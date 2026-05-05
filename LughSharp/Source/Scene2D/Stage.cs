@@ -152,17 +152,17 @@ public class Stage : InputAdapter, IDisposable
         Viewport = viewport ?? throw new ArgumentException( "viewport cannot be null." );
         Batch    = batch ?? throw new ArgumentException( "batch cannot be null." );
 
-        Pools.AddPool< InputEvent >( new Pool< InputEvent >
+        Pools.RegisterPool< InputEvent >( new Pool< InputEvent >
         {
             NewObjectFactory = () => new InputEvent()
         } );
         
-        Pools.AddPool< TouchFocus >( new Pool< TouchFocus >
+        Pools.RegisterPool< TouchFocus >( new Pool< TouchFocus >
         {
             NewObjectFactory = () => new TouchFocus()
         } );
         
-        Pools.AddPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
+        Pools.RegisterPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
         {
             NewObjectFactory = () => new FocusListener.FocusEvent()
         } );

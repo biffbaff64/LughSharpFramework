@@ -317,7 +317,7 @@ LUGHSHARP/SOURCE/GRAPHICS/ATLASES
     - DONE - DONE - DONE - AtlasRegion
     - DONE - DONE - DONE - AtlasSprite
     - DONE - DONE - DONE - TextureAtlas
-    - DONE - IP   - DONE - TextureAtlasData
+    - DONE - DONE - DONE - TextureAtlasData
 
 LUGHSHARP/SOURCE/GRAPHICS/CAMERAS
 ---------------------------------
@@ -325,7 +325,7 @@ LUGHSHARP/SOURCE/GRAPHICS/CAMERAS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - Camera
-    - DONE = IP   - DONE - CameraData
+    - DONE - DONE - DONE - CameraData
     - DONE - DONE - DONE - IGameCamera
     - DONE - DONE - DONE - OrthographicCamera
     - DONE - DONE - DONE - OrthographicGameCamera
@@ -1025,7 +1025,7 @@ LUGHSHARP/SOURCE/SCENE2D/UI
     -      -      -      - Value                - 
     -      -      -      - VerticalGroup        - 
     -      -      -      - Widget               - 
-    -      -      -      - WidgetGroup          - 
+    - DONE - DONE - DONE - WidgetGroup          - 
     -      -      -      - Window               - 
 
 LUGHSHARP/SOURCE/SCENE2D/UI/STYLES

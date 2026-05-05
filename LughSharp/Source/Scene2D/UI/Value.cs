@@ -29,9 +29,11 @@ using LughSharp.Source.Scene2D.Utils;
 namespace LughSharp.Source.Scene2D.UI;
 
 /// <summary>
-/// Value placeholder, allowing the value to be computed on request. Values can be
-/// provided an actor for context to reduce the number of value instances that need
-/// to be created and reduce verbosity in code that specifies values.
+/// Value placeholder, allowing the value to be computed on request. Values can be provided an
+/// actor for context to reduce the number of value instances that need to be created and reduce
+/// verbosity in code that specifies values.
+/// Tt provides lazy/deferred evaluation of layout dimensions (e.g. "preferred width of the actor
+/// at the time it's queried"), which is not something you can replace with a plain float.
 /// </summary>
 [PublicAPI]
 public abstract class Value
@@ -80,14 +82,6 @@ public abstract class Value
     }
 
     /// <summary>
-    /// Returns a value that is the specified percent of the height of the actor.
-    /// </summary>
-    public static Value PercentHeight( float percent )
-    {
-        return new LambdaValue( ctx => ( ctx?.Height ?? 0 ) * percent );
-    }
-
-    /// <summary>
     /// Returns a value that is the specified percent of the width of the specified actor.
     /// </summary>
     public static Value PercentWidth( float percent, Actor actor )
@@ -95,6 +89,14 @@ public abstract class Value
         Guard.Against.Null( actor );
 
         return new LambdaValue( _ => actor.Width * percent );
+    }
+
+    /// <summary>
+    /// Returns a value that is the specified percent of the height of the actor.
+    /// </summary>
+    public static Value PercentHeight( float percent )
+    {
+        return new LambdaValue( ctx => ( ctx?.Height ?? 0 ) * percent );
     }
 
     /// <summary>
@@ -114,7 +116,9 @@ public abstract class Value
     /// <param name="fromLayout">Invoked with the context cast to <see cref="ILayout"/>.</param>
     /// <param name="fallback">Invoked with the raw context actor when it is not an <see cref="ILayout"/>.</param>
     private static Value FromLayout( Func< ILayout, float > fromLayout, Func< Actor?, float > fallback )
-        => new LambdaValue( ctx => ctx is ILayout layout ? fromLayout( layout ) : fallback( ctx ) );
+    {
+        return new LambdaValue( ctx => ctx is ILayout layout ? fromLayout( layout ) : fallback( ctx ) );
+    }
 
     public abstract float Get( Actor? context = null );
 
@@ -204,3 +208,5 @@ public abstract class Value
 
 // ============================================================================
 // ============================================================================
+
+

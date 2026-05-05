@@ -22,16 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using Exception = System.Exception;
 
@@ -428,6 +420,15 @@ public class TextureAtlasData
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Defines a contract for parsing and updating a field of type T from one or more
+    /// string entries.
+    /// Implementations should use this interface to provide custom parsing logic for 
+    /// specific field types. The interface is intended for use in scenarios where fields
+    /// of various types need to be populated from string data, such as deserialization
+    /// or data import operations.
+    /// </summary>
+    /// <typeparam name="T">The type of the object whose field is to be parsed.</typeparam>
     [PublicAPI]
     protected interface IField< in T >
     {
@@ -437,6 +438,15 @@ public class TextureAtlasData
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Represents a texture page, including its associated texture, file information, 
+    /// filtering, wrapping, and format settings. A Page encapsulates the data and 
+    /// configuration required for a single texture page, which may be loaded from a file
+    /// or provided directly as a texture. It includes properties for texture filtering,
+    /// wrapping modes, format, and dimensions. The Texture or TextureFile property must
+    /// be set to provide the texture data. This type is typically used in graphics or 
+    /// rendering systems that manage texture atlases or similar resources.
+    /// </summary>
     [PublicAPI]
     public record Page
     {
@@ -465,6 +475,10 @@ public class TextureAtlasData
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// An object which describes a rectangular region of a texture atlas page,
+    /// including its position, size, and other properties.
+    /// </summary>
     [PublicAPI]
     public class Region
     {
@@ -485,6 +499,16 @@ public class TextureAtlasData
         public string[]? Names          { get; set; }
         public int[]?[]? Values         { get; set; }
 
+        /// <summary>
+        /// Searches for the specified name and returns the associated array of integer
+        /// values, if found. If multiple entries exist for the same name, only the first
+        /// match is returned. Returns null if the collection of names is null or if the 
+        /// specified name is not found.
+        /// </summary>
+        /// <param name="name"> The name to locate in the collection. Comparison is case-sensitive. </param>
+        /// <returns>
+        /// An array of integers associated with the specified name if found; otherwise, null.
+        /// </returns>
         public int[]? FindValue( string name )
         {
             if ( Names != null )

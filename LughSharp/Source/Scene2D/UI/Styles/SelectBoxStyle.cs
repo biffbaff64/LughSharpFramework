@@ -33,16 +33,16 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SelectBoxStyle : ISceneStyle
 {
-    public BitmapFont      Font               { get; } = null!;
-    public ScrollPaneStyle ScrollStyle        { get; } = null!;
-    public ListBoxStyle    ListBoxStyle       { get; } = null!;
-    public Color           FontColor          { get; } = new( 1, 1, 1, 1 );
-    public Color?          OverFontColor      { get; }
-    public Color?          DisabledFontColor  { get; }
-    public ISceneDrawable? Background         { get; }
-    public ISceneDrawable? BackgroundOver     { get; }
-    public ISceneDrawable? BackgroundOpen     { get; }
-    public ISceneDrawable? BackgroundDisabled { get; }
+    public BitmapFont?      Font               { get; }
+    public ScrollPaneStyle? ScrollPaneStyle    { get; }
+    public ListBoxStyle?    ListBoxStyle       { get; }
+    public Color            FontColor          { get; } = new( 1, 1, 1, 1 );
+    public Color?           OverFontColor      { get; }
+    public Color?           DisabledFontColor  { get; }
+    public ISceneDrawable?  Background         { get; }
+    public ISceneDrawable?  BackgroundOver     { get; }
+    public ISceneDrawable?  BackgroundOpen     { get; }
+    public ISceneDrawable?  BackgroundDisabled { get; }
 
     // ====================================================================
 
@@ -56,10 +56,10 @@ public class SelectBoxStyle : ISceneStyle
                            ScrollPaneStyle scrollStyle,
                            ListBoxStyle listBoxStyle )
     {
-        Font         = font;
-        Background   = background;
-        ScrollStyle  = scrollStyle;
-        ListBoxStyle = listBoxStyle;
+        Font            = font;
+        Background      = background;
+        ScrollPaneStyle = scrollStyle;
+        ListBoxStyle    = listBoxStyle;
 
         FontColor.Set( fontColor );
     }
@@ -81,9 +81,9 @@ public class SelectBoxStyle : ISceneStyle
             DisabledFontColor = new Color( style.DisabledFontColor );
         }
 
-        Background   = style.Background;
-        ScrollStyle  = new ScrollPaneStyle( style.ScrollStyle );
-        ListBoxStyle = new ListBoxStyle( style.ListBoxStyle );
+        Background      = style.Background;
+        ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ?? new ScrollPaneStyle() );
+        ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ?? new ListBoxStyle() );
 
         BackgroundOver     = style.BackgroundOver;
         BackgroundOpen     = style.BackgroundOpen;

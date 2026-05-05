@@ -38,20 +38,14 @@ IN PROGRESS:
           - Slider              - Done
           - ScrollPane          - Done
           - ListBox             - Done
-          - Window              - 
-          - Label               - 
-          - Table               - 
-          - Dialog              - 
+          - Label               - Done
           - TextField           - Done
           - TextArea            - Done
+          - Window              - 
+          - Table               - 
+          - Dialog              - 
           - SplitPane           - 
           - SelectBox           - 
-
-        
-
-
-
-
 
 TODO:
 

@@ -23,8 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Utils.Pooling;
 
 namespace LughSharp.Source.Scene2D.Utils;
@@ -46,7 +44,6 @@ public sealed class ScenePoolAdapter< T > : IScenePool where T : SceneAction, ne
     {
         if ( action is T typed )
         {
-            
             _inner.Free( typed );
         }
     }

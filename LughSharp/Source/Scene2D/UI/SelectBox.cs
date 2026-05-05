@@ -77,11 +77,12 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin and style name,
+    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin
+    /// and style name, which defaults to "default".
     /// </summary>
     /// <param name="skin"></param>
     /// <param name="styleName"></param>
-    public SelectBox( Skin skin, string styleName )
+    public SelectBox( Skin skin, string styleName = "default" )
         : this( skin.Get< SelectBoxStyle >( styleName ) )
     {
     }
@@ -142,7 +143,7 @@ public class SelectBox< T > : Widget, IDisableable
 
         if ( _scrollPane != null )
         {
-            _scrollPane.Style         = style.ScrollStyle;
+            _scrollPane.Style         = style.ScrollPaneStyle;
             _scrollPane.ListBox.Style = style.ListBoxStyle;
         }
 
@@ -271,7 +272,7 @@ public class SelectBox< T > : Widget, IDisableable
             }
 
             ListBoxStyle    listStyle   = Style.ListBoxStyle;
-            ScrollPaneStyle scrollStyle = Style.ScrollStyle;
+            ScrollPaneStyle scrollStyle = Style.ScrollPaneStyle;
 
             float? listWidth = maxItemWidth + listStyle.Selection?.LeftWidth + listStyle.Selection?.RightWidth;
 
@@ -284,8 +285,8 @@ public class SelectBox< T > : Widget, IDisableable
 
             if ( _scrollPane is not { DisableYScroll: true } )
             {
-                listWidth += Math.Max( Style.ScrollStyle.VScroll?.MinWidth ?? 0,
-                                       Style.ScrollStyle.VScrollKnob?.MinWidth ?? 0 );
+                listWidth += Math.Max( Style.ScrollPaneStyle.VScroll?.MinWidth ?? 0,
+                                       Style.ScrollPaneStyle.VScrollKnob?.MinWidth ?? 0 );
             }
 
             PrefWidth = Math.Max( PrefWidth, ( float )listWidth! );
@@ -593,7 +594,8 @@ public class SelectBox< T > : Widget, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// A SelectBoxScrollPane extends the <see cref="ScrollPane"/> to provide a specialized
+    /// scrollable container for displaying a list of items in a <see cref="SelectBox{T}"/>.
     /// </summary>
     [PublicAPI]
     public class SelectBoxScrollPane : ScrollPane
@@ -610,8 +612,7 @@ public class SelectBox< T > : Widget, IDisableable
 
         // ====================================================================
 
-        public SelectBoxScrollPane( SelectBox< T > selectBox )
-            : base( null, selectBox.Style.ScrollStyle )
+        public SelectBoxScrollPane( SelectBox< T > selectBox ) : base( null, selectBox.Style.ScrollPaneStyle )
         {
             SelectBox = selectBox;
 

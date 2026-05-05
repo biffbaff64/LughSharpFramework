@@ -48,7 +48,7 @@ public class DialogInputListener : InputListener
             // Delay a frame to eat the keyTyped event.
             Engine.App.PostRunnable( () =>
             {
-                _dialog.Result( _object );
+                _dialog.ClickResult( _object );
 
                 if ( !_dialog.CancelHide )
                 {

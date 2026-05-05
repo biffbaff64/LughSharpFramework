@@ -51,7 +51,7 @@ public class TableTest
         _stage = stage;
         _skin  = new Skin( Engine.Files.Assets( "Skins/uiskin.json" ) );
         
-        _root = new Table
+        _root = new Table( _skin )
         {
             IsVisible = true,
         };
@@ -67,12 +67,13 @@ public class TableTest
         _stage.AddActor( _root );
         // root.setTransform(true);
 
-        var table = new Table
+        var table = new Table( _skin )
         {
             Transform = true,
             Rotation  = 45f,
             ScaleY    = 2
         };
+        
         table.SetPosition( 100, 100 );
         table.SetOrigin( 0, 0 );
         table.SetBackground( _skin.Get< WindowStyle >( "default" ).Background );

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Utils.Pooling;
-
 namespace LughSharp.Source.Scene2D.Actions;
 
 /// <summary>

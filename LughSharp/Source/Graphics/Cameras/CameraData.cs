@@ -24,8 +24,14 @@
 
 namespace LughSharp.Source.Graphics.Cameras;
 
+/// <summary>
+/// A static class containing default values for camera properties, such as near and
+/// far planes, pixels per meter (PPM), zoom level, scene dimensions, and default Z
+/// position. These values can be used as defaults when creating or configuring cameras
+/// in the graphics system.
+/// </summary>
 [PublicAPI]
-public class CameraData
+public static class CameraData
 {
     public const float DefaultNearPlane   = -100.0f;
     public const float DefaultFarPlane    = 100.0f;

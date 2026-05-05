@@ -32,8 +32,9 @@ namespace LughSharp.Source.Scene2D.Actions;
 [PublicAPI]
 public class AlphaSceneAction : TemporalSceneAction
 {
-    private float _start;
-    public  float Alpha { get; set; }
+    private float  _start;
+    public  Color? Color    { get; set; }
+    public  float  EndAlpha { get; set; }
 
     // ========================================================================
 
@@ -42,31 +43,41 @@ public class AlphaSceneAction : TemporalSceneAction
     {
         if ( Target == null )
         {
-            throw new RuntimeException( "Cannot begin with a null Target!" );
+            Logger.Error( "Cannot begin with a null Target!" );
         }
 
-        _start = Target.ActorColor.A;
+        if ( Color == null )
+        {
+            Color = Target?.ActorColor;
+        }
+
+        _start = Color?.A ?? 0;
     }
 
     /// <inheritdoc />
     protected override void Update( float percent )
     {
-        if ( Target == null )
-        {
-            return;
-        }
-
         if ( percent == 0 )
         {
-            Target.ActorColor.A = _start;
+            Color?.A = _start;
         }
         else if ( percent is 1.0f )
         {
-            Target.ActorColor.A = Alpha;
+            Color?.A = EndAlpha;
         }
         else
         {
-            Target.ActorColor.A = _start + ( ( Alpha - _start ) * percent );
+            Color?.A = _start + ( ( EndAlpha - _start ) * percent );
         }
     }
+
+    /// <inheritdoc />
+    public override void Reset()
+    {
+        base.Reset();
+        Color = null;
+    }
 }
+
+// ============================================================================
+// ============================================================================

@@ -53,7 +53,7 @@ public class DialogChangeListener : ChangeListener
             actor = actor.Parent;
         }
 
-        _dialog.Result( _dialog.Values[ actor ] );
+        _dialog.ClickResult( _dialog.Values[ actor ] );
 
         if ( !_dialog.CancelHide )
         {

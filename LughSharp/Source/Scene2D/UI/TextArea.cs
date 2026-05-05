@@ -77,18 +77,37 @@ public class TextArea : TextField
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new text area with the given text and using the default <see cref="TextFieldStyle"/>
+    /// from the supplied skin.
+    /// </summary>
+    /// <param name="text"> The text to display in the field. </param>
+    /// <param name="skin"> The skin to use, holding the style to use. </param>
     public TextArea( string text, Skin skin )
         : base( text, skin )
     {
         WriteEnters = true;
     }
 
+    /// <summary>
+    /// Creates a new text area with the given text and using the <see cref="TextFieldStyle"/>
+    /// identified by <paramref name="styleName"/> from the supplied skin.
+    /// </summary>
+    /// <param name="text"> The text to display in the field. </param>
+    /// <param name="skin"> The skin to use, holding the style to use. </param>
+    /// <param name="styleName"> The style name. </param>
     public TextArea( string text, Skin skin, string styleName )
         : base( text, skin, styleName )
     {
         WriteEnters = true;
     }
 
+    /// <summary>
+    /// Creates a new text area with the given text and using the <see cref="TextFieldStyle"/>
+    /// provided by <paramref name="style"/>.
+    /// </summary>
+    /// <param name="text"> The text to display in the field. </param>
+    /// <param name="style"> The style to use. </param>
     public TextArea( string text, TextFieldStyle style )
         : base( text, style )
     {
@@ -110,7 +129,7 @@ public class TextArea : TextField
 
         if ( ( CursorLine * 2 ) >= LinesBreak.Count )
         {
-            return Text?.Length ?? throw new RuntimeException( "member 'text' is null!" );
+            return Text?.Length ?? throw new RuntimeException( "member 'Text' is null!" );
         }
 
         float[] glyphPos = GlyphPositions.ToArray();
@@ -137,6 +156,10 @@ public class TextArea : TextField
         return Math.Max( 0, i - 1 );
     }
 
+    /// <summary>
+    /// Sets the <see cref="TextFieldStyle"/> for this text field.
+    /// </summary>
+    /// <param name="style"> The style to use. </param>
     public override void SetStyle( TextFieldStyle? style )
     {
         Guard.Against.Null( style );
@@ -154,6 +177,10 @@ public class TextArea : TextField
         InvalidateHierarchy();
     }
 
+    /// <summary>
+    /// Gets the preferred height of this text area.
+    /// </summary>
+    /// <returns></returns>
     public override float GetPrefHeight()
     {
         if ( PrefRows <= 0 || Style?.Font == null )

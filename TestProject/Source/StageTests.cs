@@ -113,16 +113,39 @@ public class StageTests : IDisposable
 //        TextFieldActor();
 //        TextAreaActor();
 //        LabelActor();
-        WindowActor();
         // ----------------------------
 //        TableActor();
 //        DialogActor();
+//        WindowActor();
+        // ----------------------------
+        SelectBoxActor();
 //        SplitPaneActor();
-//        SelectBoxActor();
 
         return;
 
         // ====================================================================
+
+        void SplitPaneActor()
+        {
+        }
+
+        // --------------------------------------
+
+        void SelectBoxActor()
+        {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+            var selectBox = new SelectBox< string >( skin, "default" )
+            {
+                IsVisible = true,
+            };
+            selectBox.SetPosition( 200, 200 );
+            selectBox.SetItems( new List< string > { "Item 1", "Item 2", "Item 3" } );
+            
+            _stage?.AddActor( selectBox );
+        }
+
+        // --------------------------------------
 
         void WindowActor()
         {
@@ -141,7 +164,7 @@ public class StageTests : IDisposable
             window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
             window.SetPosition( 200, 200 );
             window.CellDefaults.SetSpaceBottom( 10 );
-            window.AddRow().Fill().Expand();
+            window.AddRow()?.Fill().Expand();
             window.AddCell( new Label( "Window Content", skin ) );
             window.AddRow();
             window.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) ) );
@@ -149,9 +172,74 @@ public class StageTests : IDisposable
             window.AddCell( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
             window.Pack();
 
+            Logger.Debug( $"Window width: {window.Width}, Window height: {window.Height}" );
+            Logger.Debug( $"Padding - Left: {window.GetPadLeft()}, Right: {window.GetPadRight()}" );
+            Logger.Debug( $"Padding - Top: {window.GetPadTop()}, Bottom: {window.GetPadBottom()}" );
+            Logger.Debug( $"Columns: {window.Columns}, Rows: {window.Rows}" );
+
             _stage?.AddActor( window );
         }
 
+        // --------------------------------------
+
+        void TableActor()
+        {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+            var table = new Table( skin )
+            {
+                IsVisible = true,
+            };
+
+            table.EnableDebug();
+            table.SetBackground( "default-pane" );
+            table.SetColor( 1, 1, 1, 1 );
+            table.SetPosition( 200, 300 );
+            table.SetSize( 400, 200 );
+
+            table.AddCell( new Label( "IIIIIIIII", skin ) );
+            table.AddRow();
+            table.AddCell( new Label( "---------", skin ) );
+            table.AddRow();
+
+            _stage?.AddActor( table );
+        }
+
+        // --------------------------------------
+
+        void DialogActor()
+        {
+            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+            var dialogStyle = new DialogStyle()
+            {
+                Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
+                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
+                TitleFontColor = Color.Red,
+            };
+
+            var dialog = new Dialog( "Dialog Title", dialogStyle )
+            {
+                IsVisible = true,
+            };
+
+            dialog.Text( "This is a dialog box with a custom title and text.",
+                         skin.Get< LabelStyle >( "default" ) );
+
+            dialog.Text( "Bla Bla Bla Bla Bla Bla.", skin.Get< LabelStyle >( "default" )  );
+
+            dialog.Button( "OK", true, skin.Get< TextButtonStyle >( "default" ) )
+                  .Button( "Cancel", false, skin.Get< TextButtonStyle >( "default" ) );
+
+            dialog.Key( IInput.Keys.Enter, true )
+                  .Key( IInput.Keys.Escape, false );
+
+            dialog.Show( _stage, null )
+                  .SetPosition( ( float )Math.Round( ( _stage.Width - dialog.Width ) / 2 ),
+                                ( float )Math.Round( ( _stage.Height - dialog.Height ) / 2 ) );
+        }
+
+        //@formatter:off
         // --------------------------------------
 
         void ScrollPaneActor()
@@ -260,18 +348,6 @@ public class StageTests : IDisposable
 
         // --------------------------------------
 
-        void SplitPaneActor()
-        {
-        }
-
-        // --------------------------------------
-
-        void SelectBoxActor()
-        {
-        }
-
-        // --------------------------------------
-
         void LabelActor()
         {
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
@@ -294,63 +370,6 @@ public class StageTests : IDisposable
             _stage?.AddActor( t );
         }
 
-        // --------------------------------------
-
-        void TableActor()
-        {
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
-            var table = new Table( skin )
-            {
-                IsVisible = true,
-            };
-
-            table.EnableDebug();
-            table.SetBackground( "default-pane" );
-            table.SetColor( 1, 1, 1, 1 );
-            table.SetPosition( 200, 300 );
-            table.SetSize( 400, 200 );
-
-            table.AddCell( new Label( "IIIIIIIII", skin ) );
-            table.AddRow();
-            table.AddCell( new Label( "---------", skin ) );
-            table.AddRow();
-
-            _stage?.AddActor( table );
-        }
-
-        // --------------------------------------
-
-        void DialogActor()
-        {
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
-            var dialogStyle = new DialogStyle()
-            {
-                Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
-                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
-                TitleFontColor = Color.Red,
-            };
-
-            var dialog = new Dialog( "Dialog Title", dialogStyle )
-            {
-                IsVisible = true,
-            };
-
-            dialog.Text( "This is a dialog box with a custom title and text.",
-                         skin.Get< LabelStyle >( "default" ) );
-
-            dialog.Button( "OK", true, skin.Get< TextButtonStyle >( "default" ) )
-                  .Button( "Cancel", false, skin.Get< TextButtonStyle >( "default" ) );
-
-            dialog.Key( IInput.Keys.Enter, true )
-                  .Key( IInput.Keys.Escape, false );
-
-//            dialog.Show( _stage );
-            _stage?.AddActor( dialog );
-        }
-
-        //@formatter:off
         // --------------------------------------
 
         // Working. Draws a progress bar correctly. The knob is programmatically

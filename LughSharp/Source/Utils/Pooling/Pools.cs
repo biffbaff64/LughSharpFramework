@@ -33,7 +33,7 @@ namespace LughSharp.Source.Utils.Pooling;
 public static class Pools
 {
     // Use a ConcurrentDictionary for thread-safe access to the pools themselves.
-    // Store object as base Pool<object> or dynamic, cast when retrieving.
+    // Store object as base Pool<object> or dynamic cast when retrieving.
     private static readonly ConcurrentDictionary< Type, object > _typePools = new();
 
     // ========================================================================
@@ -43,13 +43,22 @@ public static class Pools
     /// for the same Type is already registered
     /// </summary>
     /// <param name="pool"> The pool to register. </param>
+    /// <param name="fatal">
+    /// If true, will throw an exception if a pool for the same Type is already registered.
+    /// Default is true.
+    /// </param>
+    /// <returns> True if the pool was registered, false if it was already registered. </returns>
     /// <typeparam name="T"> The Type of the pool. </typeparam>
-    public static void AddPool< T >( Pool< T > pool ) where T : class
+    public static bool RegisterPool< T >( Pool< T > pool, bool fatal = true ) where T : class
     {
-        if ( !_typePools.TryAdd( typeof( T ), pool ) )
+        bool added = _typePools.TryAdd( typeof( T ), pool );
+
+        if ( !added && fatal )
         {
             throw new InvalidOperationException( $"Pool for type {typeof( T ).Name} already exists." );
         }
+
+        return added;
     }
 
     /// <summary>
@@ -106,7 +115,7 @@ public static class Pools
     /// Thread-safety note: If multiple threads call this method concurrently for the same type
     /// with different parameters, only one pool will be created and stored. The factory and
     /// parameters used for that stored pool are non-deterministic in such scenarios.
-    /// To ensure specific pool configuration, pre-register the pool using <see cref="AddPool{T}"/>
+    /// To ensure specific pool configuration, pre-register the pool using <see cref="RegisterPool{T}"/>
     /// or <see cref="Set{T}"/> before concurrent access.
     /// </remarks>
     /// <typeparam name="T">The type of object to pool.</typeparam>
@@ -119,19 +128,19 @@ public static class Pools
                                       int max = int.MaxValue ) where T : class
     {
         Guard.Against.Null( newObjectFactory );
-        
+
         // If pool exists, return it; otherwise create new one
         if ( _typePools.TryGetValue( typeof( T ), out object? existingPool ) )
         {
             return ( Pool< T > )existingPool;
         }
-    
+
         // Create and add new pool
         var newPool = new Pool< T >( initialCapacity, max )
         {
             NewObjectFactory = newObjectFactory
         };
-    
+
         return ( Pool< T > )_typePools.GetOrAdd( typeof( T ), newPool );
     }
 
@@ -189,7 +198,7 @@ public static class Pools
         // Materialize the enumerable to get accurate count
         // and avoid multiple enumeration issues
         List< T? > objectsList = objects.Where( obj => obj != null ).ToList();
-    
+
         if ( objectsList.Count == 0 )
         {
             return;
@@ -237,7 +246,7 @@ public static class Pools
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    private static Pool< T > GetRegisteredPool< T >() where T : class
+    public static Pool< T > GetRegisteredPool< T >() where T : class
     {
         return !TryGetRegisteredPool< T >( out Pool< T > pool )
             ? throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}." )
@@ -250,7 +259,7 @@ public static class Pools
     /// <param name="pool"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    private static bool TryGetRegisteredPool< T >( out Pool< T > pool ) where T : class
+    public static bool TryGetRegisteredPool< T >( out Pool< T > pool ) where T : class
     {
         if ( _typePools.TryGetValue( typeof( T ), out object? poolObject ) )
         {
@@ -267,4 +276,3 @@ public static class Pools
 
 // ============================================================================
 // ============================================================================
-

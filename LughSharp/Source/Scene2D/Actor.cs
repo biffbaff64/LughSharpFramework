@@ -58,22 +58,22 @@ public class Actor : IComparable< Actor >
 
     static Actor()
     {
-        Pools.AddPool< Rectangle >( new Pool< Rectangle >
+        Pools.RegisterPool< Rectangle >( new Pool< Rectangle >
         {
             NewObjectFactory = () => new Rectangle()
         } );
 
-        Pools.AddPool< List< Group > >( new Pool< List< Group > >
+        Pools.RegisterPool< List< Group > >( new Pool< List< Group > >
         {
             NewObjectFactory = () => new List< Group >()
         } );
 
-        Pools.AddPool< GlyphLayout >( new Pool< GlyphLayout >
+        Pools.RegisterPool< GlyphLayout >( new Pool< GlyphLayout >
         {
             NewObjectFactory = () => new GlyphLayout()
         } );
 
-        Pools.AddPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
+        Pools.RegisterPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
         {
             NewObjectFactory = () => new ChangeListener.ChangeEvent()
         } );
@@ -911,7 +911,7 @@ public class Actor : IComparable< Actor >
     /// <summary>
     /// Sets the position of the actor's bottom left corner.
     /// </summary>
-    public void SetPosition( float x, float y )
+    public Actor SetPosition( float x, float y )
     {
         if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
         {
@@ -919,13 +919,15 @@ public class Actor : IComparable< Actor >
             Y = y;
             OnPositionChanged();
         }
+
+        return this;
     }
 
     /// <summary>
     /// Sets the position using the specified <see cref="Align"/> alignment.
     /// Note this may set the position to non-integer coordinates.
     /// </summary>
-    public void SetPosition( float x, float y, Align alignment )
+    public Actor SetPosition( float x, float y, Align alignment )
     {
         if ( ( alignment & Align.Right ) != 0 )
         {
@@ -951,6 +953,8 @@ public class Actor : IComparable< Actor >
             Y = y;
             OnPositionChanged();
         }
+
+        return this;
     }
 
     /// <summary>

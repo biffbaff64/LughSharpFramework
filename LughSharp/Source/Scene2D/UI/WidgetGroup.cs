@@ -88,9 +88,6 @@ public class WidgetGroup : Group, ILayout
     /// </summary>
     public virtual void Pack()
     {
-        //TODO: Establish why this is done twice. The original LibGDX code does this, and that
-        // is why it'sa done here too. I need to understand why this is done twice.
-        
         SetSize( GetPrefWidth(), GetPrefHeight() );
 
         Validate();
@@ -114,10 +111,10 @@ public class WidgetGroup : Group, ILayout
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.Invalidate"/> has been
-    /// called since the last time <see cref="ILayout.Validate"/> was called, or if the
-    /// actor otherwise needs to be laid out. This method is usually called in
-    /// <see cref="Actor.Draw"/> by the actor itself before drawing is performed.
+    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.Invalidate"/> has been called
+    /// since the last time <see cref="ILayout.Validate"/> was called, or if the actor otherwise
+    /// needs to be laid out. This method is usually called in <see cref="Actor.Draw"/> by the
+    /// actor itself before drawing is performed.
     /// </para>
     /// </summary>
     public virtual void Validate()
@@ -239,31 +236,49 @@ public class WidgetGroup : Group, ILayout
         }
     }
 
+    /// <summary>
+    /// Returns the minimum width of this group.
+    /// </summary>
     public virtual float GetMinWidth()
     {
         return GetPrefWidth();
     }
 
+    /// <summary>
+    /// Returns the minimum height of this group.
+    /// </summary>
     public virtual float GetMinHeight()
     {
         return GetPrefHeight();
     }
 
+    /// <summary>
+    /// Returns the preferred width of this group.
+    /// </summary>
     public virtual float GetPrefWidth()
     {
         return 0;
     }
 
+    /// <summary>
+    /// Returns the preferred height of this group.
+    /// </summary>
     public virtual float GetPrefHeight()
     {
         return 0;
     }
 
+    /// <summary>
+    /// Returns the maximum width of this group.
+    /// </summary>
     public virtual float GetMaxWidth()
     {
         return 0;
     }
 
+    /// <summary>
+    /// Returns the maximum height of this group.
+    /// </summary>
     public virtual float GetMaxHeight()
     {
         return 0;

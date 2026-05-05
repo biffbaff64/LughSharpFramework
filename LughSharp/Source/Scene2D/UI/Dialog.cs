@@ -33,7 +33,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// <summary>
 /// Displays a dialog, which is a window with a title, a content table, and a button table.
 /// Methods are provided to add a label to the content table and buttons to the button table,
-/// but any widgets can be added. When a button is clicked, <see cref="Result(object)"/> is
+/// but any widgets can be added. When a button is clicked, <see cref="ClickResult"/> is
 /// called and the dialog is removed from the stage.
 /// </summary>
 [PublicAPI]
@@ -45,7 +45,7 @@ public class Dialog : Window
     public Table? ButtonTable           { get; private set; }
     public bool   CancelHide            { get; set; }
 
-    public Dictionary< Actor, object >? Values { get; set; } = new();
+    public Dictionary< Actor, object? >? Values { get; set; } = new();
 
     // ========================================================================
 
@@ -73,6 +73,7 @@ public class Dialog : Window
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"> The Skin holding the WindowStyle.</param>
@@ -105,12 +106,8 @@ public class Dialog : Window
 
         CellDefaults.Space( 6 );
 
-        ContentTable = new Table( _skin );
-        ButtonTable  = new Table( _skin );
-
-        AddCell( ContentTable ).Grow();
-        AddRow();
-        AddCell( ButtonTable ).SetFillX();
+        AddCell( ContentTable = new Table( _skin ) ).Grow();
+        AddCell( ButtonTable  = new Table( _skin ) ).SetFillX();
 
         ContentTable.CellDefaults.Space( 6 );
         ButtonTable.CellDefaults.Space( 6 );
@@ -127,7 +124,7 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Sets the <see cref="Stage"/> which this Dialog will act on.
+    /// Sets the <see cref="Stage"/> on which this Dialog will act.
     /// </summary>
     public override void SetStage( Stage? stage )
     {
@@ -177,16 +174,16 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Adds a text button to the button table. Null will be passed to <see cref="Result(object)"/>
+    /// Adds a text button to the button table. Null will be passed to <see cref="ClickResult(object)"/>
     /// if this button is clicked. The dialog must have been constructed with a skin to use this
-    /// method. If it hasn't, a default Skin will be created which may need further adjustments.
+    /// method.
     /// </summary>
     public Dialog Button( string text, object? obj = null )
     {
         if ( _skin == null )
         {
-            throw new RuntimeException( "This method may only be used if the dialog was constructed "
-                                      + "with a Skin, a default Skin has been provided." );
+            throw new RuntimeException( "This method may only be used if the "
+                                      + "dialog was constructed with a Skin." );
         }
 
         return Button( text, obj, _skin.Get< TextButtonStyle >() );
@@ -197,7 +194,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="text"></param>
     /// <param name="obj">
-    /// The object that will be passed to <see cref="Result(object)"/>
+    /// The object that will be passed to <see cref="ClickResult"/>
     /// if this button is clicked. May be null.
     /// </param>
     /// <param name="buttonStyle"></param>
@@ -211,7 +208,7 @@ public class Dialog : Window
     /// </summary>
     /// <param name="button"></param>
     /// <param name="obj">
-    /// The object that will be passed to <see cref="Result(object)"/> if this
+    /// The object that will be passed to <see cref="ClickResult"/> if this
     /// button is clicked. May be null.
     /// </param>
     public Dialog Button( Button button, object? obj = null )
@@ -224,10 +221,31 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// <see cref="WidgetGroup.Pack()"/> the dialog (but doesn't set the position), adds
-    /// it to the stage, sets it as the keyboard and scroll focus, clears any actions on
-    /// the dialog, and adds the specified action to it. The previous keyboard and scroll
-    /// focus are remembered so they can be restored when the dialog is hidden.
+    /// Centers the dialog in the stage and calls <see cref="Show(Stage, SceneAction)"/>
+    /// with a <see cref="SceneActions.FadeIn(float, IInterpolation)"/> action.
+    /// </summary>
+    /// <remarks>
+    /// Use <see cref="Show(Stage, SceneAction?)"/>, passing null for SceneAction, to show
+    /// the dialog without performing any actions.
+    /// </remarks>
+    /// <param name="stage"> The Stage to act on. </param>
+    public Dialog Show( Stage stage )
+    {
+        Show( stage,
+              SceneActions.Sequence( SceneActions.Alpha( 0 ),
+                                     SceneActions.FadeIn( 0.4f, Interpolation.Fade ) ) );
+
+        SetPosition( ( float )Math.Round( ( stage.Width - Width ) / 2 ),
+                     ( float )Math.Round( ( stage.Height - Height ) / 2 ) );
+
+        return this;
+    }
+
+    /// <summary>
+    /// <see cref="WidgetGroup.Pack()"/> the dialog (but doesn't set the position), adds it to the
+    /// stage, sets it as the keyboard and scroll focus, clears any actions on the dialog, and adds
+    /// the specified action to it. The previous keyboard and scroll focus are remembered so they can
+    /// be restored when the dialog is hidden.
     /// </summary>
     /// <param name="stage"> The Stage to act on. </param>
     /// <param name="action"> May be null. </param>
@@ -268,23 +286,6 @@ public class Dialog : Window
         {
             AddAction( action );
         }
-
-        return this;
-    }
-
-    /// <summary>
-    /// Centers the dialog in the stage and calls <see cref="Show(Stage, SceneAction)"/>
-    /// with a <see cref="SceneActions.FadeIn(float, IInterpolation)"/> action.
-    /// </summary>
-    /// <param name="stage"> The Stage to act on. </param>
-    public Dialog Show( Stage stage )
-    {
-        Show( stage,
-              SceneActions.Sequence( SceneActions.Alpha( 0 ),
-                                     SceneActions.FadeIn( 0.4f, Interpolation.Fade ) ) );
-
-        SetPosition( ( float )Math.Round( ( stage.Width - Width ) / 2 ),
-                     ( float )Math.Round( ( stage.Height - Height ) / 2 ) );
 
         return this;
     }
@@ -351,13 +352,18 @@ public class Dialog : Window
         Hide( SceneActions.FadeOut( 0.4f, Interpolation.Fade ) );
     }
 
+    /// <summary>
+    /// Sets the object associated with the given button.
+    /// </summary>
+    /// <param name="actor"></param>
+    /// <param name="obj"></param>
     public void SetObject( Actor actor, object obj )
     {
         Values?[ actor ] = obj;
     }
 
     /// <summary>
-    /// If this key is pressed, <see cref="Result(object)"/> is
+    /// If this key is pressed, <see cref="ClickResult"/> is
     /// called with the specified object.
     /// </summary>
     public Dialog Key( int keycode, object obj )
@@ -402,13 +408,16 @@ public class Dialog : Window
     /// method returns unless <see cref="CancelHide"/> is set.
     /// </summary>
     /// <param name="obj"> The object specified when the button was added. </param>
-    public virtual void Result( object? obj )
+    public virtual void ClickResult( object? obj )
     {
     }
 
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
     internal class ButtonTableChangeListener : ChangeListener
     {
         private readonly Dialog _dialog;
@@ -435,7 +444,7 @@ public class Dialog : Window
                 actor = actor?.Parent;
             }
 
-            _dialog.Result( _dialog.Values[ actor! ] );
+            _dialog.ClickResult( _dialog.Values[ actor! ] );
 
             if ( !_dialog.CancelHide )
             {
@@ -446,6 +455,9 @@ public class Dialog : Window
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class IgnoreTouchDown : InputListener
     {
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )

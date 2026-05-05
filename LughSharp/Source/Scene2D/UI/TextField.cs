@@ -174,6 +174,10 @@ public class TextField : Widget
         }
     }
 
+    /// <summary>
+    /// The character to use for hiding the password, typically a bullet character but can
+    /// be any character.
+    /// </summary>
     public char PasswordCharacter
     {
         get => _passwordCharacter;
@@ -1654,6 +1658,11 @@ public class TextField : Widget
             return true;
         }
 
+        /// <summary>
+        /// Sets the cursor position within the text field.
+        /// </summary>
+        /// <param name="x"> X coordinate. </param>
+        /// <param name="y"> Y coordinate. </param>
         protected virtual void SetCursorPosition( float x, float y )
         {
             _tf.Cursor    = _tf.LetterUnderCursor( x );
@@ -1668,6 +1677,10 @@ public class TextField : Widget
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="keycode"></param>
         protected virtual void ScheduleKeyRepeatTask( int keycode )
         {
             if ( _tf._keyRepeat.KeyCode != keycode )
