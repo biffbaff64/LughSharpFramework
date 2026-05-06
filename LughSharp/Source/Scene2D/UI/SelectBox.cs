@@ -143,8 +143,8 @@ public class SelectBox< T > : Widget, IDisableable
 
         if ( _scrollPane != null )
         {
-            _scrollPane.Style         = style.ScrollPaneStyle;
-            _scrollPane.ListBox.Style = style.ListBoxStyle;
+            _scrollPane.Style         = style.ScrollPaneStyle ?? new ScrollPaneStyle();
+            _scrollPane.ListBox.Style = style.ListBoxStyle ?? new ListBoxStyle();
         }
 
         InvalidateHierarchy();
@@ -285,8 +285,8 @@ public class SelectBox< T > : Widget, IDisableable
 
             if ( _scrollPane is not { DisableYScroll: true } )
             {
-                listWidth += Math.Max( Style.ScrollPaneStyle.VScroll?.MinWidth ?? 0,
-                                       Style.ScrollPaneStyle.VScrollKnob?.MinWidth ?? 0 );
+                listWidth += Math.Max( Style.ScrollPaneStyle?.VScroll?.MinWidth ?? 0,
+                                       Style.ScrollPaneStyle?.VScrollKnob?.MinWidth ?? 0 );
             }
 
             PrefWidth = Math.Max( PrefWidth, ( float )listWidth! );

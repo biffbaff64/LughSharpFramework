@@ -1031,6 +1031,9 @@ LUGHSHARP/SOURCE/SCENE2D/UI
 LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
 ----------------------------------
 
+All Styles should provide a fully defined default style. This will
+remove any possibility of NullReferenceExceptions.
+
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      - DONE - ButtonStyle

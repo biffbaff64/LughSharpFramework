@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.IO;
 using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI.Styles;
@@ -60,6 +61,17 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ButtonStyle()
     {
+        var skin = new Skin( new FileInfo( $"{Files.AssetsRoot}skins\\lughskin.json" ) );
+        
+        Up             = skin.GetDrawable( "button" );
+        Down           = skin.GetDrawable( "button-down" );
+        Over           = skin.GetDrawable( "button-over" );
+        Focused        = skin.GetDrawable( "button" );
+        Disabled       = skin.GetDrawable( "check-on-disabled" );
+        Checked        = skin.GetDrawable( "check-on" );
+        CheckedOver    = skin.GetDrawable( "check-over-on" );
+        CheckedDown    = skin.GetDrawable( "check-over-off" );
+        CheckedFocused = skin.GetDrawable( "check-on" );
     }
 
     /// <summary>
@@ -68,7 +80,7 @@ public class ButtonStyle : ISceneStyle
     /// <param name="up"> The ISceneDrawable image for button UP. </param>
     /// <param name="down"> The ISceneDrawable image for button DOWN. </param>
     /// <param name="chcked"></param>
-    public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? chcked )
+    public ButtonStyle( ISceneDrawable up, ISceneDrawable down, ISceneDrawable chcked )
     {
         Up      = up;
         Down    = down;
@@ -85,7 +97,7 @@ public class ButtonStyle : ISceneStyle
 
     /// <summary>
     /// Sets the properties of this ButtonStyle to the properties from the given
-    /// style, which must be a subclass of ButtonStyle.
+    /// style, which must be a ButtonStyle, or a subclass of it.
     /// </summary>
     /// <param name="style"></param>
     /// <typeparam name="T"></typeparam>

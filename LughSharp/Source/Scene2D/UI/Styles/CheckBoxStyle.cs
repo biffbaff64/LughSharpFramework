@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.IO;
 using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI.Styles;
@@ -44,6 +45,8 @@ public class CheckBoxStyle : TextButtonStyle
     
     public CheckBoxStyle()
     {
+        var skin = new Skin( new FileInfo( $"{Files.AssetsRoot}skins\\lughskin.json" ) );
+        
     }
 
     public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color fontColor )

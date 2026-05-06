@@ -79,7 +79,15 @@
         <EmbeddedResource Include="Assets\Circa64_Main_Logo.png" />
         <EmbeddedResource Include="Assets\Embedded\**\*" />
         <EmbeddedResource Include="Assets\lughlogo.png" />
-        <None Remove="Assets\Embedded\lughlogo.png" />
+        <Content Include="Assets\Skins\lughskin.atlas">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Assets\Skins\lughskin.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="Assets\Skins\lughskin.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
     
     <ItemGroup>
