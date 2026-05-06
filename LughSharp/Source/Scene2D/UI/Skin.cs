@@ -1,4 +1,4 @@
-﻿// ///////////////////////////////////////////////////////////////////////////////
+﻿﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
@@ -186,7 +186,7 @@ public class Skin : IDisposable
         AddRegions( atlas );
         Load( skinFile );
     }
-
+    
     /// <summary>
     /// Initialises the table of default tag classes into the working dictionary.
     /// Further tag classes can be added to the working dictionary if required.

@@ -959,25 +959,26 @@ LUGHSHARP/SOURCE/SCENE2D/STYLES
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   -      - DONE - ButtonStyleRecord
-    -      -      - DONE - CheckBoxStyleRecord
-    -      -      - DONE - ImageButtonStyleRecord
-    -      -      - DONE - ImageTextButtonStyleRecord
-    -      -      - DONE - LabelStyleRecord
-    -      -      - DONE - ListBoxStyleRecord
-    -      -      - DONE - ProgressBarStyleRecord
-    -      -      - DONE - ScrollPaneStyleRecord
-    -      -      - DONE - SelectBoxStyleRecord
-    -      -      - DONE - SliderStyleRecord
-    -      -      - DONE - SplitPaneStyleRecord
-    - IP   -      - DONE - StyleFactory
-    - IP   -      - DONE - StyleRegistry
-    -      -      - DONE - TextButtonStyleRecord
-    -      -      - DONE - TextFieldStyleRecord
-    -      -      - DONE - TextTooltipStyleRecord
-    -      -      - DONE - TouchpadStyleRecord
-    -      -      - DONE - TreeStyleRecord
-    -      -      - DONE - WindowStyleRecord
+    - IP   - IP   - DONE - ButtonStyleRecord                 - ButtonStyle
+    - IP   - IP   - DONE - CheckBoxStyleRecord               - CheckBoxStyle
+    - IP   - IP   - DONE - DialogStyleRecord                 - ImageButtonStyle
+    - IP   - IP   - DONE - ImageButtonStyleRecord            - ImageTextButtonStyle
+    - IP   - IP   - DONE - ImageTextButtonStyleRecord        - ISceneStyle
+    - IP   - IP   - DONE - LabelStyleRecord                  - LabelStyle
+    - IP   - IP   - DONE - ListBoxStyleRecord                - ListBoxStyle
+    - IP   - IP   - DONE - ProgressBarStyleRecord            - ProgressBarStyle
+    - IP   - IP   - DONE - ScrollPaneStyleRecord             - ScrollPaneStyle
+    - IP   - IP   - DONE - SelectBoxStyleRecord              - SelectBoxStyle
+    - IP   - IP   - DONE - SliderStyleRecord                 - SliderStyle
+    - IP   - IP   - DONE - SplitPaneStyleRecord              - SplitPaneStyle
+    - IP   - IP   - DONE - StyleFactory                      
+    - IP   - IP   - DONE - StyleRegistry                     
+    - IP   - IP   - DONE - TextButtonStyleRecord             - TextButtonStyle
+    - IP   - IP   - DONE - TextFieldStyleRecord              - TextFieldStyle
+    - IP   - IP   - DONE - TextTooltipStyleRecord            - TextTooltipStyle
+    - IP   - IP   - DONE - TouchpadStyleRecord               - TouchpadStyle
+    - IP   - IP   - DONE - TreeStyleRecord                   - TreeStyle
+    - IP   - IP   - DONE - WindowStyleRecord                 - WindowStyle
 
 LUGHSHARP/SOURCE/SCENE2D/UI
 ---------------------------

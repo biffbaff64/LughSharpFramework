@@ -61,17 +61,17 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ButtonStyle()
     {
-        var skin = new Skin( new FileInfo( $"{Files.AssetsRoot}skins\\lughskin.json" ) );
+//        var skin = Engine.Files.GetDefaultLughSkin();
         
-        Up             = skin.GetDrawable( "button" );
-        Down           = skin.GetDrawable( "button-down" );
-        Over           = skin.GetDrawable( "button-over" );
-        Focused        = skin.GetDrawable( "button" );
-        Disabled       = skin.GetDrawable( "check-on-disabled" );
-        Checked        = skin.GetDrawable( "check-on" );
-        CheckedOver    = skin.GetDrawable( "check-over-on" );
-        CheckedDown    = skin.GetDrawable( "check-over-off" );
-        CheckedFocused = skin.GetDrawable( "check-on" );
+//        Up             = skin.GetDrawable( "button" );
+//        Down           = skin.GetDrawable( "button-down" );
+//        Over           = skin.GetDrawable( "button-over" );
+//        Focused        = skin.GetDrawable( "button" );
+//        Disabled       = skin.GetDrawable( "check-on-disabled" );
+//        Checked        = skin.GetDrawable( "check-on" );
+//        CheckedOver    = skin.GetDrawable( "check-over-on" );
+//        CheckedDown    = skin.GetDrawable( "check-over-off" );
+//        CheckedFocused = skin.GetDrawable( "check-on" );
     }
 
     /// <summary>

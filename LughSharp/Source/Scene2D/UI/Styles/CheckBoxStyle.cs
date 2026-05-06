@@ -45,8 +45,6 @@ public class CheckBoxStyle : TextButtonStyle
     
     public CheckBoxStyle()
     {
-        var skin = new Skin( new FileInfo( $"{Files.AssetsRoot}skins\\lughskin.json" ) );
-        
     }
 
     public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color fontColor )

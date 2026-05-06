@@ -22,10 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record LabelStyleRecord(  );
+public record LabelStyleRecord
+{
+    public BitmapFont?     Font       { get; set; }
+    public Color?          FontColor  { get; set; } = Color.White;
+    public ISceneDrawable? Background { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

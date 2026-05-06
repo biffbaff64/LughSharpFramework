@@ -22,10 +22,26 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record TextFieldStyleRecord(  );
+public record TextFieldStyleRecord
+{
+    public BitmapFont?     Font               { get; set; }
+    public Color?          FontColor          { get; set; }
+    public Color?          FocusedFontColor   { get; set; }
+    public Color?          DisabledFontColor  { get; set; }
+    public ISceneDrawable? Background         { get; set; }
+    public ISceneDrawable? FocusedBackground  { get; set; }
+    public ISceneDrawable? DisabledBackground { get; set; }
+    public ISceneDrawable? Cursor             { get; set; }
+    public ISceneDrawable? Selection          { get; set; }
+    public BitmapFont?     MessageFont        { get; set; }
+    public Color?          MessageFontColor   { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

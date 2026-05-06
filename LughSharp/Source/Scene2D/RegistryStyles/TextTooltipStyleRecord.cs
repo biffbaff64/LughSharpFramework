@@ -22,10 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Scene2D.UI.Styles;
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record TextTooltipStyleRecord(  );
+public record TextTooltipStyleRecord
+{
+    public LabelStyle?     Label      { get; set; }
+    public ISceneDrawable? Background { get; set; }
+    public float           WrapWidth  { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

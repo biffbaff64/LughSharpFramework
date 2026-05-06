@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Scene2D.UI;
+
 namespace LughSharp.Source.IO;
 
 /// <summary>
@@ -43,7 +45,7 @@ public interface IFiles
     FileInfo GetFileHandle( string path, PathType type );
 
     /// <inheritdoc cref="PathType.Classpath"/>
-    FileInfo Classpath( string path );
+    FileInfo ClassPath( string path );
 
     /// <inheritdoc cref="PathType.Absolute"/>
     FileInfo Absolute( string path );
@@ -129,6 +131,13 @@ public interface IFiles
     /// For desktops builds, this would default to true if the folder exists.
     /// </summary>
     bool IsLocalStorageAvailable();
+    
+    // ========================================================================
+
+    /// <summary>
+    /// Returns the default Lugh skin, which is stored in the assets directory of this framework.
+    /// </summary>
+    Skin GetDefaultLughSkin();
 }
 
 // ============================================================================

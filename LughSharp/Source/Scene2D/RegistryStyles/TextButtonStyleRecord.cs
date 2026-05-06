@@ -22,10 +22,24 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Fonts;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record TextButtonStyleRecord(  );
+public record TextButtonStyleRecord
+{
+    public BitmapFont? Font                    { get; set; }
+    public Color?      FontColor               { get; set; }
+    public Color?      DownFontColor           { get; set; }
+    public Color?      OverFontColor           { get; set; }
+    public Color?      FocusedFontColor        { get; set; }
+    public Color?      DisabledFontColor       { get; set; }
+    public Color?      CheckedFontColor        { get; set; }
+    public Color?      CheckedDownFontColor    { get; set; }
+    public Color?      CheckedOverFontColor    { get; set; }
+    public Color?      CheckedFocusedFontColor { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

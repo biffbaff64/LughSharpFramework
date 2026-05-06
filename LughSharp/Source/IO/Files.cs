@@ -1,4 +1,4 @@
-﻿// /////////////////////////////////////////////////////////////////////////////
+﻿﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
 //  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
+
+using LughSharp.Source.Scene2D.UI;
 
 namespace LughSharp.Source.IO;
 
@@ -70,7 +72,7 @@ public class Files : IFiles
     /// </code>
     /// </para>
     /// </summary>
-    public static string ExternalPath => $"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}\\";
+    public static string ExternalPath => $@"{Environment.GetFolderPath( Environment.SpecialFolder.UserProfile )}\";
 
     /// <summary>
     /// Path relative to the asset directory on Android and to the application's root
@@ -116,7 +118,7 @@ public class Files : IFiles
     /// C:\Development\Projects\CSharp\TestProject\bin\Debug\net8.0\Assets\
     /// </code>
     /// </summary>
-    public static string AssetsRoot => $"{AssemblyDirectory}{ContentRoot}\\";
+    public static string AssetsRoot => $@"{AssemblyDirectory}{ContentRoot}\";
 
     // ========================================================================
     // ========================================================================
@@ -125,7 +127,7 @@ public class Files : IFiles
     /// <summary>
     /// Convenience method that returns a <see cref="PathType.Classpath"/> file handle.
     /// </summary>
-    public virtual FileInfo Classpath( string path )
+    public virtual FileInfo ClassPath( string path )
     {
         if ( string.IsNullOrEmpty( path ) )
         {
@@ -153,6 +155,7 @@ public class Files : IFiles
 
             // Try to find the resource in the assembly's manifest
             string[] manifestResourceNames = assembly.GetManifestResourceNames();
+            
             string? matchingResource = manifestResourceNames
                 .FirstOrDefault( r => r.EndsWith( resourcePath, StringComparison.OrdinalIgnoreCase ) );
 
@@ -186,8 +189,37 @@ public class Files : IFiles
         }
     }
 
+    /// <summary>
+    /// Returns a <see cref="Stream"/> for the embedded resource at the given path,
+    /// searching the <b>framework assembly</b> (i.e. the assembly that contains
+    /// <see cref="Files"/>). Returns <c>null</c> if no matching resource is found.
+    /// </summary>
+    /// <param name="path">
+    /// Path relative to the embedded resource root, using forward or back slashes.
+    /// Example: <c>"Assets/Skins/uiskin.json"</c>
+    /// </param>
+    public virtual Stream? GetClassPathStream( string path )
+    {
+        if ( string.IsNullOrEmpty( path ) )
+        {
+            throw new ArgumentNullException( nameof( path ) );
+        }
+
+        // Use typeof(Files).Assembly so we always search the framework assembly,
+        // regardless of which assembly is currently executing.
+        var assembly = typeof( Files ).Assembly;
+
+        string resourcePath = path.TrimStart( '/' ).Replace( '/', '.' ).Replace( '\\', '.' );
+
+        string? match = assembly.GetManifestResourceNames()
+                                .FirstOrDefault( r => r.EndsWith( resourcePath,
+                                                                   StringComparison.OrdinalIgnoreCase ) );
+
+        return match != null ? assembly.GetManifestResourceStream( match ) : null;
+    }
+
     #endregion Class path
-    
+
     // ========================================================================
     // ========================================================================
     #region Internal storage
@@ -574,7 +606,7 @@ public class Files : IFiles
 
         return type switch
                {
-                   PathType.Classpath => Classpath( path ),
+                   PathType.Classpath => ClassPath( path ),
                    PathType.Internal  => Internal( path ),
                    PathType.Absolute  => Absolute( path ),
                    PathType.Assembly  => Assembly( path ),
@@ -752,6 +784,26 @@ public class Files : IFiles
                 file.Delete();
             }
         }
+    }
+
+    /// <summary>
+    /// Returns the default Lugh skin, which is stored in the assets directory of this framework.
+    /// </summary>
+    public Skin GetDefaultLughSkin()
+    {
+        using var stream = GetClassPathStream( "Assets/Skins/uiskin.json" )
+                        ?? throw new RuntimeException( "Embedded resource 'Assets/Skins/uiskin.json' not found." );
+
+        using var reader = new StreamReader( stream );
+        
+        
+        
+        
+        string text = reader.ReadToEnd();
+
+        Logger.Debug( text );
+
+        return new Skin();
     }
 
     // ========================================================================

@@ -92,7 +92,7 @@ public class MainGame : LughGame
 //        _mapTests = new MapTests();
 //        _mapTests.CreateMap();
         // --------------------------------------
-        _stageTests.CreateStage( _hudCam, ref _stage, ref _inputMultiplexer );
+//        _stageTests.CreateStage( _hudCam, ref _stage, ref _inputMultiplexer );
         // --------------------------------------
 //        _font         = _fontTests.CreateBitmapFont();
 //        _freetypeFont = _fontTests.CreateFreeTypeFont();
@@ -107,7 +107,7 @@ public class MainGame : LughGame
 //        }
         // --------------------------------------
 
-        _font = new BitmapFont( new FileInfo( Assets.DefaultSkinFont ) );
+        _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
 
         if ( _inputMultiplexer.Processors.Size > 0 )
         {

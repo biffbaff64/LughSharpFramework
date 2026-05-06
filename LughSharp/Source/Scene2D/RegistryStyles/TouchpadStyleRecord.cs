@@ -22,10 +22,17 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record TouchpadStyleRecord(  );
+public record TouchpadStyleRecord
+{
+    // Stretched in both directions.
+    public ISceneDrawable? Background { get; set; }
+    public ISceneDrawable? Knob       { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

@@ -22,10 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record SplitPaneStyleRecord(  );
+public record SplitPaneStyleRecord
+{
+    public ISceneDrawable? Handle { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

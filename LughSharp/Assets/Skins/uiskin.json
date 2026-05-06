@@ -125,6 +125,46 @@
       "disabledFontColor": "grey"
     }
   },
+  "ImageButtonStyle": {
+    "default": {
+      "down": "button-down",
+      "up": "button",
+      "over": "button-over",
+      "disabled": "button",
+      "focusBorder": "border"
+    },
+    "toggle": {
+      "checked": "button-down",
+      "focusBorder": "border",
+      "down": "button-down",
+      "up": "button",
+      "over": "button-over",
+      "disabled": "button"
+    },
+  },
+  "ImageTextButtonStyle": {
+    "default": {
+      "down": "button-down",
+      "up": "button",
+      "over": "button-over",
+      "disabled": "button",
+      "font": "default-font",
+      "fontColor": "white",
+      "disabledFontColor": "grey",
+      "focusBorder": "border"
+    },
+    "toggle": {
+      "checked": "button-down",
+      "down": "button-down",
+      "up": "button",
+      "font": "default-font",
+      "fontColor": "white",
+      "over": "button-over",
+      "disabled": "button",
+      "disabledFontColor": "grey",
+      "focusBorder": "border"
+    },
+  },
   "ScrollPaneStyle": {
     "list": {
       "vScroll": "scroll",
@@ -179,7 +219,7 @@
       "titleFontColor": "white"
     },
     "dialog": {
-      "stageBackground": "dialogDim",
+      "stageBackground": "default-pane",
       "titleFont": "default-font",
       "background": "window",
       "titleFontColor": "white"
@@ -217,6 +257,11 @@
     "default": {
       "font": "default-font",
       "fontColor": "white"
+    },
+    "default-bg": {
+      "font": "default-font",
+      "fontColor": "white",
+      "background": "window-bg"
     },
     "link-label": {
       "fontColor": "link-label",
@@ -269,7 +314,7 @@
       "disabledFontColor": "grey"
     }
   },
-  "ListStyle": {
+  "ListBoxStyle": {
     "default": {
       "fontColorUnselected": "white",
       "selection": "padded-list-selection",

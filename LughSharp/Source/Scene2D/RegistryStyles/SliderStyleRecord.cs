@@ -22,10 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record SliderStyleRecord(  );
+public record SliderStyleRecord
+{
+    public ISceneDrawable? BackgroundOver { get; set; }
+    public ISceneDrawable? BackgroundDown { get; set; }
+    public ISceneDrawable? KnobBeforeOver { get; set; }
+    public ISceneDrawable? KnobOver       { get; set; }
+    public ISceneDrawable? KnobAfterOver  { get; set; }
+    public ISceneDrawable? KnobBeforeDown { get; set; }
+    public ISceneDrawable? KnobDown       { get; set; }
+    public ISceneDrawable? KnobAfterDown  { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

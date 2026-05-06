@@ -82,8 +82,8 @@ public class SelectBoxStyle : ISceneStyle
         }
 
         Background      = style.Background;
-        ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ?? new ScrollPaneStyle() );
-        ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ?? new ListBoxStyle() );
+        ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ?? throw new NullReferenceException() );
+        ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ?? throw new NullReferenceException() );
 
         BackgroundOver     = style.BackgroundOver;
         BackgroundOpen     = style.BackgroundOpen;

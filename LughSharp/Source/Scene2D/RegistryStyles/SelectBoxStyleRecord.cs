@@ -22,10 +22,26 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Scene2D.UI.Styles;
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record SelectBoxStyleRecord(  );
+public record SelectBoxStyleRecord
+{
+    public BitmapFont?      Font               { get; }
+    public ScrollPaneStyle? ScrollPaneStyle    { get; }
+    public ListBoxStyle?    ListBoxStyle       { get; }
+    public Color            FontColor          { get; } = new( 1, 1, 1, 1 );
+    public Color?           OverFontColor      { get; }
+    public Color?           DisabledFontColor  { get; }
+    public ISceneDrawable?  Background         { get; }
+    public ISceneDrawable?  BackgroundOver     { get; }
+    public ISceneDrawable?  BackgroundOpen     { get; }
+    public ISceneDrawable?  BackgroundDisabled { get; }
+}
 
 // ============================================================================
 // ============================================================================

@@ -22,10 +22,21 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record TreeStyleRecord(  );
+public record TreeStyleRecord
+{
+    public ISceneDrawable? Plus       { get; set; }
+    public ISceneDrawable? Minus      { get; set; }
+    public ISceneDrawable? PlusOver   { get; set; }
+    public ISceneDrawable? MinusOver  { get; set; }
+    public ISceneDrawable? Over       { get; set; }
+    public ISceneDrawable? Selection  { get; set; }
+    public ISceneDrawable? Background { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

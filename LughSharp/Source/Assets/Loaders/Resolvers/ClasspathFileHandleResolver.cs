@@ -32,7 +32,7 @@ public class ClasspathFileHandleResolver : IFileHandleResolver
     /// <inheritdoc />
     public FileInfo Resolve( string filename )
     {
-        return Engine.Files.Classpath( filename );
+        return Engine.Files.ClassPath( filename );
     }
 }
 

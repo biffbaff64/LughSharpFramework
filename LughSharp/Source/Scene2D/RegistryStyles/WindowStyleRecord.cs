@@ -22,10 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Scene2D.Utils;
+
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record WindowStyleRecord(  );
+public record WindowStyleRecord
+{
+    public ISceneDrawable? Background      { get; set; }
+    public BitmapFont?     TitleFont       { get; set; }
+    public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
+    public ISceneDrawable? StageBackground { get; set; }
+}
 
 // ============================================================================
 // ============================================================================

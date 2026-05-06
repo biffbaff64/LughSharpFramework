@@ -26,6 +26,7 @@
 using JetBrains.Annotations;
 
 using LughSharp.Source.IO;
+using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Mock.Files;
@@ -47,7 +48,7 @@ public class MockFiles : IFiles
     }
 
     /// <inheritdoc cref="PathType.Classpath"/>
-    public FileInfo Classpath( string path )
+    public FileInfo ClassPath( string path )
     {
         throw new NotImplementedException();
     }
@@ -168,6 +169,14 @@ public class MockFiles : IFiles
     /// For desktops builds, this would default to true if the folder exists.
     /// </summary>
     public bool IsLocalStorageAvailable()
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Returns the default Lugh skin, which is stored in the assets directory of this framework.
+    /// </summary>
+    public Skin GetDefaultLughSkin()
     {
         throw new NotImplementedException();
     }

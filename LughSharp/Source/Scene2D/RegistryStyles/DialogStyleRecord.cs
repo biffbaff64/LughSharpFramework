@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
+// Copyright (c) 2024 Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.RegistryStyles;
 
 [PublicAPI]
-public record CheckBoxStyleRecord
-{
-    public ISceneDrawable? CheckboxOn          { get; set; }
-    public ISceneDrawable? CheckboxOff         { get; set; }
-    public ISceneDrawable? CheckboxOnOver      { get; set; }
-    public ISceneDrawable? CheckboxOver        { get; set; }
-    public ISceneDrawable? CheckboxOnDisabled  { get; set; }
-    public ISceneDrawable? CheckboxOffDisabled { get; set; }
-}
+public record DialogStyleRecord : WindowStyleRecord;
 
 // ============================================================================
 // ============================================================================

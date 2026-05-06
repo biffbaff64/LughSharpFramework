@@ -118,7 +118,7 @@ public class StageTests : IDisposable
 //        DialogActor();
 //        WindowActor();
         // ----------------------------
-        SelectBoxActor();
+//        SelectBoxActor();
 //        SplitPaneActor();
 
         return;
