@@ -147,6 +147,11 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
 
         return drawable;
     }
+
+    /// <summary>
+    /// Creates a copy of this drawable.
+    /// </summary>
+    public override SpriteDrawable Copy() => new( this );
 }
 
 // ============================================================================

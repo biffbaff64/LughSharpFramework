@@ -45,14 +45,14 @@ public class BaseDrawable : ISceneDrawable
     /// <summary>
     /// Creates a new, empty, BaseDrawable object.
     /// </summary>
-    protected BaseDrawable()
+    public BaseDrawable()
     {
     }
 
     /// <summary>
     /// Creates a new empty drawable with the same sizing information as the specified drawable.
     /// </summary>
-    protected BaseDrawable( ISceneDrawable? drawable )
+    public BaseDrawable( ISceneDrawable? drawable )
     {
         Guard.Against.Null( drawable );
 
@@ -97,6 +97,11 @@ public class BaseDrawable : ISceneDrawable
         MinWidth  = minWidth;
         MinHeight = minHeight;
     }
+    
+    /// <summary>
+    /// Creates a copy of this drawable.
+    /// </summary>
+    public virtual ISceneDrawable Copy() => new BaseDrawable( this );
 }
 
 // ============================================================================

@@ -33,21 +33,31 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SelectBoxStyle : ISceneStyle
 {
-    public BitmapFont?      Font               { get; }
-    public ScrollPaneStyle? ScrollPaneStyle    { get; }
-    public ListBoxStyle?    ListBoxStyle       { get; }
-    public Color            FontColor          { get; } = new( 1, 1, 1, 1 );
-    public Color?           OverFontColor      { get; }
-    public Color?           DisabledFontColor  { get; }
-    public ISceneDrawable?  Background         { get; }
-    public ISceneDrawable?  BackgroundOver     { get; }
-    public ISceneDrawable?  BackgroundOpen     { get; }
-    public ISceneDrawable?  BackgroundDisabled { get; }
+    public BitmapFont      Font               { get; }
+    public ScrollPaneStyle ScrollPaneStyle    { get; }
+    public ListBoxStyle    ListBoxStyle       { get; }
+    public Color           FontColor          { get; }
+    public Color           OverFontColor      { get; }
+    public Color           DisabledFontColor  { get; }
+    public ISceneDrawable  Background         { get; }
+    public ISceneDrawable  BackgroundOver     { get; }
+    public ISceneDrawable  BackgroundOpen     { get; }
+    public ISceneDrawable  BackgroundDisabled { get; }
 
     // ====================================================================
 
     public SelectBoxStyle()
     {
+        Font               = new BitmapFont();
+        FontColor          = new Color( 1, 1, 1, 1 );
+        OverFontColor      = new Color( 1, 1, 1, 1 );
+        DisabledFontColor  = new Color( 0.5f, 0.5f, 0.5f, 1 );
+        ScrollPaneStyle    = new ScrollPaneStyle();
+        ListBoxStyle       = new ListBoxStyle();
+        Background         = new BaseDrawable();
+        BackgroundOver     = new BaseDrawable();
+        BackgroundOpen     = new BaseDrawable();
+        BackgroundDisabled = new BaseDrawable();
     }
 
     public SelectBoxStyle( BitmapFont font,
@@ -57,34 +67,35 @@ public class SelectBoxStyle : ISceneStyle
                            ListBoxStyle listBoxStyle )
     {
         Font            = font;
-        Background      = background;
         ScrollPaneStyle = scrollStyle;
         ListBoxStyle    = listBoxStyle;
 
-        FontColor.Set( fontColor );
+        FontColor         = fontColor;
+        OverFontColor     = fontColor;
+        DisabledFontColor = new Color( 0.5f, 0.5f, 0.5f, 1 );
+
+        Background         = background;
+        BackgroundOver     = background;
+        BackgroundOpen     = background;
+        BackgroundDisabled = background;
     }
 
     public SelectBoxStyle( SelectBoxStyle? style )
     {
         Guard.Against.Null( style );
 
-        Font = style.Font;
-        FontColor.Set( style.FontColor );
-
-        if ( style.OverFontColor != null )
-        {
-            OverFontColor = new Color( style.OverFontColor );
-        }
-
-        if ( style.DisabledFontColor != null )
-        {
-            DisabledFontColor = new Color( style.DisabledFontColor );
-        }
-
-        Background      = style.Background;
+        // Font and Styles
+        Font            = style.Font;
         ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ?? throw new NullReferenceException() );
         ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ?? throw new NullReferenceException() );
 
+        // Colors
+        FontColor         = style.FontColor;
+        OverFontColor     = style.OverFontColor;
+        DisabledFontColor = style.DisabledFontColor;
+
+        // Drawables
+        Background         = style.Background;
         BackgroundOver     = style.BackgroundOver;
         BackgroundOpen     = style.BackgroundOpen;
         BackgroundDisabled = style.BackgroundDisabled;

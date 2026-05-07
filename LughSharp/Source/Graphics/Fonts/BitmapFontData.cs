@@ -150,10 +150,67 @@ public class BitmapFontData
         Load( fontFile, flip );
     }
 
+    /// <summary>
+    /// Creates a deep copy of the specified <see cref="BitmapFontData"/>.
+    /// </summary>
+    public BitmapFontData( BitmapFontData other )
+    {
+        BreakChars = other.BreakChars != null ? ( char[] )other.BreakChars.Clone() : null;
+        CapChars   = ( char[] )other.CapChars.Clone();
+        XChars     = ( char[] )other.XChars.Clone();
+
+        Name           = other.Name;
+        FontFile       = new FileInfo( other.FontFile.FullName );
+        ImagePaths     = other.ImagePaths != null ? ( string[] )other.ImagePaths.Clone() : null;
+        Flipped        = other.Flipped;
+        PadTop         = other.PadTop;
+        PadRight       = other.PadRight;
+        PadBottom      = other.PadBottom;
+        PadLeft        = other.PadLeft;
+        ScaleX         = other.ScaleX;
+        ScaleY         = other.ScaleY;
+        MarkupEnabled  = other.MarkupEnabled;
+        LineHeight     = other.LineHeight;
+        CapHeight      = other.CapHeight;
+        Ascent         = other.Ascent;
+        Descent        = other.Descent;
+        Down           = other.Down;
+        BlankLineScale = other.BlankLineScale;
+        CursorX        = other.CursorX;
+        SpaceXadvance  = other.SpaceXadvance;
+        XHeight        = other.XHeight;
+        MissingGlyph   = other.MissingGlyph != null ? CopyGlyph( other.MissingGlyph ) : null;
+
+        Glyphs = new Glyph?[]?[ other.Glyphs.Length ];
+
+        for ( var i = 0; i < other.Glyphs.Length; i++ )
+        {
+            if ( other.Glyphs[ i ] == null )
+            {
+                continue;
+            }
+
+            Glyphs[ i ] = new Glyph?[ other.Glyphs[ i ]!.Length ];
+
+            for ( var j = 0; j < other.Glyphs[ i ]!.Length; j++ )
+            {
+                if ( other.Glyphs[ i ]![ j ] != null )
+                {
+                    Glyphs[ i ]![ j ] = CopyGlyph( other.Glyphs[ i ]![ j ]! );
+                }
+            }
+        }
+    }
+
     // ====================================================================
 
     /// <summary>
-    /// 
+    /// Creates a new BitmapFontData instance from this one.
+    /// </summary>
+    public BitmapFontData Copy() => new( this );
+    
+    /// <summary>
+    ///
     /// </summary>
     /// <param name="file"></param>
     /// <param name="flip"></param>
@@ -1061,6 +1118,45 @@ public class BitmapFontData
         }
 
         return pageRegions;
+    }
+
+    private static Glyph CopyGlyph( Glyph src )
+    {
+        return new Glyph
+        {
+            ID         = src.ID,
+            SrcX       = src.SrcX,
+            SrcY       = src.SrcY,
+            Width      = src.Width,
+            Height     = src.Height,
+            U          = src.U,
+            U2         = src.U2,
+            V          = src.V,
+            V2         = src.V2,
+            Xoffset    = src.Xoffset,
+            Yoffset    = src.Yoffset,
+            Xadvance   = src.Xadvance,
+            Page       = src.Page,
+            FixedWidth = src.FixedWidth,
+            Kerning    = CopyKerning( src.Kerning ),
+        };
+    }
+
+    private static byte[]?[]? CopyKerning( byte[]?[]? source )
+    {
+        if ( source == null )
+        {
+            return null;
+        }
+
+        byte[]?[] copy = new byte[]?[ source.Length ];
+
+        for ( var i = 0; i < source.Length; i++ )
+        {
+            copy[ i ] = source[ i ] != null ? ( byte[] )source[ i ]!.Clone() : null;
+        }
+
+        return copy;
     }
 
     /// <inheritdoc />

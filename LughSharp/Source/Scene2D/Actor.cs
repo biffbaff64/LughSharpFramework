@@ -1171,16 +1171,26 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
+    /// Sets the actor color.
     /// </summary>
-    /// <param name="r"></param>
-    /// <param name="g"></param>
-    /// <param name="b"></param>
-    /// <param name="a"></param>
+    /// <param name="r"> Red component. </param>
+    /// <param name="g"> Green component. </param>
+    /// <param name="b"> Blue component. </param>
+    /// <param name="a"> Alpha component. </param>
     public void SetColor( float r, float g, float b, float a )
     {
         ActorColor.Set( r, g, b, a );
     }
 
+    /// <summary>
+    /// Sets the actor color.
+    /// </summary>
+    /// <param name="color"> The color. </param>
+    public void SetColor( Color color )
+    {
+        ActorColor.Set( color );
+    }
+    
     /// <summary>
     /// Changes the z-order for this actor so it is in front of all siblings.
     /// </summary>

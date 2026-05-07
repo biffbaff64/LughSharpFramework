@@ -28,18 +28,18 @@ using LughSharp.Source.Scene2D.Utils;
 namespace LughSharp.Source.Scene2D.UI.Styles;
 
 /// <summary>
-/// The style for an image text button, see <see cref="ImageTextButton"/>.
+/// The style for an <see cref="ImageTextButton"/>.
 /// </summary>
 [PublicAPI]
 public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
 {
-    public ISceneDrawable? ImageUp          { get; set; }
-    public ISceneDrawable? ImageDown        { get; set; }
-    public ISceneDrawable? ImageOver        { get; set; }
-    public ISceneDrawable? ImageDisabled    { get; set; }
-    public ISceneDrawable? ImageChecked     { get; set; }
-    public ISceneDrawable? ImageCheckedDown { get; set; }
-    public ISceneDrawable? ImageCheckedOver { get; set; }
+    public ISceneDrawable ImageUp          { get; set; }    = new BaseDrawable();
+    public ISceneDrawable ImageDown        { get; set; }    = new BaseDrawable();
+    public ISceneDrawable ImageOver        { get; set; }    = new BaseDrawable();
+    public ISceneDrawable ImageDisabled    { get; set; }    = new BaseDrawable();
+    public ISceneDrawable ImageChecked     { get; set; }    = new BaseDrawable();
+    public ISceneDrawable ImageCheckedDown { get; set; }    = new BaseDrawable();
+    public ISceneDrawable ImageCheckedOver { get; set; }    = new BaseDrawable();
     
     // ========================================================================
     
@@ -52,8 +52,7 @@ public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
     {
     }
 
-    public ImageTextButtonStyle( ImageTextButtonStyle style )
-        : base( style )
+    public ImageTextButtonStyle( ImageTextButtonStyle style ) : base( style )
 
     {
         ImageUp          = style.ImageUp;
@@ -65,8 +64,7 @@ public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
         ImageCheckedOver = style.ImageCheckedOver;
     }
 
-    public ImageTextButtonStyle( TextButtonStyle style )
-        : base( style )
+    public ImageTextButtonStyle( TextButtonStyle style ) : base( style )
     {
     }
 }

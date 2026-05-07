@@ -83,17 +83,6 @@ public class BitmapFont
 
     /// <summary>
     /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
-    /// This constructor is provided for convenience, and is primarily intended for use
-    /// by the SceneGraph Skin Loader.
-    /// </summary>
-    public BitmapFont() : this( Engine.Files.Internal( DefaultFont ),
-                                Engine.Files.Internal( DefaultFontImage ),
-                                false )
-    {
-    }
-
-    /// <summary>
-    /// Creates a BitmapFont using the default 15pt Arial font included in the Library.
     /// This is convenient to easily display text without bothering without generating
     /// a bitmap font yourself.
     /// </summary>
@@ -235,12 +224,34 @@ public class BitmapFont
             OwnsTexture = false;
         }
 
-        Cache = new BitmapFontCache( this, GetUseIntegerPositions() );
+        Cache = new BitmapFontCache( this, _useIntegerPositions );
 
         SafeLoad( data );
     }
 
+    /// <summary>
+    /// Constructs a new copy of the given <see cref="BitmapFont"/>.
+    /// </summary>
+    public BitmapFont( BitmapFont font )
+    {
+        Cache = new BitmapFontCache( font, _useIntegerPositions );
+        FontData = font.FontData.Copy();
+
+        Flipped     = font.Flipped;
+        OwnsTexture = font.OwnsTexture;
+
+        _pathType            = font._pathType;
+        _useIntegerPositions = font._useIntegerPositions;
+
+        _regions = new List< TextureRegion >( font._regions );
+    }
+
     // ========================================================================
+
+    /// <summary>
+    /// Constructs a new BitmapFont from the given <see cref="BitmapFont"/>
+    /// </summary>
+    public BitmapFont Copy() => new( this );
 
     /// <summary>
     /// Wrapper method for <see cref="Load(BitmapFontData)"/> that is safe to call
@@ -554,7 +565,7 @@ public class BitmapFont
                              float x,
                              float y,
                              int targetWidth,
-                             Align halign = Align.Left ,
+                             Align halign = Align.Left,
                              bool wrap = false )
     {
         Guard.Against.Null( Cache );
@@ -639,7 +650,7 @@ public class BitmapFont
 
         Cache.Draw( batch );
     }
-    
+
     /// <summary>
     /// Disposes the texture used by this BitmapFont's region IF this BitmapFont
     /// created the texture.

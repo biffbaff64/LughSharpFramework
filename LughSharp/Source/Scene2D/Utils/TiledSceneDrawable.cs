@@ -34,6 +34,9 @@ namespace LughSharp.Source.Scene2D.Utils;
 [PublicAPI]
 public class TiledSceneDrawable : TextureRegionDrawable
 {
+    public Color Color { get; set; } = new( 1, 1, 1, 1 );
+    public float Scale { set; get; } = 1;
+
     // ========================================================================
 
     /// <summary>
@@ -52,10 +55,21 @@ public class TiledSceneDrawable : TextureRegionDrawable
     {
     }
 
-    public Color Color { get; set; } = new( 1, 1, 1, 1 );
-    public float Scale { set; get; } = 1;
-
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates a new TiledDrawable, initialised with the same properties as the given drawable.
+    /// </summary>
+    /// <param name="drawable"></param>
+    public TiledSceneDrawable( TiledSceneDrawable drawable ) : base( drawable )
+    {
+        Color = drawable.Color.Copy();
+        Scale = drawable.Scale;
+    }
+    
+    /// <summary>
+    /// Draws this drawable at the specified bounds. The drawable should be tinted
+    /// with <see cref="IBatch.Color"/>, possibly by mixing its own color.
+    /// The default implementation does nothing.
+    /// </summary>
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
         TextureRegion? region = Region;
@@ -167,13 +181,18 @@ public class TiledSceneDrawable : TextureRegionDrawable
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws this drawable at the specified bounds.
+    /// </summary>
     public override void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         throw new NotSupportedException();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Creates a new drawable that renders the same as this drawable
+    /// but tinted with the specified color.
+    /// </summary>
     public override TiledSceneDrawable Tint( Color tint )
     {
         var drawable = new TiledSceneDrawable( this );
@@ -186,4 +205,13 @@ public class TiledSceneDrawable : TextureRegionDrawable
 
         return drawable;
     }
+
+    /// <summary>
+    /// Creates a copy of this drawable.
+    /// </summary>
+    public override TiledSceneDrawable Copy() => new( this );
 }
+
+// ============================================================================
+// ============================================================================
+

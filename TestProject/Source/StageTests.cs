@@ -118,7 +118,7 @@ public class StageTests : IDisposable
 //        DialogActor();
 //        WindowActor();
         // ----------------------------
-//        SelectBoxActor();
+        SelectBoxActor();
 //        SplitPaneActor();
 
         return;
@@ -200,6 +200,8 @@ public class StageTests : IDisposable
             table.AddCell( new Label( "IIIIIIIII", skin ) );
             table.AddRow();
             table.AddCell( new Label( "---------", skin ) );
+            table.AddRow();
+            table.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) )  );
             table.AddRow();
 
             _stage?.AddActor( table );
@@ -414,11 +416,11 @@ public class StageTests : IDisposable
         {
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
-            var scene2DImage = new Scene2DImage( new Texture2D( Assets.HudPanel ) )
+            var scene2DImage = new Scene2DImage( new Texture2D( Assets.Boulder64X64 ) )
             {
                 IsVisible = true
             };
-            scene2DImage.SetPosition( 0, 0 );
+            scene2DImage.SetPosition( 100, 100 );
             _stage?.AddActor( scene2DImage );
         }
 

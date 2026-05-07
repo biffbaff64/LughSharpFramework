@@ -216,6 +216,11 @@ public class Color : ICloneable, IEquatable< Color >
     {
     }
 
+    /// <summary>
+    /// Constructs a new color using the components from the supplied color.
+    /// </summary>
+    public Color Copy() => new( this );
+    
     // ========================================================================
     // ========================================================================
     // ========================================================================

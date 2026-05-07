@@ -973,6 +973,7 @@ LUGHSHARP/SOURCE/SCENE2D/STYLES
     - IP   - IP   - DONE - SplitPaneStyleRecord              - SplitPaneStyle
     - IP   - IP   - DONE - StyleFactory                      
     - IP   - IP   - DONE - StyleRegistry                     
+    -      -      -      - TextAreaStyleRecord               - TextAreaStyle
     - IP   - IP   - DONE - TextButtonStyleRecord             - TextButtonStyle
     - IP   - IP   - DONE - TextFieldStyleRecord              - TextFieldStyle
     - IP   - IP   - DONE - TextTooltipStyleRecord            - TextTooltipStyle
@@ -1049,6 +1050,7 @@ remove any possibility of NullReferenceExceptions.
     -      -      - DONE - SelectBoxStyle
     -      -      - DONE - SliderStyle
     -      -      - DONE - SplitPaneStyle
+    -      -      - DONE - TextAreaStyle
     -      -      - DONE - TextButtonStyle
     -      -      - DONE - TextFieldStyle
     -      -      - DONE - TextTooltipStyle

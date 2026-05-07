@@ -32,13 +32,13 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ImageButtonStyle : ButtonStyle, ISceneStyle
 {
-    public ISceneDrawable? ImageChecked;
-    public ISceneDrawable? ImageCheckedDown;
-    public ISceneDrawable? ImageCheckedOver;
-    public ISceneDrawable? ImageDisabled;
-    public ISceneDrawable? ImageDown;
-    public ISceneDrawable? ImageOver;
-    public ISceneDrawable? ImageUp;
+    public ISceneDrawable ImageUp               = new BaseDrawable();
+    public ISceneDrawable ImageDown             = new BaseDrawable();
+    public ISceneDrawable ImageOver             = new BaseDrawable();
+    public ISceneDrawable ImageDisabled         = new BaseDrawable();
+    public ISceneDrawable ImageChecked          = new BaseDrawable();
+    public ISceneDrawable ImageCheckedDown      = new BaseDrawable();
+    public ISceneDrawable ImageCheckedOver      = new BaseDrawable();
 
     // ========================================================================
 
@@ -52,8 +52,9 @@ public class ImageButtonStyle : ButtonStyle, ISceneStyle
     /// <summary>
     /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable"/>
     /// images for <see cref="ImageUp"/>, <see cref="ImageDown"/> and <see cref="ImageChecked"/>.
+    /// The provided ISceneDrawables cannot be <c>null</c>.
     /// </summary>
-    public ImageButtonStyle( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
+    public ImageButtonStyle( ISceneDrawable imageUp, ISceneDrawable imageDown, ISceneDrawable imageChecked )
         : base( imageUp, imageDown, imageChecked )
     {
         ImageUp      = imageUp;
@@ -65,13 +66,12 @@ public class ImageButtonStyle : ButtonStyle, ISceneStyle
     /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ISceneDrawable"/>
     /// images for <see cref="ImageUp"/>, <see cref="ImageDown"/> and <see cref="ImageChecked"/>.
     /// </summary>
-    public ImageButtonStyle( ISceneDrawable? up,
-                             ISceneDrawable? down,
-                             ISceneDrawable? chcked,
-                             ISceneDrawable? imageUp,
-                             ISceneDrawable? imageDown,
-                             ISceneDrawable? imageChecked )
-        : base( up, down, chcked )
+    public ImageButtonStyle( ISceneDrawable up,
+                             ISceneDrawable down,
+                             ISceneDrawable chcked,
+                             ISceneDrawable imageUp,
+                             ISceneDrawable imageDown,
+                             ISceneDrawable imageChecked ) : base( up, down, chcked )
     {
         ImageUp      = imageUp;
         ImageDown    = imageDown;
@@ -81,8 +81,7 @@ public class ImageButtonStyle : ButtonStyle, ISceneStyle
     /// <summary>
     /// Creates a new ImageButtonStyle instance, using the given <see cref="ImageButtonStyle"/>
     /// </summary>
-    public ImageButtonStyle( ImageButtonStyle style )
-        : base( style )
+    public ImageButtonStyle( ImageButtonStyle style ) : base( style )
     {
         ImageUp          = style.ImageUp;
         ImageDown        = style.ImageDown;
@@ -102,6 +101,8 @@ public class ImageButtonStyle : ButtonStyle, ISceneStyle
     {
     }
 
+    // ========================================================================
+    
     public void Debug()
     {
         Logger.Debug( "ImageButtonStyle" );

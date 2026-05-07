@@ -46,6 +46,7 @@ public class LabelStyle : ISceneStyle
     public LabelStyle()
     {
         Font       = new BitmapFont();
+        FontColor  = Color.White;
         Background = null;
     }
 
@@ -57,8 +58,9 @@ public class LabelStyle : ISceneStyle
     /// <param name="fontColor"></param>
     public LabelStyle( BitmapFont font, Color? fontColor )
     {
-        Font      = font;
-        FontColor = fontColor ?? Color.White;
+        Font       = font;
+        FontColor  = fontColor ?? Color.White;
+        Background = new BaseDrawable();
     }
 
     /// <summary>

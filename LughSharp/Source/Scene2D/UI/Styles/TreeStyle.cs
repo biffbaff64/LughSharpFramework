@@ -32,20 +32,20 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TreeStyle : ISceneStyle
 {
-    public ISceneDrawable? Plus       { get; set; }
-    public ISceneDrawable? Minus      { get; set; }
-    public ISceneDrawable? PlusOver   { get; set; }
-    public ISceneDrawable? MinusOver  { get; set; }
-    public ISceneDrawable? Over       { get; set; }
-    public ISceneDrawable? Selection  { get; set; }
-    public ISceneDrawable? Background { get; set; }
+    public ISceneDrawable? Plus       { get; set; } = new BaseDrawable();
+    public ISceneDrawable? Minus      { get; set; } = new BaseDrawable();
+    public ISceneDrawable? PlusOver   { get; set; } = new BaseDrawable();
+    public ISceneDrawable? MinusOver  { get; set; } = new BaseDrawable();
+    public ISceneDrawable? Over       { get; set; } = new BaseDrawable();
+    public ISceneDrawable? Selection  { get; set; } = new BaseDrawable();
+    public ISceneDrawable? Background { get; set; } = new BaseDrawable();
 
     // ====================================================================
 
     public TreeStyle()
     {
     }
-    
+
     public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
     {
         Plus      = plus;
@@ -55,12 +55,10 @@ public class TreeStyle : ISceneStyle
 
     public TreeStyle( TreeStyle style )
     {
-        Plus  = style.Plus;
-        Minus = style.Minus;
-
-        PlusOver  = style.PlusOver;
-        MinusOver = style.MinusOver;
-
+        Plus       = style.Plus;
+        Minus      = style.Minus;
+        PlusOver   = style.PlusOver;
+        MinusOver  = style.MinusOver;
         Over       = style.Over;
         Selection  = style.Selection;
         Background = style.Background;
@@ -69,4 +67,3 @@ public class TreeStyle : ISceneStyle
 
 // ============================================================================
 // ============================================================================
-

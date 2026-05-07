@@ -140,6 +140,11 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
 
         return drawable;
     }
+
+    /// <summary>
+    /// Creates a copy of this drawable.
+    /// </summary>
+    public override TextureRegionDrawable Copy() => new( this );
 }
 
 // ============================================================================

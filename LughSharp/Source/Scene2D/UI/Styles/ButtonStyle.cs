@@ -35,15 +35,15 @@ public class ButtonStyle : ISceneStyle
 {
     public string Name { get; set; } = string.Empty;
 
-    public ISceneDrawable? Up             { get; set; }
-    public ISceneDrawable? Down           { get; set; }
-    public ISceneDrawable? Over           { get; set; }
-    public ISceneDrawable? Focused        { get; set; }
-    public ISceneDrawable? Disabled       { get; set; }
-    public ISceneDrawable? Checked        { get; set; }
-    public ISceneDrawable? CheckedOver    { get; set; }
-    public ISceneDrawable? CheckedDown    { get; set; }
-    public ISceneDrawable? CheckedFocused { get; set; }
+    public ISceneDrawable Up             { get; set; } = new BaseDrawable();
+    public ISceneDrawable Down           { get; set; } = new BaseDrawable();
+    public ISceneDrawable Over           { get; set; } = new BaseDrawable();
+    public ISceneDrawable Focused        { get; set; } = new BaseDrawable();
+    public ISceneDrawable Disabled       { get; set; } = new BaseDrawable();
+    public ISceneDrawable Checked        { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckedOver    { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckedDown    { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckedFocused { get; set; } = new BaseDrawable();
 
     public float PressedOffsetX   { get; set; }
     public float PressedOffsetY   { get; set; }
@@ -61,17 +61,6 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ButtonStyle()
     {
-//        var skin = Engine.Files.GetDefaultLughSkin();
-        
-//        Up             = skin.GetDrawable( "button" );
-//        Down           = skin.GetDrawable( "button-down" );
-//        Over           = skin.GetDrawable( "button-over" );
-//        Focused        = skin.GetDrawable( "button" );
-//        Disabled       = skin.GetDrawable( "check-on-disabled" );
-//        Checked        = skin.GetDrawable( "check-on" );
-//        CheckedOver    = skin.GetDrawable( "check-over-on" );
-//        CheckedDown    = skin.GetDrawable( "check-over-off" );
-//        CheckedFocused = skin.GetDrawable( "check-on" );
     }
 
     /// <summary>
@@ -92,7 +81,21 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ButtonStyle( ButtonStyle style )
     {
-        Set( style );
+        Up               = style.Up;
+        Down             = style.Down;
+        Over             = style.Over;
+        Focused          = style.Focused;
+        Disabled         = style.Disabled;
+        Checked          = style.Checked;
+        CheckedOver      = style.CheckedOver;
+        CheckedDown      = style.CheckedDown;
+        CheckedFocused   = style.CheckedFocused;
+        PressedOffsetX   = style.PressedOffsetX;
+        PressedOffsetY   = style.PressedOffsetY;
+        UnpressedOffsetX = style.UnpressedOffsetX;
+        UnpressedOffsetY = style.UnpressedOffsetY;
+        CheckedOffsetX   = style.CheckedOffsetX;
+        CheckedOffsetY   = style.CheckedOffsetY;
     }
 
     /// <summary>
@@ -103,8 +106,6 @@ public class ButtonStyle : ISceneStyle
     /// <typeparam name="T"></typeparam>
     public void Set< T >( T style ) where T : ButtonStyle
     {
-        Guard.Against.Null( style );
-
         Up               = style.Up;
         Down             = style.Down;
         Over             = style.Over;

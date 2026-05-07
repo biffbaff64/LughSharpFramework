@@ -32,12 +32,12 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ScrollPaneStyle : ISceneStyle
 {
-    public ISceneDrawable? Background  { get; set; }
-    public ISceneDrawable? Corner      { get; set; }
-    public ISceneDrawable? HScroll     { get; set; }
-    public ISceneDrawable? HScrollKnob { get; set; }
-    public ISceneDrawable? VScroll     { get; set; }
-    public ISceneDrawable? VScrollKnob { get; set; }
+    public ISceneDrawable Background  { get; set; } = new BaseDrawable();
+    public ISceneDrawable Corner      { get; set; } = new BaseDrawable();
+    public ISceneDrawable HScroll     { get; set; } = new BaseDrawable();
+    public ISceneDrawable HScrollKnob { get; set; } = new BaseDrawable();
+    public ISceneDrawable VScroll     { get; set; } = new BaseDrawable();
+    public ISceneDrawable VScrollKnob { get; set; } = new BaseDrawable();
 
     // ====================================================================
 

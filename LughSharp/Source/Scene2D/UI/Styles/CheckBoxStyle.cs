@@ -34,32 +34,49 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class CheckBoxStyle : TextButtonStyle
 {
-    public ISceneDrawable? CheckboxOn          { get; set; }
-    public ISceneDrawable? CheckboxOff         { get; set; }
-    public ISceneDrawable? CheckboxOnOver      { get; set; }
-    public ISceneDrawable? CheckboxOver        { get; set; }
-    public ISceneDrawable? CheckboxOnDisabled  { get; set; }
-    public ISceneDrawable? CheckboxOffDisabled { get; set; }
- 
+    public ISceneDrawable CheckboxOn          { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOff         { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOnOver      { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOver        { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOnDisabled  { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOffDisabled { get; set; } = new BaseDrawable();
+
     // ========================================================================
-    
+
+    /// <summary>
+    /// Default constructor. All properties are initialised to default values.
+    /// </summary>
     public CheckBoxStyle()
     {
     }
 
+    /// <summary>
+    /// Creates a new CheckBoxStyle with the given ISceneDrawables for <see cref="CheckboxOn"/>,
+    /// <see cref="CheckboxOff"/>, and base properties <see cref="TextButtonStyle.Font"/> and
+    /// <see cref="TextButtonStyle.FontColor"/>.
+    /// </summary>
+    /// <param name="checkboxOff"> The OFF-state SceneDrawable. </param>
+    /// <param name="checkboxOn"> The ON-state SceneDrawable. </param>
+    /// <param name="font"> The <see cref="BitmapFont"/> to use for labels. </param>
+    /// <param name="fontColor"> The font color to use. </param>
     public CheckBoxStyle( ISceneDrawable checkboxOff, ISceneDrawable checkboxOn, BitmapFont font, Color fontColor )
     {
-        CheckboxOff = checkboxOff;
         CheckboxOn  = checkboxOn;
-        Font        = font;
-        FontColor   = fontColor;
+        CheckboxOff = checkboxOff;
+
+        // Properties from base
+        Font      = font.Copy();
+        FontColor = fontColor.Copy();
     }
 
+    /// <summary>
+    /// Creates a new CheckBoxStyle with the same properties as the supplied style.
+    /// </summary>
+    /// <param name="style"></param>
     public CheckBoxStyle( CheckBoxStyle style ) : base( style )
     {
-        CheckboxOff = style.CheckboxOff;
-        CheckboxOn  = style.CheckboxOn;
-
+        CheckboxOn          = style.CheckboxOn;
+        CheckboxOff         = style.CheckboxOff;
         CheckboxOnOver      = style.CheckboxOnOver;
         CheckboxOver        = style.CheckboxOver;
         CheckboxOnDisabled  = style.CheckboxOnDisabled;
@@ -69,4 +86,3 @@ public class CheckBoxStyle : TextButtonStyle
 
 // ============================================================================
 // ============================================================================
-

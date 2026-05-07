@@ -35,10 +35,10 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class WindowStyle : ISceneStyle
 {
-    public ISceneDrawable? Background      { get; set; }
-    public BitmapFont?     TitleFont       { get; set; }
-    public Color?          TitleFontColor  { get; set; } = new( 1, 1, 1, 1 );
-    public ISceneDrawable? StageBackground { get; set; }
+    public ISceneDrawable Background      { get; set; }
+    public BitmapFont     TitleFont       { get; set; }
+    public Color          TitleFontColor  { get; set; }
+    public ISceneDrawable StageBackground { get; set; }
 
     // ====================================================================
 
@@ -49,6 +49,10 @@ public class WindowStyle : ISceneStyle
     /// </summary>
     public WindowStyle()
     {
+        TitleFont       = new BitmapFont();
+        TitleFontColor  = Color.White;
+        Background      = new BaseDrawable();
+        StageBackground = new BaseDrawable();
     }
 
     /// <summary>
@@ -59,12 +63,12 @@ public class WindowStyle : ISceneStyle
     /// <param name="titleFontColor"></param>
     /// <param name="background"></param>
     [JsonConstructor]
-    public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable? background )
+    public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable background )
     {
-        TitleFont  = titleFont;
-        Background = background;
-
-        TitleFontColor?.Set( titleFontColor );
+        TitleFont       = titleFont.Copy();
+        Background      = background;
+        StageBackground = new BaseDrawable();
+        TitleFontColor  = titleFontColor.Copy();
     }
 
     /// <summary>
@@ -73,18 +77,12 @@ public class WindowStyle : ISceneStyle
     /// <param name="style"> The style to copy from. </param>
     public WindowStyle( WindowStyle style )
     {
-        Background = style.Background;
-        TitleFont  = style.TitleFont;
-
-        if ( style.TitleFontColor != null )
-        {
-            TitleFontColor = new Color( style.TitleFontColor );
-        }
-
-        Background = style.Background;
+        Background      = style.Background;
+        TitleFont       = style.TitleFont;
+        TitleFontColor  = style.TitleFontColor.Copy();
+        StageBackground = style.StageBackground;
     }
 }
 
 // ============================================================================
 // ============================================================================
-

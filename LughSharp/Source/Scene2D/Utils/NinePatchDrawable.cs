@@ -42,6 +42,8 @@ namespace LughSharp.Source.Scene2D.Utils;
 [PublicAPI]
 public class NinePatchDrawable : BaseDrawable, ITransformDrawable
 {
+    public NinePatch? Patch { get; set; }
+
     // ========================================================================
 
     /// <summary>
@@ -70,8 +72,6 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     {
         Patch = drawable.Patch;
     }
-
-    public NinePatch? Patch { get; set; }
 
     /// <inheritdoc />
     public override void Draw( IBatch batch, float x, float y, float width, float height )
@@ -132,4 +132,13 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
 
         return drawable;
     }
+
+    /// <summary>
+    /// Creates a copy of this drawable.
+    /// </summary>
+    public override NinePatchDrawable Copy() => new( this );
 }
+
+// ============================================================================
+// ============================================================================
+
