@@ -62,11 +62,11 @@ public class InputTest : InputAdapter, ILughTest
         if ( Engine.Input.JustTouched() )
         {
             Logger.Debug( "JustTouched: button: "
-                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Left ) ? "left " : "" )
-                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Middle ) ? "middle " : "" )
-                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Right ) ? "right" : "" )
-                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Back ) ? "back" : "" )
-                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Forward ) ? "forward" : "" ) );
+                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Left ) ? "left " : string.Empty )
+                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Middle ) ? "middle " : string.Empty )
+                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Right ) ? "right" : string.Empty )
+                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Back ) ? "back" : string.Empty )
+                        + ( Engine.Input.IsButtonPressed( IInput.Buttons.Forward ) ? "forward" : string.Empty ) );
         }
 
         for ( int i = 0; i < 10; i++ )

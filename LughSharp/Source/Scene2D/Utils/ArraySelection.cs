@@ -35,7 +35,7 @@ public class ArraySelection< T > : Selection< T >
 
     // ========================================================================
 
-    private readonly List< T > _array = [];
+    private readonly List< T > _array;
     private          T?        _rangeStart;
 
     // ========================================================================
@@ -51,16 +51,10 @@ public class ArraySelection< T > : Selection< T >
 
     /// <summary>
     /// Selects or deselects the specified item based on how the selection configured, whether
-    /// ctrl is currently pressed, etc.
-    /// <para>
-    /// This is typically invoked by user interaction.
-    /// </para>
+    /// ctrl is currently pressed, etc. This is typically invoked by user interaction.
     /// </summary>
     public override void Choose( T item )
     {
-        Guard.Against.Null( item );
-        Guard.Against.Null( _array );
-
         if ( IsDisabled )
         {
             return;
@@ -133,9 +127,9 @@ public class ArraySelection< T > : Selection< T >
     }
 
     /// <summary>
-    /// Removes objects from the selection that are no longer in the items
-    /// array. If <see cref="Selection{T}.Required"/> is true and there is
-    /// no selected item, the first item is selected.
+    /// Removes objects from the selection that are no longer in the items array. If
+    /// <see cref="Selection{T}.Required"/> is true and there is no selected item,
+    /// the first item is selected.
     /// </summary>
     public virtual void Validate()
     {

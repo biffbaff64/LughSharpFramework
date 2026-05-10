@@ -56,7 +56,7 @@ public class RuntimeException : ApplicationException
     /// reference if no inner exception is specified.
     /// </param>
     public RuntimeException( Exception? e )
-        : this( "", e )
+        : this( string.Empty, e )
     {
     }
 

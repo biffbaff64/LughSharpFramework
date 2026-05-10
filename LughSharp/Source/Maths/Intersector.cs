@@ -310,7 +310,7 @@ public class Intersector
 
         _floatArray.Clear();
         _floatArray2.Clear();
-        _floatArray2.AddAll( p1.TransformedVertices!.ToList() );
+        _floatArray2.AddRange( p1.TransformedVertices!.ToList() );
 
         float[]? vertices2 = p2.TransformedVertices;
 
@@ -371,7 +371,7 @@ public class Intersector
             }
 
             _floatArray2.Clear();
-            _floatArray2.AddAll( _floatArray );
+            _floatArray2.AddRange( _floatArray );
             _floatArray.Clear();
         }
 

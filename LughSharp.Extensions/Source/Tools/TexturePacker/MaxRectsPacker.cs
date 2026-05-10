@@ -220,7 +220,7 @@ public class MaxRectsPacker : IPacker
                 {
                     string paddingMessage = edgePadX || edgePadY
                         ? $" and edge padding {paddingX} *2, {paddingY} *2"
-                        : "";
+                        : string.Empty;
 
                     throw new RuntimeException( $"Image does not fit within max page size " +
                                                 $"{_settings.MaxWidth}x{_settings.MaxHeight}" +
@@ -231,7 +231,7 @@ public class MaxRectsPacker : IPacker
             {
                 if ( width > maxWidth )
                 {
-                    string paddingMessage = edgePadX ? $" and X edge padding {_settings.PaddingX} *2" : "";
+                    string paddingMessage = edgePadX ? $" and X edge padding {_settings.PaddingX} *2" : string.Empty;
 
                     throw new RuntimeException( $"Image does not fit within max page width " +
                                                 $"{_settings.MaxWidth}{paddingMessage}: {rect.Name} {width}x{height}" );
@@ -239,7 +239,7 @@ public class MaxRectsPacker : IPacker
 
                 if ( ( height > maxHeight ) && ( !_settings.Rotation || ( width > maxHeight ) ) )
                 {
-                    string paddingMessage = edgePadY ? $" and Y edge padding {_settings.PaddingY} *2" : "";
+                    string paddingMessage = edgePadY ? $" and Y edge padding {_settings.PaddingY} *2" : string.Empty;
 
                     throw new RuntimeException( $"Image does not fit within max page height " +
                                                 $"{_settings.MaxHeight}{paddingMessage}: {rect.Name} {width}x{height}" );

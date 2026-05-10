@@ -118,7 +118,7 @@ public class FreetypeFontLoader : AsynchronousAssetLoader
     public class FreeTypeFontLoaderParameter : BitmapFontParameter
     {
         /// the name of the TTF file to be used to load the font
-        public string FontFileName { get; set; } = "";
+        public string FontFileName { get; set; } = string.Empty;
 
         /// the parameters used to generate the font, e.g. size, characters, etc.
         public readonly FreeTypeFontGenerator.FreeTypeFontParameter FontParameters = new();

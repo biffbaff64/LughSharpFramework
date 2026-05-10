@@ -22,19 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
-
 namespace LughSharp.Source.Graphics.Images;
 
 /// <summary>
-/// Defines a rectangular area of a texture. The coordinate system used has
-/// its origin in the upper left corner with the x-axis pointing to the
-/// right and the y axis pointing downwards.
+/// Defines a rectangular area of a texture. The coordinate system used has its origin in the
+/// upper left corner with the x-axis pointing to the right and the y axis pointing downwards.
 /// </summary>
 [PublicAPI]
 public class TextureRegion
@@ -64,9 +56,8 @@ public class TextureRegion
     }
 
     /// <summary>
-    /// Represents a portion of a texture, defined by specific coordinates,
-    /// width, and height. Used for rendering only a subsection of the
-    /// original texture.
+    /// Represents a portion of a texture, defined by specific coordinates, width, and height.
+    /// Used for rendering only a subsection of the original texture.
     /// </summary>
     public TextureRegion( Texture2D? texture )
     {
@@ -76,9 +67,8 @@ public class TextureRegion
     }
 
     /// <summary>
-    /// Represents a rectangular region of a texture, defining texture coordinates
-    /// and dimensions. Can be used to sample a sub-section of a texture image for
-    /// rendering.
+    /// Represents a rectangular region of a texture, defining texture coordinates and dimensions. Can
+    /// be used to sample a sub-section of a texture image for rendering.
     /// </summary>
     /// <param name="texture"> The texture from which to extract the region. </param>
     /// <param name="width">
@@ -673,3 +663,4 @@ public class TextureRegion
 
 // ========================================================================
 // ========================================================================
+

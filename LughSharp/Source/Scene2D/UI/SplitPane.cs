@@ -338,7 +338,7 @@ public class SplitPane : WidgetGroup
     public void SetSplitAmount( float splitAmount )
     {
         _splitAmount = splitAmount;
-        Invalidate();
+        InvalidateLayout();
     }
 
     public float GetSplitAmount()
@@ -351,7 +351,7 @@ public class SplitPane : WidgetGroup
     /// By default it imposes the limits of the <see cref="GetMinSplitAmount()"/>,
     /// <see cref="GetMaxSplitAmount()"/>, and min sizes of the children.
     /// This method is internally called in response to layout, so it should not call
-    /// <see cref="WidgetGroup.Invalidate()"/>.
+    /// <see cref="WidgetGroup.InvalidateLayout"/>.
     /// </summary>
     protected void ClampSplitAmount()
     {
@@ -444,7 +444,7 @@ public class SplitPane : WidgetGroup
             AddActor( widget );
         }
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     public void SetSecondWidget( Actor? widget )
@@ -461,7 +461,7 @@ public class SplitPane : WidgetGroup
             AddActor( widget );
         }
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     public bool RemoveActor( Actor actor )
@@ -494,7 +494,7 @@ public class SplitPane : WidgetGroup
         {
             base.RemoveActor( actor, unfocus );
             _firstWidget = null;
-            Invalidate();
+            InvalidateLayout();
 
             return true;
         }
@@ -503,7 +503,7 @@ public class SplitPane : WidgetGroup
         {
             base.RemoveActor( actor, unfocus );
             _secondWidget = null;
-            Invalidate();
+            InvalidateLayout();
 
             return true;
         }
@@ -521,13 +521,13 @@ public class SplitPane : WidgetGroup
             {
                 base.RemoveActor( actor, unfocus );
                 _firstWidget = null;
-                Invalidate();
+                InvalidateLayout();
             }
             else if ( actor == _secondWidget )
             {
                 base.RemoveActor( actor, unfocus );
                 _secondWidget = null;
-                Invalidate();
+                InvalidateLayout();
             }
         }
 
@@ -624,7 +624,7 @@ public class SplitPane : WidgetGroup
 
             _parent.LastPoint.Set( x, y );
 
-            _parent.Invalidate();
+            _parent.InvalidateLayout();
         }
 
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )

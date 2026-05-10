@@ -923,23 +923,10 @@ public class BitmapFontCache : IDisposable
 
             if ( disposing )
             {
-                //TODO: Dispose managed resources.
-//                _pooledLayouts?.Dispose();
-//                _pooledLayouts = null;
-
-//                _pageVertices = null;
-//                _idx          = null;
+                //TODO:
             }
         }
     }
-
-    // ========================================================================
-
-    #if DEBUG
-    public float[][] GetPageVertices() => _pageVertices;
-
-    public int[] GetIdx() => _idx;
-    #endif
 }
 
 // ============================================================================

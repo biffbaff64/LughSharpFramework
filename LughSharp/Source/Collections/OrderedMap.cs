@@ -394,7 +394,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     {
         if ( Size == 0 )
         {
-            return braces ? "{}" : "";
+            return braces ? "{}" : string.Empty;
         }
 
         var buffer = new StringBuilder( 32 );
@@ -551,7 +551,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         /// <inheritdoc />
         public override List< TK > ToArray( List< TK > array )
         {
-            array.AddAll( _keys, NextIndex, _keys.Count - NextIndex );
+//            array.AddRange( _keys, NextIndex, _keys.Count - NextIndex );
 
             NextIndex = _keys.Count;
             HasNext   = false;

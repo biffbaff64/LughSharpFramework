@@ -28,24 +28,28 @@ IN PROGRESS:
            creation and use of Scene2D UI Actors without the need for Json Skin files,
            although support for Json Skins will still be retained.
 
-          - Scene2DImage        - Done
           - Button              - Done
-          - TextButton          - Done
+          - CheckBox            - Done
+          - Dialog              - 
           - ImageButton         - Done
           - ImageTextButton     - Done
-          - CheckBox            - Done
-          - ProgressBar         - Done
-          - Slider              - Done
-          - ScrollPane          - Done
-          - ListBox             - Done
           - Label               - Done
-          - TextField           - Done
-          - TextArea            - Done
-          - Window              - 
-          - Table               - 
-          - Dialog              - 
-          - SplitPane           - 
+          - ListBox             - Done
+          - ProgressBar         - Done
+          - Scene2DImage        - Done
+          - ScrollPane          - Done
           - SelectBox           - 
+          - Slider              - Done
+          - SplitPane           - 
+          - Table               - 
+          - TextArea            - Done
+          - TextButton          - Done
+          - TextField           - Done
+          - TextTooltip         - 
+          - Tooltip             - 
+          - Touchpad            - 
+          - Tree                - 
+          - Window              - 
 
   - Scene2D UI Actor Styles must initialise all properties.
     
@@ -58,29 +62,50 @@ IN PROGRESS:
           - ListBoxStyle           - Done
           - ProgressBarStyle       - Done
           - ScrollPaneStyle        - Done
-          - SelectBoxStyle         - 
-          - SliderStyle            - 
-          - SplitPaneStyle         - 
-          - TextAreaStyle          -  
-          - TextButtonStyle        - 
-          - TextFieldStyle         - 
+          - SelectBoxStyle         - Done
+          - SliderStyle            - Done
+          - SplitPaneStyle         - Done
+          - TextAreaStyle          - Done 
+          - TextButtonStyle        - Done
+          - TextFieldStyle         - Done
           - TextTooltipStyle       - Done
           - TouchpadStyle          - Done
           - TreeStyle              - Done
           - WindowStyle            - Done
+
+          - ButtonStyleRecord            - 
+          - CheckBoxStyleRecord          - 
+          - DialogStyleRecord            - 
+          - ImageButtonStyleRecord       - 
+          - ImageTextButtonStyleRecord   - 
+          - LabelStyleRecord             - 
+          - ListBoxStyleRecord           - 
+          - ProgressBarStyleRecord       - 
+          - ScrollPaneStyleRecord        - 
+          - SelectBoxStyleRecord         - 
+          - SliderStyleRecord            - 
+          - SplitPaneStyleRecord         - 
+          - TextAreaStyleRecord          - Done
+          - TextButtonStyleRecord        - 
+          - TextFieldStyleRecord         - 
+          - TextTooltipStyleRecord       - 
+          - TouchpadStyleRecord          - 
+          - TreeStyleRecord              - 
+          - WindowStyleRecord            - 
 
 TODO:
 
 - Add Copy() methods for Mutable classes.
 - GameSprite helpers.
 - Network / HTTP etc.
+- Update Logger.Debug and Logger.Error to acceot NULL messages and report them as such.
 - Box2D Physics support.
 - 3D Graphics needs testing and/or finishing.
 - 2D Particle System needs testing and/or finishing.
 - Freetype Font generation.
 - SpriteFont support.
-- Use NUnit for testing properly.
 
 FUTURE UPDATES:
 - Migrate to EventHandler based event system for Scene2D. This is a BIG task and will require a lot of work.
+- Use NUnit for testing properly.
 - 

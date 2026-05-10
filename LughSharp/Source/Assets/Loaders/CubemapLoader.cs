@@ -52,7 +52,7 @@ public class CubemapLoader : AsynchronousAssetLoader
     /// </summary>
     private CubemapLoaderInfo _loaderInfo = new()
     {
-        Filename    = "",
+        Filename    = string.Empty,
         Cubemap     = null!,
         CubemapData = null!
     };

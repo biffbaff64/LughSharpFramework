@@ -115,7 +115,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 ///     "LimitMemory": true,
 ///     "Grid": false,
 ///     "Scale": [ 1 ],
-///     "ScaleSuffix": [ "" ],
+///     "ScaleSuffix": [ string.Empty ],
 ///     "ScaleResampling": [ "Bicubic" ],
 ///     "AtlasExtension": ".atlas",
 ///     "PrettyPrint": true,

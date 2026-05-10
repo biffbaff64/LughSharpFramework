@@ -61,6 +61,16 @@ public class StageTests : IDisposable
     // ========================================================================
 
     private Stage? _stage;
+    private static readonly string[] _newItems = new string[]
+            {
+                "Carp",
+                "Roach",
+                "Pike",
+                "Bream",
+                "Rudd",
+                "Tench",
+                "Gudgeon",
+                "Perch" };
 
     // ========================================================================
 
@@ -133,16 +143,24 @@ public class StageTests : IDisposable
 
         void SelectBoxActor()
         {
+            Guard.Against.Null( _stage );
+
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
-            var selectBox = new SelectBox< string >( skin, "default" )
+            var selectBox = new SelectBox< string >( skin )
             {
                 IsVisible = true,
             };
-            selectBox.SetPosition( 200, 200 );
-            selectBox.SetItems( new List< string > { "Item 1", "Item 2", "Item 3" } );
             
-            _stage?.AddActor( selectBox );
+            selectBox.SetItems( new List< string >( _newItems ) );
+            selectBox.SetSelected( "Rudd" );
+            
+            selectBox.SetAlignment( Align.Right );
+            selectBox.GetList().Alignment                     = Align.Right;
+            selectBox.Style.ListBoxStyle.Selection.RightWidth = 10;
+            selectBox.Style.ListBoxStyle.Selection.LeftWidth  = 20;
+            
+            _stage.AddActor( selectBox );
         }
 
         // --------------------------------------
@@ -201,7 +219,7 @@ public class StageTests : IDisposable
             table.AddRow();
             table.AddCell( new Label( "---------", skin ) );
             table.AddRow();
-            table.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) )  );
+            table.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) ) );
             table.AddRow();
 
             _stage?.AddActor( table );
@@ -228,7 +246,7 @@ public class StageTests : IDisposable
             dialog.Text( "This is a dialog box with a custom title and text.",
                          skin.Get< LabelStyle >( "default" ) );
 
-            dialog.Text( "Bla Bla Bla Bla Bla Bla.", skin.Get< LabelStyle >( "default" )  );
+            dialog.Text( "Bla Bla Bla Bla Bla Bla.", skin.Get< LabelStyle >( "default" ) );
 
             dialog.Button( "OK", true, skin.Get< TextButtonStyle >( "default" ) )
                   .Button( "Cancel", false, skin.Get< TextButtonStyle >( "default" ) );
@@ -313,7 +331,7 @@ public class StageTests : IDisposable
 
             skin.GetFont( "default-font" ).SetFixedWidthGlyphs( "0123456789" );
 
-            var textField = new TextField( "", skin, "default" )
+            var textField = new TextField( string.Empty, skin, "default" )
             {
                 IsVisible = true,
             };

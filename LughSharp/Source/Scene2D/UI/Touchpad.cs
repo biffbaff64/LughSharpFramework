@@ -288,7 +288,7 @@ public class Touchpad : Widget
 
         _deadzoneRadius = deadzoneRadius;
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     // ========================================================================

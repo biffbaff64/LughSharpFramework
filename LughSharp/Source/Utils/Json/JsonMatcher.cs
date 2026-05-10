@@ -148,7 +148,7 @@ namespace LughSharp.Source.Utils.Json;
 /// values are captured.</li>
 /// <li>A single capture before processing provides the value directly, multiple captures
 /// provide an object.</li>
-/// <li>No patterns or a <c>""</c> pattern captures the entire JSON document.</li>
+/// <li>No patterns or a <c>string.Empty</c> pattern captures the entire JSON document.</li>
 /// </para>
 ///
 /// <para>

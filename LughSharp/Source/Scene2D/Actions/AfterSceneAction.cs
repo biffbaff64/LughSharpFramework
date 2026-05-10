@@ -35,7 +35,7 @@ public class AfterSceneAction : DelegateSceneAction
     {
         if ( target != null )
         {
-            _waitForActions.AddAll( target.Actions );
+            _waitForActions.AddRange( target.Actions );
         }
 
         base.Target = target;

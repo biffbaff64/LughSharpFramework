@@ -39,7 +39,7 @@
     1
   ],
   "ScaleSuffix": [
-    ""
+    string.Empty
   ],
   "ScaleResampling": [
     "Bicubic"

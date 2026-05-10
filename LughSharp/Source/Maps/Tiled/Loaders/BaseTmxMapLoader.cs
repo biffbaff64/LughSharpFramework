@@ -709,7 +709,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 }
             }
 
-            mapObject.Name = element.GetAttribute( "name", "" ) ?? "";
+            mapObject.Name = element.GetAttribute( "name", string.Empty ) ?? string.Empty;
 
             string? rotation;
 
@@ -1085,7 +1085,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
         if ( element is { Name: "tileset" } )
         {
             var firstgid    = ( uint )element.GetIntAttribute( "firstgid", 1 );
-            var imageSource = "";
+            var imageSource = string.Empty;
             var imageWidth  = 0;
             var imageHeight = 0;
 
@@ -1152,7 +1152,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
             var tileSet = new TiledMapTileSet
             {
-                Name = name ?? ""
+                Name = name ?? string.Empty
             };
 
             MapProperties      tileSetProperties = tileSet.Properties;

@@ -29,14 +29,14 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SliderStyle : ProgressBarStyle, ISceneStyle
 {
-    public ISceneDrawable? BackgroundOver { get; set; }
-    public ISceneDrawable? BackgroundDown { get; set; }
-    public ISceneDrawable? KnobBeforeOver { get; set; }
-    public ISceneDrawable? KnobOver       { get; set; }
-    public ISceneDrawable? KnobAfterOver  { get; set; }
-    public ISceneDrawable? KnobBeforeDown { get; set; }
-    public ISceneDrawable? KnobDown       { get; set; }
-    public ISceneDrawable? KnobAfterDown  { get; set; }
+    public ISceneDrawable BackgroundOver { get; set; } = new BaseDrawable();
+    public ISceneDrawable BackgroundDown { get; set; } = new BaseDrawable();
+    public ISceneDrawable KnobBeforeOver { get; set; } = new BaseDrawable();
+    public ISceneDrawable KnobOver       { get; set; } = new BaseDrawable();
+    public ISceneDrawable KnobAfterOver  { get; set; } = new BaseDrawable();
+    public ISceneDrawable KnobBeforeDown { get; set; } = new BaseDrawable();
+    public ISceneDrawable KnobDown       { get; set; } = new BaseDrawable();
+    public ISceneDrawable KnobAfterDown  { get; set; } = new BaseDrawable();
 
     // ====================================================================
 

@@ -34,7 +34,7 @@ namespace Extensions.Source.Tools.TexturePacker;
 [SupportedOSPlatform( "windows" )]
 public class TexturePackerPage
 {
-    public string?                   ImageName      { get; set; } = "";
+    public string?                   ImageName      { get; set; } = string.Empty;
     public List< TexturePackerRect > OutputRects    { get; set; } = [ ];
     public List< TexturePackerRect > RemainingRects { get; set; } = [ ];
     public float                     Occupancy      { get; set; }

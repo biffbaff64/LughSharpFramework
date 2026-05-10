@@ -34,15 +34,15 @@ namespace LughSharp.Source.Scene2D;
 /// <summary>
 /// 2D scene graph node that may contain other actors.
 /// <para>
-/// Actors have a z-order equal to the order they were inserted into the group.
-/// Actors inserted later will be drawn on top of actors added earlier. Touch
-/// events that hit more than one actor are distributed to topmost actors first.
+/// Actors have a z-order equal to the order they were inserted into the group. Actors inserted
+/// later will be drawn on top of actors added earlier. Touch events that hit more than one actor
+/// are distributed to topmost actors first.
 /// </para>
 /// </summary>
 [PublicAPI]
 public class Group : Actor, ICullable
 {
-    public SnapshotArrayList< Actor? > Children { get; set; } = new( 4 );
+    public SnapshotArrayList< Actor > Children { get; set; } = new( 4 );
 
     /// <summary>
     /// When true (the default), the Batch is transformed so children are drawn
@@ -71,11 +71,11 @@ public class Group : Actor, ICullable
     {
         base.Act( delta );
 
-        Actor?[] actors = Children.Begin();
+        Actor[] actors = Children.Begin();
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            actors[ i ]?.Act( delta );
+            actors[ i ].Act( delta );
         }
 
         Children.End();
@@ -124,7 +124,7 @@ public class Group : Actor, ICullable
     {
         parentAlpha *= ActorColor.A;
 
-        Actor?[] actors = Children.Begin();
+        Actor[] actors = Children.Begin();
 
         if ( CullingArea != null )
         {
@@ -138,9 +138,9 @@ public class Group : Actor, ICullable
             {
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    Actor? child = actors[ i ];
+                    Actor child = actors[ i ];
 
-                    if ( child is not { IsVisible: true } )
+                    if ( !child.IsVisible )
                     {
                         continue;
                     }
@@ -168,9 +168,9 @@ public class Group : Actor, ICullable
 
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    Actor? child = actors[ i ];
+                    Actor child = actors[ i ];
 
-                    if ( child is not { IsVisible: true } )
+                    if ( !child.IsVisible )
                     {
                         continue;
                     }
@@ -204,9 +204,9 @@ public class Group : Actor, ICullable
             {
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    Actor? child = actors[ i ];
+                    Actor child = actors[ i ];
 
-                    if ( child is not { IsVisible: true } )
+                    if ( !child.IsVisible )
                     {
                         continue;
                     }
@@ -225,9 +225,9 @@ public class Group : Actor, ICullable
 
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
-                    Actor? child = actors[ i ];
+                    Actor child = actors[ i ];
 
-                    if ( child is not { IsVisible: true } )
+                    if ( !child.IsVisible )
                     {
                         continue;
                     }
@@ -467,12 +467,7 @@ public class Group : Actor, ICullable
 
         for ( int i = Children.Size - 1; i >= 0; i-- )
         {
-            Actor? child = Children.GetAt( i );
-
-            if ( child == null )
-            {
-                continue;
-            }
+            Actor child = Children.GetAt( i );
 
             child.ParentToLocalCoordinates( _tmp.Set( x, y ) );
 
@@ -644,13 +639,13 @@ public class Group : Actor, ICullable
     /// <returns> The actor removed from this group. </returns>
     public virtual Actor? RemoveActorAt( int index, bool unfocus )
     {
-        Actor? actor = Children.RemoveAt( index );
+        Actor actor = Children.RemoveAt( index );
 
-        if ( actor != null )
+        if ( Stage != null )
         {
             if ( unfocus )
             {
-                Stage?.Unfocus( actor );
+                Stage.Unfocus( actor );
             }
 
             actor.Parent = null;
@@ -708,9 +703,9 @@ public class Group : Actor, ICullable
     {
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            Actor? child = Children.GetAt( i );
+            Actor child = Children.GetAt( i );
 
-            if ( name.Equals( child?.GetType().Name ) )
+            if ( name.Equals( child.GetType().Name ) )
             {
                 return ( T )child;
             }
@@ -718,7 +713,7 @@ public class Group : Actor, ICullable
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            Actor? child = Children.GetAt( i );
+            Actor child = Children.GetAt( i );
 
             if ( child is Group group )
             {
@@ -743,7 +738,7 @@ public class Group : Actor, ICullable
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            Children.GetAt( i )?.Stage = stage;
+            Children.GetAt( i ).Stage = stage;
         }
     }
 
@@ -792,7 +787,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Returns the child at the specified index.
     /// </summary>
-    public Actor? GetChild( int index )
+    public Actor GetChild( int index )
     {
         return Children.GetAt( index );
     }
@@ -843,7 +838,7 @@ public class Group : Actor, ICullable
 
         if ( recursively )
         {
-            foreach ( Actor? child in Children )
+            foreach ( Actor child in Children )
             {
                 if ( child is Group group )
                 {
@@ -851,7 +846,7 @@ public class Group : Actor, ICullable
                 }
                 else
                 {
-                    child?.DebugActive = enabled;
+                    child.DebugActive = enabled;
                 }
             }
         }

@@ -51,22 +51,23 @@ public class ListBoxStyle : ISceneStyle
     public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected,
                          ISceneDrawable selection )
     {
-        Font = font;
+        Font      = font;
+        Selection = selection;
+
         FontColorSelected.Set( fontColorSelected );
         FontColorUnselected.Set( fontColorUnselected );
-        Selection = selection;
     }
 
     public ListBoxStyle( ListBoxStyle boxStyle )
     {
-        Font = boxStyle.Font;
-        FontColorSelected.Set( boxStyle.FontColorSelected );
-        FontColorUnselected.Set( boxStyle.FontColorUnselected );
-        Selection = boxStyle.Selection;
-
+        Font       = boxStyle.Font;
+        Selection  = boxStyle.Selection;
         Down       = boxStyle.Down;
         Over       = boxStyle.Over;
         Background = boxStyle.Background;
+
+        FontColorSelected.Set( boxStyle.FontColorSelected );
+        FontColorUnselected.Set( boxStyle.FontColorUnselected );
     }
 }
 

@@ -111,10 +111,10 @@ public class ResolutionFileResolver : IFileHandleResolver
     /// <returns>The resolved file path.</returns>
     protected static string Resolve( FileInfo originalHandle, string suffix )
     {
-        var            parentstring = "";
+        var            parentstring = string.Empty;
         DirectoryInfo? parent       = originalHandle.Directory;
 
-        if ( ( parent != null ) && !parent.Name.Equals( "" ) )
+        if ( ( parent != null ) && !parent.Name.Equals( string.Empty ) )
         {
             parentstring = parent + "/";
         }

@@ -26,7 +26,7 @@
 namespace LughSharp.Source.Scene2D.UI.Styles;
 
 /// <summary>
-/// The style for a dialog, see <see cref="Dialog"/>. A DialogStyle is exactly the same
+/// The style for a <see cref="Dialog"/>. A DialogStyle is exactly the same
 /// as a WindowStyle, and is provided for convenience.
 /// </summary>
 [PublicAPI]

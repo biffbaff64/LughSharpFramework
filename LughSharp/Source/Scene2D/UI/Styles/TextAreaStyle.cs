@@ -25,6 +25,10 @@
 
 namespace LughSharp.Source.Scene2D.UI.Styles;
 
+/// <summary>
+/// The style for a <see cref="TextAreaStyle"/>. A TextAreaStyle is exactly the same
+/// as a TextFieldStyle, and is provided for convenience.
+/// </summary>
 [PublicAPI]
 public class TextAreaStyle : TextFieldStyle;
 

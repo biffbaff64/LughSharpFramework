@@ -309,7 +309,7 @@ public class TexturePackerSettings
         PrettyPrint           = true;
         LegacyOutput          = true;
         Scale                 = [ 1.0f ];
-        ScaleSuffix           = [ "" ];
+        ScaleSuffix           = [ string.Empty ];
         ScaleResampling       = [ Resampling.Bicubic ];
     }
 

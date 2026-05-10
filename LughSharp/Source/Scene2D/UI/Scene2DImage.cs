@@ -55,7 +55,7 @@ public class Scene2DImage : Widget
         set
         {
             field = value;
-            Invalidate();
+            InvalidateLayout();
         }
     }
 
@@ -168,7 +168,7 @@ public class Scene2DImage : Widget
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
-    /// children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// children, positions and sizes each child, calls <see cref="ILayout.InvalidateLayout"/>
     /// on any child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
     /// on each child.
     /// <para>
@@ -334,7 +334,7 @@ public class Scene2DImage : Widget
         Guard.Against.Null( scale );
 
         _scaling = scale;
-        Invalidate();
+        InvalidateLayout();
     }
 
     /// <inheritdoc />
@@ -348,7 +348,7 @@ public class Scene2DImage : Widget
             className = className.Substring( dotIndex + 1 );
         }
 
-        return ( className.IndexOf( '$' ) != -1 ? "Image " : "" ) + className + ": " + Drawable;
+        return ( className.IndexOf( '$' ) != -1 ? "Image " : string.Empty ) + className + ": " + Drawable;
     }
 }
 

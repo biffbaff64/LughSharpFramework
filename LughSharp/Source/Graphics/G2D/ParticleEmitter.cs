@@ -2223,7 +2223,7 @@ public class ParticleEmitter
     public float  Duration           { get; set; } = 1;
     public float  DurationTimer      { get; set; }
     public bool   Behind             { get; set; }
-    public string Name               { get; set; } = "";
+    public string Name               { get; set; } = string.Empty;
     public bool   Attached           { get; set; }
     public bool   Continuous         { get; set; }
     public bool   Aligned            { get; set; }

@@ -224,7 +224,7 @@ public class TextButton : Button
             className = className.Substring( dotIndex + 1 );
         }
 
-        return $"{( className.IndexOf( '$' ) != -1 ? "TextButton " : "" )}{className}: {Label?.GetText()}";
+        return $"{( className.IndexOf( '$' ) != -1 ? "TextButton " : string.Empty )}{className}: {Label?.GetText()}";
     }
 }
 

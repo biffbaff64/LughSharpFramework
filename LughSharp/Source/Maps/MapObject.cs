@@ -35,7 +35,7 @@ namespace LughSharp.Source.Maps;
 [PublicAPI]
 public class MapObject
 {
-    public string        Name       { get; set; }         = "";
+    public string        Name       { get; set; }         = string.Empty;
     public float         Opacity    { get; set; }         = 1.0f;
     public bool          IsVisible  { get; set; }         = true;
     public Color         Color      { get; set; }         = Color.White;

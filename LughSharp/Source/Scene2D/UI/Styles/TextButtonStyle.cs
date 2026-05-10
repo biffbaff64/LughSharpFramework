@@ -34,15 +34,15 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 public class TextButtonStyle : ButtonStyle
 {
     public BitmapFont Font                    { get; set; }
-    public Color?     FontColor               { get; set; }
-    public Color?     DownFontColor           { get; set; }
-    public Color?     OverFontColor           { get; set; }
-    public Color?     FocusedFontColor        { get; set; }
-    public Color?     DisabledFontColor       { get; set; }
-    public Color?     CheckedFontColor        { get; set; }
-    public Color?     CheckedDownFontColor    { get; set; }
-    public Color?     CheckedOverFontColor    { get; set; }
-    public Color?     CheckedFocusedFontColor { get; set; }
+    public Color      FontColor               { get; set; } = new( 1, 1, 1, 1 );
+    public Color      DownFontColor           { get; set; } = new( 1, 1, 1, 1 );
+    public Color      OverFontColor           { get; set; } = new( 1, 1, 1, 1 );
+    public Color      FocusedFontColor        { get; set; } = new( 1, 1, 1, 1 );
+    public Color      DisabledFontColor       { get; set; } = new( 1, 1, 1, 1 );
+    public Color      CheckedFontColor        { get; set; } = new( 1, 1, 1, 1 );
+    public Color      CheckedDownFontColor    { get; set; } = new( 1, 1, 1, 1 );
+    public Color      CheckedOverFontColor    { get; set; } = new( 1, 1, 1, 1 );
+    public Color      CheckedFocusedFontColor { get; set; } = new( 1, 1, 1, 1 );
 
     // ========================================================================
 
@@ -54,8 +54,7 @@ public class TextButtonStyle : ButtonStyle
     public TextButtonStyle( ISceneDrawable upImage,
                             ISceneDrawable downImage,
                             ISceneDrawable checkedImage,
-                            BitmapFont font )
-        : base( upImage, downImage, checkedImage )
+                            BitmapFont font ) : base( upImage, downImage, checkedImage )
     {
         Font = font;
     }
@@ -64,50 +63,15 @@ public class TextButtonStyle : ButtonStyle
     {
         Font = style.Font;
 
-        if ( style.FontColor != null )
-        {
-            FontColor = new Color( style.FontColor );
-        }
-
-        if ( style.DownFontColor != null )
-        {
-            DownFontColor = new Color( style.DownFontColor );
-        }
-
-        if ( style.OverFontColor != null )
-        {
-            OverFontColor = new Color( style.OverFontColor );
-        }
-
-        if ( style.FocusedFontColor != null )
-        {
-            FocusedFontColor = new Color( style.FocusedFontColor );
-        }
-
-        if ( style.DisabledFontColor != null )
-        {
-            DisabledFontColor = new Color( style.DisabledFontColor );
-        }
-
-        if ( style.CheckedFontColor != null )
-        {
-            CheckedFontColor = new Color( style.CheckedFontColor );
-        }
-
-        if ( style.CheckedDownFontColor != null )
-        {
-            CheckedDownFontColor = new Color( style.CheckedDownFontColor );
-        }
-
-        if ( style.CheckedOverFontColor != null )
-        {
-            CheckedOverFontColor = new Color( style.CheckedOverFontColor );
-        }
-
-        if ( style.CheckedFocusedFontColor != null )
-        {
-            CheckedFocusedFontColor = new Color( style.CheckedFocusedFontColor );
-        }
+        FontColor               = new Color( style.FontColor );
+        DownFontColor           = new Color( style.DownFontColor );
+        OverFontColor           = new Color( style.OverFontColor );
+        FocusedFontColor        = new Color( style.FocusedFontColor );
+        DisabledFontColor       = new Color( style.DisabledFontColor );
+        CheckedFontColor        = new Color( style.CheckedFontColor );
+        CheckedDownFontColor    = new Color( style.CheckedDownFontColor );
+        CheckedOverFontColor    = new Color( style.CheckedOverFontColor );
+        CheckedFocusedFontColor = new Color( style.CheckedFocusedFontColor );
     }
 }
 

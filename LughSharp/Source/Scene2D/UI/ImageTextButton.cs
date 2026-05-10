@@ -319,7 +319,7 @@ public class ImageTextButton : Button
     /// </summary>
     public string GetText()
     {
-        return _label?.GetText().ToString() ?? "";
+        return _label?.GetText().ToString() ?? string.Empty;
     }
 
     /// <summary>

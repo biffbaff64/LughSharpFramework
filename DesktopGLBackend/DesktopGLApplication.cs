@@ -674,7 +674,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
             windowHandle = DotGLFW.Glfw.CreateWindow( config.FullscreenMode.Width,
                                                       config.FullscreenMode.Height,
-                                                      config.Title ?? "",
+                                                      config.Title ?? string.Empty,
                                                       config.FullscreenMode.MonitorHandle,
                                                       DotGLFW.Window.NULL );
         }
@@ -683,7 +683,7 @@ public class DesktopGLApplication : IApplication, IDisposable
             // Create a 'windowed' window
             windowHandle = DotGLFW.Glfw.CreateWindow( config.WindowWidth,
                                                       config.WindowHeight,
-                                                      config.Title ?? "",
+                                                      config.Title ?? string.Empty,
                                                       Monitor.NULL,
                                                       DotGLFW.Window.NULL );
         }

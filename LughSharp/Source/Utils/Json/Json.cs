@@ -1881,9 +1881,7 @@ public class Json
             Field = field;
             Type fieldType = field.FieldType;
 
-            bool isMap = IsSubclassOfRawGeneric( typeof( ObjectMap< , > ), fieldType ) ||
-                         typeof( IDictionary< , > ).IsAssignableFrom( fieldType );
-
+            bool isMap = typeof( IDictionary< , > ).IsAssignableFrom( fieldType );
             int index = isMap ? 1 : 0;
 
             if ( fieldType.IsGenericType )

@@ -50,6 +50,11 @@ namespace LughSharp.Source.Graphics.Fonts;
 [PublicAPI]
 public class GlyphLayout : IResetable, IPoolable
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="index"></param>
+    /// <param name="color"></param>
     public struct GlyphColor( int index, int color )
     {
         public int GlyphIndex { get; } = index;
@@ -67,12 +72,12 @@ public class GlyphLayout : IResetable, IPoolable
     public List< GlyphRun > Runs { get; set; } = new( 1 );
 
     /// <summary>
-    /// Determines the colors of the glpyhs in the <see cref="Runs"/>. Entries are
-    /// instances of the <see cref="GlyphColor"/> struct, which holds the glyph index
-    /// (across all runs) where the color starts, and the color encoded as RGBA8888.
+    /// Determines the colors of the glpyhs in the <see cref="Runs"/>. Entries are instances of
+    /// the <see cref="GlyphColor"/> struct, which holds the glyph index (across all runs) where
+    /// the color starts, and the color encoded as RGBA8888.
     /// <para>
     /// For example: <code>[0, WHITE, 4, GREEN, 5, WHITE]</code>
-    /// Glpyhs 0 to 3 are WHITE, 4 is GREEN and 5 to the end are WHITE.
+    /// Glyphs 0 to 3 are WHITE, 4 is GREEN and 5 to the end are WHITE.
     /// </para>
     /// <para>
     /// The List is empty if there are no runs, otherwise it has at least two entries:
@@ -701,11 +706,11 @@ public class GlyphLayout : IResetable, IPoolable
 
             SetLastGlyphXAdvance( fontData, run );
 
-            if ( truncateRun.XAdvances.Count > 0 )
+            int xTruncateAdvancesCount = run.XAdvances.Count;
+            
+            if ( xTruncateAdvancesCount > 0 )
             {
-                run.XAdvances.AddAll( truncateRun.XAdvances,
-                                      1,
-                                      truncateRun.XAdvances.Count - 1 );
+                run.XAdvances.AddRange( truncateRun.XAdvances.GetRange( 1, xTruncateAdvancesCount - 1 ) );
             }
         }
         else
@@ -713,7 +718,7 @@ public class GlyphLayout : IResetable, IPoolable
             // If no glyphs from the original run fit, use only the truncate glyphs.
             run.Glyphs.Clear();
             run.XAdvances.Clear();
-            run.XAdvances.AddAll( truncateRun.XAdvances );
+            run.XAdvances.AddRange( truncateRun.XAdvances );
         }
 
         int droppedGlyphCount = glyphCount - run.Glyphs.Count;
@@ -732,7 +737,7 @@ public class GlyphLayout : IResetable, IPoolable
         }
 
         // Add the truncate glyphs to the run.
-        run.Glyphs.AddAll( truncateRun.Glyphs );
+        run.Glyphs.AddRange( truncateRun.Glyphs );
 
         GlyphCount += truncate.Length;
 
@@ -788,7 +793,7 @@ public class GlyphLayout : IResetable, IPoolable
 
             List< Glyph > glyphs1 = second.Glyphs; // Starts empty.
 
-            glyphs1.AddAll( glyphs2, 0, firstEnd );
+            glyphs1.AddRange( glyphs2.GetRange( 0, firstEnd ) );
             glyphs2.RemoveRange( 0, secondStart - 1 );
 
             first.Glyphs  = glyphs1;
@@ -796,8 +801,9 @@ public class GlyphLayout : IResetable, IPoolable
 
             List< float > xAdvances1 = second.XAdvances; // Starts empty.
 
-            xAdvances1.AddAll( xAdvances2, 0, firstEnd + 1 );
+            xAdvances1.AddRange( xAdvances2.GetRange( 0, firstEnd + 1 ) );
             xAdvances2.RemoveRange( 1, secondStart ); // Leave first entry to be overwritten by next line.
+            
             xAdvances2[ 0 ]  = GetLineOffset( glyphs2, fontData );
             first.XAdvances  = xAdvances1;
             second.XAdvances = xAdvances2;
@@ -893,7 +899,8 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Returns an X offset for the first glyph so when drawn, none of it is left of the line's drawing position.
+    /// Returns an X offset for the first glyph so when drawn, none of it is left of the line's
+    /// drawing position.
     /// </summary>
     private float GetLineOffset( List< Glyph > glyphs, BitmapFontData fontData )
     {
@@ -912,10 +919,9 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="end"> The end index of the markup. </param>
     /// <returns>
     /// An integer indicating the number of characters processed:
-    /// - -1 if the string ends with "["
-    /// - -2 if the markup is "[["
-    /// - 0 if the markup is "[]"
-    /// - The number of characters processed for valid color markups
+    /// <li> -1 if the string ends with "[" </li>
+    /// <li> -2 if the markup is "[[" </li>
+    /// <li> 0 if the markup is "[]" </li>
     /// </returns>
     private int ParseColorMarkup( string str, int start, int end )
     {

@@ -287,9 +287,9 @@ public class Label : Widget, IDisposable
     /// Marks the Label as invalid, triggering a recalculation of its preferred
     /// size or layout during the next rendering pass.
     /// </summary>
-    public override void Invalidate()
+    public override void InvalidateLayout()
     {
-        base.Invalidate();
+        base.InvalidateLayout();
         _prefSizeInvalid = true;
     }
 
@@ -612,7 +612,7 @@ public class Label : Widget, IDisposable
             LineAlign = Align.Center;
         }
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     /// <summary>

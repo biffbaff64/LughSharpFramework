@@ -593,7 +593,7 @@ public class TexturePackerWriter
     /// </summary>
     private void WritePage( TextWriter writer, bool appending, TexturePackerPage page )
     {
-        var tab   = "";
+        var tab   = string.Empty;
         var colon = ":";
         var comma = ",";
 
@@ -637,7 +637,7 @@ public class TexturePackerWriter
     /// </summary>
     private void WriteRect( TextWriter writer, TexturePackerPage page, TexturePackerRect rect, string name )
     {
-        var tab   = "";
+        var tab   = string.Empty;
         var colon = ":";
         var comma = ",";
 

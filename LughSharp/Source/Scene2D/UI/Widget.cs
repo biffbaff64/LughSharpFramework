@@ -37,7 +37,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// maximum size is 0, which means no maximum size.
 /// </para>
 /// See <see cref="ILayout"/> for details on how a widget should participate in layout.
-/// A widget's mutator methods should call <see cref="Invalidate"/> or
+/// A widget's mutator methods should call <see cref="InvalidateLayout"/> or
 /// <see cref="InvalidateHierarchy"/> as needed.
 /// </summary>
 [PublicAPI]
@@ -60,7 +60,7 @@ public class Widget : Actor, ILayout
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor
-    /// has children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// has children, positions and sizes each child, calls <see cref="ILayout.InvalidateLayout"/>
     /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="ILayout.Validate"/> should be used.
@@ -72,7 +72,7 @@ public class Widget : Actor, ILayout
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.Invalidate"/> has
+    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.InvalidateLayout"/> has
     /// been called since the last time <see cref="ILayout.Validate"/> was called, or
     /// if the actor otherwise needs to be laid out. This method is usually called in
     /// <see cref="Actor.Draw(IBatch, float)"/> by the actor itself before drawing is
@@ -106,14 +106,12 @@ public class Widget : Actor, ILayout
             SetSize( parentWidth, parentHeight );
         }
 
-        if ( !NeedsLayout )
+        if ( NeedsLayout )
         {
-            return;
+            NeedsLayout = false;
+
+            Layout();
         }
-
-        NeedsLayout = false;
-
-        Layout();
     }
 
     /// <summary>
@@ -123,13 +121,13 @@ public class Widget : Actor, ILayout
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
     /// parent actor's layout).
     /// </summary>
-    public virtual void Invalidate()
+    public virtual void InvalidateLayout()
     {
         NeedsLayout = true;
     }
 
     /// <summary>
-    /// Invalidates this actor and its ascendants, calling <see cref="ILayout.Invalidate"/> on each.
+    /// Invalidates this actor and its ascendants, calling <see cref="ILayout.InvalidateLayout"/> on each.
     /// This method should be called when state changes in the actor that affects the minimum,
     /// preferred, maximum, or actual size of the actor (meaning it potentially affects the
     /// parent actor's layout).
@@ -141,7 +139,7 @@ public class Widget : Actor, ILayout
             return;
         }
 
-        Invalidate();
+        InvalidateLayout();
 
         if ( Parent is ILayout layout )
         {
@@ -210,7 +208,7 @@ public class Widget : Actor, ILayout
     /// <inheritdoc />
     public override void OnSizeChanged()
     {
-        Invalidate();
+        InvalidateLayout();
     }
 
     public float GetMinWidth()

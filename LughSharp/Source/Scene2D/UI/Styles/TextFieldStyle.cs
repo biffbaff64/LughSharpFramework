@@ -33,31 +33,30 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TextFieldStyle : ISceneStyle
 {
-    public BitmapFont      Font               { get; set; }
-    public Color           FontColor          { get; set; }
-    public Color?          FocusedFontColor   { get; set; }
-    public Color?          DisabledFontColor  { get; set; }
-    public ISceneDrawable? Background         { get; set; }
-    public ISceneDrawable? FocusedBackground  { get; set; }
-    public ISceneDrawable? DisabledBackground { get; set; }
-    public ISceneDrawable? Cursor             { get; set; }
-    public ISceneDrawable? Selection          { get; set; }
-    public BitmapFont?     MessageFont        { get; set; }
-    public Color?          MessageFontColor   { get; set; }
+    public BitmapFont     Font               { get; set; }
+    public BitmapFont?    MessageFont        { get; set; }
+    public Color          FontColor          { get; set; } = new( 1, 1, 1, 1 );
+    public Color          FocusedFontColor   { get; set; } = new( 1, 1, 1, 1 );
+    public Color          DisabledFontColor  { get; set; } = new( 0.5f, 0.5f, 0.5f, 1 );
+    public Color          MessageFontColor   { get; set; } = new( 1, 1, 1, 1 );
+    public ISceneDrawable Background         { get; set; } = new BaseDrawable();
+    public ISceneDrawable FocusedBackground  { get; set; } = new BaseDrawable();
+    public ISceneDrawable DisabledBackground { get; set; } = new BaseDrawable();
+    public ISceneDrawable Cursor             { get; set; } = new BaseDrawable();
+    public ISceneDrawable Selection          { get; set; } = new BaseDrawable();
 
     // ====================================================================
 
     public TextFieldStyle()
     {
-        Font      = new BitmapFont();
-        FontColor = Color.White;
+        Font = new BitmapFont();
     }
 
     public TextFieldStyle( BitmapFont font,
                            Color fontColor,
-                           ISceneDrawable? cursor,
-                           ISceneDrawable? selection,
-                           ISceneDrawable? background )
+                           ISceneDrawable cursor,
+                           ISceneDrawable selection,
+                           ISceneDrawable background )
     {
         Font       = font;
         FontColor  = fontColor;
@@ -68,30 +67,19 @@ public class TextFieldStyle : ISceneStyle
 
     public TextFieldStyle( TextFieldStyle style )
     {
-        Font = style.Font;
+        Font        = style.Font;
+        MessageFont = style.MessageFont;
 
         Background         = style.Background;
         FocusedBackground  = style.FocusedBackground;
         DisabledBackground = style.DisabledBackground;
         Cursor             = style.Cursor;
         Selection          = style.Selection;
-        MessageFont        = style.MessageFont;
-        FontColor          = new Color( style.FontColor );
 
-        if ( style.FocusedFontColor != null )
-        {
-            FocusedFontColor = new Color( style.FocusedFontColor );
-        }
-
-        if ( style.DisabledFontColor != null )
-        {
-            DisabledFontColor = new Color( style.DisabledFontColor );
-        }
-
-        if ( style.MessageFontColor != null )
-        {
-            MessageFontColor = new Color( style.MessageFontColor );
-        }
+        FontColor         = new Color( style.FontColor );
+        FocusedFontColor  = new Color( style.FocusedFontColor );
+        DisabledFontColor = new Color( style.DisabledFontColor );
+        MessageFontColor  = new Color( style.MessageFontColor );
     }
 }
 

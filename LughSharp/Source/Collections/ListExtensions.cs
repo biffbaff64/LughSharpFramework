@@ -22,136 +22,24 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
-
 namespace LughSharp.Source.Collections;
 
 [PublicAPI]
 public static class ListExtensions
 {
-    /// <param name="ts"> This list </param>
+    /// <param name="target"> This list </param>
     /// <typeparam name="T"> This list type </typeparam>
-    extension< T >( List< T > ts )
+    extension< T >( List< T > target )
     {
-        public T[] Resize( int newSize )
-        {
-            var newItems = new T[ newSize ];
-
-            Array.Copy( ts.ToArray(), newItems, newSize );
-
-            return newItems;
-        }
-
         /// <summary>
         /// Returns the element found at a random position within the list.
         /// </summary>
         /// <returns></returns>
         public T Random()
         {
-            return ts[ MathUtils.Random( ts.Count - 1 ) ];
-        }
-    }
-
-    /// <param name="target"></param>
-    /// <typeparam name="T"></typeparam>
-    extension< T >( List< T > target )
-    {
-        /// <summary>
-        /// Adds <paramref name="count" /> elements in the source Array, starting at position
-        /// <paramref name="start" /> to the target List.
-        /// </summary>
-        public void AddAll( T[] source, int start, int count )
-        {
-            for ( int i = start; i < count; i++ )
-            {
-                target.Add( source[ i ] );
-            }
+            return target[ MathUtils.Random( target.Count - 1 ) ];
         }
 
-        /// <summary>
-        /// Adds <paramref name="count" /> elements in the source List, starting at position
-        /// <paramref name="start" /> to the target List.
-        /// </summary>
-        public void AddAll( List< T > source, int start, int count )
-        {
-            for ( int i = start; i < count; i++ )
-            {
-                target.Add( source[ i ] );
-            }
-        }
-
-        /// <summary>
-        /// Adds all elements from the specified collection to the target list.
-        /// </summary>
-        /// <param name="source">
-        /// The collection of elements to add to the target list. Cannot be null.
-        /// </param>
-        public void AddAll( IEnumerable< T > source )
-        {
-            foreach ( T item in source )
-            {
-                target.Add( item );
-            }
-        }
-
-        /// <summary>
-        /// Adds all elements in the source List to the target List.
-        /// </summary>
-        public void AddAll( List< T > source )
-        {
-            foreach ( T tex in source )
-            {
-                target.Add( tex );
-            }
-        }
-    }
-
-    /// <summary>
-    /// Adds all elements in the array 'items' to the target List.
-    /// Elements are added in the order they appear in the array, and cannot be null.
-    /// </summary>
-    public static void AddAll< T >( this List< T > target, params T[] items ) where T : notnull
-    {
-        foreach ( T item in items )
-        {
-            target.Add( item );
-        }
-    }
-
-    extension< T >( List< T >? list )
-    {
-        public T? SafePop()
-        {
-            // 1. Check if we have anything to pop
-            if ( list == null || list.Count == 0 )
-            {
-                return default;
-            }
-
-            // 2. Grab the last index
-            int lastIndex = list.Count - 1;
-
-            // 3. Store the item to return it
-            T item = list[ lastIndex ];
-
-            // 4. Correctly reduce the size by 1
-            list.RemoveAt( lastIndex );
-
-            return item;
-        }
-    }
-
-    /// <param name="target"></param>
-    /// <typeparam name="T"></typeparam>
-    extension< T >( List< T > target )
-    {
         /// <summary>
         /// Shuffles the element order of the specified list.
         /// </summary>
@@ -244,6 +132,31 @@ public static class ListExtensions
             }
 
             Logger.IsMinimal = false;
+        }
+    }
+
+    /// <param name="target"> This list </param>
+    /// <typeparam name="T"> This list type </typeparam>
+    extension< T >( List< T >? target )
+    {
+        public T? SafePop()
+        {
+            // 1. Check if we have anything to pop
+            if ( target == null || target.Count == 0 )
+            {
+                return default;
+            }
+
+            // 2. Grab the last index
+            int lastIndex = target.Count - 1;
+
+            // 3. Store the item to return it
+            T item = target[ lastIndex ];
+
+            // 4. Correctly reduce the size by 1
+            target.RemoveAt( lastIndex );
+
+            return item;
         }
     }
 }

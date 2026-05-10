@@ -65,10 +65,10 @@ public class WindowStyle : ISceneStyle
     [JsonConstructor]
     public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable background )
     {
-        TitleFont       = titleFont.Copy();
+        TitleFont       = titleFont;
         Background      = background;
         StageBackground = new BaseDrawable();
-        TitleFontColor  = titleFontColor.Copy();
+        TitleFontColor  = titleFontColor;
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public class WindowStyle : ISceneStyle
     {
         Background      = style.Background;
         TitleFont       = style.TitleFont;
-        TitleFontColor  = style.TitleFontColor.Copy();
+        TitleFontColor  = style.TitleFontColor;
         StageBackground = style.StageBackground;
     }
 }

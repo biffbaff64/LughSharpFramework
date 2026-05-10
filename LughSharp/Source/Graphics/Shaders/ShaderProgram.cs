@@ -100,7 +100,7 @@ public class ShaderProgram : IDisposable
     /// </summary>
     public static readonly bool Pedantic = true;
 
-    private string _shaderLog = "";
+    private string _shaderLog = string.Empty;
     private int    _fragmentShaderHandle;
     private int    _vertexShaderHandle;
 

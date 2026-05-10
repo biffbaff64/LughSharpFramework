@@ -22,22 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Exceptions;
-
 namespace LughSharp.Source.Graphics.Images;
 
 /// <summary>
-/// Provides functionality for managing and manipulating 2D pixel maps with various
-/// color formats, blending modes, and scaling options.  Gdx2DPixmap is designed to
-/// handle image processing and manipulation at the pixel level. It supports multiple
-/// color formats, allows drawing operations, and facilitates scaling and format
-/// conversion for efficient rendering in 2D graphics. The class also allows management
-/// of associated buffer data and provides constructors for different initialization scenarios.
+/// Provides functionality for managing and manipulating 2D pixel maps with various color formats,
+/// blending modes, and scaling options.  Gdx2DPixmap is designed to handle image processing and
+/// manipulation at the pixel level. It supports multiple color formats, allows drawing operations,
+/// and facilitates scaling and format conversion for efficient rendering in 2D graphics. The class
+/// also allows management of associated buffer data and provides constructors for different
+/// initialization scenarios.
 /// </summary>
 [PublicAPI]
 public class Gdx2DPixmap : IDisposable
@@ -67,18 +60,12 @@ public class Gdx2DPixmap : IDisposable
 
     // ========================================================================
 
-    public const int Gdx2DIgnore = 0;
-
-    // ========================================================================
-
+    public const int Gdx2DIgnore        = 0;
     public const int Gdx2DScaleNearest  = 0;
     public const int Gdx2DScaleLinear   = 1;
     public const int Gdx2DScaleBilinear = 1;
-
-    // ========================================================================
-
     public const int Gdx2DBlendNone     = 0;
-    public const int Gdx2DBlendSrcOver = 1;
+    public const int Gdx2DBlendSrcOver  = 1;
 
     // ========================================================================
 
@@ -185,8 +172,7 @@ public class Gdx2DPixmap : IDisposable
 
         int length = width * height * PixelFormat.BytesPerPixel( format );
 
-        Pixels = new byte[ length ];
-
+        Pixels       = new byte[ length ];
         PixmapBuffer = new Buffer< byte >( length );
         PixmapBuffer.Put( Pixels );
     }
@@ -337,9 +323,11 @@ public class Gdx2DPixmap : IDisposable
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Clears the pixmap with the specified color.
     /// </summary>
-    /// <param name="color"></param>
+    /// <param name="color">
+    /// The RGBA color value to clear the pixmap with, represented as an integer.
+    /// </param>
     public void Clear( int color )
     {
         var colorObj = new Color();
@@ -446,9 +434,9 @@ public class Gdx2DPixmap : IDisposable
     }
 
     /// <summary>
-    /// Clears the pixmap data in the GDX_2D_FORMAT_RGB888 format with the specified color.
+    /// Clears the pixmap data in the RGB888 format with the specified color.
     /// </summary>
-    /// <param name="color">The color used to clear the pixmap, specified in the ARGB color format.</param>
+    /// <param name="color">The color used to clear the pixmap, specified in the RGB color format.</param>
     /// <param name="size">The size of the pixmap data in bytes.</param>
     private void ClearRGB888( Color color, uint size )
     {

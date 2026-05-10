@@ -54,7 +54,7 @@ public class ListenerFailureException : ApplicationException
     /// reference if no inner exception is specified.
     /// </param>
     public ListenerFailureException( Exception? e )
-        : this( "", e )
+        : this( string.Empty, e )
     {
     }
 

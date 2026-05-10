@@ -112,7 +112,7 @@ public class TextField : Widget
     private float                    _renderOffset;
     private float                    _selectionWidth;
     private float                    _selectionX;
-    private string?                  _undoText = "";
+    private string?                  _undoText = string.Empty;
     private int                      _visibleTextEnd;
     private int                      _visibleTextStart;
 
@@ -869,8 +869,8 @@ public class TextField : Widget
         int minIndex = Math.Min( from, to );
         int maxIndex = Math.Max( from, to );
 
-        string newText = ( minIndex > 0 ? Text.Substring( 0, minIndex ) : "" )
-                       + ( maxIndex < Text.Length ? Text.Substring( maxIndex, Text.Length ) : "" );
+        string newText = ( minIndex > 0 ? Text.Substring( 0, minIndex ) : string.Empty )
+                       + ( maxIndex < Text.Length ? Text.Substring( maxIndex, Text.Length ) : string.Empty );
 
         if ( fireChangeEvent )
         {
@@ -1243,7 +1243,7 @@ public class TextField : Widget
 
         protected TextFieldClickListener()
         {
-            _tf = new TextField( "", new Skin() );
+            _tf = new TextField( string.Empty, new Skin() );
         }
 
         protected internal TextFieldClickListener( TextField tf )

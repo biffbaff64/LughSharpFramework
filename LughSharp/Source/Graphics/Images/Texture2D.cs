@@ -342,7 +342,7 @@ public class Texture2D : GLTexture, IManaged
             }
 
             _managedTextures[ app ].Clear();
-            _managedTextures[ app ].AddAll( textures );
+            _managedTextures[ app ].AddRange( textures );
         }
     }
 

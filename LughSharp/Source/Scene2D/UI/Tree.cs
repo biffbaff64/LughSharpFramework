@@ -237,9 +237,9 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Invalidates the tree's layout.
     /// </summary>
-    public override void Invalidate()
+    public override void InvalidateLayout()
     {
-        base.Invalidate();
+        base.InvalidateLayout();
 
         _sizeInvalid = true;
     }

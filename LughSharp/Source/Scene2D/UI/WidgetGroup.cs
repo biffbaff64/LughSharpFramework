@@ -39,7 +39,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// is 0, which means no maximum size.
 /// </para>
 /// See <see cref="ILayout"/> for details on how a widget group should participate
-/// in layout. A widget group's mutator methods should call <see cref="Invalidate()"/>
+/// in layout. A widget group's mutator methods should call <see cref="InvalidateLayout"/>
 /// or <see cref="InvalidateHierarchy()"/> as needed. By default, InvalidateHierarchy
 /// is called when child widgets are added and removed.
 /// </summary>
@@ -111,7 +111,7 @@ public class WidgetGroup : Group, ILayout
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.Invalidate"/> has been called
+    /// Calls <see cref="ILayout.Layout"/> if <see cref="ILayout.InvalidateLayout"/> has been called
     /// since the last time <see cref="ILayout.Validate"/> was called, or if the actor otherwise
     /// needs to be laid out. This method is usually called in <see cref="Actor.Draw"/> by the
     /// actor itself before drawing is performed.
@@ -181,20 +181,20 @@ public class WidgetGroup : Group, ILayout
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
     /// parent actor's layout).
     /// </summary>
-    public virtual void Invalidate()
+    public virtual void InvalidateLayout()
     {
         NeedsLayout = true;
     }
 
     /// <summary>
-    /// Invalidates this actor and its ascendants, calling <see cref="ILayout.Invalidate"/> on each.
+    /// Invalidates this actor and its ascendants, calling <see cref="ILayout.InvalidateLayout"/> on each.
     /// This method should be called when state changes in the actor that affects the minimum,
     /// preferred, maximum, or actual size of the actor (meaning it potentially affects the
     /// parent actor's layout).
     /// </summary>
     public virtual void InvalidateHierarchy()
     {
-        Invalidate();
+        InvalidateLayout();
 
         if ( Parent is ILayout layout )
         {
@@ -297,7 +297,7 @@ public class WidgetGroup : Group, ILayout
     /// </summary>
     public override void OnSizeChanged()
     {
-        Invalidate();
+        InvalidateLayout();
     }
 
     /// <summary>

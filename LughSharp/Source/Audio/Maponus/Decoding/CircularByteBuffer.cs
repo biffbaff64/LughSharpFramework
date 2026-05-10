@@ -248,7 +248,7 @@ public class CircularByteBuffer
     /// <inheritdoc />
     public override string ToString()
     {
-        var ret = "";
+        var ret = string.Empty;
 
         foreach ( byte t in _buffer )
         {

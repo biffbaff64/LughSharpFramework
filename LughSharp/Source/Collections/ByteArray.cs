@@ -801,7 +801,7 @@ public class ByteArray
     {
         if ( Size == 0 )
         {
-            return "";
+            return string.Empty;
         }
 
         byte[] items  = Items;

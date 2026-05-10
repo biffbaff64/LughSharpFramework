@@ -323,7 +323,7 @@ public class DesktopGLPreferences : IPreferences
     {
         foreach ( KeyValuePair< string, object > property in _properties )
         {
-            _put( property.Key, "" );
+            _put( property.Key, string.Empty );
         }
     }
 

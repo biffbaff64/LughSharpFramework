@@ -36,7 +36,7 @@ public class MapLayer
 {
     public MapObjects    Objects    { get; init; } = new();
     public MapProperties Properties { get; init; } = new();
-    public string?       Name       { get; set; }  = "";
+    public string?       Name       { get; set; }  = string.Empty;
     public float         Opacity    { get; set; }  = 1.0f;
     public bool          Visible    { get; set; }  = true;
     public float         ParallaxX  { get; set; }  = 1.0f;

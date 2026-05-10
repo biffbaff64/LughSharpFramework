@@ -55,7 +55,7 @@ public class FileHandle
     public FileHandle( string? path, PathType type = PathType.Internal )
     {
         Type     = type;
-        _rawPath = path ?? "";
+        _rawPath = path ?? string.Empty;
     }
 
     /// <summary>

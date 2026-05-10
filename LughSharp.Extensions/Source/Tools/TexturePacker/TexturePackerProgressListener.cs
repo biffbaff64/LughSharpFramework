@@ -87,7 +87,7 @@ public class TexturePackerProgressListener
     public void Reset()
     {
         _scale  = 1;
-        Message = "";
+        Message = string.Empty;
         Count   = 0;
         Total   = 0;
 
@@ -103,7 +103,7 @@ public class TexturePackerProgressListener
 
             Progress( _lastUpdate );
         }
-    } = "";
+    } = string.Empty;
 
     protected virtual void Progress( float progress )
     {

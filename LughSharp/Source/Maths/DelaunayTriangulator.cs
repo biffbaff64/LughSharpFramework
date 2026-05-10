@@ -252,8 +252,12 @@ public class DelaunayTriangulator
                         break;
 
                     case Inside:
-                        _edges.AddAll( p1, p2, p2, p3 );
-                        _edges.AddAll( p3, p1 );
+                        _edges.Add( p1 );
+                        _edges.Add( p2 );
+                        _edges.Add( p2 );
+                        _edges.Add( p3 );
+                        _edges.Add( p3 );
+                        _edges.Add( p1 );
 
                         triangles.RemoveRange( triangleIndex - 2, triangleIndex );
                         _complete.RemoveAt( completeIndex );

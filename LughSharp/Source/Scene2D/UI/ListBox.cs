@@ -152,7 +152,7 @@ public class ListBox< T > : Widget where T : notnull
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor has
-    /// children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// children, positions and sizes each child, calls <see cref="ILayout.InvalidateLayout"/>
     /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="ILayout.Validate"/> should be used.
@@ -423,14 +423,14 @@ public class ListBox< T > : Widget where T : notnull
         float oldPrefHeight = GetPrefHeight();
 
         Items.Clear();
-        Items.AddAll( newItems );
+        Items.AddRange( newItems );
 
         _overIndex    = -1;
         _pressedIndex = -1;
 
         Selection.Validate();
 
-        Invalidate();
+        InvalidateLayout();
 
         if ( !oldPrefWidth.Equals( GetPrefWidth() ) || !oldPrefHeight.Equals( GetPrefHeight() ) )
         {
@@ -446,29 +446,28 @@ public class ListBox< T > : Widget where T : notnull
     /// </summary>
     public void SetItems( List< T > newItems )
     {
-        Guard.Against.Null( newItems );
-
         float oldPrefWidth  = GetPrefWidth();
         float oldPrefHeight = GetPrefHeight();
 
-        if ( !newItems.Equals( Items ) )
-        {
-            Items.Clear();
-            Items.AddAll( newItems );
-        }
+        Items.Clear();
+        Items.AddRange( newItems );
 
         _overIndex    = -1;
         _pressedIndex = -1;
         Selection.Validate();
 
-        Invalidate();
+        InvalidateLayout();
 
-        if ( !oldPrefWidth.Equals( GetPrefWidth() ) || !oldPrefHeight.Equals( GetPrefHeight() ) )
+        if ( Math.Abs( oldPrefWidth - GetPrefWidth() ) > NumberUtils.FloatTolerance 
+          || Math.Abs( oldPrefHeight - GetPrefHeight() ) > NumberUtils.FloatTolerance )
         {
             InvalidateHierarchy();
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public void ClearItems()
     {
         if ( Items.Count == 0 )
@@ -597,7 +596,7 @@ public class ListBox< T > : Widget where T : notnull
 
             if ( time > _typeTimeout )
             {
-                _prefix = "";
+                _prefix = string.Empty;
             }
 
             _typeTimeout =  time + 300;

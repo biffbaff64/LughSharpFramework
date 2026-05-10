@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// to be inserted into or removed from the middle of the group.
 /// <para>
 /// <see cref="Group.Children"/> can be sorted to change the order of the actors
-/// <see cref="Actor.SetZIndex(int)"/>. <see cref="Invalidate()"/> must be called
+/// <see cref="Actor.SetZIndex(int)"/>. <see cref="InvalidateLayout"/> must be called
 /// after changing the children order.
 /// </para>
 /// <para>
@@ -103,9 +103,9 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <inheritdoc />
-    public override void Invalidate()
+    public override void InvalidateLayout()
     {
-        base.Invalidate();
+        base.InvalidateLayout();
         _sizeInvalid = true;
     }
 

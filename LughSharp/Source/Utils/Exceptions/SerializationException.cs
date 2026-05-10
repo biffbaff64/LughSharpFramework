@@ -75,7 +75,7 @@ public class SerializationException : System.Runtime.Serialization.Serialization
     /// </summary>
     /// <param name="inner"></param>
     public SerializationException( Exception inner )
-        : base( "", inner )
+        : base( string.Empty, inner )
     {
     }
 

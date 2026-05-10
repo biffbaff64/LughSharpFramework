@@ -38,7 +38,7 @@ public class SplitPaneStyle : ISceneStyle
     
     public SplitPaneStyle()
     {
-        Handle = null!;
+        Handle = new BaseDrawable();
     }
 
     public SplitPaneStyle( ISceneDrawable handle )

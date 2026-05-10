@@ -183,7 +183,7 @@ public class OpenGL
 
                 return field;
             }
-        } = "";
+        } = string.Empty;
 
         /// <summary>
         /// A string describing the graphics hardware, i.e. "Intel(R) UHD Graphics 620"
@@ -196,7 +196,7 @@ public class OpenGL
 
                 return field;
             }
-        } = "";
+        } = string.Empty;
 
         /// <summary>
         /// A string describing the OpenGL version, i.e. "4.6.0"
@@ -209,7 +209,7 @@ public class OpenGL
 
                 return field;
             }
-        } = "";
+        } = string.Empty;
 
         /// <summary>
         /// A string describing the shading language version, i.e. "4.60"
@@ -222,7 +222,7 @@ public class OpenGL
 
                 return field;
             }
-        } = "";
+        } = string.Empty;
     }
 }
 

@@ -109,7 +109,7 @@ public class Container< T > : WidgetGroup where T : Actor
                             background.RightWidth );
             }
 
-            Invalidate();
+            InvalidateLayout();
         }
     }
 
@@ -454,7 +454,7 @@ public class Container< T > : WidgetGroup where T : Actor
         _clip     = enabled;
         Transform = enabled;
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     public bool GetClip()

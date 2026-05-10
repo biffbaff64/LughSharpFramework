@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// <see cref="Actor.SetZIndex(int)"/>). This can be easier than using <see cref="Table"/>
 /// when actors need to be inserted into or removed from the middle of the group.
 /// <para>
-/// <see cref="Invalidate()"/> must be called after changing the children order.
+/// <see cref="InvalidateLayout"/> must be called after changing the children order.
 /// </para>
 /// <para>
 /// The preferred width is the largest preferred width of any child. The preferred height
@@ -123,9 +123,9 @@ public class VerticalGroup : WidgetGroup
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
     /// parent actor's layout).
     /// </summary>
-    public override void Invalidate()
+    public override void InvalidateLayout()
     {
-        base.Invalidate();
+        base.InvalidateLayout();
         _sizeInvalid = true;
     }
 
@@ -273,7 +273,7 @@ public class VerticalGroup : WidgetGroup
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor
-    /// has children, positions and sizes each child, calls <see cref="ILayout.Invalidate"/>
+    /// has children, positions and sizes each child, calls <see cref="ILayout.InvalidateLayout"/>
     /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="ILayout.Validate"/> should be used.

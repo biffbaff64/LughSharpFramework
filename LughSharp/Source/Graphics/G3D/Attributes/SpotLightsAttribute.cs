@@ -43,7 +43,7 @@ public class SpotLightsAttribute : G3DAttribute
 
     public SpotLightsAttribute( SpotLightsAttribute copyFrom ) : this()
     {
-        Lights.AddAll( copyFrom.Lights );
+        Lights.AddRange( copyFrom.Lights );
     }
 
     public static string Alias => "spotLights";

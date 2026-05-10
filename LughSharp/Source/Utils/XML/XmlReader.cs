@@ -1101,7 +1101,7 @@ public class XmlReader
         /// </returns>
         public float GetFloatAttribute( string name, float defaultValue = 0 )
         {
-            return float.TryParse( GetAttribute( name, "" ), out float res )
+            return float.TryParse( GetAttribute( name, string.Empty ), out float res )
                 ? res
                 : defaultValue;
         }
@@ -1121,7 +1121,7 @@ public class XmlReader
         /// </returns>
         public int GetIntAttribute( string name, int defaultValue = 0 )
         {
-            return int.TryParse( GetAttribute( name, "" ), out int res )
+            return int.TryParse( GetAttribute( name, string.Empty ), out int res )
                 ? res
                 : defaultValue;
         }
@@ -1142,7 +1142,7 @@ public class XmlReader
         /// </returns>
         public uint GetUIntAttribute( string name, uint defaultValue = 0 )
         {
-            return uint.TryParse( GetAttribute( name, "" ), out uint res )
+            return uint.TryParse( GetAttribute( name, string.Empty ), out uint res )
                 ? res
                 : defaultValue;
         }
@@ -1267,7 +1267,7 @@ public class XmlReader
         /// <returns>A string that represents the current object.</returns>
         public override string ToString()
         {
-            return ToString( "" );
+            return ToString( string.Empty );
         }
 
         /// <summary>

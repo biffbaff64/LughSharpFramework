@@ -72,8 +72,8 @@ public static class Logger
 
     // ========================================================================
 
-    private static string        _debugFilePath = "";
-    private static string        _debugFileName = "";
+    private static string        _debugFilePath = string.Empty;
+    private static string        _debugFileName = string.Empty;
     private static StreamWriter? _streamWriter;
 
     // ========================================================================
@@ -471,7 +471,7 @@ public static class Logger
     /// <returns></returns>
     private static string CreateMessage( string? tag, CallerID? cid, string formatString )
     {
-        var sb = new StringBuilder( tag ?? "" );
+        var sb = new StringBuilder( tag ?? string.Empty );
 
         if ( cid != null )
         {

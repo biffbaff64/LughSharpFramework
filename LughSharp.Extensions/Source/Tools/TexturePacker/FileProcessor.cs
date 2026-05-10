@@ -111,7 +111,7 @@ public class FileProcessor
         Comparator  = processor.Comparator;
 
         InputRegex ??= [ ];
-        InputRegex.AddAll( processor.InputRegex );
+        InputRegex.AddRange( processor.InputRegex );
 
         OutputFilesList = processor.OutputFilesList;
         OutputSuffix    = processor.OutputSuffix;

@@ -1120,7 +1120,7 @@ public class ScrollPane : WidgetGroup
             RemoveListener( _flickScrollListener );
         }
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     public void SetFlickScrollTapSquareSize( float halfTapSquareSize )
@@ -1243,7 +1243,7 @@ public class ScrollPane : WidgetGroup
         DisableXScroll = x;
         DisableYScroll = y;
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     public bool IsPanning()
@@ -1311,7 +1311,7 @@ public class ScrollPane : WidgetGroup
             FadeAlpha = FadeAlphaSeconds;
         }
 
-        Invalidate();
+        InvalidateLayout();
     }
 
     public void SetupFadeScrollBars( float fadeAlphaSeconds, float fadeDelaySeconds )
@@ -1330,7 +1330,7 @@ public class ScrollPane : WidgetGroup
     public void SetScrollbarsOnTop( bool scrollbarsOnTop )
     {
         ScrollbarsOnTop = scrollbarsOnTop;
-        Invalidate();
+        InvalidateLayout();
     }
 
     public override void DrawDebug( ShapeRenderer shapes )

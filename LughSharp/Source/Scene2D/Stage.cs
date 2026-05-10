@@ -156,12 +156,12 @@ public class Stage : InputAdapter, IDisposable
         {
             NewObjectFactory = () => new InputEvent()
         } );
-        
+
         Pools.RegisterPool< TouchFocus >( new Pool< TouchFocus >
         {
             NewObjectFactory = () => new TouchFocus()
         } );
-        
+
         Pools.RegisterPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
         {
             NewObjectFactory = () => new FocusListener.FocusEvent()

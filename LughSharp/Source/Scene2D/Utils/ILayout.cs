@@ -56,7 +56,7 @@ public interface ILayout
 
     /// <summary>
     /// Computes and caches any information needed for drawing and, if this actor
-    /// has children, positions and sizes each child, calls <see cref="Invalidate()"/>
+    /// has children, positions and sizes each child, calls <see cref="InvalidateLayout"/>
     /// on any each child whose width or height has changed, and calls <see cref="Validate()"/>
     /// on each child. This method should almost never be called directly, instead
     /// <see cref="Validate()"/> should be used.
@@ -70,10 +70,10 @@ public interface ILayout
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
     /// parent actor's layout).
     /// </summary>
-    void Invalidate();
+    void InvalidateLayout();
 
     /// <summary>
-    /// Invalidates this actor and its ascendants, calling <see cref="Invalidate()"/> on each.
+    /// Invalidates this actor and its ascendants, calling <see cref="InvalidateLayout"/> on each.
     /// This method should be called when state changes in the actor that affects the minimum,
     /// preferred, maximum, or actual size of the actor (meaning it potentially affects the
     /// parent actor's layout).
@@ -83,7 +83,7 @@ public interface ILayout
     /// <summary>
     /// Ensures the actor has been laid out.
     /// <para>
-    /// Calls <see cref="Layout"/> if <see cref="Invalidate()"/> has been called since the
+    /// Calls <see cref="Layout"/> if <see cref="InvalidateLayout"/> has been called since the
     /// last time <see cref="Validate()"/> was called, or if the actor otherwise needs to be
     /// laid out. This method is usually called in <see cref="Actor.Draw"/> by
     /// the actor itself before drawing is performed.

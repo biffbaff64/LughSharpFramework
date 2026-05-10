@@ -134,9 +134,9 @@ public class Stack : WidgetGroup
         set;
     }
 
-    public override void Invalidate()
+    public override void InvalidateLayout()
     {
-        base.Invalidate();
+        base.InvalidateLayout();
         _sizeInvalid = true;
     }
 

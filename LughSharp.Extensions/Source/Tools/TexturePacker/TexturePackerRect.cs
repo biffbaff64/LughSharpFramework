@@ -243,7 +243,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
     /// <inheritdoc />
     public override string ToString()
     {
-        return $"{Name}{( Index != -1 ? $"_{Index}" : "" )}[{X},{Y} {Width}x{Height}]";
+        return $"{Name}{( Index != -1 ? $"_{Index}" : string.Empty )}[{X},{Y} {Width}x{Height}]";
     }
 }
 

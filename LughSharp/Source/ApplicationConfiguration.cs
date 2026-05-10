@@ -138,7 +138,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// Sets the window title. Defaults to empty string.
     /// </summary>
-    public string? Title { get; set; } = "";
+    public string? Title { get; set; } = string.Empty;
 
     // ========================================================================
 

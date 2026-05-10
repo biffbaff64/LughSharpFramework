@@ -476,7 +476,7 @@ public class PNGDecoder
         var byteArray = new byte[ 4 ];
         Array.Copy( bytes, startIndex, byteArray, 0, 4 );
 
-        return BitConverter.ToString( byteArray ).Replace( "-", "" );
+        return BitConverter.ToString( byteArray ).Replace( "-", string.Empty );
     }
 
     /// <summary>

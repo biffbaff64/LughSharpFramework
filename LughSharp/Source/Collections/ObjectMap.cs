@@ -1006,7 +1006,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     {
         if ( Size == 0 )
         {
-            return braces ? "{}" : "";
+            return braces ? "{}" : string.Empty;
         }
 
         var buffer = new StringBuilder( 32 );

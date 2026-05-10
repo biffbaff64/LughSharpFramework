@@ -25,10 +25,6 @@
 using System.Globalization;
 using System.Xml.Linq;
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Exceptions;
-
 namespace LughSharp.Source.Utils.Logging;
 
 [PublicAPI]
@@ -322,7 +318,7 @@ public class Preferences : IPreferences
     {
         foreach ( KeyValuePair< string, object > property in _properties )
         {
-            Put( property.Key, "" );
+            Put( property.Key, string.Empty );
         }
     }
 

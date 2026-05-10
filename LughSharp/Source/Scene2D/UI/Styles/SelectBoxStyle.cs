@@ -36,28 +36,21 @@ public class SelectBoxStyle : ISceneStyle
     public BitmapFont      Font               { get; }
     public ScrollPaneStyle ScrollPaneStyle    { get; }
     public ListBoxStyle    ListBoxStyle       { get; }
-    public Color           FontColor          { get; }
-    public Color           OverFontColor      { get; }
-    public Color           DisabledFontColor  { get; }
-    public ISceneDrawable  Background         { get; }
-    public ISceneDrawable  BackgroundOver     { get; }
-    public ISceneDrawable  BackgroundOpen     { get; }
-    public ISceneDrawable  BackgroundDisabled { get; }
+    public Color           FontColor          { get; } = new Color( 1, 1, 1, 1 );
+    public Color           OverFontColor      { get; } = new Color( 1, 1, 1, 1 );
+    public Color           DisabledFontColor  { get; } = new Color( 0.5f, 0.5f, 0.5f, 1 );
+    public ISceneDrawable  Background         { get; } = new BaseDrawable();
+    public ISceneDrawable  BackgroundOver     { get; } = new BaseDrawable();
+    public ISceneDrawable  BackgroundOpen     { get; } = new BaseDrawable();
+    public ISceneDrawable  BackgroundDisabled { get; } = new BaseDrawable();
 
     // ====================================================================
 
     public SelectBoxStyle()
     {
-        Font               = new BitmapFont();
-        FontColor          = new Color( 1, 1, 1, 1 );
-        OverFontColor      = new Color( 1, 1, 1, 1 );
-        DisabledFontColor  = new Color( 0.5f, 0.5f, 0.5f, 1 );
-        ScrollPaneStyle    = new ScrollPaneStyle();
-        ListBoxStyle       = new ListBoxStyle();
-        Background         = new BaseDrawable();
-        BackgroundOver     = new BaseDrawable();
-        BackgroundOpen     = new BaseDrawable();
-        BackgroundDisabled = new BaseDrawable();
+        Font            = new BitmapFont();
+        ScrollPaneStyle = new ScrollPaneStyle();
+        ListBoxStyle    = new ListBoxStyle();
     }
 
     public SelectBoxStyle( BitmapFont font,
@@ -69,15 +62,11 @@ public class SelectBoxStyle : ISceneStyle
         Font            = font;
         ScrollPaneStyle = scrollStyle;
         ListBoxStyle    = listBoxStyle;
+        Background      = background;
 
         FontColor         = fontColor;
         OverFontColor     = fontColor;
         DisabledFontColor = new Color( 0.5f, 0.5f, 0.5f, 1 );
-
-        Background         = background;
-        BackgroundOver     = background;
-        BackgroundOpen     = background;
-        BackgroundDisabled = background;
     }
 
     public SelectBoxStyle( SelectBoxStyle? style )

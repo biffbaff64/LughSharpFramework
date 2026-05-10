@@ -209,7 +209,7 @@ public class Skin : IDisposable
     /// <returns></returns>
     private static TextureAtlas? LoadAtlasIfExists( FileInfo skinFile )
     {
-        string skinHome  = skinFile.DirectoryName ?? "";
+        string skinHome  = skinFile.DirectoryName ?? string.Empty;
         string name      = Path.GetFileNameWithoutExtension( skinFile.Name );
         var    atlasFile = new FileInfo( Path.Combine( skinHome, $"{name}.atlas" ) );
 
@@ -856,7 +856,7 @@ public class Skin : IDisposable
             return;
         }
 
-        name  = name.Replace( "-disabled", "" ) + ( enabled ? "" : "-disabled" );
+        name  = name.Replace( "-disabled", string.Empty ) + ( enabled ? string.Empty : "-disabled" );
         style = Get( name, style.GetType() );
 
         // Set new style.
@@ -1129,7 +1129,7 @@ public class Skin : IDisposable
 
             path = Path.Combine( _skin._skinHome, path );
 
-            var fontFile = new FileInfo( Path.Combine( file.DirectoryName ?? "", path ) );
+            var fontFile = new FileInfo( Path.Combine( file.DirectoryName ?? string.Empty, path ) );
 
             if ( !fontFile.Exists )
             {

@@ -101,6 +101,6 @@ public abstract class DelegateSceneAction : SceneAction
 
     public override string ToString()
     {
-        return base.ToString() + ( Action == null ? "" : $"({Action})" );
+        return base.ToString() + ( Action == null ? string.Empty : $"({Action})" );
     }
 }

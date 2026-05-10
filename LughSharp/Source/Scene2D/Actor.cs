@@ -1004,7 +1004,9 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetSize( float width, float height )
     {
-        if ( Compare.IsNotEqual( Width, width ) || Compare.IsNotEqual( Height, height ) )
+        if ( Math.Abs( Width - width ) > NumberUtils.FloatTolerance
+          || Math.Abs( Height - height ) > NumberUtils.FloatTolerance )
+        
         {
             Width  = width;
             Height = height;

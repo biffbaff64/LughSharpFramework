@@ -36,8 +36,7 @@ namespace LughSharp.Source.Graphics.Fonts;
 public class BitmapFontData
 {
     /// <summary>
-    /// Additional characters besides whitespace where text is wrapped.
-    /// Eg, a hypen (-).
+    /// Additional characters besides whitespace where text is wrapped. Eg, a hypen (-).
     /// </summary>
     public readonly char[]? BreakChars;
 
@@ -54,7 +53,7 @@ public class BitmapFontData
 
     // ====================================================================
 
-    public string?     Name          { get; set; }
+    public string      Name          { get; set; } = string.Empty;
     public string[]?   ImagePaths    { get; set; }
     public FileInfo    FontFile      { get; set; }
     public bool        Flipped       { get; set; }
@@ -208,9 +207,9 @@ public class BitmapFontData
     /// Creates a new BitmapFontData instance from this one.
     /// </summary>
     public BitmapFontData Copy() => new( this );
-    
+
     /// <summary>
-    ///
+    /// Loads the font data from the specified file for processing.
     /// </summary>
     /// <param name="file"></param>
     /// <param name="flip"></param>
@@ -603,9 +602,8 @@ public class BitmapFontData
                 }
             }
 
-            xGlyph ??= GetFirstGlyph();
-
-            XHeight = xGlyph.Height - padY;
+            xGlyph  ??= GetFirstGlyph();
+            XHeight =   xGlyph.Height - padY;
 
             Glyph? capGlyph = null;
 
@@ -647,9 +645,8 @@ public class BitmapFontData
             }
 
             CapHeight -= padY;
-
-            Ascent = baseLine - CapHeight;
-            Down   = -LineHeight;
+            Ascent    =  baseLine - CapHeight;
+            Down      =  -LineHeight;
 
             if ( flip )
             {

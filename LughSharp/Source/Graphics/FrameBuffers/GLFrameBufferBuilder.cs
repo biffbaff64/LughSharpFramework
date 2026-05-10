@@ -30,31 +30,76 @@ using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics.FrameBuffers;
 
+/// <summary>
+/// Fluent builder for constructing <see cref="GLFrameBuffer{TU}"/> instances with
+/// configurable texture and render-buffer attachments.
+/// <para>
+/// Call the various <c>Add*</c> methods to describe the desired attachments, then
+/// call <see cref="Build"/> (overridden in a concrete subclass) to produce the
+/// frame-buffer object.
+/// </para>
+/// </summary>
+/// <typeparam name="TU">The concrete <see cref="GLFrameBuffer{GLTexture}"/> type to build.</typeparam>
+/// <param name="width">Width of the frame buffer in pixels.</param>
+/// <param name="height">Height of the frame buffer in pixels.</param>
 [PublicAPI]
 public class GLFrameBufferBuilder< TU >( int width, int height )
     where TU : GLFrameBuffer< GLTexture >
 {
-    public int Width  { get; } = width;
+    /// <summary>
+    /// Width of the frame buffer in pixels.
+    /// </summary>
+    public int Width { get; } = width;
+
+    /// <summary>
+    /// Height of the frame buffer in pixels.
+    /// </summary>
     public int Height { get; } = height;
 
+    /// <summary>
+    /// Ordered list of texture attachment specifications added to this builder.
+    /// </summary>
     public List< FrameBufferTextureAttachmentSpec > TextureAttachmentSpecs { get; } = new();
 
-    public FrameBufferRenderBufferAttachmentSpec? StencilRenderBufferSpec            { get; set; }
-    public FrameBufferRenderBufferAttachmentSpec? DepthRenderBufferSpec              { get; set; }
+    /// <summary>
+    /// Specification for the stencil render-buffer attachment, or <c>null</c> if none was added.
+    /// </summary>
+    public FrameBufferRenderBufferAttachmentSpec? StencilRenderBufferSpec { get; set; }
+
+    /// <summary>
+    /// Specification for the depth render-buffer attachment, or <c>null</c> if none was added.
+    /// </summary>
+    public FrameBufferRenderBufferAttachmentSpec? DepthRenderBufferSpec { get; set; }
+
+    /// <summary>
+    /// Specification for the packed depth/stencil render-buffer attachment, or <c>null</c> if none was added.
+    /// </summary>
     public FrameBufferRenderBufferAttachmentSpec? PackedStencilDepthRenderBufferSpec { get; set; }
 
-    public bool HasStencilRenderBuffer            { get; set; }
-    public bool HasDepthRenderBuffer              { get; set; }
+    /// <summary>
+    /// <c>true</c> when a stencil render-buffer attachment has been configured.
+    /// </summary>
+    public bool HasStencilRenderBuffer { get; set; }
+
+    /// <summary>
+    /// <c>true</c> when a depth render-buffer attachment has been configured.
+    /// </summary>
+    public bool HasDepthRenderBuffer { get; set; }
+
+    /// <summary>
+    /// <c>true</c> when a packed depth/stencil render-buffer attachment has been configured.
+    /// </summary>
     public bool HasPackedStencilDepthRenderBuffer { get; set; }
 
     // ========================================================================
 
     /// <summary>
+    /// Adds a color texture attachment with explicit GL format parameters.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <param name="format"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal format (e.g. <c>GL_RGBA8</c>).</param>
+    /// <param name="format">GL base format (e.g. <c>GL_RGBA</c>).</param>
+    /// <param name="type">GL data type (e.g. <c>GL_UNSIGNED_BYTE</c>).</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddColorTextureAttachment( int internalFormat,
                                                                  int format,
                                                                  int type )
@@ -65,9 +110,12 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a color texture attachment by deriving the GL format and data type from a
+    /// <see cref="PixelFormat"/> value. This is a convenience wrapper around
+    /// <see cref="AddColorTextureAttachment"/>.
     /// </summary>
-    /// <param name="format"></param>
-    /// <returns></returns>
+    /// <param name="format">A <see cref="PixelFormat"/> constant used to resolve the GL format and type.</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( int format )
     {
         int glFormat = PixelFormat.ToGLFormat( format );
@@ -77,12 +125,16 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a floating-point texture attachment. Floating-point attachments are used for
+    /// HDR rendering or other scenarios that require values outside the [0, 1] range.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <param name="format"></param>
-    /// <param name="type"></param>
-    /// <param name="gpuOnly"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal format (e.g. <c>GL_RGBA16F</c> or <c>GL_RGBA32F</c>).</param>
+    /// <param name="format">GL base format (e.g. <c>GL_RGBA</c>).</param>
+    /// <param name="type">GL data type (e.g. <c>GL_FLOAT</c>).</param>
+    /// <param name="gpuOnly">
+    /// When <c>true</c> the texture data lives exclusively on the GPU and cannot be read back to the CPU.
+    /// </param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddFloatAttachment( int internalFormat,
                                                           int format,
                                                           int type,
@@ -100,10 +152,12 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a depth texture attachment. The attachment uses <c>GL_DEPTH_COMPONENT</c> as its
+    /// base format and is flagged as a depth attachment.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal depth format (e.g. <c>GL_DEPTH_COMPONENT16</c>).</param>
+    /// <param name="type">GL data type for the depth values (e.g. <c>GL_UNSIGNED_SHORT</c>).</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddDepthTextureAttachment( int internalFormat, int type )
     {
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GLDepthComponent, type )
@@ -117,10 +171,12 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a stencil texture attachment. The attachment uses <c>GL_STENCIL_ATTACHMENT</c> as
+    /// its base format and is flagged as a stencil attachment.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal stencil format (e.g. <c>GL_STENCIL_INDEX8</c>).</param>
+    /// <param name="type">GL data type for the stencil values.</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddStencilTextureAttachment( int internalFormat, int type )
     {
         var spec = new FrameBufferTextureAttachmentSpec( internalFormat, IGL.GLStencilAttachment, type )
@@ -134,9 +190,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a depth render-buffer attachment with the specified internal format.
+    /// Sets <see cref="HasDepthRenderBuffer"/> to <c>true</c>.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal depth format (e.g. <c>GL_DEPTH_COMPONENT16</c>).</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddDepthRenderBuffer( int internalFormat )
     {
         DepthRenderBufferSpec = new FrameBufferRenderBufferAttachmentSpec( internalFormat );
@@ -146,9 +204,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a stencil render-buffer attachment with the specified internal format.
+    /// Sets <see cref="HasStencilRenderBuffer"/> to <c>true</c>.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal stencil format (e.g. <c>GL_STENCIL_INDEX8</c>).</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddStencilRenderBuffer( int internalFormat )
     {
         StencilRenderBufferSpec = new FrameBufferRenderBufferAttachmentSpec( internalFormat );
@@ -158,9 +218,11 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a packed depth/stencil render-buffer attachment with the specified internal format.
+    /// Sets <see cref="HasPackedStencilDepthRenderBuffer"/> to <c>true</c>.
     /// </summary>
-    /// <param name="internalFormat"></param>
-    /// <returns></returns>
+    /// <param name="internalFormat">GL internal packed format (e.g. <c>GL_DEPTH24_STENCIL8</c>).</param>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddStencilDepthPackedRenderBuffer( int internalFormat )
     {
         PackedStencilDepthRenderBufferSpec = new FrameBufferRenderBufferAttachmentSpec( internalFormat );
@@ -170,35 +232,46 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     }
 
     /// <summary>
+    /// Adds a depth render-buffer using the default <c>GL_DEPTH_COMPONENT16</c> internal format.
+    /// Convenience wrapper for <see cref="AddDepthRenderBuffer"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddBasicDepthRenderBuffer()
     {
         return AddDepthRenderBuffer( IGL.GLDepthComponent16 );
     }
 
     /// <summary>
+    /// Adds a stencil render-buffer using the default <c>GL_STENCIL_INDEX8</c> internal format.
+    /// Convenience wrapper for <see cref="AddStencilRenderBuffer"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilRenderBuffer()
     {
         return AddStencilRenderBuffer( IGL.GLStencilIndex8 );
     }
 
     /// <summary>
+    /// Adds a packed depth/stencil render-buffer using the default <c>GL_DEPTH24_STENCIL8</c>
+    /// internal format. Convenience wrapper for <see cref="AddStencilDepthPackedRenderBuffer"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddBasicStencilDepthPackedRenderBuffer()
     {
         return AddStencilDepthPackedRenderBuffer( IGL.GLDepth24Stencil8 );
     }
 
     /// <summary>
+    /// Constructs and returns the configured frame-buffer object.
+    /// Must be overridden by every concrete subclass.
     /// </summary>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <returns>The newly created frame-buffer instance.</returns>
+    /// <exception cref="RuntimeException">Always thrown from this base implementation.</exception>
     public virtual object Build()
     {
         throw new RuntimeException( "This method must be overriden by derived class(es)" );
     }
 }
+
+// ============================================================================
+// ============================================================================

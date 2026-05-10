@@ -43,7 +43,7 @@ public class PointLightsAttribute : G3DAttribute
 
     public PointLightsAttribute( PointLightsAttribute copyFrom ) : this()
     {
-        Lights.AddAll( copyFrom.Lights );
+        Lights.AddRange( copyFrom.Lights );
     }
 
     public static string Alias => "pointLights";

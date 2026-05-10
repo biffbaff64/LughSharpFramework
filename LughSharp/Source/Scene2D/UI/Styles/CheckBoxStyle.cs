@@ -65,8 +65,8 @@ public class CheckBoxStyle : TextButtonStyle
         CheckboxOff = checkboxOff;
 
         // Properties from base
-        Font      = font.Copy();
-        FontColor = fontColor.Copy();
+        Font      = font;
+        FontColor = fontColor;
     }
 
     /// <summary>

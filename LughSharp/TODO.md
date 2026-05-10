@@ -338,8 +338,8 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - BitmapFont
-    - IP   - DONE - DONE - BitmapFontCache      Dispose() needs completing
-    - IP   - IP   - DONE - BitmapFontData
+    - DONE - DONE - DONE - BitmapFontCache      Dispose() needs completing
+    - DONE - IP   - DONE - BitmapFontData
     - IP   - IP   - DONE - DistanceFieldFont
     - DONE - DONE - DONE - Glyph
     - IP   - IP   - DONE - GlyphLayout
@@ -359,8 +359,8 @@ LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS
     -      -      -      - FrameBufferCubemapBuilder
     -      -      -      - FrameBufferRenderBufferAttachmentSpec
     -      -      -      - FrameBufferTextureAttachmentSpec
-    -      -      -      - GLFrameBuffer
-    -      -      -      - GLFrameBufferBuilder
+    - DONE - IP   - DONE - GLFrameBuffer
+    - DONE - DONE - DONE - GLFrameBufferBuilder
 
 LUGHSHARP/SOURCE/GRAPHICS/G2D
 -----------------------------
@@ -382,8 +382,8 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
     -      -      -      - PolygonSpriteBatch              Some methods have too many parameters
     -      -      -      - RepeatablePolygonSprite
     -      -      -      - Sprite2D
-    -      -      -      - SpriteBatch
-    -      -      -      - SpriteCache
+    - DONE - DONE - DONE - SpriteBatch
+    - IP   - IP   - DONE - SpriteCache
 
 LUGHSHARP/SOURCE/GRAPHICS/G3D
 -----------------------------
@@ -402,7 +402,7 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Gdx2DPixmap
+    - DONE - IP   - DONE - Gdx2DPixmap
     - DONE - DONE - DONE - GLTexture
     - DONE - DONE - DONE - GLTextureArray
     - DONE - IP   - DONE - NinePatch
@@ -411,7 +411,7 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES
     -      -      -      - PixmapDownloader
     -      -      -      - PixmapIO
     - DONE - DONE - DONE - Texture2D
-    -      -      -      - TextureRegion
+    - DONE - IP   - DONE - TextureRegion
 
 LUGHSHARP/SOURCE/GRAPHICS/IMAGES/DECODERS
 -----------------------------------------
@@ -1034,7 +1034,8 @@ LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
 ----------------------------------
 
 All Styles should provide a fully defined default style. This will
-remove any possibility of NullReferenceExceptions.
+remove any possibility of problems with the default style not being
+defined..
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -1050,7 +1051,7 @@ remove any possibility of NullReferenceExceptions.
     -      -      - DONE - SelectBoxStyle
     -      -      - DONE - SliderStyle
     -      -      - DONE - SplitPaneStyle
-    -      -      - DONE - TextAreaStyle
+    - DONE - DONE - DONE - TextAreaStyle
     -      -      - DONE - TextButtonStyle
     -      -      - DONE - TextFieldStyle
     -      -      - DONE - TextTooltipStyle

@@ -289,7 +289,7 @@ public class Cubemap : GLTexture, IManaged
             }
 
             managedCubemapArray.Clear();
-            managedCubemapArray.AddAll( cubemaps );
+            managedCubemapArray.AddRange( cubemaps );
         }
     }
 

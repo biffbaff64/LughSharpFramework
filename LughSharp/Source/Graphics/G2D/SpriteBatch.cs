@@ -56,27 +56,28 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    public bool      BlendingEnabled   { get; set; }
-    public float     InvTexHeight      { get; set; }
-    public float     InvTexWidth       { get; set; }
-    public Matrix4   CombinedMatrix    { get; set; } = new();
-    public Matrix4   ProjectionMatrix  { get; set; } = new();
-    public Matrix4   TransformMatrix   { get; set; } = new();
-    public int       RenderCalls       { get; set; }
-    public long      TotalRenderCalls  { get; set; }
-    public int       MaxSpritesInBatch { get; set; }
+    public Matrix4   CombinedMatrix    { get; set; }         = new();
+    public Matrix4   ProjectionMatrix  { get; set; }         = new();
+    public Matrix4   TransformMatrix   { get; set; }         = new();
     public BlendMode BlendSrcFunc      { get; private set; } = BlendMode.SrcAlpha;
     public BlendMode BlendDstFunc      { get; private set; } = BlendMode.OneMinusSrcAlpha;
     public BlendMode BlendSrcFuncAlpha { get; private set; } = BlendMode.One;
     public BlendMode BlendDstFuncAlpha { get; private set; } = BlendMode.OneMinusDstAlpha;
-    public float[]   Vertices          { get; set; }         = [ ];
-    public int       TextureOffset     { get; set; }
+
+    public float[] Vertices          { get; set; } = [ ];
+    public int     TextureOffset     { get; set; }
+    public int     RenderCalls       { get; set; }
+    public long    TotalRenderCalls  { get; set; }
+    public int     MaxSpritesInBatch { get; set; }
+    public bool    BlendingEnabled   { get; set; }
+    public float   InvTexHeight      { get; set; }
+    public float   InvTexWidth       { get; set; }
 
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
     // ========================================================================
 
-    protected Texture2D?     LastTexture        { get; set; }
+    protected Texture2D?   LastTexture        { get; set; }
     protected int          Idx                { get; set; }
     protected BatchState?  CurrentBatchState  { get; set; }
     protected RenderState? CurrentRenderState { get; set; }
@@ -86,7 +87,7 @@ public class SpriteBatch : IBatch
     private const int VerticesPerSprite = 4;     // Number of vertices per sprite (quad)
     private const int IndicesPerSprite  = 6;     // Number of indices per sprite (two triangles)
     private const int MaxVertexIndex    = 32767; //
-    private const int MaxSprites        = 8191;  //
+    private const int MaxSprites        = 8191;  // MaxVertexIndex / VerticesPerSprite = 8191 sprites max.
     private const int MaxQuads          = 100;   //
 
     // ========================================================================
@@ -98,7 +99,7 @@ public class SpriteBatch : IBatch
     private static readonly Vector2 _defaultOrigin = Vector2.Zero;
     private static readonly Vector2 _defaultScale  = Vector2.One;
 
-    private Texture2D?       _lastSuccessfulTexture;
+    private Texture2D?     _lastSuccessfulTexture;
     private ShaderProgram? _shader;
     private Mesh?          _mesh;
 
@@ -131,22 +132,19 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Constructs a new SpriteBatch. Sets the projection matrix to an orthographic
-    /// projection with y-axis point upwards, x-axis point to the right and the origin
-    /// being in the bottom left corner of the screen. The projection will be pixel
-    /// perfect with respect to the current screen resolution.
-    /// The defaultShader specifies the shader to use. Note that the names for uniforms
-    /// for this default shader are different than the ones expect for shaders set with
-    /// <see cref="Shader"/>.
-    /// See <see cref="CreateDefaultShader()"/>.
+    /// Constructs a new SpriteBatch. Sets the projection matrix to an orthographic projection with
+    /// y-axis point upwards, x-axis point to the right and the origin being in the bottom left corner
+    /// of the screen. The projection will be pixel perfect with respect to the current screen resolution.
+    /// The defaultShader specifies the shader to use. Note that the names for uniforms for this default
+    /// shader are different than the ones expect for shaders set with <see cref="Shader"/>.
     /// </summary>
     /// <param name="size">
     /// The max number of sprites in a single batch. Max of <see cref="MaxSprites"/>.
     /// </param>
     /// <param name="defaultShader">
-    /// The default shader to use. This is not owned by the SpriteBatch and must be disposed
-    /// separately.
+    /// The default shader to use. This is not owned by the SpriteBatch and must be disposed separately.
     /// </param>
+    /// <seealso cref="CreateDefaultShader()"/>.
     protected SpriteBatch( int size = MaxQuads, ShaderProgram? defaultShader = null )
     {
         // 32767 is max vertex index, so 32767 / 4 vertices per sprite = 8191 sprites max.
@@ -258,7 +256,10 @@ public class SpriteBatch : IBatch
     {
         lock ( _lockObject )
         {
-            ThrowIfDisposed();
+            if ( _disposed )
+            {
+                throw new ObjectDisposedException( nameof( SpriteBatch ) );
+            }
 
             if ( CurrentBatchState == BatchState.Drawing )
             {
@@ -692,9 +693,8 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
-    /// Switches the current texture to the specified texture and updates internal
-    /// properties related to the texture dimensions. Also flushes any pending
-    /// batched render operations.
+    /// Switches the current texture to the specified texture and updates internal properties related to
+    /// the texture dimensions. Also flushes any pending batched render operations.
     /// </summary>
     /// <param name="texture">The new texture to switch to. If null, no action is taken.</param>
     protected void SwitchTexture( Texture2D? texture )
@@ -1618,13 +1618,16 @@ public class SpriteBatch : IBatch
     }
 
     /// <summary>
+    /// Draws a TextureRegion onto the specified destination with the given transformation parameters.
     /// </summary>
-    /// <param name="textureRegion"></param>
-    /// <param name="destination"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
-    /// <param name="clockwise"></param>
+    /// <param name="textureRegion">The texture region to be drawn.</param>
+    /// <param name="destination">The target rectangle where the texture region will be drawn.</param>
+    /// <param name="origin">The point of origin for transformations, such as scaling and rotation.</param>
+    /// <param name="scale">The scaling factor to apply to the texture region.</param>
+    /// <param name="rotation">The angle of rotation to apply, in degrees.</param>
+    /// <param name="clockwise">
+    /// Specifies whether the rotation is applied in the clockwise direction (true) or counterclockwise (false).
+    /// </param>
     public virtual void Draw( TextureRegion textureRegion,
                               GRect destination,
                               Point2D origin,
@@ -1946,6 +1949,12 @@ public class SpriteBatch : IBatch
     /// </summary>
     public float ColorPackedRGBA => Color.ToFloatBitsRgba( Color.R, Color.G, Color.B, Color.A );
 
+    /// <summary>
+    /// Logs detailed debugging information about the vertex data and texture coordinates
+    /// within the SpriteBatch. This includes individual vertex values and their indices,
+    /// the current index pointer position, and the UV mapping for texture coordinates.
+    /// This method is only executed in debug builds.
+    /// </summary>
     public void DebugVertices()
     {
         for ( var i = 0; i < ( VerticesPerSprite * VertexConstants.VertexSize ); i++ )
@@ -2033,14 +2042,6 @@ public class SpriteBatch : IBatch
         }
     }
 
-    private void ThrowIfDisposed()
-    {
-        if ( _disposed )
-        {
-            throw new ObjectDisposedException( nameof( SpriteBatch ) );
-        }
-    }
-
     ~SpriteBatch()
     {
         Dispose( false );
@@ -2049,7 +2050,7 @@ public class SpriteBatch : IBatch
     // ========================================================================
 
     /// <summary>
-    ///
+    /// Represents the state of a batch operation within the rendering process.
     /// </summary>
     [PublicAPI]
     public enum BatchState
@@ -2070,8 +2071,8 @@ public class SpriteBatch : IBatch
     public record struct RenderState
     {
         public Texture2D? CurrentTexture  { get; set; }
-        public int      VertexCount     { get; set; }
-        public Matrix4  TransformMatrix { get; set; }
+        public int        VertexCount     { get; set; }
+        public Matrix4    TransformMatrix { get; set; }
 
         /// <summary>
         /// Represents the rendering state within a sprite batch, including texture information,
@@ -2116,3 +2117,4 @@ public class SpriteBatch : IBatch
 
 // ============================================================================
 // ============================================================================
+

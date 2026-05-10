@@ -304,7 +304,7 @@ public class Scene2DUtils
     /// <returns> The Checkbox. </returns>
     public static CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
     {
-        var            checkBox = new CheckBox( "", skin );
+        var            checkBox = new CheckBox( string.Empty, skin );
         CheckBoxStyle? style    = checkBox.Style;
 
         style?.FontColor   = color;

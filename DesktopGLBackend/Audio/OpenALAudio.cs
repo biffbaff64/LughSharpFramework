@@ -80,7 +80,7 @@ public class OpenALAudio : IAudio
         RegisterSound( "wav", typeof( Wav.Sound ) );
         RegisterSound( "mp3", typeof( Mp3.Sound ) );
 
-        _device = ALC.OpenDevice( "" ); //TODO: Find which value to use for default device
+        _device = ALC.OpenDevice( string.Empty ); //TODO: Find which value to use for default device
 
         if ( _device == 0L )
         {

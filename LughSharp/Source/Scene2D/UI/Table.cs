@@ -63,7 +63,7 @@ public class Table : WidgetGroup
         {
             _clip     = value;
             Transform = value;
-            Invalidate();
+            InvalidateLayout();
         }
     }
 
@@ -267,7 +267,7 @@ public class Table : WidgetGroup
                || Math.Abs( padBottomOld - padBottomNew ) > NumberUtils.FloatTolerance
                || Math.Abs( padRightOld - padRightNew ) > NumberUtils.FloatTolerance )
         {
-            Invalidate();
+            InvalidateLayout();
         }
     }
 
@@ -299,7 +299,7 @@ public class Table : WidgetGroup
         Clip      = enabled;
         Transform = enabled;
 
-        Invalidate();
+        InvalidateLayout();
 
         return this;
     }
@@ -311,10 +311,10 @@ public class Table : WidgetGroup
     /// preferred, maximum, or actual size of the actor (meaning it does not affect the
     /// parent actor's layout).
     /// </summary>
-    public override void Invalidate()
+    public override void InvalidateLayout()
     {
         _sizeInvalid = true;
-        base.Invalidate();
+        base.InvalidateLayout();
     }
 
     /// <summary>
@@ -593,7 +593,7 @@ public class Table : WidgetGroup
                 EndRow();
             }
 
-            Invalidate();
+            InvalidateLayout();
         }
 
         _implicitEndRow = false;
@@ -1982,7 +1982,7 @@ public class Table : WidgetGroup
         if ( TableDebug != DebugType.Table )
         {
             TableDebug = DebugType.Table;
-            Invalidate();
+            InvalidateLayout();
         }
 
         return this;
@@ -1998,7 +1998,7 @@ public class Table : WidgetGroup
         if ( TableDebug != DebugType.Cell )
         {
             TableDebug = DebugType.Cell;
-            Invalidate();
+            InvalidateLayout();
         }
 
         return this;
@@ -2014,7 +2014,7 @@ public class Table : WidgetGroup
         if ( TableDebug != DebugType.Actor )
         {
             TableDebug = DebugType.Actor;
-            Invalidate();
+            InvalidateLayout();
         }
 
         return this;
@@ -2037,7 +2037,7 @@ public class Table : WidgetGroup
             }
             else
             {
-                Invalidate();
+                InvalidateLayout();
             }
         }
 

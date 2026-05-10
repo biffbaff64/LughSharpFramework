@@ -309,7 +309,7 @@ public class TiledMapPacker
     /// <returns></returns>
     private string TilesetNameFromTileID( TiledMap map, int tileid )
     {
-        var name = "";
+        var name = string.Empty;
 
         if ( tileid != 0 )
         {
@@ -392,7 +392,7 @@ public class TiledMapPacker
 //
 //				if (usedIds != null && !usedIds.contains(gid)) {
 //					if (verbose) {
-//						System.out.println("Stripped id #" + gid + " from tileset \"" + tilesetName + "\"");
+//						System.out.println("Stripped id #" + gid + " from tileset \string.Empty + tilesetName + "\string.Empty);
 //					}
 //					continue;
 //				}
@@ -648,7 +648,7 @@ public class TiledMapPacker
 //				packerSettings.verbose = true;
 //
 //			} else {
-//				System.out.println("\nOption \"" + string + "\" not recognized.\n");
+//				System.out.println("\nOption \string.Empty + string + "\" not recognized.\n");
 //				printUsage();
 //				System.exit(0);
 //			}
@@ -783,7 +783,7 @@ public class TiledMapPacker
 //				packerSettings.verbose = true;
 //
 //			} else {
-//				System.out.println("\nOption \"" + string + "\" not recognized.\n");
+//				System.out.println("\nOption \string.Empty + string + "\" not recognized.\n");
 //				printUsage();
 //				System.exit(0);
 //			}
