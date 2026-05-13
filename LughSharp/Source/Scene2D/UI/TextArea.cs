@@ -61,7 +61,7 @@ public class TextArea : TextField
     /// Used to calculate preferred height
     /// </summary>
     public float PrefRows { get; set; }
-    
+
     // ========================================================================
 
     /// <summary>
@@ -193,11 +193,8 @@ public class TextArea : TextField
         // rounded value.
         float prefHeight = MathUtils.Ceil( Style.Font.GetLineHeight() * PrefRows );
 
-        if ( Style.Background != null )
-        {
-            prefHeight = Math.Max( prefHeight + Style.Background.BottomHeight + Style.Background.TopHeight,
-                                   Style.Background.MinHeight );
-        }
+        prefHeight = Math.Max( prefHeight + Style.Background.BottomHeight + Style.Background.TopHeight,
+                               Style.Background.MinHeight );
 
         return prefHeight;
     }
@@ -355,7 +352,7 @@ public class TextArea : TextField
         BitmapFont?     font       = Style?.Font;
         ISceneDrawable? background = Style?.Background;
 
-        float availableHeight = Height
+        float availableHeight = GetHeight()
                               - ( background == null
                                     ? 0
                                     : background.BottomHeight + background.TopHeight );
@@ -365,7 +362,7 @@ public class TextArea : TextField
 
     protected override float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
-        float textY = Height;
+        float textY = GetHeight();
 
         if ( background != null )
         {
@@ -382,6 +379,11 @@ public class TextArea : TextField
 
     protected override void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
+        if ( Style == null )
+        {
+            return;
+        }
+
         int   i          = FirstLineShowing * 2;
         var   offsetY    = 0f;
         int   minIndex   = Math.Min( Cursor, SelectionStart );
@@ -395,14 +397,12 @@ public class TextArea : TextField
             int lineStart = LinesBreak[ i ];
             int lineEnd   = LinesBreak[ i + 1 ];
 
-            if ( !( ( ( minIndex < lineStart )
-                   && ( minIndex < lineEnd )
-                   && ( maxIndex < lineStart )
-                   && ( maxIndex < lineEnd ) )
-                 || ( ( minIndex > lineStart )
-                   && ( minIndex > lineEnd )
-                   && ( maxIndex > lineStart )
-                   && ( maxIndex > lineEnd ) ) ) )
+            if ( !( ( ( minIndex < lineStart ) && ( minIndex < lineEnd )
+                                               && ( maxIndex < lineStart )
+                                               && ( maxIndex < lineEnd ) )
+                 || ( ( minIndex > lineStart ) && ( minIndex > lineEnd )
+                                               && ( maxIndex > lineStart )
+                                               && ( maxIndex > lineEnd ) ) ) )
             {
                 int start = Math.Max( lineStart, minIndex );
                 int end   = Math.Min( lineEnd, maxIndex );
@@ -412,7 +412,7 @@ public class TextArea : TextField
 
                 // we can't use fontOffset as it is valid only for first glyph/line in the text
                 // we will grab first character in this line and calculate proper offset for this line
-                Glyph? lineFirst = fontData.GetGlyph( DisplayText![ lineStart ] );
+                Glyph? lineFirst = fontData.GetGlyph( DisplayText[ lineStart ] );
 
                 if ( lineFirst != null )
                 {
@@ -449,19 +449,19 @@ public class TextArea : TextField
 
     protected override void DrawText( IBatch batch, BitmapFont font, float x, float y )
     {
-        if ( ( Style == null ) || ( LinesBreak == null ) )
+        if ( Style == null )
         {
             return;
         }
 
-        float? offsetY = -( Style.Font?.GetLineHeight() - TextHeight ) / 2;
+        float? offsetY = -( Style.Font.GetLineHeight() - TextHeight ) / 2;
 
         for ( int i = FirstLineShowing * 2;
              ( i < ( ( FirstLineShowing + LinesShowing ) * 2 ) ) && ( i < LinesBreak.Count );
              i += 2 )
         {
             font.Draw( batch,
-                       DisplayText!,
+                       DisplayText,
                        x,
                        y + ( offsetY ?? 0 ),
                        LinesBreak[ i ],
@@ -489,9 +489,7 @@ public class TextArea : TextField
         {
             _lastText = Text;
 
-            float maxWidthLine = Width - ( Style.Background != null
-                ? Style.Background.LeftWidth + Style.Background.RightWidth
-                : 0 );
+            float maxWidthLine = GetWidth() - ( Style.Background.LeftWidth + Style.Background.RightWidth );
 
             LinesBreak.Clear();
 
@@ -509,6 +507,7 @@ public class TextArea : TextField
                 {
                     LinesBreak.Add( lineStart );
                     LinesBreak.Add( i );
+
                     lineStart = i + 1;
                     lastSpace = lineStart;
 
@@ -545,7 +544,7 @@ public class TextArea : TextField
                 }
             }
 
-            layoutPool.Free( layout! );
+            layoutPool.Free( layout );
 
             // Add last line
             if ( lineStart < Text.Length )
@@ -593,11 +592,6 @@ public class TextArea : TextField
 
     protected override bool ContinueCursor( int index, int offset )
     {
-        if ( LinesBreak == null )
-        {
-            return false;
-        }
-
         int pos = CalculateCurrentLineIndex( index + offset );
 
         return base.ContinueCursor( index, offset )
@@ -610,25 +604,22 @@ public class TextArea : TextField
     public float GetCursorX()
     {
         float           textOffset = 0;
-        BitmapFontData? fontData   = Style?.Font?.FontData;
+        BitmapFontData? fontData   = Style?.Font.FontData;
 
-        if ( DisplayText != null )
+        if ( !( ( Cursor >= GlyphPositions.Count ) || ( ( CursorLine * 2 ) >= LinesBreak.Count ) ) )
         {
-            if ( !( ( Cursor >= GlyphPositions.Count ) || ( ( CursorLine * 2 ) >= LinesBreak.Count ) ) )
+            int    lineStart   = LinesBreak[ CursorLine * 2 ];
+            float  glyphOffset = 0;
+            Glyph? lineFirst   = fontData?.GetGlyph( DisplayText[ lineStart ] );
+
+            if ( lineFirst != null )
             {
-                int    lineStart   = LinesBreak[ CursorLine * 2 ];
-                float  glyphOffset = 0;
-                Glyph? lineFirst   = fontData?.GetGlyph( DisplayText[ lineStart ] );
-
-                if ( lineFirst != null )
-                {
-                    glyphOffset = lineFirst.FixedWidth
-                        ? 0
-                        : ( -lineFirst.Xoffset * fontData!.ScaleX ) - fontData.PadLeft;
-                }
-
-                textOffset = GlyphPositions[ Cursor ] - GlyphPositions[ lineStart ] + glyphOffset;
+                glyphOffset = lineFirst.FixedWidth
+                    ? 0
+                    : ( -lineFirst.Xoffset * fontData!.ScaleX ) - fontData.PadLeft;
             }
+
+            textOffset = GlyphPositions[ Cursor ] - GlyphPositions[ lineStart ] + glyphOffset;
         }
 
         return textOffset + fontData!.CursorX;
@@ -636,6 +627,8 @@ public class TextArea : TextField
 
     public float GetCursorY()
     {
+        Guard.Against.Null( Style );
+
         return -( CursorLine - FirstLineShowing + 1 ) * Style.Font.GetLineHeight();
     }
 
@@ -662,7 +655,7 @@ public class TextArea : TextField
             ISceneDrawable? background = _parent.Style?.Background;
             BitmapFont?     font       = _parent.Style?.Font;
 
-            float height = _parent.Height;
+            float height = _parent.GetHeight();
 
             if ( background != null )
             {

@@ -235,8 +235,8 @@ public class Dialog : Window
               SceneActions.Sequence( SceneActions.Alpha( 0 ),
                                      SceneActions.FadeIn( 0.4f, Interpolation.Fade ) ) );
 
-        SetPosition( ( float )Math.Round( ( stage.Width - Width ) / 2 ),
-                     ( float )Math.Round( ( stage.Height - Height ) / 2 ) );
+        SetPosition( ( float )Math.Round( ( stage.Width - GetWidth() ) / 2 ),
+                     ( float )Math.Round( ( stage.Height - GetHeight() ) / 2 ) );
 
         return this;
     }

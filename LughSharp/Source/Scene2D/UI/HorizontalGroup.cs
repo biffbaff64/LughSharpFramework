@@ -52,14 +52,14 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class HorizontalGroup : WidgetGroup
 {
-    public          bool    Wrap      { get; set; }
-    public          float   Fill      { get; set; }
-    public          bool    Expand    { get; set; }
-    public          Align   Alignment { get; set; } = Align.Left;
-    public          float   PadTop    { get; set; }
-    public          float   PadLeft   { get; set; }
-    public          float   PadBottom { get; set; }
-    public          float   PadRight  { get; set; }
+    public bool  Wrap      { get; set; }
+    public float Fill      { get; set; }
+    public bool  Expand    { get; set; }
+    public Align Alignment { get; set; } = Align.Left;
+    public float PadTop    { get; set; }
+    public float PadLeft   { get; set; }
+    public float PadBottom { get; set; }
+    public float PadRight  { get; set; }
 
     /// <summary>
     /// If true, the children will be displayed last to first.
@@ -112,7 +112,7 @@ public class HorizontalGroup : WidgetGroup
     private void ComputeSize()
     {
         _sizeInvalid = false;
-        SnapshotArrayList< Actor? > children = Children;
+        var children = new SnapshotArrayList< Actor >( Children );
 
         int n = children.Size;
 
@@ -136,7 +136,7 @@ public class HorizontalGroup : WidgetGroup
             float space      = Space;
             float wrapSpace  = WrapSpace;
             float pad        = PadLeft + PadRight;
-            float groupWidth = Width - pad;
+            float groupWidth = GetWidth() - pad;
             var   x          = 0f;
             var   y          = 0f;
             var   rowHeight  = 0f;
@@ -152,12 +152,7 @@ public class HorizontalGroup : WidgetGroup
 
             for ( ; i != n; i += incr )
             {
-                Actor? child = children.GetAt( i );
-
-                if ( child == null )
-                {
-                    continue;
-                }
+                Actor child = children.GetAt( i );
 
                 float width;
                 float height;
@@ -175,8 +170,8 @@ public class HorizontalGroup : WidgetGroup
                 }
                 else
                 {
-                    width  = child.Width;
-                    height = child.Height;
+                    width  = child.GetWidth();
+                    height = child.GetHeight();
                 }
 
                 float incrX = width + ( x > 0 ? space : 0 );
@@ -221,12 +216,7 @@ public class HorizontalGroup : WidgetGroup
 
             for ( var i = 0; i < n; i++ )
             {
-                Actor? child = children.GetAt( i );
-
-                if ( child == null )
-                {
-                    continue;
-                }
+                Actor child = children.GetAt( i );
 
                 if ( child is ILayout layout )
                 {
@@ -235,8 +225,8 @@ public class HorizontalGroup : WidgetGroup
                 }
                 else
                 {
-                    _prefWidth  += child.Width;
-                    _prefHeight =  Math.Max( _prefHeight, child.Height );
+                    _prefWidth  += child.GetWidth();
+                    _prefHeight =  Math.Max( _prefHeight, child.GetHeight() );
                 }
             }
         }
@@ -270,16 +260,16 @@ public class HorizontalGroup : WidgetGroup
         float space     = Space;
         float padBottom = PadBottom;
         float fill      = Fill;
-        float rowHeight = ( Expand ? Height : _prefHeight ) - PadTop - padBottom;
+        float rowHeight = ( Expand ? GetHeight() : _prefHeight ) - PadTop - padBottom;
         float x         = PadLeft;
 
         if ( ( align & Align.Right ) != 0 )
         {
-            x += Width - _prefWidth;
+            x += GetWidth() - _prefWidth;
         }
         else if ( ( align & Align.Left ) == 0 ) // center
         {
-            x += ( Width - _prefWidth ) / 2;
+            x += ( GetWidth() - _prefWidth ) / 2;
         }
 
         float startY;
@@ -290,16 +280,16 @@ public class HorizontalGroup : WidgetGroup
         }
         else if ( ( align & Align.Top ) != 0 )
         {
-            startY = Height - PadTop - rowHeight;
+            startY = GetHeight() - PadTop - rowHeight;
         }
         else
         {
-            startY = padBottom + ( ( Height - padBottom - PadTop - rowHeight ) / 2 );
+            startY = padBottom + ( ( GetHeight() - padBottom - PadTop - rowHeight ) / 2 );
         }
 
         align = _rowAlign;
 
-        SnapshotArrayList< Actor? > children = Children;
+        var children = new SnapshotArrayList< Actor >( Children );
 
         var i    = 0;
         int n    = children.Size;
@@ -314,12 +304,7 @@ public class HorizontalGroup : WidgetGroup
 
         for ( ; i != n; i += incr )
         {
-            Actor? child = children.GetAt( i );
-
-            if ( child == null )
-            {
-                continue;
-            }
+            Actor child = children.GetAt( i );
 
             float    width;
             float    height;
@@ -334,8 +319,8 @@ public class HorizontalGroup : WidgetGroup
             }
             else
             {
-                width  = child.Width;
-                height = child.Height;
+                width  = child.GetWidth();
+                height = child.GetHeight();
             }
 
             if ( fill > 0 )
@@ -404,7 +389,7 @@ public class HorizontalGroup : WidgetGroup
         float wrapSpace  = WrapSpace;
         float maxWidth   = _prefWidth - PadLeft - PadRight;
         float rowY       = prefHeight - PadTop;
-        float groupWidth = Width;
+        float groupWidth = GetWidth();
         float xStart     = PadLeft;
         float x          = 0;
         float rowHeight  = 0;
@@ -417,11 +402,11 @@ public class HorizontalGroup : WidgetGroup
 
         if ( ( align & Align.Top ) != 0 )
         {
-            rowY += Height - prefHeight;
+            rowY += GetHeight() - prefHeight;
         }
         else if ( ( align & Align.Bottom ) == 0 ) // center
         {
-            rowY += ( Height - prefHeight ) / 2;
+            rowY += ( GetHeight() - prefHeight ) / 2;
         }
 
         if ( WrapReverse )
@@ -442,11 +427,11 @@ public class HorizontalGroup : WidgetGroup
         groupWidth -= PadRight;
         align      =  _rowAlign;
 
-        List< float >?              rowSizes = _rowSizes;
-        SnapshotArrayList< Actor? > children = Children;
-        var                         i        = 0;
-        int                         n        = children.Size;
-        var                         incr     = 1;
+        List< float >? rowSizes = _rowSizes;
+        var            children = new SnapshotArrayList< Actor >( Children );
+        var            i        = 0;
+        int            n        = children.Size;
+        var            incr     = 1;
 
         if ( Reverse )
         {
@@ -457,16 +442,11 @@ public class HorizontalGroup : WidgetGroup
 
         for ( var r = 0; i != n; i += incr )
         {
-            Actor?   child  = children.GetAt( i );
+            Actor    child  = children.GetAt( i );
             ILayout? layout = null;
 
             float width;
             float height;
-
-            if ( child == null )
-            {
-                continue;
-            }
 
             // ReSharper disable once MergeCastWithTypeCheck
             if ( child is ILayout )
@@ -483,8 +463,8 @@ public class HorizontalGroup : WidgetGroup
             }
             else
             {
-                width  = child.Width;
-                height = child.Height;
+                width  = child.GetWidth();
+                height = child.GetHeight();
             }
 
             if ( ( ( x + width ) > groupWidth ) || ( r == 0 ) )
@@ -693,12 +673,12 @@ public class HorizontalGroup : WidgetGroup
             shapes.Color = Stage.DebugColor;
         }
 
-        shapes.Rect( X + PadLeft,
-                     Y + PadBottom,
+        shapes.Rect( GetX() + PadLeft,
+                     GetY() + PadBottom,
                      OriginX,
                      OriginY,
-                     Width - PadLeft - PadRight,
-                     Height - PadBottom - PadTop,
+                     GetWidth() - PadLeft - PadRight,
+                     GetHeight() - PadBottom - PadTop,
                      ScaleX,
                      ScaleY,
                      Rotation );

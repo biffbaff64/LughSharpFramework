@@ -322,7 +322,7 @@ public class Slider : ProgressBar
 
         if ( IsVertical )
         {
-            float height     = Height - bg!.TopHeight - bg.BottomHeight;
+            float height     = GetHeight() - bg!.TopHeight - bg.BottomHeight;
             float knobHeight = knob?.MinHeight ?? 0;
 
             KnobPosition = y - bg.BottomHeight - ( knobHeight * 0.5f );
@@ -333,7 +333,7 @@ public class Slider : ProgressBar
         }
         else
         {
-            float width     = Width - bg!.LeftWidth - bg.RightWidth;
+            float width     = GetWidth() - bg!.LeftWidth - bg.RightWidth;
             float knobWidth = knob?.MinWidth ?? 0;
 
             KnobPosition = x - bg.LeftWidth - ( knobWidth * 0.5f );

@@ -145,13 +145,13 @@ public class Group : Actor, ICullable
                         continue;
                     }
 
-                    float cx = child.X;
-                    float cy = child.Y;
+                    float cx = child.GetX();
+                    float cy = child.GetY();
 
                     if ( ( cx <= cullRight )
                       && ( cy <= cullTop )
-                      && ( ( cx + child.Width ) >= cullLeft )
-                      && ( ( cy + child.Height ) >= cullBottom ) )
+                      && ( ( cx + child.GetWidth() ) >= cullLeft )
+                      && ( ( cy + child.GetHeight() ) >= cullBottom ) )
                     {
                         child.Draw( batch, parentAlpha );
                     }
@@ -160,11 +160,11 @@ public class Group : Actor, ICullable
             else
             {
                 // No transform for this group, offset each child.
-                float offsetX = X;
-                float offsetY = Y;
+                float offsetX = GetX();
+                float offsetY = GetY();
 
-                X = 0;
-                Y = 0;
+                SetX( 0 );
+                SetY( 0 );
 
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
@@ -175,26 +175,26 @@ public class Group : Actor, ICullable
                         continue;
                     }
 
-                    float cx = child.X;
-                    float cy = child.Y;
+                    float cx = child.GetX();
+                    float cy = child.GetY();
 
                     if ( ( cx <= cullRight )
                       && ( cy <= cullTop )
-                      && ( ( cx + child.Width ) >= cullLeft )
-                      && ( ( cy + child.Height ) >= cullBottom ) )
+                      && ( ( cx + child.GetWidth() ) >= cullLeft )
+                      && ( ( cy + child.GetHeight() ) >= cullBottom ) )
                     {
-                        child.X = cx + offsetX;
-                        child.Y = cy + offsetY;
+                        child.SetX( cx + offsetX );
+                        child.SetY( cy + offsetY );
 
                         child.Draw( batch, parentAlpha );
 
-                        child.X = cx;
-                        child.Y = cy;
+                        child.SetX( cx );
+                        child.SetY( cy );
                     }
                 }
 
-                X = offsetX;
-                Y = offsetY;
+                SetX( offsetX );
+                SetY( offsetY );
             }
         }
         else
@@ -217,11 +217,11 @@ public class Group : Actor, ICullable
             else
             {
                 // No transform for this group, offset each child.
-                float offsetX = X;
-                float offsetY = Y;
+                float offsetX = GetX();
+                float offsetY = GetY();
 
-                X = 0;
-                Y = 0;
+                SetX( 0 );
+                SetY( 0 );
 
                 for ( int i = 0, n = Children.Size; i < n; i++ )
                 {
@@ -232,20 +232,20 @@ public class Group : Actor, ICullable
                         continue;
                     }
 
-                    float cx = child.X;
-                    float cy = child.Y;
+                    float cx = child.GetX();
+                    float cy = child.GetY();
 
-                    child.X = cx + offsetX;
-                    child.Y = cy + offsetY;
+                    child.SetX( cx + offsetX );
+                    child.SetY( cy + offsetY );
 
                     child.Draw( batch, parentAlpha );
 
-                    child.X = cx;
-                    child.Y = cy;
+                    child.SetX( cx );
+                    child.SetY( cy );
                 }
 
-                X = offsetX;
-                Y = offsetY;
+                SetX( offsetX );
+                SetY( offsetY );
             }
         }
 
@@ -319,11 +319,11 @@ public class Group : Actor, ICullable
         else
         {
             // No transform for this group, offset each child.
-            float offsetX = X;
-            float offsetY = Y;
+            float offsetX = GetX();
+            float offsetY = GetY();
 
-            X = 0;
-            Y = 0;
+            SetX( 0 );
+            SetY( 0 );
 
             for ( int i = 0, n = Children.Size; i < n; i++ )
             {
@@ -344,18 +344,18 @@ public class Group : Actor, ICullable
                     continue;
                 }
 
-                float cx = child.X;
-                float cy = child.Y;
+                float cx = child.GetX();
+                float cy = child.GetY();
 
-                child.X = cx + offsetX;
-                child.Y = cy + offsetY;
+                child.SetX( cx + offsetX );
+                child.SetY( cy + offsetY );
                 child.DrawDebug( shapes );
-                child.X = cx;
-                child.Y = cy;
+                child.SetX( cx );
+                child.SetY( cy );
             }
 
-            X = offsetX;
-            Y = offsetY;
+            SetX( offsetX );
+            SetY( offsetY );
         }
 
         Children.End();
@@ -366,7 +366,7 @@ public class Group : Actor, ICullable
     /// </summary>
     protected Matrix4 ComputeTransform()
     {
-        _worldTransform.SetToTrnRotScl( X + OriginX, Y + OriginY, Rotation, ScaleX, ScaleY );
+        _worldTransform.SetToTrnRotScl( GetX() + OriginX, GetY() + OriginY, Rotation, ScaleX, ScaleY );
 
         if ( ( OriginX != 0 ) || ( OriginY != 0 ) )
         {

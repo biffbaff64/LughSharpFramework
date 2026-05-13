@@ -49,7 +49,6 @@ public class SpriteTests : IDisposable
     private int                         _ydirection;
     private float                       _xspeed;
     private float                       _yspeed;
-    private TextureRegion[]?            _animFrames;
     private Animation< TextureRegion >? _animation;
     private float                       _elapsedAnimTime;
 
@@ -87,6 +86,9 @@ public class SpriteTests : IDisposable
         _sprite3.SetPosition( 700, 300 );
         _sprite3.Flip( false, false );
 
+        _xspeed = 6;
+        _yspeed = 6;
+        
         Logger.Debug( "Finished." );
     }
 

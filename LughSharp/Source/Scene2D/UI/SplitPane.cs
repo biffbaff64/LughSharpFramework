@@ -92,14 +92,14 @@ public class SplitPane : WidgetGroup
                           {
                               null           => 0,
                               ILayout widget => widget.GetPrefWidth(),
-                              var _          => _firstWidget.Width
+                              var _          => _firstWidget.GetWidth()
                           };
 
             float second = _secondWidget switch
                            {
                                null           => 0,
                                ILayout layout => layout.GetPrefWidth(),
-                               var _          => _secondWidget.Width
+                               var _          => _secondWidget.GetWidth()
                            };
 
             if ( _vertical )
@@ -119,14 +119,14 @@ public class SplitPane : WidgetGroup
                           {
                               null           => 0,
                               ILayout widget => widget.GetPrefHeight(),
-                              var _          => _firstWidget.Height
+                              var _          => _firstWidget.GetHeight()
                           };
 
             float second = _secondWidget switch
                            {
                                null           => 0,
                                ILayout layout => layout.GetPrefHeight(),
-                               var _          => _secondWidget.Height
+                               var _          => _secondWidget.GetHeight()
                            };
 
             if ( !_vertical )
@@ -252,8 +252,8 @@ public class SplitPane : WidgetGroup
     {
         ISceneDrawable handle = Style.Handle;
 
-        float height         = Height;
-        float availWidth     = Width - handle.MinWidth;
+        float height         = GetHeight();
+        float availWidth     = GetWidth() - handle.MinWidth;
         float leftAreaWidth  = availWidth * _splitAmount;
         float rightAreaWidth = availWidth - leftAreaWidth;
         float handleWidth    = handle.MinWidth;
@@ -267,8 +267,8 @@ public class SplitPane : WidgetGroup
     {
         ISceneDrawable handle = Style.Handle;
 
-        float width  = Width;
-        float height = Height;
+        float width  = GetWidth();
+        float height = GetHeight();
 
         float availHeight      = height - handle.MinHeight;
         float topAreaHeight    = availHeight * _splitAmount;
@@ -359,7 +359,7 @@ public class SplitPane : WidgetGroup
 
         if ( _vertical )
         {
-            float availableHeight = Height - Style.Handle.MinHeight;
+            float availableHeight = GetHeight() - Style.Handle.MinHeight;
 
             if ( _firstWidget is ILayout layout )
             {
@@ -375,7 +375,7 @@ public class SplitPane : WidgetGroup
         }
         else
         {
-            float availableWidth = Width - Style.Handle.MinWidth;
+            float availableWidth = GetWidth() - Style.Handle.MinWidth;
 
             if ( _firstWidget is ILayout layout )
             {
@@ -598,7 +598,7 @@ public class SplitPane : WidgetGroup
             if ( !_parent._vertical )
             {
                 float delta      = x - _parent.LastPoint.X;
-                float availWidth = _parent.Width - handle.MinWidth;
+                float availWidth = _parent.GetWidth() - handle.MinWidth;
                 float dragX      = _parent._handlePosition.X + delta;
 
                 _parent._handlePosition.X = dragX;
@@ -611,7 +611,7 @@ public class SplitPane : WidgetGroup
             else
             {
                 float delta       = y - _parent.LastPoint.Y;
-                float availHeight = _parent.Height - handle.MinHeight;
+                float availHeight = _parent.GetHeight() - handle.MinHeight;
                 float dragY       = _parent._handlePosition.Y + delta;
 
                 _parent._handlePosition.Y = dragY;

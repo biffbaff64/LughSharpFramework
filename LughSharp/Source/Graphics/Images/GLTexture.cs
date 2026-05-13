@@ -335,7 +335,7 @@ public abstract class GLTexture : IDisposable
 
         level = Math.Min( level, max );
 
-        if ( !force && Compare.IsEqual( level, AnisotropicFilterLevel, 0.1f ) )
+        if ( !force && Math.Abs( level - AnisotropicFilterLevel ) < 0.1f )
         {
             return AnisotropicFilterLevel;
         }
@@ -361,7 +361,7 @@ public abstract class GLTexture : IDisposable
 
         level = Math.Min( level, max );
 
-        if ( Compare.IsEqual( level, AnisotropicFilterLevel, 0.1f ) )
+        if ( Math.Abs( level - AnisotropicFilterLevel ) < 0.1f )
         {
             return level;
         }

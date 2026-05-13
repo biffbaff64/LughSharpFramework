@@ -329,7 +329,7 @@ public class Label : Widget, IDisposable
 
         if ( Wrap && ( _ellipsis == null ) )
         {
-            float width = Width;
+            float width = GetWidth();
 
             if ( Style.Background != null )
             {
@@ -379,8 +379,8 @@ public class Label : Widget, IDisposable
             }
         }
 
-        float width  = Width;
-        float height = Height;
+        float width  = GetWidth();
+        float height = GetHeight();
         float x      = 0;
         float y      = 0;
 
@@ -486,7 +486,7 @@ public class Label : Widget, IDisposable
         if ( Style.Background != null )
         {
             batch.SetColor( color.R, color.G, color.B, color.A );
-            Style.Background?.Draw( batch, X, Y, Width, Height );
+            Style.Background?.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
         }
 
         if ( Style.FontColor != null )
@@ -497,7 +497,7 @@ public class Label : Widget, IDisposable
         if ( _fontCache != null )
         {
             _fontCache.Tint( color );
-            _fontCache.SetPosition( X, Y );
+            _fontCache.SetPosition( GetX(), GetY() );
             _fontCache.Draw( batch );
         }
     }

@@ -62,8 +62,10 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
     /// <summary>
     /// Resets the specified particle effect to its initial state.
     /// </summary>
-    public override void Free( PooledEffect effect1 )
+    public override void Free( PooledEffect? effect1 )
     {
+        if ( effect1 == null ) return;
+        
         base.Free( effect1 );
 
         effect1.Reset( false ); // copy parameters exactly to avoid introducing error

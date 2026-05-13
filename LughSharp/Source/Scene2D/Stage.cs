@@ -625,10 +625,10 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Applies a key down event to the actor that has
-    /// <see cref="Stage.KeyboardFocus"/>, if any, and returns
+    /// Applies a key down event to the actor that has Keyboard Focus, if any, and returns
     /// true if the event was handled in <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <seealso cref="GetKeyboardFocus()"/>
     public override bool OnKeyDown( int keyCode )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
@@ -651,9 +651,10 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Applies a key up event to the actor that has <see cref="Stage.KeyboardFocus"/>,
-    /// if any, and returns true if the event was <see cref="Event.SetHandled"/>.
+    /// Applies a key up event to the actor that has Keyboard Focus, if any, and returns
+    /// true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <seealso cref="GetKeyboardFocus()"/>
     public override bool OnKeyUp( int keyCode )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
@@ -676,9 +677,10 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Applies a key typed event to the actor that has <see cref="Stage.KeyboardFocus"/>,
-    /// if any, and returns true if the event was <see cref="Event.SetHandled"/>.
+    /// Applies a key typed event to the actor that has Keyboard Focus, if any, and returns
+    /// true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <seealso cref="GetKeyboardFocus()"/>
     public override bool OnKeyTyped( char character )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
@@ -703,7 +705,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Adds the listener to be notified for all touchDragged and touchUp events for
     /// the specified pointer and button. Touch focus is added automatically when true
-    /// is returned from <see cref="InputListener.TouchDown(InputEvent, float, float, int, int)"/>
+    /// is returned from <see cref="InputListener.OnTouchDown(InputEvent, float, float, int, int)"/>
     /// The specified actors will be used as the <see cref="Event.ListenerActor"/> and
     /// <see cref="Event.TargetActor"/> for the touchDragged and touchUp events.
     /// </summary>
@@ -759,7 +761,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// Cancels touch focus for all listeners with the specified listener actor.
     /// </summary>
-    /// <see cref="CancelTouchFocus() "/>
+    /// <seealso cref="CancelTouchFocus() "/>
     public void CancelTouchFocus( Actor listenerActor )
     {
         // Cancel all current touch focuses for the specified listener, allowing
@@ -784,8 +786,6 @@ public class Stage : InputAdapter, IDisposable
             if ( inputEvent == null )
             {
                 inputEvent = Pools.Obtain< InputEvent >();
-
-                //TODO: throw exception here if inputEvent is STILL null, or create a new one?
 
                 inputEvent.Stage  = this;
                 inputEvent.Type   = InputEvent.EventType.TouchUp;
@@ -942,7 +942,9 @@ public class Stage : InputAdapter, IDisposable
             ScrollFocus = null;
         }
 
-        if ( ( GetKeyboardFocus() != null ) && GetKeyboardFocus().IsDescendantOf( actor ) )
+        Actor? focus = GetKeyboardFocus();
+        
+        if ( ( focus != null ) && focus.IsDescendantOf( actor ) )
         {
             SetKeyboardFocus( null );
         }
@@ -1203,7 +1205,7 @@ public class Stage : InputAdapter, IDisposable
     /// Returns the root's child actors.
     /// </summary>
     /// <see cref="Group.Children "/>
-    public SnapshotArrayList< Actor? > Actors => RootGroup.Children;
+    public SnapshotArrayList< Actor > Actors => RootGroup.Children;
 
     /// <inheritdoc />
     public void Dispose()
@@ -1331,7 +1333,7 @@ public class Stage : InputAdapter, IDisposable
             {
                 if ( group.Children.GetAt( i ) != except )
                 {
-                    group.Children.GetAt( i )?.DebugActive = false;
+                    group.Children.GetAt( i ).DebugActive = false;
                 }
             }
         }

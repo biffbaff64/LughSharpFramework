@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices.JavaScript;
+
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
@@ -53,6 +55,13 @@ public class Actor : IComparable< Actor >
     protected float OriginX { get; set; }
     protected float OriginY { get; set; }
 
+    // ========================================================================
+
+    private float _x;
+    private float _y;
+    private float _width;
+    private float _height;
+    
     // ========================================================================
     // ========================================================================
 
@@ -368,7 +377,7 @@ public class Actor : IComparable< Actor >
             return null;
         }
 
-        return ( x >= 0 ) && ( x < Width ) && ( y >= 0 ) && ( y < Height ) ? this : null;
+        return ( x >= 0 ) && ( x < _width ) && ( y >= 0 ) && ( y < _height ) ? this : null;
     }
 
     /// <summary>
@@ -615,78 +624,14 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
-    /// The X coordinate of the actor's left edge.
-    /// </summary>
-    public float X
-    {
-        get;
-        set
-        {
-            if ( Compare.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnPositionChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// The Y coordinate of the actor's bottom edge.
-    /// </summary>
-    public float Y
-    {
-        get;
-        set
-        {
-            if ( Compare.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnPositionChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// The actors width.
-    /// </summary>
-    public float Width
-    {
-        get;
-        set
-        {
-            if ( Compare.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnSizeChanged();
-            }
-        }
-    }
-
-    /// <summary>
-    /// The actors height.
-    /// </summary>
-    public float Height
-    {
-        get;
-        set
-        {
-            if ( Compare.IsNotEqual( field, value ) )
-            {
-                field = value;
-                OnSizeChanged();
-            }
-        }
-    }
-
-    /// <summary>
     /// Top edge of this actor.
     /// </summary>
-    public float TopEdge => Y + Height;
+    public float TopEdge => _y + _height;
 
     /// <summary>
     /// Right side edge of this actor.
     /// </summary>
-    public float RightEdge => X + Width;
+    public float RightEdge => _x + _width;
 
     /// <summary>
     /// The X Scaling factor
@@ -826,97 +771,15 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
-    /// Returns the X position of the specified <see cref="Align"/>.
-    /// </summary>
-    public float GetX( Align alignment )
-    {
-        float x = X;
-
-        if ( ( alignment & Align.Right ) != 0 )
-        {
-            x += Width;
-        }
-        else if ( ( alignment & Align.Left ) == 0 )
-        {
-            x += Width / 2;
-        }
-
-        return x;
-    }
-
-    /// <summary>
-    /// Sets the x position using the specified <see cref="Align"/>.
-    /// Note this may set the position to non-integer coordinates.
-    /// </summary>
-    public void SetXWithAlignment( float x, Align alignment )
-    {
-        if ( ( alignment & Align.Right ) != 0 )
-        {
-            x -= Width;
-        }
-        else if ( ( alignment & Align.Left ) == 0 )
-        {
-            x -= Width / 2;
-        }
-
-        if ( Compare.IsNotEqual( X, x ) )
-        {
-            X = x;
-            OnPositionChanged();
-        }
-    }
-
-    /// <summary>
-    /// Sets the y position using the specified <see cref="Align"/>.
-    /// Note this may set the position to non-integer
-    /// coordinates.
-    /// </summary>
-    public void SetYWithAlignment( float y, Align alignment )
-    {
-        if ( ( alignment & Align.Top ) != 0 )
-        {
-            y -= Height;
-        }
-        else if ( ( alignment & Align.Bottom ) == 0 )
-        {
-            y -= Height / 2;
-        }
-
-        if ( Compare.IsNotEqual( Y, y ) )
-        {
-            Y = y;
-            OnPositionChanged();
-        }
-    }
-
-    /// <summary>
-    /// Returns the Y position of the specified <see cref="Align"/>.
-    /// </summary>
-    public float GetY( Align alignment )
-    {
-        float y = Y;
-
-        if ( ( alignment & Align.Top ) != 0 )
-        {
-            y += Height;
-        }
-        else if ( ( alignment & Align.Bottom ) == 0 )
-        {
-            y += Height / 2;
-        }
-
-        return y;
-    }
-
-    /// <summary>
     /// Sets the position of the actor's bottom left corner.
     /// </summary>
     public Actor SetPosition( float x, float y )
     {
-        if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
+        if ( ( Math.Abs( _x - x ) > NumberUtils.FloatTolerance )
+          || ( Math.Abs( _y - y ) > NumberUtils.FloatTolerance ) )
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
             OnPositionChanged();
         }
 
@@ -931,26 +794,27 @@ public class Actor : IComparable< Actor >
     {
         if ( ( alignment & Align.Right ) != 0 )
         {
-            x -= Width;
+            x -= _width;
         }
         else if ( ( alignment & Align.Left ) == 0 )
         {
-            x -= Width / 2;
+            x -= _width / 2;
         }
 
         if ( ( alignment & Align.Top ) != 0 )
         {
-            y -= Height;
+            y -= _height;
         }
         else if ( ( alignment & Align.Bottom ) == 0 )
         {
-            y -= Height / 2;
+            y -= _height / 2;
         }
 
-        if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
+        if ( ( Math.Abs( _x - x ) > NumberUtils.FloatTolerance )
+          || ( Math.Abs( _y - y ) > NumberUtils.FloatTolerance ) )
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
             OnPositionChanged();
         }
 
@@ -964,8 +828,8 @@ public class Actor : IComparable< Actor >
     {
         if ( ( x != 0f ) || ( y != 0f ) )
         {
-            X += x;
-            Y += y;
+            _x += x;
+            _y += y;
 
             OnPositionChanged();
         }
@@ -1000,16 +864,169 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
+    /// The X coordinate of the actor's left edge.
+    /// </summary>
+    public virtual float GetX()
+    {
+        return _x;
+    }
+
+    /// <summary>
+    /// Returns the X position of the specified <see cref="Align"/>.
+    /// </summary>
+    public virtual float GetX( Align alignment )
+    {
+        float x = _x;
+
+        if ( ( alignment & Align.Right ) != 0 )
+        {
+            x += _width;
+        }
+        else if ( ( alignment & Align.Left ) == 0 )
+        {
+            x += _width / 2;
+        }
+
+        return x;
+    }
+
+    public virtual void SetX( float x )
+    {
+        if ( Math.Abs( _x - x ) > NumberUtils.FloatTolerance )
+        {
+            _x = x;
+            OnPositionChanged();
+        }
+    }
+
+    /// <summary>
+    /// Sets the x position using the specified <see cref="Align"/>.
+    /// Note this may set the position to non-integer coordinates.
+    /// </summary>
+    public virtual void SetXWithAlignment( float x, Align alignment )
+    {
+        if ( ( alignment & Align.Right ) != 0 )
+        {
+            x -= _width;
+        }
+        else if ( ( alignment & Align.Left ) == 0 )
+        {
+            x -= _width / 2;
+        }
+
+        if ( Math.Abs( _x - x ) > NumberUtils.FloatTolerance )
+        {
+            _x = x;
+            OnPositionChanged();
+        }
+    }
+    
+    /// <summary>
+    /// The Y coordinate of the actor's left edge.
+    /// </summary>
+    public virtual float GetY()
+    {
+        return _y;
+    }
+
+    /// <summary>
+    /// Returns the Y position of the specified <see cref="Align"/>.
+    /// </summary>
+    public virtual float GetY( Align alignment )
+    {
+        float y = _y;
+
+        if ( ( alignment & Align.Top ) != 0 )
+        {
+            y += _height;
+        }
+        else if ( ( alignment & Align.Bottom ) == 0 )
+        {
+            y += _height / 2;
+        }
+
+        return y;
+    }
+
+    public virtual void SetY( float y )
+    {
+        if ( Math.Abs( _y - y ) > NumberUtils.FloatTolerance )
+        {
+            _y = y;
+            OnPositionChanged();
+        }
+    }
+
+    /// <summary>
+    /// Sets the y position using the specified <see cref="Align"/>.
+    /// Note this may set the position to non-integer
+    /// coordinates.
+    /// </summary>
+    public virtual void SetYWithAlignment( float y, Align alignment )
+    {
+        if ( ( alignment & Align.Top ) != 0 )
+        {
+            y -= _height;
+        }
+        else if ( ( alignment & Align.Bottom ) == 0 )
+        {
+            y -= _height / 2;
+        }
+
+        if ( Math.Abs( _y - y ) > NumberUtils.FloatTolerance )
+        {
+            _y = y;
+            OnPositionChanged();
+        }
+    }
+
+    /// <summary>
+    /// The actors width.
+    /// </summary>
+    public virtual float GetWidth()
+    {
+        return _width;
+    }
+
+    public virtual void SetWidth( float width )
+    {
+        if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance )
+        {
+            _width = width;
+            OnSizeChanged();
+        }
+    }
+
+    /// <summary>
+    /// The actors height.
+    /// </summary>
+    public virtual float GetHeight()
+    {
+        return _height;
+    }
+
+    public virtual void SetHeight( float height )
+    {
+        if ( Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
+        {
+            _height = height;
+            OnSizeChanged();
+        }
+    }
+    
+    /// <summary>
     /// Sets the width and height.
     /// </summary>
     public void SetSize( float width, float height )
     {
-        if ( Math.Abs( Width - width ) > NumberUtils.FloatTolerance
-          || Math.Abs( Height - height ) > NumberUtils.FloatTolerance )
+        Logger.Debug( $"_width: { _width }, _height: { _height }, width: { width }, height: { height}" );
+        
+        if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance
+          || Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
         
         {
-            Width  = width;
-            Height = height;
+            _width  = width;
+            _height = height;
 
             OnSizeChanged();
         }
@@ -1022,8 +1039,8 @@ public class Actor : IComparable< Actor >
     {
         if ( size != 0 )
         {
-            Width  += size;
-            Height += size;
+            _width  += size;
+            _height += size;
 
             OnSizeChanged();
         }
@@ -1036,8 +1053,8 @@ public class Actor : IComparable< Actor >
     {
         if ( ( width != 0f ) || ( height != 0f ) )
         {
-            Width  += width;
-            Height += height;
+            _width  += width;
+            _height += height;
 
             OnSizeChanged();
         }
@@ -1048,17 +1065,19 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public virtual void SetBounds( float x, float y, float width, float height )
     {
-        if ( Compare.IsNotEqual( X, x ) || Compare.IsNotEqual( Y, y ) )
+        if ( Math.Abs( _x - x ) > NumberUtils.FloatTolerance
+          || Math.Abs( _y - y ) > NumberUtils.FloatTolerance )
         {
-            X = x;
-            Y = y;
+            _x = x;
+            _y = y;
             OnPositionChanged();
         }
 
-        if ( Compare.IsNotEqual( Width, width ) || Compare.IsNotEqual( Height, height ) )
+        if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance
+          || Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
         {
-            Width  = width;
-            Height = height;
+            _width  = width;
+            _height = height;
             OnSizeChanged();
         }
     }
@@ -1083,11 +1102,11 @@ public class Actor : IComparable< Actor >
         }
         else if ( ( alignment & Align.Right ) != 0 )
         {
-            OriginX = Width;
+            OriginX = _width;
         }
         else
         {
-            OriginX = Width / 2;
+            OriginX = _width / 2;
         }
 
         if ( ( alignment & Align.Bottom ) != 0 )
@@ -1096,11 +1115,11 @@ public class Actor : IComparable< Actor >
         }
         else if ( ( alignment & Align.Top ) != 0 )
         {
-            OriginY = Height;
+            OriginY = _height;
         }
         else
         {
-            OriginY = Height / 2;
+            OriginY = _height / 2;
         }
     }
 
@@ -1110,7 +1129,8 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetScale( float scaleXY )
     {
-        if ( Compare.IsNotEqual( ScaleX, scaleXY ) || Compare.IsNotEqual( ScaleY, scaleXY ) )
+        if ( ( Math.Abs( ScaleX - scaleXY ) > NumberUtils.FloatTolerance )
+          || ( Math.Abs( ScaleY - scaleXY ) > NumberUtils.FloatTolerance ) )
         {
             ScaleX = scaleXY;
             ScaleY = scaleXY;
@@ -1265,7 +1285,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public bool ClipBegin()
     {
-        return ClipBegin( X, Y, Width, Height );
+        return ClipBegin( _x, _y, _width, _height );
     }
 
     /// <summary>
@@ -1351,12 +1371,13 @@ public class Actor : IComparable< Actor >
         float rotation = Rotation;
         float scaleX   = ScaleX;
         float scaleY   = ScaleY;
-        float childX   = X;
-        float childY   = Y;
+        float childX   = _x;
+        float childY   = _y;
 
         if ( rotation == 0 )
         {
-            if ( Compare.IsEqual( scaleX, 1f ) && Compare.IsEqual( scaleY, 1f ) )
+            if ( ( Math.Abs( scaleX - 1f ) < NumberUtils.FloatTolerance )
+              && ( Math.Abs( scaleY - 1f ) < NumberUtils.FloatTolerance ) )
             {
                 parentCoords.X -= childX;
                 parentCoords.Y -= childY;
@@ -1411,13 +1432,12 @@ public class Actor : IComparable< Actor >
         float rotation = -Rotation;
         float scaleX   = ScaleX;
         float scaleY   = ScaleY;
-        float x        = X;
-        float y        = Y;
+        float x        = _x;
+        float y        = _y;
 
         if ( rotation == 0 )
         {
-            if ( ( Math.Abs( scaleX - 1f ) < 0.001f )
-              && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
+            if ( ( Math.Abs( scaleX - 1f ) < 0.001f ) && ( Math.Abs( scaleY - 1f ) < 0.001f ) )
             {
                 localCoords.X += x;
                 localCoords.Y += y;
@@ -1511,7 +1531,7 @@ public class Actor : IComparable< Actor >
             shapes.Color = Stage.DebugColor;
         }
 
-        shapes.Rect( X, Y, OriginX, OriginY, Width, Height, ScaleX, ScaleY, Rotation );
+        shapes.Rect( _x, _y, OriginX, OriginY, _width, _height, ScaleX, ScaleY, Rotation );
     }
 
     /// <summary>

@@ -30,7 +30,7 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record ListBoxStyleRecord
 {
-    public BitmapFont      Font                { get; set; }
+    public BitmapFont      Font                { get; set; } = new();
     public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
     public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
     public ISceneDrawable? Selection           { get; set; }

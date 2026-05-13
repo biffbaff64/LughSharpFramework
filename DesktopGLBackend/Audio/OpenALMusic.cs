@@ -35,17 +35,21 @@ public abstract class OpenALMusic : IMusic
 {
     public const int InvalidSourceID = AL.InvalidValue;
 
+    // ========================================================================
+
+    protected readonly FileInfo? File;
+    
+    // ========================================================================
+    
     private static readonly int           _bufferSize     = 4096 * 10;
     private static readonly int           _bufferCount    = 3;
     private static readonly int           _bytesPerSample = 2;
     private static readonly byte[]        _tempBytes      = new byte[ _bufferSize ];
     private static readonly byte[]        _tempBuffer     = new byte[ _bufferSize ];
-    private readonly        OpenALAudio   _audio;
-    private readonly        float         _pan;
+    private readonly        OpenALAudio?  _audio;
+    private                 float         _pan;
     private readonly        List< float > _renderedSecondsQueue = new( _bufferCount );
-    private readonly        float         _volume               = 1;
-
-    protected readonly FileInfo File;
+    private                 float         _volume               = 1;
 
     private uint[]? _buffers;
     private int     _format;
@@ -54,10 +58,12 @@ public abstract class OpenALMusic : IMusic
     private float   _renderedSeconds;
     private int     _sampleRate;
 
+    // ========================================================================
+    
     protected OpenALMusic()
     {
-        _audio               = null!;
-        File                 = null!;
+        _audio               = null;
+        File                 = null;
         OnCompletionListener = null;
     }
 
@@ -70,7 +76,7 @@ public abstract class OpenALMusic : IMusic
 
     public void Play()
     {
-        if ( _audio.NoDevice )
+        if ( _audio == null || _audio.NoDevice )
         {
             return;
         }
@@ -146,7 +152,7 @@ public abstract class OpenALMusic : IMusic
 
     public void Stop()
     {
-        if ( _audio.NoDevice )
+        if ( _audio == null || _audio.NoDevice )
         {
             return;
         }
@@ -207,19 +213,19 @@ public abstract class OpenALMusic : IMusic
 
     public void SetPan( float pan, float volume )
     {
-//        _volume = volume;
-//        _pan    = pan;
-//
-//        if ( _audio.NoDevice )
-//        {
-//            return;
-//        }
-//
-//        if ( SourceId == INVALID_SOURCE_ID )
-//        {
-//            return;
-//        }
-//
+        _volume = volume;
+        _pan    = pan;
+
+        if ( _audio == null || _audio.NoDevice )
+        {
+            return;
+        }
+
+        if ( SourceId == InvalidSourceID )
+        {
+            return;
+        }
+
 //        AL.Source3F( SourceId,
 //                    AL.POSITION,
 //                    MathUtils.Cos( ( pan - 1 ) * MathUtils.HALF_PI ),
@@ -231,16 +237,16 @@ public abstract class OpenALMusic : IMusic
 
     public void SetPosition( float position )
     {
-//        if ( _audio.NoDevice )
-//        {
-//            return;
-//        }
-//
-//        if ( SourceId == INVALID_SOURCE_ID )
-//        {
-//            return;
-//        }
-//
+        if ( _audio == null || _audio.NoDevice )
+        {
+            return;
+        }
+
+        if ( SourceId == InvalidSourceID )
+        {
+            return;
+        }
+
 //        var wasPlaying = IsPlaying;
 //        IsPlaying = false;
 //        alSourceStop( SourceId );
@@ -306,7 +312,7 @@ public abstract class OpenALMusic : IMusic
 
     public float GetPosition()
     {
-        if ( _audio.NoDevice )
+        if ( _audio == null || _audio.NoDevice )
         {
             return 0;
         }
@@ -491,7 +497,7 @@ public abstract class OpenALMusic : IMusic
     {
         get
         {
-            if ( _audio.NoDevice )
+            if ( _audio == null || _audio.NoDevice )
             {
                 return false;
             }

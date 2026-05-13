@@ -43,8 +43,8 @@ public class SizeToSceneAction : TemporalSceneAction
             throw new RuntimeException( "Cannot Begin with null Target Actor!" );
         }
 
-        StartWidth  = Target.Width;
-        StartHeight = Target.Height;
+        StartWidth  = Target.GetWidth();
+        StartHeight = Target.GetHeight();
     }
 
     /// <inheritdoc />

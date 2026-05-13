@@ -185,8 +185,8 @@ public class Scene2DImage : Widget
 
         float regionWidth  = Drawable.MinWidth;
         float regionHeight = Drawable.MinHeight;
-        float width        = Width;
-        float height       = Height;
+        float width        = GetWidth();
+        float height       = GetHeight();
 
         Vector2 size = _scaling.Apply( regionWidth, regionHeight, width, height );
 
@@ -248,8 +248,8 @@ public class Scene2DImage : Widget
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-        float x      = X;
-        float y      = Y;
+        float x      = GetX();
+        float y      = GetY();
         float scaleX = ScaleX;
         float scaleY = ScaleY;
 

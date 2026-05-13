@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-
 namespace LughSharp.Source.Graphics.G3D;
 
 /// <summary>
@@ -32,10 +29,11 @@ namespace LughSharp.Source.Graphics.G3D;
 /// statically calling the <see cref="Register(string)"/> method, whose return value should
 /// be used to instantiate the attribute. A class can implement multiple types
 /// </summary>
+[PublicAPI]
 public abstract class G3DAttribute : IComparable< G3DAttribute >
 {
     // The type of this attribute
-    public long Type;
+    public long AttributeType;
 
     // ========================================================================
     
@@ -48,10 +46,10 @@ public abstract class G3DAttribute : IComparable< G3DAttribute >
 
     // ========================================================================
     
-    protected G3DAttribute( long type )
+    protected G3DAttribute( long attributeType )
     {
-        this.Type = type;
-        _typeBit  = ( int )long.TrailingZeroCount( type );
+        this.AttributeType = attributeType;
+        _typeBit  = ( int )long.TrailingZeroCount( attributeType );
     }
 
     /// <inheritdoc />
@@ -150,13 +148,13 @@ public abstract class G3DAttribute : IComparable< G3DAttribute >
             return false;
         }
 
-        return ( Type == other.Type ) && Equals( other );
+        return ( AttributeType == other.AttributeType ) && Equals( other );
     }
 
     /// <inheritdoc />
     public override string? ToString()
     {
-        return GetAttributeAlias( Type );
+        return GetAttributeAlias( AttributeType );
     }
 
     /// <inheritdoc />

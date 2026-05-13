@@ -18,7 +18,6 @@ namespace TestProject.Source;
 public static class DesktopLauncher
 {
     // Constants for use with the BuildTextureAtlases() method.
-    private const bool BuildAtlases          = false;
     private const bool RemoveDuplicateImages = false;
     private const bool DrawDebugLines        = false;
 
@@ -46,7 +45,7 @@ public static class DesktopLauncher
         Engine.CheckEnableDevMode();
         Engine.CheckEnableGodMode();
 
-        BuildTextureAtlases();
+//        BuildTextureAtlases();
 
         var game = new DesktopGLApplication( new MainGame(), config );
 
@@ -60,11 +59,6 @@ public static class DesktopLauncher
     /// </summary>
     private static void BuildTextureAtlases()
     {
-        if ( !BuildAtlases )
-        {
-            return;
-        }
-
         var settings = new TexturePackerSettings
         {
             MaxWidth         = 2048,                  // Maximum Width of final atlas image

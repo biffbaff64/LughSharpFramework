@@ -28,6 +28,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.IO;
 using LughSharp.Source.Maths;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
@@ -119,7 +120,7 @@ public class FreeType
 
     private const string NativeLib = "lib/net8.0/freetype.dll";
 
-    private static int _lastError;
+//    private static int _lastError;
 
     // ========================================================================
 
@@ -145,7 +146,7 @@ public class FreeType
         }
 
         Logger.Debug( $"Freetype initialized successfully. Address: {address}" );
-            
+
         return new Library( address );
 
         // --------------------------------------
@@ -183,7 +184,7 @@ public class FreeType
         // the memory to remain valid. The byte[] in C# is managed, so we need to
         // ensure it's not garbage collected while FreeType uses it.
         // This is primarily for fonts loaded via NewMemoryFace.
-        public Dictionary< IntPtr, byte[] > FontData { get; private set; } = new();
+        public Dictionary< IntPtr, byte[]? > FontData { get; private set; } = new();
 
         internal Library( IntPtr address )
             : base( address )
@@ -224,12 +225,13 @@ public class FreeType
 
                         if ( fileSize == 0 )
                         {
-//                            data = StreamUtils.CopyStreamToByteArray( input, 1024 * 16 );
+                            data = StreamUtils.CopyStreamToByteArray( input, 1024 * 16 );
                         }
                         else
                         {
                             data = new byte[ fileSize ];
-//                            StreamUtils.CopyStream( input, data ); // Assuming a method to copy stream to byte[]
+
+                            StreamUtils.CopyStream( input, data ); // Assuming a method to copy stream to byte[]
                         }
                     }
                     catch ( IOException ex )
@@ -335,13 +337,13 @@ public class FreeType
                     Address = IntPtr.Zero; // SetMark as disposed
 
                     // Dispose of any pinned byte buffers
-                    foreach ( byte[] buffer in FontData.Values )
-                    {
-//TODO:                        if ( BufferUtils.IsUnsafeByteBuffer( buffer ) )
-                        {
-//TODO:                            BufferUtils.DisposeUnsafeByteBuffer( buffer );
-                        }
-                    }
+//                    foreach ( byte[] buffer in FontData.Values )
+//                    {
+////TODO:                        if ( BufferUtils.IsUnsafeByteBuffer( buffer ) )
+//                        {
+////TODO:                            BufferUtils.DisposeUnsafeByteBuffer( buffer );
+//                        }
+//                    }
 
                     FontData.Clear();
                 }
@@ -805,8 +807,10 @@ public class FreeType
         [DllImport( NativeLib, EntryPoint = "strokeBorder", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr StrokeBorderNative( IntPtr glyph, IntPtr stroker, bool inside );
 
-        public void StrokeBorder( Stroker stroker, bool inside )
+        public void StrokeBorder( Stroker? stroker, bool inside )
         {
+            Guard.Against.Null( stroker );
+            
             Address = StrokeBorderNative( Address, stroker.Address, inside );
         }
 

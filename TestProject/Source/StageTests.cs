@@ -38,6 +38,7 @@ using LughSharp.Source.Scene2D.Utils;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
+#pragma warning disable CS8321 // Local function is declared but never used
 
 namespace TestProject.Source;
 
@@ -61,16 +62,18 @@ public class StageTests : IDisposable
     // ========================================================================
 
     private Stage? _stage;
+
     private static readonly string[] _newItems = new string[]
-            {
-                "Carp",
-                "Roach",
-                "Pike",
-                "Bream",
-                "Rudd",
-                "Tench",
-                "Gudgeon",
-                "Perch" };
+    {
+        "Carp",
+        "Roach",
+        "Pike",
+        "Bream",
+        "Rudd",
+        "Tench",
+        "Gudgeon",
+        "Perch"
+    };
 
     // ========================================================================
 
@@ -128,7 +131,7 @@ public class StageTests : IDisposable
 //        DialogActor();
 //        WindowActor();
         // ----------------------------
-        SelectBoxActor();
+//        SelectBoxActor();
 //        SplitPaneActor();
 
         return;
@@ -137,6 +140,7 @@ public class StageTests : IDisposable
 
         void SplitPaneActor()
         {
+            Guard.Against.Null( _stage );
         }
 
         // --------------------------------------
@@ -151,15 +155,15 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
-            
-            selectBox.SetItems( new List< string >( _newItems ) );
-            selectBox.SetSelected( "Rudd" );
-            
+
             selectBox.SetAlignment( Align.Right );
             selectBox.GetList().Alignment                     = Align.Right;
             selectBox.Style.ListBoxStyle.Selection.RightWidth = 10;
             selectBox.Style.ListBoxStyle.Selection.LeftWidth  = 20;
-            
+
+            selectBox.SetItems( new List< string >( _newItems ) );
+            selectBox.SetSelected( "Rudd" );
+
             _stage.AddActor( selectBox );
         }
 
@@ -167,6 +171,8 @@ public class StageTests : IDisposable
 
         void WindowActor()
         {
+            Guard.Against.Null( _stage );
+
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
 //            var windowStyle = new WindowStyle
@@ -190,7 +196,7 @@ public class StageTests : IDisposable
             window.AddCell( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
             window.Pack();
 
-            Logger.Debug( $"Window width: {window.Width}, Window height: {window.Height}" );
+            Logger.Debug( $"Window width: {window.GetWidth()}, Window height: {window.GetHeight()}" );
             Logger.Debug( $"Padding - Left: {window.GetPadLeft()}, Right: {window.GetPadRight()}" );
             Logger.Debug( $"Padding - Top: {window.GetPadTop()}, Bottom: {window.GetPadBottom()}" );
             Logger.Debug( $"Columns: {window.Columns}, Rows: {window.Rows}" );
@@ -202,6 +208,8 @@ public class StageTests : IDisposable
 
         void TableActor()
         {
+            Guard.Against.Null( _stage );
+
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var table = new Table( skin )
@@ -229,6 +237,8 @@ public class StageTests : IDisposable
 
         void DialogActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var dialogStyle = new DialogStyle()
@@ -255,8 +265,8 @@ public class StageTests : IDisposable
                   .Key( IInput.Keys.Escape, false );
 
             dialog.Show( _stage, null )
-                  .SetPosition( ( float )Math.Round( ( _stage.Width - dialog.Width ) / 2 ),
-                                ( float )Math.Round( ( _stage.Height - dialog.Height ) / 2 ) );
+                  .SetPosition( ( float )Math.Round( ( _stage.Width - dialog.GetWidth() ) / 2 ),
+                                ( float )Math.Round( ( _stage.Height - dialog.GetHeight() ) / 2 ) );
         }
 
         //@formatter:off
@@ -264,6 +274,8 @@ public class StageTests : IDisposable
 
         void ScrollPaneActor()
         {
+            Guard.Against.Null( _stage );
+
             string[] listEntries =
             {
                 "A a A a A a A a A a",
@@ -325,6 +337,8 @@ public class StageTests : IDisposable
 
         void TextFieldActor()
         {
+            Guard.Against.Null( _stage );
+
             TextAreaActor();
 
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
@@ -336,8 +350,8 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             textField.SetPosition( 200, 200 );
-            textField.Width  = 100;
-            textField.Height = 30;
+            textField.SetWidth( 100 );
+            textField.SetHeight( 30 );
 
             _stage?.AddActor( textField );
             
@@ -348,6 +362,8 @@ public class StageTests : IDisposable
 
         void TextAreaActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var textArea = new TextArea( "Text Area\n1111111111\n0123456789\nEssentially, "
@@ -358,10 +374,10 @@ public class StageTests : IDisposable
                                          skin )
             {
                 IsVisible = true,
-                Width     = 200,
-                Height    = 200,
             };
             textArea.SetPosition( 200, 200 );
+            textArea.SetWidth( 200 );
+            textArea.SetHeight( 200 );
 
             _stage?.AddActor( textArea );
         }
@@ -370,6 +386,8 @@ public class StageTests : IDisposable
 
         void LabelActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
             
             var label = new Label( "AbCdEfGhIjKlMnOpQrStUvWxYz", skin, "default-bg" )
@@ -396,6 +414,8 @@ public class StageTests : IDisposable
         // moveable as expected.
         void ProgressBarActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var progressBar = new ProgressBar( 0f, 10f, 1f, false, skin )
@@ -403,8 +423,8 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             progressBar.SetPosition( 200, 200 );
-            progressBar.Width  = 400;
-            progressBar.Height = 100;
+            progressBar.SetWidth(400);
+            progressBar.SetHeight(100);
             _stage?.AddActor( progressBar );
         }
 
@@ -414,6 +434,8 @@ public class StageTests : IDisposable
         // and move it up and down the slider bar.
         void SliderActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var slider = new Slider( 0f, 10f, 1f, false, skin )
@@ -421,8 +443,8 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             slider.SetPosition( 200, 400 );
-            slider.Width  = 400;
-            slider.Height = 100;
+            slider.SetWidth( 400 );
+            slider.SetHeight( 100 );
             _stage?.AddActor( slider );
         }
 
@@ -432,6 +454,8 @@ public class StageTests : IDisposable
         // Draws an image correctly.
         void ImageActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var scene2DImage = new Scene2DImage( new Texture2D( Assets.Boulder64X64 ) )
@@ -448,6 +472,8 @@ public class StageTests : IDisposable
         // custom styles, or default styles from skins.
         void ButtonActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var btStyle = new ButtonStyle
@@ -505,6 +531,8 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void TextButtonActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var tbStyle = new TextButtonStyle
@@ -534,7 +562,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             textButton2.SetPosition( 300, 70 );
-            textButton2.SetSize( textButton.Width, textButton.Height );
+            textButton2.SetSize( textButton.GetWidth(), textButton.GetHeight() );
             _stage?.AddActor( textButton2 );
         }
 
@@ -545,6 +573,8 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void ImageButtonActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var imageButtonStyle = new ImageButtonStyle
@@ -569,7 +599,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             imageButton2.SetPosition( 500, 70 );
-            imageButton2.SetSize( imageButton.Width, imageButton.Height );
+            imageButton2.SetSize( imageButton.GetWidth(), imageButton.GetHeight() );
             _stage?.AddActor( imageButton2 );
         }
 
@@ -580,6 +610,8 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void ImageTextButtonActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var imageTextButtonStyle = new ImageTextButtonStyle
@@ -603,7 +635,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
             imageTextButton2.SetPosition( 700, 70 );
-            imageTextButton2.SetSize( imageTextButton.Width, imageTextButton.Height );
+            imageTextButton2.SetSize( imageTextButton.GetWidth(), imageTextButton.GetHeight() );
             _stage?.AddActor( imageTextButton2 );
         }
 
@@ -613,6 +645,8 @@ public class StageTests : IDisposable
         // Text is displayed correctly.
         void CheckBoxActor()
         {
+            Guard.Against.Null( _stage );
+            
             var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             var checkBoxStyle = new CheckBoxStyle()

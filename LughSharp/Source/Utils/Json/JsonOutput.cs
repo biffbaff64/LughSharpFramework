@@ -103,7 +103,7 @@ public static class JsonOutput
     /// <param name="name"></param>
     /// <param name="outputType"></param>
     /// <returns></returns>
-    public static string QuoteName( string name, JsonOutputType outputType )
+    public static string QuoteName( string? name, JsonOutputType outputType )
     {
         var quote = false;
 

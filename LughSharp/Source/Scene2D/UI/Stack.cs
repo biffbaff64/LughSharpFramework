@@ -36,9 +36,14 @@ public class Stack : WidgetGroup
 
     public Stack()
     {
+        Initialise();
+    }
+
+    private void Initialise()
+    {
         Transform = false;
-        Width     = 150;
-        Height    = 150;
+        SetWidth( 150 );
+        SetHeight( 150 );
         Touchable = Touchable.ChildrenOnly;
     }
 
@@ -150,17 +155,12 @@ public class Stack : WidgetGroup
         MaxWidth     = 0;
         MaxHeight    = 0;
 
-        SnapshotArrayList< Actor? > children = Children;
+        var children = new SnapshotArrayList< Actor >( Children );
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {
-            Actor? child = children.GetAt( i );
-            float  childMaxWidth, childMaxHeight;
-
-            if ( child == null )
-            {
-                continue;
-            }
+            Actor child = children.GetAt( i );
+            float childMaxWidth, childMaxHeight;
 
             if ( child is ILayout layout )
             {
@@ -174,10 +174,10 @@ public class Stack : WidgetGroup
             }
             else
             {
-                PrefWidth  = Math.Max( PrefWidth, child.Width );
-                PrefHeight = Math.Max( PrefHeight, child.Height );
-                MinWidth   = Math.Max( MinWidth, child.Width );
-                MinHeight  = Math.Max( MinHeight, child.Height );
+                PrefWidth  = Math.Max( PrefWidth, child.GetWidth() );
+                PrefHeight = Math.Max( PrefHeight, child.GetHeight() );
+                MinWidth   = Math.Max( MinWidth, child.GetWidth() );
+                MinHeight  = Math.Max( MinHeight, child.GetHeight() );
 
                 childMaxWidth  = 0;
                 childMaxHeight = 0;
@@ -202,10 +202,10 @@ public class Stack : WidgetGroup
             ComputeSize();
         }
 
-        float width  = Width;
-        float height = Height;
+        float width  = GetWidth();
+        float height = GetHeight();
 
-        SnapshotArrayList< Actor? > children = Children;
+        var children = new SnapshotArrayList< Actor >( Children );
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {

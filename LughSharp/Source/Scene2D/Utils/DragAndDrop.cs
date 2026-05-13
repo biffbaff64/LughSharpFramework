@@ -237,8 +237,8 @@ public class DragAndDrop
 
             if ( oldDragActor != null )
             {
-                oldDragActorX = oldDragActor.X;
-                oldDragActorY = oldDragActor.Y;
+                oldDragActorX = oldDragActor.GetX();
+                oldDragActorY = oldDragActor.GetY();
                 oldDragActor.SetPosition( int.MaxValue, int.MaxValue );
             }
 
@@ -326,7 +326,7 @@ public class DragAndDrop
             }
 
             // Position the drag actor.
-            float actorX = ev.StageX - actor.Width + _parent._dragActorX;
+            float actorX = ev.StageX - actor.GetWidth() + _parent._dragActorX;
             float actorY = ev.StageY + _parent._dragActorY;
 
             if ( _parent.KeepWithinStage )
@@ -336,8 +336,8 @@ public class DragAndDrop
 
                 if ( stage != null )
                 {
-                    actorX = Math.Min( actorX, stage.Width - actor.Width );
-                    actorY = Math.Min( actorY, stage.Height - actor.Height );
+                    actorX = Math.Min( actorX, stage.Width - actor.GetWidth() );
+                    actorY = Math.Min( actorY, stage.Height - actor.GetHeight() );
                 }
             }
 

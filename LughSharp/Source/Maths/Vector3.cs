@@ -209,7 +209,7 @@ public class Vector3 : IVector< Vector3 >
     {
         float len2 = Len2();
 
-        if ( ( len2 == 0f ) || Compare.IsEqual( len2, 1f ) )
+        if ( ( len2 == 0f ) || ( Math.Abs( len2 - 1f ) < NumberUtils.FloatTolerance ) )
         {
             return this;
         }
@@ -254,8 +254,7 @@ public class Vector3 : IVector< Vector3 >
     {
         return Len2( ( Y * other.Z ) - ( Z * other.Y ),
                      ( Z * other.X ) - ( X * other.Z ),
-                     ( X * other.Y ) - ( Y * other.X ) )
-            <= NumberUtils.FloatTolerance;
+                     ( X * other.Y ) - ( Y * other.X ) ) <= NumberUtils.FloatTolerance;
     }
 
     /// <inheritdoc />
@@ -352,7 +351,7 @@ public class Vector3 : IVector< Vector3 >
     {
         float oldLen2 = Len2();
 
-        return ( oldLen2 == 0 ) || Compare.IsEqual( oldLen2, len2 )
+        return ( oldLen2 == 0 ) || ( Math.Abs( oldLen2 - len2 ) < NumberUtils.FloatTolerance )
             ? this
             : Scale( ( float )Math.Sqrt( len2 / oldLen2 ) );
     }
@@ -488,9 +487,9 @@ public class Vector3 : IVector< Vector3 >
 
     public bool Idt( Vector3 vector )
     {
-        return Compare.IsEqual( X, vector.X )
-            && Compare.IsEqual( Y, vector.Y )
-            && Compare.IsEqual( Z, vector.Z );
+        return ( Math.Abs( X - vector.X ) < NumberUtils.FloatTolerance )
+            && ( Math.Abs( Y - vector.Y ) < NumberUtils.FloatTolerance )
+            && ( Math.Abs( Z - vector.Z ) < NumberUtils.FloatTolerance );
     }
 
     public static float Dst( float x1, float y1, float z1, float x2, float y2, float z2 )

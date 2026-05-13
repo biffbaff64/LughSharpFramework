@@ -45,6 +45,16 @@ public class StreamUtils
             }
         }
     }
+
+    public static byte[] CopyStreamToByteArray( FileStream input, int i )
+    {
+        throw new NotImplementedException();
+    }
+
+    public static void CopyStream( FileStream input, byte[] data )
+    {
+        throw new NotImplementedException();
+    }
 }
 
 // ============================================================================

@@ -151,7 +151,7 @@ public class DragScrollListener : DragListener
     /// </summary>
     protected bool IsAbove( float y )
     {
-        return y >= ( _scrollPane.Height - _padTop );
+        return y >= ( _scrollPane.GetHeight() - _padTop );
     }
 
     /// <summary>

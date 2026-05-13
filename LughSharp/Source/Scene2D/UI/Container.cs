@@ -141,8 +141,8 @@ public class Container< T > : WidgetGroup where T : Actor
 
         float padLeft         = _padLeft.Get( this );
         float padBottom       = _padBottom.Get( this );
-        float containerWidth  = Width - padLeft - _padRight.Get( this );
-        float containerHeight = Height - padBottom - _padTop.Get( this );
+        float containerWidth  = GetWidth() - padLeft - _padRight.Get( this );
+        float containerHeight = GetHeight() - padBottom - _padTop.Get( this );
         float minWidth        = _minWidth.Get( _actor );
         float minHeight       = _minHeight.Get( _actor );
         float prefWidth       = _prefWidth.Get( _actor );
@@ -471,7 +471,7 @@ public class Container< T > : WidgetGroup where T : Actor
                 return null;
             }
 
-            if ( ( x < 0 ) || ( x >= Width ) || ( y < 0 ) || ( y >= Height ) )
+            if ( ( x < 0 ) || ( x >= GetWidth() ) || ( y < 0 ) || ( y >= GetHeight() ) )
             {
                 return null;
             }
@@ -1165,8 +1165,8 @@ public class Container< T > : WidgetGroup where T : Actor
                 if ( ClipBegin(
                                padLeft,
                                padBottom,
-                               Width - padLeft - _padRight.Get( this ),
-                               Height - padBottom - _padTop.Get( this )
+                               GetWidth() - padLeft - _padRight.Get( this ),
+                               GetHeight() - padBottom - _padTop.Get( this )
                               ) )
                 {
                     DrawChildren( batch, parentAlpha );
@@ -1183,7 +1183,7 @@ public class Container< T > : WidgetGroup where T : Actor
         }
         else
         {
-            DrawBackground( batch, parentAlpha, X, Y );
+            DrawBackground( batch, parentAlpha, GetX(), GetY() );
             base.Draw( batch, parentAlpha );
         }
     }
@@ -1200,7 +1200,7 @@ public class Container< T > : WidgetGroup where T : Actor
         }
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
-        _background.Draw( batch, x, y, Width, Height );
+        _background.Draw( batch, x, y, GetWidth(), GetHeight() );
     }
 
     public override void DrawDebug( ShapeRenderer shapes )
@@ -1219,12 +1219,12 @@ public class Container< T > : WidgetGroup where T : Actor
                 float padBottom = _padBottom.Get( this );
 
                 bool draw = _background == null
-                    ? ClipBegin( 0, 0, Width, Height )
+                    ? ClipBegin( 0, 0, GetWidth(), GetHeight() )
                     : ClipBegin(
                                 padLeft,
                                 padBottom,
-                                Width - padLeft - _padRight.Get( this ),
-                                Height - padBottom - _padTop.Get( this )
+                                GetWidth() - padLeft - _padRight.Get( this ),
+                                GetHeight() - padBottom - _padTop.Get( this )
                                );
 
                 if ( draw )
@@ -1248,3 +1248,7 @@ public class Container< T > : WidgetGroup where T : Actor
 
     #endregion drawing
 }
+
+// ============================================================================
+// ============================================================================
+

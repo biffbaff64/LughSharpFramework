@@ -89,7 +89,8 @@ public class Sphere
 
         var s = ( Sphere )o;
 
-        return Compare.IsEqual( Radius, Radius ) && Center.Equals( s.Center );
+        return ( Math.Abs( this.Radius - s.Radius ) < NumberUtils.FloatTolerance )
+            && Center.Equals( s.Center );
     }
 
     /// <summary>

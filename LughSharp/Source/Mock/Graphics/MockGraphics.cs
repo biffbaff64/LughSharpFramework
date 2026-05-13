@@ -105,7 +105,7 @@ public class MockGraphics : IGraphicsDevice
     /// </para>
     /// </summary>
     public bool ContinuousRendering { get; set; }
-
+    
     public void SetBackend( Platform.ApplicationType appType, OpenGLProfile profile )
     {
         throw new NotImplementedException();

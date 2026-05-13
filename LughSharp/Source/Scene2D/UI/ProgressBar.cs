@@ -217,10 +217,10 @@ public class ProgressBar : Widget, IDisableable
         ISceneDrawable? knobBefore  = GetKnobBeforeDrawable();
         ISceneDrawable? knobAfter   = GetKnobAfterDrawable();
 
-        float x          = X;
-        float y          = Y;
-        float width      = Width;
-        float height     = Height;
+        float x          = GetX();
+        float y          = GetY();
+        float width      = GetWidth();
+        float height     = GetHeight();
         float knobHeight = knob?.MinHeight ?? 0;
         float knobWidth  = knob?.MinWidth ?? 0;
         float percent    = GetVisualPercent();

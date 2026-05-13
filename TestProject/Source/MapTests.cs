@@ -47,8 +47,8 @@ public class MapTests
     private int _mapHeight;
     private int _mapPosX;
     private int _mapPosY;
-    private int _mapDirX = 1;
-    private int _mapDirY = 1;
+    private int _mapDirX;
+    private int _mapDirY;
 
     // ========================================================================
 
@@ -72,36 +72,46 @@ public class MapTests
 
         _mapWidth  = width * tileWidth;
         _mapHeight = height * tileHeight;
+        
+        _mapDirX = 0;
+        _mapDirY = 0;
     }
 
     public void ScrollMap( ref readonly OrthographicGameCamera? tiledMapCam )
     {
         if ( tiledMapCam != null && TiledMap != null )
         {
-//            _mapPosX += _mapDirX;
-//
-//            if ( _mapPosX > _mapWidth && _mapDirX == 1 )
-//            {
-//                _mapDirX = -1;
-//            }
-//            else if ( _mapPosX <= 0 && _mapDirX == -1 )
-//            {
-//                _mapDirX = 1;
-//            }
-//
-//            _mapPosY += _mapDirY;
-//
-//            if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
-//            {
-//                _mapDirY = -1;
-//            }
-//            else if ( _mapPosY <= 0 && _mapDirY == -1 )
-//            {
-//                _mapDirY = 1;
-//            }
-//
-//            tiledMapCam.Camera.Translate( _mapDirX, _mapDirY );
+            _mapPosX += _mapDirX;
 
+            if ( _mapDirX == 0 )
+            {
+                _mapDirX = 1;
+            }
+            else if ( _mapPosX > _mapWidth && _mapDirX == 1 )
+            {
+                _mapDirX = -1;
+            }
+            else if ( _mapPosX <= 0 && _mapDirX == -1 )
+            {
+                _mapDirX = 1;
+            }
+
+            _mapPosY += _mapDirY;
+
+            if ( _mapDirY == 0 )
+            {
+                _mapDirY = 1;
+            }
+            else if ( _mapPosY >= _mapHeight && _mapDirY == 1 )
+            {
+                _mapDirY = -1;
+            }
+            else if ( _mapPosY <= 0 && _mapDirY == -1 )
+            {
+                _mapDirY = 1;
+            }
+
+            tiledMapCam.Camera.Translate( _mapDirX, _mapDirY );
             tiledMapCam.SetPosition( new Vector3( 4012, 680, 0 ) );
         }
     }

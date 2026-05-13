@@ -214,10 +214,10 @@ public class ListBox< T > : Widget where T : notnull
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-        float x      = X;
-        float y      = Y;
-        float width  = Width;
-        float height = Height;
+        float x      = GetX();
+        float y      = GetY();
+        float width  = GetWidth();
+        float height = GetHeight();
         float itemY  = height;
 
         ISceneDrawable? background = Style.Background;
@@ -303,7 +303,7 @@ public class ListBox< T > : Widget where T : notnull
         {
             batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-            Style.Background.Draw( batch, X, Y, Width, Height );
+            Style.Background.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
         }
     }
 
@@ -396,7 +396,7 @@ public class ListBox< T > : Widget where T : notnull
     /// <returns> -1 if not over an item. </returns>
     public int GetItemIndexAt( float y )
     {
-        float           height     = Height;
+        float           height     = GetHeight();
         ISceneDrawable? background = Style.Background;
 
         if ( background != null )

@@ -40,10 +40,6 @@ public class FlushablePool< T > : Pool< T > where T : class
 
     // ========================================================================
     
-    private readonly Func< T >? _factory;
-
-    // ========================================================================
-
     /// <summary>
     /// Creates a new FlushablePool with the default initial capacity.
     /// </summary>
@@ -98,8 +94,10 @@ public class FlushablePool< T > : Pool< T > where T : class
     /// object from the list of currently obtained items.
     /// </summary>
     /// <param name="obj"></param>
-    public override void Free( T obj )
+    public override void Free( T? obj )
     {
+        if ( obj == null ) return;
+        
         Obtained.Remove( obj );
         base.Free( obj );
     }

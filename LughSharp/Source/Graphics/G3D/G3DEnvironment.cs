@@ -28,7 +28,8 @@ using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics.G3D;
 
-public class Environment : AttributesGroup
+[PublicAPI]
+public class G3DEnvironment : AttributesGroup
 {
     /// <summary>
     /// Shadow map used to render shadows
@@ -41,7 +42,7 @@ public class Environment : AttributesGroup
     /// </summary>
     /// <param name="lights"></param>
     /// <returns></returns>
-    public Environment Add( params BaseLight[] lights )
+    public G3DEnvironment Add( params BaseLight[] lights )
     {
         foreach ( BaseLight light in lights )
         {
@@ -51,7 +52,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Add( List< BaseLight > lights )
+    public G3DEnvironment Add( List< BaseLight > lights )
     {
         foreach ( BaseLight light in lights )
         {
@@ -61,7 +62,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Add( BaseLight light )
+    public G3DEnvironment Add( BaseLight light )
     {
         if ( light is DirectionalLight directionalLight )
         {
@@ -83,9 +84,9 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Add( DirectionalLight light )
+    public G3DEnvironment Add( DirectionalLight light )
     {
-        var dirLights = ( DirectionalLightsAttribute? )Get( DirectionalLightsAttribute.Type );
+        var dirLights = ( DirectionalLightsAttribute? )Get( DirectionalLightsAttribute.DlaType );
 
         if ( dirLights == null )
         {
@@ -97,7 +98,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Add( PointLight light )
+    public G3DEnvironment Add( PointLight light )
     {
         var pointLights = ( PointLightsAttribute? )Get( PointLightsAttribute.Type );
 
@@ -111,7 +112,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Add( SpotLight light )
+    public G3DEnvironment Add( SpotLight light )
     {
         var spotLights = ( SpotLightsAttribute? )Get( SpotLightsAttribute.Type );
 
@@ -125,7 +126,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Remove( params BaseLight[] lights )
+    public G3DEnvironment Remove( params BaseLight[] lights )
     {
         foreach ( BaseLight light in lights )
         {
@@ -135,7 +136,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Remove( List< BaseLight > lights )
+    public G3DEnvironment Remove( List< BaseLight > lights )
     {
         foreach ( BaseLight light in lights )
         {
@@ -145,7 +146,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Remove( BaseLight light )
+    public G3DEnvironment Remove( BaseLight light )
     {
         if ( light is DirectionalLight directionalLight )
         {
@@ -167,24 +168,24 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Remove( DirectionalLight light )
+    public G3DEnvironment Remove( DirectionalLight light )
     {
-        if ( Has( DirectionalLightsAttribute.Type ) )
+        if ( Has( DirectionalLightsAttribute.DlaType ) )
         {
-            var dirLights = ( DirectionalLightsAttribute? )Get( DirectionalLightsAttribute.Type );
+            var dirLights = ( DirectionalLightsAttribute? )Get( DirectionalLightsAttribute.DlaType );
 
             dirLights?.Lights.Remove( light );
 
             if ( dirLights?.Lights.Count == 0 )
             {
-                Remove( DirectionalLightsAttribute.Type );
+                Remove( DirectionalLightsAttribute.DlaType );
             }
         }
 
         return this;
     }
 
-    public Environment Remove( PointLight light )
+    public G3DEnvironment Remove( PointLight light )
     {
         if ( Has( PointLightsAttribute.Type ) )
         {
@@ -201,7 +202,7 @@ public class Environment : AttributesGroup
         return this;
     }
 
-    public Environment Remove( SpotLight light )
+    public G3DEnvironment Remove( SpotLight light )
     {
         if ( Has( SpotLightsAttribute.Type ) )
         {
@@ -218,3 +219,6 @@ public class Environment : AttributesGroup
         return this;
     }
 }
+
+// ============================================================================
+// ============================================================================

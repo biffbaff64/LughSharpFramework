@@ -269,9 +269,9 @@ public class Circle : IShape2D
 
         var c = ( Circle )o;
 
-        return Compare.IsEqual( X, c.X )
-            || Compare.IsEqual( Y, c.Y )
-            || Compare.IsEqual( Radius, c.Radius );
+        return ( Math.Abs( X - c.X ) < NumberUtils.FloatTolerance )
+            || ( Math.Abs( Y - c.Y ) < NumberUtils.FloatTolerance )
+            || ( Math.Abs( Radius - c.Radius ) < NumberUtils.FloatTolerance );
     }
 
     /// <inheritdoc />
@@ -286,3 +286,6 @@ public class Circle : IShape2D
         return result;
     }
 }
+
+// ============================================================================
+// ============================================================================

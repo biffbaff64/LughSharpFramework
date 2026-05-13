@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 using LughSharp.Source.Collections;
@@ -49,8 +50,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class SelectBox< T > : Widget, IDisableable
-    where T : notnull
+public class SelectBox< T > : Widget, IDisableable where T : notnull
 {
     public ClickListener       ClickListener { get; set; }
     public SelectBoxStyle      Style         { get; set; } = null!;
@@ -60,7 +60,6 @@ public class SelectBox< T > : Widget, IDisableable
 
     // ========================================================================
 
-    private readonly SelectBoxScrollPane? _scrollPane;
     private readonly ArraySelection< T >  _selection;
     private readonly Vector2              _temp = new();
 
@@ -89,7 +88,8 @@ public class SelectBox< T > : Widget, IDisableable
     }
 
     /// <summary>
-    /// Creates a select box with the provided style.
+    /// Creates a select box with the provided style. Also initialises the <see cref="SelectBoxScrollPane"/>
+    /// and <see cref="SelectBoxClickListener"/>.
     /// </summary>
     /// <param name="style"></param>
     public SelectBox( SelectBoxStyle style )
@@ -100,7 +100,13 @@ public class SelectBox< T > : Widget, IDisableable
             Required = true
         };
 
+        Logger.Checkpoint();
+        
         SetStyle( style );
+
+        Logger.Debug( $"GetWidth: {GetWidth()}, PrefWidth: {PrefWidth}" );
+        Logger.Debug( $"GetHeight: {GetHeight()}, PrefHeight: {PrefHeight}" );
+        
         SetSize( PrefWidth, PrefHeight );
 
         ScrollPane    = new SelectBoxScrollPane( this );
@@ -227,6 +233,8 @@ public class SelectBox< T > : Widget, IDisableable
 
         Items.Clear();
         _selection.Clear();
+        ScrollPane.ListBox.ClearItems();
+
         InvalidateHierarchy();
     }
 
@@ -244,7 +252,7 @@ public class SelectBox< T > : Widget, IDisableable
     {
         if ( Style == null )
         {
-            throw new RuntimeException( "SelectBoxStyle cannot be null." );
+            throw new RuntimeException( "SelectBoxStyle cannot be null in Layout()." );
         }
 
         ISceneDrawable bg   = Style.Background;
@@ -261,11 +269,11 @@ public class SelectBox< T > : Widget, IDisableable
         {
             PrefWidth = bg.LeftWidth + bg.RightWidth;
 
-            T? selected;
+            T? selected = GetSelected();
 
-            if ( ( selected = GetSelected() ) != null )
+            if ( selected != null )
             {
-                layout.SetText( font, ToString( selected ) ?? string.Empty );
+                layout.SetText( font, ToString( selected ) );
                 PrefWidth += layout.Width;
             }
         }
@@ -275,7 +283,7 @@ public class SelectBox< T > : Widget, IDisableable
 
             foreach ( T t in Items )
             {
-                layout.SetText( font, ToString( t ) ?? string.Empty );
+                layout.SetText( font, ToString( t ) );
                 maxItemWidth = Math.Max( layout.Width, maxItemWidth );
             }
 
@@ -285,18 +293,18 @@ public class SelectBox< T > : Widget, IDisableable
             ListBoxStyle    listStyle   = Style.ListBoxStyle;
             ScrollPaneStyle scrollStyle = Style.ScrollPaneStyle;
 
-            float? listWidth = maxItemWidth + listStyle.Selection.LeftWidth + listStyle.Selection.RightWidth;
+            float? scrollWidth = maxItemWidth + listStyle.Selection.LeftWidth + listStyle.Selection.RightWidth;
 
-            bg        = scrollStyle.Background;
-            listWidth = Math.Max( ( float )( listWidth + bg.LeftWidth + bg.RightWidth )!, bg.MinWidth );
+            bg          = scrollStyle.Background;
+            scrollWidth = Math.Max( ( float )( scrollWidth + bg.LeftWidth + bg.RightWidth )!, bg.MinWidth );
 
             if ( ScrollPane is not { DisableYScroll: true } )
             {
-                listWidth += Math.Max( Style.ScrollPaneStyle.VScroll.MinWidth,
-                                       Style.ScrollPaneStyle.VScrollKnob.MinWidth );
+                scrollWidth += Math.Max( Style.ScrollPaneStyle.VScroll.MinWidth,
+                                         Style.ScrollPaneStyle.VScrollKnob.MinWidth );
             }
 
-            PrefWidth = Math.Max( PrefWidth, ( float )listWidth );
+            PrefWidth = Math.Max( PrefWidth, ( float )scrollWidth );
         }
 
         layoutPool.Free( layout );
@@ -351,13 +359,14 @@ public class SelectBox< T > : Widget, IDisableable
         BitmapFont     font       = Style.Font;
 
         Logger.Checkpoint();
+        Logger.Debug( $"background: {background.LeftWidth}, {background.RightWidth}, {background.TopHeight}, {background.BottomHeight}" );
 
-        // Make copies of x,y,width and height for local modification
+        // Make copies of x, y, width and height for local modification
         // and preserving the originals.
-        float x      = X;
-        float y      = Y;
-        float width  = Width;
-        float height = Height;
+        float x      = GetX();
+        float y      = GetY();
+        float width  = GetWidth();
+        float height = GetHeight();
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
@@ -392,7 +401,7 @@ public class SelectBox< T > : Widget, IDisableable
 
     protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
     {
-        string str = ToString( item ) ?? string.Empty;
+        string str = ToString( item );
 
         return font.Draw( batch, str, x, y, 0, str.Length, width, _alignment, false, "..." );
     }
@@ -485,9 +494,9 @@ public class SelectBox< T > : Widget, IDisableable
         GlyphLayout         layout     = layoutPool.Obtain();
         float               width      = 0;
 
-        foreach ( T t in Items )
+        for ( var index = 0; index < Items.Count; index++ )
         {
-            layout.SetText( Style.Font, ToString( t ) ?? string.Empty );
+            layout.SetText( Style.Font, ToString( Items[ index ] ) );
             width = Math.Max( layout.Width, width );
         }
 
@@ -498,6 +507,9 @@ public class SelectBox< T > : Widget, IDisableable
         return width;
     }
 
+    /// <summary>
+    /// Disables the select box if the provided boolean is true, otherwise enables it.
+    /// </summary>
     public void SetDisabled( bool disabled )
     {
         if ( disabled && !IsDisabled )
@@ -589,9 +601,21 @@ public class SelectBox< T > : Widget, IDisableable
         Logger.Checkpoint();
     }
 
-    protected string? ToString( T? item )
+    public override void SetWidth( float width )
     {
-        return item?.ToString();
+        Logger.Debug( $"width: {width}" );
+        base.SetWidth( width );
+    }
+    
+    public override void SetHeight( float height )
+    {
+        Logger.Debug( $"height: {height}" );
+        base.SetHeight( height );
+    }
+
+    protected string ToString( T item )
+    {
+        return item.ToString() ?? string.Empty;
     }
 
     // ========================================================================
@@ -674,7 +698,7 @@ public class SelectBox< T > : Widget, IDisableable
             height += listBackground.TopHeight + listBackground.BottomHeight;
 
             float heightBelow = _stagePosition.Y;
-            float heightAbove = stage.Height - heightBelow - ParentSelectBox.Height;
+            float heightAbove = stage.Height - heightBelow - ParentSelectBox.GetHeight();
             var   below       = true;
 
             if ( height > heightBelow )
@@ -692,32 +716,33 @@ public class SelectBox< T > : Widget, IDisableable
 
             if ( below )
             {
-                Y = _stagePosition.Y - height;
+                SetY( _stagePosition.Y - height );
             }
             else
             {
-                Y = _stagePosition.Y + ParentSelectBox.Height;
+                SetY( _stagePosition.Y + ParentSelectBox.GetHeight() );
             }
 
-            Height = height;
+            SetHeight( height );
             Validate();
 
-            float width = Math.Max( ParentSelectBox.PrefWidth, ParentSelectBox.Width );
-            Width = width;
+            float width = Math.Max( ParentSelectBox.PrefWidth, ParentSelectBox.GetWidth() );
+            
+            SetWidth( width );
 
             float x = _stagePosition.X;
 
             if ( x + width > stage.Width )
             {
-                x -= width - ParentSelectBox.Width - 1;
+                x -= width - ParentSelectBox.GetWidth() - 1;
             }
 
-            X = x;
+            SetX( x );
 
             Validate();
 
             ScrollTo( 0,
-                      ListBox.Height - ( ParentSelectBox.GetSelectedIndex() * itemHeight ) - ( itemHeight / 2 ),
+                      ListBox.GetHeight() - ( ParentSelectBox.GetSelectedIndex() * itemHeight ) - ( itemHeight / 2 ),
                       0,
                       0,
                       true,

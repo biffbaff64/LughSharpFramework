@@ -261,7 +261,7 @@ public class TextField : Widget
     /// </summary>
     public virtual void CalculateOffsets()
     {
-        float           visibleWidth = Width;
+        float           visibleWidth = GetWidth();
         ISceneDrawable? background   = GetBackgroundDrawable();
 
         if ( background != null )
@@ -519,10 +519,10 @@ public class TextField : Widget
         ISceneDrawable? cursorPatch = Style.Cursor;
         ISceneDrawable? background  = GetBackgroundDrawable();
 
-        float x            = X;
-        float y            = Y;
-        float width        = Width;
-        float height       = Height;
+        float x            = GetX();
+        float y            = GetY();
+        float width        = GetWidth();
+        float height       = GetHeight();
         var   bgLeftWidth  = 0f;
         var   bgRightWidth = 0f;
 
@@ -585,7 +585,7 @@ public class TextField : Widget
 
     protected virtual float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
-        float height = Height;
+        float height = GetHeight();
         float textY  = ( TextHeight / 2 ) + font.GetDescent();
 
         if ( background != null )
@@ -903,7 +903,7 @@ public class TextField : Widget
         }
 
         TextField current       = this;
-        Vector2   currentCoords = current.Parent.LocalToStageCoordinates( _tmp2.Set( current.X, current.Y ) );
+        Vector2   currentCoords = current.Parent.LocalToStageCoordinates( _tmp2.Set( current.GetX(), current.GetY() ) );
 
         while ( true )
         {
@@ -971,7 +971,7 @@ public class TextField : Widget
                 }
 
                 Vector2? actorCoords =
-                    textField.Parent?.LocalToStageCoordinates( _tmp3.Set( textField.X, textField.Y ) );
+                    textField.Parent?.LocalToStageCoordinates( _tmp3.Set( textField.GetX(), textField.GetY() ) );
 
                 if ( actorCoords is null )
                 {

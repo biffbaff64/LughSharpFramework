@@ -144,8 +144,8 @@ public class InputEvent : Event
     /// <summary>
     /// Returns true if this event is a touchUp triggered by <see cref="Stage.CancelTouchFocus()"/>.
     /// </summary>
-    public bool TouchFocusCancel => Compare.IsEqual( StageX, int.MinValue )
-                                 || Compare.IsEqual( StageY, int.MinValue );
+    public bool TouchFocusCancel => ( Math.Abs( StageX - int.MinValue ) < NumberUtils.FloatTolerance ) 
+                                 || ( Math.Abs( StageY - int.MinValue ) < NumberUtils.FloatTolerance );
 
     /// <summary>
     /// If false, <see cref="Event.SetHandled"/> will not add the listener

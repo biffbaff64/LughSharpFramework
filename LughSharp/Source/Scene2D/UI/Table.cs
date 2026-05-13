@@ -182,8 +182,8 @@ public class Table : WidgetGroup
 
                 if ( ClipBegin( padLeft,
                                 padBottom,
-                                Width - padLeft - _padRight.Get( this ),
-                                Height - padBottom - _padTop.Get( this ) ) )
+                                GetWidth() - padLeft - _padRight.Get( this ),
+                                GetHeight() - padBottom - _padTop.Get( this ) ) )
                 {
                     DrawChildren( batch, parentAlpha );
                     batch.Flush();
@@ -199,7 +199,7 @@ public class Table : WidgetGroup
         }
         else
         {
-            DrawBackground( batch, parentAlpha, X, Y );
+            DrawBackground( batch, parentAlpha, GetX(), GetY() );
             base.Draw( batch, parentAlpha );
         }
     }
@@ -217,7 +217,7 @@ public class Table : WidgetGroup
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-        _background.Draw( batch, x, y, Width, Height );
+        _background.Draw( batch, x, y, GetWidth(), GetHeight() );
     }
 
     /// <summary>
@@ -285,7 +285,7 @@ public class Table : WidgetGroup
                 return null;
             }
 
-            if ( ( x < 0 ) || ( x >= Width ) || ( y < 0 ) || ( y >= Height ) )
+            if ( ( x < 0 ) || ( x >= GetWidth() ) || ( y < 0 ) || ( y >= GetHeight() ) )
             {
                 return null;
             }
@@ -1495,8 +1495,8 @@ public class Table : WidgetGroup
             ComputeSize();
         }
 
-        float layoutWidth  = Width;
-        float layoutHeight = Height;
+        float layoutWidth  = GetWidth();
+        float layoutHeight = GetHeight();
         int   columns      = Columns;
         int   rows         = Rows;
 
@@ -2074,7 +2074,7 @@ public class Table : WidgetGroup
 
         if ( TableDebug is DebugType.Table or DebugType.All )
         {
-            AddDebugRect( 0, 0, Width, Height, DebugTableColor );
+            AddDebugRect( 0, 0, GetWidth(), GetHeight(), DebugTableColor );
             AddDebugRect( currentX, currentY, width, height, DebugTableColor );
         }
 
@@ -2135,8 +2135,8 @@ public class Table : WidgetGroup
 
                 var   x      = 0.0f;
                 var   y      = 0.0f;
-                float width  = Width;
-                float height = Height;
+                float width  = GetWidth();
+                float height = GetHeight();
 
                 if ( _background != null )
                 {
@@ -2185,8 +2185,8 @@ public class Table : WidgetGroup
 
         if ( !Transform )
         {
-            x = X;
-            y = Y;
+            x = GetX();
+            y = GetY();
         }
 
         for ( int i = 0, n = _debugRects.Count; i < n; i++ )

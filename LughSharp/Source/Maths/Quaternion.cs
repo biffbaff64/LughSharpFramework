@@ -316,7 +316,7 @@ public class Quaternion
     {
         float len = Len2();
 
-        if ( ( len != 0.0f ) && !Compare.IsEqual( len, 1f ) )
+        if ( ( len != 0.0f ) && ( Math.Abs( len - 1f ) > NumberUtils.FloatTolerance ) )
         {
             len = ( float )Math.Sqrt( len );
 
@@ -527,7 +527,7 @@ public class Quaternion
         return MathUtils.IsZero( X )
             && MathUtils.IsZero( Y )
             && MathUtils.IsZero( Z )
-            && Compare.IsEqual( W, 1f );
+            && ( Math.Abs( W - 1f ) < NumberUtils.FloatTolerance );
     }
 
     /// <summary>
@@ -538,7 +538,7 @@ public class Quaternion
         return MathUtils.IsZero( X, tolerance )
             && MathUtils.IsZero( Y, tolerance )
             && MathUtils.IsZero( Z, tolerance )
-            && Compare.IsEqual( W, 1f, tolerance );
+            && ( Math.Abs( W - 1f ) < tolerance );
     }
 
     // todo : the setFromAxis(v3,float) method should replace the set(v3,float) method

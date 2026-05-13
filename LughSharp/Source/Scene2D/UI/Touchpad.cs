@@ -106,7 +106,7 @@ public class Touchpad : Widget
 
         _deadzoneRadius = deadzoneRadius;
 
-        _knobPosition.Set( Width / 2f, Height / 2f );
+        _knobPosition.Set( GetWidth() / 2f, GetHeight() / 2f );
 
         Style = style;
 
@@ -232,8 +232,8 @@ public class Touchpad : Widget
     public override void Layout()
     {
         // Recalc pad and deadzone bounds
-        float halfWidth  = Width / 2;
-        float halfHeight = Height / 2;
+        float halfWidth  = GetWidth() / 2;
+        float halfHeight = GetHeight() / 2;
         float radius     = Math.Min( halfWidth, halfHeight );
 
         _touchBounds.Set( halfWidth, halfHeight, radius );
@@ -258,12 +258,12 @@ public class Touchpad : Widget
         Color c = ActorColor;
         batch.SetColor( c.R, c.G, c.B, c.A * parentAlpha );
 
-        float x = X;
-        float y = Y;
+        float x = GetX();
+        float y = GetY();
 
         ISceneDrawable? bg = _style.Background;
 
-        bg?.Draw( batch, x, y, Width, Height );
+        bg?.Draw( batch, x, y, GetWidth(), GetHeight() );
 
         ISceneDrawable? knob = _style.Knob;
 

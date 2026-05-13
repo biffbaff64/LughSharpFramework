@@ -109,7 +109,7 @@ public class ImageTextButton : Button
     /// <exception cref="ArgumentException">
     /// Thrown if the style is not an <see cref="ImageTextButtonStyle"/>.
     /// </exception>
-    public override void SetStyle< T >( T style )
+    public override void SetStyle< T >( T? style ) where T : class
     {
         if ( style is not ImageTextButtonStyle textButtonStyle )
         {

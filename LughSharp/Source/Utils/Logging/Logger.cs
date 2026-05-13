@@ -55,11 +55,11 @@ public static class Logger
     public const int LogError = 2;
 
     // ========================================================================
-    
-    private const string DebugTag              = "[DEBUG.....]";
-    private const string ErrorTag              = "[WARNING...]";
-    private const string CheckpointTag         = "[CHECKPOINT]";
-    private const string PrefsFolder           = "logs";
+
+    private const string DebugTag             = "[DEBUG.....]";
+    private const string ErrorTag             = "[WARNING...]";
+    private const string CheckpointTag        = "[CHECKPOINT]";
+    private const string PrefsFolder          = "logs";
     private const string DefaultTraceFilename = "trace.txt";
 
     private const string DividerString = "-----------------------------------------------------";
@@ -113,7 +113,7 @@ public static class Logger
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
     [Conditional( "DEBUG" )]
-    public static void Debug( string message,
+    public static void Debug( string? message,
                               bool boxedDebug = false,
                               [CallerFilePath] string callerFilePath = "",
                               [CallerMemberName] string callerMethod = "",
@@ -129,21 +129,14 @@ public static class Logger
             Divider();
         }
 
-        CallerID? callerID = IsMinimal
-            ? null
-            : MakeCallerID( callerFilePath, callerMethod, callerLine );
-
-        string str = CreateMessage( DebugTag, callerID, message );
-
-        Console.WriteLine( str );
-        WriteToFile( str );
+        CreateAndWriteMessage( DebugTag, message, callerFilePath, callerMethod, callerLine );
 
         if ( boxedDebug )
         {
             Divider();
         }
     }
-
+    
     /// <summary>
     /// Send a DEBUG message to output window/console/File.
     /// </summary>
@@ -152,7 +145,7 @@ public static class Logger
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
     [Conditional( "DEBUG" )]
-    public static void Error( string message,
+    public static void Error( string? message,
                               [CallerFilePath] string callerFilePath = "",
                               [CallerMemberName] string callerMethod = "",
                               [CallerLineNumber] int callerLine = 0 )
@@ -162,14 +155,7 @@ public static class Logger
             return;
         }
 
-        CallerID? callerID = IsMinimal
-            ? null
-            : MakeCallerID( callerFilePath, callerMethod, callerLine );
-
-        string str = CreateMessage( ErrorTag, callerID, message );
-
-        Console.WriteLine( str );
-        WriteToFile( str );
+        CreateAndWriteMessage( ErrorTag, message, callerFilePath, callerMethod, callerLine );
     }
 
     /// <summary>
@@ -181,7 +167,7 @@ public static class Logger
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
     [Conditional( "DEBUG" )]
-    public static void DebugCondition( string message,
+    public static void DebugCondition( string? message,
                                        bool condition = false,
                                        [CallerFilePath] string callerFilePath = "",
                                        [CallerMemberName] string callerMethod = "",
@@ -192,11 +178,7 @@ public static class Logger
             return;
         }
 
-        CallerID callerID = MakeCallerID( callerFilePath, callerMethod, callerLine );
-        string   str      = CreateMessage( DebugTag, callerID, message );
-
-        Console.WriteLine( str );
-        WriteToFile( str );
+        CreateAndWriteMessage( DebugTag, message, callerFilePath, callerMethod, callerLine );
     }
 
     /// <summary>
@@ -204,15 +186,11 @@ public static class Logger
     /// <li> Current time and date. </li>
     /// <li> Calling Class/method/line number information. </li>
     /// </summary>
-    /// <param name="lineBefore"> Draws a divider line first, if set to true. </param>
-    /// <param name="lineAfter"> Draws a divider line after checkpoint is logged, if set to true. </param>
     /// <param name="callerFilePath"> The File this message was sent from. </param>
     /// <param name="callerMethod"> The Method this message was sent from. </param>
     /// <param name="callerLine"> The Line this message was sent from. </param>
     [Conditional( "DEBUG" )]
-    public static void Checkpoint( bool lineBefore = false,
-                                   bool lineAfter = false,
-                                   [CallerFilePath] string callerFilePath = "",
+    public static void Checkpoint( [CallerFilePath] string callerFilePath = "",
                                    [CallerMemberName] string callerMethod = "",
                                    [CallerLineNumber] int callerLine = 0 )
     {
@@ -221,26 +199,30 @@ public static class Logger
             return;
         }
 
-        if ( lineBefore )
+        CreateAndWriteMessage( CheckpointTag, "<Checkpoint>", callerFilePath, callerMethod, callerLine );
+    }
+
+    private static void CreateAndWriteMessage( string tag,
+                                               string? message,
+                                               string callerFilePath,
+                                               string callerMethod,
+                                               int callerLine )
+    {
+        if ( string.IsNullOrEmpty( message ) )
         {
-            Divider();
+            message = "<null>";
         }
 
         CallerID? callerID = IsMinimal
             ? null
             : MakeCallerID( callerFilePath, callerMethod, callerLine );
 
-        string str = CreateMessage( CheckpointTag, callerID, "<Checkpoint>" );
+        string str = CreateMessage( tag, callerID, message );
 
         Console.WriteLine( str );
         WriteToFile( str );
-
-        if ( lineAfter )
-        {
-            Divider();
-        }
     }
-
+    
     /// <summary>
     /// Adds a dividing line to text output.
     /// </summary>
@@ -565,5 +547,3 @@ internal struct CallerID
 
 // ============================================================================
 // ============================================================================
-
-

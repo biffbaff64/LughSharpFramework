@@ -96,7 +96,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     protected readonly float LoadFactor;
 
     protected int   Threshold;
-    protected TK[]  KeyTable;
+    protected TK?[] KeyTable;
     protected TV?[] ValueTable;
 
     protected EntriesIterator? Entries1;
@@ -1153,7 +1153,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     [PublicAPI]
     public class Entry
     {
-        public TK Key   { get; set; }
+        public TK? Key   { get; set; }
         public TV? Value { get; set; }
     }
 

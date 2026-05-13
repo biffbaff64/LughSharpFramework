@@ -41,7 +41,7 @@ public class AttributesGroup : IComparer< G3DAttribute >
         Guard.Against.Null( arg0 );
         Guard.Against.Null( arg1 );
 
-        return ( int )( arg0.Type - arg1.Type );
+        return ( int )( arg0.AttributeType - arg1.AttributeType );
     }
 
     /// <summary>
@@ -70,7 +70,7 @@ public class AttributesGroup : IComparer< G3DAttribute >
         {
             foreach ( G3DAttribute att in _attributes )
             {
-                if ( att.Type == type )
+                if ( att.AttributeType == type )
                 {
                     return att;
                 }
@@ -89,7 +89,7 @@ public class AttributesGroup : IComparer< G3DAttribute >
     {
         foreach ( G3DAttribute att in _attributes )
         {
-            if ( ( att.Type & type ) != 0 )
+            if ( ( att.AttributeType & type ) != 0 )
             {
                 output.Add( att );
             }
@@ -125,11 +125,11 @@ public class AttributesGroup : IComparer< G3DAttribute >
     /// </summary>
     public void Set( G3DAttribute attribute )
     {
-        int idx = IndexOf( attribute.Type );
+        int idx = IndexOf( attribute.AttributeType );
 
         if ( idx < 0 )
         {
-            Enable( attribute.Type );
+            Enable( attribute.AttributeType );
 
             _attributes.Add( attribute );
             _sorted = false;
@@ -213,7 +213,7 @@ public class AttributesGroup : IComparer< G3DAttribute >
     {
         for ( int i = _attributes.Count - 1; i >= 0; i-- )
         {
-            long type = _attributes[ i ].Type;
+            long type = _attributes[ i ].AttributeType;
 
             if ( ( mask & type ) == type )
             {
@@ -248,7 +248,7 @@ public class AttributesGroup : IComparer< G3DAttribute >
         {
             for ( var i = 0; i < _attributes.Count; i++ )
             {
-                if ( _attributes[ i ].Type == type )
+                if ( _attributes[ i ].AttributeType == type )
                 {
                     return i;
                 }

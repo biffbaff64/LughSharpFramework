@@ -113,6 +113,19 @@ public class SnapshotArrayList< T > : IEnumerable< T >
     }
 
     /// <summary>
+    /// Creates a new SnapshotArray from the supplied <c>SnapshotArrayList</c>,
+    /// </summary>
+    /// <param name="arrayList"> The reference SnapshotArrayList to copy. </param>
+    public SnapshotArrayList( SnapshotArrayList< T > arrayList )
+    {
+        Ordered = arrayList.Ordered;
+        Size    = arrayList.Size;
+        _items  = new T[ Size ];
+        
+        Array.Copy( arrayList.ToArray(), 0, _items, 0, Size );
+    }
+    
+    /// <summary>
     /// Sets or Gets the element at the given index.
     /// </summary>
     public T this[ int index ]

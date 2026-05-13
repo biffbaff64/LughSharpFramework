@@ -40,7 +40,6 @@ public class MainGame : LughGame
     private TextureRegion?          _textureRegion;
     private NinePatch?              _ninePatch;
     private BitmapFont?             _font;
-    private BitmapFont?             _freetypeFont;
     private InputMultiplexer        _inputMultiplexer = new();
     private AtlasLoader?            _atlasLoader;
     private Stage?                  _stage;
@@ -50,11 +49,6 @@ public class MainGame : LughGame
     private readonly FontTests  _fontTests  = new();
     private readonly StageTests _stageTests = new();
     private readonly ImageTests _imageTests = new();
-
-    private MapTests?    _mapTests;
-    private SpriteTests? _spriteTests;
-    private InputTest?   _inputTest;
-    private TableTest?   _tableTest;
 
     // ========================================================================
     // ========================================================================
@@ -85,27 +79,7 @@ public class MainGame : LughGame
         
         CreateAssets();
         
-        // --------------------------------------
-//        _inputTest = new InputTest( ref _inputMultiplexer );
-//        _inputTest.Setup();
-        // --------------------------------------
-//        _mapTests = new MapTests();
-//        _mapTests.CreateMap();
-        // --------------------------------------
         _stageTests.CreateStage( _hudCam, ref _stage, ref _inputMultiplexer );
-        // --------------------------------------
-//        _font         = _fontTests.CreateBitmapFont();
-//        _freetypeFont = _fontTests.CreateFreeTypeFont();
-        // --------------------------------------
-//        _spriteTests = new SpriteTests( _assetManager );
-//        _spriteTests.Create();
-        // --------------------------------------
-//        if ( _stage != null )
-//        {
-//            _tableTest = new TableTest( ref _stage );
-//            _tableTest.Setup();
-//        }
-        // --------------------------------------
 
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
 
@@ -120,12 +94,6 @@ public class MainGame : LughGame
     /// <inheritdoc />
     public override void Update( float delta )
     {
-        _inputTest?.Update();
-        _spriteTests?.Update( delta );
-        // --------------------------------------
-
-        _mapTests?.ScrollMap( ref _tiledMapCam );
-
         if ( Engine.Input.IsKeyJustPressed( IInput.Keys.Enter ) )
         {
             Shake.ScreenShakeAllowed = true;
@@ -170,16 +138,6 @@ public class MainGame : LughGame
 
         // --------------------------------------
 
-        if ( _mapTests?.MapRenderer != null && _tiledMapCam is { IsInUse: true } )
-        {
-            _tiledMapCam.Update();
-
-            _mapTests.MapRenderer.SetView( _tiledMapCam.Camera );
-            _mapTests.MapRenderer.Render();
-        }
-
-        // --------------------------------------
-
         if ( _spriteBatch != null )
         {
             _spriteBatch.EnableBlending();
@@ -213,8 +171,6 @@ public class MainGame : LughGame
                     _ninePatch.Draw( _spriteBatch, 500, 100, 100, 10 );
                 }
 
-                _spriteTests?.Draw( _spriteBatch );
-
                 _spriteBatch.End();
             }
 
@@ -230,8 +186,6 @@ public class MainGame : LughGame
 
                 _hudCam.SetPosition( Vector3.Zero, CameraData.NoZoom, false );
                 _hudCam.Update();
-
-                _inputTest?.Render( _spriteBatch );
 
                 _spriteBatch.End();
             }
@@ -317,7 +271,6 @@ public class MainGame : LughGame
                 _spriteCam?.Dispose();
                 _texture?.Dispose();
                 _stageTests.Dispose();
-                _spriteTests?.Dispose();
                 _font?.Dispose();
             }
 
@@ -333,18 +286,10 @@ public class MainGame : LughGame
 
     private void CreateAssets()
     {
-//        _texture           = new Texture2D( Assets.Solid112X112 );
-//        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
-//        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
+        _texture           = new Texture2D( Assets.Solid112X112 );
+        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
+        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
         _backgroundTexture = new Texture2D( Assets.Background );
-        
-        var scene2DImage = new Scene2DImage( new Texture2D( Assets.HudPanel ) )
-        {
-            IsVisible = true
-        };
-
-        scene2DImage.SetPosition( 0, 0 );
-        _stage?.AddActor( scene2DImage );
     }
 }
 

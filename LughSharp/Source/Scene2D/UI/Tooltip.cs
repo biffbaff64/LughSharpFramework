@@ -102,7 +102,7 @@ public class Tooltip< T > : InputListener where T : Actor
         float offsetY = Manager.OffsetY;
         float dist    = Manager.EdgeDistance;
 
-        Vector2 point = actor.LocalToStageCoordinates( _tmp.Set( x + offsetX, y - offsetY - Container.Height ) );
+        Vector2 point = actor.LocalToStageCoordinates( _tmp.Set( x + offsetX, y - offsetY - Container.GetHeight() ) );
 
         if ( point.Y < dist )
         {
@@ -114,20 +114,20 @@ public class Tooltip< T > : InputListener where T : Actor
             point.X = dist;
         }
 
-        if ( ( point.X + Container.Width ) > ( actor.Stage.Width - dist ) )
+        if ( ( point.X + Container.GetWidth() ) > ( actor.Stage.Width - dist ) )
         {
-            point.X = actor.Stage.Width - dist - Container.Width;
+            point.X = actor.Stage.Width - dist - Container.GetWidth();
         }
 
-        if ( ( point.Y + Container.Height ) > ( actor.Stage.Height - dist ) )
+        if ( ( point.Y + Container.GetHeight() ) > ( actor.Stage.Height - dist ) )
         {
-            point.Y = actor.Stage.Height - dist - Container.Height;
+            point.Y = actor.Stage.Height - dist - Container.GetHeight();
         }
 
         Container.SetPosition( point.X, point.Y );
 
-        point = actor.LocalToStageCoordinates( _tmp.Set( actor.Width / 2, actor.Height / 2 ) );
-        point.Sub( Container.X, Container.Y );
+        point = actor.LocalToStageCoordinates( _tmp.Set( actor.GetWidth() / 2, actor.GetHeight() / 2 ) );
+        point.Sub( Container.GetX(), Container.GetY() );
 
         Container.SetOrigin( point.X, point.Y );
     }

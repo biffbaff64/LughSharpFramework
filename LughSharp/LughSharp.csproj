@@ -7,7 +7,7 @@
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Title>LughSharp</Title>
         <Authors>Richard Ikin</Authors>
-        <Version>0.0.1-beta3.4</Version>
+        <Version>0.0.1-beta4.0</Version>
         <Description>C# 2D/3D Game Framework.</Description>
         <RepositoryUrl>https://github.com/biffbaff64/LughSharp</RepositoryUrl>
         <LangVersion>preview</LangVersion>
@@ -20,7 +20,7 @@
         <PackageTags>CSharp;2D;Framework;OpenGL;</PackageTags>
         <Copyright>Copyright 2024 Circa64 Software Projects</Copyright>
         <Company>Circa64 Software Projects</Company>
-        <PackageReleaseNotes>TiledMap support. Basic Scene2D support, the rest is to follow. </PackageReleaseNotes>
+        <PackageReleaseNotes>Released for internal structural testing.</PackageReleaseNotes>
         <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
         <AssemblyName>LughSharp</AssemblyName>
         <RootNamespace>LughSharp</RootNamespace>

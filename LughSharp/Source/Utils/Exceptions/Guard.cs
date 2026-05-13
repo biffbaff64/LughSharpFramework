@@ -67,9 +67,9 @@ public class Guard
     {
         switch ( argumentValue )
         {
-            case { Exists: true }:
+            case { Exists: true } info:
 
-                if ( argumentValue is not DirectoryInfo or FileInfo )
+                if ( info is null )
                 {
                     throw new ArgumentException( $"{argumentName} must be a valid  directory or file." );
                 }

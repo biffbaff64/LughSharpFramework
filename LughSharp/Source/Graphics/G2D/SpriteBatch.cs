@@ -112,7 +112,6 @@ public class SpriteBatch : IBatch
     private int  _combinedMatrixLocation; //
     private int  _textureLocation;        //
     private bool _ownsShader;             // Whether the shader was created here, or passed in.
-    private bool _originalDepthMask;
     private bool _disposed;
     private bool _initialBlendingState;
     private bool _originalDepthTestEnabled;

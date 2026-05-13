@@ -249,7 +249,7 @@ public class Vector2 : IVector< Vector2 >
     {
         float oldLen2 = Len2();
 
-        return ( oldLen2 == 0 ) || Compare.IsEqual( oldLen2, len2 )
+        return ( oldLen2 == 0 ) || ( Math.Abs( oldLen2 - len2 ) < NumberUtils.FloatTolerance )
             ? this
             : Scale( ( float )Math.Sqrt( len2 / oldLen2 ) );
     }

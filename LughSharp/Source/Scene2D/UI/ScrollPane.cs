@@ -484,8 +484,8 @@ public class ScrollPane : WidgetGroup
 
         WidgetArea.Set( bg.LeftWidth,
                         bg.BottomHeight,
-                        Width - bg.LeftWidth - bg.RightWidth,
-                        Height - bg.TopHeight - bg.BottomHeight );
+                        GetWidth() - bg.LeftWidth - bg.RightWidth,
+                        GetHeight() - bg.TopHeight - bg.BottomHeight );
 
         if ( Widget == null )
         {
@@ -526,8 +526,8 @@ public class ScrollPane : WidgetGroup
         }
         else
         {
-            widgetWidth  = Widget.Width;
-            widgetHeight = Widget.Height;
+            widgetWidth  = Widget.GetWidth();
+            widgetHeight = Widget.GetHeight();
         }
 
         // Determine if horizontal/vertical scrollbars are needed.
@@ -592,7 +592,7 @@ public class ScrollPane : WidgetGroup
             if ( hScrollKnob != null )
             {
                 float x = ScrollbarsOnTop ? bg.LeftWidth : WidgetArea.X;
-                float y = HScrollOnBottom ? bg.BottomHeight : Height - bg.TopHeight - scrollbarHeight;
+                float y = HScrollOnBottom ? bg.BottomHeight : GetHeight() - bg.TopHeight - scrollbarHeight;
 
                 HScrollBounds.Set( x, y, WidgetArea.Width, scrollbarHeight );
 
@@ -638,7 +638,7 @@ public class ScrollPane : WidgetGroup
         {
             if ( vScrollKnob != null )
             {
-                float x = VScrollOnRight ? Width - bg.RightWidth - scrollbarWidth : bg.LeftWidth;
+                float x = VScrollOnRight ? GetWidth() - bg.RightWidth - scrollbarWidth : bg.LeftWidth;
                 float y = ScrollbarsOnTop ? bg.BottomHeight : WidgetArea.Y;
 
                 VScrollBounds.Set( x, y, scrollbarWidth, WidgetArea.Height );
@@ -671,7 +671,7 @@ public class ScrollPane : WidgetGroup
                     VKnobBounds.Height = 0;
                 }
 
-                VKnobBounds.X = VScrollOnRight ? Width - bg.RightWidth - vScrollKnob.MinWidth : bg.LeftWidth;
+                VKnobBounds.X = VScrollOnRight ? GetWidth() - bg.RightWidth - vScrollKnob.MinWidth : bg.LeftWidth;
                 VKnobBounds.Y = VScrollBounds.Y +
                                 ( int )( ( VScrollBounds.Height - VKnobBounds.Height ) *
                                          ( 1 - GetScrollPercentY() ) );
@@ -745,7 +745,7 @@ public class ScrollPane : WidgetGroup
         if ( Style.Background != null )
         {
             batch.SetColor( color.R, color.G, color.B, alpha );
-            Style.Background.Draw( batch, 0, 0, Width, Height );
+            Style.Background.Draw( batch, 0, 0, GetWidth(), GetHeight() );
         }
 
         batch.Flush();
@@ -864,7 +864,7 @@ public class ScrollPane : WidgetGroup
         }
         else if ( Widget != null )
         {
-            width = Widget.Width;
+            width = Widget.GetWidth();
         }
 
         ISceneDrawable? background = Style.Background;
@@ -904,7 +904,7 @@ public class ScrollPane : WidgetGroup
         }
         else if ( Widget != null )
         {
-            height = Widget.Height;
+            height = Widget.GetHeight();
         }
 
         ISceneDrawable? background = Style.Background;
@@ -1009,7 +1009,7 @@ public class ScrollPane : WidgetGroup
     /// <returns></returns>
     public override Actor? Hit( float x, float y, bool touchable )
     {
-        if ( ( x < 0 ) || ( x >= Width ) || ( y < 0 ) || ( y >= Height ) )
+        if ( ( x < 0 ) || ( x >= GetWidth() ) || ( y < 0 ) || ( y >= GetHeight() ) )
         {
             return null;
         }

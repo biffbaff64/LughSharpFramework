@@ -22,11 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Collections.Generic;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.G3D.Env;
 
 namespace LughSharp.Source.Graphics.G3D.Attributes;
@@ -38,7 +33,7 @@ public class DirectionalLightsAttribute : G3DAttribute
 
     // ========================================================================
 
-    public DirectionalLightsAttribute() : base( Type )
+    public DirectionalLightsAttribute() : base( DlaType )
     {
         Lights = new List< DirectionalLight >( 1 );
     }
@@ -48,8 +43,8 @@ public class DirectionalLightsAttribute : G3DAttribute
         Lights.AddRange( copyFrom.Lights );
     }
 
-    public static string Alias => "directionalLights";
-    public static long   Type  => Register( Alias );
+    public static string Alias   => "directionalLights";
+    public static long   DlaType => Register( Alias );
 
     /// <inheritdoc />
     public override G3DAttribute Copy()
@@ -60,4 +55,3 @@ public class DirectionalLightsAttribute : G3DAttribute
 
 // ============================================================================
 // ============================================================================
-

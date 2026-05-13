@@ -315,8 +315,8 @@ public class Tree< TNode, TValue > : WidgetGroup
                 }
                 else
                 {
-                    rowWidth    += actor.Width;
-                    node.Height =  actor.Height;
+                    rowWidth    += actor.GetWidth();
+                    node.Height =  actor.GetHeight();
                 }
 
                 if ( node.Icon != null )
@@ -347,7 +347,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             ComputeSize();
         }
 
-        Layout( RootNodes, _paddingLeft, Height - ( YSpacing / 2 ), PlusMinusWidth() );
+        Layout( RootNodes, _paddingLeft, GetHeight() - ( YSpacing / 2 ), PlusMinusWidth() );
     }
 
     /// <summary>
@@ -422,7 +422,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         {
             batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-            Style.Background.Draw( batch, X, Y, Width, Height );
+            Style.Background.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
         }
     }
 
@@ -448,8 +448,8 @@ public class Tree< TNode, TValue > : WidgetGroup
 
         TreeStyle? style = Style;
 
-        float x       = X;
-        float y       = Y;
+        float x       = GetX();
+        float y       = GetY();
         float expandX = x + indent;
         float iconX   = expandX + plusMinusWidth + _iconSpacingLeft;
 
@@ -457,7 +457,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         {
             TNode node   = nodes[ i ];
             Actor actor  = node.Actor ?? throw new RuntimeException( "node.Actor cannot be null!" );
-            float actorY = actor.Y;
+            float actorY = actor.GetY();
             float height = node.Height;
 
             if ( ( cullingArea == null ) || ( ( ( actorY + height ) >= cullBottom ) && ( actorY <= cullTop ) ) )
@@ -469,12 +469,12 @@ public class Tree< TNode, TValue > : WidgetGroup
                                    batch,
                                    x,
                                    y + actorY - ( YSpacing / 2 ),
-                                   Width,
+                                   GetWidth(),
                                    height + YSpacing );
                 }
                 else if ( ( node == OverNode ) && ( style?.Over != null ) )
                 {
-                    DrawOver( node, style.Over, batch, x, y + actorY - ( YSpacing / 2 ), Width, height + YSpacing );
+                    DrawOver( node, style.Over, batch, x, y + actorY - ( YSpacing / 2 ), GetWidth(), height + YSpacing );
                 }
 
                 if ( node.Icon != null )
@@ -582,7 +582,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     public TNode? GetNodeAt( float y )
     {
         _foundNode = null;
-        GetNodeAt( RootNodes, y, Height );
+        GetNodeAt( RootNodes, y, GetHeight() );
 
         return _foundNode;
     }
@@ -626,7 +626,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         {
             TNode node = nodes[ i ];
 
-            if ( node.Actor?.Y < low )
+            if ( node.Actor?.GetY() < low )
             {
                 break;
             }
@@ -636,7 +636,7 @@ public class Tree< TNode, TValue > : WidgetGroup
                 continue;
             }
 
-            if ( node.Actor?.Y <= high )
+            if ( node.Actor?.GetY() <= high )
             {
                 _selection.Add( node );
             }
@@ -1426,8 +1426,8 @@ public class Tree< TNode, TValue > : WidgetGroup
                     return;
                 }
 
-                float start = rangeStart.Actor.Y;
-                float end   = node.Actor.Y;
+                float start = rangeStart.Actor.GetY();
+                float end   = node.Actor.GetY();
 
                 if ( start > end )
                 {
@@ -1448,7 +1448,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             if ( ( node.NodeChildren?.Count > 0 ) && ( !_tree._selection.Multiple || !InputUtils.CtrlKey() ) )
             {
                 // Toggle expanded if left of icon.
-                float? rowX = node.Actor?.X;
+                float? rowX = node.Actor?.GetX();
 
                 if ( node.Icon != null )
                 {

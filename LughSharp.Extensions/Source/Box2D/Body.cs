@@ -50,7 +50,7 @@ public class Body
     protected List< JointEdge > Joints = new( 2 );
 
     /** user data **/
-    private object? _userData;
+//    private object? _userData;
 
     // ========================================================================
 

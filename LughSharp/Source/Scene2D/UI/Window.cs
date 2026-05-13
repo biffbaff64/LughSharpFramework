@@ -186,24 +186,24 @@ public class Window : Table
         }
         else if ( Parent == stage.RootGroup )
         {
-            if ( X < 0 )
+            if ( GetX() < 0 )
             {
-                X = 0;
+                SetX( 0 );
             }
 
             if ( RightEdge > parentWidth )
             {
-                X = parentWidth - Width;
+                SetX( parentWidth - GetWidth() );
             }
 
-            if ( Y < 0 )
+            if ( GetY() < 0 )
             {
-                Y = 0;
+                SetY( 0 );
             }
 
             if ( TopEdge > parentHeight )
             {
-                Y = parentHeight - Height;
+                SetY( parentHeight - GetHeight() );
             }
         }
     }
@@ -237,10 +237,10 @@ public class Window : Table
 
                 DrawStageBackground( batch,
                                      parentAlpha,
-                                     X + _tmpPosition.X,
-                                     Y + _tmpPosition.Y,
-                                     X + _tmpSize.X,
-                                     Y + _tmpSize.Y );
+                                     GetX() + _tmpPosition.X,
+                                     GetY() + _tmpPosition.Y,
+                                     GetX() + _tmpSize.X,
+                                     GetY() + _tmpSize.Y );
             }
         }
 
@@ -282,8 +282,8 @@ public class Window : Table
             float padTop  = GetPadTop();
             float padLeft = GetPadLeft();
 
-            TitleTable.SetSize( Width - padLeft - GetPadRight(), padTop );
-            TitleTable.SetPosition( padLeft, Height - padTop );
+            TitleTable.SetSize( GetWidth() - padLeft - GetPadRight(), padTop );
+            TitleTable.SetPosition( padLeft, GetHeight() - padTop );
 
             DrawTitleTable = true;
 
@@ -311,8 +311,8 @@ public class Window : Table
             return hit;
         }
 
-        if ( ( y <= Height ) && ( y >= ( Height - GetPadTop() ) )
-                             && ( x >= 0 ) && ( x <= Width ) )
+        if ( ( y <= GetHeight() ) && ( y >= ( GetHeight() - GetPadTop() ) )
+                                  && ( x >= 0 ) && ( x <= GetWidth() ) )
         {
             // Hit the title bar, don't use the hit child if it is in the Window's table.
             Actor? current = hit;
@@ -416,8 +416,8 @@ public class Window : Table
                 _window.Dragging = _window.Edge != 0;
                 _startX          = x;
                 _startY          = y;
-                _lastX           = x - _window.Width;
-                _lastY           = y - _window.Height;
+                _lastX           = x - _window.GetWidth();
+                _lastY           = y - _window.GetHeight();
             }
 
             return ( _window.Edge != 0 ) || _window.IsModal;
@@ -435,10 +435,10 @@ public class Window : Table
                 return;
             }
 
-            float  width     = _window.Width;
-            float  height    = _window.Height;
-            float  windowX   = _window.X;
-            float  windowY   = _window.Y;
+            float  width     = _window.GetWidth();
+            float  height    = _window.GetHeight();
+            float  windowX   = _window.GetX();
+            float  windowY   = _window.GetY();
             float  minWidth  = _window.GetMinWidth();
             float  minHeight = _window.GetMinHeight();
             Stage? stage     = _window.Stage;
@@ -568,8 +568,8 @@ public class Window : Table
         private void UpdateEdge( float x, float y )
         {
             float border = _window.ResizeBorder / 2f;
-            float width  = _window.Width;
-            float height = _window.Height;
+            float width  = _window.GetWidth();
+            float height = _window.GetHeight();
 
             float padTop    = _window.GetPadTop();
             float padLeft   = _window.GetPadLeft();

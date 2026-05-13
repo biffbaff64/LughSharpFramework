@@ -46,39 +46,39 @@ public abstract class Value
     /// <summary>
     /// Value that is the minWidth of the actor in the cell.
     /// </summary>
-    public static readonly Value MinWidth = FromLayout( l => l.GetMinWidth(), ctx => ctx?.Width ?? 0 );
+    public static readonly Value MinWidth = FromLayout( l => l.GetMinWidth(), ctx => ctx?.GetWidth() ?? 0 );
 
     /// <summary>
     /// Value that is the minHeight of the actor in the cell.
     /// </summary>
-    public static readonly Value MinHeight = FromLayout( l => l.GetMinHeight(), ctx => ctx?.Height ?? 0 );
+    public static readonly Value MinHeight = FromLayout( l => l.GetMinHeight(), ctx => ctx?.GetHeight() ?? 0 );
 
     /// <summary>
     /// Value that is the preferred width of the actor in the cell.
     /// </summary>
-    public static readonly Value PrefWidth = FromLayout( l => l.GetPrefWidth(), ctx => ctx?.Width ?? 0 );
+    public static readonly Value PrefWidth = FromLayout( l => l.GetPrefWidth(), ctx => ctx?.GetWidth() ?? 0 );
 
     /// <summary>
     /// Value that is the preferred height of the actor in the cell.
     /// </summary>
-    public static readonly Value PrefHeight = FromLayout( l => l.GetPrefHeight(), ctx => ctx?.Height ?? 0 );
+    public static readonly Value PrefHeight = FromLayout( l => l.GetPrefHeight(), ctx => ctx?.GetHeight() ?? 0 );
 
     /// <summary>
     /// Value that is the maxWidth of the actor in the cell.
     /// </summary>
-    public static readonly Value MaxWidth = FromLayout( l => l.GetMaxWidth(), ctx => ctx?.Width ?? 0 );
+    public static readonly Value MaxWidth = FromLayout( l => l.GetMaxWidth(), ctx => ctx?.GetWidth() ?? 0 );
 
     /// <summary>
     /// Value that is the maxHeight of the actor in the cell.
     /// </summary>
-    public static readonly Value MaxHeight = FromLayout( l => l.GetMaxHeight(), ctx => ctx?.Height ?? 0 );
+    public static readonly Value MaxHeight = FromLayout( l => l.GetMaxHeight(), ctx => ctx?.GetHeight() ?? 0 );
 
     /// <summary>
     /// Returns a value that is the specified percent of the width of the actor.
     /// </summary>
     public static Value PercentWidth( float percent )
     {
-        return new LambdaValue( ctx => ( ctx?.Width ?? 0 ) * percent );
+        return new LambdaValue( ctx => ( ctx?.GetWidth() ?? 0 ) * percent );
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ public abstract class Value
     {
         Guard.Against.Null( actor );
 
-        return new LambdaValue( _ => actor.Width * percent );
+        return new LambdaValue( _ => actor.GetWidth() * percent );
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ public abstract class Value
     /// </summary>
     public static Value PercentHeight( float percent )
     {
-        return new LambdaValue( ctx => ( ctx?.Height ?? 0 ) * percent );
+        return new LambdaValue( ctx => ( ctx?.GetHeight() ?? 0 ) * percent );
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public abstract class Value
     {
         Guard.Against.Null( actor );
 
-        return new LambdaValue( _ => actor.Height * percent );
+        return new LambdaValue( _ => actor.GetHeight() * percent );
     }
 
     /// <summary>

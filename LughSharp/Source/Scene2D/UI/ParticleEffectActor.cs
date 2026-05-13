@@ -73,7 +73,7 @@ public class ParticleEffectActor : Actor, IDisposable
 
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        ParticleEffect.SetPosition( X, Y );
+        ParticleEffect.SetPosition( GetX(), GetY() );
 
         if ( LastDelta > 0 )
         {

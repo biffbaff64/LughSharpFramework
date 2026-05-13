@@ -138,8 +138,8 @@ public class WidgetGroup : Group, ILayout
             }
             else
             {
-                parentWidth  = parent.Width;
-                parentHeight = parent.Height;
+                parentWidth  = parent.GetWidth();
+                parentHeight = parent.GetHeight();
             }
 
             SetSize( parentWidth, parentHeight );

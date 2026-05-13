@@ -80,10 +80,6 @@ public class Sprite2D : TextureRegion
 
     // ========================================================================
 
-    private bool       _flipX;
-    private bool       _flipY;
-    private float      _uScrollOffset;
-    private float      _vScrollOffset;
     private Rectangle? _bounds;
     private float      _x;
     private float      _y;
