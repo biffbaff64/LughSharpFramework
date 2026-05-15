@@ -30,7 +30,7 @@ using LughSharp.Source.Utils.Exceptions;
 
 using SixLabors.ImageSharp;
 
-namespace Extensions.Source.Tools.TiledMapPacker;
+namespace Extensions.Source.TiledMapPacker;
 
 /// <summary>
 /// Contains extra information that can only be calculated after a Tiled

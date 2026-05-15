@@ -129,7 +129,7 @@ public class TextArea : TextField
 
         if ( ( CursorLine * 2 ) >= LinesBreak.Count )
         {
-            return Text?.Length ?? throw new RuntimeException( "member 'Text' is null!" );
+            return Text.Length;
         }
 
         float[] glyphPos = GlyphPositions.ToArray();
@@ -169,11 +169,7 @@ public class TextArea : TextField
         // no extra descent to fake line height
         TextHeight = style.Font.GetCapHeight() - style.Font.GetDescent();
 
-        if ( Text != null )
-        {
-            UpdateDisplayText();
-        }
-
+        UpdateDisplayText();
         InvalidateHierarchy();
     }
 
@@ -212,11 +208,6 @@ public class TextArea : TextField
     /// </summary>
     public bool NewLineAtEnd()
     {
-        if ( Text == null )
-        {
-            return false;
-        }
-
         return ( Text.Length != 0 ) && ( ( Text[ Text.Length - 1 ] == Newline )
                                       || ( Text[ Text.Length - 1 ] == CarriageReturn ) );
     }
@@ -226,8 +217,6 @@ public class TextArea : TextField
     /// </summary>
     public void MoveCursorLine( int line )
     {
-        if ( Text == null ) return;
-
         if ( line < 0 )
         {
             CursorLine  = 0;
@@ -279,11 +268,6 @@ public class TextArea : TextField
     {
         int index = CalculateCurrentLineIndex( Cursor );
         int line  = index / 2;
-
-        if ( Text == null )
-        {
-            return;
-        }
 
         // Special case when cursor moves to the beginning of the line from
         // the end of another and a word wider than the box
@@ -773,7 +757,7 @@ public class TextArea : TextField
         {
             if ( jump || ( _parent.CursorLine >= _parent.GetLines() ) )
             {
-                _parent.Cursor = _parent.Text!.Length;
+                _parent.Cursor = _parent.Text.Length;
             }
             else if ( ( ( _parent.CursorLine * 2 ) + 1 ) < _parent.LinesBreak.Count )
             {

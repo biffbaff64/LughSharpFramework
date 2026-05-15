@@ -22,44 +22,17 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.Versioning;
-
 using JetBrains.Annotations;
 
-using LughSharp.Source.Utils.Logging;
-
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
-public class TexturePackerPage
+public interface IPacker
 {
-    public string?                   ImageName      { get; set; } = string.Empty;
-    public List< TexturePackerRect > OutputRects    { get; set; } = [ ];
-    public List< TexturePackerRect > RemainingRects { get; set; } = [ ];
-    public float                     Occupancy      { get; set; }
-    public int                       X              { get; set; }
-    public int                       Y              { get; set; }
-    public int                       Width          { get; set; }
-    public int                       Height         { get; set; }
-    public int                       ImageWidth     { get; set; }
-    public int                       ImageHeight    { get; set; }
+    List< TexturePackerPage > Pack( List< TexturePackerRect > inputRects );
 
-    public void Debug()
-    {
-        Logger.Block();
-        Logger.Debug( $"ImageName: {ImageName}" );
-        Logger.Debug( $"OutputRects: {OutputRects.Count}" );
-        Logger.Debug( $"RemainingRects: {RemainingRects.Count}" );
-        Logger.Debug( $"Occupancy: {Occupancy}" );
-        Logger.Debug( $"X: {X}" );
-        Logger.Debug( $"Y: {Y}" );
-        Logger.Debug( $"Width: {Width}" );
-        Logger.Debug( $"Height: {Height}" );
-        Logger.Debug( $"ImageWidth: {ImageWidth}" );
-        Logger.Debug( $"ImageHeight: {ImageHeight}" );
-        Logger.Block();
-    }
+    List< TexturePackerPage > Pack( TexturePackerProgressListener progressListener,
+                                    List< TexturePackerRect > inputRects );
 }
 
 // ============================================================================

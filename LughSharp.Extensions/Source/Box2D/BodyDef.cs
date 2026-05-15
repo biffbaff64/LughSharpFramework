@@ -87,14 +87,14 @@ public class BodyDef
     public float AngularVelocity;
 
     /// <summary>
-    /// Linear damping is use to reduce the linear velocity. The damping parameter can be
+    /// Linear damping is used to reduce the linear velocity. The damping parameter can be
     /// larger than 1.0f but the damping effect becomes sensitive to the time step when
     /// the damping parameter is large.
     /// </summary>
     public float LinearDamping;
 
     /// <summary>
-    /// Angular damping is use to reduce the angular velocity. The damping parameter can be
+    /// Angular damping is used to reduce the angular velocity. The damping parameter can be
     /// larger than 1.0f but the damping effect becomes sensitive to the time step when the
     /// damping parameter is large.
     /// </summary>

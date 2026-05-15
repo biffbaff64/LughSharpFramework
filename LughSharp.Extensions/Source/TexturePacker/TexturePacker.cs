@@ -33,7 +33,7 @@ using LughSharp.Source.Utils.Exceptions;
 
 using Bitmap = System.Drawing.Bitmap;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 /// <summary>
 /// TexturePacker can pack all images for an application in one shot. Given a directory, it

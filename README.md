@@ -74,29 +74,28 @@ IN PROGRESS:
         - TreeStyle              - Done
         - WindowStyle            - Done
 
-        - ButtonStyleRecord            - 
-        - CheckBoxStyleRecord          - 
-        - DialogStyleRecord            - 
-        - ImageButtonStyleRecord       - 
-        - ImageTextButtonStyleRecord   - 
-        - LabelStyleRecord             - 
-        - ListBoxStyleRecord           - 
-        - ProgressBarStyleRecord       - 
-        - ScrollPaneStyleRecord        - 
-        - SelectBoxStyleRecord         - 
-        - SliderStyleRecord            - 
-        - SplitPaneStyleRecord         - 
-        - TextAreaStyleRecord          - 
-        - TextButtonStyleRecord        - 
-        - TextFieldStyleRecord         - 
-        - TextTooltipStyleRecord       - 
-        - TouchpadStyleRecord          - 
-        - TreeStyleRecord              - 
-        - WindowStyleRecord            - 
+        - ButtonStyleRecord            - Done
+        - CheckBoxStyleRecord          - Done
+        - DialogStyleRecord            - Done
+        - ImageButtonStyleRecord       - Done
+        - ImageTextButtonStyleRecord   - Done
+        - LabelStyleRecord             - Done
+        - ListBoxStyleRecord           - Done
+        - ProgressBarStyleRecord       - Done
+        - ScrollPaneStyleRecord        - Done
+        - SelectBoxStyleRecord         - Done
+        - SliderStyleRecord            - Done
+        - SplitPaneStyleRecord         - Done
+        - TextAreaStyleRecord          - Done
+        - TextButtonStyleRecord        - Done
+        - TextFieldStyleRecord         - Done
+        - TextTooltipStyleRecord       - Done
+        - TouchpadStyleRecord          - Done
+        - TreeStyleRecord              - Done
+        - WindowStyleRecord            - Done
 
 TODO:
 
-- Add Copy() methods for Mutable classes.
 - GameSprite helpers.
 - Network / HTTP etc.
 - Box2D Physics support.

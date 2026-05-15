@@ -31,7 +31,7 @@ using JetBrains.Annotations;
 
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

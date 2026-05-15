@@ -26,7 +26,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
-using Extensions.Source.Tools.ImagePacker;
+using Extensions.Source.ImagePacker;
 
 using JetBrains.Annotations;
 

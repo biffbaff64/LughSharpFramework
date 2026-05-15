@@ -30,9 +30,9 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record LabelStyleRecord
 {
-    public BitmapFont?     Font       { get; set; }
-    public Color?          FontColor  { get; set; } = Color.White;
-    public ISceneDrawable? Background { get; set; }
+    public BitmapFont     Font       { get; set; } = new ();
+    public Color          FontColor  { get; set; } = Color.White;
+    public ISceneDrawable Background { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

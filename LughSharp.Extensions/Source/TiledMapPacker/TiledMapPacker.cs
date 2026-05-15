@@ -22,14 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection.Metadata;
-using System.Xml;
 using System.Xml.Linq;
 
-using Extensions.Source.Tools.TexturePacker;
+using Extensions.Source.TexturePacker;
 
 using JetBrains.Annotations;
 
@@ -42,7 +37,7 @@ using LughSharp.Source.Maps.Tiled.Tiles;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
 
-namespace Extensions.Source.Tools.TiledMapPacker;
+namespace Extensions.Source.TiledMapPacker;
 
 /// <summary>
 /// Given one or more TMX tilemaps, packs all tileset resources used across the

@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
+// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,30 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.Utils;
+using System.Drawing;
+using System.Runtime.Versioning;
 
-namespace LughSharp.Source.Scene2D.RegistryStyles;
+using JetBrains.Annotations;
+
+using LughSharp.Source.Utils.Logging;
+
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
-public record ImageTextButtonStyleRecord
+[SupportedOSPlatform( "windows" )]
+public class TexturePackerInputImage
 {
-    public required ISceneDrawable ImageUp          { get; set; }
-    public required ISceneDrawable ImageDown        { get; set; }
-    public required ISceneDrawable ImageDisabled    { get; set; }
-    public          ISceneDrawable ImageChecked     { get; set; } = new BaseDrawable();
-    public          ISceneDrawable ImageOver        { get; set; } = new BaseDrawable();
-    public          ISceneDrawable ImageCheckedDown { get; set; } = new BaseDrawable();
-    public          ISceneDrawable ImageCheckedOver { get; set; } = new BaseDrawable();
+    public FileInfo? FileInfo { get; set; }
+    public string?   RootPath { get; set; }
+    public string?   Name     { get; set; }
+    public Bitmap?   Image    { get; set; }
+
+    public void DebugPrint()
+    {
+        Logger.Debug( $"FileInfo: {FileInfo?.FullName}" );
+        Logger.Debug( $"RootPath: {RootPath}" );
+        Logger.Debug( $"Name: {Name}" );
+    }
 }
 
 // ============================================================================

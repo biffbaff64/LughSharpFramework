@@ -60,7 +60,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     /// <summary>
     /// Returns the Keys table for this ObjectMap.
     /// </summary>
-    public TK[] Keys => KeyTable;
+    public TK?[] Keys => KeyTable;
 
     // ========================================================================
 
@@ -226,11 +226,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     {
         ArgumentNullException.ThrowIfNull( key );
 
-        TK[] keyTable = KeyTable;
+        TK?[] keyTable = KeyTable;
 
         for ( int i = GetHashIndex( key );; i = ( i + 1 ) & Mask )
         {
-            TK other = keyTable[ i ];
+            TK? other = keyTable[ i ];
 
             if ( other == null )
             {

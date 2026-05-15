@@ -205,18 +205,20 @@ public class Widget : Actor, ILayout
         Validate();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Called when the actor's size has been changed.
+    /// </summary>
     public override void OnSizeChanged()
     {
         InvalidateLayout();
     }
 
-    public float GetMinWidth()
+    public virtual float GetMinWidth()
     {
         return GetPrefWidth();
     }
 
-    public float GetMinHeight()
+    public virtual float GetMinHeight()
     {
         return GetPrefHeight();
     }
@@ -231,12 +233,12 @@ public class Widget : Actor, ILayout
         return 0;
     }
 
-    public float GetMaxWidth()
+    public virtual float GetMaxWidth()
     {
         return 0;
     }
 
-    public float GetMaxHeight()
+    public virtual float GetMaxHeight()
     {
         return 0;
     }

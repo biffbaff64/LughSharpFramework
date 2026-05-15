@@ -42,7 +42,7 @@ using Bitmap = System.Drawing.Bitmap;
 using Image = System.Drawing.Image;
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 /// <summary>
 /// 

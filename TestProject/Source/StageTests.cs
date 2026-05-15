@@ -38,6 +38,7 @@ using LughSharp.Source.Scene2D.Utils;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
+
 #pragma warning disable CS8321 // Local function is declared but never used
 
 namespace TestProject.Source;
@@ -114,7 +115,17 @@ public class StageTests : IDisposable
     {
         Guard.Against.Null( _stage );
 
-//        ImageActor();
+        Table  table;
+        Window window;
+        var    skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+        // Lay out the table for the UI widgets etc.
+        TableActor();
+        WindowActor();
+        // ----------------------------
+        ImageActor();
+        SelectBoxActor();
+        // ----------------------------
 //        ButtonActor();
 //        TextButtonActor();
 //        ImageButtonActor();
@@ -126,121 +137,76 @@ public class StageTests : IDisposable
 //        TextFieldActor();
 //        TextAreaActor();
 //        LabelActor();
-        // ----------------------------
-//        TableActor();
 //        DialogActor();
-//        WindowActor();
-        // ----------------------------
-//        SelectBoxActor();
 //        SplitPaneActor();
+
+        // ----------------------------
 
         return;
 
         // ====================================================================
 
-        void SplitPaneActor()
-        {
-            Guard.Against.Null( _stage );
-        }
-
-        // --------------------------------------
-
-        void SelectBoxActor()
-        {
-            Guard.Against.Null( _stage );
-
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
-            var selectBox = new SelectBox< string >( skin )
-            {
-                IsVisible = true,
-            };
-
-            selectBox.SetAlignment( Align.Right );
-            selectBox.GetList().Alignment                     = Align.Right;
-            selectBox.Style.ListBoxStyle.Selection.RightWidth = 10;
-            selectBox.Style.ListBoxStyle.Selection.LeftWidth  = 20;
-
-            selectBox.SetItems( new List< string >( _newItems ) );
-            selectBox.SetSelected( "Rudd" );
-
-            _stage.AddActor( selectBox );
-        }
-
-        // --------------------------------------
-
-        void WindowActor()
-        {
-            Guard.Against.Null( _stage );
-
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
-//            var windowStyle = new WindowStyle
-//            {
-//                TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),
-//                TitleFontColor = Color.Red,
-//                Background     = new TextureRegionDrawable( new Texture2D( Assets.WindowBackground ) )
-//            };
-            var window = new Window( "Window Title", skin )
-            {
-                IsVisible = true,
-            };
-            window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
-            window.SetPosition( 200, 200 );
-            window.CellDefaults.SetSpaceBottom( 10 );
-            window.AddRow()?.Fill().Expand();
-            window.AddCell( new Label( "Window Content", skin ) );
-            window.AddRow();
-            window.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) ) );
-            window.AddRow();
-            window.AddCell( new Scene2DImage( new Texture2D( Assets.Boulder32X32 ) ) );
-            window.Pack();
-
-            Logger.Debug( $"Window width: {window.GetWidth()}, Window height: {window.GetHeight()}" );
-            Logger.Debug( $"Padding - Left: {window.GetPadLeft()}, Right: {window.GetPadRight()}" );
-            Logger.Debug( $"Padding - Top: {window.GetPadTop()}, Bottom: {window.GetPadBottom()}" );
-            Logger.Debug( $"Columns: {window.Columns}, Rows: {window.Rows}" );
-
-            _stage?.AddActor( window );
-        }
-
-        // --------------------------------------
-
         void TableActor()
         {
-            Guard.Against.Null( _stage );
-
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
-            var table = new Table( skin )
+            table = new Table( skin )
             {
                 IsVisible = true,
+                FillParent = true
             };
 
-            table.EnableDebug();
-            table.SetBackground( "default-pane" );
-            table.SetColor( 1, 1, 1, 1 );
-            table.SetPosition( 200, 300 );
-            table.SetSize( 400, 200 );
-
-            table.AddCell( new Label( "IIIIIIIII", skin ) );
-            table.AddRow();
-            table.AddCell( new Label( "---------", skin ) );
-            table.AddRow();
-            table.AddCell( new Button( skin.Get< ButtonStyle >( "default" ) ) );
-            table.AddRow();
+            table.SetDebug( true );
 
             _stage?.AddActor( table );
         }
 
         // --------------------------------------
 
+        void WindowActor()
+        {
+            window = new Window( "Window Title", skin )
+            {
+                IsVisible = true,
+            };
+            window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
+            window.SetPosition( 0, 0 );
+            window.CellDefaults.SetSpaceBottom( 10 );
+            window.AddRow()?.Fill().Expand();
+
+            _stage?.AddActor( window );
+        }
+
+        // --------------------------------------
+
+        void SelectBoxActor()
+        {
+            var selectBox = new SelectBox< string >( skin )
+            {
+                IsVisible  = true,
+                IsDisabled = false,
+            };
+
+            selectBox.SetAlignment( Align.Right );
+            selectBox.GetList().Alignment                     = Align.Right;
+            selectBox.Style.ListBoxStyle.Selection.RightWidth = 10;
+            selectBox.Style.ListBoxStyle.Selection.LeftWidth  = 20;
+            selectBox.SetItems( new List< string >( _newItems ) );
+            selectBox.SetSelected( "Rudd" );
+
+            table.AddCell( selectBox ).SetMaxWidth( 100 );
+//            window.AddCell( selectBox ).SetMaxWidth( 100 );
+//            window.Pack();
+        }
+
+        // --------------------------------------
+
+        void SplitPaneActor()
+        {
+        }
+
+        // --------------------------------------
+
         void DialogActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var dialogStyle = new DialogStyle()
             {
                 Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
@@ -274,8 +240,6 @@ public class StageTests : IDisposable
 
         void ScrollPaneActor()
         {
-            Guard.Against.Null( _stage );
-
             string[] listEntries =
             {
                 "A a A a A a A a A a",
@@ -306,8 +270,6 @@ public class StageTests : IDisposable
                 "Z z Z z Z z Z z Z z",
             };
 
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var list = new ListBox< string >( skin )
             {
                 Selection =
@@ -337,11 +299,7 @@ public class StageTests : IDisposable
 
         void TextFieldActor()
         {
-            Guard.Against.Null( _stage );
-
             TextAreaActor();
-
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
 
             skin.GetFont( "default-font" ).SetFixedWidthGlyphs( "0123456789" );
 
@@ -362,10 +320,6 @@ public class StageTests : IDisposable
 
         void TextAreaActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var textArea = new TextArea( "Text Area\n1111111111\n0123456789\nEssentially, "
                                        + "a text field\nwith\nmultiple\nlines.\n"
                                        + "It can even handle very looooooooooooooooooooooo"
@@ -386,10 +340,6 @@ public class StageTests : IDisposable
 
         void LabelActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-            
             var label = new Label( "AbCdEfGhIjKlMnOpQrStUvWxYz", skin, "default-bg" )
             {
                 IsVisible = true,
@@ -414,10 +364,6 @@ public class StageTests : IDisposable
         // moveable as expected.
         void ProgressBarActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var progressBar = new ProgressBar( 0f, 10f, 1f, false, skin )
             {
                 IsVisible = true,
@@ -434,10 +380,6 @@ public class StageTests : IDisposable
         // and move it up and down the slider bar.
         void SliderActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var slider = new Slider( 0f, 10f, 1f, false, skin )
             {
                 IsVisible = true,
@@ -454,16 +396,11 @@ public class StageTests : IDisposable
         // Draws an image correctly.
         void ImageActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var scene2DImage = new Scene2DImage( new Texture2D( Assets.Boulder64X64 ) )
             {
                 IsVisible = true
             };
-            scene2DImage.SetPosition( 100, 100 );
-            _stage?.AddActor( scene2DImage );
+            table.AddCell( scene2DImage );
         }
 
         // --------------------------------------
@@ -472,10 +409,6 @@ public class StageTests : IDisposable
         // custom styles, or default styles from skins.
         void ButtonActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var btStyle = new ButtonStyle
             {
                 Up      = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
@@ -531,10 +464,6 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void TextButtonActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var tbStyle = new TextButtonStyle
             {
                 Up                = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
@@ -573,10 +502,6 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void ImageButtonActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var imageButtonStyle = new ImageButtonStyle
             {
                 Up       = new TextureRegionDrawable( new Texture2D( Assets.Icon11112X112 ) ),
@@ -610,10 +535,6 @@ public class StageTests : IDisposable
         // Text centres correctly in the middle of the button.
         void ImageTextButtonActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var imageTextButtonStyle = new ImageTextButtonStyle
             {
                 Up       = new TextureRegionDrawable( new Texture2D( Assets.ButtonBUp ) ),
@@ -645,10 +566,6 @@ public class StageTests : IDisposable
         // Text is displayed correctly.
         void CheckBoxActor()
         {
-            Guard.Against.Null( _stage );
-            
-            var skin = new Skin( new FileInfo( Assets.UiSkin ) );
-
             var checkBoxStyle = new CheckBoxStyle()
             {
                 CheckboxOn  = new TextureRegionDrawable( new Texture2D( Assets.ToggleOn ) ),

@@ -325,6 +325,21 @@ public class BitmapFont
     /// <summary>
     /// A convenience method for setting the font color.
     /// </summary>
+    public void SetColor( Color color, float alpha )
+    {
+        if ( Cache == null )
+        {
+            throw new InvalidOperationException( "Font cache is not initialized" );
+        }
+
+        color.A = alpha;
+            
+        Cache.Color.Set( color );
+    }
+
+    /// <summary>
+    /// A convenience method for setting the font color.
+    /// </summary>
     public void SetColor( float r, float g, float b, float a )
     {
         if ( Cache == null )

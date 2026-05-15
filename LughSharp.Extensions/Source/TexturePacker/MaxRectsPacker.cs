@@ -31,7 +31,7 @@ using LughSharp.Source.Maths;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

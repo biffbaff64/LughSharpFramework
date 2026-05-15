@@ -24,7 +24,7 @@
 
 using System.Runtime.Versioning;
 
-using Extensions.Source.Tools.TexturePacker;
+using Extensions.Source.TexturePacker;
 
 using JetBrains.Annotations;
 

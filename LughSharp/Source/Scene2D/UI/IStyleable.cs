@@ -1,7 +1,7 @@
 ﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 // 
-// Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
+// Copyright (c) 2024 Richard Ikin.
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -22,30 +22,23 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
-using System.Runtime.Versioning;
+namespace LughSharp.Source.Scene2D.UI;
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Logging;
-
-namespace Extensions.Source.Tools.TexturePacker;
-
+/// <summary>
+/// This interface marks an Actor as Styleable
+/// </summary>
 [PublicAPI]
-[SupportedOSPlatform( "windows" )]
-public class TexturePackerInputImage
+public interface IStyleable< T >
 {
-    public FileInfo? FileInfo { get; set; }
-    public string?   RootPath { get; set; }
-    public string?   Name     { get; set; }
-    public Bitmap?   Image    { get; set; }
+    /// <summary>
+    /// Get the current style of the actor
+    /// </summary>
+    T GetStyle();
 
-    public void DebugPrint()
-    {
-        Logger.Debug( $"FileInfo: {FileInfo?.FullName}" );
-        Logger.Debug( $"RootPath: {RootPath}" );
-        Logger.Debug( $"Name: {Name}" );
-    }
+    /// <summary>
+    /// Set the current style of the actor
+    /// </summary>
+    void SetStyle( T style );
 }
 
 // ============================================================================

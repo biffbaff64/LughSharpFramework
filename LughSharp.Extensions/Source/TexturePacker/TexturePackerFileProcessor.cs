@@ -32,7 +32,7 @@ using LughSharp.Source.IO;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

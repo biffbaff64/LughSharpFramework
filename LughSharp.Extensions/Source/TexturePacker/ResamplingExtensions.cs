@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,8 +22,34 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace Extensions.Source.Tools.TiledMapPacker;
+using System.Drawing.Drawing2D;
+using System.Runtime.Versioning;
 
-public class TiledMapPackerTestRender
+using JetBrains.Annotations;
+
+namespace Extensions.Source.TexturePacker;
+
+[PublicAPI]
+public enum Resampling
 {
+    None,
+    Nearest,
+    Bilinear,
+    Bicubic
+}
+
+[PublicAPI]
+[SupportedOSPlatform( "windows" )]
+public static class ResamplingExtensions
+{
+    public static InterpolationMode ToInterpolationMode( this Resampling resampling )
+    {
+        return resampling switch
+               {
+                   Resampling.Nearest  => InterpolationMode.NearestNeighbor,
+                   Resampling.Bilinear => InterpolationMode.Bilinear,
+                   Resampling.Bicubic  => InterpolationMode.Bicubic,
+                   var _               => InterpolationMode.Default
+               };
+    }
 }

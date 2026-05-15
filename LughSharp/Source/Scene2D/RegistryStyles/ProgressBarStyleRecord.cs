@@ -32,31 +32,31 @@ public record ProgressBarStyleRecord
     /// <summary>
     /// The progress bar background, stretched only in one direction.
     /// </summary>
-    public ISceneDrawable? Background         { get; set; }
-    public ISceneDrawable? DisabledBackground { get; set; }
+    public ISceneDrawable Background         { get; set; } = new BaseDrawable();
+    public ISceneDrawable DisabledBackground { get; set; } = new BaseDrawable();
     
     /// <summary>
     /// This is the visual indicator that marks the current value. Even if the progress
     /// bar is non-interactive (not a Slider), the "Knob" image is often used as the
     /// "head" of the progress line.
     /// </summary>
-    public ISceneDrawable? Knob               { get; set; }
-    public ISceneDrawable? DisabledKnob       { get; set; }
+    public ISceneDrawable Knob               { get; set; } = new BaseDrawable();
+    public ISceneDrawable DisabledKnob       { get; set; } = new BaseDrawable();
 
     /// <summary>
     /// This is the drawable used to fill the area before the knob (the "completed" or
     /// "filled" side). For a horizontal bar, this is the left side; for a vertical bar,
     /// it is the bottom.
     /// </summary>
-    public ISceneDrawable? KnobBefore         { get; set; }
-    public ISceneDrawable? DisabledKnobBefore { get; set; }
+    public ISceneDrawable KnobBefore         { get; set; } = new BaseDrawable();
+    public ISceneDrawable DisabledKnobBefore { get; set; } = new BaseDrawable();
 
     /// <summary>
     /// This is the drawable used to fill the area after the knob (the "unfilled" or
     /// "remaining" side).
     /// </summary>
-    public ISceneDrawable? KnobAfter          { get; set; }
-    public ISceneDrawable? DisabledKnobAfter  { get; set; }
+    public ISceneDrawable KnobAfter          { get; set; } = new BaseDrawable();
+    public ISceneDrawable DisabledKnobAfter  { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

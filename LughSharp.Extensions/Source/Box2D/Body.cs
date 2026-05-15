@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices.JavaScript;
-
 using JetBrains.Annotations;
 
 namespace Extensions.Source.Box2D;

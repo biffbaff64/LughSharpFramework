@@ -32,7 +32,7 @@ using LughSharp.Source.Utils.Exceptions;
 
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Extensions.Source.Tools.ImagePacker;
+namespace Extensions.Source.ImagePacker;
 
 /// <summary>
 /// A simple image packer class based on the nice algorithm by blackpawn.

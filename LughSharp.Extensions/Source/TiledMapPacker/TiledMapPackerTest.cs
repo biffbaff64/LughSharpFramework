@@ -26,7 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Source.IO;
 
-namespace Extensions.Source.Tools.TiledMapPacker;
+namespace Extensions.Source.TiledMapPacker;
 
 /// <summary>
 /// Processes the maps located in <c>{ContentRoot}/maps/source:</c>. Creates the

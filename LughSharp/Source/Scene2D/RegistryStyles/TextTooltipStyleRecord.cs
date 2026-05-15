@@ -30,9 +30,9 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record TextTooltipStyleRecord
 {
-    public LabelStyle?     Label      { get; set; }
-    public ISceneDrawable? Background { get; set; }
-    public float           WrapWidth  { get; set; }
+    public LabelStyle     Label      { get; set; } = new();
+    public ISceneDrawable Background { get; set; } = new BaseDrawable();
+    public float          WrapWidth  { get; set; }
 }
 
 // ============================================================================

@@ -4,7 +4,7 @@ using System.Runtime.Versioning;
 
 using DesktopGLBackend;
 
-using Extensions.Source.Tools.TexturePacker;
+using Extensions.Source.TexturePacker;
 
 using LughSharp.Source;
 using LughSharp.Source.IO;

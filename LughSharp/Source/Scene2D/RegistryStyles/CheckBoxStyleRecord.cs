@@ -29,12 +29,12 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record CheckBoxStyleRecord
 {
-    public ISceneDrawable? CheckboxOn          { get; set; }
-    public ISceneDrawable? CheckboxOff         { get; set; }
-    public ISceneDrawable? CheckboxOnOver      { get; set; }
-    public ISceneDrawable? CheckboxOver        { get; set; }
-    public ISceneDrawable? CheckboxOnDisabled  { get; set; }
-    public ISceneDrawable? CheckboxOffDisabled { get; set; }
+    public ISceneDrawable CheckboxOn          { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOff         { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOnOver      { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOver        { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOnDisabled  { get; set; } = new BaseDrawable();
+    public ISceneDrawable CheckboxOffDisabled { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

@@ -30,8 +30,8 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 public record TouchpadStyleRecord
 {
     // Stretched in both directions.
-    public ISceneDrawable? Background { get; set; }
-    public ISceneDrawable? Knob       { get; set; }
+    public ISceneDrawable Background { get; set; } = new BaseDrawable();
+    public ISceneDrawable Knob       { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

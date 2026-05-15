@@ -31,16 +31,16 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record SelectBoxStyleRecord
 {
-    public BitmapFont?      Font               { get; }
-    public ScrollPaneStyle? ScrollPaneStyle    { get; }
-    public ListBoxStyle?    ListBoxStyle       { get; }
-    public Color            FontColor          { get; } = new( 1, 1, 1, 1 );
-    public Color?           OverFontColor      { get; }
-    public Color?           DisabledFontColor  { get; }
-    public ISceneDrawable?  Background         { get; }
-    public ISceneDrawable?  BackgroundOver     { get; }
-    public ISceneDrawable?  BackgroundOpen     { get; }
-    public ISceneDrawable?  BackgroundDisabled { get; }
+    public BitmapFont      Font               { get; } = new();
+    public ScrollPaneStyle ScrollPaneStyle    { get; } = new();
+    public ListBoxStyle    ListBoxStyle       { get; } = new();
+    public Color           FontColor          { get; } = Color.White;
+    public Color           OverFontColor      { get; } = Color.White;
+    public Color           DisabledFontColor  { get; } = Color.Gray;
+    public ISceneDrawable  Background         { get; } = new BaseDrawable();
+    public ISceneDrawable  BackgroundOver     { get; } = new BaseDrawable();
+    public ISceneDrawable  BackgroundOpen     { get; } = new BaseDrawable();
+    public ISceneDrawable  BackgroundDisabled { get; } = new BaseDrawable();
 }
 
 // ============================================================================

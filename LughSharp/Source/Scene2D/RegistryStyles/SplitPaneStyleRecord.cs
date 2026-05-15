@@ -29,7 +29,7 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record SplitPaneStyleRecord
 {
-    public ISceneDrawable? Handle { get; set; }
+    public ISceneDrawable Handle { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

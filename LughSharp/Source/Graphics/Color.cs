@@ -22,16 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Linq;
-using System.Reflection;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
 using LughSharp.Source.Scene2D.RegistryStyles;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
+using LughSharp.Source.Scene2D.UI;
 
 namespace LughSharp.Source.Graphics;
 

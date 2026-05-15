@@ -30,17 +30,17 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record TextFieldStyleRecord
 {
-    public BitmapFont?     Font               { get; set; }
-    public Color?          FontColor          { get; set; }
-    public Color?          FocusedFontColor   { get; set; }
-    public Color?          DisabledFontColor  { get; set; }
-    public ISceneDrawable? Background         { get; set; }
-    public ISceneDrawable? FocusedBackground  { get; set; }
-    public ISceneDrawable? DisabledBackground { get; set; }
-    public ISceneDrawable? Cursor             { get; set; }
-    public ISceneDrawable? Selection          { get; set; }
-    public BitmapFont?     MessageFont        { get; set; }
-    public Color?          MessageFontColor   { get; set; }
+    public BitmapFont     Font               { get; set; } = new ();
+    public BitmapFont     MessageFont        { get; set; } = new ();
+    public Color          MessageFontColor   { get; set; } = Color.White;
+    public Color          FontColor          { get; set; } = Color.White;
+    public Color          FocusedFontColor   { get; set; } = Color.White;
+    public Color          DisabledFontColor  { get; set; } = Color.Gray;
+    public ISceneDrawable Background         { get; set; } = new BaseDrawable();
+    public ISceneDrawable FocusedBackground  { get; set; } = new BaseDrawable();
+    public ISceneDrawable DisabledBackground { get; set; } = new BaseDrawable();
+    public ISceneDrawable Cursor             { get; set; } = new BaseDrawable();
+    public ISceneDrawable Selection          { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

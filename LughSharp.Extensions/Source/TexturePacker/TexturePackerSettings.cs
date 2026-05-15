@@ -8,7 +8,7 @@ using JetBrains.Annotations;
 using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 public class TexturePackerSettings

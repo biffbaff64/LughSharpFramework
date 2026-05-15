@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
-using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.Actions;
@@ -44,8 +40,8 @@ namespace LughSharp.Source.Scene2D.UI;
 /// <see cref="ChangeListener.ChangeEvent"/> is fired when the selectbox selection changes.
 /// </para>
 /// <para>
-/// The preferred size of the select box is determined by the maximum text bounds of the items and the size of the
-/// {@link SelectBoxStyle#background}.
+/// The preferred size of the select box is determined by the maximum text bounds of the
+/// items and the size of the <see cref="SelectBoxStyle.Background"/>.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -60,11 +56,13 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
     // ========================================================================
 
-    private readonly ArraySelection< T >  _selection;
-    private readonly Vector2              _temp = new();
+    private readonly ArraySelection< T > _selection;
+    private readonly Vector2             _temp = new();
 
     private Align _alignment = Align.Left;
     private bool  _selectedPrefWidth;
+    private float _prefWidth;
+    private float _prefHeight;
 
     // ========================================================================
 
@@ -99,15 +97,15 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             Actor    = this,
             Required = true
         };
-
-        Logger.Checkpoint();
         
+        Logger.Checkpoint();
+
         SetStyle( style );
 
-        Logger.Debug( $"GetWidth: {GetWidth()}, PrefWidth: {PrefWidth}" );
-        Logger.Debug( $"GetHeight: {GetHeight()}, PrefHeight: {PrefHeight}" );
-        
-        SetSize( PrefWidth, PrefHeight );
+        Logger.Debug( $"Width: {GetWidthSafe()}, PrefWidth: {GetPrefWidthSafe()}" );
+        Logger.Debug( $"Height: {GetHeightSafe()}, PrefHeight: {GetPrefHeightSafe()}" );
+
+        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
 
         ScrollPane    = new SelectBoxScrollPane( this );
         ClickListener = new SelectBoxClickListener( this );
@@ -146,37 +144,9 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// <param name="style"></param>
     public void SetStyle( SelectBoxStyle style )
     {
-        Style = new SelectBoxStyle( style );
+        Style = style;
 
         InvalidateHierarchy();
-    }
-
-    /// <summary>
-    /// The preferred width of the select box based on the items it contains.
-    /// </summary>
-    public float PrefWidth
-    {
-        get
-        {
-            Validate();
-
-            return field;
-        }
-        private set;
-    }
-
-    /// <summary>
-    /// The preferred height of the select box based on the items it contains.
-    /// </summary>
-    public float PrefHeight
-    {
-        get
-        {
-            Validate();
-
-            return field;
-        }
-        private set;
     }
 
     /// <summary>
@@ -184,7 +154,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// </summary>
     public void SetItems( T[] newItems )
     {
-        float oldPrefWidth = PrefWidth;
+        float oldPrefWidth = GetPrefWidth();
 
         Items.Clear();
         Items.AddRange( newItems );
@@ -194,7 +164,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         InvalidateLayout();
 
-        if ( Math.Abs( oldPrefWidth - PrefWidth ) < NumberUtils.FloatTolerance )
+        if ( Math.Abs( oldPrefWidth - GetPrefWidth() ) < NumberUtils.FloatTolerance )
         {
             InvalidateHierarchy();
         }
@@ -205,7 +175,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// </summary>
     public void SetItems( List< T > newItems )
     {
-        float oldPrefWidth = PrefWidth;
+        float oldPrefWidth = GetPrefWidth();
 
         Items.Clear();
         Items.AddRange( newItems );
@@ -215,7 +185,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         InvalidateLayout();
 
-        if ( Math.Abs( oldPrefWidth - PrefWidth ) < NumberUtils.FloatTolerance )
+        if ( Math.Abs( oldPrefWidth - GetPrefWidth() ) < NumberUtils.FloatTolerance )
         {
             InvalidateHierarchy();
         }
@@ -258,23 +228,23 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         ISceneDrawable bg   = Style.Background;
         BitmapFont     font = Style.Font;
 
-        PrefHeight = Math.Max( bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
-                             - ( font.GetDescent() * 2 ),
-                               bg.MinHeight );
+        _prefHeight = ( Math.Max( bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
+                                - ( font.GetDescent() * 2 ),
+                                  bg.MinHeight ) );
 
         Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
         {
-            PrefWidth = bg.LeftWidth + bg.RightWidth;
+            _prefWidth = ( bg.LeftWidth + bg.RightWidth );
 
             T? selected = GetSelected();
 
             if ( selected != null )
             {
                 layout.SetText( font, ToString( selected ) );
-                PrefWidth += layout.Width;
+                _prefWidth = ( GetPrefWidth() + layout.Width );
             }
         }
         else
@@ -287,8 +257,8 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                 maxItemWidth = Math.Max( layout.Width, maxItemWidth );
             }
 
-            PrefWidth = maxItemWidth;
-            PrefWidth = Math.Max( PrefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
+            _prefWidth = ( maxItemWidth );
+            _prefWidth = ( Math.Max( GetPrefWidth() + bg.LeftWidth + bg.RightWidth, bg.MinWidth ) );
 
             ListBoxStyle    listStyle   = Style.ListBoxStyle;
             ScrollPaneStyle scrollStyle = Style.ScrollPaneStyle;
@@ -304,7 +274,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                                          Style.ScrollPaneStyle.VScrollKnob.MinWidth );
             }
 
-            PrefWidth = Math.Max( PrefWidth, ( float )scrollWidth );
+            _prefWidth = ( Math.Max( GetPrefWidth(), ( float )scrollWidth ) );
         }
 
         layoutPool.Free( layout );
@@ -382,8 +352,6 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         if ( selected != null )
         {
-            Logger.Debug( $"width:{width}, height:{height}, background:{background}" );
-
             width  -= background.LeftWidth + background.RightWidth;
             height -= background.BottomHeight + background.TopHeight;
             x      += background.LeftWidth;
@@ -399,11 +367,21 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         Logger.Checkpoint();
     }
 
-    protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
+    protected void DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
     {
         string str = ToString( item );
+        
+        font.Draw( batch, str, x, y, 0, str.Length, width, _alignment, false, "..." );
+    }
 
-        return font.Draw( batch, str, x, y, 0, str.Length, width, _alignment, false, "..." );
+    protected string ToString( T item )
+    {
+        if ( item is string str )
+        {
+            return str;
+        }
+        
+        return item as string ?? string.Empty;
     }
 
     /// <summary>
@@ -601,21 +579,44 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
         Logger.Checkpoint();
     }
 
-    public override void SetWidth( float width )
+    /// <summary>
+    /// The preferred width of the select box based on the items it contains.
+    /// </summary>
+    public override float GetPrefWidth()
     {
-        Logger.Debug( $"width: {width}" );
-        base.SetWidth( width );
-    }
-    
-    public override void SetHeight( float height )
-    {
-        Logger.Debug( $"height: {height}" );
-        base.SetHeight( height );
+        Validate();
+
+        return _prefWidth;
     }
 
-    protected string ToString( T item )
+    /// <summary>
+    /// The preferred height of the select box based on the items it contains.
+    /// </summary>
+    public override float GetPrefHeight()
     {
-        return item.ToString() ?? string.Empty;
+        Validate();
+
+        return _prefHeight;
+    }
+
+    public float GetPrefWidthSafe()
+    {
+        return GetPrefWidth();
+    }
+
+    public float GetPrefHeightSafe()
+    {
+        return GetPrefHeight();
+    }
+
+    public float GetWidthSafe()
+    {
+        return GetWidth();
+    }
+
+    public float GetHeightSafe()
+    {
+        return GetHeight();
     }
 
     // ========================================================================
@@ -726,8 +727,8 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             SetHeight( height );
             Validate();
 
-            float width = Math.Max( ParentSelectBox.PrefWidth, ParentSelectBox.GetWidth() );
-            
+            float width = Math.Max( ParentSelectBox.GetPrefWidth(), ParentSelectBox.GetWidth() );
+
             SetWidth( width );
 
             float x = _stagePosition.X;

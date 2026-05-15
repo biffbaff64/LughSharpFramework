@@ -35,7 +35,7 @@ using LughSharp.Source.Utils.Logging;
 
 using Rectangle = System.Drawing.Rectangle;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

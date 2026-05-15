@@ -26,7 +26,7 @@ using System.Runtime.Versioning;
 
 using JetBrains.Annotations;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 [SupportedOSPlatform( "windows" )]

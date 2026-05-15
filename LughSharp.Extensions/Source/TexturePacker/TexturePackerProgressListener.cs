@@ -26,7 +26,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Source.Collections;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 public class TexturePackerProgressListener

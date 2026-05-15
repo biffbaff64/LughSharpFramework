@@ -26,7 +26,7 @@ using System.Text.RegularExpressions;
 
 using JetBrains.Annotations;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 public interface IFileProcessor

@@ -286,10 +286,10 @@ public class MainGame : LughGame
 
     private void CreateAssets()
     {
-        _texture           = new Texture2D( Assets.Solid112X112 );
-        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
-        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
-        _backgroundTexture = new Texture2D( Assets.Background );
+//        _texture           = new Texture2D( Assets.Solid112X112 );
+//        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
+//        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
+//        _backgroundTexture = new Texture2D( Assets.Background );
     }
 }
 

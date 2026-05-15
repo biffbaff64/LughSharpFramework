@@ -29,13 +29,13 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record TreeStyleRecord
 {
-    public ISceneDrawable? Plus       { get; set; }
-    public ISceneDrawable? Minus      { get; set; }
-    public ISceneDrawable? PlusOver   { get; set; }
-    public ISceneDrawable? MinusOver  { get; set; }
-    public ISceneDrawable? Over       { get; set; }
-    public ISceneDrawable? Selection  { get; set; }
-    public ISceneDrawable? Background { get; set; }
+    public ISceneDrawable Plus       { get; set; } = new BaseDrawable();
+    public ISceneDrawable Minus      { get; set; } = new BaseDrawable();
+    public ISceneDrawable PlusOver   { get; set; } = new BaseDrawable();
+    public ISceneDrawable MinusOver  { get; set; } = new BaseDrawable();
+    public ISceneDrawable Over       { get; set; } = new BaseDrawable();
+    public ISceneDrawable Selection  { get; set; } = new BaseDrawable();
+    public ISceneDrawable Background { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

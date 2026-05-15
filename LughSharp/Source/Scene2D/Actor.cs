@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices.JavaScript;
-
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
@@ -413,20 +411,27 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
-    /// Remove the specified listener from this Actor.
+    /// Removes the first occurance of the specified listener from the actor.
     /// </summary>
     /// <param name="listener"> The listener to remove. </param>
-    /// <returns> True if listener successfully removed. </returns>
+    /// <returns>
+    /// true if the listener is successfully removed; otherwise, false. This method also
+    /// returns false if the listener was not found in the list
+    /// </returns>
     public bool RemoveListener( IEventListener listener )
     {
         return Listeners.RemoveValue( listener );
     }
 
     /// <summary>
+    /// Adds a capture listener to the actor.
+    /// Capture listeners are notified before regular event listeners when an event occurs.
     /// </summary>
-    /// <param name="listener"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="listener">The capture listener to add.</param>
+    /// <returns>
+    /// True if the listener was successfully added; false if the listener was already present.
+    /// </returns>
+    /// <exception cref="ArgumentException">Thrown if the listener is null.</exception>
     public bool AddCaptureListener( IEventListener listener )
     {
         if ( !CaptureListeners.Contains( listener ) )
@@ -438,10 +443,13 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
+    /// Removes the first occurance of the specified capture listener from the actor.
     /// </summary>
-    /// <param name="listener"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="listener"> The listener to remove. </param>
+    /// <returns>
+    /// true if the listener is successfully removed; otherwise, false. This method also
+    /// returns false if the listener was not found in the list
+    /// </returns>
     public bool RemoveCaptureListener( IEventListener listener )
     {
         return CaptureListeners.RemoveValue( listener );
@@ -1019,8 +1027,6 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void SetSize( float width, float height )
     {
-        Logger.Debug( $"_width: { _width }, _height: { _height }, width: { width }, height: { height}" );
-        
         if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance
           || Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
         

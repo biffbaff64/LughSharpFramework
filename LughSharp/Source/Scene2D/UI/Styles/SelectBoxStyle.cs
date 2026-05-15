@@ -69,6 +69,11 @@ public class SelectBoxStyle : ISceneStyle
         DisabledFontColor = new Color( 0.5f, 0.5f, 0.5f, 1 );
     }
 
+    /// <summary>
+    /// Copy Constructor
+    /// </summary>
+    /// <param name="style"></param>
+    /// <exception cref="NullReferenceException"></exception>
     public SelectBoxStyle( SelectBoxStyle? style )
     {
         Guard.Against.Null( style );

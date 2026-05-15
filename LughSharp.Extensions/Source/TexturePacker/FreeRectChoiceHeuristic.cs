@@ -24,7 +24,7 @@
 
 using JetBrains.Annotations;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
 public enum FreeRectChoiceHeuristic

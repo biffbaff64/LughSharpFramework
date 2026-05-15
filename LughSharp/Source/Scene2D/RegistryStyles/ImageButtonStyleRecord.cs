@@ -29,13 +29,13 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record ImageButtonStyleRecord
 {
-    public ISceneDrawable? ImageChecked;
-    public ISceneDrawable? ImageCheckedDown;
-    public ISceneDrawable? ImageCheckedOver;
-    public ISceneDrawable? ImageDisabled;
-    public ISceneDrawable? ImageDown;
-    public ISceneDrawable? ImageOver;
-    public ISceneDrawable? ImageUp;
+    public ISceneDrawable ImageChecked      { get; set; } = new BaseDrawable();
+    public ISceneDrawable ImageCheckedDown  { get; set; } = new BaseDrawable();
+    public ISceneDrawable ImageCheckedOver  { get; set; } = new BaseDrawable();
+    public ISceneDrawable ImageDisabled     { get; set; } = new BaseDrawable();
+    public ISceneDrawable ImageDown         { get; set; } = new BaseDrawable();
+    public ISceneDrawable ImageOver         { get; set; } = new BaseDrawable();
+    public ISceneDrawable ImageUp           { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

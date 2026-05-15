@@ -30,13 +30,13 @@ namespace LughSharp.Source.Scene2D.RegistryStyles;
 [PublicAPI]
 public record ListBoxStyleRecord
 {
-    public BitmapFont      Font                { get; set; } = new();
-    public Color           FontColorSelected   { get; set; } = new( 1, 1, 1, 1 );
-    public Color           FontColorUnselected { get; set; } = new( 1, 1, 1, 1 );
-    public ISceneDrawable? Selection           { get; set; }
-    public ISceneDrawable? Down                { get; set; }
-    public ISceneDrawable? Over                { get; set; }
-    public ISceneDrawable? Background          { get; set; }
+    public BitmapFont     Font                { get; set; } = new();
+    public Color          FontColorSelected   { get; set; } = Color.White;
+    public Color          FontColorUnselected { get; set; } = Color.White;
+    public ISceneDrawable Selection           { get; set; } = new BaseDrawable();
+    public ISceneDrawable Down                { get; set; } = new BaseDrawable();
+    public ISceneDrawable Over                { get; set; } = new BaseDrawable();
+    public ISceneDrawable Background          { get; set; } = new BaseDrawable();
 }
 
 // ============================================================================

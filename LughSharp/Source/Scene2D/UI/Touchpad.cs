@@ -117,9 +117,9 @@ public class Touchpad : Widget
 
     // ========================================================================
 
-    public float PrefWidth => _style.Background?.MinWidth ?? 0;
+    public override float GetPrefWidth() => _style.Background?.MinWidth ?? 0;
 
-    public float PrefHeight => _style.Background?.MinHeight ?? 0;
+    public override float GetPrefHeight() => _style.Background?.MinHeight ?? 0;
 
     public TouchpadStyle Style
     {

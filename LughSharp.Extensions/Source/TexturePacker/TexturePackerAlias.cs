@@ -22,17 +22,53 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Versioning;
+
 using JetBrains.Annotations;
 
-namespace Extensions.Source.Tools.TexturePacker;
+namespace Extensions.Source.TexturePacker;
 
 [PublicAPI]
-public interface IPacker
+[SupportedOSPlatform( "windows" )]
+public class TexturePackerAlias : IComparable< TexturePackerAlias >
 {
-    List< TexturePackerPage > Pack( List< TexturePackerRect > inputRects );
+    public int     Index;
+    public int     OffsetX;
+    public int     OffsetY;
+    public int     OriginalHeight;
+    public int     OriginalWidth;
+    public string? Name;
+    public int[]?  Pads;
+    public int[]?  Splits;
 
-    List< TexturePackerPage > Pack( TexturePackerProgressListener progressListener,
-                                    List< TexturePackerRect > inputRects );
+    public TexturePackerAlias( TexturePackerRect rect )
+    {
+        Index          = rect.Index;
+        Name           = rect.Name;
+        OffsetX        = rect.OffsetX;
+        OffsetY        = rect.OffsetY;
+        OriginalHeight = rect.OriginalHeight;
+        OriginalWidth  = rect.OriginalWidth;
+        Pads           = rect.Pads?.ToArray();
+        Splits         = rect.Splits?.ToArray();
+    }
+
+    public void Apply( TexturePackerRect rect )
+    {
+        rect.Name           = Name;
+        rect.Index          = Index;
+        rect.Splits         = Splits?.ToArray();
+        rect.Pads           = Pads?.ToArray();
+        rect.OffsetX        = OffsetX;
+        rect.OffsetY        = OffsetY;
+        rect.OriginalWidth  = OriginalWidth;
+        rect.OriginalHeight = OriginalHeight;
+    }
+
+    public int CompareTo( TexturePackerAlias? o )
+    {
+        return string.Compare( Name, o?.Name, StringComparison.Ordinal );
+    }
 }
 
 // ============================================================================
