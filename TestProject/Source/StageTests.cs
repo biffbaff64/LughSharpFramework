@@ -167,6 +167,7 @@ public class StageTests : IDisposable
             {
                 IsVisible = true,
             };
+            window.AddTitleTable( skin );
             window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
             window.SetPosition( 0, 0 );
             window.CellDefaults.SetSpaceBottom( 10 );
@@ -193,8 +194,6 @@ public class StageTests : IDisposable
             selectBox.SetSelected( "Rudd" );
 
             table.AddCell( selectBox ).SetMaxWidth( 100 );
-//            window.AddCell( selectBox ).SetMaxWidth( 100 );
-//            window.Pack();
         }
 
         // --------------------------------------

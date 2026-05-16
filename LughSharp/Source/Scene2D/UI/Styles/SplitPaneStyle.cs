@@ -32,13 +32,12 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SplitPaneStyle : ISceneStyle
 {
-    public ISceneDrawable Handle { get; set; }
+    public ISceneDrawable? Handle { get; set; }
 
     // ========================================================================
     
     public SplitPaneStyle()
     {
-        Handle = new BaseDrawable();
     }
 
     public SplitPaneStyle( ISceneDrawable handle )

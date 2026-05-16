@@ -114,8 +114,7 @@ public class Window : Table
         Touchable = Touchable.Enabled;
         Clip      = true;
 
-        style.TitleFont      ??= new BitmapFont();
-        style.TitleFontColor ??= Color.White;
+        style.TitleFont ??= new BitmapFont();
 
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
@@ -127,6 +126,10 @@ public class Window : Table
         AddListener( new WindowInputListener( this ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="skin"></param>
     public void AddTitleTable( Skin skin )
     {
         TitleTable = new Table( skin );
@@ -331,6 +334,9 @@ public class Window : Table
         return hit;
     }
 
+    /// <summary>
+    /// Returns the preferred width of this window.
+    /// </summary>
     public override float GetPrefWidth()
     {
         return TitleTable == null
@@ -350,12 +356,9 @@ public class Window : Table
 
             SetBackground( Style.Background );
 
-            if ( TitleLabel != null )
+            if ( ( TitleLabel != null ) && ( field.TitleFont != null ) )
             {
-                if ( field.TitleFont != null && field.TitleFontColor != null )
-                {
-                    TitleLabel.Style = new LabelStyle( field.TitleFont, field.TitleFontColor );
-                }
+                TitleLabel.Style = new LabelStyle( field.TitleFont, field.TitleFontColor );
             }
 
             InvalidateHierarchy();

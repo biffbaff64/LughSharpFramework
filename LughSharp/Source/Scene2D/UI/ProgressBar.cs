@@ -149,7 +149,7 @@ public class ProgressBar : Widget, IDisableable
         IsVertical = vertical;
         Value      = min;
 
-        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
     }
 
     // ========================================================================
@@ -521,14 +521,14 @@ public class ProgressBar : Widget, IDisableable
     /// <inheritdoc />
     public override float GetPrefWidth()
     {
-        return GetPrefWidthSafe();
+        return GetPrefWidthUnchecked();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    protected float GetPrefWidthSafe()
+    protected float GetPrefWidthUnchecked()
     {
         if ( IsVertical )
         {
@@ -544,14 +544,14 @@ public class ProgressBar : Widget, IDisableable
     /// <inheritdoc />
     public override float GetPrefHeight()
     {
-        return GetPrefHeightSafe();
+        return GetPrefHeightUnchecked();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    protected float GetPrefHeightSafe()
+    protected float GetPrefHeightUnchecked()
     {
         if ( IsVertical )
         {

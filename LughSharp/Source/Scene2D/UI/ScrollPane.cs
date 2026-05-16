@@ -38,41 +38,41 @@ public class ScrollPane : WidgetGroup
 {
     public readonly Rectangle HKnobBounds   = new();
     public readonly Rectangle HScrollBounds = new();
-    public readonly Vector2   LastPoint     = new();
     public readonly Rectangle VKnobBounds   = new();
     public readonly Rectangle VScrollBounds = new();
     public readonly Rectangle WidgetArea    = new();
+    public readonly Vector2   LastPoint     = new();
 
     // ========================================================================
 
-    public          int     DraggingPointer    { get; set; } = -1;
-    public          float   FadeAlpha          { get; set; }
-    public          float   FadeAlphaSeconds   { get; set; } = 1;
-    public          float   FadeDelay          { get; set; }
-    public          float   FadeDelaySeconds   { get; set; } = 1;
-    public          bool    FlickScroll        { get; set; } = true;
-    public          float   FlingTimer         { get; set; }
-    public          bool    HScrollOnBottom    { get; set; } = true;
-    public          float   OverscrollSpeedMax { get; set; } = 200;
-    public          float   OverscrollSpeedMin { get; set; } = 30;
-    public          bool    OverscrollX        { get; set; } = true;
-    public          bool    OverscrollY        { get; set; } = true;
-    public          bool    ScrollbarsOnTop    { get; set; }
-    public          bool    TouchScrollH       { get; set; }
-    public          bool    TouchScrollV       { get; set; }
-    public          float   VisualAmountX      { get; set; }
-    public          float   VisualAmountY      { get; set; }
-    public          bool    VScrollOnRight     { get; set; } = true;
-    public          Actor?  Widget             { get; set; }
-    public          float   AmountX            { get; set; }
-    public          float   AmountY            { get; set; }
-    public          bool    ForceScrollX       { get; set; }
-    public          bool    ForceScrollY       { get; set; }
-    public          bool    DisableXScroll     { get; set; }
-    public          bool    DisableYScroll     { get; set; }
-    public          float   OverscrollDistance { get; set; } = 50;
-    public          bool    FadeScrollBars     { get; set; } = true;
-    public          bool    SmoothScrolling    { get; set; } = true;
+    public bool   FlickScroll        { get; set; } = true;
+    public bool   HScrollOnBottom    { get; set; } = true;
+    public bool   OverscrollX        { get; set; } = true;
+    public bool   OverscrollY        { get; set; } = true;
+    public bool   VScrollOnRight     { get; set; } = true;
+    public bool   FadeScrollBars     { get; set; } = true;
+    public bool   SmoothScrolling    { get; set; } = true;
+    public bool   ScrollbarsOnTop    { get; set; }
+    public bool   TouchScrollH       { get; set; }
+    public bool   TouchScrollV       { get; set; }
+    public bool   ForceScrollX       { get; set; }
+    public bool   ForceScrollY       { get; set; }
+    public bool   DisableXScroll     { get; set; }
+    public bool   DisableYScroll     { get; set; }
+    public int    DraggingPointer    { get; set; } = -1;
+    public Actor? Widget             { get; set; }
+    public float  FadeAlpha          { get; set; }
+    public float  FadeAlphaSeconds   { get; set; } = 1;
+    public float  FadeDelay          { get; set; }
+    public float  FadeDelaySeconds   { get; set; } = 1;
+    public float  FlingTimer         { get; set; }
+    public float  OverscrollSpeedMax { get; set; } = 200;
+    public float  OverscrollSpeedMin { get; set; } = 30;
+    public float  VisualAmountX      { get; set; }
+    public float  VisualAmountY      { get; set; }
+    public float  ScrollAmountX      { get; set; }
+    public float  ScrollAmountY      { get; set; }
+    public float  OverscrollDistance { get; set; } = 50;
 
     /// <summary>
     /// Returns the maximum scroll value in the x direction.
@@ -260,13 +260,13 @@ public class ScrollPane : WidgetGroup
             return;
         }
 
-        AmountX = OverscrollX
-            ? MathUtils.Clamp( AmountX, -OverscrollDistance, MaxScrollX + OverscrollDistance )
-            : MathUtils.Clamp( AmountX, 0, MaxScrollX );
+        ScrollAmountX = OverscrollX
+            ? MathUtils.Clamp( ScrollAmountX, -OverscrollDistance, MaxScrollX + OverscrollDistance )
+            : MathUtils.Clamp( ScrollAmountX, 0, MaxScrollX );
 
-        AmountY = OverscrollY
-            ? MathUtils.Clamp( AmountY, -OverscrollDistance, MaxScrollY + OverscrollDistance )
-            : MathUtils.Clamp( AmountY, 0, MaxScrollY );
+        ScrollAmountY = OverscrollY
+            ? MathUtils.Clamp( ScrollAmountY, -OverscrollDistance, MaxScrollY + OverscrollDistance )
+            : MathUtils.Clamp( ScrollAmountY, 0, MaxScrollY );
     }
 
     public override void Act( float delta )
@@ -294,28 +294,28 @@ public class ScrollPane : WidgetGroup
 
             float alpha = FlingTimer / FlingTime;
 
-            AmountX -= VelocityX * alpha * delta;
-            AmountY -= VelocityY * alpha * delta;
+            ScrollAmountX -= VelocityX * alpha * delta;
+            ScrollAmountY -= VelocityY * alpha * delta;
 
             ClampPane();
 
             // Stop fling if hit overscroll distance.
-            if ( AmountX.Equals( -OverscrollDistance ) )
+            if ( ScrollAmountX.Equals( -OverscrollDistance ) )
             {
                 VelocityX = 0;
             }
 
-            if ( AmountX >= ( MaxScrollX + OverscrollDistance ) )
+            if ( ScrollAmountX >= ( MaxScrollX + OverscrollDistance ) )
             {
                 VelocityX = 0;
             }
 
-            if ( AmountY.Equals( -OverscrollDistance ) )
+            if ( ScrollAmountY.Equals( -OverscrollDistance ) )
             {
                 VelocityY = 0;
             }
 
-            if ( AmountY >= ( MaxScrollY + OverscrollDistance ) )
+            if ( ScrollAmountY >= ( MaxScrollY + OverscrollDistance ) )
             {
                 VelocityY = 0;
             }
@@ -344,42 +344,44 @@ public class ScrollPane : WidgetGroup
                ( IsScrollY &&
                  ( ( MaxScrollY / ( VScrollBounds.Height - VKnobBounds.Height ) ) > ( WidgetArea.Height * 0.1f ) ) ) ) )
         {
-            if ( !VisualAmountX.Equals( AmountX ) )
+            if ( !VisualAmountX.Equals( ScrollAmountX ) )
             {
-                VisualScrollX( VisualAmountX < AmountX
-                                   ? Math.Min( AmountX,
+                VisualScrollX( VisualAmountX < ScrollAmountX
+                                   ? Math.Min( ScrollAmountX,
                                                VisualAmountX +
-                                               Math.Max( 200 * delta, ( AmountX - VisualAmountX ) * 7 * delta ) )
-                                   : Math.Max( AmountX,
+                                               Math.Max( 200 * delta, ( ScrollAmountX - VisualAmountX ) * 7 * delta ) )
+                                   : Math.Max( ScrollAmountX,
                                                VisualAmountX -
-                                               Math.Max( 200 * delta, ( VisualAmountX - AmountX ) * 7 * delta ) ) );
+                                               Math.Max( 200 * delta,
+                                                         ( VisualAmountX - ScrollAmountX ) * 7 * delta ) ) );
 
                 animating = true;
             }
 
-            if ( !VisualAmountY.Equals( AmountY ) )
+            if ( !VisualAmountY.Equals( ScrollAmountY ) )
             {
-                VisualScrollY( VisualAmountY < AmountY
-                                   ? Math.Min( AmountY,
+                VisualScrollY( VisualAmountY < ScrollAmountY
+                                   ? Math.Min( ScrollAmountY,
                                                VisualAmountY +
-                                               Math.Max( 200 * delta, ( AmountY - VisualAmountY ) * 7 * delta ) )
-                                   : Math.Max( AmountY,
+                                               Math.Max( 200 * delta, ( ScrollAmountY - VisualAmountY ) * 7 * delta ) )
+                                   : Math.Max( ScrollAmountY,
                                                VisualAmountY -
-                                               Math.Max( 200 * delta, ( VisualAmountY - AmountY ) * 7 * delta ) ) );
+                                               Math.Max( 200 * delta,
+                                                         ( VisualAmountY - ScrollAmountY ) * 7 * delta ) ) );
 
                 animating = true;
             }
         }
         else
         {
-            if ( !VisualAmountX.Equals( AmountX ) )
+            if ( !VisualAmountX.Equals( ScrollAmountX ) )
             {
-                VisualScrollX( AmountX );
+                VisualScrollX( ScrollAmountX );
             }
 
-            if ( !VisualAmountY.Equals( AmountY ) )
+            if ( !VisualAmountY.Equals( ScrollAmountY ) )
             {
-                VisualScrollY( AmountY );
+                VisualScrollY( ScrollAmountY );
             }
         }
 
@@ -387,36 +389,36 @@ public class ScrollPane : WidgetGroup
         {
             if ( OverscrollX && IsScrollX )
             {
-                if ( AmountX < 0 )
+                if ( ScrollAmountX < 0 )
                 {
                     SetScrollbarsVisible( true );
 
-                    AmountX += ( OverscrollSpeedMin
-                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                 * -AmountX
-                                 / OverscrollDistance ) )
-                             * delta;
+                    ScrollAmountX += ( OverscrollSpeedMin
+                                     + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                       * -ScrollAmountX
+                                       / OverscrollDistance ) )
+                                   * delta;
 
-                    if ( AmountX > 0 )
+                    if ( ScrollAmountX > 0 )
                     {
-                        AmountX = 0;
+                        ScrollAmountX = 0;
                     }
 
                     animating = true;
                 }
-                else if ( AmountX > MaxScrollX )
+                else if ( ScrollAmountX > MaxScrollX )
                 {
                     SetScrollbarsVisible( true );
 
-                    AmountX -= ( OverscrollSpeedMin
-                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                 * -( MaxScrollX - AmountX )
-                                 / OverscrollDistance ) )
-                             * delta;
+                    ScrollAmountX -= ( OverscrollSpeedMin
+                                     + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                       * -( MaxScrollX - ScrollAmountX )
+                                       / OverscrollDistance ) )
+                                   * delta;
 
-                    if ( AmountX < MaxScrollX )
+                    if ( ScrollAmountX < MaxScrollX )
                     {
-                        AmountX = MaxScrollX;
+                        ScrollAmountX = MaxScrollX;
                     }
 
                     animating = true;
@@ -425,36 +427,36 @@ public class ScrollPane : WidgetGroup
 
             if ( OverscrollY && IsScrollY )
             {
-                if ( AmountY < 0 )
+                if ( ScrollAmountY < 0 )
                 {
                     SetScrollbarsVisible( true );
 
-                    AmountY += ( OverscrollSpeedMin
-                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                 * -AmountY
-                                 / OverscrollDistance ) )
-                             * delta;
+                    ScrollAmountY += ( OverscrollSpeedMin
+                                     + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                       * -ScrollAmountY
+                                       / OverscrollDistance ) )
+                                   * delta;
 
-                    if ( AmountY > 0 )
+                    if ( ScrollAmountY > 0 )
                     {
-                        AmountY = 0;
+                        ScrollAmountY = 0;
                     }
 
                     animating = true;
                 }
-                else if ( AmountY > MaxScrollY )
+                else if ( ScrollAmountY > MaxScrollY )
                 {
                     SetScrollbarsVisible( true );
 
-                    AmountY -= ( OverscrollSpeedMin
-                               + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
-                                 * -( MaxScrollY - AmountY )
-                                 / OverscrollDistance ) )
-                             * delta;
+                    ScrollAmountY -= ( OverscrollSpeedMin
+                                     + ( ( OverscrollSpeedMax - OverscrollSpeedMin )
+                                       * -( MaxScrollY - ScrollAmountY )
+                                       / OverscrollDistance ) )
+                                   * delta;
 
-                    if ( AmountY < MaxScrollY )
+                    if ( ScrollAmountY < MaxScrollY )
                     {
-                        AmountY = MaxScrollY;
+                        ScrollAmountY = MaxScrollY;
                     }
 
                     animating = true;
@@ -477,15 +479,18 @@ public class ScrollPane : WidgetGroup
         ISceneDrawable? hScrollKnob = Style.HScrollKnob;
         ISceneDrawable? vScrollKnob = Style.VScrollKnob;
 
-        if ( bg == null )
-        {
-            return;
-        }
+        float bgLeftWidth    = bg.LeftWidth;
+        float bgRightWidth   = bg.RightWidth;
+        float bgTopHeight    = bg.TopHeight;
+        float bgBottomHeight = bg.BottomHeight;
 
-        WidgetArea.Set( bg.LeftWidth,
-                        bg.BottomHeight,
-                        GetWidth() - bg.LeftWidth - bg.RightWidth,
-                        GetHeight() - bg.TopHeight - bg.BottomHeight );
+        float width  = GetWidth();
+        float height = GetHeight();
+
+        WidgetArea.Set( bgLeftWidth,
+                        bgBottomHeight,
+                        width - bgLeftWidth - bgRightWidth,
+                        height - bgTopHeight - bgBottomHeight );
 
         if ( Widget == null )
         {
@@ -583,8 +588,8 @@ public class ScrollPane : WidgetGroup
         MaxScrollX = widgetWidth - WidgetArea.Width;
         MaxScrollY = widgetHeight - WidgetArea.Height;
 
-        AmountX = MathUtils.Clamp( AmountX, 0, MaxScrollX );
-        AmountY = MathUtils.Clamp( AmountY, 0, MaxScrollY );
+        ScrollAmountX = MathUtils.Clamp( ScrollAmountX, 0, MaxScrollX );
+        ScrollAmountY = MathUtils.Clamp( ScrollAmountY, 0, MaxScrollY );
 
         // Set the scrollbar and knob bounds.
         if ( IsScrollX )
@@ -1048,8 +1053,8 @@ public class ScrollPane : WidgetGroup
     /// </summary>
     public void UpdateVisualScroll()
     {
-        VisualAmountX = AmountX;
-        VisualAmountY = AmountY;
+        VisualAmountX = ScrollAmountX;
+        VisualAmountY = ScrollAmountY;
     }
 
     public float GetVisualScrollPercentX()
@@ -1079,12 +1084,12 @@ public class ScrollPane : WidgetGroup
             return 0;
         }
 
-        return MathUtils.Clamp( AmountX / MaxScrollX, 0, 1 );
+        return MathUtils.Clamp( ScrollAmountX / MaxScrollX, 0, 1 );
     }
 
     public void SetScrollPercentX( float percentX )
     {
-        AmountX = MaxScrollX * MathUtils.Clamp( percentX, 0, 1 );
+        ScrollAmountX = MaxScrollX * MathUtils.Clamp( percentX, 0, 1 );
     }
 
     public float GetScrollPercentY()
@@ -1094,12 +1099,12 @@ public class ScrollPane : WidgetGroup
             return 0;
         }
 
-        return MathUtils.Clamp( AmountY / MaxScrollY, 0, 1 );
+        return MathUtils.Clamp( ScrollAmountY / MaxScrollY, 0, 1 );
     }
 
     public void SetScrollPercentY( float percentY )
     {
-        AmountY = MaxScrollY * MathUtils.Clamp( percentY, 0, 1 );
+        ScrollAmountY = MaxScrollY * MathUtils.Clamp( percentY, 0, 1 );
     }
 
     public void SetFlickScroll( bool flickScroll )
@@ -1147,7 +1152,7 @@ public class ScrollPane : WidgetGroup
     {
         Validate();
 
-        float amountX = AmountX;
+        float amountX = ScrollAmountX;
 
         if ( centerHorizontal )
         {
@@ -1166,9 +1171,9 @@ public class ScrollPane : WidgetGroup
             }
         }
 
-        AmountX = MathUtils.Clamp( amountX, 0, MaxScrollX );
+        ScrollAmountX = MathUtils.Clamp( amountX, 0, MaxScrollX );
 
-        float amountY = AmountY;
+        float amountY = ScrollAmountY;
 
         if ( centerVertical )
         {
@@ -1187,7 +1192,7 @@ public class ScrollPane : WidgetGroup
             }
         }
 
-        AmountY = MathUtils.Clamp( amountY, 0f, MaxScrollY );
+        ScrollAmountY = MathUtils.Clamp( amountY, 0f, MaxScrollY );
     }
 
     public float GetScrollBarHeight()
@@ -1403,22 +1408,22 @@ public class ScrollPane : WidgetGroup
 
     public bool IsLeftEdge()
     {
-        return !IsScrollX || ( AmountX <= 0 );
+        return !IsScrollX || ( ScrollAmountX <= 0 );
     }
 
     public bool IsRightEdge()
     {
-        return !IsScrollX || ( AmountX >= MaxScrollX );
+        return !IsScrollX || ( ScrollAmountX >= MaxScrollX );
     }
 
     public bool IsTopEdge()
     {
-        return !IsScrollY || ( AmountY <= 0 );
+        return !IsScrollY || ( ScrollAmountY <= 0 );
     }
 
     public bool IsBottomEdge()
     {
-        return !IsScrollY || ( AmountY >= MaxScrollY );
+        return !IsScrollY || ( ScrollAmountY >= MaxScrollY );
     }
 
     public bool IsDragging()
@@ -1438,12 +1443,12 @@ public class ScrollPane : WidgetGroup
 
     public void SetScrollX( float pixels )
     {
-        AmountX = MathUtils.Clamp( pixels, 0, MaxScrollX );
+        ScrollAmountX = MathUtils.Clamp( pixels, 0, MaxScrollX );
     }
 
     public void SetScrollY( float pixels )
     {
-        AmountY = MathUtils.Clamp( pixels, 0, MaxScrollY );
+        ScrollAmountY = MathUtils.Clamp( pixels, 0, MaxScrollY );
     }
 
     public bool IsFlinging()

@@ -86,7 +86,7 @@ public class ImageButton : Button
 
         // The Scene2DImage drawable will be updated by the style.
         SetStyle( style );
-        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
     }
 
     /// <summary>

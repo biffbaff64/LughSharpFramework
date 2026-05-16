@@ -189,9 +189,12 @@ public class TextArea : TextField
         // rounded value.
         float prefHeight = MathUtils.Ceil( Style.Font.GetLineHeight() * PrefRows );
 
-        prefHeight = Math.Max( prefHeight + Style.Background.BottomHeight + Style.Background.TopHeight,
-                               Style.Background.MinHeight );
-
+        if ( Style.Background != null )
+        {
+            prefHeight = Math.Max( prefHeight + Style.Background.BottomHeight + Style.Background.TopHeight,
+                                   Style.Background.MinHeight );
+        }
+        
         return prefHeight;
     }
 
@@ -473,7 +476,10 @@ public class TextArea : TextField
         {
             _lastText = Text;
 
-            float maxWidthLine = GetWidth() - ( Style.Background.LeftWidth + Style.Background.RightWidth );
+            float leftWidth  = Style.Background?.LeftWidth ?? 0.0f;
+            float rightWidth = Style.Background?.RightWidth ?? 0.0f;
+            
+            float maxWidthLine = GetWidth() - ( leftWidth + rightWidth );
 
             LinesBreak.Clear();
 

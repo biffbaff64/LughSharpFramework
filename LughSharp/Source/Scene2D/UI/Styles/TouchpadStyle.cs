@@ -33,8 +33,8 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 public class TouchpadStyle : ISceneStyle
 {
     // Stretched in both directions.
-    public ISceneDrawable Background { get; set; } = new BaseDrawable();
-    public ISceneDrawable Knob       { get; set; } = new BaseDrawable();
+    public ISceneDrawable? Background { get; set; }
+    public ISceneDrawable? Knob       { get; set; }
 
     // ====================================================================
 

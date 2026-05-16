@@ -36,19 +36,20 @@ public class SelectBoxStyle : ISceneStyle
     public BitmapFont      Font               { get; }
     public ScrollPaneStyle ScrollPaneStyle    { get; }
     public ListBoxStyle    ListBoxStyle       { get; }
-    public Color           FontColor          { get; } = new Color( 1, 1, 1, 1 );
-    public Color           OverFontColor      { get; } = new Color( 1, 1, 1, 1 );
-    public Color           DisabledFontColor  { get; } = new Color( 0.5f, 0.5f, 0.5f, 1 );
-    public ISceneDrawable  Background         { get; } = new BaseDrawable();
-    public ISceneDrawable  BackgroundOver     { get; } = new BaseDrawable();
-    public ISceneDrawable  BackgroundOpen     { get; } = new BaseDrawable();
-    public ISceneDrawable  BackgroundDisabled { get; } = new BaseDrawable();
+    public Color           FontColor          { get; }
+    public Color?          OverFontColor      { get; }
+    public Color?          DisabledFontColor  { get; }
+    public ISceneDrawable? Background         { get; }
+    public ISceneDrawable? BackgroundOver     { get; }
+    public ISceneDrawable? BackgroundOpen     { get; }
+    public ISceneDrawable? BackgroundDisabled { get; }
 
     // ====================================================================
 
     public SelectBoxStyle()
     {
         Font            = new BitmapFont();
+        FontColor       = Color.White;
         ScrollPaneStyle = new ScrollPaneStyle();
         ListBoxStyle    = new ListBoxStyle();
     }
@@ -66,7 +67,7 @@ public class SelectBoxStyle : ISceneStyle
 
         FontColor         = fontColor;
         OverFontColor     = fontColor;
-        DisabledFontColor = new Color( 0.5f, 0.5f, 0.5f, 1 );
+        DisabledFontColor = Color.Gray;
     }
 
     /// <summary>
@@ -80,13 +81,21 @@ public class SelectBoxStyle : ISceneStyle
 
         // Font and Styles
         Font            = style.Font;
-        ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ?? throw new NullReferenceException() );
-        ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ?? throw new NullReferenceException() );
+        ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle );
+        ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle );
 
         // Colors
-        FontColor         = style.FontColor;
-        OverFontColor     = style.OverFontColor;
-        DisabledFontColor = style.DisabledFontColor;
+        FontColor = style.FontColor;
+
+        if ( style.OverFontColor != null )
+        {
+            OverFontColor = style.OverFontColor;
+        }
+
+        if ( style.DisabledFontColor != null )
+        {
+            DisabledFontColor = style.DisabledFontColor;
+        }
 
         // Drawables
         Background         = style.Background;

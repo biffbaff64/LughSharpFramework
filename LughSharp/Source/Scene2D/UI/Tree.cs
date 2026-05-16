@@ -541,7 +541,7 @@ public class Tree< TNode, TValue > : WidgetGroup
 
     /// <summary>
     /// Returns the drawable for the expand icon. The default implementation returns
-    /// <see cref="TreeStyle{T,V}.PlusOver"/> or <see cref="TreeStyle{T,V}.MinusOver"/>
+    /// <see cref="TreeStyle.PlusOver"/> or <see cref="TreeStyle.MinusOver"/>
     /// on the desktop if the node is the over node, the mouse is left of iconX, and
     /// clicking would expand the node.
     /// </summary>
@@ -566,9 +566,11 @@ public class Tree< TNode, TValue > : WidgetGroup
             throw new RuntimeException( "Style is NULL!" );
         }
 
+        ISceneDrawable? icon;
+        
         if ( over )
         {
-            ISceneDrawable? icon = node.IsExpanded ? Style.MinusOver : Style.PlusOver;
+            icon = node.IsExpanded ? Style.MinusOver : Style.PlusOver;
 
             if ( icon != null )
             {
@@ -576,9 +578,21 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
-        return node.IsExpanded ? Style.Minus : Style.Plus;
+        icon = node.IsExpanded ? Style.Minus : Style.Plus;
+        
+        if ( icon != null )
+        {
+            return icon;
+        }
+        
+        throw new RuntimeException( "Style.Plus or Style.Minus is NULL!" );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public TNode? GetNodeAt( float y )
     {
         _foundNode = null;
@@ -587,6 +601,13 @@ public class Tree< TNode, TValue > : WidgetGroup
         return _foundNode;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="nodes"></param>
+    /// <param name="y"></param>
+    /// <param name="rowY"></param>
+    /// <returns></returns>
     private float GetNodeAt( List< TNode > nodes, float y, float rowY )
     {
         for ( int i = 0, n = nodes.Count; i < n; i++ )

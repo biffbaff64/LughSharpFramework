@@ -106,7 +106,7 @@ public class Touchpad : Widget
 
         _deadzoneRadius = deadzoneRadius;
 
-        _knobPosition.Set( GetWidth() / 2f, GetHeight() / 2f );
+        _knobPosition.Set( GetWidthUnchecked() / 2f, GetHeightUnchecked() / 2f );
 
         Style = style;
 
@@ -117,6 +117,10 @@ public class Touchpad : Widget
 
     // ========================================================================
 
+    private float GetWidthUnchecked() => GetWidth();
+    
+    private float GetHeightUnchecked() => GetHeight();
+    
     public override float GetPrefWidth() => _style.Background?.MinWidth ?? 0;
 
     public override float GetPrefHeight() => _style.Background?.MinHeight ?? 0;
@@ -198,11 +202,6 @@ public class Touchpad : Widget
         if ( !oldPercentX.Equals( _knobPercent.X ) || !oldPercentY.Equals( _knobPercent.Y ) )
         {
             var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
-
-            if ( changeEvent == null )
-            {
-                return;
-            }
 
             if ( Fire( changeEvent ) )
             {

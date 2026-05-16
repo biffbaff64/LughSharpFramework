@@ -45,15 +45,23 @@ public class SplitPane : WidgetGroup
     private readonly Rectangle _secondWidgetBounds = new();
     private readonly Rectangle _tempScissors       = new();
 
-    private Actor? _firstWidget;
-    private Actor? _secondWidget;
-    private float  _maxAmount = 1;
-    private float  _minAmount;
-    private float  _splitAmount = 0.5f;
-    private bool   _vertical;
+    private Actor?          _firstWidget;
+    private Actor?          _secondWidget;
+    private float           _maxAmount = 1;
+    private float           _minAmount;
+    private float           _splitAmount = 0.5f;
+    private bool            _vertical;
+    private SplitPaneStyle? _style;
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new SplitPane with the given first and second widgets.
+    /// </summary>
+    /// <param name="firstWidget"></param>
+    /// <param name="secondWidget"></param>
+    /// <param name="vertical"></param>
+    /// <param name="skin"></param>
     public SplitPane( Actor? firstWidget, Actor? secondWidget, bool vertical, Skin skin )
         : this( firstWidget,
                 secondWidget,
@@ -73,113 +81,136 @@ public class SplitPane : WidgetGroup
 
     public SplitPane( Actor? firstWidget, Actor? secondWidget, bool vertical, SplitPaneStyle style )
     {
+        Guard.Against.Null( style );
+
         _vertical = vertical;
-        Style     = style;
+
+        SetStyle( style );
 
         SetFirstWidget( firstWidget );
         SetSecondWidget( secondWidget );
 
-        SetSize( PrefWidth, PrefHeight );
+        SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
 
         AddListener( new SplitPaneInputListener( this ) );
     }
 
-    public float PrefWidth
+    private float GetPrefWidthUnchecked() => GetPrefWidth();
+
+    private float GetPrefHeightUnchecked() => GetPrefHeight();
+
+    /// <summary>
+    /// Returns the preferred width of this actor.
+    /// </summary>
+    public override float GetPrefWidth()
     {
-        get
+        float first = _firstWidget switch
+                      {
+                          null           => 0,
+                          ILayout widget => widget.GetPrefWidth(),
+                          var _          => _firstWidget.GetWidth()
+                      };
+
+        float second = _secondWidget switch
+                       {
+                           null           => 0,
+                           ILayout layout => layout.GetPrefWidth(),
+                           var _          => _secondWidget.GetWidth()
+                       };
+
+        if ( _vertical )
         {
-            float first = _firstWidget switch
-                          {
-                              null           => 0,
-                              ILayout widget => widget.GetPrefWidth(),
-                              var _          => _firstWidget.GetWidth()
-                          };
-
-            float second = _secondWidget switch
-                           {
-                               null           => 0,
-                               ILayout layout => layout.GetPrefWidth(),
-                               var _          => _secondWidget.GetWidth()
-                           };
-
-            if ( _vertical )
-            {
-                return Math.Max( first, second );
-            }
-
-            return first + Style.Handle.MinWidth + second;
+            return Math.Max( first, second );
         }
+
+        float handleMinWidth = _style?.Handle?.MinWidth ?? 0;
+
+        return first + handleMinWidth + second;
     }
 
-    public float PrefHeight
+    /// <summary>
+    /// Returns the preferred height of this actor.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetPrefHeight()
     {
-        get
+        float first = _firstWidget switch
+                      {
+                          null           => 0,
+                          ILayout widget => widget.GetPrefHeight(),
+                          var _          => _firstWidget.GetHeight()
+                      };
+
+        float second = _secondWidget switch
+                       {
+                           null           => 0,
+                           ILayout layout => layout.GetPrefHeight(),
+                           var _          => _secondWidget.GetHeight()
+                       };
+
+        if ( !_vertical )
         {
-            float first = _firstWidget switch
-                          {
-                              null           => 0,
-                              ILayout widget => widget.GetPrefHeight(),
-                              var _          => _firstWidget.GetHeight()
-                          };
-
-            float second = _secondWidget switch
-                           {
-                               null           => 0,
-                               ILayout layout => layout.GetPrefHeight(),
-                               var _          => _secondWidget.GetHeight()
-                           };
-
-            if ( !_vertical )
-            {
-                return Math.Max( first, second );
-            }
-
-            return first + Style.Handle.MinHeight + second;
+            return Math.Max( first, second );
         }
+
+        float handleMinHeight = _style?.Handle?.MinHeight ?? 0;
+
+        return first + handleMinHeight + second;
     }
 
-    public float MinWidth
+    /// <summary>
+    /// Returns the minimum width of this actor.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetMinWidth()
     {
-        get
+        float first  = _firstWidget is ILayout layout ? layout.GetMinWidth() : 0;
+        float second = _secondWidget is ILayout widget ? widget.GetMinWidth() : 0;
+
+        if ( _vertical )
         {
-            float first  = _firstWidget is ILayout layout ? layout.GetMinWidth() : 0;
-            float second = _secondWidget is ILayout widget ? widget.GetMinWidth() : 0;
-
-            if ( _vertical )
-            {
-                return Math.Max( first, second );
-            }
-
-            return first + Style.Handle.MinWidth + second;
+            return Math.Max( first, second );
         }
+
+        float handleMinWidth = _style?.Handle?.MinWidth ?? 0;
+
+        return first + handleMinWidth + second;
     }
 
-    public float MinHeight
+    /// <summary>
+    /// Returns the minimum height of this actor.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetMinHeight()
     {
-        get
+        float first  = _firstWidget is ILayout layout ? layout.GetMinHeight() : 0;
+        float second = _secondWidget is ILayout widget ? widget.GetMinHeight() : 0;
+
+        if ( !_vertical )
         {
-            float first  = _firstWidget is ILayout layout ? layout.GetMinHeight() : 0;
-            float second = _secondWidget is ILayout widget ? widget.GetMinHeight() : 0;
-
-            if ( !_vertical )
-            {
-                return Math.Max( first, second );
-            }
-
-            return first + Style.Handle.MinHeight + second;
+            return Math.Max( first, second );
         }
+
+        float handleMinHeight = _style?.Handle?.MinHeight ?? 0;
+
+        return first + handleMinHeight + second;
     }
 
-    public SplitPaneStyle Style
+    public SplitPaneStyle GetStyle()
     {
-        get;
-        set
-        {
-            field = value;
-            InvalidateHierarchy();
-        }
+        return _style ?? throw new NullReferenceException( "Style cannot be null." );
     }
 
+    public void SetStyle( SplitPaneStyle value )
+    {
+        _style = value;
+        InvalidateHierarchy();
+    }
+
+    /// <summary>
+    /// Positions and sizes children of the table using the cell associated with each child.
+    /// The values given are the position within the parent and size of the table.
+    /// </summary>
     public override void Layout()
     {
         ClampSplitAmount();
@@ -224,14 +255,6 @@ public class SplitPane : WidgetGroup
         }
     }
 
-    public override float GetMinWidth() => MinWidth;
-
-    public override float GetMinHeight() => MinHeight;
-
-    public override float GetPrefWidth() => PrefWidth;
-
-    public override float GetPrefHeight() => PrefHeight;
-
     public void SetVertical( bool vertical )
     {
         if ( _vertical == vertical )
@@ -250,12 +273,15 @@ public class SplitPane : WidgetGroup
 
     private void CalculateHorizBoundsAndPositions()
     {
-        ISceneDrawable handle = Style.Handle;
+        Guard.Against.Null( _style );
+        Guard.Against.Null( _style.Handle );
+
+        ISceneDrawable handle = _style.Handle;
 
         float height         = GetHeight();
-        float availWidth     = GetWidth() - handle.MinWidth;
-        float leftAreaWidth  = availWidth * _splitAmount;
-        float rightAreaWidth = availWidth - leftAreaWidth;
+        float availableWidth = GetWidth() - handle.MinWidth;
+        float leftAreaWidth  = availableWidth * _splitAmount;
+        float rightAreaWidth = availableWidth - leftAreaWidth;
         float handleWidth    = handle.MinWidth;
 
         _firstWidgetBounds.Set( 0, 0, leftAreaWidth, height );
@@ -265,11 +291,13 @@ public class SplitPane : WidgetGroup
 
     private void CalculateVertBoundsAndPositions()
     {
-        ISceneDrawable handle = Style.Handle;
+        Guard.Against.Null( _style );
+        Guard.Against.Null( _style.Handle );
 
-        float width  = GetWidth();
-        float height = GetHeight();
+        ISceneDrawable handle = _style.Handle;
 
+        float width            = GetWidth();
+        float height           = GetHeight();
         float availHeight      = height - handle.MinHeight;
         float topAreaHeight    = availHeight * _splitAmount;
         float bottomAreaHeight = availHeight - topAreaHeight;
@@ -325,7 +353,7 @@ public class SplitPane : WidgetGroup
         }
 
         batch.SetColor( color.R, color.G, color.B, alpha );
-        Style.Handle.Draw( batch, HandleBounds.X, HandleBounds.Y, HandleBounds.Width, HandleBounds.Height );
+        _style?.Handle?.Draw( batch, HandleBounds.X, HandleBounds.Y, HandleBounds.Width, HandleBounds.Height );
 
         ResetTransform( batch );
     }
@@ -359,7 +387,8 @@ public class SplitPane : WidgetGroup
 
         if ( _vertical )
         {
-            float availableHeight = GetHeight() - Style.Handle.MinHeight;
+            float styleHandleMinWidth = _style?.Handle?.MinHeight ?? 0;
+            float availableHeight     = GetHeight() - styleHandleMinWidth;
 
             if ( _firstWidget is ILayout layout )
             {
@@ -375,12 +404,13 @@ public class SplitPane : WidgetGroup
         }
         else
         {
-            float availableWidth = GetWidth() - Style.Handle.MinWidth;
+            float styleHandleMinHeight = _style?.Handle?.MinHeight ?? 0;
+            float availableWidth       = GetWidth() - styleHandleMinHeight;
 
             if ( _firstWidget is ILayout layout )
             {
-                effectiveMinAmount =
-                    Math.Max( effectiveMinAmount, Math.Min( layout.GetMinWidth() / availableWidth, 1 ) );
+                effectiveMinAmount = Math.Max( effectiveMinAmount,
+                                               Math.Min( layout.GetMinWidth() / availableWidth, 1 ) );
             }
 
             if ( _secondWidget is ILayout layout2 )
@@ -593,7 +623,8 @@ public class SplitPane : WidgetGroup
                 return;
             }
 
-            ISceneDrawable handle = _parent.Style.Handle;
+            ISceneDrawable handle = _parent.GetStyle().Handle
+                                 ?? throw new NullReferenceException( "Handle cannot be null." );
 
             if ( !_parent._vertical )
             {
@@ -623,7 +654,6 @@ public class SplitPane : WidgetGroup
             }
 
             _parent.LastPoint.Set( x, y );
-
             _parent.InvalidateLayout();
         }
 

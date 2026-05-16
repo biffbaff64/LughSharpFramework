@@ -32,25 +32,26 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TextTooltipStyle : ISceneStyle
 {
-    public LabelStyle     Label      { get; set; } = new();
-    public ISceneDrawable Background { get; set; } = new BaseDrawable();
-    public float          WrapWidth  { get; set; }
+    public LabelStyle      LabelStyle { get; set; }
+    public ISceneDrawable? Background { get; set; }
+    public float           WrapWidth  { get; set; }
 
     // ========================================================================
 
     public TextTooltipStyle()
     {
+        LabelStyle = new LabelStyle();
     }
 
     public TextTooltipStyle( LabelStyle label, ISceneDrawable background )
     {
-        Label      = label;
+        LabelStyle = label;
         Background = background;
     }
 
     public TextTooltipStyle( TextTooltipStyle style )
     {
-        Label      = new LabelStyle( style.Label );
+        LabelStyle = new LabelStyle( style.LabelStyle );
         Background = style.Background;
         WrapWidth  = style.WrapWidth;
     }

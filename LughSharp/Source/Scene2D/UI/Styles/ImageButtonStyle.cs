@@ -32,13 +32,13 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ImageButtonStyle : ButtonStyle, ISceneStyle
 {
-    public ISceneDrawable ImageUp               = new BaseDrawable();
-    public ISceneDrawable ImageDown             = new BaseDrawable();
-    public ISceneDrawable ImageOver             = new BaseDrawable();
-    public ISceneDrawable ImageDisabled         = new BaseDrawable();
-    public ISceneDrawable ImageChecked          = new BaseDrawable();
-    public ISceneDrawable ImageCheckedDown      = new BaseDrawable();
-    public ISceneDrawable ImageCheckedOver      = new BaseDrawable();
+    public ISceneDrawable? ImageUp;
+    public ISceneDrawable? ImageDown;
+    public ISceneDrawable? ImageOver;
+    public ISceneDrawable? ImageDisabled;
+    public ISceneDrawable? ImageChecked;
+    public ISceneDrawable? ImageCheckedDown;
+    public ISceneDrawable? ImageCheckedOver;
 
     // ========================================================================
 
@@ -93,41 +93,11 @@ public class ImageButtonStyle : ButtonStyle, ISceneStyle
     }
 
     /// <summary>
-    /// Creates a new ImageButtonStyle instance, using the supplied
-    /// <see cref="ButtonStyle"/>.
+    /// Creates a new ImageButtonStyle instance, using the supplied <see cref="ButtonStyle"/>.
     /// </summary>
     public ImageButtonStyle( ButtonStyle style )
         : base( style )
     {
-    }
-
-    // ========================================================================
-    
-    public void Debug()
-    {
-        Logger.Debug( "ImageButtonStyle" );
-        Logger.Debug( $"  ImageUp: {ImageUp}" );
-        Logger.Debug( $"  ImageDown: {ImageDown}" );
-        Logger.Debug( $"  ImageChecked: {ImageChecked}" );
-        Logger.Debug( $"  ImageDisabled: {ImageDisabled}" );
-        Logger.Debug( $"  ImageCheckedDown: {ImageCheckedDown}" );
-        Logger.Debug( $"  ImageCheckedOver: {ImageCheckedOver}" );
-        Logger.Debug( $"  ImageOver: {ImageOver}" );
-        Logger.Debug( $"  Up: {Up}" );
-        Logger.Debug( $"  Down: {Down}" );
-        Logger.Debug( $"  Over: {Over}" );
-        Logger.Debug( $"  Focused: {Focused}" );
-        Logger.Debug( $"  Disabled: {Disabled}" );
-        Logger.Debug( $"  Checked: {Checked}" );
-        Logger.Debug( $"  CheckedDown: {CheckedDown}" );
-        Logger.Debug( $"  CheckedOver: {CheckedOver}" );
-        Logger.Debug( $"  CheckedFocused: {CheckedFocused}" );
-        Logger.Debug( $"  CheckedOffsetX: {CheckedOffsetX}" );
-        Logger.Debug( $"  CheckedOffsetY: {CheckedOffsetY}" );
-        Logger.Debug( $"  PressedOffsetX: {PressedOffsetX}" );
-        Logger.Debug( $"  PressedOffsetY: {PressedOffsetY}" );
-        Logger.Debug( $"  UnpressedOffsetX: {UnpressedOffsetX}" );
-        Logger.Debug( $"  UnpressedOffsetY: {UnpressedOffsetY}" );
     }
 }
 

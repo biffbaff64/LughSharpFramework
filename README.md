@@ -52,47 +52,11 @@ IN PROGRESS:
         - Tree                - 
         - Window              - 
 
-- Scene2D UI Actor Styles must initialise all properties.
-    
-        - ButtonStyle            - Done
-        - CheckBoxStyle          - Done
-        - DialogStyle            - Done
-        - ImageButtonStyle       - Done
-        - ImageTextButtonStyle   - Done
-        - LabelStyle             - Done
-        - ListBoxStyle           - Done
-        - ProgressBarStyle       - Done
-        - ScrollPaneStyle        - Done
-        - SelectBoxStyle         - Done
-        - SliderStyle            - Done
-        - SplitPaneStyle         - Done
-        - TextAreaStyle          - Done 
-        - TextButtonStyle        - Done
-        - TextFieldStyle         - Done
-        - TextTooltipStyle       - Done
-        - TouchpadStyle          - Done
-        - TreeStyle              - Done
-        - WindowStyle            - Done
+- Something for consideration:
 
-        - ButtonStyleRecord            - Done
-        - CheckBoxStyleRecord          - Done
-        - DialogStyleRecord            - Done
-        - ImageButtonStyleRecord       - Done
-        - ImageTextButtonStyleRecord   - Done
-        - LabelStyleRecord             - Done
-        - ListBoxStyleRecord           - Done
-        - ProgressBarStyleRecord       - Done
-        - ScrollPaneStyleRecord        - Done
-        - SelectBoxStyleRecord         - Done
-        - SliderStyleRecord            - Done
-        - SplitPaneStyleRecord         - Done
-        - TextAreaStyleRecord          - Done
-        - TextButtonStyleRecord        - Done
-        - TextFieldStyleRecord         - Done
-        - TextTooltipStyleRecord       - Done
-        - TouchpadStyleRecord          - Done
-        - TreeStyleRecord              - Done
-        - WindowStyleRecord            - Done
+  All Styles should provide a fully defined default style. This will
+  remove any possibility of problems with the default style not being
+  defined..
 
 TODO:
 

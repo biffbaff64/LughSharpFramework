@@ -134,7 +134,7 @@ public class Scene2DImage : Widget
         _scaling  = scaling;
         Alignment = align;
 
-        SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+        SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
     }
 
     /// <summary>
@@ -144,10 +144,10 @@ public class Scene2DImage : Widget
     /// </summary>
     public override float GetPrefWidth()
     {
-        return GetPrefWidthSafe();
+        return GetPrefWidthUnchecked();
     }
 
-    protected float GetPrefWidthSafe()
+    protected float GetPrefWidthUnchecked()
     {
         return Drawable?.MinWidth ?? 0;
     }
@@ -158,10 +158,10 @@ public class Scene2DImage : Widget
     /// </summary>
     public override float GetPrefHeight()
     {
-        return GetPrefHeightSafe();
+        return GetPrefHeightUnchecked();
     }
 
-    protected float GetPrefHeightSafe()
+    protected float GetPrefHeightUnchecked()
     {
         return Drawable?.MinHeight ?? 0;
     }

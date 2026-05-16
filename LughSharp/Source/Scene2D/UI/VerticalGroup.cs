@@ -43,8 +43,8 @@ namespace LughSharp.Source.Scene2D.UI;
 /// preferred size and the max size is 0.
 /// </para>
 /// <para>
-/// Widgets are sized using their <see cref="ILayout.PrefHeight"/>, so widgets which return
-/// 0 as their preferred height will be given a height of 0.
+/// Widgets are sized using their <see cref="ILayout.GetPrefHeight()"/>, so widgets which
+/// returns 0 as their preferred height will be given a height of 0.
 /// </para>
 /// </summary>
 [PublicAPI]

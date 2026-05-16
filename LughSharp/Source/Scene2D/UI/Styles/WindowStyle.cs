@@ -35,10 +35,10 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class WindowStyle : ISceneStyle
 {
-    public ISceneDrawable Background      { get; set; }
-    public BitmapFont     TitleFont       { get; set; }
-    public Color          TitleFontColor  { get; set; }
-    public ISceneDrawable StageBackground { get; set; }
+    public ISceneDrawable? Background      { get; set; }
+    public BitmapFont?     TitleFont       { get; set; }
+    public Color           TitleFontColor  { get; set; }
+    public ISceneDrawable? StageBackground { get; set; }
 
     // ====================================================================
 
@@ -49,10 +49,7 @@ public class WindowStyle : ISceneStyle
     /// </summary>
     public WindowStyle()
     {
-        TitleFont       = new BitmapFont();
-        TitleFontColor  = Color.White;
-        Background      = new BaseDrawable();
-        StageBackground = new BaseDrawable();
+        TitleFontColor = Color.White;
     }
 
     /// <summary>

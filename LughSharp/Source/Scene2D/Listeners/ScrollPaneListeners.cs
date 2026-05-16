@@ -63,8 +63,8 @@ public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListene
                 }
             }
 
-            _parent!.AmountY += _parent!.GetMouseWheelY() * scrollAmountY;
-            _parent!.AmountX += _parent!.GetMouseWheelX() * scrollAmountX;
+            _parent!.ScrollAmountY += _parent!.GetMouseWheelY() * scrollAmountY;
+            _parent!.ScrollAmountX += _parent!.GetMouseWheelX() * scrollAmountX;
         }
         else
         {
@@ -134,7 +134,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
                 return true;
             }
 
-            _parent.AmountX += _parent.WidgetArea.Width * ( x < _parent.HKnobBounds.X ? -1 : 1 );
+            _parent.ScrollAmountX += _parent.WidgetArea.Width * ( x < _parent.HKnobBounds.X ? -1 : 1 );
 
             return true;
         }
@@ -156,7 +156,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
                 return true;
             }
 
-            _parent.AmountY += _parent.WidgetArea.Height * ( y < _parent.VKnobBounds.Y ? 1 : -1 );
+            _parent.ScrollAmountY += _parent.WidgetArea.Height * ( y < _parent.VKnobBounds.Y ? 1 : -1 );
 
             return true;
         }
@@ -283,8 +283,8 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
 
         _parent!.SetScrollbarsVisible( true );
 
-        _parent!.AmountX -= deltaX;
-        _parent!.AmountY += deltaY;
+        _parent!.ScrollAmountX -= deltaX;
+        _parent!.ScrollAmountY += deltaY;
 
         _parent!.ClampPane();
 

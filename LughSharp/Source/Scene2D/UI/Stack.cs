@@ -30,23 +30,27 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Stack : WidgetGroup
 {
-    private bool _sizeInvalid = true;
+    private bool  _sizeInvalid = true;
+    private float _prefWidth;
+    private float _prefHeight;
+    private float _minWidth;
+    private float _minHeight;
+    private float _maxWidth;
+    private float _maxHeight;
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new Stack.
+    /// </summary>
     public Stack()
     {
         Initialise();
     }
 
-    private void Initialise()
-    {
-        Transform = false;
-        SetWidth( 150 );
-        SetHeight( 150 );
-        Touchable = Touchable.ChildrenOnly;
-    }
-
+    /// <summary>
+    /// Creates a new Stack with the specified actors.
+    /// </summary>
     public Stack( params Actor[] actors ) : this()
     {
         foreach ( Actor actor in actors )
@@ -55,90 +59,109 @@ public class Stack : WidgetGroup
         }
     }
 
-    public float PrefWidth
+    /// <summary>
+    /// Initialises the Stack. Sets the default values for the width and height to 150.
+    /// Sets the touchable to ChildrenOnly.
+    /// </summary>
+    private void Initialise()
     {
-        get
-        {
-            if ( _sizeInvalid )
-            {
-                ComputeSize();
-            }
+        Transform = false;
 
-            return field;
-        }
-        set;
+        SetWidth( 150 );
+        SetHeight( 150 );
+
+        Touchable = Touchable.ChildrenOnly;
     }
 
-    public float PrefHeight
+    /// <summary>
+    /// Returns the preferred width of this Stack.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetPrefWidth()
     {
-        get
+        if ( _sizeInvalid )
         {
-            if ( _sizeInvalid )
-            {
-                ComputeSize();
-            }
-
-            return field;
+            ComputeSize();
         }
-        set;
+
+        return _prefWidth;
     }
 
-    public float MinWidth
+    /// <summary>
+    /// Returns the preferred height of this Stack.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetPrefHeight()
     {
-        get
+        if ( _sizeInvalid )
         {
-            if ( _sizeInvalid )
-            {
-                ComputeSize();
-            }
-
-            return field;
+            ComputeSize();
         }
-        set;
+
+        return _prefHeight;
     }
 
-    public float MinHeight
+    /// <summary>
+    /// Returns the minimum width of this Stack.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetMinWidth()
     {
-        get
+        if ( _sizeInvalid )
         {
-            if ( _sizeInvalid )
-            {
-                ComputeSize();
-            }
-
-            return field;
+            ComputeSize();
         }
-        set;
+
+        return _minWidth;
     }
 
-    public float MaxWidth
+    /// <summary>
+    /// Returns the minimum height of this Stack.
+    /// </summary>
+    /// <returns></returns>
+    public override float GetMinHeight()
     {
-        get
+        if ( _sizeInvalid )
         {
-            if ( _sizeInvalid )
-            {
-                ComputeSize();
-            }
-
-            return field;
+            ComputeSize();
         }
-        set;
+
+        return _minHeight;
     }
 
-    public float MaxHeight
+    /// <summary>
+    /// Returns the maximum width of this Stack.
+    /// </summary>
+    public override float GetMaxWidth()
     {
-        get
+        if ( _sizeInvalid )
         {
-            if ( _sizeInvalid )
-            {
-                ComputeSize();
-            }
-
-            return field;
+            ComputeSize();
         }
-        set;
+
+        return _maxWidth;
     }
 
+    /// <summary>
+    /// Returns the maximum height of this Stack.
+    /// </summary>
+    public override float GetMaxHeight()
+    {
+        if ( _sizeInvalid )
+        {
+            ComputeSize();
+        }
+
+        return _maxHeight;
+    }
+
+    /// <summary>
+    /// Invalidates this actor's layout, causing <see cref="ILayout.Layout"/> to happen the
+    /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
+    /// state changes in the actor that requires a layout but does not change the minimum,
+    /// preferred, maximum, or actual size of the actor (meaning it does not affect the
+    /// parent actor's layout).
+    /// </summary>
     public override void InvalidateLayout()
     {
         base.InvalidateLayout();
@@ -148,12 +171,12 @@ public class Stack : WidgetGroup
     private void ComputeSize()
     {
         _sizeInvalid = false;
-        PrefWidth    = 0;
-        PrefHeight   = 0;
-        MinWidth     = 0;
-        MinHeight    = 0;
-        MaxWidth     = 0;
-        MaxHeight    = 0;
+        _prefWidth   = 0;
+        _prefHeight  = 0;
+        _minWidth    = 0;
+        _minHeight   = 0;
+        _maxWidth    = 0;
+        _maxHeight   = 0;
 
         var children = new SnapshotArrayList< Actor >( Children );
 
@@ -164,20 +187,20 @@ public class Stack : WidgetGroup
 
             if ( child is ILayout layout )
             {
-                PrefWidth  = Math.Max( PrefWidth, layout.GetPrefWidth() );
-                PrefHeight = Math.Max( PrefHeight, layout.GetPrefHeight() );
-                MinWidth   = Math.Max( MinWidth, layout.GetMinWidth() );
-                MinHeight  = Math.Max( MinHeight, layout.GetMinHeight() );
+                _prefWidth  = Math.Max( _prefWidth, layout.GetPrefWidth() );
+                _prefHeight = Math.Max( _prefHeight, layout.GetPrefHeight() );
+                _minWidth   = Math.Max( _minWidth, layout.GetMinWidth() );
+                _minHeight  = Math.Max( _minHeight, layout.GetMinHeight() );
 
                 childMaxWidth  = layout.GetMaxWidth();
                 childMaxHeight = layout.GetMaxHeight();
             }
             else
             {
-                PrefWidth  = Math.Max( PrefWidth, child.GetWidth() );
-                PrefHeight = Math.Max( PrefHeight, child.GetHeight() );
-                MinWidth   = Math.Max( MinWidth, child.GetWidth() );
-                MinHeight  = Math.Max( MinHeight, child.GetHeight() );
+                _prefWidth  = Math.Max( _prefWidth, child.GetWidth() );
+                _prefHeight = Math.Max( _prefHeight, child.GetHeight() );
+                _minWidth   = Math.Max( _minWidth, child.GetWidth() );
+                _minHeight  = Math.Max( _minHeight, child.GetHeight() );
 
                 childMaxWidth  = 0;
                 childMaxHeight = 0;
@@ -185,16 +208,20 @@ public class Stack : WidgetGroup
 
             if ( childMaxWidth > 0 )
             {
-                MaxWidth = MaxWidth == 0 ? childMaxWidth : Math.Min( MaxWidth, childMaxWidth );
+                _maxWidth = _maxWidth == 0 ? childMaxWidth : Math.Min( _maxWidth, childMaxWidth );
             }
 
             if ( childMaxHeight > 0 )
             {
-                MaxHeight = MaxHeight == 0 ? childMaxHeight : Math.Min( MaxHeight, childMaxHeight );
+                _maxHeight = _maxHeight == 0 ? childMaxHeight : Math.Min( _maxHeight, childMaxHeight );
             }
         }
     }
 
+    /// <summary>
+    /// Positions and sizes children of the table using the cell associated with each child.
+    /// The values given are the position within the parent and size of the table.
+    /// </summary>
     public override void Layout()
     {
         if ( _sizeInvalid )
@@ -209,8 +236,8 @@ public class Stack : WidgetGroup
 
         for ( int i = 0, n = children.Size; i < n; i++ )
         {
-            Actor? child = children.GetAt( i );
-            child?.SetBounds( 0, 0, width, height );
+            Actor child = children.GetAt( i );
+            child.SetBounds( 0, 0, width, height );
 
             if ( child is ILayout layout )
             {
@@ -218,13 +245,6 @@ public class Stack : WidgetGroup
             }
         }
     }
-
-    public override float GetMinWidth() => MinWidth;
-    public override float GetMinHeight() => MinHeight;
-    public override float GetPrefWidth() => PrefWidth;
-    public override float GetPrefHeight() => PrefHeight;
-    public override float GetMaxWidth() => MaxWidth;
-    public override float GetMaxHeight() => MaxHeight;
 }
 
 // ============================================================================

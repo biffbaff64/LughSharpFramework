@@ -59,7 +59,7 @@ public class Button : Table, IDisableable
 
     public bool                   IsDisabled    { get; set; }
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
-    public ClickListener?         ClickListener { get; set; } = null!;
+    public ClickListener?         ClickListener { get; set; }
 
     // ========================================================================
 
@@ -82,9 +82,9 @@ public class Button : Table, IDisableable
     /// Creates a button with using the named <see cref="ButtonStyle"/> from the
     /// supplied <see cref="Skin"/>, and also adding the supplied child.
     /// </summary>
-    /// <param name="child"></param>
-    /// <param name="skin"></param>
-    /// <param name="styleName"></param>
+    /// <param name="child"> The child actor to add. </param>
+    /// <param name="skin"> The Skin holding the <see cref="ButtonStyle"/> to use. </param>
+    /// <param name="styleName"> The name of the required ButtonStyle. </param>
     public Button( Actor child, Skin skin, string styleName )
         : this( child, skin.Get< ButtonStyle >( styleName ) )
     {
@@ -194,6 +194,7 @@ public class Button : Table, IDisableable
     {
         Touchable = Touchable.Enabled;
 
+        // ReSharper disable UnusedParameter.Local
         ClickListener = new ClickListener( ( ev, x, y ) =>
         {
             if ( !IsDisabled )
@@ -306,10 +307,10 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Gets this button's preferred width.
     /// </summary>
-    /// <returns> The width, via <see cref="GetPrefWidthSafe()"/>. </returns>
+    /// <returns> The width, via <see cref="GetPrefWidthUnchecked"/>. </returns>
     public override float GetPrefWidth()
     {
-        return GetPrefWidthSafe();
+        return GetPrefWidthUnchecked();
     }
 
     /// <summary>
@@ -317,7 +318,7 @@ public class Button : Table, IDisableable
     /// to call from constructors.
     /// </summary>
     /// <returns></returns>
-    protected float GetPrefWidthSafe()
+    protected float GetPrefWidthUnchecked()
     {
         float width = base.GetPrefWidth();
 
@@ -342,10 +343,10 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Gets this button's preferred height.
     /// </summary>
-    /// <returns> The height, via <see cref="GetPrefHeightSafe()"/>. </returns>
+    /// <returns> The height, via <see cref="GetPrefHeightUnchecked"/>. </returns>
     public override float GetPrefHeight()
     {
-        return GetPrefHeightSafe();
+        return GetPrefHeightUnchecked();
     }
 
     /// <summary>
@@ -353,7 +354,7 @@ public class Button : Table, IDisableable
     /// to call from constructors.
     /// </summary>
     /// <returns></returns>
-    protected float GetPrefHeightSafe()
+    protected float GetPrefHeightUnchecked()
     {
         float height = base.GetPrefHeight();
 
@@ -488,9 +489,9 @@ public class Button : Table, IDisableable
 
         if ( offset )
         {
-            foreach ( Actor? actor in Children )
+            foreach ( Actor actor in Children )
             {
-                actor?.MoveBy( offsetX, offsetY );
+                actor.MoveBy( offsetX, offsetY );
             }
         }
 
@@ -500,7 +501,7 @@ public class Button : Table, IDisableable
         {
             for ( var i = 0; i < Children.Size; i++ )
             {
-                Children.GetAt( i )?.MoveBy( -offsetX, -offsetY );
+                Children.GetAt( i ).MoveBy( -offsetX, -offsetY );
             }
         }
 

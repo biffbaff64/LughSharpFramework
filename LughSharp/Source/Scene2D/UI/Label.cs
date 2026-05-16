@@ -29,11 +29,8 @@ using LughSharp.Source.Scene2D.UI.Styles;
 namespace LughSharp.Source.Scene2D.UI;
 
 /// <summary>
-/// A text label, with optional word wrapping.
-/// <para>
-/// The preferred size of the label is determined by the actual text bounds,
-/// unless <see cref="Wrap"/> is enabled.
-/// </para>
+/// A text label, with optional word wrapping. The preferred size of the label is
+/// determined by the actual text bounds, unless <see cref="Wrap"/> is enabled.
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
@@ -49,7 +46,7 @@ public class Label : Widget, IDisposable
     private readonly Vector2     _prefSize       = new();
 
     private StringBuilder    _text            = new();
-    private int?             _intValue        = null;
+    private int?             _intValue;
     private bool             _prefSizeInvalid = true;
     private BitmapFontCache? _fontCache;
     private float            _lastPrefHeight;
@@ -106,8 +103,10 @@ public class Label : Widget, IDisposable
     /// </summary>
     /// <param name="text"></param>
     /// <param name="style"></param>
-    public Label( string? text, LabelStyle style )
+    public Label( string? text, LabelStyle? style )
     {
+        Guard.Against.Null( style );
+        
         if ( text != null )
         {
             _text.Append( text );
@@ -117,7 +116,7 @@ public class Label : Widget, IDisposable
 
         if ( text is { Length: > 0 } )
         {
-            SetSize( GetPrefWidthSafe(), GetPrefHeightSafe() );
+            SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
         }
     }
 
@@ -508,14 +507,14 @@ public class Label : Widget, IDisposable
     /// <returns></returns>
     public override float GetPrefWidth()
     {
-        return GetPrefWidthSafe();
+        return GetPrefWidthUnchecked();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public float GetPrefWidthSafe()
+    public float GetPrefWidthUnchecked()
     {
         if ( Wrap )
         {
@@ -544,14 +543,14 @@ public class Label : Widget, IDisposable
     /// <returns></returns>
     public override float GetPrefHeight()
     {
-        return GetPrefHeightSafe();
+        return GetPrefHeightUnchecked();
     }
 
     /// <summary>
     /// 
     /// </summary>
     /// <returns></returns>
-    public float GetPrefHeightSafe()
+    public float GetPrefHeightUnchecked()
     {
         if ( _prefSizeInvalid )
         {

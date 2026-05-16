@@ -35,15 +35,15 @@ public class ButtonStyle : ISceneStyle
 {
     public string Name { get; set; } = string.Empty;
 
-    public ISceneDrawable Up             { get; set; } = new BaseDrawable();
-    public ISceneDrawable Down           { get; set; } = new BaseDrawable();
-    public ISceneDrawable Over           { get; set; } = new BaseDrawable();
-    public ISceneDrawable Focused        { get; set; } = new BaseDrawable();
-    public ISceneDrawable Disabled       { get; set; } = new BaseDrawable();
-    public ISceneDrawable Checked        { get; set; } = new BaseDrawable();
-    public ISceneDrawable CheckedOver    { get; set; } = new BaseDrawable();
-    public ISceneDrawable CheckedDown    { get; set; } = new BaseDrawable();
-    public ISceneDrawable CheckedFocused { get; set; } = new BaseDrawable();
+    public ISceneDrawable? Up             { get; set; }
+    public ISceneDrawable? Down           { get; set; }
+    public ISceneDrawable? Over           { get; set; }
+    public ISceneDrawable? Focused        { get; set; }
+    public ISceneDrawable? Disabled       { get; set; }
+    public ISceneDrawable? Checked        { get; set; }
+    public ISceneDrawable? CheckedOver    { get; set; }
+    public ISceneDrawable? CheckedDown    { get; set; }
+    public ISceneDrawable? CheckedFocused { get; set; }
 
     public float PressedOffsetX   { get; set; }
     public float PressedOffsetY   { get; set; }
@@ -69,7 +69,7 @@ public class ButtonStyle : ISceneStyle
     /// <param name="up"> The ISceneDrawable image for button UP. </param>
     /// <param name="down"> The ISceneDrawable image for button DOWN. </param>
     /// <param name="chcked"></param>
-    public ButtonStyle( ISceneDrawable up, ISceneDrawable down, ISceneDrawable chcked )
+    public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? chcked )
     {
         Up      = up;
         Down    = down;

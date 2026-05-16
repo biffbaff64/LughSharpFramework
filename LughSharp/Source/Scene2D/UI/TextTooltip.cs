@@ -30,8 +30,12 @@ namespace LughSharp.Source.Scene2D.UI;
 /// A tooltip that shows a label.
 /// </summary>
 [PublicAPI]
-public class TextTooltip : Tooltip< Label >
+public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltipStyle >
 {
+    private TextTooltipStyle? _style;
+    
+    // ========================================================================
+
     public TextTooltip( string text, Skin skin )
         : this( text, new TooltipManager< Label >(), skin.Get< TextTooltipStyle >() )
     {
@@ -60,7 +64,7 @@ public class TextTooltip : Tooltip< Label >
     public TextTooltip( string text, TooltipManager< Label > manager, TextTooltipStyle style )
         : base( null, manager )
     {
-        var label = new Label( text, style.Label )
+        var label = new Label( text, style.LabelStyle )
         {
             Wrap = true
         };
@@ -68,28 +72,33 @@ public class TextTooltip : Tooltip< Label >
         Container.SetContainerActor( label );
         Container.SetWidths( Math.Min( manager.MaxWidth, label.GlyphLayout.Width ) );
 
-        Style = style;
+        SetStyle( style );
     }
 
-    public TextTooltipStyle Style
+    /// <summary>
+    /// Get the current style of the actor
+    /// </summary>
+    public TextTooltipStyle GetStyle()
     {
-        get;
-        set
-        {
-            field = value;
-
-            if ( Container == null )
-            {
-                throw new NullReferenceException( "Container cannot be null" );
-            }
-
-            Container.GetContainerActor()!.Style = value.Label;
-            Container.SetBackground( value.Background );
-            Container.SetMaxWidth( value.WrapWidth );
-        }
+        return _style ?? throw new NullReferenceException( "Style cannot be null" );
     }
 
-    // ========================================================================
+    /// <summary>
+    /// Set the current style of the actor
+    /// </summary>
+    public void SetStyle( TextTooltipStyle value )
+    {
+        _style = value;
+
+        if ( Container == null )
+        {
+            throw new NullReferenceException( "Container cannot be null" );
+        }
+
+        Container.GetContainerActor()?.Style = value.LabelStyle;
+        Container.SetBackground( value.Background );
+        Container.SetMaxWidth( value.WrapWidth );
+    }
 }
 
 // ============================================================================

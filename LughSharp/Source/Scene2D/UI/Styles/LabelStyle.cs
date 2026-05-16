@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 public class LabelStyle : ISceneStyle
 {
     public BitmapFont      Font       { get; set; }
-    public Color?          FontColor  { get; set; } = Color.White;
+    public Color?          FontColor  { get; set; }
     public ISceneDrawable? Background { get; set; }
 
     // ====================================================================
@@ -45,9 +45,7 @@ public class LabelStyle : ISceneStyle
     /// </summary>
     public LabelStyle()
     {
-        Font       = new BitmapFont();
-        FontColor  = Color.White;
-        Background = null;
+        Font = new BitmapFont();
     }
 
     /// <summary>
@@ -59,27 +57,24 @@ public class LabelStyle : ISceneStyle
     public LabelStyle( BitmapFont font, Color? fontColor )
     {
         Font       = font;
-        FontColor  = fontColor ?? Color.White;
+        FontColor  = fontColor;
         Background = new BaseDrawable();
     }
 
     /// <summary>
     /// Creates a new LabelStyle with the same properties as the supplied style.
     /// </summary>
-    public LabelStyle( LabelStyle style )
+    public LabelStyle( LabelStyle? style )
     {
+        Guard.Against.Null( style );
+        
         Font       = style.Font;
-        FontColor  = new Color( style.FontColor ?? Color.White );
         Background = style.Background;
-    }
-
-    /// <summary>
-    /// Returns a string that represents the current object.
-    /// </summary>
-    /// <returns>A string that represents the current object.</returns>
-    public override string ToString()
-    {
-        return $"[Font: {Font}], [FontColor: {FontColor?.Name}], [Background: {Background?.GetType().Name}]";
+        
+        if ( style.FontColor != null )
+        {
+            FontColor = new Color( style.FontColor );
+        }
     }
 }
 

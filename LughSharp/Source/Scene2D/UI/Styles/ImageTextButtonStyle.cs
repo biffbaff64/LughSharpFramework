@@ -33,16 +33,16 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
 {
-    public ISceneDrawable ImageUp          { get; set; }    = new BaseDrawable();
-    public ISceneDrawable ImageDown        { get; set; }    = new BaseDrawable();
-    public ISceneDrawable ImageOver        { get; set; }    = new BaseDrawable();
-    public ISceneDrawable ImageDisabled    { get; set; }    = new BaseDrawable();
-    public ISceneDrawable ImageChecked     { get; set; }    = new BaseDrawable();
-    public ISceneDrawable ImageCheckedDown { get; set; }    = new BaseDrawable();
-    public ISceneDrawable ImageCheckedOver { get; set; }    = new BaseDrawable();
-    
+    public ISceneDrawable? ImageUp          { get; set; }
+    public ISceneDrawable? ImageDown        { get; set; }
+    public ISceneDrawable? ImageOver        { get; set; }
+    public ISceneDrawable? ImageDisabled    { get; set; }
+    public ISceneDrawable? ImageChecked     { get; set; }
+    public ISceneDrawable? ImageCheckedDown { get; set; }
+    public ISceneDrawable? ImageCheckedOver { get; set; }
+
     // ========================================================================
-    
+
     public ImageTextButtonStyle()
     {
     }
@@ -53,7 +53,6 @@ public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
     }
 
     public ImageTextButtonStyle( ImageTextButtonStyle style ) : base( style )
-
     {
         ImageUp          = style.ImageUp;
         ImageDown        = style.ImageDown;
@@ -71,4 +70,3 @@ public class ImageTextButtonStyle : TextButtonStyle, ISceneStyle
 
 // ============================================================================
 // ============================================================================
-

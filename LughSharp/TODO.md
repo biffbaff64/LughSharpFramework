@@ -951,8 +951,8 @@ Button.AddListener( new ChangeListener( ( ev, actor ) =>
 } ) );
 ```
 
-LUGHSHARP/SOURCE/SCENE2D/STYLES
--------------------------------
+LUGHSHARP/SOURCE/SCENE2D/REGISTRYSTYLES
+---------------------------------------
 
 ( Styles to use with StyleRegistry / StyleFactory )
 
@@ -1032,10 +1032,6 @@ LUGHSHARP/SOURCE/SCENE2D/UI
 
 LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
 ----------------------------------
-
-All Styles should provide a fully defined default style. This will
-remove any possibility of problems with the default style not being
-defined..
 
       CODE   DOCU   FOOTER
       ----   ----   ------
