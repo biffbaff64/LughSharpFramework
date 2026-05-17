@@ -206,7 +206,7 @@ public class StageTests : IDisposable
 
         void DialogActor()
         {
-            var dialogStyle = new DialogStyle()
+            var dialogStyle = new DialogStyle
             {
                 Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
                 TitleFont      = new BitmapFont( new FileInfo( Assets.ArialFont ) ),

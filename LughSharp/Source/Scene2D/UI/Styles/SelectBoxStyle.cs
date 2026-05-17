@@ -33,16 +33,17 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SelectBoxStyle : ISceneStyle
 {
-    public BitmapFont      Font               { get; }
-    public ScrollPaneStyle ScrollPaneStyle    { get; }
-    public ListBoxStyle    ListBoxStyle       { get; }
-    public Color           FontColor          { get; }
-    public Color?          OverFontColor      { get; }
-    public Color?          DisabledFontColor  { get; }
-    public ISceneDrawable? Background         { get; }
-    public ISceneDrawable? BackgroundOver     { get; }
-    public ISceneDrawable? BackgroundOpen     { get; }
-    public ISceneDrawable? BackgroundDisabled { get; }
+    public required BitmapFont      Font            { get; set; }
+    public required Color           FontColor       { get; set; }
+    public required ScrollPaneStyle ScrollPaneStyle { get; set; }
+    public required ListBoxStyle    ListBoxStyle    { get; set; }
+    public required ISceneDrawable? Background      { get; set; }
+
+    public Color?          OverFontColor      { get; private set; }
+    public Color?          DisabledFontColor  { get; private set; }
+    public ISceneDrawable? BackgroundOver     { get; private set; }
+    public ISceneDrawable? BackgroundOpen     { get; private set; }
+    public ISceneDrawable? BackgroundDisabled { get; private set; }
 
     // ====================================================================
 
@@ -52,6 +53,7 @@ public class SelectBoxStyle : ISceneStyle
         FontColor       = Color.White;
         ScrollPaneStyle = new ScrollPaneStyle();
         ListBoxStyle    = new ListBoxStyle();
+        Background      = new BaseDrawable();
     }
 
     public SelectBoxStyle( BitmapFont font,

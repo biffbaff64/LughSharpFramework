@@ -1,5 +1,11 @@
 ﻿
-C# 2D Game Framework project inspired by, but not a direct copy of, the Java LibGDX Game Framework.
+C# 2D Game Framework project inspired by, but not a direct copy of, the Java LibGDX Game Framework.#
+The original reason for this project was to learn C# and to gain experience with C#, as my exposure
+that language, and OOP in general was very limited ( I've spent most of my career with C and Assembly
+languages ).
+
+I realise and accept that the code within this project is not the best, and that it is not production ready.
+I'm working on it, and I'm hoping to release a version 1.0.0 at some point.
 
 ( Heavily Work In Progress )
 

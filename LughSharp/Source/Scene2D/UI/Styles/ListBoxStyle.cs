@@ -36,7 +36,7 @@ public class ListBoxStyle : ISceneStyle
     public BitmapFont      Font                { get; set; }
     public Color           FontColorSelected   { get; set; } = Color.White;
     public Color           FontColorUnselected { get; set; } = Color.White;
-    public ISceneDrawable? Selection           { get; set; }
+    public ISceneDrawable  Selection           { get; set; }
     public ISceneDrawable? Down                { get; set; }
     public ISceneDrawable? Over                { get; set; }
     public ISceneDrawable? Background          { get; set; }
@@ -45,7 +45,8 @@ public class ListBoxStyle : ISceneStyle
 
     public ListBoxStyle()
     {
-        Font = new BitmapFont();
+        Font      = new BitmapFont();
+        Selection = new BaseDrawable();
     }
 
     public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected,

@@ -35,9 +35,9 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class WindowStyle : ISceneStyle
 {
-    public ISceneDrawable? Background      { get; set; }
     public BitmapFont?     TitleFont       { get; set; }
     public Color           TitleFontColor  { get; set; }
+    public ISceneDrawable? Background      { get; set; }
     public ISceneDrawable? StageBackground { get; set; }
 
     // ====================================================================
@@ -63,9 +63,9 @@ public class WindowStyle : ISceneStyle
     public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable background )
     {
         TitleFont       = titleFont;
+        TitleFontColor  = titleFontColor;
         Background      = background;
         StageBackground = new BaseDrawable();
-        TitleFontColor  = titleFontColor;
     }
 
     /// <summary>

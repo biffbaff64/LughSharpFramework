@@ -140,7 +140,14 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// <param name="style"></param>
     public void SetStyle( SelectBoxStyle style )
     {
-        Style = style;
+        Style = new SelectBoxStyle
+        {
+            Font            = style.Font,
+            FontColor       = style.FontColor,
+            ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ),
+            ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ),
+            Background      = style.Background
+        };
 
         if ( ScrollPane != null )
         {
@@ -216,19 +223,26 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             throw new RuntimeException( "SelectBoxStyle cannot be null in Layout()." );
         }
 
-        ISceneDrawable bg   = Style.Background;
-        BitmapFont     font = Style.Font;
+        ISceneDrawable? bg   = Style.Background;
+        BitmapFont      font = Style.Font;
 
-        _prefHeight = ( Math.Max( bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
-                                - ( font.GetDescent() * 2 ),
-                                  bg.MinHeight ) );
+        if ( bg != null )
+        {
+            _prefHeight = ( Math.Max( bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
+                                    - ( font.GetDescent() * 2 ),
+                                      bg.MinHeight ) );
+        }
+        else
+        {
+            _prefHeight = ( font.GetCapHeight() - ( font.GetDescent() * 2 ) );
+        }
 
         Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
         {
-            _prefWidth = ( bg.LeftWidth + bg.RightWidth );
+            _prefWidth = ( bg != null ) ? ( bg.LeftWidth + bg.RightWidth ) : 0;
 
             T? selected = GetSelected();
 
@@ -249,16 +263,25 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             }
 
             _prefWidth = ( maxItemWidth );
-            _prefWidth = ( Math.Max( _prefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth ) );
+
+            if ( bg != null )
+            {
+                _prefWidth = ( Math.Max( _prefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth ) );
+            }
 
             ListBoxStyle    listStyle   = Style.ListBoxStyle;
             ScrollPaneStyle scrollStyle = Style.ScrollPaneStyle;
-            float           scrollWidth = maxItemWidth
-                                        + listStyle.Selection.LeftWidth
-                                        + listStyle.Selection.RightWidth;
 
-            bg          = scrollStyle.Background;
-            scrollWidth = Math.Max( ( scrollWidth + bg.LeftWidth + bg.RightWidth ), bg.MinWidth );
+            float scrollWidth = maxItemWidth
+                              + listStyle.Selection.LeftWidth
+                              + listStyle.Selection.RightWidth;
+
+            bg = scrollStyle.Background;
+
+            if ( bg != null )
+            {
+                scrollWidth = Math.Max( ( scrollWidth + bg.LeftWidth + bg.RightWidth ), bg.MinWidth );
+            }
 
             if ( Style.ScrollPaneStyle is { VScroll: not null, VScrollKnob: not null } )
             {
@@ -268,7 +291,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                                              Style.ScrollPaneStyle.VScrollKnob.MinWidth );
                 }
             }
-            
+
             _prefWidth = ( Math.Max( _prefWidth, scrollWidth ) );
         }
 
@@ -281,7 +304,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     protected ISceneDrawable GetBackgroundDrawable()
     {
         Guard.Against.Null( Style.Background );
-        
+
         if ( IsDisabled )
         {
             return Style.BackgroundDisabled ?? Style.Background;
@@ -708,7 +731,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             {
                 height += scrollPaneBackground.TopHeight + scrollPaneBackground.BottomHeight;
             }
-            
+
             if ( listBackground != null )
             {
                 height += listBackground.TopHeight + listBackground.BottomHeight;
