@@ -22,18 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Collections;
 using LughSharp.Source.IO;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Utils.Json;
 
@@ -1076,7 +1068,7 @@ public class Json
         {
             obj = NewInstance( type );
         }
-        catch ( Exception ex )
+        catch ( Exception )
         {
             _classToDefaultValues[ type ] = null!;
 
@@ -1293,7 +1285,7 @@ public class Json
         {
             if ( value == null )
             {
-                JsonWriter?.Value( null );
+                JsonWriter?.Value( string.Empty );
 
                 return;
             }
@@ -1367,12 +1359,12 @@ public class Json
                 {
                     WriteObjectStart( actualType, null );
                     JsonWriter?.Name( "value" );
-                    JsonWriter?.Value( ConvertToString( ( Enum )value ) );
+                    JsonWriter?.Value( ConvertToString( ( Enum )value ) ?? string.Empty );
                     WriteObjectEnd();
                 }
                 else
                 {
-                    JsonWriter?.Value( ConvertToString( ( Enum )value ) );
+                    JsonWriter?.Value( ConvertToString( ( Enum )value ) ?? string.Empty );
                 }
 
                 return;

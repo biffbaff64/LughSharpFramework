@@ -105,6 +105,8 @@ public static class JsonOutput
     /// <returns></returns>
     public static string QuoteName( string? name, JsonOutputType outputType )
     {
+        Guard.Against.Null( name );
+        
         var quote = false;
 
         for ( var i = 0; i < name.Length; i++ )

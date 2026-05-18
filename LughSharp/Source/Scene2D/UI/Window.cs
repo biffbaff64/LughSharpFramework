@@ -66,7 +66,7 @@ public class Window : Table, IStyleable< WindowStyle >
 
     private static readonly Vector2     _tmpPosition = new();
     private static readonly Vector2     _tmpSize     = new();
-    private                 WindowStyle _style;
+    private                 WindowStyle _style       = null!;
 
     // ========================================================================
     // ========================================================================
@@ -119,7 +119,7 @@ public class Window : Table, IStyleable< WindowStyle >
 
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
-        
+
         SetStyle( style );
         SetSize( DefaultWidth, DefaultHeight );
 
@@ -137,7 +137,7 @@ public class Window : Table, IStyleable< WindowStyle >
         TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( 0 );
         AddActor( TitleTable );
     }
-    
+
     /// <summary>
     /// Ensures that the window remains within the bounds of the stage by adjusting
     /// its position if necessary. The check accounts for the stage dimensions, camera

@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text.RegularExpressions;
-
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Utils.Json;
 
 /// <summary>
@@ -189,13 +185,13 @@ public class JsonMatcher : JsonSkimmer
     private const int Keys    = 0b00010000;
     private const int Single  = 0b00100000;
 
-    private JsonMatcher.IProcessor? _processor;
-    private Regex[]?                _patterns;
-    private Regex[]?                _original;
-    private Regex[]?                _all;
+//    private JsonMatcher.IProcessor? _processor;
+//    private Regex[]?                _patterns;
+//    private Regex[]?                _original;
+//    private Regex[]?                _all;
 
-    private int _total;
-    private int _endCaptures;
+//    private int _total;
+//    private int _endCaptures;
 
     // ========================================================================
     

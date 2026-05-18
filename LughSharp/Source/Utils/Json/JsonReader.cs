@@ -22,19 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Collections;
-using LughSharp.Source.Utils.Exceptions;
-
-using FormatException = System.FormatException;
 
 namespace LughSharp.Source.Utils.Json;
 
@@ -145,737 +133,739 @@ public class JsonReader
     /// <exception cref="SerializationException"></exception>
     public JsonValue? Parse( char[] data, int offset, int length )
     {
-        IsStopped = false;
-
-        int     p                = offset;
-        var     stack            = new int[ 4 ];
-        var     s                = 0;
-        string? name             = null;
-        var     needsUnescape    = false;
-        var     stringIsName     = false;
-        var     stringIsUnquoted = false;
-
-        RuntimeException? parseRuntimeEx = null;
-
-        try
-        {
-            int cs  = JsonStart;
-            var top = 0;
-
-            {
-                var gotoTarg = 0;
-
-                while ( true )
-                {
-                    switch ( gotoTarg )
-                    {
-                        case 0:
-                            if ( p == length )
-                            {
-                                gotoTarg = 4;
-
-                                goto _goto;
-                            }
-
-                            if ( cs == 0 )
-                            {
-                                gotoTarg = 5;
-
-                                goto _goto;
-                            }
-
-                            break;
-
-                        case 1:
-
-                            int trans;
-
-                            do
-                            {
-                                int keys = _jsonKeyOffsets[ cs ];
-                                int klen = _jsonSingleLengths[ cs ];
-                                trans = _jsonIndexOffsets[ cs ];
-
-                                if ( klen > 0 )
-                                {
-                                    int lower = keys;
-                                    int upper = keys + klen - 1;
-
-                                    while ( true )
-                                    {
-                                        if ( upper < lower )
-                                        {
-                                            break;
-                                        }
-
-                                        int mid = lower + ( ( upper - lower ) >> 1 );
-
-                                        if ( data[ p ] < _jsonTransKeys[ mid ] )
-                                        {
-                                            upper = mid - 1;
-                                        }
-                                        else if ( data[ p ] > _jsonTransKeys[ mid ] )
-                                        {
-                                            lower = mid + 1;
-                                        }
-                                        else
-                                        {
-                                            trans += ( mid - keys );
-
-                                            goto _match;
-                                        }
-                                    }
-
-                                    keys  += klen;
-                                    trans += klen;
-                                }
-
-                                klen = _jsonRangeLengths[ cs ];
-
-                                if ( klen > 0 )
-                                {
-                                    int lower = keys;
-                                    int mid;
-                                    int upper = keys + ( klen << 1 ) - 2;
-
-                                    while ( true )
-                                    {
-                                        if ( upper < lower )
-                                        {
-                                            break;
-                                        }
-
-                                        mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
-
-                                        if ( data[ p ] < _jsonTransKeys[ mid ] )
-                                        {
-                                            upper = mid - 2;
-                                        }
-                                        else if ( data[ p ] > _jsonTransKeys[ mid + 1 ] )
-                                        {
-                                            lower = mid + 2;
-                                        }
-                                        else
-                                        {
-                                            trans += ( ( mid - keys ) >> 1 );
-
-                                            goto _match;
-                                        }
-                                    }
-
-                                    trans += klen;
-                                }
-                            }
-                            while ( false );
-
-                            trans = _jsonIndicies[ trans ];
-                            cs    = _jsonTransTargs[ trans ];
-
-                            if ( _jsonTransActions[ trans ] != 0 )
-                            {
-                                int acts  = _jsonTransActions[ trans ];
-                                int nacts = _jsonActions[ acts++ ];
-
-                                while ( nacts-- > 0 )
-                                {
-                                    switch ( _jsonActions[ acts++ ] )
-                                    {
-                                        // ------------------------------------
-                                        case 0:
-                                            stringIsName = true;
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 1:
-                                            var value = new string( data, s, p - s );
-
-                                            if ( needsUnescape )
-                                            {
-                                                value = Unescape( value );
-                                            }
-
-                                            if ( stringIsName )
-                                            {
-                                                stringIsName = false;
-                                                name         = value;
-                                            }
-                                            else
-                                            {
-                                                string? valueName = name;
-                                                name = null;
-
-                                                if ( stringIsUnquoted )
-                                                {
-                                                    if ( value.Equals( "true" ) )
-                                                    {
-                                                        HandleBool( valueName, true );
-
-                                                        goto outer1;
-                                                    }
-
-                                                    if ( value.Equals( "false" ) )
-                                                    {
-                                                        HandleBool( valueName, false );
-
-                                                        goto outer1;
-                                                    }
-
-                                                    if ( value.Equals( "null" ) )
-                                                    {
-                                                        HandleString( valueName, null );
-
-                                                        goto outer1;
-                                                    }
-
-                                                    bool couldBeDouble = false, couldBeLong = true;
-
-                                                    for ( int i = s; i < p; i++ )
-                                                    {
-                                                        switch ( data[ i ] )
-                                                        {
-                                                            case '0':
-                                                            case '1':
-                                                            case '2':
-                                                            case '3':
-                                                            case '4':
-                                                            case '5':
-                                                            case '6':
-                                                            case '7':
-                                                            case '8':
-                                                            case '9':
-                                                            case '-':
-                                                            case '+':
-                                                                break;
-
-                                                            case '.':
-                                                            case 'e':
-                                                            case 'E':
-                                                                couldBeDouble = true;
-                                                                couldBeLong   = false;
-
-                                                                break;
-
-                                                            default:
-                                                                couldBeDouble = false;
-                                                                couldBeLong   = false;
-
-                                                                break;
-                                                        }
-                                                    }
-
-                                                    if ( couldBeDouble )
-                                                    {
-                                                        try
-                                                        {
-                                                            HandleNumber( valueName, double.Parse( value ), value );
-
-                                                            goto outer1;
-                                                        }
-                                                        catch ( FormatException )
-                                                        {
-                                                            // Ignored
-                                                        }
-                                                    }
-                                                    else if ( couldBeLong )
-                                                    {
-                                                        try
-                                                        {
-                                                            HandleNumber( valueName, long.Parse( value ), value );
-
-                                                            goto outer1;
-                                                        }
-                                                        catch ( FormatException )
-                                                        {
-                                                            // Ignored
-                                                        }
-                                                    }
-                                                }
-
-                                                HandleString( valueName, value );
-                                            }
-
-                                        outer1:
-
-                                            if ( IsStopped )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            stringIsUnquoted = false;
-                                            s                = p;
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 2:
-                                            StartObject( name );
-
-                                            if ( IsStopped )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            name = null;
-
-                                            if ( top == stack.Length )
-                                            {
-                                                int[] newStack = ArrayPool< int >.Shared.Rent( stack.Length * 2 );
-
-                                                Array.Copy( stack, 0, newStack, 0, stack.Length );
-                                                ArrayPool< int >.Shared.Return( stack );
-                                                stack = newStack;
-                                            }
-
-                                            stack[ top++ ] = cs;
-                                            cs             = 5;
-                                            gotoTarg       = 2;
-
-                                            if ( true )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 3:
-                                            Pop();
-
-                                            if ( IsStopped )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            cs       = stack[ --top ];
-                                            gotoTarg = 2;
-
-                                            if ( true )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 4:
-                                            StartArray( name );
-
-                                            if ( IsStopped )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            name = null;
-
-                                            if ( top == stack.Length )
-                                            {
-                                                int[] newStack = ArrayPool< int >.Shared.Rent( stack.Length * 2 );
-
-                                                Array.Copy( stack, 0, newStack, 0, stack.Length );
-                                                ArrayPool< int >.Shared.Return( stack );
-                                                stack = newStack;
-                                            }
-
-                                            stack[ top++ ] = cs;
-                                            cs             = 23;
-                                            gotoTarg       = 2;
-
-                                            if ( true )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 5:
-                                            Pop();
-
-                                            if ( IsStopped )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            cs       = stack[ --top ];
-                                            gotoTarg = 2;
-
-                                            if ( true )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 6:
-                                            int start = p - 1;
-
-                                            if ( data[ p++ ] == '/' )
-                                            {
-                                                while ( p != length && data[ p ] != '\n' )
-                                                {
-                                                    p++;
-                                                }
-
-                                                p--;
-                                            }
-                                            else
-                                            {
-                                                while ( p + 1 < length && ( data[ p ] != '*' || data[ p + 1 ] != '/' ) )
-                                                {
-                                                    p++;
-                                                }
-
-                                                p++;
-                                            }
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 7:
-                                            s                = p;
-                                            needsUnescape    = false;
-                                            stringIsUnquoted = true;
-
-                                            if ( stringIsName )
-                                            {
-                                                while ( true )
-                                                {
-                                                    switch ( data[ p ] )
-                                                    {
-                                                        case '\\':
-                                                            needsUnescape = true;
-
-                                                            break;
-
-                                                        case '/':
-                                                            if ( p + 1 == length )
-                                                            {
-                                                                break;
-                                                            }
-
-                                                            char c = data[ p + 1 ];
-
-                                                            if ( c == '/' || c == '*' )
-                                                            {
-                                                                goto outer7;
-                                                            }
-
-                                                            break;
-
-                                                        case ':':
-                                                        case '\r':
-                                                        case '\n':
-                                                            goto outer7;
-                                                    }
-
-                                                    p++;
-
-                                                    if ( p == length )
-                                                    {
-                                                        break;
-                                                    }
-                                                }
-
-                                            outer7: ;
-                                            }
-                                            else
-                                            {
-                                                while ( true )
-                                                {
-                                                    switch ( data[ p ] )
-                                                    {
-                                                        case '\\':
-                                                            needsUnescape = true;
-
-                                                            break;
-
-                                                        case '/':
-                                                            if ( p + 1 == length )
-                                                            {
-                                                                break;
-                                                            }
-
-                                                            char c = data[ p + 1 ];
-
-                                                            if ( c == '/' || c == '*' )
-                                                            {
-                                                                goto outer7b;
-                                                            }
-
-                                                            break;
-
-                                                        case '}':
-                                                        case ']':
-                                                        case ',':
-                                                        case '\r':
-                                                        case '\n':
-                                                            goto outer7b;
-                                                    }
-
-                                                    p++;
-
-                                                    if ( p == length )
-                                                    {
-                                                        break;
-                                                    }
-                                                }
-
-                                            outer7b: ;
-                                            }
-
-                                            p--;
-
-                                            while ( char.IsWhiteSpace( data[ p ] ) )
-                                            {
-                                                p--;
-                                            }
-
-                                            break;
-
-                                        // ------------------------------------
-                                        case 8:
-                                            s             = ++p;
-                                            needsUnescape = false;
-
-                                            while ( true )
-                                            {
-                                                switch ( data[ p ] )
-                                                {
-                                                    case '\\':
-                                                        needsUnescape = true;
-                                                        p++;
-
-                                                        break;
-
-                                                    case '"':
-                                                        goto outer8;
-                                                }
-
-                                                p++;
-
-                                                if ( p == length )
-                                                {
-                                                    break;
-                                                }
-                                            }
-
-                                        outer8:
-
-                                            p--;
-
-                                            break;
-                                    }
-                                }
-                            }
-
-                        _match: ;
-
-                            break;
-
-                        case 2:
-                            if ( cs == 0 )
-                            {
-                                gotoTarg = 5;
-
-                                goto _goto;
-                            }
-
-                            if ( ++p != length )
-                            {
-                                gotoTarg = 1;
-
-                                goto _goto;
-                            }
-
-                            break;
-
-                        case 4:
-                            if ( p == length )
-                            {
-                                int acts2  = _jsonEofActions[ cs ];
-                                var nacts2 = ( int )_jsonActions[ acts2++ ];
-
-                                while ( nacts2-- > 0 )
-                                {
-                                    switch ( _jsonActions[ acts2++ ] )
-                                    {
-                                        case 1:
-                                            var value = new string( data, s, p - s );
-
-                                            if ( needsUnescape )
-                                            {
-                                                value = Unescape( value );
-                                            }
-
-                                            if ( stringIsName )
-                                            {
-                                                stringIsName = false;
-                                                name         = value;
-                                            }
-                                            else
-                                            {
-                                                string? valueName = name;
-                                                name = null;
-
-                                                if ( stringIsUnquoted )
-                                                {
-                                                    if ( value.Equals( "true" ) )
-                                                    {
-                                                        HandleBool( valueName, true );
-
-                                                        goto outer41;
-                                                    }
-
-                                                    if ( value.Equals( "false" ) )
-                                                    {
-                                                        HandleBool( valueName, false );
-
-                                                        goto outer41;
-                                                    }
-
-                                                    if ( value.Equals( "null" ) )
-                                                    {
-                                                        HandleString( valueName, null );
-
-                                                        goto outer41;
-                                                    }
-
-                                                    var couldBeDouble = false;
-                                                    var couldBeLong   = true;
-
-                                                    for ( int i = s; i < p; i++ )
-                                                    {
-                                                        switch ( data[ i ] )
-                                                        {
-                                                            case '0':
-                                                            case '1':
-                                                            case '2':
-                                                            case '3':
-                                                            case '4':
-                                                            case '5':
-                                                            case '6':
-                                                            case '7':
-                                                            case '8':
-                                                            case '9':
-                                                            case '-':
-                                                            case '+':
-                                                                break;
-
-                                                            case '.':
-                                                            case 'e':
-                                                            case 'E':
-                                                                couldBeDouble = true;
-                                                                couldBeLong   = false;
-
-                                                                break;
-
-                                                            default:
-                                                                couldBeDouble = false;
-                                                                couldBeLong   = false;
-
-                                                                break;
-                                                        }
-                                                    }
-
-                                                    if ( couldBeDouble )
-                                                    {
-                                                        try
-                                                        {
-                                                            HandleNumber( valueName, double.Parse( value ), value );
-
-                                                            goto outer41;
-                                                        }
-                                                        catch ( FormatException )
-                                                        {
-                                                        }
-                                                    }
-                                                    else if ( couldBeLong )
-                                                    {
-                                                        try
-                                                        {
-                                                            HandleNumber( valueName, long.Parse( value ), value );
-
-                                                            goto outer41;
-                                                        }
-                                                        catch ( FormatException )
-                                                        {
-                                                        }
-                                                    }
-                                                }
-
-                                                HandleString( valueName, value );
-                                            }
-
-                                        outer41:
-
-                                            if ( IsStopped )
-                                            {
-                                                goto _goto;
-                                            }
-
-                                            stringIsUnquoted = false;
-                                            s                = p;
-
-                                            break;
-                                    }
-                                }
-                            }
-
-                            break;
-                    }
-
-                    break;
-                }
-
-            _goto: ;
-            }
-        }
-        catch ( RuntimeException ex )
-        {
-            parseRuntimeEx = ex;
-        }
-
-        ( JsonValue? root, this._root ) = ( this._root, null );
-
-        _current = null;
-
-        if ( !IsStopped )
-        {
-            if ( p < length )
-            {
-                int lineNumber = 1 + data.Count( c => c == '\n' );
-                int start      = Math.Max( 0, p - 32 );
-
-                throw new SerializationException( $"Error parsing JSON on line {lineNumber} "
-                                                + $"near: {new string( data, start, p - start )}"
-                                                + $"*ERROR*{new string( data, p, Math.Min( 64, length - p ) )}",
-                                                  parseRuntimeEx );
-            }
-
-            if ( _elements.Count != 0 )
-            {
-                JsonValue? element = _elements.Peek();
-                _elements.Clear();
-
-                if ( element != null && element.IsObject() )
-                {
-                    throw new SerializationException( "Error parsing JSON, unmatched brace." );
-                }
-                else
-                {
-                    throw new SerializationException( "Error parsing JSON, unmatched bracket." );
-                }
-            }
-
-            if ( parseRuntimeEx != null )
-            {
-                throw new SerializationException( $"Error parsing JSON: {new string( data )}", parseRuntimeEx );
-            }
-        }
-
-        return root;
+//        IsStopped = false;
+//
+//        int     p                = offset;
+//        var     stack            = new int[ 4 ];
+//        var     s                = 0;
+//        string? name             = null;
+//        var     needsUnescape    = false;
+//        var     stringIsName     = false;
+//        var     stringIsUnquoted = false;
+//
+//        RuntimeException? parseRuntimeEx = null;
+//
+//        try
+//        {
+//            int cs  = JsonStart;
+//            var top = 0;
+//
+//            {
+//                var gotoTarg = 0;
+//
+//                while ( true )
+//                {
+//                    switch ( gotoTarg )
+//                    {
+//                        case 0:
+//                            if ( p == length )
+//                            {
+//                                gotoTarg = 4;
+//
+//                                goto _goto;
+//                            }
+//
+//                            if ( cs == 0 )
+//                            {
+//                                gotoTarg = 5;
+//
+//                                goto _goto;
+//                            }
+//
+//                            break;
+//
+//                        case 1:
+//
+//                            int trans;
+//
+//                            do
+//                            {
+//                                int keys = _jsonKeyOffsets[ cs ];
+//                                int klen = _jsonSingleLengths[ cs ];
+//                                trans = _jsonIndexOffsets[ cs ];
+//
+//                                if ( klen > 0 )
+//                                {
+//                                    int lower = keys;
+//                                    int upper = keys + klen - 1;
+//
+//                                    while ( true )
+//                                    {
+//                                        if ( upper < lower )
+//                                        {
+//                                            break;
+//                                        }
+//
+//                                        int mid = lower + ( ( upper - lower ) >> 1 );
+//
+//                                        if ( data[ p ] < _jsonTransKeys[ mid ] )
+//                                        {
+//                                            upper = mid - 1;
+//                                        }
+//                                        else if ( data[ p ] > _jsonTransKeys[ mid ] )
+//                                        {
+//                                            lower = mid + 1;
+//                                        }
+//                                        else
+//                                        {
+//                                            trans += ( mid - keys );
+//
+//                                            goto _match;
+//                                        }
+//                                    }
+//
+//                                    keys  += klen;
+//                                    trans += klen;
+//                                }
+//
+//                                klen = _jsonRangeLengths[ cs ];
+//
+//                                if ( klen > 0 )
+//                                {
+//                                    int lower = keys;
+//                                    int mid;
+//                                    int upper = keys + ( klen << 1 ) - 2;
+//
+//                                    while ( true )
+//                                    {
+//                                        if ( upper < lower )
+//                                        {
+//                                            break;
+//                                        }
+//
+//                                        mid = lower + ( ( ( upper - lower ) >> 1 ) & ~1 );
+//
+//                                        if ( data[ p ] < _jsonTransKeys[ mid ] )
+//                                        {
+//                                            upper = mid - 2;
+//                                        }
+//                                        else if ( data[ p ] > _jsonTransKeys[ mid + 1 ] )
+//                                        {
+//                                            lower = mid + 2;
+//                                        }
+//                                        else
+//                                        {
+//                                            trans += ( ( mid - keys ) >> 1 );
+//
+//                                            goto _match;
+//                                        }
+//                                    }
+//
+//                                    trans += klen;
+//                                }
+//                            }
+//                            while ( false );
+//
+//                            trans = _jsonIndicies[ trans ];
+//                            cs    = _jsonTransTargs[ trans ];
+//
+//                            if ( _jsonTransActions[ trans ] != 0 )
+//                            {
+//                                int acts  = _jsonTransActions[ trans ];
+//                                int nacts = _jsonActions[ acts++ ];
+//
+//                                while ( nacts-- > 0 )
+//                                {
+//                                    switch ( _jsonActions[ acts++ ] )
+//                                    {
+//                                        // ------------------------------------
+//                                        case 0:
+//                                            stringIsName = true;
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 1:
+//                                            var value = new string( data, s, p - s );
+//
+//                                            if ( needsUnescape )
+//                                            {
+//                                                value = Unescape( value );
+//                                            }
+//
+//                                            if ( stringIsName )
+//                                            {
+//                                                stringIsName = false;
+//                                                name         = value;
+//                                            }
+//                                            else
+//                                            {
+//                                                string? valueName = name;
+//                                                name = null;
+//
+//                                                if ( stringIsUnquoted )
+//                                                {
+//                                                    if ( value.Equals( "true" ) )
+//                                                    {
+//                                                        HandleBool( valueName, true );
+//
+//                                                        goto outer1;
+//                                                    }
+//
+//                                                    if ( value.Equals( "false" ) )
+//                                                    {
+//                                                        HandleBool( valueName, false );
+//
+//                                                        goto outer1;
+//                                                    }
+//
+//                                                    if ( value.Equals( "null" ) )
+//                                                    {
+//                                                        HandleString( valueName, null );
+//
+//                                                        goto outer1;
+//                                                    }
+//
+//                                                    bool couldBeDouble = false, couldBeLong = true;
+//
+//                                                    for ( int i = s; i < p; i++ )
+//                                                    {
+//                                                        switch ( data[ i ] )
+//                                                        {
+//                                                            case '0':
+//                                                            case '1':
+//                                                            case '2':
+//                                                            case '3':
+//                                                            case '4':
+//                                                            case '5':
+//                                                            case '6':
+//                                                            case '7':
+//                                                            case '8':
+//                                                            case '9':
+//                                                            case '-':
+//                                                            case '+':
+//                                                                break;
+//
+//                                                            case '.':
+//                                                            case 'e':
+//                                                            case 'E':
+//                                                                couldBeDouble = true;
+//                                                                couldBeLong   = false;
+//
+//                                                                break;
+//
+//                                                            default:
+//                                                                couldBeDouble = false;
+//                                                                couldBeLong   = false;
+//
+//                                                                break;
+//                                                        }
+//                                                    }
+//
+//                                                    if ( couldBeDouble )
+//                                                    {
+//                                                        try
+//                                                        {
+//                                                            HandleNumber( valueName, double.Parse( value ), value );
+//
+//                                                            goto outer1;
+//                                                        }
+//                                                        catch ( FormatException )
+//                                                        {
+//                                                            // Ignored
+//                                                        }
+//                                                    }
+//                                                    else if ( couldBeLong )
+//                                                    {
+//                                                        try
+//                                                        {
+//                                                            HandleNumber( valueName, long.Parse( value ), value );
+//
+//                                                            goto outer1;
+//                                                        }
+//                                                        catch ( FormatException )
+//                                                        {
+//                                                            // Ignored
+//                                                        }
+//                                                    }
+//                                                }
+//
+//                                                HandleString( valueName, value );
+//                                            }
+//
+//                                        outer1:
+//
+//                                            if ( IsStopped )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            stringIsUnquoted = false;
+//                                            s                = p;
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 2:
+//                                            StartObject( name );
+//
+//                                            if ( IsStopped )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            name = null;
+//
+//                                            if ( top == stack.Length )
+//                                            {
+//                                                int[] newStack = ArrayPool< int >.Shared.Rent( stack.Length * 2 );
+//
+//                                                Array.Copy( stack, 0, newStack, 0, stack.Length );
+//                                                ArrayPool< int >.Shared.Return( stack );
+//                                                stack = newStack;
+//                                            }
+//
+//                                            stack[ top++ ] = cs;
+//                                            cs             = 5;
+//                                            gotoTarg       = 2;
+//
+//                                            if ( true )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 3:
+//                                            Pop();
+//
+//                                            if ( IsStopped )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            cs       = stack[ --top ];
+//                                            gotoTarg = 2;
+//
+//                                            if ( true )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 4:
+//                                            StartArray( name );
+//
+//                                            if ( IsStopped )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            name = null;
+//
+//                                            if ( top == stack.Length )
+//                                            {
+//                                                int[] newStack = ArrayPool< int >.Shared.Rent( stack.Length * 2 );
+//
+//                                                Array.Copy( stack, 0, newStack, 0, stack.Length );
+//                                                ArrayPool< int >.Shared.Return( stack );
+//                                                stack = newStack;
+//                                            }
+//
+//                                            stack[ top++ ] = cs;
+//                                            cs             = 23;
+//                                            gotoTarg       = 2;
+//
+//                                            if ( true )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 5:
+//                                            Pop();
+//
+//                                            if ( IsStopped )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            cs       = stack[ --top ];
+//                                            gotoTarg = 2;
+//
+//                                            if ( true )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 6:
+//                                            int start = p - 1;
+//
+//                                            if ( data[ p++ ] == '/' )
+//                                            {
+//                                                while ( p != length && data[ p ] != '\n' )
+//                                                {
+//                                                    p++;
+//                                                }
+//
+//                                                p--;
+//                                            }
+//                                            else
+//                                            {
+//                                                while ( p + 1 < length && ( data[ p ] != '*' || data[ p + 1 ] != '/' ) )
+//                                                {
+//                                                    p++;
+//                                                }
+//
+//                                                p++;
+//                                            }
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 7:
+//                                            s                = p;
+//                                            needsUnescape    = false;
+//                                            stringIsUnquoted = true;
+//
+//                                            if ( stringIsName )
+//                                            {
+//                                                while ( true )
+//                                                {
+//                                                    switch ( data[ p ] )
+//                                                    {
+//                                                        case '\\':
+//                                                            needsUnescape = true;
+//
+//                                                            break;
+//
+//                                                        case '/':
+//                                                            if ( p + 1 == length )
+//                                                            {
+//                                                                break;
+//                                                            }
+//
+//                                                            char c = data[ p + 1 ];
+//
+//                                                            if ( c == '/' || c == '*' )
+//                                                            {
+//                                                                goto outer7;
+//                                                            }
+//
+//                                                            break;
+//
+//                                                        case ':':
+//                                                        case '\r':
+//                                                        case '\n':
+//                                                            goto outer7;
+//                                                    }
+//
+//                                                    p++;
+//
+//                                                    if ( p == length )
+//                                                    {
+//                                                        break;
+//                                                    }
+//                                                }
+//
+//                                            outer7: ;
+//                                            }
+//                                            else
+//                                            {
+//                                                while ( true )
+//                                                {
+//                                                    switch ( data[ p ] )
+//                                                    {
+//                                                        case '\\':
+//                                                            needsUnescape = true;
+//
+//                                                            break;
+//
+//                                                        case '/':
+//                                                            if ( p + 1 == length )
+//                                                            {
+//                                                                break;
+//                                                            }
+//
+//                                                            char c = data[ p + 1 ];
+//
+//                                                            if ( c == '/' || c == '*' )
+//                                                            {
+//                                                                goto outer7b;
+//                                                            }
+//
+//                                                            break;
+//
+//                                                        case '}':
+//                                                        case ']':
+//                                                        case ',':
+//                                                        case '\r':
+//                                                        case '\n':
+//                                                            goto outer7b;
+//                                                    }
+//
+//                                                    p++;
+//
+//                                                    if ( p == length )
+//                                                    {
+//                                                        break;
+//                                                    }
+//                                                }
+//
+//                                            outer7b: ;
+//                                            }
+//
+//                                            p--;
+//
+//                                            while ( char.IsWhiteSpace( data[ p ] ) )
+//                                            {
+//                                                p--;
+//                                            }
+//
+//                                            break;
+//
+//                                        // ------------------------------------
+//                                        case 8:
+//                                            s             = ++p;
+//                                            needsUnescape = false;
+//
+//                                            while ( true )
+//                                            {
+//                                                switch ( data[ p ] )
+//                                                {
+//                                                    case '\\':
+//                                                        needsUnescape = true;
+//                                                        p++;
+//
+//                                                        break;
+//
+//                                                    case '"':
+//                                                        goto outer8;
+//                                                }
+//
+//                                                p++;
+//
+//                                                if ( p == length )
+//                                                {
+//                                                    break;
+//                                                }
+//                                            }
+//
+//                                        outer8:
+//
+//                                            p--;
+//
+//                                            break;
+//                                    }
+//                                }
+//                            }
+//
+//                        _match: ;
+//
+//                            break;
+//
+//                        case 2:
+//                            if ( cs == 0 )
+//                            {
+//                                gotoTarg = 5;
+//
+//                                goto _goto;
+//                            }
+//
+//                            if ( ++p != length )
+//                            {
+//                                gotoTarg = 1;
+//
+//                                goto _goto;
+//                            }
+//
+//                            break;
+//
+//                        case 4:
+//                            if ( p == length )
+//                            {
+//                                int acts2  = _jsonEofActions[ cs ];
+//                                var nacts2 = ( int )_jsonActions[ acts2++ ];
+//
+//                                while ( nacts2-- > 0 )
+//                                {
+//                                    switch ( _jsonActions[ acts2++ ] )
+//                                    {
+//                                        case 1:
+//                                            var value = new string( data, s, p - s );
+//
+//                                            if ( needsUnescape )
+//                                            {
+//                                                value = Unescape( value );
+//                                            }
+//
+//                                            if ( stringIsName )
+//                                            {
+//                                                stringIsName = false;
+//                                                name         = value;
+//                                            }
+//                                            else
+//                                            {
+//                                                string? valueName = name;
+//                                                name = null;
+//
+//                                                if ( stringIsUnquoted )
+//                                                {
+//                                                    if ( value.Equals( "true" ) )
+//                                                    {
+//                                                        HandleBool( valueName, true );
+//
+//                                                        goto outer41;
+//                                                    }
+//
+//                                                    if ( value.Equals( "false" ) )
+//                                                    {
+//                                                        HandleBool( valueName, false );
+//
+//                                                        goto outer41;
+//                                                    }
+//
+//                                                    if ( value.Equals( "null" ) )
+//                                                    {
+//                                                        HandleString( valueName, null );
+//
+//                                                        goto outer41;
+//                                                    }
+//
+//                                                    var couldBeDouble = false;
+//                                                    var couldBeLong   = true;
+//
+//                                                    for ( int i = s; i < p; i++ )
+//                                                    {
+//                                                        switch ( data[ i ] )
+//                                                        {
+//                                                            case '0':
+//                                                            case '1':
+//                                                            case '2':
+//                                                            case '3':
+//                                                            case '4':
+//                                                            case '5':
+//                                                            case '6':
+//                                                            case '7':
+//                                                            case '8':
+//                                                            case '9':
+//                                                            case '-':
+//                                                            case '+':
+//                                                                break;
+//
+//                                                            case '.':
+//                                                            case 'e':
+//                                                            case 'E':
+//                                                                couldBeDouble = true;
+//                                                                couldBeLong   = false;
+//
+//                                                                break;
+//
+//                                                            default:
+//                                                                couldBeDouble = false;
+//                                                                couldBeLong   = false;
+//
+//                                                                break;
+//                                                        }
+//                                                    }
+//
+//                                                    if ( couldBeDouble )
+//                                                    {
+//                                                        try
+//                                                        {
+//                                                            HandleNumber( valueName, double.Parse( value ), value );
+//
+//                                                            goto outer41;
+//                                                        }
+//                                                        catch ( FormatException )
+//                                                        {
+//                                                        }
+//                                                    }
+//                                                    else if ( couldBeLong )
+//                                                    {
+//                                                        try
+//                                                        {
+//                                                            HandleNumber( valueName, long.Parse( value ), value );
+//
+//                                                            goto outer41;
+//                                                        }
+//                                                        catch ( FormatException )
+//                                                        {
+//                                                        }
+//                                                    }
+//                                                }
+//
+//                                                HandleString( valueName, value );
+//                                            }
+//
+//                                        outer41:
+//
+//                                            if ( IsStopped )
+//                                            {
+//                                                goto _goto;
+//                                            }
+//
+//                                            stringIsUnquoted = false;
+//                                            s                = p;
+//
+//                                            break;
+//                                    }
+//                                }
+//                            }
+//
+//                            break;
+//                    }
+//
+//                    break;
+//                }
+//
+//            _goto: ;
+//            }
+//        }
+//        catch ( RuntimeException ex )
+//        {
+//            parseRuntimeEx = ex;
+//        }
+//
+//        ( JsonValue? root, this._root ) = ( this._root, null );
+//
+//        _current = null;
+//
+//        if ( !IsStopped )
+//        {
+//            if ( p < length )
+//            {
+//                int lineNumber = 1 + data.Count( c => c == '\n' );
+//                int start      = Math.Max( 0, p - 32 );
+//
+//                throw new SerializationException( $"Error parsing JSON on line {lineNumber} "
+//                                                + $"near: {new string( data, start, p - start )}"
+//                                                + $"*ERROR*{new string( data, p, Math.Min( 64, length - p ) )}",
+//                                                  parseRuntimeEx );
+//            }
+//
+//            if ( _elements.Count != 0 )
+//            {
+//                JsonValue? element = _elements.Peek();
+//                _elements.Clear();
+//
+//                if ( element != null && element.IsObject() )
+//                {
+//                    throw new SerializationException( "Error parsing JSON, unmatched brace." );
+//                }
+//                else
+//                {
+//                    throw new SerializationException( "Error parsing JSON, unmatched bracket." );
+//                }
+//            }
+//
+//            if ( parseRuntimeEx != null )
+//            {
+//                throw new SerializationException( $"Error parsing JSON: {new string( data )}", parseRuntimeEx );
+//            }
+//        }
+//
+//        return root;
+
+        return _root;
     }
 
     private void AddChild( string? name, JsonValue child )

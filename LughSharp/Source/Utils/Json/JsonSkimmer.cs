@@ -121,7 +121,7 @@ public class JsonSkimmer
 
         // ========================================================================
 
-        public char[]    Chars       { get; set; }
+        public char[]?   Chars       { get; set; }
         public int       Start       { get; set; }
         public int       Length      { get; set; }
         public TokenType Type        { get; set; } = TokenType.Other;

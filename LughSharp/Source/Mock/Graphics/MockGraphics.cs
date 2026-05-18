@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics;
+
 using DotGLFW;
 
 using LughSharp.Source.Graphics.FrameBuffers;
@@ -105,8 +107,11 @@ public class MockGraphics : IGraphicsDevice
     
     // ========================================================================
 
-    private int _fps;
-    private long _frameID;
+    private int  _fps;
+    private long _frameId;
+    private int  _frames;
+    private long _frameCounterStart;
+    private long _lastFrameTime = -1;
     
     // ========================================================================
     
@@ -121,6 +126,25 @@ public class MockGraphics : IGraphicsDevice
     /// </summary>
     public void Update()
     {
+        long time = Stopwatch.GetTimestamp() * 1_000_000_000 / Stopwatch.Frequency;
+
+        if ( _lastFrameTime == -1 )
+        {
+            _lastFrameTime = time;
+        }
+
+        DeltaTime      = ( time - _lastFrameTime ) / ( float )1_000_000_000;
+        _lastFrameTime = time;
+
+        if ( ( time - _frameCounterStart ) >= ( float )1_000_000_000 )
+        {
+            _fps               = _frames;
+            _frames            = 0;
+            _frameCounterStart = time;
+        }
+
+        _frames++;
+        _frameId++;
     }
 
     /// <summary>
@@ -211,7 +235,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The current frame ID.</returns>
     public long GetFrameID()
     {
-        return _frameID;
+        return _frameId;
     }
 
     /// <summary>
