@@ -24,15 +24,12 @@
 
 using DotGLFW;
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.FrameBuffers;
 using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Utils;
 
 using Monitor = DotGLFW.Monitor;
-using Platform = LughSharp.Source.Platform;
 
 namespace LughSharp.Source.Mock.Graphics;
 
@@ -44,7 +41,7 @@ public class MockGraphics : IGraphicsDevice
     /// <summary>
     /// Gets or sets the buffer config data (bits per pixel, depth, stencil, samples).
     /// </summary>
-    public FramebufferConfig BufferConfig { get; set; }
+    public FramebufferConfig BufferConfig { get; set; } = null!;
 
     /// <summary>
     /// Gets or sets the time span between the current frame and the last frame in seconds,
@@ -91,7 +88,7 @@ public class MockGraphics : IGraphicsDevice
     /// which might be needed for advanced GLFW operations.
     /// </para>
     /// </summary>
-    public Window CurrentContext { get; set; }
+    public DotGLFW.Window CurrentContext { get; set; } = null!;
 
     /// <summary>
     /// Gets a value indicating whether continuous rendering is enabled.
@@ -106,9 +103,15 @@ public class MockGraphics : IGraphicsDevice
     /// </summary>
     public bool ContinuousRendering { get; set; }
     
+    // ========================================================================
+
+    private int _fps;
+    private long _frameID;
+    
+    // ========================================================================
+    
     public void SetBackend( Platform.ApplicationType appType, OpenGLProfile profile )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -118,7 +121,6 @@ public class MockGraphics : IGraphicsDevice
     /// </summary>
     public void Update()
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -129,7 +131,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The back buffer scale factor.</returns>
     public float GetBackBufferScale()
     {
-        throw new NotImplementedException();
+        return BackBufferWidth / ( float )WindowWidth;
     }
 
     /// <summary>
@@ -140,7 +142,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The raw delta time in seconds.</returns>
     public float GetRawDeltaTime()
     {
-        throw new NotImplementedException();
+        return DeltaTime;
     }
 
     /// <summary>
@@ -156,7 +158,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The Density Independent Pixel factor of the display.</returns>
     public float GetDensity()
     {
-        throw new NotImplementedException();
+        return 1.0f;
     }
 
     /// <summary>
@@ -167,7 +169,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The left safe area inset in pixels.</returns>
     public int GetSafeInsetLeft()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     /// <summary>
@@ -178,7 +180,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The top safe area inset in pixels.</returns>
     public int GetSafeInsetTop()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     /// <summary>
@@ -189,7 +191,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The bottom safe area inset in pixels.</returns>
     public int GetSafeInsetBottom()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     /// <summary>
@@ -200,7 +202,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The right safe area inset in pixels.</returns>
     public int GetSafeInsetRight()
     {
-        throw new NotImplementedException();
+        return 0;
     }
 
     /// <summary>
@@ -209,7 +211,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The current frame ID.</returns>
     public long GetFrameID()
     {
-        throw new NotImplementedException();
+        return _frameID;
     }
 
     /// <summary>
@@ -219,7 +221,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>The current frames per second.</returns>
     public int GetFramesPerSecond()
     {
-        throw new NotImplementedException();
+        return _fps;
     }
 
     /// <summary>
@@ -229,7 +231,10 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>A tuple containing PPC in the X and Y directions (PpcXY).</returns>
     public (float X, float Y) GetPpcXY()
     {
-        throw new NotImplementedException();
+        DotGLFW.Glfw.GetMonitorPhysicalSize( DotGLFW.Glfw.GetPrimaryMonitor(), out int sizeX, out int sizeY );
+
+        return ( GetDisplayMode().Width / ( float )sizeX * 10,
+            GetDisplayMode().Height / ( float )sizeY * 10 );
     }
 
     /// <summary>
@@ -239,7 +244,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns>A tuple containing PPI in the X and Y directions (PpiXY).</returns>
     public (float X, float Y) GetPpiXY()
     {
-        throw new NotImplementedException();
+        return ( GetPpcXY().X * 2.54f, GetPpcXY().Y * 2.54f );
     }
 
     /// <summary>
@@ -250,7 +255,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns><c>true</c> if display mode changing is supported, <c>false</c> otherwise.</returns>
     public bool SupportsDisplayModeChange()
     {
-        throw new NotImplementedException();
+        return true;
     }
 
     /// <summary>
@@ -261,7 +266,7 @@ public class MockGraphics : IGraphicsDevice
     /// <returns><c>true</c> if the extension is supported, <c>false</c> otherwise.</returns>
     public bool SupportsExtension( string extension )
     {
-        throw new NotImplementedException();
+        return DotGLFW.Glfw.ExtensionSupported( extension );
     }
 
     /// <summary>
@@ -269,7 +274,7 @@ public class MockGraphics : IGraphicsDevice
     /// </summary>
     public bool SupportsCubeMapSeamless()
     {
-        throw new NotImplementedException();
+        return SupportsExtension( "GL_ARB_seamless_cube_map" );
     }
 
     /// <summary>
@@ -279,7 +284,10 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="enable"></param>
     public void EnableCubeMapSeamless( bool enable )
     {
-        throw new NotImplementedException();
+        if ( SupportsCubeMapSeamless() )
+        {
+            Engine.GL.EnableOrDisable( EnableCap.TextureCubemapSeamless, enable );
+        }
     }
 
     /// <summary>
@@ -361,7 +369,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="undecorated"><c>true</c> to make the window undecorated, <c>false</c> otherwise.</param>
     public void SetUndecorated( bool undecorated )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -370,7 +377,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="resizable"><c>true</c> to make the window resizable, <c>false</c> otherwise.</param>
     public void SetResizable( bool resizable )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -383,7 +389,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="source"></param>
     public void UpdateViewport( int x, int y, int width, int height, int source = 0 )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -394,7 +399,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="vsync"><c>true</c> to enable VSync, <c>false</c> to disable it.</param>
     public void SetVSync( bool vsync )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -408,7 +412,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="fps">The desired foreground FPS.</param>
     public void SetForegroundFps( int fps )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -421,7 +424,6 @@ public class MockGraphics : IGraphicsDevice
     /// </summary>
     public void RequestRendering()
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -462,7 +464,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="cursor">The mouse cursor as a <see cref="ICursor"/></param>
     public void SetCursor( ICursor cursor )
     {
-        throw new NotImplementedException();
     }
 
     /// <summary>
@@ -472,7 +473,6 @@ public class MockGraphics : IGraphicsDevice
     /// <param name="systemCursor"> The system cursor to use. </param>
     public void SetSystemCursor( ICursor.SystemCursor systemCursor )
     {
-        throw new NotImplementedException();
     }
 }
 

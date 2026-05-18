@@ -30,14 +30,13 @@ namespace LughSharp.Source.Scene2D.UI;
 
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class ImageTextButton : Button
+public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
 {
-    public Scene2DImage? Image { get; private set;}
-    
+    public Scene2DImage? Image { get; private set; }
+
     // ========================================================================
 
-    private Label?                _label;
-    private ImageTextButtonStyle? _style;
+    private ImageTextButtonStyle _style;
 
     // ========================================================================
 
@@ -94,11 +93,24 @@ public class ImageTextButton : Button
         Image.SetScaling( Scaling.Fit );
         AddCell( Image );
 
-        _label = new Label( text, new LabelStyle( style.Font!, style.FontColor! ) );
-        _label.SetAlignment( Align.Center );
-        AddCell( _label );
+        Label = new Label( text, new LabelStyle( style.Font, style.FontColor ) );
+        Label.SetAlignment( Align.Center );
+        AddCell( Label );
 
         SetStyleAndSize( style );
+    }
+
+    /// <summary>
+    /// Returns the buttons style.
+    /// </summary>
+    public override ImageTextButtonStyle GetStyle() => _style;
+
+    /// <summary>
+    /// Set the current style of the actor
+    /// </summary>
+    public void SetStyle( ImageTextButtonStyle style )
+    {
+        SetStyle< ImageTextButtonStyle >( style );
     }
 
     /// <summary>
@@ -124,14 +136,12 @@ public class ImageTextButton : Button
             UpdateImage();
         }
 
-        if ( _label != null )
-        {
-            LabelStyle labelStyle = _label.Style;
+        LabelStyle labelStyle = Label.GetStyle();
 
-            labelStyle.Font      = textButtonStyle.Font!;
-            labelStyle.FontColor = GetFontColor();
-            _label.Style         = labelStyle;
-        }
+        labelStyle.Font      = textButtonStyle.Font;
+        labelStyle.FontColor = GetFontColor();
+
+        Label.SetStyle( labelStyle );
     }
 
     /// <summary>
@@ -141,7 +151,7 @@ public class ImageTextButton : Button
     public virtual ISceneDrawable? GetImageDrawable()
     {
         // The button is disabled.
-        if ( IsDisabled && ( _style?.ImageDisabled != null ) )
+        if ( IsDisabled && ( _style.ImageDisabled != null ) )
         {
             return _style.ImageDisabled;
         }
@@ -149,12 +159,12 @@ public class ImageTextButton : Button
         // The button is being pressed.
         if ( IsPressed )
         {
-            if ( IsChecked && ( _style?.ImageCheckedDown != null ) )
+            if ( IsChecked && ( _style.ImageCheckedDown != null ) )
             {
                 return _style.ImageCheckedDown;
             }
 
-            if ( _style?.ImageDown != null )
+            if ( _style.ImageDown != null )
             {
                 return _style.ImageDown;
             }
@@ -165,14 +175,14 @@ public class ImageTextButton : Button
         {
             if ( IsChecked )
             {
-                if ( _style?.ImageCheckedOver != null )
+                if ( _style.ImageCheckedOver != null )
                 {
                     return _style.ImageCheckedOver;
                 }
             }
             else
             {
-                if ( _style?.ImageOver != null )
+                if ( _style.ImageOver != null )
                 {
                     return _style.ImageOver;
                 }
@@ -182,18 +192,18 @@ public class ImageTextButton : Button
         // The button is being focused.
         if ( IsChecked )
         {
-            if ( _style?.ImageChecked != null )
+            if ( _style.ImageChecked != null )
             {
                 return _style.ImageChecked;
             }
 
-            if ( IsOver && ( _style?.ImageOver != null ) )
+            if ( IsOver && ( _style.ImageOver != null ) )
             {
                 return _style.ImageOver;
             }
         }
 
-        return _style?.ImageUp;
+        return _style.ImageUp;
     }
 
     /// <summary>
@@ -210,19 +220,19 @@ public class ImageTextButton : Button
     /// </summary>
     protected Color GetFontColor()
     {
-        if ( IsDisabled && ( _style?.DisabledFontColor != null ) )
+        if ( IsDisabled && ( _style.DisabledFontColor != null ) )
         {
             return _style.DisabledFontColor;
         }
 
         if ( IsPressed )
         {
-            if ( IsChecked && ( _style?.CheckedDownFontColor != null ) )
+            if ( IsChecked && ( _style.CheckedDownFontColor != null ) )
             {
                 return _style.CheckedDownFontColor;
             }
 
-            if ( _style?.DownFontColor != null )
+            if ( _style.DownFontColor != null )
             {
                 return _style.DownFontColor;
             }
@@ -232,14 +242,14 @@ public class ImageTextButton : Button
         {
             if ( IsChecked )
             {
-                if ( _style?.CheckedOverFontColor != null )
+                if ( _style.CheckedOverFontColor != null )
                 {
                     return _style.CheckedOverFontColor;
                 }
             }
             else
             {
-                if ( _style?.OverFontColor != null )
+                if ( _style.OverFontColor != null )
                 {
                     return _style.OverFontColor;
                 }
@@ -250,28 +260,28 @@ public class ImageTextButton : Button
 
         if ( IsChecked )
         {
-            if ( focused && ( _style?.CheckedFocusedFontColor != null ) )
+            if ( focused && ( _style.CheckedFocusedFontColor != null ) )
             {
                 return _style.CheckedFocusedFontColor;
             }
 
-            if ( _style?.CheckedFontColor != null )
+            if ( _style.CheckedFontColor != null )
             {
                 return _style.CheckedFontColor;
             }
 
-            if ( IsOver && ( _style?.OverFontColor != null ) )
+            if ( IsOver && ( _style.OverFontColor != null ) )
             {
                 return _style.OverFontColor;
             }
         }
 
-        if ( focused && ( _style?.FocusedFontColor != null ) )
+        if ( focused && ( _style.FocusedFontColor != null ) )
         {
             return _style.FocusedFontColor;
         }
 
-        return _style?.FontColor ?? Color.White;
+        return _style.FontColor ?? Color.White;
     }
 
     /// <inheritdoc />
@@ -279,10 +289,7 @@ public class ImageTextButton : Button
     {
         UpdateImage();
 
-        if ( _label != null )
-        {
-            _label.Style.FontColor = GetFontColor();
-        }
+        Label.GetStyle().FontColor = GetFontColor();
 
         base.Draw( batch, parentAlpha );
     }
@@ -294,24 +301,20 @@ public class ImageTextButton : Button
 
     public Cell? GetLabelCell()
     {
-        return GetCell( _label! );
+        return GetCell( Label );
     }
 
     /// <summary>
-    /// Returns the label for this button, or null if no label is set.
+    /// The label for this button. Cannot be null.
     /// </summary>
-    public Label? GetLabel()
+    public Label Label
     {
-        return _label;
-    }
-
-    /// <summary>
-    /// Sets the label for this button. Cannot be null.
-    /// </summary>
-    public void SetLabel( Label label )
-    {
-        GetLabelCell()?.Actor = label;
-        _label                = label;
+        get;
+        set
+        {
+            GetLabelCell()?.Actor = value;
+            field                 = value;
+        }
     }
 
     /// <summary>
@@ -319,7 +322,7 @@ public class ImageTextButton : Button
     /// </summary>
     public string GetText()
     {
-        return _label?.GetText().ToString() ?? string.Empty;
+        return Label.GetText().ToString();
     }
 
     /// <summary>
@@ -327,11 +330,8 @@ public class ImageTextButton : Button
     /// </summary>
     public void SetText( string text )
     {
-        if ( _label != null )
-        {
-            _label.GetText().Clear();
-            _label.GetText().Append( text );
-        }
+        Label.GetText().Clear();
+        Label.GetText().Append( text );
     }
 }
 

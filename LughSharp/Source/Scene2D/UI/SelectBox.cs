@@ -46,11 +46,10 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class SelectBox< T > : Widget, IDisableable where T : notnull
+public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable where T : notnull
 {
     public ClickListener        ClickListener { get; set; }
-    public SelectBoxStyle       Style         { get; set; } = null!;
-    public List< T >            Items         { get; }      = [ ];
+    public List< T >            Items         { get; } = [ ];
     public bool                 IsDisabled    { get; set; }
     public SelectBoxScrollPane? ScrollPane    { get; private set; }
     public ArraySelection< T >  Selection     { get; private set; }
@@ -63,10 +62,11 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
     private readonly Vector2 _temp = new();
 
-    private Align _alignment = Align.Left;
-    private bool  _selectedPrefWidth;
-    private float _prefWidth;
-    private float _prefHeight;
+    private SelectBoxStyle _style     = null!;
+    private Align          _alignment = Align.Left;
+    private bool           _selectedPrefWidth;
+    private float          _prefWidth;
+    private float          _prefHeight;
 
     // ========================================================================
 
@@ -135,12 +135,21 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     }
 
     /// <summary>
+    /// Returns the select box's style. Modifying the returned style may not have an effect
+    /// until <see cref="SetStyle(SelectBoxStyle)"/> is called.
+    /// </summary>
+    public SelectBoxStyle GetStyle()
+    {
+        return _style;
+    }
+
+    /// <summary>
     /// Sets the <see cref="SelectBoxStyle"/> to use for this select box.
     /// </summary>
     /// <param name="style"></param>
     public void SetStyle( SelectBoxStyle style )
     {
-        Style = new SelectBoxStyle
+        _style = new SelectBoxStyle
         {
             Font            = style.Font,
             FontColor       = style.FontColor,
@@ -151,7 +160,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         if ( ScrollPane != null )
         {
-            ScrollPane.Style = style.ScrollPaneStyle;
+            ScrollPane.SetStyle( style.ScrollPaneStyle );
             ScrollPane.ListBox.SetStyle( style.ListBoxStyle );
         }
 
@@ -218,13 +227,13 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// </exception>
     public override void Layout()
     {
-        if ( Style == null )
+        if ( _style == null )
         {
             throw new RuntimeException( "SelectBoxStyle cannot be null in Layout()." );
         }
 
-        ISceneDrawable? bg   = Style.Background;
-        BitmapFont      font = Style.Font;
+        ISceneDrawable? bg   = _style.Background;
+        BitmapFont      font = _style.Font;
 
         if ( bg != null )
         {
@@ -269,8 +278,8 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                 _prefWidth = ( Math.Max( _prefWidth + bg.LeftWidth + bg.RightWidth, bg.MinWidth ) );
             }
 
-            ListBoxStyle    listStyle   = Style.ListBoxStyle;
-            ScrollPaneStyle scrollStyle = Style.ScrollPaneStyle;
+            ListBoxStyle    listStyle   = _style.ListBoxStyle;
+            ScrollPaneStyle scrollStyle = _style.ScrollPaneStyle;
 
             float scrollWidth = maxItemWidth
                               + listStyle.Selection.LeftWidth
@@ -283,12 +292,12 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                 scrollWidth = Math.Max( ( scrollWidth + bg.LeftWidth + bg.RightWidth ), bg.MinWidth );
             }
 
-            if ( Style.ScrollPaneStyle is { VScroll: not null, VScrollKnob: not null } )
+            if ( _style.ScrollPaneStyle is { VScroll: not null, VScrollKnob: not null } )
             {
                 if ( ScrollPane is not { DisableYScroll: true } )
                 {
-                    scrollWidth += Math.Max( Style.ScrollPaneStyle.VScroll.MinWidth,
-                                             Style.ScrollPaneStyle.VScrollKnob.MinWidth );
+                    scrollWidth += Math.Max( _style.ScrollPaneStyle.VScroll.MinWidth,
+                                             _style.ScrollPaneStyle.VScrollKnob.MinWidth );
                 }
             }
 
@@ -303,19 +312,19 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     /// </summary>
     protected ISceneDrawable GetBackgroundDrawable()
     {
-        Guard.Against.Null( Style.Background );
+        Guard.Against.Null( _style.Background );
 
         if ( IsDisabled )
         {
-            return Style.BackgroundDisabled ?? Style.Background;
+            return _style.BackgroundDisabled ?? _style.Background;
         }
 
         if ( ScrollPane != null && ScrollPane.HasParent() )
         {
-            return Style.BackgroundOpen ?? Style.Background;
+            return _style.BackgroundOpen ?? _style.Background;
         }
 
-        return IsOver() ? Style.BackgroundOver ?? Style.Background : Style.Background;
+        return IsOver() ? _style.BackgroundOver ?? _style.Background : _style.Background;
     }
 
     /// <summary>
@@ -325,15 +334,15 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
     {
         if ( IsDisabled )
         {
-            return Style.DisabledFontColor ?? Style.FontColor;
+            return _style.DisabledFontColor ?? _style.FontColor;
         }
 
         if ( IsOver() || ( ScrollPane != null && ScrollPane.HasParent() ) )
         {
-            return Style.OverFontColor ?? Style.FontColor;
+            return _style.OverFontColor ?? _style.FontColor;
         }
 
-        return Style.FontColor;
+        return _style.FontColor;
     }
 
     /// <summary>
@@ -347,7 +356,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         ISceneDrawable background = GetBackgroundDrawable();
         Color          fontColor  = GetFontColor();
-        BitmapFont     font       = Style.Font;
+        BitmapFont     font       = _style.Font;
 
         // Make copies of x, y, width and height for local modification
         // and preserving the originals.
@@ -482,11 +491,11 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         for ( var index = 0; index < Items.Count; index++ )
         {
-            layout.SetText( Style.Font, ToString( Items[ index ] ) );
+            layout.SetText( _style.Font, ToString( Items[ index ] ) );
             width = Math.Max( layout.Width, width );
         }
 
-        ISceneDrawable? bg = Style.Background;
+        ISceneDrawable? bg = _style.Background;
 
         if ( bg != null )
         {
@@ -679,7 +688,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
 
         // ====================================================================
 
-        public SelectBoxScrollPane( SelectBox< T > parent ) : base( null, parent.Style.ScrollPaneStyle )
+        public SelectBoxScrollPane( SelectBox< T > parent ) : base( null, parent._style.ScrollPaneStyle )
         {
             ParentSelectBox = parent;
 
@@ -687,7 +696,7 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
             SetFadeScrollBars( false );
             SetScrollingDisabled( true, false );
 
-            ListBox = new ListBox< T >( ParentSelectBox.Style.ListBoxStyle )
+            ListBox = new ListBox< T >( ParentSelectBox._style.ListBoxStyle )
             {
                 Touchable    = Touchable.Disabled,
                 TypeToSelect = true
@@ -724,8 +733,8 @@ public class SelectBox< T > : Widget, IDisableable where T : notnull
                 ? ParentSelectBox.Items.Count
                 : Math.Min( MaxListCount, ParentSelectBox.Items.Count ) );
 
-            ISceneDrawable? scrollPaneBackground = Style.Background;
-            ISceneDrawable? listBackground       = ListBox.Style.Background;
+            ISceneDrawable? scrollPaneBackground = GetStyle().Background;
+            ISceneDrawable? listBackground       = ListBox.GetStyle().Background;
 
             if ( scrollPaneBackground != null )
             {

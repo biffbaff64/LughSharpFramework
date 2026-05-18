@@ -54,7 +54,7 @@ public class ImageButtonStyle : ButtonStyle, ISceneStyle
     /// images for <see cref="ImageUp"/>, <see cref="ImageDown"/> and <see cref="ImageChecked"/>.
     /// The provided ISceneDrawables cannot be <c>null</c>.
     /// </summary>
-    public ImageButtonStyle( ISceneDrawable imageUp, ISceneDrawable imageDown, ISceneDrawable imageChecked )
+    public ImageButtonStyle( ISceneDrawable? imageUp, ISceneDrawable? imageDown, ISceneDrawable? imageChecked )
         : base( imageUp, imageDown, imageChecked )
     {
         ImageUp      = imageUp;

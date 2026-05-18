@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
 using LughSharp.Source.Scene2D.Actions;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI.Styles;
@@ -37,7 +35,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// called and the dialog is removed from the stage.
 /// </summary>
 [PublicAPI]
-public class Dialog : Window
+public class Dialog : Window, IStyleable< DialogStyle >
 {
     public Actor? PreviousKeyboardFocus { get; set; }
     public Actor? PreviousScrollFocus   { get; set; }
@@ -63,8 +61,8 @@ public class Dialog : Window
     /// Creates a new Dialog, using the supplied title and <see cref="Skin"/>
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="skin"> The Skin holding the WindowStyle.</param>
-    public Dialog( string title, Skin skin ) : base( title, skin.Get< WindowStyle >() )
+    /// <param name="skin"> The Skin holding the DialogStyle.</param>
+    public Dialog( string title, Skin skin ) : base( title, skin.Get< DialogStyle >() )
     {
         Skin  = skin;
         _skin = skin;
@@ -76,10 +74,10 @@ public class Dialog : Window
     /// 
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="skin"> The Skin holding the WindowStyle.</param>
-    /// <param name="windowStyle"> The <see cref="WindowStyle"/> to use. </param>
-    public Dialog( string title, Skin skin, string windowStyle )
-        : base( title, skin.Get< WindowStyle >( windowStyle ) )
+    /// <param name="skin"> The Skin holding the DialogStyle.</param>
+    /// <param name="dialogStyle"> The <see cref="DialogStyle"/> to use. </param>
+    public Dialog( string title, Skin skin, string dialogStyle )
+        : base( title, skin.Get< DialogStyle >( dialogStyle ) )
     {
         Skin  = skin;
         _skin = skin;
@@ -88,11 +86,11 @@ public class Dialog : Window
     }
 
     /// <summary>
-    /// Creates a new Dialog window, using the supplied name and <see cref="WindowStyle"/>.
+    /// Creates a new Dialog window, using the supplied name and <see cref="DialogStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="windowStyle"> The <see cref="WindowStyle"/> to use. </param>
-    public Dialog( string title, WindowStyle windowStyle ) : base( title, windowStyle )
+    /// <param name="dialogStyle"> The <see cref="DialogStyle"/> to use. </param>
+    public Dialog( string title, DialogStyle dialogStyle ) : base( title, dialogStyle )
     {
         Initialise();
     }
@@ -411,6 +409,10 @@ public class Dialog : Window
     public virtual void ClickResult( object? obj )
     {
     }
+
+    public override DialogStyle GetStyle() => ( DialogStyle )base.GetStyle();
+
+    public void SetStyle( DialogStyle style ) => base.SetStyle( style );
 
     // ========================================================================
     // ========================================================================

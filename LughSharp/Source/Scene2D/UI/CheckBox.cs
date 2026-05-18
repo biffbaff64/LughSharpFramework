@@ -30,13 +30,17 @@ namespace LughSharp.Source.Scene2D.UI;
 
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class CheckBox : TextButton
+public class CheckBox : TextButton, IStyleable< CheckBoxStyle >
 {
-    public Scene2DImage? Image     { get; set; }
-    public Cell?         ImageCell { get; set; }
+    public  Scene2DImage?  Image     { get; set; }
+    public  Cell?          ImageCell { get; set; }
 
     // ========================================================================
 
+    private CheckBoxStyle _style = null!;
+    
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new CheckBox using the supplied <see cref="Skin"/>, and text for the
     /// associated <see cref="Label"/>.
@@ -63,17 +67,17 @@ public class CheckBox : TextButton
     /// </summary>
     public CheckBox( string text, CheckBoxStyle style ) : base( text, style )
     {
-        SafeSetup( style );
+        Setup( style );
     }
 
     /// <summary>
     /// Private setup method to allow calls to virtual methods that can't
     /// be called from constructors.
     /// </summary>
-    private void SafeSetup( CheckBoxStyle style )
+    private void Setup( CheckBoxStyle style )
     {
-        Style = style;
-        
+        SetStyle( style );
+
         Label? label = Label;
 
         // Override the default label alignment, set in TextButton.
@@ -108,33 +112,33 @@ public class CheckBox : TextButton
     /// </summary>
     private ISceneDrawable? GetImageDrawable()
     {
-        Guard.Against.Null( Style );
+        Guard.Against.Null( _style );
 
         if ( IsDisabled )
         {
-            if ( IsChecked && Style.CheckboxOnDisabled != null )
+            if ( IsChecked && _style.CheckboxOnDisabled != null )
             {
-                return Style.CheckboxOnDisabled;
+                return _style.CheckboxOnDisabled;
             }
 
-            return Style.CheckboxOffDisabled;
+            return _style.CheckboxOffDisabled;
         }
 
         bool over = IsOver && !IsDisabled;
 
-        if ( IsChecked && Style.CheckboxOn != null )
+        if ( IsChecked && _style.CheckboxOn != null )
         {
-            return over && Style.CheckboxOnOver != null
-                ? Style.CheckboxOnOver
-                : Style.CheckboxOn;
+            return over && _style.CheckboxOnOver != null
+                ? _style.CheckboxOnOver
+                : _style.CheckboxOn;
         }
 
-        if ( over && Style.CheckboxOver != null )
+        if ( over && _style.CheckboxOver != null )
         {
-            return Style.CheckboxOver;
+            return _style.CheckboxOver;
         }
 
-        return Style.CheckboxOff;
+        return _style.CheckboxOff;
     }
 
     /// <summary>
@@ -143,14 +147,18 @@ public class CheckBox : TextButton
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
     /// </exception>
-    public new CheckBoxStyle? Style
+    public override CheckBoxStyle GetStyle() => _style;
+
+    /// <summary>
+    /// Returns the <see cref="CheckBoxStyle"/> for this CheckBox.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    /// Thrown if an attempt to set Style to null is made.
+    /// </exception>
+    public void SetStyle( CheckBoxStyle value )
     {
-        get;
-        set
-        {
-            field      = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );
-            base.Style = value;
-        }
+        _style     = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );
+        base.SetStyle( value );
     }
 }
 

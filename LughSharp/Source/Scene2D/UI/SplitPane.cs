@@ -32,7 +32,7 @@ using Rectangle = LughSharp.Source.Maths.Rectangle;
 namespace LughSharp.Source.Scene2D.UI;
 
 [PublicAPI]
-public class SplitPane : WidgetGroup
+public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
 {
     protected        bool      CursorOverHandle { get; private set; }
     protected        Rectangle HandleBounds     { get; } = new();

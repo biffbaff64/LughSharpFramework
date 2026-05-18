@@ -58,7 +58,7 @@ public class Scene2DUtils
             stage.Draw();
         }
     }
-    
+
     /// <summary>
     /// Creates a <see cref="Table"/>, without adding it to the stage.
     /// </summary>
@@ -138,7 +138,6 @@ public class Scene2DUtils
         var label = new Label( labelText, label1Style )
         {
             LabelAlign = Align.Center,
-            Style      = label1Style
         };
         label.SetPosition( pos.X, pos.Y );
 
@@ -174,11 +173,11 @@ public class Scene2DUtils
     /// <param name="stage"> The <see cref="Stage"/>. </param>
     /// <returns> The ImageButton. </returns>
     public static ImageButton AddButton( Scene2DImage upButton,
-                                  Scene2DImage downButton,
-                                  Scene2DImage checkedButton,
-                                  int x,
-                                  int y,
-                                  Stage stage )
+                                         Scene2DImage downButton,
+                                         Scene2DImage checkedButton,
+                                         int x,
+                                         int y,
+                                         Stage stage )
     {
         var imageButton = new ImageButton( upButton.Drawable, downButton.Drawable, checkedButton.Drawable );
 
@@ -251,11 +250,11 @@ public class Scene2DUtils
     public static Label MakeLabel( string str, int x, int y, Color color, Skin skin )
     {
         var        label = new Label( str, skin );
-        LabelStyle style = label.Style;
+        LabelStyle style = label.GetStyle();
 
         style.FontColor = color;
 
-        label.Style = style;
+        label.SetStyle( style );
         label.SetAlignment( Align.Center );
         label.SetPosition( x, y );
 
@@ -302,17 +301,18 @@ public class Scene2DUtils
     /// <param name="color"> The Tint. </param>
     /// <param name="skin"> The <see cref="Skin"/> to use. </param>
     /// <returns> The Checkbox. </returns>
-    public static CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color, Skin skin )
+    public static CheckBox MakeCheckBox( TextureRegion imageOn, TextureRegion imageOff, int x, int y, Color color,
+                                         Skin skin )
     {
-        var            checkBox = new CheckBox( string.Empty, skin );
-        CheckBoxStyle? style    = checkBox.Style;
+        var           checkBox = new CheckBox( string.Empty, skin );
+        CheckBoxStyle style    = checkBox.GetStyle();
 
-        style?.FontColor   = color;
-        style?.CheckboxOn  = new TextureRegionDrawable( imageOn );
-        style?.CheckboxOff = new TextureRegionDrawable( imageOff );
+        style.FontColor   = color;
+        style.CheckboxOn  = new TextureRegionDrawable( imageOn );
+        style.CheckboxOff = new TextureRegionDrawable( imageOff );
 
         checkBox.SetSize( imageOn.GetRegionWidth(), imageOn.GetRegionHeight() );
-        checkBox.Style = style;
+        checkBox.SetStyle( style );
         checkBox.SetPosition( x, y );
 
         return checkBox;

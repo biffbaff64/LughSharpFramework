@@ -54,7 +54,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </remarks>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class ProgressBar : Widget, IDisableable
+public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 {
     public float KnobPosition { get; set; }
     public float MinValue     { get; set; }
@@ -74,9 +74,10 @@ public class ProgressBar : Widget, IDisableable
 
     private readonly bool _programmaticChangeEvents = true;
 
-    private float _animateDuration;
-    private float _animateFromValue;
-    private float _animateTime;
+    private float            _animateDuration;
+    private float            _animateFromValue;
+    private float            _animateTime;
+    private ProgressBarStyle _style = null!;
 
     // ========================================================================
     // ========================================================================
@@ -141,7 +142,7 @@ public class ProgressBar : Widget, IDisableable
             throw new ArgumentException( $"stepSize must be > 0. stepSize: {stepSize}" );
         }
 
-        Style = style;
+        SetStyle( style );
 
         MinValue   = min;
         MaxValue   = max;
@@ -180,16 +181,17 @@ public class ProgressBar : Widget, IDisableable
     /// <summary>
     /// 
     /// </summary>
-    public ProgressBarStyle Style
-    {
-        get;
-        set
-        {
-            Guard.Against.Null( value );
+    public virtual ProgressBarStyle GetStyle() => _style;
 
-            field = value;
-            InvalidateHierarchy();
-        }
+    /// <summary>
+    /// 
+    /// </summary>
+    public void SetStyle( ProgressBarStyle value )
+    {
+        Guard.Against.Null( value );
+
+        _style = value;
+        InvalidateHierarchy();
     }
 
     /// <inheritdoc />
@@ -211,7 +213,7 @@ public class ProgressBar : Widget, IDisableable
     /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        ISceneDrawable? knob        = Style.Knob;
+        ISceneDrawable? knob        = _style.Knob;
         ISceneDrawable? currentKnob = GetKnobDrawable();
         ISceneDrawable? bg          = GetBackgroundDrawable();
         ISceneDrawable? knobBefore  = GetKnobBeforeDrawable();
@@ -242,7 +244,6 @@ public class ProgressBar : Widget, IDisableable
 
         void DrawVerticalBar()
         {
-            float bgTopHeight    = 0;
             float bgBottomHeight = 0;
 
             if ( bg != null )
@@ -254,7 +255,8 @@ public class ProgressBar : Widget, IDisableable
                            bg.MinWidth,
                            height );
 
-                bgTopHeight    =  bg.TopHeight;
+                float bgTopHeight = bg.TopHeight;
+                
                 bgBottomHeight =  bg.BottomHeight;
                 height         -= bgTopHeight + bgBottomHeight;
             }
@@ -304,7 +306,6 @@ public class ProgressBar : Widget, IDisableable
         void DrawHorizontalBar()
         {
             float bgLeftWidth  = 0;
-            float bgRightWidth = 0;
 
             if ( bg != null )
             {
@@ -314,8 +315,10 @@ public class ProgressBar : Widget, IDisableable
                            ( float )Math.Round( y + ( ( height - bg.MinHeight ) * 0.5f ) ),
                            width,
                            ( float )Math.Round( bg.MinHeight ) );
+                
+                float bgRightWidth = bg.RightWidth;
+
                 bgLeftWidth  =  bg.LeftWidth;
-                bgRightWidth =  bg.RightWidth;
                 width        -= bgLeftWidth + bgRightWidth;
             }
 
@@ -455,8 +458,8 @@ public class ProgressBar : Widget, IDisableable
 
         if ( _programmaticChangeEvents )
         {
-            ChangeListener.ChangeEvent changeEvent = Pools.Obtain< ChangeListener.ChangeEvent > ();
-            bool     cancelled   = Fire( changeEvent );
+            ChangeListener.ChangeEvent changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+            bool                       cancelled   = Fire( changeEvent );
 
             Pools.Free( changeEvent );
 
@@ -532,7 +535,7 @@ public class ProgressBar : Widget, IDisableable
     {
         if ( IsVertical )
         {
-            ISceneDrawable? knob = Style.Knob;
+            ISceneDrawable? knob = _style.Knob;
             ISceneDrawable? bg   = GetBackgroundDrawable();
 
             return Math.Max( knob?.MinWidth ?? 0, bg?.MinWidth ?? 0 );
@@ -558,7 +561,7 @@ public class ProgressBar : Widget, IDisableable
             return DefaultPrefHeight;
         }
 
-        ISceneDrawable? knob = Style.Knob;
+        ISceneDrawable? knob = _style.Knob;
         ISceneDrawable? bg   = GetBackgroundDrawable();
 
         return Math.Max( knob?.MinHeight ?? 0, bg?.MinHeight ?? 0 );
@@ -640,12 +643,12 @@ public class ProgressBar : Widget, IDisableable
     /// <returns></returns>
     private ISceneDrawable? GetBackgroundDrawable()
     {
-        if ( IsDisabled && ( Style.DisabledBackground != null ) )
+        if ( IsDisabled && ( _style.DisabledBackground != null ) )
         {
-            return Style.DisabledBackground;
+            return _style.DisabledBackground;
         }
 
-        return Style.Background;
+        return _style.Background;
     }
 
     /// <summary>
@@ -660,12 +663,12 @@ public class ProgressBar : Widget, IDisableable
     /// </returns>
     private ISceneDrawable? GetKnobDrawable()
     {
-        if ( IsDisabled && ( Style.DisabledKnob != null ) )
+        if ( IsDisabled && ( _style.DisabledKnob != null ) )
         {
-            return Style.DisabledKnob;
+            return _style.DisabledKnob;
         }
 
-        return Style.Knob;
+        return _style.Knob;
     }
 
     /// <summary>
@@ -680,12 +683,12 @@ public class ProgressBar : Widget, IDisableable
     /// </returns>
     private ISceneDrawable? GetKnobBeforeDrawable()
     {
-        if ( IsDisabled && ( Style.DisabledKnobBefore != null ) )
+        if ( IsDisabled && ( _style.DisabledKnobBefore != null ) )
         {
-            return Style.DisabledKnobBefore;
+            return _style.DisabledKnobBefore;
         }
 
-        return Style.KnobBefore;
+        return _style.KnobBefore;
     }
 
     /// <summary>
@@ -700,12 +703,12 @@ public class ProgressBar : Widget, IDisableable
     /// </returns>
     private ISceneDrawable? GetKnobAfterDrawable()
     {
-        if ( IsDisabled && ( Style.DisabledKnobAfter != null ) )
+        if ( IsDisabled && ( _style.DisabledKnobAfter != null ) )
         {
-            return Style.DisabledKnobAfter;
+            return _style.DisabledKnobAfter;
         }
 
-        return Style.KnobAfter;
+        return _style.KnobAfter;
     }
 }
 

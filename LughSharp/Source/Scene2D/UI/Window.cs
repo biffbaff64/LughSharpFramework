@@ -42,7 +42,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class Window : Table
+public class Window : Table, IStyleable< WindowStyle >
 {
     public int    ResizeBorder   { get; set; } = 8;
     public bool   IsMovable      { get; set; } = true;
@@ -64,8 +64,9 @@ public class Window : Table
     private const int   DefaultHeight = 150;
     private const Align Move          = Align.Special;
 
-    private static readonly Vector2 _tmpPosition = new();
-    private static readonly Vector2 _tmpSize     = new();
+    private static readonly Vector2     _tmpPosition = new();
+    private static readonly Vector2     _tmpSize     = new();
+    private                 WindowStyle _style;
 
     // ========================================================================
     // ========================================================================
@@ -119,7 +120,7 @@ public class Window : Table
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
         
-        Style = style;
+        SetStyle( style );
         SetSize( DefaultWidth, DefaultHeight );
 
         AddCaptureListener( new WindowCaptureListener( this ) );
@@ -233,7 +234,7 @@ public class Window : Table
 
             EnsureWithinStage();
 
-            if ( Style.StageBackground != null )
+            if ( GetStyle().StageBackground != null )
             {
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
                 StageToLocalCoordinates( _tmpSize.Set( Stage.Width, Stage.Height ) );
@@ -263,7 +264,7 @@ public class Window : Table
     {
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-        Style.StageBackground?.Draw( batch, x, y, width, height );
+        GetStyle().StageBackground?.Draw( batch, x, y, width, height );
     }
 
     /// <summary>
@@ -345,24 +346,26 @@ public class Window : Table
     }
 
     /// <summary>
+    /// Gets this windows <see cref="WindowStyle"/> property. Modifying the returned style
+    /// may not have an effect until <see cref="SetStyle(WindowStyle)"/> is called.
+    /// </summary>
+    public virtual WindowStyle GetStyle() => _style;
+
+    /// <summary>
     /// Gets this windows <see cref="WindowStyle"/> property.
     /// </summary>
-    public WindowStyle Style
+    public virtual void SetStyle( WindowStyle style )
     {
-        get;
-        set
+        _style = style;
+
+        SetBackground( _style.Background );
+
+        if ( ( TitleLabel != null ) && ( _style.TitleFont != null ) )
         {
-            field = value;
-
-            SetBackground( Style.Background );
-
-            if ( ( TitleLabel != null ) && ( field.TitleFont != null ) )
-            {
-                TitleLabel.Style = new LabelStyle( field.TitleFont, field.TitleFontColor );
-            }
-
-            InvalidateHierarchy();
+            TitleLabel.SetStyle( new LabelStyle( _style.TitleFont, _style.TitleFontColor ) );
         }
+
+        InvalidateHierarchy();
     }
 
     // ========================================================================

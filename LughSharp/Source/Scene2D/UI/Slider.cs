@@ -49,7 +49,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </remarks>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class Slider : ProgressBar
+public class Slider : ProgressBar, IStyleable< SliderStyle >
 {
     private int      _draggingPointer = -1;
     private float[]? _snapValues;
@@ -192,7 +192,7 @@ public class Slider : ProgressBar
     /// </summary>
     protected ISceneDrawable? GetBackgroundDrawable()
     {
-        var style = ( SliderStyle )Style;
+        var style = ( SliderStyle )GetStyle();
 
         if ( IsDisabled && ( style.DisabledBackground != null ) )
         {
@@ -218,7 +218,7 @@ public class Slider : ProgressBar
     /// </summary>
     protected ISceneDrawable? GetKnobDrawable()
     {
-        var style = ( SliderStyle )Style;
+        var style = ( SliderStyle )GetStyle();
 
         if ( IsDisabled && ( style.DisabledKnob != null ) )
         {
@@ -249,7 +249,7 @@ public class Slider : ProgressBar
     /// </returns>
     protected ISceneDrawable? GetKnobBeforeDrawable()
     {
-        var style = ( SliderStyle )Style;
+        var style = ( SliderStyle )GetStyle();
 
         if ( IsDisabled && ( style.DisabledKnobBefore != null ) )
         {
@@ -282,7 +282,7 @@ public class Slider : ProgressBar
     /// </returns>
     protected ISceneDrawable? GetKnobAfterDrawable()
     {
-        var style = ( SliderStyle )Style;
+        var style = ( SliderStyle )GetStyle();
 
         if ( IsDisabled && ( style.DisabledKnobAfter != null ) )
         {
@@ -310,7 +310,7 @@ public class Slider : ProgressBar
     /// <returns>True if the value was successfully set, otherwise false.</returns>
     private bool CalculatePositionAndValue( float x, float y )
     {
-        SliderStyle     style = ( SliderStyle )Style;
+        SliderStyle     style = ( SliderStyle )GetStyle();
         ISceneDrawable? knob  = style.Knob;
         ISceneDrawable? bg    = GetBackgroundDrawable();
 
@@ -426,6 +426,13 @@ public class Slider : ProgressBar
         Value = MinValue + ( ( MaxValue - MinValue ) * VisualInterpolationInverse.Apply( percent ) );
     }
 
+    public override SliderStyle GetStyle() => ( SliderStyle )base.GetStyle();
+
+    public void SetStyle( SliderStyle style )
+    {
+        base.SetStyle( style );
+    }
+    
     // ========================================================================
     // ========================================================================
 

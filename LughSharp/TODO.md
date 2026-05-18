@@ -23,7 +23,7 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 - Methods like **Dispose(), ToString(), Equals(), GetHashCode() ( Essentially overridden system methods )**
 - should be positioned at the END of source files.
-- All source files should have a footer at the bottom of the file, consisting of 2 lines of '=' signs
+- All source files should have a footer at the bottom of the file, consisting of two lines of '=' signs
 - 80 chars long.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -984,51 +984,45 @@ LUGHSHARP/SOURCE/SCENE2D/UI
     TODO: Streamline the Button classes. Currently there is Button,
           TextButton, ImageTextButton, ImageButton. Are all of them needed?
 
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - Button               - Draws. Detects click, release, hover.
-    - DONE - IP   - DONE - ButtonGroup          - 
-    - IP   - IP   - DONE - Cell                 - 
-    - IP   - IP   - DONE - CheckBox             - 
-    -      -      -      - Container            - 
-    - IP   - IP   - DONE - Dialog               - 
-    -      -      -      - HorizontalGroup      - 
-    - IP   - IP   - DONE - ImageButton          - Draws. Detects click, release, hover.
-    - IP   - IP   - DONE - ImageTextButton      - Draws. Detects click, release, hover. Text draws correctly.
-    -      -      -      - IOnScreenKeyboard    - 
-    - DONE - DONE - DONE - IStyleable           - 
-    -      -      -      - Label                - 
-    -      -      -      - ListBox              - 
-    -      -      -      - ParticleEffectActor  - 
-    - IP   - IP   - DONE - ProgressBar          - 
-    -      -      -      - Scene2DImage         - 
-    -      -      -      - ScrollPane           - 
-    -      -      -      - SelectBox            - 
-    -      -      -      - Skin                 - 
-    - DONE - DONE - DONE - Slider               - 
-    -      -      -      - SplitPane            - 
-    -      -      -      - Stack                - 
-    - IP   - IP   - DONE - StyleFactory         -            
-    - IP   - IP   - DONE - StyleRegistry        -
-    -      -      -      - Table                - 
-    -      -      -      - TextArea             - 
-    - IP   - IP   - DONE - TextButton           - Draws. Detects click, release, hover. Text draws correctly.
-    - IP   - IP   - DONE - TextField            - 
-    - IP   - IP   - DONE - TextTooltip          - 
-    - IP   - IP   - DONE - Touchpad             - 
-    - IP   - IP   - DONE - Tree                 - 
-    - IP   - IP   - DONE - Window               - 
-    -      -      -      - TextField            - 
-    -      -      -      - TextTooltip          - 
-    -      -      -      - Tooltip              - 
-    -      -      -      - TooltipManager       - 
-    -      -      -      - Touchpad             - 
-    -      -      -      - Tree                 - 
-    -      -      -      - Value                - 
-    -      -      -      - VerticalGroup        - 
-    -      -      -      - Widget               - 
-    - DONE - DONE - DONE - WidgetGroup          - 
-    -      -      -      - Window               - 
+      CODE   DOCU   FOOTER IStyleable
+      ----   ----   ------ ----------
+    - DONE - DONE - DONE - DONE - xxxx - Button               - 
+    - DONE - IP   - DONE - xxxx - xxxx - ButtonGroup              - 
+    - IP   - IP   - DONE - xxxx - xxxx - Cell                 - 
+    - IP   - IP   - DONE - DONE - xxxx - CheckBox             - 
+    -      -      -      - xxxx - xxxx - Container            - 
+    - IP   - IP   - DONE - DONE - xxxx - Dialog               - 
+    -      -      -      - xxxx - xxxx - HorizontalGroup      - 
+    - IP   - IP   - DONE - DONE - xxxx - ImageButton          - 
+    - IP   - IP   - DONE - DONE - xxxx - ImageTextButton      - 
+    -      -      -      - xxxx - xxxx - IOnScreenKeyboard    - 
+    - DONE - DONE - DONE - xxxx - xxxx - IStyleable           - 
+    -      -      -      - DONE - xxxx - Label                - 
+    -      -      -      - DONE - xxxx - ListBox              - 
+    -      -      -      - xxxx - xxxx - ParticleEffectActor  - 
+    - IP   - IP   - DONE - DONE - xxxx - ProgressBar          - 
+    -      -      -      - xxxx - xxxx - Scene2DImage         - 
+    -      -      -      - DONE - xxxx - ScrollPane           - 
+    -      -      -      - DONE - xxxx - SelectBox            - 
+    -      -      -      - xxxx - xxxx - Skin                 - 
+    - DONE - DONE - DONE - DONE - xxxx - Slider               - 
+    -      -      -      - DONE - xxxx - SplitPane            - 
+    -      -      -      - xxxx - xxxx - Stack                - 
+    - IP   - IP   - DONE - xxxx - xxxx - StyleFactory         -            
+    - IP   - IP   - DONE - xxxx - xxxx - StyleRegistry        -
+    -      -      -      - xxxx - xxxx - Table                - 
+    -      -      -      - DONE - xxxx - TextArea             - 
+    - IP   - IP   - DONE - DONE - xxxx - TextButton           - 
+    - IP   - IP   - DONE - DONE - xxxx - TextField            - 
+    - IP   - IP   - DONE - xxxx - xxxx - TextTooltip          - 
+    -      -      -      - xxxx - xxxx - TooltipManager       - 
+    - IP   - IP   - DONE - DONE - xxxx - Touchpad             - 
+    - IP   - IP   - DONE - xxxx - xxxx - Tree                 - 
+    -      -      -      - xxxx - xxxx - Value                - 
+    -      -      -      - xxxx - xxxx - VerticalGroup        - 
+    -      -      -      - xxxx - xxxx - Widget               - 
+    - DONE - DONE - DONE - xxxx - xxxx - WidgetGroup          - 
+    - IP   - IP   - DONE - DONE - xxxx - Window               - 
 
 LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
 ----------------------------------

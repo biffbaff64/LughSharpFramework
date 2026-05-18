@@ -45,7 +45,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class ListBox< T > : Widget where T : notnull
+public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }
     public InputListener?      KeyListener  { get; set; }
@@ -55,18 +55,13 @@ public class ListBox< T > : Widget where T : notnull
     public Align               Alignment    { get; set; } = Align.Left;
     public bool                TypeToSelect { get; set; }
 
-    /// <summary>
-    /// Returns the list's style. Modifying the returned style may not have an
-    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
-    /// </summary>
-    public ListBoxStyle Style { get; set; } = null!;
-
     // ========================================================================
 
-    private int   _overIndex    = -1;
-    private int   _pressedIndex = -1;
-    private float _prefHeight;
-    private float _prefWidth;
+    private int          _overIndex    = -1;
+    private int          _pressedIndex = -1;
+    private ListBoxStyle _style        = null!;
+    private float        _prefHeight;
+    private float        _prefWidth;
 
     // ========================================================================
 
@@ -101,30 +96,6 @@ public class ListBox< T > : Widget where T : notnull
         Create( boxStyle );
     }
 
-    public override float GetPrefWidth()
-    {
-        Validate();
-
-        return _prefWidth;
-    }
-
-    public void SetPrefWidth( float value )
-    {
-        _prefWidth = value;
-    }
-
-    public override float GetPrefHeight()
-    {
-        Validate();
-
-        return _prefHeight;
-    }
-
-    public void SetPrefHeight( float value )
-    {
-        _prefHeight = value;
-    }
-
     private void Create( ListBoxStyle boxStyle )
     {
         Selection = new ArraySelection< T >( Items )
@@ -142,9 +113,15 @@ public class ListBox< T > : Widget where T : notnull
         AddListener( new ListInputListener( this ) );
     }
 
+    /// <summary>
+    /// Returns the list's style. Modifying the returned style may not have an
+    /// effect until <see cref="SetStyle(ListBoxStyle)"/> is called.
+    /// </summary>
+    public ListBoxStyle GetStyle() => _style;
+
     public void SetStyle( ListBoxStyle boxStyle )
     {
-        Style = boxStyle ?? throw new ArgumentException( "style cannot be null." );
+        _style = boxStyle ?? throw new ArgumentException( "style cannot be null." );
 
         InvalidateHierarchy();
     }
@@ -158,8 +135,8 @@ public class ListBox< T > : Widget where T : notnull
     /// </summary>
     public override void Layout()
     {
-        BitmapFont?     font             = Style.Font;
-        ISceneDrawable? selectedDrawable = Style.Selection;
+        BitmapFont?     font             = _style.Font;
+        ISceneDrawable? selectedDrawable = _style.Selection;
 
         if ( font == null )
         {
@@ -189,7 +166,7 @@ public class ListBox< T > : Widget where T : notnull
         _prefWidth  += selectedDrawable.LeftWidth + selectedDrawable.RightWidth;
         _prefHeight =  Items.Count * ItemHeight;
 
-        ISceneDrawable? background = Style.Background;
+        ISceneDrawable? background = _style.Background;
 
         if ( background != null )
         {
@@ -206,10 +183,10 @@ public class ListBox< T > : Widget where T : notnull
 
         DrawBackground( batch, parentAlpha );
 
-        BitmapFont      font                = Style.Font;
-        ISceneDrawable? selectedDrawable    = Style.Selection;
-        Color           fontColorSelected   = Style.FontColorSelected;
-        Color           fontColorUnselected = Style.FontColorUnselected;
+        BitmapFont      font                = _style.Font;
+        ISceneDrawable? selectedDrawable    = _style.Selection;
+        Color           fontColorSelected   = _style.FontColorSelected;
+        Color           fontColorUnselected = _style.FontColorUnselected;
 
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
@@ -219,7 +196,7 @@ public class ListBox< T > : Widget where T : notnull
         float height = GetHeight();
         float itemY  = height;
 
-        ISceneDrawable? background = Style.Background;
+        ISceneDrawable? background = _style.Background;
 
         if ( background != null )
         {
@@ -249,9 +226,9 @@ public class ListBox< T > : Widget where T : notnull
                 bool            selected = Selection.Contains( item );
                 ISceneDrawable? drawable = null;
 
-                if ( ( _pressedIndex == i ) && ( Style?.Down != null ) )
+                if ( ( _pressedIndex == i ) && ( _style?.Down != null ) )
                 {
-                    drawable = Style.Down;
+                    drawable = _style.Down;
                 }
                 else if ( selected )
                 {
@@ -261,9 +238,9 @@ public class ListBox< T > : Widget where T : notnull
                                    fontColorSelected.B,
                                    fontColorSelected.A * parentAlpha );
                 }
-                else if ( ( _overIndex == i ) && ( Style?.Over != null ) )
+                else if ( ( _overIndex == i ) && ( _style?.Over != null ) )
                 {
-                    drawable = Style.Over;
+                    drawable = _style.Over;
                 }
 
                 drawable?.Draw( batch, x, y + itemY - ItemHeight, width, ItemHeight );
@@ -298,11 +275,11 @@ public class ListBox< T > : Widget where T : notnull
     /// </summary>
     protected void DrawBackground( IBatch batch, float parentAlpha )
     {
-        if ( Style.Background != null )
+        if ( _style.Background != null )
         {
             batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
 
-            Style.Background.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
+            _style.Background.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
         }
     }
 
@@ -391,12 +368,14 @@ public class ListBox< T > : Widget where T : notnull
     }
 
     /// <summary>
+    /// Returns the index of the item at the passed y coordinate. The top item has an index of 0.
     /// </summary>
-    /// <returns> -1 if not over an item. </returns>
+    /// <param name="y"></param>
+    /// <returns></returns>
     public int GetItemIndexAt( float y )
     {
         float           height     = GetHeight();
-        ISceneDrawable? background = Style.Background;
+        ISceneDrawable? background = _style.Background;
 
         if ( background != null )
         {
@@ -437,6 +416,30 @@ public class ListBox< T > : Widget where T : notnull
         }
     }
 
+    public override float GetPrefWidth()
+    {
+        Validate();
+
+        return _prefWidth;
+    }
+
+    public void SetPrefWidth( float value )
+    {
+        _prefWidth = value;
+    }
+
+    public override float GetPrefHeight()
+    {
+        Validate();
+
+        return _prefHeight;
+    }
+
+    public void SetPrefHeight( float value )
+    {
+        _prefHeight = value;
+    }
+
     /// <summary>
     /// Sets the items visible in the list, clearing the selection if it is no longer
     /// valid. If a selection is <see cref="ArraySelection{T}.Required()"/>, the first
@@ -457,7 +460,7 @@ public class ListBox< T > : Widget where T : notnull
 
         InvalidateLayout();
 
-        if ( Math.Abs( oldPrefWidth - GetPrefWidth() ) > NumberUtils.FloatTolerance 
+        if ( Math.Abs( oldPrefWidth - GetPrefWidth() ) > NumberUtils.FloatTolerance
           || Math.Abs( oldPrefHeight - GetPrefHeight() ) > NumberUtils.FloatTolerance )
         {
             InvalidateHierarchy();

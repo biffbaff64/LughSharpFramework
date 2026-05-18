@@ -24,6 +24,19 @@
 
 using System.Collections;
 
+// TODO: THIS CLASS IS TO BE REMOVED
+
+#pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8619 // Null as non-nullable type.
+#pragma warning disable CS8618 // Non-nullable field is uninitialized.
+#pragma warning disable CS0162 // Unreachable code detected.
+#pragma warning disable CS0168 // Variable is declared but never used.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable type.
+#pragma warning disable CS0169 // The field is never used.
+
 namespace LughSharp.Source.Collections;
 
 /// <summary>

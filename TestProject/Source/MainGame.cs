@@ -19,6 +19,8 @@ using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Logging;
 using LughSharp.Tests.Source;
 
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
+
 namespace TestProject.Source;
 
 [PublicAPI]
@@ -35,14 +37,15 @@ public class MainGame : LughGame
     private OrthographicGameCamera? _spriteCam;
     private OrthographicGameCamera? _hudCam;
     private Vector3                 _cameraPos = Vector3.Zero;
-    private Texture2D?              _backgroundTexture;
-    private Texture2D?              _texture;
-    private TextureRegion?          _textureRegion;
-    private NinePatch?              _ninePatch;
     private BitmapFont?             _font;
     private InputMultiplexer        _inputMultiplexer = new();
     private AtlasLoader?            _atlasLoader;
     private Stage?                  _stage;
+
+    private Texture2D?     _backgroundTexture;
+    private Texture2D?     _texture;
+    private TextureRegion? _textureRegion;
+    private NinePatch?     _ninePatch;
 
     private bool _disposed;
 

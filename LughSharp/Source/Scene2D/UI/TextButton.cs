@@ -29,8 +29,12 @@ namespace LughSharp.Source.Scene2D.UI;
 
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class TextButton : Button
+public class TextButton : Button, IStyleable< TextButtonStyle >
 {
+    private TextButtonStyle _style = null!;
+
+    // ========================================================================
+    
     /// <summary>
     /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
     /// setting its text property to the supplied text.
@@ -59,8 +63,8 @@ public class TextButton : Button
     /// </summary>
     public TextButton( string? text, TextButtonStyle style ) : base( style )
     {
-        Style = style;
-        
+        SetStyle( style );
+
         Label = new Label( text, new LabelStyle( style.Font, style.FontColor ) );
         Label.SetAlignment( Align.Center );
 
@@ -74,23 +78,31 @@ public class TextButton : Button
     /// <exception cref="ArgumentException">
     /// Thrown if an attempt to set Style to null is made.
     /// </exception>
-    public TextButtonStyle Style
+    public override TextButtonStyle GetStyle() => _style;
+
+    /// <summary>
+    /// Property: The <see cref="TextButtonStyle"/> for this TextButton.
+    /// </summary>
+    /// <exception cref="ArgumentException">
+    /// Thrown if an attempt to set Style to null is made.
+    /// </exception>
+    public void SetStyle( TextButtonStyle value )
     {
-        get;
-        set
+        Guard.Against.Null( value );
+
+        _style = value;
+
+        this.SetStyle< TextButtonStyle >( value );
+        base.SetStyle( value );
+
+        if ( Label != null )
         {
-            Guard.Against.Null( value );
+            var style = Label.GetStyle();
 
-            field = value;
+            style.Font      = value.Font;
+            style.FontColor = value.FontColor ?? Color.White;
 
-            this.SetStyle< TextButtonStyle >( value );
-            base.SetStyle( value );
-
-            Label?.Style = new LabelStyle( Label.Style )
-            {
-                Font      = value.Font,
-                FontColor = value.FontColor ?? Color.White,
-            };
+            Label?.SetStyle( new LabelStyle( style ) );
         }
     }
 
@@ -116,21 +128,21 @@ public class TextButton : Button
     /// </summary>
     public Color GetFontColor()
     {
-        if ( IsDisabled && ( Style.DisabledFontColor != null ) )
+        if ( IsDisabled && ( _style.DisabledFontColor != null ) )
         {
-            return Style.DisabledFontColor;
+            return _style.DisabledFontColor;
         }
 
         if ( IsPressed )
         {
-            if ( IsChecked && ( Style.CheckedDownFontColor != null ) )
+            if ( IsChecked && ( _style.CheckedDownFontColor != null ) )
             {
-                return Style.CheckedDownFontColor;
+                return _style.CheckedDownFontColor;
             }
 
-            if ( Style.DownFontColor != null )
+            if ( _style.DownFontColor != null )
             {
-                return Style.DownFontColor;
+                return _style.DownFontColor;
             }
         }
 
@@ -138,16 +150,16 @@ public class TextButton : Button
         {
             if ( IsChecked )
             {
-                if ( Style.CheckedOverFontColor != null )
+                if ( _style.CheckedOverFontColor != null )
                 {
-                    return Style.CheckedOverFontColor;
+                    return _style.CheckedOverFontColor;
                 }
             }
             else
             {
-                if ( Style.OverFontColor != null )
+                if ( _style.OverFontColor != null )
                 {
-                    return Style.OverFontColor;
+                    return _style.OverFontColor;
                 }
             }
         }
@@ -156,28 +168,28 @@ public class TextButton : Button
 
         if ( IsChecked )
         {
-            if ( focused && ( Style.CheckedFocusedFontColor != null ) )
+            if ( focused && ( _style.CheckedFocusedFontColor != null ) )
             {
-                return Style.CheckedFocusedFontColor;
+                return _style.CheckedFocusedFontColor;
             }
 
-            if ( Style.CheckedFontColor != null )
+            if ( _style.CheckedFontColor != null )
             {
-                return Style.CheckedFontColor;
+                return _style.CheckedFontColor;
             }
 
-            if ( IsOver && ( Style.OverFontColor != null ) )
+            if ( IsOver && ( _style.OverFontColor != null ) )
             {
-                return Style.OverFontColor;
+                return _style.OverFontColor;
             }
         }
 
-        if ( focused && ( Style.FocusedFontColor != null ) )
+        if ( focused && ( _style.FocusedFontColor != null ) )
         {
-            return Style.FocusedFontColor;
+            return _style.FocusedFontColor;
         }
 
-        return Style.FontColor ?? Color.White;
+        return _style.FontColor ?? Color.White;
     }
 
     /// <inheritdoc />
@@ -185,7 +197,7 @@ public class TextButton : Button
     {
         if ( Label != null )
         {
-            Label.Style.FontColor = GetFontColor();
+            Label.GetStyle().FontColor = GetFontColor();
             base.Draw( batch, parentAlpha );
         }
     }

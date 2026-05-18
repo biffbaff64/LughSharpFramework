@@ -53,9 +53,8 @@ namespace LughSharp.Source.Scene2D.UI;
 /// Android <see cref="IOnScreenKeyboard"/> implementation will bring up the default IME.
 /// </para>
 [PublicAPI]
-public class TextField : Widget
+public class TextField : Widget, IStyleable< TextFieldStyle >
 {
-    public TextFieldStyle?     Style                    { get; set; }
     public GlyphLayout         GlyphLayout              { get; set; } = new();
     public List< float >       GlyphPositions           { get; set; } = [ ];
     public ITextFieldFilter?   Filter                   { get; set; }
@@ -117,6 +116,7 @@ public class TextField : Widget
     private string?                  _undoText = string.Empty;
     private int                      _visibleTextEnd;
     private int                      _visibleTextStart;
+    private TextFieldStyle           _style = null!;
 
     // ========================================================================
 
@@ -214,30 +214,38 @@ public class TextField : Widget
         float topAndBottom = 0;
         float minHeight    = 0;
 
-        if ( Style?.Background != null )
+        if ( _style.Background != null )
         {
             topAndBottom = Math.Max( topAndBottom,
-                                     Style.Background.BottomHeight + Style.Background.TopHeight );
-            minHeight = Math.Max( minHeight, Style.Background.MinHeight );
+                                     _style.Background.BottomHeight + _style.Background.TopHeight );
+            minHeight = Math.Max( minHeight, _style.Background.MinHeight );
         }
 
-        if ( Style?.FocusedBackground != null )
+        if ( _style.FocusedBackground != null )
         {
             topAndBottom = Math.Max( topAndBottom,
-                                     Style.FocusedBackground.BottomHeight + Style.FocusedBackground.TopHeight );
-            minHeight = Math.Max( minHeight, Style.FocusedBackground.MinHeight );
+                                     _style.FocusedBackground.BottomHeight + _style.FocusedBackground.TopHeight );
+            minHeight = Math.Max( minHeight, _style.FocusedBackground.MinHeight );
         }
 
-        if ( Style?.DisabledBackground != null )
+        if ( _style.DisabledBackground != null )
         {
             topAndBottom = Math.Max( topAndBottom,
-                                     Style.DisabledBackground.BottomHeight + Style.DisabledBackground.TopHeight );
-            minHeight = Math.Max( minHeight, Style.DisabledBackground.MinHeight );
+                                     _style.DisabledBackground.BottomHeight + _style.DisabledBackground.TopHeight );
+            minHeight = Math.Max( minHeight, _style.DisabledBackground.MinHeight );
         }
 
         return Math.Max( topAndBottom + TextHeight, minHeight );
     }
 
+    /// <summary>
+    /// Get the current style of the actor
+    /// </summary>
+    public virtual TextFieldStyle GetStyle() => _style;
+
+    /// <summary>
+    /// Set the current style of the actor
+    /// </summary>
     public virtual void SetStyle( TextFieldStyle style )
     {
         SetStyleSafe( style );
@@ -247,7 +255,7 @@ public class TextField : Widget
     {
         Guard.Against.Null( style.Font );
 
-        Style = style;
+        _style = style;
 
         TextHeight = style.Font.GetCapHeight() - ( style.Font.GetDescent() * 2 );
 
@@ -361,7 +369,7 @@ public class TextField : Widget
         // calculate selection x position and width
         if ( HasSelection )
         {
-            Guard.Against.Null( Style );
+            Guard.Against.Null( _style );
 
             int   minIndex = Math.Min( Cursor, SelectionStart );
             int   maxIndex = Math.Max( Cursor, SelectionStart );
@@ -370,18 +378,13 @@ public class TextField : Widget
                                    visibleWidth - TextOffset );
 
             _selectionX     = minX;
-            _selectionWidth = maxX - minX - Style.Font.FontData.CursorX;
+            _selectionWidth = maxX - minX - _style.Font.FontData.CursorX;
         }
     }
 
     protected virtual int LetterUnderCursor( float x )
     {
-        if ( Style == null )
-        {
-            return GlyphPositions.Count - 1;
-        }
-
-        x -= TextOffset + FontOffset - Style.Font.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
+        x -= TextOffset + FontOffset - _style.Font.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
 
         ISceneDrawable? background = GetBackgroundDrawable();
 
@@ -464,26 +467,21 @@ public class TextField : Widget
 
     protected virtual ISceneDrawable? GetBackgroundDrawable()
     {
-        if ( Disabled && ( Style?.DisabledBackground != null ) )
+        if ( Disabled && ( _style.DisabledBackground != null ) )
         {
-            return Style.DisabledBackground;
+            return _style.DisabledBackground;
         }
 
-        if ( ( Style?.FocusedBackground != null ) && HasKeyboardFocus() )
+        if ( ( _style.FocusedBackground != null ) && HasKeyboardFocus() )
         {
-            return Style.FocusedBackground;
+            return _style.FocusedBackground;
         }
 
-        return Style?.Background;
+        return _style.Background;
     }
 
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        if ( Style == null )
-        {
-            return;
-        }
-
         bool focused = HasKeyboardFocus();
 
         if ( ( focused != _focused ) || ( focused && ( _blinkTask?.Status != TaskStatus.Running ) ) )
@@ -506,7 +504,7 @@ public class TextField : Widget
             _cursorOn = false;
         }
 
-        BitmapFont font = Style.Font;
+        BitmapFont font = _style.Font;
 
         ISceneDrawable? background = GetBackgroundDrawable();
 
@@ -532,7 +530,7 @@ public class TextField : Widget
 
         if ( focused && HasSelection )
         {
-            ISceneDrawable? selection = Style.Selection;
+            ISceneDrawable? selection = _style.Selection;
 
             if ( selection != null )
             {
@@ -546,14 +544,14 @@ public class TextField : Widget
         {
             if ( !focused )
             {
-                BitmapFont messageFont = Style.MessageFont ?? font;
+                BitmapFont messageFont = _style.MessageFont ?? font;
 
-                if ( Style.MessageFontColor != null )
+                if ( _style.MessageFontColor != null )
                 {
-                    messageFont.SetColor( Style.MessageFontColor.R,
-                                          Style.MessageFontColor.G,
-                                          Style.MessageFontColor.B,
-                                          Style.MessageFontColor.A * ActorColor.A * parentAlpha );
+                    messageFont.SetColor( _style.MessageFontColor.R,
+                                          _style.MessageFontColor.G,
+                                          _style.MessageFontColor.B,
+                                          _style.MessageFontColor.A * ActorColor.A * parentAlpha );
                 }
                 else
                 {
@@ -570,10 +568,10 @@ public class TextField : Widget
         else
         {
             Color? fontColor = Disabled
-                ? Style.DisabledFontColor
+                ? _style.DisabledFontColor
                 : focused
-                    ? Style.FocusedFontColor
-                    : Style.FontColor;
+                    ? _style.FocusedFontColor
+                    : _style.FontColor;
 
             Guard.Against.Null( fontColor ); // Or force fontColor to Color.White?
 
@@ -583,7 +581,7 @@ public class TextField : Widget
 
         if ( !Disabled && _cursorOn )
         {
-            ISceneDrawable? cursorPatch = Style.Cursor;
+            ISceneDrawable? cursorPatch = _style.Cursor;
 
             if ( cursorPatch != null )
             {
@@ -657,7 +655,7 @@ public class TextField : Widget
 
     public virtual void UpdateDisplayText()
     {
-        BitmapFont     font       = Style?.Font ?? new BitmapFont();
+        BitmapFont     font       = _style.Font;
         BitmapFontData data       = font.FontData;
         string         text       = Text;
         int            textLength = text.Length;
@@ -798,9 +796,9 @@ public class TextField : Widget
             textLength -= Math.Abs( Cursor - SelectionStart );
         }
 
-        Debug.Assert( Style != null, $"{nameof( Style )} != null" );
+        Debug.Assert( _style != null, $"{nameof( _style )} != null" );
 
-        BitmapFontData data = Style.Font.FontData;
+        BitmapFontData data = _style.Font.FontData;
 
         for ( int i = 0, n = content.Length; i < n; i++ )
         {
@@ -1565,7 +1563,7 @@ public class TextField : Widget
 
                 bool add = enter
                     ? _tf.WriteEnters
-                    : !_tf._onlyFontChars || ( bool )_tf.Style?.Font.FontData.HasGlyph( character );
+                    : !_tf._onlyFontChars || _tf._style.Font.FontData.HasGlyph( character );
 
                 bool remove = backspace || delete;
 

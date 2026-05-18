@@ -64,7 +64,7 @@ public class StageTests : IDisposable
 
     private Stage? _stage;
 
-    private static readonly string[] _newItems = new string[]
+    private static readonly string[] _newItems = new []
     {
         "Carp",
         "Roach",
@@ -123,8 +123,8 @@ public class StageTests : IDisposable
         TableActor();
         WindowActor();
         // ----------------------------
-        ImageActor();
-        SelectBoxActor();
+//        ImageActor();
+//        SelectBoxActor();
         // ----------------------------
 //        ButtonActor();
 //        TextButtonActor();
@@ -188,8 +188,8 @@ public class StageTests : IDisposable
 
             selectBox.SetAlignment( Align.Right );
             selectBox.GetList().Alignment                     = Align.Right;
-            selectBox.Style.ListBoxStyle.Selection.RightWidth = 10;
-            selectBox.Style.ListBoxStyle.Selection.LeftWidth  = 20;
+            selectBox.GetStyle().ListBoxStyle.Selection.RightWidth = 10;
+            selectBox.GetStyle().ListBoxStyle.Selection.LeftWidth  = 20;
             selectBox.SetItems( new List< string >( _newItems ) );
             selectBox.SetSelected( "Rudd" );
 
@@ -206,6 +206,8 @@ public class StageTests : IDisposable
 
         void DialogActor()
         {
+            Guard.Against.Null( _stage );
+            
             var dialogStyle = new DialogStyle
             {
                 Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
@@ -578,7 +580,7 @@ public class StageTests : IDisposable
                 IsVisible = true,
             };
 
-            checkBox.Label?.Style.Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) );
+            checkBox.Label?.GetStyle().Background = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) );
             checkBox.SetPosition( 200, 200 );
             _stage?.AddActor( checkBox );
         }

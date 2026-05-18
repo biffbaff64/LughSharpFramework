@@ -95,7 +95,7 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltipStyle >
             throw new NullReferenceException( "Container cannot be null" );
         }
 
-        Container.GetContainerActor()?.Style = value.LabelStyle;
+        Container.GetContainerActor()?.SetStyle( value.LabelStyle );
         Container.SetBackground( value.Background );
         Container.SetMaxWidth( value.WrapWidth );
     }

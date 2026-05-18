@@ -38,7 +38,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class ImageButton : Button
+public class ImageButton : Button, IStyleable< ImageButtonStyle >
 {
     public Scene2DImage Scene2DImage { get; }
 
@@ -90,10 +90,9 @@ public class ImageButton : Button
     }
 
     /// <summary>
-    /// Creates a new ImageButton using the supplied <see cref="ISceneDrawable"/>
-    /// instances for the image up, down, and checked states. These images will
-    /// be used to create a new <see cref="ImageButtonStyle"/> instance, and the
-    /// button will be created from that.
+    /// Creates a new ImageButton using the supplied <see cref="ISceneDrawable"/> instances
+    /// for the image up, down, and checked states. These images will be used to create a new
+    /// <see cref="ImageButtonStyle"/> instance, and the button will be created from that.
     /// </summary>
     public ImageButton( ISceneDrawable? imageUp,
                         ISceneDrawable? imageDown,
@@ -102,6 +101,11 @@ public class ImageButton : Button
     {
     }
 
+    /// <summary>
+    /// Returns the buttons style.
+    /// </summary>
+    public override ImageButtonStyle GetStyle() => _style;
+    
     /// <summary>
     /// </summary>
     /// <param name="style"></param>

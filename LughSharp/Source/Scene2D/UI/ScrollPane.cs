@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.UI;
 
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class ScrollPane : WidgetGroup
+public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
 {
     public readonly Rectangle HKnobBounds   = new();
     public readonly Rectangle HScrollBounds = new();
@@ -122,18 +122,6 @@ public class ScrollPane : WidgetGroup
     /// </summary>
     public bool Clamp { get; set; } = true;
 
-    public ScrollPaneStyle Style
-    {
-        get;
-        set
-        {
-            Guard.Against.Null( value, "style cannot be null." );
-
-            field = value;
-            InvalidateHierarchy();
-        }
-    }
-
     /// If true, the scroll knobs are sized based on
     /// <see cref="MaxScrollX"/>
     /// " or
@@ -157,6 +145,7 @@ public class ScrollPane : WidgetGroup
 
     private readonly ActorGestureListener _flickScrollListener;
     private readonly Rectangle            _widgetCullingArea = new();
+    private          ScrollPaneStyle      _style             = null!;
 
     // ========================================================================
     // ========================================================================
@@ -200,7 +189,7 @@ public class ScrollPane : WidgetGroup
     {
         Guard.Against.Null( style );
 
-        Style = style;
+        SetStyle( style );
 
         _flickScrollListener = new ScrollPaneGestureListener( this );
 
@@ -475,14 +464,14 @@ public class ScrollPane : WidgetGroup
 
     public override void Layout()
     {
-        ISceneDrawable? bg          = Style.Background;
-        ISceneDrawable? hScrollKnob = Style.HScrollKnob;
-        ISceneDrawable? vScrollKnob = Style.VScrollKnob;
+        ISceneDrawable? bg          = GetStyle().Background;
+        ISceneDrawable? hScrollKnob = GetStyle().HScrollKnob;
+        ISceneDrawable? vScrollKnob = GetStyle().VScrollKnob;
 
-        float bgLeftWidth    = bg.LeftWidth;
-        float bgRightWidth   = bg.RightWidth;
-        float bgTopHeight    = bg.TopHeight;
-        float bgBottomHeight = bg.BottomHeight;
+        float bgLeftWidth    = bg?.LeftWidth ?? 0;
+        float bgRightWidth   = bg?.RightWidth ?? 0;
+        float bgTopHeight    = bg?.TopHeight ?? 0;
+        float bgBottomHeight = bg?.BottomHeight ?? 0;
 
         float width  = GetWidth();
         float height = GetHeight();
@@ -505,9 +494,11 @@ public class ScrollPane : WidgetGroup
             scrollbarHeight = hScrollKnob.MinHeight;
         }
 
-        if ( Style.HScroll != null )
+        ScrollPaneStyle style = GetStyle();
+
+        if ( style.HScroll != null )
         {
-            scrollbarHeight = Math.Max( scrollbarHeight, Style.HScroll.MinHeight );
+            scrollbarHeight = Math.Max( scrollbarHeight, style.HScroll.MinHeight );
         }
 
         if ( vScrollKnob != null )
@@ -515,9 +506,9 @@ public class ScrollPane : WidgetGroup
             scrollbarWidth = vScrollKnob.MinWidth;
         }
 
-        if ( Style.VScroll != null )
+        if ( style.VScroll != null )
         {
-            scrollbarWidth = Math.Max( scrollbarWidth, Style.VScroll.MinWidth );
+            scrollbarWidth = Math.Max( scrollbarWidth, style.VScroll.MinWidth );
         }
 
         // Get widget's desired width.
@@ -596,8 +587,8 @@ public class ScrollPane : WidgetGroup
         {
             if ( hScrollKnob != null )
             {
-                float x = ScrollbarsOnTop ? bg.LeftWidth : WidgetArea.X;
-                float y = HScrollOnBottom ? bg.BottomHeight : GetHeight() - bg.TopHeight - scrollbarHeight;
+                float x = ScrollbarsOnTop ? bgLeftWidth : WidgetArea.X;
+                float y = HScrollOnBottom ? bgBottomHeight : GetHeight() - bgTopHeight - scrollbarHeight;
 
                 HScrollBounds.Set( x, y, WidgetArea.Width, scrollbarHeight );
 
@@ -643,8 +634,8 @@ public class ScrollPane : WidgetGroup
         {
             if ( vScrollKnob != null )
             {
-                float x = VScrollOnRight ? GetWidth() - bg.RightWidth - scrollbarWidth : bg.LeftWidth;
-                float y = ScrollbarsOnTop ? bg.BottomHeight : WidgetArea.Y;
+                float x = VScrollOnRight ? GetWidth() - bgRightWidth - scrollbarWidth : bgLeftWidth;
+                float y = ScrollbarsOnTop ? bgBottomHeight : WidgetArea.Y;
 
                 VScrollBounds.Set( x, y, scrollbarWidth, WidgetArea.Height );
 
@@ -676,7 +667,7 @@ public class ScrollPane : WidgetGroup
                     VKnobBounds.Height = 0;
                 }
 
-                VKnobBounds.X = VScrollOnRight ? GetWidth() - bg.RightWidth - vScrollKnob.MinWidth : bg.LeftWidth;
+                VKnobBounds.X = VScrollOnRight ? GetWidth() - bgRightWidth - vScrollKnob.MinWidth : bgLeftWidth;
                 VKnobBounds.Y = VScrollBounds.Y +
                                 ( int )( ( VScrollBounds.Height - VKnobBounds.Height ) *
                                          ( 1 - GetScrollPercentY() ) );
@@ -744,13 +735,14 @@ public class ScrollPane : WidgetGroup
         UpdateWidgetPosition();
 
         // Draw the background ninepatch.
-        Color color = ActorColor;
-        float alpha = color.A * parentAlpha;
+        Color           color = ActorColor;
+        float           alpha = color.A * parentAlpha;
+        ScrollPaneStyle style = GetStyle();
 
-        if ( Style.Background != null )
+        if ( style.Background != null )
         {
             batch.SetColor( color.R, color.G, color.B, alpha );
-            Style.Background.Draw( batch, 0, 0, GetWidth(), GetHeight() );
+            style.Background.Draw( batch, 0, 0, GetWidth(), GetHeight() );
         }
 
         batch.Flush();
@@ -791,11 +783,13 @@ public class ScrollPane : WidgetGroup
         bool x = IsScrollX && ( HKnobBounds.Width > 0 );
         bool y = IsScrollY && ( VKnobBounds.Height > 0 );
 
+        ScrollPaneStyle style = GetStyle();
+
         if ( x && y )
         {
-            if ( Style.Corner != null )
+            if ( style.Corner != null )
             {
-                Style.Corner.Draw( batch,
+                style.Corner.Draw( batch,
                                    HScrollBounds.X + HScrollBounds.Width,
                                    HScrollBounds.Y,
                                    VScrollBounds.Width,
@@ -805,18 +799,18 @@ public class ScrollPane : WidgetGroup
 
         if ( x )
         {
-            if ( Style.HScroll != null )
+            if ( style.HScroll != null )
             {
-                Style.HScroll.Draw( batch,
+                style.HScroll.Draw( batch,
                                     HScrollBounds.X,
                                     HScrollBounds.Y,
                                     HScrollBounds.Width,
                                     HScrollBounds.Height );
             }
 
-            if ( Style.HScrollKnob != null )
+            if ( style.HScrollKnob != null )
             {
-                Style.HScrollKnob.Draw( batch,
+                style.HScrollKnob.Draw( batch,
                                         HKnobBounds.X,
                                         HKnobBounds.Y,
                                         HKnobBounds.Width,
@@ -826,18 +820,18 @@ public class ScrollPane : WidgetGroup
 
         if ( y )
         {
-            if ( Style.VScroll != null )
+            if ( style.VScroll != null )
             {
-                Style.VScroll.Draw( batch,
+                style.VScroll.Draw( batch,
                                     VScrollBounds.X,
                                     VScrollBounds.Y,
                                     VScrollBounds.Width,
                                     VScrollBounds.Height );
             }
 
-            if ( Style.VScrollKnob != null )
+            if ( style.VScrollKnob != null )
             {
-                Style.VScrollKnob.Draw( batch,
+                style.VScrollKnob.Draw( batch,
                                         VKnobBounds.X,
                                         VKnobBounds.Y,
                                         VKnobBounds.Width,
@@ -872,7 +866,7 @@ public class ScrollPane : WidgetGroup
             width = Widget.GetWidth();
         }
 
-        ISceneDrawable? background = Style.Background;
+        ISceneDrawable? background = GetStyle().Background;
 
         if ( background != null )
         {
@@ -881,16 +875,17 @@ public class ScrollPane : WidgetGroup
 
         if ( IsScrollY )
         {
-            float scrollbarWidth = 0;
+            float           scrollbarWidth = 0;
+            ScrollPaneStyle style          = GetStyle();
 
-            if ( Style.VScrollKnob != null )
+            if ( style.VScrollKnob != null )
             {
-                scrollbarWidth = Style.VScrollKnob.MinWidth;
+                scrollbarWidth = style.VScrollKnob.MinWidth;
             }
 
-            if ( Style.VScroll != null )
+            if ( style.VScroll != null )
             {
-                scrollbarWidth = Math.Max( scrollbarWidth, Style.VScroll.MinWidth );
+                scrollbarWidth = Math.Max( scrollbarWidth, style.VScroll.MinWidth );
             }
 
             width += scrollbarWidth;
@@ -912,7 +907,7 @@ public class ScrollPane : WidgetGroup
             height = Widget.GetHeight();
         }
 
-        ISceneDrawable? background = Style.Background;
+        ISceneDrawable? background = GetStyle().Background;
 
         if ( background != null )
         {
@@ -921,16 +916,17 @@ public class ScrollPane : WidgetGroup
 
         if ( IsScrollX )
         {
-            float scrollbarHeight = 0;
+            float           scrollbarHeight = 0;
+            ScrollPaneStyle style           = GetStyle();
 
-            if ( Style.HScrollKnob != null )
+            if ( style.HScrollKnob != null )
             {
-                scrollbarHeight = Style.HScrollKnob.MinHeight;
+                scrollbarHeight = style.HScrollKnob.MinHeight;
             }
 
-            if ( Style.HScroll != null )
+            if ( style.HScroll != null )
             {
-                scrollbarHeight = Math.Max( scrollbarHeight, Style.HScroll.MinHeight );
+                scrollbarHeight = Math.Max( scrollbarHeight, style.HScroll.MinHeight );
             }
 
             height += scrollbarHeight;
@@ -1204,14 +1200,17 @@ public class ScrollPane : WidgetGroup
 
         float height = 0;
 
-        if ( Style.HScrollKnob != null )
+        ISceneDrawable? knob   = GetStyle().HScrollKnob;
+        ISceneDrawable? scroll = GetStyle().HScroll;
+
+        if ( knob != null )
         {
-            height = Style.HScrollKnob.MinHeight;
+            height = knob.MinHeight;
         }
 
-        if ( Style.HScroll != null )
+        if ( scroll != null )
         {
-            height = Math.Max( height, Style.HScroll.MinHeight );
+            height = Math.Max( height, scroll.MinHeight );
         }
 
         return height;
@@ -1226,14 +1225,17 @@ public class ScrollPane : WidgetGroup
 
         float width = 0;
 
-        if ( Style.VScrollKnob != null )
+        ISceneDrawable? knob   = GetStyle().VScrollKnob;
+        ISceneDrawable? scroll = GetStyle().VScroll;
+
+        if ( knob != null )
         {
-            width = Style.VScrollKnob.MinWidth;
+            width = knob.MinWidth;
         }
 
-        if ( Style.VScroll != null )
+        if ( scroll != null )
         {
-            width = Math.Max( width, Style.VScroll.MinWidth );
+            width = Math.Max( width, scroll.MinWidth );
         }
 
         return width;
@@ -1353,8 +1355,15 @@ public class ScrollPane : WidgetGroup
         ResetTransform( shapes );
     }
 
-    // ========================================================================
-    // ========================================================================
+    public ScrollPaneStyle GetStyle() => _style;
+
+    public void SetStyle( ScrollPaneStyle value )
+    {
+        Guard.Against.Null( value, "style cannot be null." );
+
+        _style = value;
+        InvalidateHierarchy();
+    }
 
     /// <summary>
     /// Called whenever the visual x scroll amount is changed.

@@ -42,7 +42,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Touchpad : Widget
+public class Touchpad : Widget, IStyleable< TouchpadStyle >
 {
     public bool IsTouched { get; set; }
 
@@ -58,8 +58,8 @@ public class Touchpad : Widget
     private readonly Vector2 _knobPercent    = new();
     private readonly Vector2 _knobPosition   = new();
     private readonly Circle  _touchBounds    = new( 0, 0, 0 );
-    private          float   _deadzoneRadius;
 
+    private float         _deadzoneRadius;
     private TouchpadStyle _style = null!;
 
     // ========================================================================
@@ -105,12 +105,10 @@ public class Touchpad : Widget
         }
 
         _deadzoneRadius = deadzoneRadius;
-
         _knobPosition.Set( GetWidthUnchecked() / 2f, GetHeightUnchecked() / 2f );
 
-        Style = style;
-
-        SetSize( Style.Background?.MinWidth ?? 0, Style.Background?.MinHeight ?? 0 );
+        SetStyle( style );
+        SetSize( _style.Background?.MinWidth ?? 0, _style.Background?.MinHeight ?? 0 );
 
         AddListener( new TouchpadInputListener( this ) );
     }
@@ -118,22 +116,26 @@ public class Touchpad : Widget
     // ========================================================================
 
     private float GetWidthUnchecked() => GetWidth();
-    
+
     private float GetHeightUnchecked() => GetHeight();
-    
+
     public override float GetPrefWidth() => _style.Background?.MinWidth ?? 0;
 
     public override float GetPrefHeight() => _style.Background?.MinHeight ?? 0;
 
-    public TouchpadStyle Style
-    {
-        get => _style;
-        set
-        {
-            _style = value;
+    /// <summary>
+    /// Get the current style of the actor
+    /// </summary>
+    public TouchpadStyle GetStyle() => _style;
 
-            InvalidateHierarchy();
-        }
+    /// <summary>
+    /// Set the current style of the actor
+    /// </summary>
+    public void SetStyle( TouchpadStyle value )
+    {
+        _style = value;
+
+        InvalidateHierarchy();
     }
 
     /// <summary>

@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class Label : Widget, IDisposable
+public class Label : Widget, IStyleable< LabelStyle >, IDisposable
 {
     public Align       LabelAlign  { get; set; } = Align.Left;
     public Align       LineAlign   { get; set; } = Align.Left;
@@ -46,8 +46,9 @@ public class Label : Widget, IDisposable
     private readonly Vector2     _prefSize       = new();
 
     private StringBuilder    _text            = new();
-    private int?             _intValue;
     private bool             _prefSizeInvalid = true;
+    private LabelStyle       _style           = null!;
+    private int?             _intValue;
     private BitmapFontCache? _fontCache;
     private float            _lastPrefHeight;
     private string?          _ellipsis;
@@ -106,13 +107,13 @@ public class Label : Widget, IDisposable
     public Label( string? text, LabelStyle? style )
     {
         Guard.Against.Null( style );
-        
+
         if ( text != null )
         {
             _text.Append( text );
         }
 
-        Style = style;
+        SetStyle( style );
 
         if ( text is { Length: > 0 } )
         {
@@ -180,22 +181,26 @@ public class Label : Widget, IDisposable
     }
 
     /// <summary>
+    /// Get the current style of the actor
+    /// </summary>
+    public LabelStyle GetStyle()
+    {
+        return _style;
+    }
+
+    /// <summary>
     /// The <see cref="LabelStyle"/> used with this label. It is used to
     /// specify the Font, FontColor, and Background
     /// </summary>
-    public LabelStyle Style
+    public void SetStyle( LabelStyle style )
     {
-        get;
-        set
-        {
-            if ( value == null ) throw new ArgumentException( "style cannot be null." );
-            if ( value.Font == null ) throw new ArgumentException( "Missing LabelStyle font." );
+        if ( style == null ) throw new ArgumentException( "style cannot be null." );
+        if ( style.Font == null ) throw new ArgumentException( "Missing LabelStyle font." );
 
-            field      = value;
-            _fontCache = value.Font.NewFontCache();
+        _style     = style;
+        _fontCache = style.Font.NewFontCache();
 
-            InvalidateHierarchy();
-        }
+        InvalidateHierarchy();
     }
 
     /// <summary>
@@ -330,11 +335,11 @@ public class Label : Widget, IDisposable
         {
             float width = GetWidth();
 
-            if ( Style.Background != null )
+            if ( _style.Background != null )
             {
-                width = Math.Max( width, Style.Background.MinWidth )
-                      - Style.Background.LeftWidth
-                      - Style.Background.RightWidth;
+                width = Math.Max( width, _style.Background.MinWidth )
+                      - _style.Background.LeftWidth
+                      - _style.Background.RightWidth;
             }
 
             layout.SetText( _fontCache.Font, _text.ToString(), Color.White, width, Align.Left, true );
@@ -383,12 +388,12 @@ public class Label : Widget, IDisposable
         float x      = 0;
         float y      = 0;
 
-        if ( Style.Background != null )
+        if ( _style.Background != null )
         {
-            x      =  Style.Background.LeftWidth;
-            y      =  Style.Background.BottomHeight;
-            width  -= Style.Background.LeftWidth + Style.Background.RightWidth;
-            height -= Style.Background.BottomHeight + Style.Background.TopHeight;
+            x      =  _style.Background.LeftWidth;
+            y      =  _style.Background.BottomHeight;
+            width  -= _style.Background.LeftWidth + _style.Background.RightWidth;
+            height -= _style.Background.BottomHeight + _style.Background.TopHeight;
         }
 
         GlyphLayout layout = this.GlyphLayout;
@@ -430,17 +435,17 @@ public class Label : Widget, IDisposable
             textHeight = font.FontData.CapHeight;
         }
 
-        Guard.Against.Null( Style.Font );
+        Guard.Against.Null( _style.Font );
 
         if ( ( LabelAlign & Align.Top ) != 0 )
         {
             y += _fontCache.Font.Flipped ? 0 : height - textHeight;
-            y += Style.Font.GetDescent();
+            y += _style.Font.GetDescent();
         }
         else if ( ( LabelAlign & Align.Bottom ) != 0 )
         {
             y += _fontCache.Font.Flipped ? height - textHeight : 0;
-            y -= Style.Font.GetDescent();
+            y -= _style.Font.GetDescent();
         }
         else
         {
@@ -482,15 +487,15 @@ public class Label : Widget, IDisposable
         Color color = ActorColor;
         color.A *= parentAlpha;
 
-        if ( Style.Background != null )
+        if ( _style.Background != null )
         {
             batch.SetColor( color.R, color.G, color.B, color.A );
-            Style.Background?.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
+            _style.Background?.Draw( batch, GetX(), GetY(), GetWidth(), GetHeight() );
         }
 
-        if ( Style.FontColor != null )
+        if ( _style.FontColor != null )
         {
-            color.Mul( Style.FontColor );
+            color.Mul( _style.FontColor );
         }
 
         if ( _fontCache != null )
@@ -528,10 +533,10 @@ public class Label : Widget, IDisposable
 
         float width = _prefSize.X;
 
-        if ( Style.Background != null )
+        if ( _style.Background != null )
         {
-            width = Math.Max( width + Style.Background!.LeftWidth + Style.Background!.RightWidth,
-                              Style.Background!.MinWidth );
+            width = Math.Max( width + _style.Background!.LeftWidth + _style.Background!.RightWidth,
+                              _style.Background!.MinWidth );
         }
 
         return width;
@@ -561,15 +566,15 @@ public class Label : Widget, IDisposable
 
         if ( _fontScaleChanged )
         {
-            descentScaleCorrection = FontScaleY / Style.Font.GetScaleY();
+            descentScaleCorrection = FontScaleY / _style.Font.GetScaleY();
         }
 
-        float height = _prefSize.Y - ( Style.Font.GetDescent() * descentScaleCorrection * 2 );
+        float height = _prefSize.Y - ( _style.Font.GetDescent() * descentScaleCorrection * 2 );
 
-        if ( Style.Background != null )
+        if ( _style.Background != null )
         {
-            height = Math.Max( height + Style.Background!.TopHeight + Style.Background!.BottomHeight,
-                               Style.Background!.MinHeight );
+            height = Math.Max( height + _style.Background!.TopHeight + _style.Background!.BottomHeight,
+                               _style.Background!.MinHeight );
         }
 
         return height;

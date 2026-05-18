@@ -48,7 +48,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// </summary>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
-public class Button : Table, IDisableable
+public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 {
     /// <summary>
     /// Button Checked (State/Selected): Indicates that a button (usually a toggle, checkbox, or radio
@@ -229,11 +229,19 @@ public class Button : Table, IDisableable
     /// <summary>
     /// Returns the buttons style.
     /// </summary>
-    public ButtonStyle GetStyle()
+    public virtual ButtonStyle GetStyle()
     {
         return _style;
     }
 
+    /// <summary>
+    /// Set the current style of the actor
+    /// </summary>
+    public void SetStyle( ButtonStyle style )
+    {
+        SetStyle< ButtonStyle >( style );
+    }
+    
     /// <summary>
     /// Returns <c>true</c> if the button is pressed, otherwise <c>false</c>.
     /// </summary>
