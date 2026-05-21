@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Graphics.Cameras;
-using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI.Styles;
@@ -78,9 +77,8 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <param name="title"> A string holding the title. </param>
     /// <param name="skin"> The Skin. </param>
     public Window( string title, Skin skin )
-        : this( title, skin.Get< WindowStyle >() )
+        : this( title, skin.Get< WindowStyle >(), skin )
     {
-        Skin = skin;
     }
 
     /// <summary>
@@ -91,9 +89,8 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <param name="skin"> The Skin. </param>
     /// <param name="styleName"> The name of the WindowStyle to use. </param>
     public Window( string title, Skin skin, string styleName )
-        : this( title, skin.Get< WindowStyle >( styleName ) )
+        : this( title, skin.Get< WindowStyle >( styleName ), skin )
     {
-        Skin = skin;
     }
 
     /// <summary>
@@ -105,37 +102,35 @@ public class Window : Table, IStyleable< WindowStyle >
     /// </summary>
     /// <param name="title"> The title. </param>
     /// <param name="style"> The WindowStyle to use. </param>
-    public Window( string title, WindowStyle style )
+    /// <param name="skin"> The Skin. </param>
+    public Window( string title, WindowStyle style, Skin skin )
     {
         if ( string.IsNullOrEmpty( title ) )
         {
             throw new ArgumentException( "Title cannot be null or empty!" );
         }
 
+        if ( style.TitleFont == null )
+        {
+            throw new InvalidUIStyleException( "Style does not contain a TitleFont!" );
+        }
+
+        Skin      = skin;
         Touchable = Touchable.Enabled;
         Clip      = true;
-
-        style.TitleFont ??= new BitmapFont();
 
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
 
-        SetStyle( style );
+        TitleTable = new Table( skin );
+        TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( DefaultWidth );
+        AddActor( TitleTable );
+
+        SetStyleUnchecked( style );
         SetSize( DefaultWidth, DefaultHeight );
 
         AddCaptureListener( new WindowCaptureListener( this ) );
         AddListener( new WindowInputListener( this ) );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="skin"></param>
-    public void AddTitleTable( Skin skin )
-    {
-        TitleTable = new Table( skin );
-        TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( 0 );
-        AddActor( TitleTable );
     }
 
     /// <summary>
@@ -368,6 +363,11 @@ public class Window : Table, IStyleable< WindowStyle >
         InvalidateHierarchy();
     }
 
+    private void SetStyleUnchecked( WindowStyle style )
+    {
+        SetStyle( style );
+    }
+
     // ========================================================================
     // ========================================================================
 
@@ -376,11 +376,21 @@ public class Window : Table, IStyleable< WindowStyle >
     {
         private readonly Window _window;
 
+        // ====================================================================
+
         public WindowCaptureListener( Window window )
         {
             _window = window;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes down on the actor.
+        /// If true is returned, this listener will have
+        /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+        /// so it will receive all touchDragged and touchUp events, even those not
+        /// over this actor, until touchUp is received. Also when true is returned,
+        /// the event is handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             _window.BringToFront();
@@ -413,8 +423,18 @@ public class Window : Table, IStyleable< WindowStyle >
             _window = window;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes down on the actor.
+        /// If true is returned, this listener will have
+        /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+        /// so it will receive all touchDragged and touchUp events, even those not
+        /// over this actor, until touchUp is received. Also when true is returned,
+        /// the event is handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
+            Logger.Debug( $"x: {x}, y: {y}, button: {button}" );
+
             if ( button == 0 )
             {
                 UpdateEdge( x, y );
@@ -429,11 +449,23 @@ public class Window : Table, IStyleable< WindowStyle >
             return ( _window.Edge != 0 ) || _window.IsModal;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes up anywhere, but only
+        /// if touchDown previously returned true for the mouse button or touch.
+        /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
+            Logger.Checkpoint();
+
             _window.Dragging = false;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch is moved anywhere, but only
+        /// if touchDown previously returned true for the mouse button or touch.
+        /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             if ( !_window.Dragging )
@@ -538,6 +570,11 @@ public class Window : Table, IStyleable< WindowStyle >
                                ( float )Math.Round( height ) );
         }
 
+        /// <summary>
+        /// Called any time the mouse is moved when a button is not down. This event
+        /// only occurs on the desktop. When true is returned, the event is handled
+        /// by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             UpdateEdge( x, y );
@@ -545,38 +582,56 @@ public class Window : Table, IStyleable< WindowStyle >
             return _window.IsModal;
         }
 
-        public bool OnScrolled( InputEvent ev, float x, float y, int amount )
+        /// <summary>
+        /// Called when the mouse wheel has been scrolled. When true is returned,
+        /// the event is handled in <see cref="Event.SetHandled"/>.
+        /// </summary>
+        public override bool OnScrolled( InputEvent? ev, float x, float y, float amountX, float amountY )
         {
             return _window.IsModal;
         }
 
+        /// <summary>
+        /// Called when a key goes down. When true is returned, the event is
+        /// handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             return _window.IsModal;
         }
 
+        /// <summary>
+        /// Called when a key goes up. When true is returned, the event is
+        /// handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnKeyUp( InputEvent? ev, int keycode )
         {
             return _window.IsModal;
         }
 
         /// <summary>
-        /// 
+        /// Called when a key is typed. When true is returned, the event is
+        /// handled by <see cref="Event.SetHandled"/>.
         /// </summary>
-        /// <param name="ev"></param>
-        /// <param name="character"></param>
-        /// <returns></returns>
+        /// <param name="ev"> The input event. </param>
+        /// <param name="character">
+        /// May be 0 for key typed events that don't map to a character (ctrl, shift, etc).
+        /// </param>
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             return _window.IsModal;
         }
 
+        /// <summary>
+        /// Updates the edge of the window based on the specified coordinates.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         private void UpdateEdge( float x, float y )
         {
-            float border = _window.ResizeBorder / 2f;
-            float width  = _window.GetWidth();
-            float height = _window.GetHeight();
-
+            float border    = _window.ResizeBorder / 2f;
+            float width     = _window.GetWidth();
+            float height    = _window.GetHeight();
             float padTop    = _window.GetPadTop();
             float padLeft   = _window.GetPadLeft();
             float padBottom = _window.GetPadBottom();
@@ -630,8 +685,7 @@ public class Window : Table, IStyleable< WindowStyle >
               && ( y <= height )
               && ( y >= ( height - padTop ) )
               && ( x >= padLeft )
-              && ( x <= right )
-               )
+              && ( x <= right ) )
             {
                 _window.Edge = Move;
             }

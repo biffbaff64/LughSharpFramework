@@ -107,6 +107,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         ScrollPane    = new SelectBoxScrollPane( this );
         ClickListener = new SelectBoxClickListener( this );
+        
+        AddListener( ClickListener );
     }
 
     /// <summary>
@@ -575,7 +577,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// Scene2D Actions to perform when the specified select box is first shown.
     /// </summary>
     /// <param name="selectBox"></param>
-    protected void OnShow( Actor selectBox )
+    /// <param name="below"></param>
+    protected void OnShow( Actor selectBox, bool below )
     {
         selectBox.ActorColor.A = 0;
         selectBox.AddAction( SceneActions.FadeIn( 0.3f, Interpolation.Fade ) );
@@ -719,7 +722,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             stage.AddActor( this );
             stage.AddCaptureListener( _hideListener );
-
             stage.AddListener( ListBox.KeyListener
                             ?? throw new RuntimeException( "No ListBox KeyListener available!" ) );
 
@@ -784,6 +786,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             if ( x + width > stage.Width )
             {
                 x -= width - ParentSelectBox.GetWidth() - 1;
+                x = Math.Max( x, 0 );
             }
 
             SetX( x );
@@ -814,7 +817,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             ClearActions();
 
-            ParentSelectBox.OnShow( this );
+            ParentSelectBox.OnShow( this, below );
         }
 
         public void Hide()
@@ -831,12 +834,14 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
                 Stage.RemoveCaptureListener( _hideListener );
                 Stage.RemoveListener( ListBox.KeyListener! );
 
-                if ( _previousScrollFocus is { Stage: null } )
+                if ( ( _previousScrollFocus != null ) && ( _previousScrollFocus.Stage == null ) )
                 {
                     _previousScrollFocus = null;
                 }
 
-                if ( ( Stage.ScrollFocus == null ) || IsAscendantOf( Stage.ScrollFocus ) )
+                Actor? actor = Stage.ScrollFocus;
+                
+                if ( ( actor == null ) || IsAscendantOf( actor ) )
                 {
                     Stage.ScrollFocus = _previousScrollFocus;
                 }

@@ -42,12 +42,13 @@ public class TileSetLayout
     public Image Image    { get; private set; }
     public int   NumTiles { get; private set; }
     public int   Firstgid { get; private set; }
-    public int   NumRows  { get; private set; }
-    public int   NumCols  { get; private set; }
 
     // ========================================================================
 
     private Dictionary< int, Vector2 > _imageTilePositions;
+
+    private int _numRows;
+    private int _numCols;
 
     // ========================================================================
 
@@ -80,8 +81,8 @@ public class TileSetLayout
         int y;
         var tile = 0;
 
-        NumRows = 0;
-        NumCols = 0;
+        _numRows = 0;
+        _numCols = 0;
 
         int stopWidth  = Image.Width - tileWidth;
         int stopHeight = Image.Height - tileHeight;
@@ -92,17 +93,17 @@ public class TileSetLayout
             {
                 if ( y == margin )
                 {
-                    NumCols++;
+                    _numCols++;
                 }
 
                 _imageTilePositions[ tile ] = new Vector2( x, y );
                 tile++;
             }
 
-            NumRows++;
+            _numRows++;
         }
 
-        NumTiles = NumRows * NumCols;
+        NumTiles = _numRows * _numCols;
     }
 
     /// <summary>

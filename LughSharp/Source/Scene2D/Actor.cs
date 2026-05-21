@@ -161,15 +161,17 @@ public class Actor : IComparable< Actor >
         {
             for ( var i = 0; i < Actions.Count; i++ )
             {
-                if ( Actions[ i ].Act( delta ) && ( i < Actions.Count ) )
+                SceneAction action = Actions[ i ];
+                
+                if ( action.Act( delta ) && ( i < Actions.Count ) )
                 {
                     SceneAction current     = Actions[ i ];
-                    int         actionIndex = current == Actions[ i ] ? i : Actions.IndexOf( Actions[ i ] );
+                    int         actionIndex = current == action ? i : Actions.IndexOf( action );
 
                     if ( actionIndex != -1 )
                     {
                         Actions.RemoveIndex( actionIndex );
-                        Actions[ i ].Actor = null;
+                        action.Actor = null;
 
                         i--;
                     }

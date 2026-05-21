@@ -22,15 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils;
-
 using Exception = System.Exception;
-using Platform = LughSharp.Source.Platform;
 
 namespace LughSharp.Source.Network;
 
+/// <summary>
+/// Provides an interface for network operations, including sending HTTP requests,
+/// managing sockets, and handling URIs.
+/// </summary>
 [PublicAPI]
 public interface INet
 {
@@ -192,19 +191,6 @@ public interface INet
     [PublicAPI]
     public class HttpRequest : IResetable
     {
-        private readonly Dictionary< string, string >? _headers;
-        private          bool                          _followRedirects = true;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HttpRequest"/> class.
-        /// </summary>
-        /// <param name="httpMethod"> The HTTP method for the request. </param>
-        public HttpRequest( string? httpMethod = null )
-        {
-            _headers   = new Dictionary< string, string >();
-            HttpMethod = httpMethod;
-        }
-
         /// <summary>
         /// Gets or sets the URL for the HTTP request.
         /// </summary>
@@ -243,7 +229,9 @@ public interface INet
         /// <summary>
         /// Gets or sets a value indicating whether to follow redirects.
         /// </summary>
-        /// <exception cref="ArgumentException">Thrown if setting follow redirects to false on WebGL backend.</exception>
+        /// <exception cref="ArgumentException">
+        /// Thrown if setting follow redirects to false on WebGL backend.
+        /// </exception>
         public bool FollowRedirects
         {
             get => _followRedirects;
@@ -260,6 +248,23 @@ public interface INet
             }
         }
 
+        // ====================================================================
+
+        private readonly Dictionary< string, string >? _headers;
+        private          bool                          _followRedirects = true;
+        
+        // ====================================================================
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HttpRequest"/> class.
+        /// </summary>
+        /// <param name="httpMethod"> The HTTP method for the request. </param>
+        public HttpRequest( string? httpMethod = null )
+        {
+            _headers   = new Dictionary< string, string >();
+            HttpMethod = httpMethod;
+        }
+
         /// <summary>
         /// Resets the HTTP request to its initial state.
         /// </summary>
@@ -272,13 +277,14 @@ public interface INet
             ContentStream    = null;
             ContentLength    = 0;
             _followRedirects = true;
+            
             _headers?.Clear();
         }
 
         /// <summary>
         /// Gets the headers of the HTTP request.
         /// </summary>
-        /// <returns>A dictionary containing the headers.</returns>
+        /// <returns>A Dictionary&lt; string, string &gt; containing the headers.</returns>
         public Dictionary< string, string >? GetHeaders()
         {
             return _headers;
@@ -291,10 +297,7 @@ public interface INet
         /// <param name="value">The value of the header.</param>
         public void SetHeader( string name, string value )
         {
-            if ( _headers != null )
-            {
-                _headers[ name ] = value;
-            }
+            _headers?[ name ] = value;
         }
     }
 }

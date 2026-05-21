@@ -1,15 +1,18 @@
 ﻿
+( Heavily Work In Progress )
+
+
 C# 2D Game Framework project inspired by, but not a direct copy of, the Java LibGDX Game Framework.#
 The original reason for this project was to learn C# and to gain experience with C#, as my exposure
 that language, and OOP in general was very limited ( I've spent most of my career with C and Assembly
 languages ).
 
-I realise and accept that the code within this project is not the best, and that it is not production ready.
-I'm working on it, and I'm hoping to release a version 1.0.0 at some point.
+I realise and accept that the code within this project is not the best, and that it is not production
+ready. I'm working on it, and I'm hoping to release a version 1.0.0 at some point.
 
-( Heavily Work In Progress )
 
 WORKING:
+--------
 
 - Asset Management.
 - TexturePacker support.
@@ -25,13 +28,15 @@ WORKING:
 - Sprite Scrolling.
 - Update Logger.Debug and Logger.Error to acceot NULL messages and report them as such.
 
+
 IN PROGRESS:
+------------
 
 - Audio needs testing and/or finishing.
 - TiledMapPacker support.
 - Scene2D UI is not yet complete.
       1. I'm currently testing the UI Actors and their functionality.
-      2. I'm currently working on adding StyleRegistry and StyleFactory classes to enable
+      2. I'm working on adding StyleRegistry and StyleFactory classes to enable
          creation and use of Scene2D UI Actors without the need for Json Skin files,
          although support for Json Skins will still be retained.
 
@@ -60,11 +65,12 @@ IN PROGRESS:
 
 - Something for consideration:
 
-  All Styles should provide a fully defined default style. This will
-  remove any possibility of problems with the default style not being
-  defined..
+  All Styles should provide a fully defined default style. This will remove any possibility
+  of problems with the default style not being defined..
+
 
 TODO:
+-----
 
 - GameSprite helpers.
 - Network / HTTP etc.

@@ -31,7 +31,7 @@ namespace Extensions.Source.TiledMapPacker;
 /// <summary>
 /// Processes the maps located in <c>{ContentRoot}/maps/source:</c>. Creates the
 /// directory <c>{ContentRoot}/maps/processed</c> which contains processed maps.
-/// Run <see cref="TiledMapPackerTestRender"/> to render the maps and, optionally,
+/// Run <see cref="TiledMapPackerTestRenderer"/> to render the maps and, optionally,
 /// delete the created folder on exit.
 /// </summary>
 [PublicAPI]
@@ -52,16 +52,19 @@ public class TiledMapPackerTest
     }
 
     public static TestType Testtype { get; set; }
-    
+
+    // ========================================================================
+
     public static void Run( string[] args )
     {
-        var path       = @$"{Files.ContentRoot}\data\maps\";
-        var input      = @$"{path}\source\";
-        var output     = @$"{path}\processed";
-        var verboseOpt = "-v";
-        var unused     = "--strip-unused";
-        var combine    = "--combine-tilesets";
-        var badOpt     = "bad";
+        const string VerboseOpt = "-v";
+        const string Unused     = "--strip-unused";
+        const string Combine    = "--combine-tilesets";
+        const string BadOpt     = "bad";
+
+        var path   = @$"{Files.ContentRoot}\maps\";
+        var input  = @$"{path}\source\";
+        var output = @$"{path}\processed";
 
         // There is an optional 3rd path parameter, which is specifically meant to
         // support maps which use the custom class properties. You must specify the
@@ -74,68 +77,72 @@ public class TiledMapPackerTest
 
         if ( outputDir.Exists )
         {
-            // OR...Should I just delete the output folder here?
-            Console.WriteLine( "Please run TiledMapPackerTestRender or delete output "
-                             + $"folder located in {output}" );
-
-            return;
+            Directory.Delete( output, true );
+            
+//            // OR...Should I just delete the output folder here?
+//            Console.WriteLine( "Please run TiledMapPackerTestRenderer or delete output "
+//                             + $"folder located in {output}" );
+//
+//            return;
         }
 
-        string[] noArgs                             = Array.Empty<string>();
+        string[] noArgs                             = Array.Empty< string >();
         string[] defaultUsage                       = { input, output };
         string[] defaultUsageWithProjectFile        = { input, output, projectFilePath };
-        string[] defaultUsageWithProjectFileVerbose = { input, output, projectFilePath, verboseOpt };
-        string[] verbose                            = { input, output, verboseOpt };
-        string[] stripUnused                        = { input, output, unused };
-        string[] combineTilesets                    = { input, output, combine };
-        string[] unusedAndCombine                   = { input, output, unused, combine };
+        string[] defaultUsageWithProjectFileVerbose = { input, output, projectFilePath, VerboseOpt };
+        string[] verbose                            = { input, output, VerboseOpt };
+        string[] stripUnused                        = { input, output, Unused };
+        string[] combineTilesets                    = { input, output, Combine };
+        string[] unusedAndCombine                   = { input, output, Unused, Combine };
 
-        string[] badOption = { input, output, unused, verboseOpt, combine, badOpt };
+        string[] badOption = { input, output, Unused, VerboseOpt, Combine, BadOpt };
 
+        var tiledMapPacker = new TiledMapPacker();
+        
         switch ( Testtype )
         {
             case TestType.NoArgs:
-                TiledMapPacker.Run( noArgs );
+                tiledMapPacker.Run( noArgs );
 
                 break;
 
             case TestType.DefaultUsage:
-                TiledMapPacker.Run( defaultUsage );
+                tiledMapPacker.Run( defaultUsage );
 
                 break;
 
             case TestType.DefaultUsageWithProjectFile:
-                TiledMapPacker.Run( defaultUsageWithProjectFile );
+                tiledMapPacker.Run( defaultUsageWithProjectFile );
 
                 break;
 
             case TestType.Verbose:
-                TiledMapPacker.Run( verbose );
+                tiledMapPacker.Run( verbose );
 
                 break;
 
             case TestType.DefaultUsageWithProjectFileVerbose:
-                TiledMapPacker.Run( defaultUsageWithProjectFileVerbose );
+                tiledMapPacker.Run( defaultUsageWithProjectFileVerbose );
 
                 break;
 
             case TestType.StripUnused:
-                TiledMapPacker.Run( stripUnused );
+                tiledMapPacker.Run( stripUnused );
 
                 break;
 
             case TestType.CombineTilesets:
-                TiledMapPacker.Run( combineTilesets );
+                tiledMapPacker.Run( combineTilesets );
 
                 break;
 
             case TestType.UnusedAndCombine:
-                TiledMapPacker.Run( unusedAndCombine );
+                tiledMapPacker.Run( unusedAndCombine );
 
                 break;
 
             case TestType.BadOption:
-                TiledMapPacker.Run( badOption );
+                tiledMapPacker.Run( badOption );
 
                 break;
 

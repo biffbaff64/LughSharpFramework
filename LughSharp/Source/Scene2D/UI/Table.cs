@@ -598,7 +598,10 @@ public class Table : WidgetGroup
 
         _implicitEndRow = false;
 
-        CellPool.Free( _rowDefaults );
+        if ( _rowDefaults != null )
+        {
+            CellPool.Free( _rowDefaults );
+        }
 
         _rowDefaults = ObtainCell();
         _rowDefaults.Clear();
@@ -1911,8 +1914,6 @@ public class Table : WidgetGroup
         {
             AddDebugRects( x, y, tableWidth - hpadding, tableHeight - vpadding );
         }
-
-        Logger.Debug( $"tableWidth={tableWidth}, tableHeight={tableHeight}, layoutWidth={layoutWidth}, layoutHeight={layoutHeight}" );
     }
 
     /// <summary>

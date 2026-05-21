@@ -40,20 +40,19 @@ using LughSharp.Source.Utils.Logging;
 namespace Extensions.Source.TiledMapPacker;
 
 /// <summary>
-/// Given one or more TMX tilemaps, packs all tileset resources used across the
-/// maps, or the resources used per map, into a single, or multiple (one per map),
-/// <see cref="TextureAtlas"/>s and produces a new TMX file to be loaded with a
-/// dedicated TiledMap map loader. Optionally, it can keep track of unused tiles
-/// and omit them from the generated atlas, reducing the resource size.
+/// Given one or more TMX tilemaps, packs all tileset resources used across the maps, or the
+/// resources used per map, into a single, or multiple (one per map), <see cref="TextureAtlas"/>s
+/// and produces a new TMX file to be loaded with a dedicated TiledMap map loader.
+/// Optionally, it can keep track of unused tiles and omit them from the generated atlas, reducing
+/// the resource size.
 /// <para>
-/// The original TMX map file will be parsed by using the <see cref="TmxMapLoader"/>
-/// loader, thus access to a valid OpenGL context is <b>required</b>, that's why
-/// an DesktopGLApplication is created by this preprocessor.
+/// The original TMX map file will be parsed by using the <see cref="TmxMapLoader"/> loader, thus
+/// access to a valid OpenGL context is <b>required</b>, that's why an DesktopGLApplication is
+/// created by this preprocessor.
 /// </para>
 /// <para>
-/// The new TMX map file will contains a new property, namely "atlas", whose value
-/// will enable the AtlasTiledMapLoader to correctly read the associated TextureAtlas
-/// representing the tileset.
+/// The new TMX map file will contains a new property, namely "atlas", whose value will enable the
+/// AtlasTiledMapLoader to correctly read the associated TextureAtlas representing the tileset.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -68,9 +67,9 @@ public class TiledMapPacker
     private TiledMap                              _map            = null!;
     private TiledMapPackerSettings                _settings;
 
-    public required DirectoryInfo? InputDir;
-    public required DirectoryInfo? OutputDir;
-    public required DirectoryInfo? CurrentDir;
+    public DirectoryInfo? InputDir;
+    public DirectoryInfo? OutputDir;
+    public DirectoryInfo? CurrentDir;
 
     // ========================================================================
 
@@ -187,9 +186,7 @@ public class TiledMapPacker
         _map = _mapLoader.Load( mapFile.FullName );
 
         // if enabled, build a list of used tileids for the tileset used by this map
-        bool stripUnusedTiles = _settings.StripUnusedTiles;
-
-        if ( stripUnusedTiles )
+        if ( _settings.StripUnusedTiles )
         {
             StripUnusedTiles();
         }
@@ -359,8 +356,10 @@ public class TiledMapPacker
         return bucket;
     }
 
-//	/** Traverse the specified tilesets, optionally lookup the used ids and pass every tile image to the {@link TexturePacker},
-//	 * optionally ignoring unused tile ids */
+    /// <summary>
+    /// Traverse the specified tilesets, optionally lookup the used ids and pass every tile image to the
+    /// <see cref="TexturePacker"/>, optionally ignoring unused tile ids.
+    /// </summary>
     private void PackTilesets( DirectoryInfo inputDirHandle, TexturePackerSettings texturePackerSettings )
     {
 //		BufferedImage tile;
@@ -547,34 +546,44 @@ public class TiledMapPacker
     /// args[2-4] options
     /// </li>
     /// </param>
-    public static void Run( string[] args )
+    public void Run( string[] args )
     {
-//		final Settings texturePackerSettings = new Settings();
-//		texturePackerSettings.paddingX = 2;
-//		texturePackerSettings.paddingY = 2;
-//		texturePackerSettings.edgePadding = true;
-//		texturePackerSettings.duplicatePadding = true;
-//		texturePackerSettings.bleed = true;
-//		texturePackerSettings.alias = true;
-//		texturePackerSettings.useIndexes = true;
-//
-//		final TiledMapPackerSettings packerSettings = new TiledMapPackerSettings();
-//
-//		if (args.length == 0) {
-//			printUsage();
-//			System.exit(0);
-//		} else if (args.length == 1) {
-//			inputDir = new File(args[0]);
-//			outputDir = new File(inputDir, "../output/");
-//		} else if (args.length == 2) {
-//			inputDir = new File(args[0]);
-//			outputDir = new File(args[1]);
-//		} else {
-//			inputDir = new File(args[0]);
-//			outputDir = new File(args[1]);
-//			processExtraArgs(args, packerSettings);
-//		}
-//
+        TexturePackerSettings texturePackerSettings = new()
+        {
+            PaddingX         = 2,
+            PaddingY         = 2,
+            EdgePadding      = true,
+            DuplicatePadding = true,
+            Bleed            = true,
+            IsAlias          = true,
+            UseIndexes       = true
+        };
+
+        var packerSettings = new TiledMapPackerSettings();
+
+        if ( args.Length == 0 )
+        {
+            PrintUsage();
+            System.Environment.Exit( 0 );
+        }
+        else if ( args.Length == 1 )
+        {
+            InputDir  = new DirectoryInfo( args[ 0 ] );
+            OutputDir = new DirectoryInfo( Path.Join( InputDir.FullName, "../output/" ) );
+        }
+        else if ( args.Length == 2 )
+        {
+            InputDir  = new DirectoryInfo( args[ 0 ] );
+            OutputDir = new DirectoryInfo( args[ 1 ] );
+        }
+        else
+        {
+            InputDir  = new DirectoryInfo( args[ 0 ] );
+            OutputDir = new DirectoryInfo( args[ 1 ] );
+            
+            ProcessExtraArgs( args, packerSettings );
+        }
+
 //		TiledMapPacker packer = new TiledMapPacker(packerSettings);
 //		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 //		config.forceExit = false;
@@ -650,20 +659,21 @@ public class TiledMapPacker
 //		}
 //	}
 
-//	private static void printUsage () {
-//		System.out.println("Usage: INPUTDIR [OUTPUTDIR] [--strip-unused] [--combine-tilesets] [-v]");
-//		System.out.println("Processes a directory of Tiled .tmx maps. Unable to process maps with XML");
-//		System.out.println("tile layer format.");
-//		System.out.println("  --strip-unused             omits all tiles that are not used. Speeds up");
-//		System.out.println("                             the processing. Smaller tilesets.");
-//		System.out.println("  --combine-tilesets         instead of creating a tileset for each map,");
-//		System.out.println("                             this combines the tilesets into some kind");
-//		System.out.println("                             of monster tileset. Has problems with tileset");
-//		System.out.println("                             location. Has problems with nested folders.");
-//		System.out.println("                             Not recommended.");
-//		System.out.println("  -v                         outputs which tiles are stripped and included");
-//		System.out.println();
-//	}
+    private static void PrintUsage()
+    {
+        Console.WriteLine( "Usage: INPUTDIR [OUTPUTDIR] [--strip-unused] [--combine-tilesets] [-v]" );
+        Console.WriteLine( "Processes a directory of Tiled .tmx maps. Unable to process maps with XML" );
+        Console.WriteLine( "tile layer format." );
+        Console.WriteLine( "  --strip-unused             omits all tiles that are not used. Speeds up" );
+        Console.WriteLine( "                             the processing. Smaller tilesets." );
+        Console.WriteLine( "  --combine-tilesets         instead of creating a tileset for each map," );
+        Console.WriteLine( "                             this combines the tilesets into some kind" );
+        Console.WriteLine( "                             of monster tileset. Has problems with tileset" );
+        Console.WriteLine( "                             location. Has problems with nested folders." );
+        Console.WriteLine( "                             Not recommended." );
+        Console.WriteLine( "  -v                         outputs which tiles are stripped and included" );
+        Console.WriteLine();
+    }
 
     // ========================================================================
 
@@ -683,7 +693,7 @@ public class TiledMapPacker
 //	 * 
 //	 * @param args args[0]: the input directory containing the tmx files (and tile sets, relative to the path listed in the tmx
 //	 *           file). args[1]: The output directory for the tmx files, should be empty before running. args[2-4] options */
-//	public static void main (String[] args) {
+//	public static void main (string[] args) {
 //		final Settings texturePackerSettings = new Settings();
 //		texturePackerSettings.paddingX = 2;
 //		texturePackerSettings.paddingY = 2;
@@ -757,33 +767,47 @@ public class TiledMapPacker
 //			}
 //		}, config);
 //	}
-//
-//	private static void processExtraArgs (String[] args, TiledMapPackerSettings packerSettings) {
-//		String stripUnused = "--strip-unused";
-//		String combineTilesets = "--combine-tilesets";
-//		String verbose = "-v";
-//
-//		int length = args.length - 2;
-//		String[] argsNotDir = new String[length];
-//		System.arraycopy(args, 2, argsNotDir, 0, length);
-//
-//		for (String string : argsNotDir) {
-//			if (stripUnused.equals(string)) {
-//				packerSettings.stripUnusedTiles = true;
-//
-//			} else if (combineTilesets.equals(string)) {
-//				packerSettings.combineTilesets = true;
-//
-//			} else if (verbose.equals(string)) {
-//				packerSettings.verbose = true;
-//
-//			} else {
-//				System.out.println("\nOption \string.Empty + string + "\" not recognized.\n");
-//				printUsage();
-//				System.exit(0);
-//			}
-//		}
-//	}
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="args"></param>
+    /// <param name="packerSettings"></param>
+    private static void ProcessExtraArgs( string[] args, TiledMapPackerSettings packerSettings )
+    {
+        const string StripUnused     = "--strip-unused";
+        const string CombineTilesets = "--combine-tilesets";
+        const string Verbose         = "-v";
+
+        int length     = args.Length - 2;
+        var argsNotDir = new string[ length ];
+
+        Array.Copy( args, 2, argsNotDir, 0, length );
+
+        foreach ( string str in argsNotDir )
+        {
+            if ( StripUnused.SequenceEqual( str ) )
+            {
+                packerSettings.StripUnusedTiles = true;
+            }
+            else if ( CombineTilesets.SequenceEqual( str ) )
+            {
+                packerSettings.CombineTilesets = true;
+            }
+            else if ( Verbose.SequenceEqual( str ) )
+            {
+                packerSettings.Verbose = true;
+            }
+            else
+            {
+                Console.WriteLine( $"\nOption {str} not recognized.\n" );
+
+                PrintUsage();
+
+                System.Environment.Exit( 0 );
+            }
+        }
+    }
 }
 
 // ============================================================================

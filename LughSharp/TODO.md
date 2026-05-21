@@ -855,17 +855,17 @@ LUGHSHARP/SOURCE/NETWORK
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - HttpParameterUtils
-    -      -      -      - HttpRequestBuilder
-    -      -      -      - HttpStatus
-    -      -      -      - IHttpRequestHeader
-    -      -      -      - IHttpResponseHeader
-    -      -      -      - INet
-    -      -      -      - IServerSocket
-    -      -      -      - ISocket
-    -      -      -      - NetHandler
-    -      -      -      - ServerSocketHints
-    -      -      -      - SocketHints
+    -      -      - DONE - HttpParameterUtils
+    -      -      - DONE - HttpRequestBuilder
+    -      -      - DONE - HttpStatus
+    -      -      - DONE - IHttpRequestHeader
+    -      -      - DONE - IHttpResponseHeader
+    - DONE - DONE - DONE - INet
+    -      -      - DONE - IServerSocket
+    -      -      - DONE - ISocket
+    - DONE - DONE - DONE - NetHandler
+    -      -      - DONE - ServerSocketHints
+    -      -      - DONE - SocketHints
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1122,6 +1122,7 @@ LUGHSHARP/SOURCE/UTILS/EXCEPTIONS
       ----   ----   ------
     - DONE - DONE - DONE - AssetNotLoadedException
     - DONE - DONE - DONE - Guard
+    - DONE - DONE - DONE - InvalidUIStyleException
     - DONE - DONE - DONE - ListenerFailureException
     - DONE - DONE - DONE - RuntimeException
     - DONE - DONE - DONE - SerializationException
@@ -1333,8 +1334,8 @@ LUGHSHARP/EXTENSIONS/SOURCE/TILEDMAPPACKER
       ----   ----   ------
     - IP   - IP   -      - TileMapPacker
     -      -      -      - TiledMapPackerTest
-    -      -      -      - TiledMapPackerTestRender
-    -      -      -      - TileSetLayout
+    -      -      -      - TiledMapPackerTestRenderer
+    - DONE - DONE - DONE - TileSetLayout
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -64,16 +64,31 @@ public class StageTests : IDisposable
 
     private Stage? _stage;
 
-    private static readonly string[] _newItems = new []
+    private static readonly string[] _newItems = new[]
     {
-        "Carp",
+        "Mirror Carp",
+        "Leather Carp",
+        "Common Carp",
+        "Grass Carp",
+        "Crucian Carp",
+        "F1",
         "Roach",
         "Pike",
         "Bream",
         "Rudd",
         "Tench",
         "Gudgeon",
-        "Perch"
+        "Perch",
+        "Zander",
+        "Ruffe",
+        "Minnow",
+        "Grayling",
+        "Brown Trout",
+        "Rainbow Trout",
+        "Salmon",
+        "Chub",
+        "Barbel",
+        "Silver Bream",
     };
 
     // ========================================================================
@@ -102,13 +117,12 @@ public class StageTests : IDisposable
         }
     }
 
-    public void Update( bool isDrawingStage )
+    public void Update( float deltaTime )
     {
-        if ( _stage != null && isDrawingStage )
-        {
-            _stage.Act( Math.Min( Engine.DeltaTime, 1.0f / 60.0f ) );
-            _stage.Draw();
-        }
+    }
+
+    public void Render( bool isDrawingStage )
+    {
     }
 
     public void CreateSkinActors()
@@ -124,7 +138,7 @@ public class StageTests : IDisposable
         WindowActor();
         // ----------------------------
 //        ImageActor();
-//        SelectBoxActor();
+        SelectBoxActor();
         // ----------------------------
 //        ButtonActor();
 //        TextButtonActor();
@@ -150,7 +164,7 @@ public class StageTests : IDisposable
         {
             table = new Table( skin )
             {
-                IsVisible = true,
+                IsVisible  = true,
                 FillParent = true
             };
 
@@ -163,15 +177,16 @@ public class StageTests : IDisposable
 
         void WindowActor()
         {
-            window = new Window( "Window Title", skin )
+            window = new Window( "Title", skin )
             {
                 IsVisible = true,
             };
-            window.AddTitleTable( skin );
+
             window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
-            window.SetPosition( 0, 0 );
+            window.SetPosition( 200, 200 );
             window.CellDefaults.SetSpaceBottom( 10 );
             window.AddRow()?.Fill().Expand();
+            window.Pack();
 
             _stage?.AddActor( window );
         }
@@ -186,14 +201,15 @@ public class StageTests : IDisposable
                 IsDisabled = false,
             };
 
-            selectBox.SetAlignment( Align.Right );
-            selectBox.GetList().Alignment                     = Align.Right;
+            selectBox.SetAlignment( Align.Center );
+            selectBox.GetList().Alignment                          = Align.Center;
             selectBox.GetStyle().ListBoxStyle.Selection.RightWidth = 10;
             selectBox.GetStyle().ListBoxStyle.Selection.LeftWidth  = 20;
             selectBox.SetItems( new List< string >( _newItems ) );
             selectBox.SetSelected( "Rudd" );
 
-            table.AddCell( selectBox ).SetMaxWidth( 100 );
+//            table.AddCell( selectBox ).SetMaxWidth( 100 );
+            window.AddCell( selectBox ).SetMaxWidth( 100 );
         }
 
         // --------------------------------------
@@ -207,7 +223,7 @@ public class StageTests : IDisposable
         void DialogActor()
         {
             Guard.Against.Null( _stage );
-            
+
             var dialogStyle = new DialogStyle
             {
                 Background     = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) ),
@@ -215,7 +231,7 @@ public class StageTests : IDisposable
                 TitleFontColor = Color.Red,
             };
 
-            var dialog = new Dialog( "Dialog Title", dialogStyle )
+            var dialog = new Dialog( "Dialog Title", dialogStyle, skin )
             {
                 IsVisible = true,
             };
@@ -401,7 +417,8 @@ public class StageTests : IDisposable
             {
                 IsVisible = true
             };
-            table.AddCell( scene2DImage );
+//            table.AddCell( scene2DImage );
+            window.AddCell( scene2DImage );
         }
 
         // --------------------------------------
@@ -426,10 +443,12 @@ public class StageTests : IDisposable
 
             Button.AddListener( new ChangeListener( ( ev, actor ) =>
             {
-//                var source  = ev.TargetActor; // Actor that fired the event
-//                var stage   = ev._stage;       // The _stage it belongs to
-//                var capture = ev.Capture;     // true if in capture phase
+                Actor? source  = ev.TargetActor; // Actor that fired the event
+                Stage? stage   = ev.Stage;       // The _stage it belongs to
+                bool   capture = ev.Capture;     // true if in capture phase
 
+                Logger.Debug( $"Button clicked! Actor: {source}, Stage: {stage}, Capture: {capture}" );
+                
                 if ( actor is Button { IsChecked: true } )
                 {
                     Logger.Debug( "Button is checked!" );
@@ -442,20 +461,6 @@ public class StageTests : IDisposable
             } ) );
 
             Button.AddListener( new TextTooltip( "This is a tool tip!", skin ) );
-
-//            var tooltipTable = new Table( skin );
-//            tooltipTable.Pad( 10 ).SetBackground( "default-pane" );
-//            tooltipTable.AddActor( new TextButton( "Fancy Tooltip!", skin ) );
-
-//            Button2 = new Button( skin )
-//            {
-//                IsVisible = true,
-//            };
-//            Button2.SetPosition( 100, 70 );
-//            Button2.SetSize( Button.Width, Button.Height );
-//            _stage?.AddActor( Button2 );
-//
-//            Button2.AddListener( new ClickListener( ( ev, x, y ) => { Logger.Debug( "Button2 clicked!" ); } ) );
         }
 
         // --------------------------------------

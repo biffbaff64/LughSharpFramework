@@ -53,8 +53,6 @@ public class Dialog : Window, IStyleable< DialogStyle >
     private FocusListener  _dialogFocusListener  = null!;
     private InputListener  _dialogInputListener  = null!;
 
-    private Skin? _skin;
-
     // ========================================================================
 
     /// <summary>
@@ -62,12 +60,9 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"> The Skin holding the DialogStyle.</param>
-    public Dialog( string title, Skin skin ) : base( title, skin.Get< DialogStyle >() )
+    public Dialog( string title, Skin skin ) : base( title, skin.Get< DialogStyle >(), skin )
     {
-        Skin  = skin;
-        _skin = skin;
-
-        Initialise();
+        Initialise( skin );
     }
 
     /// <summary>
@@ -77,12 +72,9 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <param name="skin"> The Skin holding the DialogStyle.</param>
     /// <param name="dialogStyle"> The <see cref="DialogStyle"/> to use. </param>
     public Dialog( string title, Skin skin, string dialogStyle )
-        : base( title, skin.Get< DialogStyle >( dialogStyle ) )
+        : base( title, skin.Get< DialogStyle >( dialogStyle ), skin )
     {
-        Skin  = skin;
-        _skin = skin;
-
-        Initialise();
+        Initialise( skin );
     }
 
     /// <summary>
@@ -90,22 +82,24 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="dialogStyle"> The <see cref="DialogStyle"/> to use. </param>
-    public Dialog( string title, DialogStyle dialogStyle ) : base( title, dialogStyle )
+    /// <param name="skin"> The Skin holding the DialogStyle.</param>
+    public Dialog( string title, DialogStyle dialogStyle, Skin skin ) : base( title, dialogStyle, skin )
     {
-        Initialise();
+        Initialise( skin );
     }
 
     /// <summary>
     /// Initialises the basic elements of this dialog, including the necessary listeners.
     /// </summary>
-    private void Initialise()
+    private void Initialise( Skin skin )
     {
+        Skin    = skin;
         IsModal = true;
 
         CellDefaults.Space( 6 );
 
-        AddCell( ContentTable = new Table( _skin ) ).Grow();
-        AddCell( ButtonTable  = new Table( _skin ) ).SetFillX();
+        AddCell( ContentTable = new Table( Skin ) ).Grow();
+        AddCell( ButtonTable  = new Table( Skin ) ).SetFillX();
 
         ContentTable.CellDefaults.Space( 6 );
         ButtonTable.CellDefaults.Space( 6 );
@@ -145,12 +139,12 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// </summary>
     public Dialog Text( string? text )
     {
-        if ( _skin == null )
+        if ( Skin == null )
         {
             throw new RuntimeException( "This method may only be used if the dialog was constructed." );
         }
 
-        return Text( text, _skin.Get< LabelStyle >() );
+        return Text( text, Skin.Get< LabelStyle >() );
     }
 
     /// <summary>
@@ -178,13 +172,13 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// </summary>
     public Dialog Button( string text, object? obj = null )
     {
-        if ( _skin == null )
+        if ( Skin == null )
         {
             throw new RuntimeException( "This method may only be used if the "
                                       + "dialog was constructed with a Skin." );
         }
 
-        return Button( text, obj, _skin.Get< TextButtonStyle >() );
+        return Button( text, obj, Skin.Get< TextButtonStyle >() );
     }
 
     /// <summary>

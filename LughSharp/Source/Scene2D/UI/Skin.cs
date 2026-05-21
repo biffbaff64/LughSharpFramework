@@ -1,4 +1,4 @@
-﻿﻿// ///////////////////////////////////////////////////////////////////////////////
+﻿///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
@@ -1178,42 +1178,69 @@ public class Skin : IDisposable
     // ========================================================================
 
     [PublicAPI]
-    public class SkinReferenceConverter( Skin skin ) : JsonConverter
+    public class SkinReferenceConverter : JsonConverter
     {
+        private readonly Skin  _skin;
+        private readonly Type? _excludedType;
+
+        public SkinReferenceConverter( Skin skin, Type? excludedType = null )
+        {
+            _skin         = skin;
+            _excludedType = excludedType;
+        }
+
         public override bool CanConvert( Type objectType )
         {
+            if ( _excludedType != null && objectType == _excludedType )
+                return false;
+
             return objectType == typeof( Color ) ||
                    objectType == typeof( BitmapFont ) ||
-                   typeof( ISceneDrawable ).IsAssignableFrom( objectType );
+                   typeof( ISceneDrawable ).IsAssignableFrom( objectType ) ||
+                   typeof( ISceneStyle ).IsAssignableFrom( objectType );
         }
 
         public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue,
                                           JsonSerializer serializer )
         {
-            // 1. Handle string name lookup (e.g., "white")
+            // 1. Handle string name lookup (e.g., "white", "button-down", "default")
             if ( reader.TokenType == JsonToken.String )
             {
                 var name = ( string )reader.Value!;
 
-                return skin.Get( name, objectType );
+                return _skin.Get( name, objectType );
             }
 
-            // 2. Handle object definition (e.g., { "r": 1, ... })
+            // 2. Handle inline object definition (e.g., { "r": 1, ... } or { "down": "button-down", ... })
             if ( reader.TokenType == JsonToken.StartObject )
             {
-                // To avoid StackOverflow/Error Context issues, create a clean serializer
-                // that DOES NOT have this SkinReferenceConverter in its list.
-                var localSettings = new JsonSerializerSettings
+                if ( typeof( ISceneStyle ).IsAssignableFrom( objectType ) )
+                {
+                    // Style objects contain drawable/color/nested-style fields that need
+                    // SkinReferenceConverter. Replace this converter with a variant that
+                    // excludes the current type, preventing infinite re-entry while keeping
+                    // resolution working for all field types.
+                    var localSettings = new JsonSerializerSettings
+                    {
+                        ContractResolver = serializer.ContractResolver,
+                        Converters = serializer.Converters
+                                               .Where( c => c is not SkinReferenceConverter )
+                                               .Append( new SkinReferenceConverter( _skin, objectType ) )
+                                               .ToList()
+                    };
+
+                    return JsonSerializer.Create( localSettings ).Deserialize( reader, objectType );
+                }
+
+                // For non-style types (Color, ISceneDrawable) use a clean serializer to
+                // avoid re-entry — their fields are primitives/textures, not skin references.
+                var cleanSettings = new JsonSerializerSettings
                 {
                     ContractResolver = serializer.ContractResolver,
-                    // Keep the ColorConverter if we are dealing with a Color
-                    Converters = serializer.Converters.Where( c => c is not SkinReferenceConverter ).ToList()
+                    Converters       = serializer.Converters.Where( c => c is not SkinReferenceConverter ).ToList()
                 };
 
-                var localSerializer = JsonSerializer.Create( localSettings );
-
-                // Deserialize using the clean serializer
-                return localSerializer.Deserialize( reader, objectType );
+                return JsonSerializer.Create( cleanSettings ).Deserialize( reader, objectType );
             }
 
             return null;

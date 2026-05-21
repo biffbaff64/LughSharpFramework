@@ -140,7 +140,7 @@
       "up": "button",
       "over": "button-over",
       "disabled": "button"
-    },
+    }
   },
   "ImageTextButtonStyle": {
     "default": {
@@ -163,7 +163,7 @@
       "disabled": "button",
       "disabledFontColor": "grey",
       "focusBorder": "border"
-    },
+    }
   },
   "ScrollPaneStyle": {
     "list": {
@@ -183,8 +183,8 @@
   "SelectBoxStyle": {
     "default": {
       "background": "default-select",
-      "scrollStyle": "default",
-      "listStyle": {
+      "scrollPaneStyle": "default",
+      "listBoxStyle": {
         "font": "default-font",
         "selection": "padded-list-selection",
         "background": "select-box-list-bg"
@@ -206,14 +206,17 @@
     "default": {
       "titleFont": "default-font",
       "background": "window",
-      "titleFontColor": "white"
+      "titleFontColor": "white",
+      "stageBackground": "default-pane"
     },
     "resizable": {
+      "stageBackground": "default-pane",
       "background": "window-resizable",
       "titleFont": "default-font",
       "titleFontColor": "white"
     },
     "noborder": {
+      "stageBackground": "default-pane-noborder",
       "background": "window-noborder",
       "titleFont": "default-font",
       "titleFontColor": "white"
@@ -316,10 +319,11 @@
   },
   "ListBoxStyle": {
     "default": {
+      "font": "default-font",
+      "fontColorSelected": "white",
       "fontColorUnselected": "white",
       "selection": "padded-list-selection",
-      "fontColorSelected": "white",
-      "font": "default-font"
+      "background": "select-box-list-bg"
     }
   },
   "TouchpadStyle": {

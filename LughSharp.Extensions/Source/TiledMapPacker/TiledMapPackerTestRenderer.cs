@@ -22,8 +22,19 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
 namespace Extensions.Source.TiledMapPacker;
 
-public class TiledMapPackerTestRender
+/// <summary>
+/// Renders and, optionally, deletes maps processed by TiledMapPackerTest.
+/// Run TiledMapPackerTest before running this.
+/// </summary>
+[PublicAPI]
+public class TiledMapPackerTestRenderer
 {
 }
+
+// ============================================================================
+// ============================================================================
+

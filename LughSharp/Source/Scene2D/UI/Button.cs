@@ -154,10 +154,8 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     /// Creates a button with using the supplied <see cref="ButtonStyle"/>, and
     /// also adding the supplied child.
     /// </summary>
-    public Button( Actor child, ButtonStyle style )
+    public Button( Actor child, ButtonStyle style ) : this( style )
     {
-        SetClickListener();
-        SetStyleAndSize( style );
         AddCell( child );
     }
 
@@ -203,7 +201,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
             }
         } );
 
-        AddListener( ClickListener! );
+        AddListener( ClickListener );
     }
 
     /// <summary>

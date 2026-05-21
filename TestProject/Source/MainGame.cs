@@ -48,6 +48,7 @@ public class MainGame : LughGame
     private NinePatch?     _ninePatch;
 
     private bool _disposed;
+    private int  _runCount;
 
     private readonly FontTests  _fontTests  = new();
     private readonly StageTests _stageTests = new();
@@ -79,9 +80,9 @@ public class MainGame : LughGame
             _stage = new Stage( _hudCam.Viewport );
         }
         // --------------------------------------
-        
+
         CreateAssets();
-        
+
         _stageTests.CreateStage( _hudCam, ref _stage, ref _inputMultiplexer );
 
         _font = new BitmapFont( new FileInfo( Assets.ArialFont ) );
@@ -127,7 +128,7 @@ public class MainGame : LughGame
                 _cameraPos.Z = 0;
 
                 _backgroundCam.SetPosition( _cameraPos, CameraData.NoZoom, true );
-                
+
                 if ( _backgroundTexture != null )
                 {
                     _spriteBatch.Draw( _backgroundTexture,
@@ -177,9 +178,9 @@ public class MainGame : LughGame
                 _spriteBatch.End();
             }
 
-            // The Camera used for the Stage doesn't actually need updating
-            // here, as the Stage will update it internally before drawing,
-            // but we'll update it here anyway to test printing of BitmapFonts.
+            // The Camera used for the Stage doesn't actually need updating here, as the Stage
+            // will update it internally before drawing, but we'll update it here anyway to
+            // test printing of BitmapFonts.
 
             if ( _hudCam is { IsInUse: true } )
             {
@@ -189,6 +190,8 @@ public class MainGame : LughGame
 
                 _hudCam.SetPosition( Vector3.Zero, CameraData.NoZoom, false );
                 _hudCam.Update();
+
+                _font?.Draw( _spriteBatch, $"Running: {_runCount++:00000000}", 10, Engine.Graphics.WindowHeight - 40 );
 
                 _spriteBatch.End();
             }
@@ -215,8 +218,8 @@ public class MainGame : LughGame
     {
         _backgroundCam = new OrthographicGameCamera( 480, 270 )
         {
-            Name    = "BackgroundCamera",
-            IsInUse = true,
+            Name     = "BackgroundCamera",
+            IsInUse  = true,
             Position = new Vector3( 0, 0, CameraData.DefaultZ )
         };
         _backgroundCam.Update();
@@ -226,8 +229,8 @@ public class MainGame : LughGame
         _tiledMapCam = new OrthographicGameCamera( Engine.Graphics.WindowWidth,
                                                    Engine.Graphics.WindowHeight )
         {
-            Name    = "TiledMapCamera",
-            IsInUse = true,
+            Name     = "TiledMapCamera",
+            IsInUse  = true,
             Position = new Vector3( 0, 0, CameraData.DefaultZ )
         };
         _tiledMapCam.Update();
