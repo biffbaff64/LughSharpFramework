@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Audio.Maponus.Support;
 
 namespace LughSharp.Source.Audio.Maponus.Decoding;

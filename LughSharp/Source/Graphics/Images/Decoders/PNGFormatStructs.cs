@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Graphics.Images.Decoders;
 
 [PublicAPI]
@@ -75,3 +71,9 @@ public class PNGFormatStructs
         public byte[] ChunkType { get; set; } // 4 bytes 'I', 'D', 'A', 'T'
     }
 }
+
+// ============================================================================
+// ============================================================================
+
+
+

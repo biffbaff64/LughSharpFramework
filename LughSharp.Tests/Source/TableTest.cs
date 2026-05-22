@@ -25,13 +25,10 @@
 using JetBrains.Annotations;
 
 using LughSharp.Source;
-using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Scene2D;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Scene2D.UI.Styles;
-using LughSharp.Source.Scene2D.Utils;
-using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Logging;
 
 using NUnit.Framework;

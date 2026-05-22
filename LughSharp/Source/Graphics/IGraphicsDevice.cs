@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.FrameBuffers;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Utils;

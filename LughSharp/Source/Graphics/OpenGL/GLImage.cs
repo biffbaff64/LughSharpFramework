@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Graphics.OpenGL;
 
 /// <summary>
@@ -36,7 +32,7 @@ namespace LughSharp.Source.Graphics.OpenGL;
 public unsafe struct GLImage
 {
     /// <summary>
-    /// Initializes a new instance of the <see cref="GLImage"/> struct.
+    /// Initializes a new instance of the GLImage struct.
     /// </summary>
     /// <param name="width">The width of the image in pixels.</param>
     /// <param name="height">The height of the image in pixels.</param>
@@ -49,12 +45,12 @@ public unsafe struct GLImage
     }
 
     /// <summary>
-    /// The width, in pixels, of this <see cref="GLImage"/>.
+    /// The width, in pixels, of this GLImage.
     /// </summary>
     public int Width;
 
     /// <summary>
-    /// The height, in pixels, of this <see cref="GLImage"/>.
+    /// The height, in pixels, of this GLImage.
     /// </summary>
     public int Height;
 

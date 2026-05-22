@@ -24,19 +24,9 @@
 
 #pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using GLuint = uint;
 

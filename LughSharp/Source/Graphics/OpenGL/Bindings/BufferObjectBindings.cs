@@ -24,8 +24,6 @@
 
 // ============================================================================
 
-using System;
-
 using LughSharp.Source.Graphics.OpenGL.Enums;
 
 using GLenum = int;
@@ -44,7 +42,14 @@ namespace LughSharp.Source.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// Bind a named buffer object.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object of the binding point to be modified. This buffer is
+    /// one of those named in the <see cref="BufferTarget"/> enum.
+    /// </param>
+    /// <param name="buffer">Specifies the name of a buffer object.</param>
     public void BindBuffer( BufferTarget target, GLuint buffer )
     {
         GetDelegateForFunction< PFNGLBINDBUFFERPROC >( "glBindBuffer", out _glBindBuffer );
@@ -54,7 +59,11 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Delete named buffer objects.
+    /// </summary>
+    /// <param name="n">Specifies the number of buffer objects to be deleted.</param>
+    /// <param name="buffers">A pointer to an array of buffer objects to be deleted.</param>
     public void DeleteBuffers( GLsizei n, GLuint* buffers )
     {
         GetDelegateForFunction< PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
@@ -62,7 +71,10 @@ public unsafe partial class GLBindings
         _glDeleteBuffers( n, buffers );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Delete named buffer objects.
+    /// </summary>
+    /// <param name="buffers">An array of buffer objects to be deleted.</param>
     public void DeleteBuffers( params GLuint[] buffers )
     {
         GetDelegateForFunction< PFNGLDELETEBUFFERSPROC >( "glDeleteBuffers", out _glDeleteBuffers );
@@ -75,7 +87,13 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Generate buffer object names.
+    /// </summary>
+    /// <param name="n">Specifies the number of buffer object names to generate.</param>
+    /// <param name="buffers">
+    /// A pointer to an array in which the generated buffer object names are to be stored.
+    /// </param>
     public void GenBuffers( GLsizei n, GLuint* buffers )
     {
         GetDelegateForFunction< PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
@@ -83,7 +101,11 @@ public unsafe partial class GLBindings
         _glGenBuffers( n, buffers );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Generate buffer object names.
+    /// </summary>
+    /// <param name="n">Specifies the number of buffer object names to generate.</param>
+    /// <returns>An array of generated buffer object names.</returns>
     public GLuint[] GenBuffers( GLsizei n )
     {
         GetDelegateForFunction< PFNGLGENBUFFERSPROC >( "glGenBuffers", out _glGenBuffers );
@@ -98,7 +120,10 @@ public unsafe partial class GLBindings
         return ret;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Generate a single buffer object name.
+    /// </summary>
+    /// <returns>The generated buffer object name.</returns>
     public GLuint GenBuffer()
     {
         return GenBuffers( 1 )[ 0 ];
@@ -106,7 +131,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Determine if a name corresponds to a buffer object.
+    /// </summary>
+    /// <param name="buffer">A value that may be the name of a buffer object.</param>
+    /// <returns>
+    /// <see langword="true"/> if <paramref name="buffer"/> is a buffer object name. <see langword="false"/>
+    /// otherwise.
+    /// </returns>
     public GLboolean IsBuffer( GLuint buffer )
     {
         GetDelegateForFunction< PFNGLISBUFFERPROC >( "glIsBuffer", out _glIsBuffer );
@@ -116,6 +148,13 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="size"></param>
+    /// <param name="data"></param>
+    /// <param name="usage"></param>
     public void BufferData( BufferTarget target, int size, IntPtr data, BufferUsageHint usage )
     {
         GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
@@ -125,7 +164,28 @@ public unsafe partial class GLBindings
         CheckErrors();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Create and initialize a buffer object's data store.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
+    /// <param name="data">
+    /// Specifies a pointer to data that will be copied into the data store for initialization, or
+    /// <see cref="GLBindings.Null"/> if no data is to be copied.
+    /// </param>
+    /// <param name="usage">
+    /// Specifies the expected usage pattern of the data store. The symbolic constant must be
+    /// <see cref="IGL.GLStreamDraw"/>, <see cref="IGL.GLStreamRead"/>, <see cref="IGL.GLStreamCopy"/>,
+    /// <see cref="IGL.GLStaticDraw"/>, <see cref="IGL.GLStaticRead"/>, <see cref="IGL.GLStaticCopy"/>,
+    /// <see cref="IGL.GLDynamicDraw"/>, <see cref="IGL.GLDynamicRead"/> or <see cref="IGL.GLDynamicCopy"/>.
+    /// </param>
     public void BufferData( GLenum target, int size, IntPtr data, GLenum usage )
     {
         GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
@@ -135,7 +195,13 @@ public unsafe partial class GLBindings
         CheckErrors();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    /// <param name="data"></param>
+    /// <param name="usage"></param>
+    /// <typeparam name="T"></typeparam>
     public void BufferData< T >( BufferTarget target, T[] data, BufferUsageHint usage ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
@@ -146,7 +212,27 @@ public unsafe partial class GLBindings
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Create and initialize a buffer object's data store.
+    /// </summary>
+    /// <typeparam name="T">The type of the data to be copied.</typeparam>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="data">
+    /// An array of <typeparamref name="T"/>s that will be copied into the data store for initialization.
+    /// </param>
+    /// <param name="usage">
+    /// Specifies the expected usage pattern of the data store. The symbolic constant must be
+    /// <see cref="IGL.GLStreamDraw"/>, <see cref="IGL.GLStreamRead"/>, <see cref="IGL.GLStreamCopy"/>,
+    /// <see cref="IGL.GLStaticDraw"/>, <see cref="IGL.GLStaticRead"/>, <see cref="IGL.GLStaticCopy"/>,
+    /// <see cref="IGL.GLDynamicDraw"/>, <see cref="IGL.GLDynamicRead"/> or <see cref="IGL.GLDynamicCopy"/>.
+    /// </param>
     public void BufferData< T >( GLenum target, T[] data, GLenum usage ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLBUFFERDATAPROC >( "glBufferData", out _glBufferData );
@@ -159,7 +245,23 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Update a subset of a buffer object's data store.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="offset">
+    /// Specifies the offset into the buffer object's data store where data replacement will begin,
+    /// measured in bytes.
+    /// </param>
+    /// <param name="size">Specifies the size in bytes of the data store region being replaced.</param>
+    /// <param name="data">Specifies a pointer to the new data that will be copied into the data store.</param>
     public void BufferSubData( GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data )
     {
         GetDelegateForFunction< PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
@@ -167,7 +269,20 @@ public unsafe partial class GLBindings
         _glBufferSubData( target, offset, size, data );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Update a subset of a buffer object's data store.
+    /// </summary>
+    /// <typeparam name="T">The type of the data to be copied.</typeparam>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="offsetCount">Specifies the offset into the buffer object's data store where data replacement will begin.</param>
+    /// <param name="data">An array of <typeparamref name="T"/>s that will be copied into the data store for replacement.</param>
     public void BufferSubData< T >( GLenum target, GLintptr offsetCount, T[] data ) where T : unmanaged
     {
         GetDelegateForFunction< PFNGLBUFFERSUBDATAPROC >( "glBufferSubData", out _glBufferSubData );
@@ -180,7 +295,23 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Return a subset of a buffer object's data store.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="offset">
+    /// Specifies the offset into the buffer object's data store from which data will be returned,
+    /// measured in bytes.
+    /// </param>
+    /// <param name="size">Specifies the size in bytes of the data store region being returned.</param>
+    /// <param name="data">Specifies a pointer to the location where buffer object data is returned.</param>
     public void GetBufferSubData( GLenum target, GLintptr offset, GLsizeiptr size, IntPtr data )
     {
         GetDelegateForFunction< PFNGLGETBUFFERSUBDATAPROC >( "glGetBufferSubData", out _glGetBufferSubData );
@@ -188,7 +319,21 @@ public unsafe partial class GLBindings
         _glGetBufferSubData( target, offset, size, data );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Return a subset of a buffer object's data store.
+    /// </summary>
+    /// <typeparam name="T">The type of the data to be returned.</typeparam>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="offsetCount">Specifies the offset into the buffer object's data store from which data will be returned.</param>
+    /// <param name="count">Specifies the number of <typeparamref name="T"/>s to be returned.</param>
+    /// <param name="data">An array of <typeparamref name="T"/>s that will be filled with the data from the buffer object.</param>
     public void GetBufferSubData< T >( GLenum target, GLintptr offsetCount, GLsizei count, ref T[] data )
         where T : unmanaged
     {
@@ -202,7 +347,23 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Map a buffer object's data store into the client's address space.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="access">
+    /// Specifies a combination of access flags indicating the desired access to the range of the buffer
+    /// object's data store. One of <see cref="IGL.GLReadOnly"/>, <see cref="IGL.GLWriteOnly"/> or
+    /// <see cref="IGL.GLReadWrite"/>.
+    /// </param>
+    /// <returns>Returns a pointer to the beginning of the mapped range.</returns>
     public IntPtr MapBuffer( GLenum target, GLenum access )
     {
         GetDelegateForFunction< PFNGLMAPBUFFERPROC >( "glMapBuffer", out _glMapBuffer );
@@ -210,7 +371,23 @@ public unsafe partial class GLBindings
         return _glMapBuffer( target, access );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Map a buffer object's data store into the client's address space.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object. The symbolic constant must be <see cref="IGL.GLArrayBuffer"/>,
+    /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
+    /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
+    /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <param name="access">
+    /// Specifies a combination of access flags indicating the desired access to the range of the buffer
+    /// object's data store. One of <see cref="IGL.GLReadOnly"/>, <see cref="IGL.GLWriteOnly"/> or
+    /// <see cref="IGL.GLReadWrite"/>.
+    /// </param>
+    /// <returns>Returns a type-safe and memory-safe <see cref="System.Span{T}"/> of the buffers data.</returns>
     public Span< T > MapBuffer< T >( GLenum target, GLenum access ) where T : unmanaged
     {
         GLint size;
@@ -229,7 +406,25 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Release a mapped buffer object's data store.
+    /// </summary>
+    /// <param name="target">
+    /// Specifies the target buffer object being unmapped. The symbolic constant must be
+    /// <see cref="IGL.GLArrayBuffer"/>, <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>,
+    /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
+    /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
+    /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
+    /// <see cref="IGL.GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> unless the data store contents have become corrupt during the time the data store was
+    /// mapped. This can occur for system-specific reasons that affect the availability of graphics memory, such as screen
+    /// mode changes. In such situations, <see cref="IGLBindings.UnmapBuffer"/> may return <see langword="false"/> to
+    /// indicate that
+    /// the contents of the buffer have become corrupt and should be considered undefined. An application must detect this
+    /// rare condition and reinitialize the data store.
+    /// </returns>
     public GLboolean UnmapBuffer( GLenum target )
     {
         GetDelegateForFunction< PFNGLUNMAPBUFFERPROC >( "glUnmapBuffer", out _glUnmapBuffer );
@@ -431,6 +626,16 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
+    /// <summary>
+    /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details
+    /// on how to use this function.
+    /// </summary>
+    /// <param name="buffer">
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="IGL.GLColor"/>,
+    /// <see cref="IGL.GLDepth"/>, <see cref="IGL.GLStencil"/>.
+    /// </param>
+    /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
+    /// <param name="value">Specifies the value to clear the buffer to.</param>
     public void ClearBufferuiv( GLenum buffer, GLint drawbuffer, GLuint* value )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
@@ -438,6 +643,16 @@ public unsafe partial class GLBindings
         _glClearBufferuiv( buffer, drawbuffer, value );
     }
 
+    /// <summary>
+    /// Clear a buffer to an unsigned integer value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details
+    /// on how to use this function.
+    /// </summary>
+    /// <param name="buffer">
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="IGL.GLColor"/>,
+    /// <see cref="IGL.GLDepth"/>, <see cref="IGL.GLStencil"/>.
+    /// </param>
+    /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
+    /// <param name="value">Specifies the value to clear the buffer to.</param>
     public void ClearBufferuiv( GLenum buffer, GLint drawbuffer, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERUIVPROC >( "glClearBufferuiv", out _glClearBufferuiv );
@@ -450,6 +665,16 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
+    /// <summary>
+    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
+    /// how to use this function.
+    /// </summary>
+    /// <param name="buffer">
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="IGL.GLColor"/>,
+    /// <see cref="IGL.GLDepth"/>, <see cref="IGL.GLStencil"/>.
+    /// </param>
+    /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
+    /// <param name="value">Specifies the value to clear the buffer to.</param>
     public void ClearBufferfv( GLenum buffer, GLint drawbuffer, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
@@ -457,6 +682,16 @@ public unsafe partial class GLBindings
         _glClearBufferfv( buffer, drawbuffer, value );
     }
 
+    /// <summary>
+    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
+    /// how to use this function.
+    /// </summary>
+    /// <param name="buffer">
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of <see cref="IGL.GLColor"/>,
+    /// <see cref="IGL.GLDepth"/>, <see cref="IGL.GLStencil"/>.
+    /// </param>
+    /// <param name="drawbuffer">Specify a partical draw buffer to clear.</param>
+    /// <param name="value">Specifies the value to clear the buffer to.</param>
     public void ClearBufferfv( GLenum buffer, GLint drawbuffer, GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERFVPROC >( "glClearBufferfv", out _glClearBufferfv );
@@ -469,6 +704,17 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
+    /// <summary>
+    /// Clear a buffer to a floating point value. Refer to <see href="https://docs.gl/gl4/glClearBuffer"/> for details on
+    /// how to use this function.
+    /// </summary>
+    /// <param name="buffer">
+    /// Specifies the buffer to clear. <paramref name="buffer"/> must be one of
+    /// <see cref="IGL.GLDepthStencil"/>.
+    /// </param>
+    /// <param name="drawbuffer">Must be zero.</param>
+    /// <param name="depth">Specifies the value to clear the depth buffer to.</param>
+    /// <param name="stencil">Specifies the value to clear the stencil buffer to.</param>
     public void ClearBufferfi( GLenum buffer, GLint drawbuffer, GLfloat depth, GLint stencil )
     {
         GetDelegateForFunction< PFNGLCLEARBUFFERFIPROC >( "glClearBufferfi", out _glClearBufferfi );

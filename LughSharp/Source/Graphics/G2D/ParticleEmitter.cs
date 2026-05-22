@@ -22,19 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Maths;
 using LughSharp.Source.Maths.Collision;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using Exception = System.Exception;
 

@@ -22,16 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Shaders;
-using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Scene2D;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics.G2D;
 

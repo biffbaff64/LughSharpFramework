@@ -22,11 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Audio.Maponus.Support;
 
 using Exception = System.Exception;

@@ -24,10 +24,7 @@
 
 // ============================================================================
 
-using System;
 using System.Numerics;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;

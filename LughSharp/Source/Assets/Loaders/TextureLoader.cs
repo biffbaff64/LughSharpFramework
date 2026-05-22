@@ -22,19 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Assets.Loaders.Resolvers;
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Images.TextureData;
-using LughSharp.Source.Graphics.Loaders;
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Assets.Loaders;
 

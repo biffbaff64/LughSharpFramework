@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.Loaders;
-
 namespace LughSharp.Source.Graphics.Images.TextureData;
 
 /// <summary>

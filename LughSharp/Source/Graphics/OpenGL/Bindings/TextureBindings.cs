@@ -24,11 +24,8 @@
 
 // ============================================================================
 
-using System;
-
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Utils.Logging;
 
 using GLenum = int;
 using GLfloat = float;

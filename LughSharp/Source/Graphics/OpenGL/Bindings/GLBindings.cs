@@ -22,15 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Numerics;
-using System.Text;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using GLenum = int;
 using GLfloat = float;
@@ -4348,7 +4342,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void BindFramebuffer( GLenum target, GLuint framebuffer )
     {
-        if ( framebuffer == GLData.CurrentBoundFbo )
+        if ( framebuffer == LughGL.CurrentBoundFbo )
         {
             Stats.IncMeter( "BindFramebuffer" );
 
@@ -4360,7 +4354,7 @@ public unsafe partial class GLBindings : IGLBindings
         _glBindFramebuffer( target, framebuffer );
 
         Engine.GL.GetIntegerv( ( int )BufferBinding.FramebufferBinding, out int binding );
-        GLData.CurrentBoundFbo = ( uint )binding;
+        LughGL.CurrentBoundFbo = ( uint )binding;
     }
 
     // ========================================================================

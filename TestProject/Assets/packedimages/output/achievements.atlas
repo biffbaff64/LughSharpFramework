@@ -1,0 +1,202 @@
+
+achievements.png
+size: 2048,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+achieved
+  rotate: false
+  xy: 1892, 800
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+background
+  rotate: false
+  xy: 2, 800
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+base_destroyed
+  rotate: false
+  xy: 2, 686
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+base_destroyed_icon
+  rotate: false
+  xy: 2, 116
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+beam_me_up
+  rotate: false
+  xy: 632, 800
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+beam_me_up_icon
+  rotate: false
+  xy: 632, 230
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+blank
+  rotate: false
+  xy: 2, 572
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+bomb_collector
+  rotate: false
+  xy: 632, 686
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+bomb_collector_icon
+  rotate: false
+  xy: 1262, 392
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+bridge_building
+  rotate: false
+  xy: 1262, 800
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+bridge_building_icon
+  rotate: false
+  xy: 1892, 686
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+coming_soon
+  rotate: false
+  xy: 2, 458
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+courier_services
+  rotate: false
+  xy: 632, 572
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+courier_services_icon
+  rotate: false
+  xy: 2, 2
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+divider
+  rotate: false
+  xy: 1262, 506
+  size: 380, 64
+  orig: 380, 64
+  offset: 0, 0
+  index: -1
+gunman_jetman
+  rotate: false
+  xy: 1262, 686
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+gunman_jetman_icon
+  rotate: false
+  xy: 116, 116
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+millionaire
+  rotate: false
+  xy: 2, 344
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+millionaire_icon
+  rotate: false
+  xy: 746, 230
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+moon_rider
+  rotate: false
+  xy: 632, 458
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+moon_rider_icon
+  rotate: false
+  xy: 1376, 392
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+not_achieved
+  rotate: false
+  xy: 1892, 572
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+score_100k
+  rotate: false
+  xy: 1262, 572
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+score_100k_icon
+  rotate: false
+  xy: 116, 2
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+score_500k
+  rotate: false
+  xy: 2, 230
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+score_500k_icon
+  rotate: false
+  xy: 230, 116
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1
+shoot_missile
+  rotate: false
+  xy: 632, 344
+  size: 628, 112
+  orig: 628, 112
+  offset: 0, 0
+  index: -1
+shoot_missile_icon
+  rotate: false
+  xy: 860, 230
+  size: 112, 112
+  orig: 112, 112
+  offset: 0, 0
+  index: -1

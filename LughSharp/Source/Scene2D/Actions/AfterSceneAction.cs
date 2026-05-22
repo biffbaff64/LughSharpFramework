@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Collections;
-
 namespace LughSharp.Source.Scene2D.Actions;
 
 [PublicAPI]

@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Images;
 
 namespace LughSharp.Source.Maps.Tiled;
@@ -35,6 +32,9 @@ namespace LughSharp.Source.Maps.Tiled;
 [PublicAPI]
 public interface ITiledMapTile
 {
+    /// <summary>
+    /// Blendmode to use when rendering a tile.
+    /// </summary>
     [PublicAPI]
     enum Blendmode
     {

@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Assets.Loaders;
-using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Images.TextureData;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Bindings;

@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Maths;
 
 [PublicAPI]

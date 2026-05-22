@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Runtime.Versioning;
+﻿using System.Runtime.Versioning;
 
 using DesktopGLBackend;
 
@@ -8,6 +6,8 @@ using Extensions.Source.TexturePacker;
 
 using LughSharp.Source;
 using LughSharp.Source.IO;
+
+using TestProject.Source.GameCore;
 
 namespace TestProject.Source;
 

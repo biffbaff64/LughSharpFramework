@@ -1,0 +1,146 @@
+
+text.png
+size: 2048,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+TeleportMessage
+  rotate: false
+  xy: 2, 420
+  size: 910, 78
+  orig: 910, 78
+  offset: 0, 0
+  index: -1
+gameover
+  rotate: false
+  xy: 1028, 614
+  size: 520, 348
+  orig: 520, 348
+  offset: 0, 0
+  index: -1
+getready
+  rotate: false
+  xy: 2, 246
+  size: 816, 120
+  orig: 816, 120
+  offset: 0, 0
+  index: -1
+help_bubble
+  rotate: false
+  xy: 1550, 808
+  size: 192, 96
+  orig: 192, 96
+  offset: 0, 0
+  index: -1
+key_collected
+  rotate: false
+  xy: 2, 124
+  size: 816, 120
+  orig: 816, 120
+  offset: 0, 0
+  index: -1
+key_hint
+  rotate: false
+  xy: 820, 69
+  size: 519, 263
+  orig: 519, 263
+  offset: 0, 0
+  index: -1
+key_needed
+  rotate: false
+  xy: 2, 848
+  size: 1024, 114
+  orig: 1024, 114
+  offset: 0, 0
+  index: -1
+new_hiscore
+  rotate: false
+  xy: 1028, 456
+  size: 600, 156
+  orig: 600, 156
+  offset: 0, 0
+  index: -1
+open_me
+  rotate: false
+  xy: 1890, 934
+  size: 128, 80
+  orig: 128, 80
+  offset: 0, 0
+  index: -1
+paused
+  rotate: false
+  xy: 2, 2
+  size: 816, 120
+  orig: 816, 120
+  offset: 0, 0
+  index: -1
+press_for_guide
+  rotate: false
+  xy: 2, 732
+  size: 1024, 114
+  orig: 1024, 114
+  offset: 0, 0
+  index: -1
+press_for_prisoner
+  rotate: false
+  xy: 2, 616
+  size: 1024, 114
+  orig: 1024, 114
+  offset: 0, 0
+  index: -1
+press_for_treasure
+  rotate: false
+  xy: 2, 500
+  size: 1024, 114
+  orig: 1024, 114
+  offset: 0, 0
+  index: -1
+press_for_treasure - Copy
+  rotate: false
+  xy: 2, 368
+  size: 898, 50
+  orig: 898, 50
+  offset: 0, 0
+  index: -1
+rect
+  rotate: false
+  xy: 1341, 69
+  size: 519, 263
+  orig: 519, 263
+  offset: 0, 0
+  index: -1
+small_speech_bubble
+  rotate: false
+  xy: 1664, 906
+  size: 224, 108
+  orig: 224, 108
+  offset: 0, 0
+  index: -1
+storm_demon_warning
+  rotate: false
+  xy: 2, 964
+  size: 1660, 50
+  orig: 1660, 50
+  offset: 0, 0
+  index: -1
+test_title
+  rotate: false
+  xy: 820, 5
+  size: 572, 62
+  orig: 572, 62
+  offset: 0, 0
+  index: -1
+title_small
+  rotate: false
+  xy: 1394, 17
+  size: 100, 50
+  orig: 100, 50
+  offset: 0, 0
+  index: -1
+welcome_message
+  rotate: false
+  xy: 914, 334
+  size: 816, 120
+  orig: 816, 120
+  offset: 0, 0
+  index: -1

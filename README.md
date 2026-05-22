@@ -11,8 +11,8 @@ I realise and accept that the code within this project is not the best, and that
 ready. I'm working on it, and I'm hoping to release a version 1.0.0 at some point.
 
 
-WORKING:
---------
+COMPLETED:
+----------
 
 - Asset Management.
 - TexturePacker support.
@@ -23,8 +23,8 @@ WORKING:
 - Ninepatch support
 - Sprite2D animations.
 - ImagePacker
-- Input System works.
-- TiledMap Animated Tiles work.
+- Input System.
+- TiledMap Animated Tiles.
 - Sprite Scrolling.
 - Update Logger.Debug and Logger.Error to acceot NULL messages and report them as such.
 
@@ -79,8 +79,20 @@ TODO:
 - 2D Particle System needs testing and/or finishing.
 - Freetype Font generation.
 - SpriteFont support.
+- Add AnimatedTileBuilder to TiledMap support.
+
+TESTS NEEDED:
+-------------
+
+- Maths
+- Scene2D
+- Network
+- TiledMap
+- 
 
 FUTURE UPDATES:
+---------------
+
 - Migrate to EventHandler based event system for Scene2D. This is a BIG task and will require a lot of work.
 - Use NUnit for testing properly.
 - 

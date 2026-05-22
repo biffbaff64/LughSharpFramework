@@ -22,13 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 namespace LughSharp.Source.Graphics.OpenGL;
 
@@ -93,19 +87,15 @@ public static class GLUtils
 
     /// <summary>
     /// Checks if there is a current OpenGL context bound to the calling thread.
-    /// Throws a <see cref="RuntimeException"/> if no OpenGL context is active.
     /// </summary>
     /// <exception cref="RuntimeException">
     /// Thrown when no OpenGL context is currently bound to the thread.
     /// </exception>
     public static bool CheckOpenGLContext()
     {
-        if ( DotGLFW.Glfw.GetCurrentContext() == null )
-        {
-            throw new RuntimeException( "No OpenGL context is current on this thread!" );
-        }
-
-        return true;
+        return DotGLFW.Glfw.GetCurrentContext() == null
+            ? throw new RuntimeException( "No OpenGL context is current on this thread!" )
+            : true;
     }
 
     /// <summary>

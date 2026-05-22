@@ -25,7 +25,6 @@
 using JetBrains.Annotations;
 
 using LughSharp.Source;
-using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Input;
 

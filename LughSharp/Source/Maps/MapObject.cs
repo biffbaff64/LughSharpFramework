@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics;
-
 namespace LughSharp.Source.Maps;
 
 /// <summary>
@@ -35,10 +31,29 @@ namespace LughSharp.Source.Maps;
 [PublicAPI]
 public class MapObject
 {
-    public string        Name       { get; set; }         = string.Empty;
-    public float         Opacity    { get; set; }         = 1.0f;
-    public bool          IsVisible  { get; set; }         = true;
-    public Color         Color      { get; set; }         = Color.White;
+    /// <summary>
+    /// The name of the object.
+    /// </summary>
+    public string Name { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The opacity of the object.
+    /// </summary>
+    public float Opacity { get; set; } = 1.0f;
+
+    /// <summary>
+    /// Whether the object is visible.
+    /// </summary>
+    public bool IsVisible { get; set; } = true;
+
+    /// <summary>
+    /// The color of the object.
+    /// </summary>
+    public Color Color { get; set; } = Color.White;
+
+    /// <summary>
+    /// The properties of the object.
+    /// </summary>
     public MapProperties Properties { get; private set; } = new();
 }
 

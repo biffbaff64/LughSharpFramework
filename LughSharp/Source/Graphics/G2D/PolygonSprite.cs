@@ -22,13 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
-
 using Rectangle = LughSharp.Source.Maths.Rectangle;
 
 namespace LughSharp.Source.Graphics.G2D;

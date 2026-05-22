@@ -24,7 +24,6 @@
 
 using System.IO.Compression;
 
-using LughSharp.Source.Graphics.Loaders;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.Utils;
 

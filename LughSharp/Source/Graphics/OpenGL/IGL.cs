@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Graphics.OpenGL;
 
 /// <summary>

@@ -22,12 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Logging;
-
 namespace LughSharp.Source.Graphics;
 
 [PublicAPI]

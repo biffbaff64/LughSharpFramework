@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Images;
 

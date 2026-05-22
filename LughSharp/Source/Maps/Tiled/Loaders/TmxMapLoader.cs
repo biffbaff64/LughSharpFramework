@@ -22,14 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Assets;
 using LughSharp.Source.Assets.Loaders.Resolvers;
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Maps.Tiled.Objects;
-using LughSharp.Source.Utils.Exceptions;
 
 using XmlReader = LughSharp.Source.Utils.XML.XmlReader;
 

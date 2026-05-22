@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Shaders;
@@ -52,7 +49,11 @@ namespace LughSharp.Source.Graphics.Fonts;
 [PublicAPI]
 public class DistanceFieldFont : BitmapFont
 {
-    private float _distanceFieldSmoothing;
+    /// <summary>
+    /// The distance field smoothing factor for this font. SpriteBatch needs
+    /// to have this shader set for rendering distance field fonts.
+    /// </summary>
+    public float DistanceFieldSmoothing { get; set; }
 
     // ========================================================================
 
@@ -123,23 +124,6 @@ public class DistanceFieldFont : BitmapFont
     }
 
     /// <summary>
-    /// Returns the distance field smoothing factor for this font.
-    /// </summary>
-    public float GetDistanceFieldSmoothing()
-    {
-        return _distanceFieldSmoothing;
-    }
-
-    /// <summary>
-    /// Set the distance field smoothing factor for this font. SpriteBatch needs
-    /// to have this shader set for rendering distance field fonts.
-    /// </summary>
-    public void SetDistanceFieldSmoothing( float distanceFieldSmoothing )
-    {
-        _distanceFieldSmoothing = distanceFieldSmoothing;
-    }
-
-    /// <summary>
     /// Returns a new instance of the distance field shader if the u_smoothing
     /// uniform > 0.0. Otherwise the same code as the default SpriteBatch shader is used.
     /// </summary>
@@ -184,61 +168,13 @@ public class DistanceFieldFont : BitmapFont
 
         var shader = new ShaderProgram( VertexShader, FragmentShader );
 
-        if ( !shader.IsCompiled )
-        {
-            throw new ArgumentException( $"Error compiling distance field shader: {shader.ShaderLog}" );
-        }
-
-        return shader;
+        return !shader.IsCompiled
+            ? throw new ArgumentException( $"Error compiling distance field shader: {shader.ShaderLog}" )
+            : shader;
     }
 
     // ========================================================================
     // ========================================================================
-    
-    /// <summary>
-    /// Provides a font cache that uses distance field shader for rendering fonts.
-    /// Attention: breaks batching because uniform is needed for smoothing factor,
-    /// so a flush is performed before and after every font rendering.
-    /// </summary>
-    private class DistanceFieldFontCache : BitmapFontCache
-    {
-        public DistanceFieldFontCache( DistanceFieldFont font )
-            : base( font, font.GetUseIntegerPositions() )
-        {
-        }
-
-        public DistanceFieldFontCache( DistanceFieldFont font, bool integer )
-            : base( font, integer )
-        {
-        }
-
-        public override void Draw( IBatch spriteBatch )
-        {
-            SetSmoothingUniform( spriteBatch, GetSmoothingFactor() );
-            base.Draw( spriteBatch );
-            SetSmoothingUniform( spriteBatch, 0 );
-        }
-
-        protected override void Draw( IBatch spriteBatch, int start, int end )
-        {
-            SetSmoothingUniform( spriteBatch, GetSmoothingFactor() );
-            base.Draw( spriteBatch, start, end );
-            SetSmoothingUniform( spriteBatch, 0 );
-        }
-
-        private void SetSmoothingUniform( IBatch spriteBatch, float smoothing )
-        {
-            spriteBatch.Flush();
-            spriteBatch.Shader?.SetUniformf( "u_smoothing", smoothing );
-        }
-
-        private float GetSmoothingFactor()
-        {
-            var font = ( DistanceFieldFont )Font;
-
-            return font.GetDistanceFieldSmoothing() * font.GetScaleX();
-        }
-    }
 }
 
 // ============================================================================

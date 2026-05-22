@@ -24,10 +24,6 @@
 
 using System.Runtime.CompilerServices;
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Exceptions;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Source.Maths;

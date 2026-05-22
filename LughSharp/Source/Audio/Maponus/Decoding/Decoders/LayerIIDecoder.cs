@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Audio.Maponus.Decoding.Decoders.LayerII;
 
 namespace LughSharp.Source.Audio.Maponus.Decoding.Decoders;

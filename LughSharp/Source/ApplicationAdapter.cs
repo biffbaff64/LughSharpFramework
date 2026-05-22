@@ -90,6 +90,10 @@ public class ApplicationAdapter : IApplicationListener
         GC.SuppressFinalize( this );
     }
 
+    /// <summary>
+    /// Disposes of unmanaged resources.
+    /// </summary>
+    /// <param name="disposing"></param>
     protected virtual void Dispose( bool disposing )
     {
         if ( disposing )

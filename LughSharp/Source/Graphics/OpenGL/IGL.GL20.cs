@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
-
 namespace LughSharp.Source.Graphics.OpenGL;
 
 /// <summary>

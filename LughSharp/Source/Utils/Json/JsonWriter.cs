@@ -22,15 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Numerics;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
 
 namespace LughSharp.Source.Utils.Json;
 

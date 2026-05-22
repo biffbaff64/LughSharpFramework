@@ -22,13 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-using LughSharp.Source.Assets;
-using LughSharp.Source.Utils.Exceptions;
-
 namespace LughSharp.Source.Utils;
 
 public class AsyncExecutor : IDisposable

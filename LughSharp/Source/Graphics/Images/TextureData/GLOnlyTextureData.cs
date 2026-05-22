@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Graphics.FrameBuffers;
-using LughSharp.Source.Graphics.Loaders;
 using LughSharp.Source.Graphics.OpenGL;
 
 namespace LughSharp.Source.Graphics.Images.TextureData;

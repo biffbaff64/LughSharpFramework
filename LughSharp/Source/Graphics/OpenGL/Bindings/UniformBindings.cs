@@ -26,11 +26,6 @@
 
 // ============================================================================
 
-using System.Text;
-
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;

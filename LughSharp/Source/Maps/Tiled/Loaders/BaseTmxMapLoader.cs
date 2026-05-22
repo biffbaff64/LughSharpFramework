@@ -22,29 +22,18 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Compression;
-using System.Linq;
 using System.Xml;
 
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Assets;
 using LughSharp.Source.Assets.Loaders;
 using LughSharp.Source.Assets.Loaders.Resolvers;
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Maps.Objects;
 using LughSharp.Source.Maps.Tiled.Objects;
 using LughSharp.Source.Maps.Tiled.Tiles;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using XmlReader = LughSharp.Source.Utils.XML.XmlReader;
 
@@ -499,11 +488,13 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
     /// <summary>
     /// From the official Tiled website:
-    /// "Image layers provide a way to quickly include a single image as foreground
-    /// or background of your map. They currently have limited functionality and you
-    /// may consider adding the image as a Tileset instead and place it as a Tile
-    /// Object. This way, you gain the ability to freely scale and rotate the image."
+    /// "Image layers provide a way to quickly include a single image as foreground or background
+    /// of your map. They currently have limited functionality and you may consider adding the
+    /// image as a Tileset instead and place it as a Tile Object. This way, you gain the ability
+    /// to freely scale and rotate the image."
+    /// <para>
     /// See https://doc.mapeditor.org/en/stable/manual/layers/
+    /// </para>
     /// </summary>
     /// <param name="map"> The parent <see cref="TiledMap"/>. </param>
     /// <param name="parentLayers"> The actual layer group belonging to the map. </param>

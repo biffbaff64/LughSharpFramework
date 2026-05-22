@@ -22,20 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Assets;
 using LughSharp.Source.Assets.Loaders;
 using LughSharp.Source.Assets.Loaders.Resolvers;
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Maps.Tiled.Objects;
-using LughSharp.Source.Utils.Exceptions;
 
 using XmlReader = LughSharp.Source.Utils.XML.XmlReader;
 
@@ -61,15 +53,30 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="AtlasTmxMapLoader"/> class, using
+    /// the specified <see cref="IFileHandleResolver"/>.
+    /// </summary>
     public AtlasTmxMapLoader() : this( new InternalFileHandleResolver() )
     {
     }
 
+    /// <summary>
+    /// Loads a TiledMap from the specified file, using default <see cref="AtlasTiledMapLoaderParameters"/>.
+    /// </summary>
+    /// <param name="filename"> The path of the TiledMap. </param>
+    /// <returns> The <see cref="TiledMap"/>. </returns>
     public TiledMap Load( string filename )
     {
         return Load( filename, new AtlasTiledMapLoaderParameters() );
     }
 
+    /// <summary>
+    /// Loads a TiledMap from the specified file, using the specified <see cref="AtlasTiledMapLoaderParameters"/>.
+    /// </summary>
+    /// <param name="filename"> The path of the TiledMap. </param>
+    /// <param name="parameter"> The loader parameters to use. </param>
+    /// <returns> The <see cref="TiledMap"/>. </returns>
     public TiledMap Load( string filename, AtlasTiledMapLoaderParameters parameter )
     {
         FileInfo tmxFile = Resolve( filename );
@@ -299,6 +306,8 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     {
         public TextureAtlas? GetAtlas();
 
+        // ====================================================================
+        
         public class DirectAtlasResolver( TextureAtlas atlas )
             : IAtlasResolver
         {
@@ -313,14 +322,23 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
             }
         }
 
+        // ====================================================================
+        
         public class AssetManagerAtlasResolver( AssetManager? assetManager, string atlasName )
             : IAtlasResolver
         {
+            /// <summary>
+            /// Gets the <see cref="TextureAtlas"/> from the <see cref="AssetManager"/>
+            /// </summary>
             public TextureAtlas? GetAtlas()
             {
                 return assetManager?.Get< TextureAtlas >( atlasName );
             }
 
+            /// <summary>
+            /// Gets the image, identified by the given name, from the <see cref="TextureAtlas"/>
+            /// </summary>
+            /// <param name="name"> The name of the atlas region. </param>
             public TextureRegion? GetImage( string name )
             {
                 return GetAtlas()?.FindRegion( name );

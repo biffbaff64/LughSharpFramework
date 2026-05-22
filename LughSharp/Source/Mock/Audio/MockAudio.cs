@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Audio;
-
 namespace LughSharp.Source.Mock.Audio;
 
 /// <summary>

@@ -30,7 +30,6 @@ using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Input;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 namespace DesktopGLBackend.Input;
 

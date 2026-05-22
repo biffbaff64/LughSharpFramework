@@ -22,11 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Logging;
-
 namespace LughSharp.Source.Utils;
 
 /// <summary>

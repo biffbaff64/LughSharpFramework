@@ -22,14 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Assets.Loaders.Resolvers;
-using LughSharp.Source.Audio;
 
 namespace LughSharp.Source.Assets.Loaders;
 

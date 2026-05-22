@@ -40,12 +40,22 @@ public class BitmapFontData
     /// </summary>
     public readonly char[]? BreakChars;
 
+    /// <summary>
+    /// Characters used to determine the cap height of a font. These are typically uppercase letters
+    /// that span the full height of a font's capital letter glyphs.
+    /// </summary>
     public readonly char[] CapChars =
     [
         'M', 'N', 'B', 'D', 'C', 'E', 'F', 'K', 'A', 'G', 'H', 'I', 'J',
         'L', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
     ];
 
+    /// <summary>
+    /// Characters typically used to determine the height of lowercase letters,
+    /// often referred to as the x-height of the font. These characters are
+    /// utilized in font metrics calculations to establish the relative size
+    /// and alignment of text.
+    /// </summary>
     public readonly char[] XChars =
     [
         'x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z'
@@ -154,13 +164,13 @@ public class BitmapFontData
     /// </summary>
     public BitmapFontData( BitmapFontData other )
     {
-        BreakChars = other.BreakChars != null ? ( char[] )other.BreakChars.Clone() : null;
+        BreakChars = ( char[]? )other.BreakChars?.Clone();
         CapChars   = ( char[] )other.CapChars.Clone();
         XChars     = ( char[] )other.XChars.Clone();
 
         Name           = other.Name;
         FontFile       = new FileInfo( other.FontFile.FullName );
-        ImagePaths     = other.ImagePaths != null ? ( string[] )other.ImagePaths.Clone() : null;
+        ImagePaths     = ( string[]? )other.ImagePaths?.Clone();
         Flipped        = other.Flipped;
         PadTop         = other.PadTop;
         PadRight       = other.PadRight;
@@ -676,11 +686,19 @@ public class BitmapFontData
     }
 
     /// <summary>
+    /// Sets the texture region for the provided glyph. This calculates the texture
+    /// coordinates for the glyph based on its position within the texture region
+    /// and adjusts for any offsets or clipping due to whitespace stripping.
     /// </summary>
     /// <param name="glyph">
-    /// A reference to the Glyph whose region is to be set.
+    /// A reference to the <see cref="Glyph"/> object whose texture region will be updated.
     /// </param>
-    /// <param name="region"> The <see cref="TextureRegion"/>. </param>
+    /// <param name="region">
+    /// The <see cref="TextureRegion"/> object that defines the texture area used by the glyph.
+    /// </param>
+    /// <returns>
+    /// The updated <see cref="Glyph"/> instance with modified texture coordinates.
+    /// </returns>
     public Glyph SetGlyphRegion( Glyph glyph, TextureRegion region )
     {
         if ( region.Texture == null )
@@ -791,9 +809,11 @@ public class BitmapFontData
     }
 
     /// <summary>
+    /// Assigns a glyph to the glyph collection for the specified character.
+    /// Updates the internal glyph lookup table to associate the character code with the specified glyph.
     /// </summary>
-    /// <param name="ch"></param>
-    /// <param name="glyph"></param>
+    /// <param name="ch">The character code for which the glyph is being assigned.</param>
+    /// <param name="glyph">The glyph to associate with the specified character code.</param>
     public void SetGlyph( int ch, Glyph glyph )
     {
         Glyph?[]? page = Glyphs[ ch / BitmapFont.PageSize ];
@@ -809,9 +829,13 @@ public class BitmapFontData
     }
 
     /// <summary>
+    /// Retrieves the first valid glyph from the collection of glyphs.
+    /// A valid glyph is one that is non-null and has both non-zero width and height.
     /// </summary>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <returns>The first valid <see cref="Glyph"/> found in the glyph collection.</returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown when no valid glyphs are found in the glyph collection.
+    /// </exception>
     public Glyph GetFirstGlyph()
     {
         foreach ( Glyph?[]? page in Glyphs )
@@ -996,9 +1020,11 @@ public class BitmapFontData
     }
 
     /// <summary>
+    /// Determines whether the specified character is a break character
+    /// based on the predefined set of break characters.
     /// </summary>
-    /// <param name="c"></param>
-    /// <returns></returns>
+    /// <param name="c">The character to check.</param>
+    /// <returns>True if the character is a break character; otherwise, false.</returns>
     public bool IsBreakChar( char c )
     {
         if ( BreakChars == null )
@@ -1018,9 +1044,11 @@ public class BitmapFontData
     }
 
     /// <summary>
+    /// Determines whether the specified character is considered a whitespace character.
+    /// Whitespace characters include newline ('\n'), carriage return ('\r'), tab ('\t'), and space (' ').
     /// </summary>
-    /// <param name="c"></param>
-    /// <returns></returns>
+    /// <param name="c">The character to check for being whitespace.</param>
+    /// <returns>True if the character is a whitespace character; otherwise, false.</returns>
     public bool IsWhitespace( char c )
     {
         switch ( c )
@@ -1117,6 +1145,10 @@ public class BitmapFontData
         return pageRegions;
     }
 
+    /// <summary>
+    /// Retturns a new <see cref="Glyph"/> which is a copy of the specified glyph.
+    /// </summary>
+    /// <param name="src"> The Glyph to copy. </param>
     private static Glyph CopyGlyph( Glyph src )
     {
         return new Glyph
@@ -1139,6 +1171,11 @@ public class BitmapFontData
         };
     }
 
+    /// <summary>
+    /// Creates a deep copy of the provided kerning data array, duplicating each sub-array if it exists.
+    /// </summary>
+    /// <param name="source">The source kerning data array to copy. Can be null.</param>
+    /// <returns>A deep copy of the provided kerning data array, or null if the source is null.</returns>
     private static byte[]?[]? CopyKerning( byte[]?[]? source )
     {
         if ( source == null )

@@ -72,4 +72,8 @@
         <None Remove="Data\Input\input.png"/>
         <None Remove="Data\Input\pack.atlas"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Source\Scenes\" />
+    </ItemGroup>
 </Project>

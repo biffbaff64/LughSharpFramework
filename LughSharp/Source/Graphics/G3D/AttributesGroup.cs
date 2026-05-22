@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Utils.Exceptions;
-
 namespace LughSharp.Source.Graphics.G3D;
 
 public class AttributesGroup : IComparer< G3DAttribute >

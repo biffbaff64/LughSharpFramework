@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Runtime.Serialization;
-
-using JetBrains.Annotations;
 
 using Exception = System.Exception;
 

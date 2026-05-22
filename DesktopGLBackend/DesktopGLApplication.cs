@@ -366,21 +366,21 @@ public class DesktopGLApplication : IApplication, IDisposable
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.DepthBits, config.Depth );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Samples, config.Samples );
 
-        OglProfile = GLData.DefaultOpenglProfile;
+        OglProfile = LughGL.DefaultOpenglProfile;
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMajor,
                                  config.GLContextMajorVersion > 0
                                      ? config.GLContextMajorVersion
-                                     : GLData.DefaultGLMajor );
+                                     : LughGL.DefaultGLMajor );
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMinor,
                                  config.GLContextMinorVersion > 0
                                      ? config.GLContextMinorVersion
-                                     : GLData.DefaultGLMinor );
+                                     : LughGL.DefaultGLMinor );
 
-        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLForwardCompat, GLData.DefaultOpenglForwardcompat );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLForwardCompat, LughGL.DefaultOpenglForwardcompat );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLProfile, OglProfile );
-        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ClientAPI, GLData.DefaultClientApi );
+        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ClientAPI, LughGL.DefaultClientApi );
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.DoubleBuffer, true );
 

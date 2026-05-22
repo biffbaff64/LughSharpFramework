@@ -22,20 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Images.TextureData;
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
 
 using Rectangle = LughSharp.Source.Maths.Rectangle;
 

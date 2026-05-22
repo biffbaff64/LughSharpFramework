@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Maps.Tiled;
 
 /// <summary>
@@ -44,9 +42,11 @@ public class TiledMap : Map, IDisposable
     public void Dispose()
     {
         Dispose( true );
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>
+    /// Disposes of the owned resources.
     /// </summary>
     /// <param name="disposing"></param>
     protected virtual void Dispose( bool disposing )

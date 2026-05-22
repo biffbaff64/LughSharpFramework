@@ -22,12 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Shaders;
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Logging;
 
 namespace LughSharp.Source.Graphics.Utils;
 

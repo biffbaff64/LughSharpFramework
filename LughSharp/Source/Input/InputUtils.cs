@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using Keys = LughSharp.Source.Input.IInput.Keys;
 
 namespace LughSharp.Source.Input;

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Assets.Loaders.Resolvers;
 
 [PublicAPI]

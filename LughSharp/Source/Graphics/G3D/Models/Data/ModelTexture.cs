@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-
 namespace LughSharp.Source.Graphics.G3D.Models.Data;
 
 [PublicAPI]

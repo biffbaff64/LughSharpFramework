@@ -27,7 +27,10 @@ using RegexUtils = LughSharp.Source.Graphics.Utils.RegexUtils;
 namespace LughSharp.Source;
 
 /// <summary>
-/// The current Library version.
+/// The current Library version, presented in the format:-
+/// <code>
+///     [LibMajorVersion].[LibMinorVersion].[LibRevisionVersion]
+/// </code>
 /// </summary>
 [PublicAPI]
 public class LibraryVersion
@@ -78,8 +81,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports
-    /// TRUE if the CURRENT version is GREATER than the provided version.
+    /// Checks the provided version components against the current and reports TRUE if the CURRENT
+    /// version is GREATER than the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -90,8 +93,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if
-    /// the CURRENT version is GREATER than or EQUAL to the provided version.
+    /// Checks the provided version components against the current and reports TRUE if the CURRENT
+    /// version is GREATER than or EQUAL to the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -112,8 +115,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if
-    /// the CURRENT version is LESS than the provided version.
+    /// Checks the provided version components against the current and reports TRUE if the CURRENT
+    /// version is LESS than the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -124,8 +127,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if
-    /// the CURRENT version is LESS than or EQUAL to the provided version.
+    /// Checks the provided version components against the current and reports TRUE if the CURRENT
+    /// version is LESS than or EQUAL to the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>

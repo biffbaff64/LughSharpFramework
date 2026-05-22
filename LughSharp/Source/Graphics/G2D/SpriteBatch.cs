@@ -22,22 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Shaders;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
 using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Scene2D.Utils;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 namespace LughSharp.Source.Graphics.G2D;
 

@@ -22,13 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Logging;
-
 namespace LughSharp.Source;
 
 /// <summary>
@@ -100,6 +93,8 @@ public interface IApplication
     Platform.ApplicationType AppType { get; }
 
     /// <summary>
+    /// Represents an interface to interact with the clipboard functionality.
+    /// Allows get and set operations for clipboard data.
     /// </summary>
     IClipboard? Clipboard { get; set; }
 
@@ -131,7 +126,7 @@ public interface IApplication
     void RemoveLifecycleListener( ILifecycleListener listener );
 
     /// <summary>
-    /// Posts a <see cref="IRunnable"/> to the event queue.
+    /// Posts an <see cref="Action"/> to the event queue.
     /// </summary>
     void PostRunnable( Action runnable );
 

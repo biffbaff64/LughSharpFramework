@@ -22,17 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Assets.Loaders.Resolvers;
 using LughSharp.Source.Graphics.Shaders;
-using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using File = System.IO.File;
 

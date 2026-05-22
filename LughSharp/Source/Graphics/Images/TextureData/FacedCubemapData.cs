@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.Loaders;
 using LughSharp.Source.Graphics.OpenGL;
 
 namespace LughSharp.Source.Graphics.Images.TextureData;

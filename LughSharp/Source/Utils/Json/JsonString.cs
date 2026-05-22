@@ -22,16 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
-using System.Text;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Collections;
-using LughSharp.Source.Maths;
 
 namespace LughSharp.Source.Utils.Json;
 

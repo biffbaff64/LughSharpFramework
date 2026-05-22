@@ -58,17 +58,13 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - IP = Conversion In Progress.
 - DONE = Class finished but may not be fully 'CSHARP-ified'
 
-- CODE Self explanatory.
-- DOCU Mark done if all methods are documented correctly.
-- FOOTER Mark done if the end of the file is marked with two lines of '=' 80 chars long.
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- CODE  :- Mark done if all required code is present.
+- DOCU  :- Mark done if all methods are documented correctly.
+- FOOTER:- Mark done if the end of the file is marked with two lines of '=' 80 chars long.
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    -      -      -      -
     -      -      -      -
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -338,9 +334,10 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - BitmapFont
-    - DONE - DONE - DONE - BitmapFontCache      Dispose() needs completing
-    - DONE - IP   - DONE - BitmapFontData
+    - IP   - DONE - DONE - BitmapFontCache          Dispose() needs completing
+    - DONE - DONE - DONE - BitmapFontData
     - IP   - IP   - DONE - DistanceFieldFont
+    - DONE - IP   - DONE - DistanceFieldFontCache
     - DONE - DONE - DONE - Glyph
     - IP   - IP   - DONE - GlyphLayout
     -      -      - DONE - SpriteFont
@@ -418,12 +415,12 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES/DECODERS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - BMPFormatStructs
-    -      -      -      - BMPUtils
+    - DONE - IP   - DONE - BMPFormatStructs
+    - IP   - IP   - DONE - BMPUtils
     - DONE - DONE - DONE - CIM
     - DONE - IP   - DONE - PNG
-    -      -      -      - PNGDecoder
-    -      -      -      - PNGFormatStructs
+    - DONE - IP   - DONE - PNGDecoder
+    - DONE - DONE - DONE - PNGFormatStructs
 
     ------------------------------------
     ( Possible future additions )
@@ -465,17 +462,15 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE -      - DONE - DebugSeverity
-    -      -      -      - GLData
-    -      -      -      - GLDebugControl
-    -      -      -      - GLImage
-    -      -      -      - GLUtils
-    -      -      -      - IGL
-    -      -      -      - IGL.GL20
-    -      -      -      - IGL.GL30
-    -      -      -      - IGL.GL31
-    -      -      -      - IGL.GL32
-    -      -      -      - OpenGLActions
+    - DONE - DONE - DONE - GLDebugControl
+    - DONE - DONE - DONE - GLImage              Is this still needed?
+    - DONE - IP   - DONE - GLUtils
+    - DONE - IP   - DONE - IGL
+    - DONE - IP   - DONE - IGL.GL20
+    - DONE - IP   - DONE - IGL.GL30
+    - DONE - IP   - DONE - IGL.GL31
+    - DONE - IP   - DONE - IGL.GL32
+    - DONE - IP   - DONE - LughGL
 
 LUGHSHARP/SOURCE/GRAPHICS/OPENGL/BINDINGS
 -----------------------------------------
@@ -667,7 +662,7 @@ LUGHSHARP/SOURCE/MAPS
     - DONE - DONE - DONE - MapGroupLayer
     - DONE - DONE - DONE - MapLayer
     - DONE - DONE - DONE - MapLayers
-    - DONE - IP   - DONE - MapObject
+    - DONE - DONE - DONE - MapObject
     - DONE - DONE - DONE - MapObjects
     - DONE - DONE - DONE - MapProperties
 
@@ -676,66 +671,66 @@ LUGHSHARP/SOURCE/MAPS/OBJECTS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - CircleMapObject
-    -      -      -      - EllipseMapObject
-    -      -      -      - PolygonMapObject
-    -      -      -      - PolylineMapObject
-    -      -      -      - RectangleMapObject
-    -      -      -      - TextureMapObject
+    - DONE - DONE - DONE - CircleMapObject
+    - DONE - DONE - DONE - EllipseMapObject
+    - DONE - DONE - DONE - PolygonMapObject
+    - DONE - DONE - DONE - PolylineMapObject
+    - DONE - DONE - DONE - RectangleMapObject
+    - DONE - DONE - DONE - TextureMapObject
 
 LUGHSHARP/SOURCE/MAPS/TILED
 ---------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - ITiledMapTile
-    -      -      -      - TiledMap
-    -      -      -      - TiledMapImageLayer
-    -      -      -      - TiledMapTileLayer
-    -      -      -      - TiledMapTileSet
-    -      -      -      - TiledMapTileSets
+    - DONE - DONE - DONE - ITiledMapTile
+    - DONE - DONE - DONE - TiledMap
+    - DONE - DONE - DONE - TiledMapImageLayer
+    - DONE - DONE - DONE - TiledMapTileLayer
+    - DONE - DONE - DONE - TiledMapTileSet
+    - DONE - DONE - DONE - TiledMapTileSets
 
 LUGHSHARP/SOURCE/MAPS/TILED/LOADERS
 -----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - AtlasTmxMapLoader
-    -      -      -      - BaseTmxMapLoader
-    -      -      -      - TmxMapLoader
+    - DONE - IP   - DONE - AtlasTmxMapLoader
+    - DONE - IP   - DONE - BaseTmxMapLoader
+    - DONE - IP   - DONE - TmxMapLoader
 
 LUGHSHARP/SOURCE/MAPS/TILED/OBJECTS
 -----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - ImageDetails
-    -      -      -      - TileContext
-    -      -      -      - TiledMapTileMapObject
-    -      -      -      - TileMetrics
+    - DONE - IP   - DONE - ImageDetails
+    - DONE - IP   - DONE - TileContext
+    - DONE - IP   - DONE - TiledMapTileMapObject
+    - DONE - IP   - DONE - TileMetrics
 
 LUGHSHARP/SOURCE/MAPS/TILED/RENDERERS
 -------------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - BatchTiledMapRenderer
-    -      -      -      - HexagonalTiledMapRenderer
-    -      -      -      - IsometricStaggeredTiledMapRenderer
-    -      -      -      - IsometricTiledMapRenderer
-    -      -      -      - ITiledMapRenderer
-    -      -      -      - OrthoCachedTiledMapRenderer
-    -      -      -      - OrthogonalTiledMapRenderer
+    - DONE - IP   - DONE - BatchTiledMapRenderer
+    - DONE - IP   - DONE - HexagonalTiledMapRenderer
+    - DONE - IP   - DONE - IsometricStaggeredTiledMapRenderer
+    - DONE - IP   - DONE - IsometricTiledMapRenderer
+    - DONE - IP   - DONE - ITiledMapRenderer
+    - DONE - IP   - DONE - OrthoCachedTiledMapRenderer
+    - DONE - IP   - DONE - OrthogonalTiledMapRenderer
 
 LUGHSHARP/SOURCE/MAPS/TILED/TILES
 ---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - AnimatedTileBuilder
-    -      -      -      - AnimatedTileMapTile
-    -      -      -      - StaticTileBuilder
-    -      -      -      - StaticTiledMapTile
+    -      -      - DONE - AnimatedTileBuilder
+    - DONE - IP   - DONE - AnimatedTileMapTile
+    - DONE - IP   - DONE - StaticTileBuilder
+    - DONE - IP   - DONE - StaticTiledMapTile
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -864,6 +859,9 @@ LUGHSHARP/SOURCE/NETWORK
     -      -      - DONE - IServerSocket
     -      -      - DONE - ISocket
     - DONE - DONE - DONE - NetHandler
+    -      -      -      - NetImpl
+    -      -      -      - NetServerSocketImpl
+    -      -      -      - NetSocketImpl
     -      -      - DONE - ServerSocketHints
     -      -      - DONE - SocketHints
 
@@ -1350,7 +1348,7 @@ LUGHSHARP/TESTS
       ----   ----   ------
     -      -      -      - InputTest
     -      -      -      - MockEngine
-    -      -      -      - 
+    -      -      -      - OpenGLTest
     -      -      -      - 
     -      -      -      - 
     -      -      -      - 

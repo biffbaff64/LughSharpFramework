@@ -22,12 +22,13 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using Rectangle = LughSharp.Source.Maths.Rectangle;
 
 namespace LughSharp.Source.Maps.Objects;
 
+/// <summary>
+/// Represents <see cref="Rectangle"/> shaped map objects.
+/// </summary>
 [PublicAPI]
 public class RectangleMapObject : MapObject
 {

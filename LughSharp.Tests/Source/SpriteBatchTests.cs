@@ -26,7 +26,6 @@ using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Images.TextureData;
-using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Maths;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;

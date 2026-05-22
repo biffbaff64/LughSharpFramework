@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 namespace LughSharp.Source.Graphics.Images.Decoders;
 
 /// <summary>
@@ -42,8 +38,8 @@ public struct BitmapFileHeader
     public uint   OffsetToPixelArray { get; set; } // 4 bytes, offset to the pixel array from the beginning of the file
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================
 
 /// <summary>
 /// BMP Info Header Structure. Do not change this layout order.
@@ -64,15 +60,18 @@ public struct BitmapFileInfoHeader
     public uint                  ColorsUsed      { get; set; } // 4 bytes, number of colors used.
     public uint                  ImportantColors { get; set; } // 4 bytes, number of important colors. 
 
-    public void Init()
+    public BitmapFileInfoHeader()
     {
         HeaderSize = ( uint )Marshal.SizeOf( this );
     }
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================
 
+/// <summary>
+/// 
+/// </summary>
 [PublicAPI]
 public enum BitmapCompressionMode : uint
 {
@@ -84,8 +83,8 @@ public enum BitmapCompressionMode : uint
     BiPNG       = 5
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================
 
 /// <summary>
 /// BMP Pixel Array Structure.
@@ -96,3 +95,8 @@ public struct BmpPixelArray
 {
     public byte[] PixelData { get; set; } // Array of color data for each pixel in the image.  
 }
+
+// ============================================================================
+// ============================================================================
+
+

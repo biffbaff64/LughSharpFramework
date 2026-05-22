@@ -22,15 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
 using System.Globalization;
-using System.IO;
-using System.Text;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Utils.Json;
 

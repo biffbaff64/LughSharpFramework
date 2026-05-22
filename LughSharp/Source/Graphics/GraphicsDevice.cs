@@ -22,15 +22,9 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.FrameBuffers;
 using LughSharp.Source.Graphics.Images;
-using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics;
 
@@ -108,8 +102,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
             Type = MapApplicationTypeToBackend( appType )
         };
 
-        Graphics.OpenGL.OpenGL.Initialisation.LoadVersion();
-        OpenGL.OpenGL.Capabilities.OpenGLProfile = profile;
+        Graphics.OpenGL.LughGL.Initialisation.LoadVersion();
+        OpenGL.LughGL.Capabilities.OpenGLProfile = profile;
     }
 
     /// <summary>

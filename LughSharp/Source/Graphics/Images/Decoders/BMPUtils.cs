@@ -23,12 +23,7 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using System.Drawing.Imaging;
-using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Logging;
 
 using Bitmap = System.Drawing.Bitmap;
 
@@ -234,3 +229,7 @@ public static class BmpUtils
         */
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -22,9 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.G3D.Env;
 
 namespace LughSharp.Source.Graphics.G3D.Attributes;

@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Assets.Loaders.Resolvers;
 
 namespace LughSharp.Source.Assets.Loaders;

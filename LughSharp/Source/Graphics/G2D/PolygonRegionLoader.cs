@@ -22,14 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Assets;
 using LughSharp.Source.Assets.Loaders;
 using LughSharp.Source.Assets.Loaders.Resolvers;
 using LughSharp.Source.Graphics.Images;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics.G2D;
 

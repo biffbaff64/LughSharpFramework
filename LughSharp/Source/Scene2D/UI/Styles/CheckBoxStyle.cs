@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Graphics.Fonts;
-using LughSharp.Source.IO;
 using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI.Styles;

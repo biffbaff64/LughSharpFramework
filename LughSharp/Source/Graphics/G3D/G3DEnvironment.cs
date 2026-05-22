@@ -24,7 +24,6 @@
 
 using LughSharp.Source.Graphics.G3D.Attributes;
 using LughSharp.Source.Graphics.G3D.Env;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics.G3D;
 

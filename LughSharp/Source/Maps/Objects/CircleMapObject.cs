@@ -22,12 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-
 namespace LughSharp.Source.Maps.Objects;
 
+/// <summary>
+/// Represents <see cref="Circle"/> shaped map objects.
+/// </summary>
 [PublicAPI]
 public class CircleMapObject : MapObject
 {

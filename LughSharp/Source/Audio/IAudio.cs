@@ -22,13 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.IO;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Utils.Exceptions;
-
 namespace LughSharp.Source.Audio;
 
 [PublicAPI]

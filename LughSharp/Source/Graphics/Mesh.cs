@@ -22,19 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.Shaders;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
 using LughSharp.Source.Maths.Collision;
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Graphics;
 

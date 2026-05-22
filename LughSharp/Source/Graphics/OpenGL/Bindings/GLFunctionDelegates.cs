@@ -22,10 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.InteropServices;
-
 using GLenum = int;
 using GLfloat = float;
 using GLint = int;

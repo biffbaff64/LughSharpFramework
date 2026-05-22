@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Shaders;
-using LughSharp.Source.Utils;
 
 namespace LughSharp.Source.Graphics.Utils;
 

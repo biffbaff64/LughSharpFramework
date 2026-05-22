@@ -22,18 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Images.Decoders;
 using LughSharp.Source.Graphics.OpenGL;
-using LughSharp.Source.Utils;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
 
 using Exception = System.Exception;
 

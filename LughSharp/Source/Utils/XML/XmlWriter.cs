@@ -22,10 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Collections;
-using LughSharp.Source.Utils.Exceptions;
 
 namespace LughSharp.Source.Utils.XML;
 

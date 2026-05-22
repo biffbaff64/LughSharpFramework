@@ -22,19 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Audio;
-using LughSharp.Source.Graphics;
-using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Bindings;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Input;
 using LughSharp.Source.IO;
-using LughSharp.Source.Network;
-using LughSharp.Source.Utils.Logging;
 
 using GLBindings = LughSharp.Source.Graphics.OpenGL.Bindings.GLBindings;
 

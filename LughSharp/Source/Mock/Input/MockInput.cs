@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Input;
-
 namespace LughSharp.Source.Mock.Input;
 
 [PublicAPI]

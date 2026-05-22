@@ -22,11 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System;
-using System.Text;
-
-using LughSharp.Source.Utils.Logging;
-
 using GLenum = int;
 using GLsizei = int;
 using GLuint = uint;

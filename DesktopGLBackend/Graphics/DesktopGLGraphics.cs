@@ -36,7 +36,6 @@ using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
 

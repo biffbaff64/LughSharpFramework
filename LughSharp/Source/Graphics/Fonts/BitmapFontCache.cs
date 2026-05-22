@@ -424,7 +424,7 @@ public class BitmapFontCache : IDisposable
     /// </param>
     /// <param name="start">The starting index of the glyphs to be rendered.</param>
     /// <param name="end">The ending index of the glyphs to be rendered.</param>
-    protected virtual void Draw( IBatch spriteBatch, int start, int end )
+    public virtual void Draw( IBatch spriteBatch, int start, int end )
     {
         if ( Font.GetRegion().Texture == null )
         {

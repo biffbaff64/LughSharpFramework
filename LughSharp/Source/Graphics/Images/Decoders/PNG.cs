@@ -27,8 +27,6 @@ using System.IO.Hashing;
 using ICSharpCode.SharpZipLib.Zip.Compression;
 using ICSharpCode.SharpZipLib.Zip.Compression.Streams;
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Collections;
 
 namespace LughSharp.Source.Graphics.Images.Decoders;

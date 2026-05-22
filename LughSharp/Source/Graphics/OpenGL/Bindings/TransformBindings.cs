@@ -24,8 +24,6 @@
 
 // ============================================================================
 
-using System.Text;
-
 using GLenum = int;
 using GLint = int;
 using GLsizei = int;

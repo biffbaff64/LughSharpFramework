@@ -22,12 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-
 namespace LughSharp.Source.Maps.Objects;
 
+/// <summary>
+/// Represents <see cref="Ellipse"/> shaped map objects.
+/// </summary>
 [PublicAPI]
 public class EllipseMapObject : MapObject
 {

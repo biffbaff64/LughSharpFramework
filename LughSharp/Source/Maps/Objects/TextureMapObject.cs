@@ -22,15 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Images;
 
 namespace LughSharp.Source.Maps.Objects;
 
 /// <summary>
-/// Represents a map object containing a texture (region).
+/// Represents a map object containing a <see cref="TextureRegion"/>.
 /// </summary>
 [PublicAPI]
 public class TextureMapObject : MapObject

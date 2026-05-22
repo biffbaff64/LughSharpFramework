@@ -22,14 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Cameras;
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
 using LughSharp.Source.Maths.Collision;
 using LughSharp.Source.Scene2D.Utils;
-using LughSharp.Source.Utils.Logging;
 
 using Rectangle = LughSharp.Source.Maths.Rectangle;
 
