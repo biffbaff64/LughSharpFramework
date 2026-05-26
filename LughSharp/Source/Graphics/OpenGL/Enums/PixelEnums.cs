@@ -34,7 +34,7 @@ public enum PixelType
 }
 
 [PublicAPI]
-public enum GLPixelFormat
+public enum GLPixFormat
 {
     Alpha          = IGL.GLAlpha,
     Luminance      = IGL.GLLuminance,
@@ -49,7 +49,7 @@ public enum GLPixelFormat
 }
 
 [PublicAPI]
-public enum PixelInternalFormat
+public enum InternalPixFormat
 {
     Alpha          = IGL.GLAlpha,
     Rgb            = IGL.GLRGB,

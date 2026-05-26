@@ -24,10 +24,9 @@
 
 using System.Runtime.Versioning;
 
-using Extensions.Source.TexturePacker;
-
 using JetBrains.Annotations;
 
+using LughSharp.Source.Graphics.Packing.TexturePacker;
 using LughSharp.Source.IO;
 
 using NUnit.Framework;

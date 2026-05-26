@@ -444,7 +444,7 @@ public class Texture2D : GLTexture, IManaged
         Logger.Debug( $"IsManaged         : {IsManaged}" );
         Logger.Debug( $"NumManagedTextures: {NumManagedTextures}" );
         Logger.Debug( $"Depth             : {Depth}" );
-        Logger.Debug( $"GLTarget          : {PixelFormat.GetGLTargetName( GLTarget )}" );
+        Logger.Debug( $"GLTarget          : {PixFormat.GetGLTargetName( GLTarget )}" );
         Logger.Debug( $"GLTextureHandle   : {GLTextureHandle:X}" );
         Logger.Debug( $"BytesPerPixel     : {TextureData.BytesPerPixel}" );
         Logger.Debug( $"BitDepth          : {TextureData.BitDepth}" );

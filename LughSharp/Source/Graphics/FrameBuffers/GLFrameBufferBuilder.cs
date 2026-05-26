@@ -108,15 +108,15 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
 
     /// <summary>
     /// Adds a color texture attachment by deriving the GL format and data type from a
-    /// <see cref="PixelFormat"/> value. This is a convenience wrapper around
+    /// <see cref="PixFormat"/> value. This is a convenience wrapper around
     /// <see cref="AddColorTextureAttachment"/>.
     /// </summary>
-    /// <param name="format">A <see cref="PixelFormat"/> constant used to resolve the GL format and type.</param>
+    /// <param name="format">A <see cref="PixFormat"/> constant used to resolve the GL format and type.</param>
     /// <returns>This builder instance for method chaining.</returns>
     public GLFrameBufferBuilder< TU > AddBasicColorTextureAttachment( int format )
     {
-        int glFormat = PixelFormat.ToGLFormat( format );
-        int glType   = PixelFormat.ToGLDataType( format );
+        int glFormat = PixFormat.ToGLFormat( format );
+        int glType   = PixFormat.ToGLDataType( format );
 
         return AddColorTextureAttachment( glFormat, glFormat, glType );
     }

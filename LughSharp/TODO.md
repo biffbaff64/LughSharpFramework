@@ -334,13 +334,24 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - BitmapFont
-    - IP   - DONE - DONE - BitmapFontCache          Dispose() needs completing
+    - DONE - DONE - DONE - BitmapFontCache          Dispose() needs completing
     - DONE - DONE - DONE - BitmapFontData
     - IP   - IP   - DONE - DistanceFieldFont
     - DONE - IP   - DONE - DistanceFieldFontCache
     - DONE - DONE - DONE - Glyph
     - IP   - IP   - DONE - GlyphLayout
     -      -      - DONE - SpriteFont
+
+LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE
+----------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - IP   - IP   - DONE - FreeType
+    - IP   - IP   - DONE - FreeTypeFontGenerator
+    - IP   - IP   - DONE - FreeTypeFontGeneratorLoader
+    - IP   - IP   - DONE - FreeTypeFontLoader
+
 
 LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS
 --------------------------------------
@@ -365,6 +376,7 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - Animation
+    - DONE - DONE - DONE - Animator
     - IP   - IP   - DONE - CpuSpriteBatch                  Some methods have too many parameters
     - DONE - DONE - DONE - IBatch
     -      -      -      - IPolygonBatch                   Some methods have too many parameters
@@ -418,6 +430,7 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES/DECODERS
     - DONE - IP   - DONE - BMPFormatStructs
     - IP   - IP   - DONE - BMPUtils
     - DONE - DONE - DONE - CIM
+    - IP   -      - DONE - ImageValidator
     - DONE - IP   - DONE - PNG
     - DONE - IP   - DONE - PNGDecoder
     - DONE - DONE - DONE - PNGFormatStructs
@@ -529,6 +542,11 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL/ENUMS
     -      -      -      - LogicOp
     -      -      -      - MatrixMode
     -      -      -      - PixelEnums
+                            - PixelType
+                            - GLPixFormat
+                            - InternalPixFormat
+                            - PixelStoreParameter
+    -      -      -      - PolygonMode
     -      -      -      - PolygonMode
     -      -      -      - PrimitiveType
     -      -      -      - ProgramParameter
@@ -546,6 +564,52 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL/ENUMS
     -      -      -      - TextureWrapMode
     -      -      -      - VertexAttribParameter
     -      -      -      - VertexAttribType
+
+LUGHSHARP/SOURCE/GRAPHICS/PACKING/IMAGEPACKER
+---------------------------------------------
+
+Q: Do I actually need this class if I already have TexturePacker?
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - ImagePacker
+
+LUGHSHARP/SOURCE/GRAPHICS/PACKING/TEXTUREPACKER
+-----------------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      -      - ColorBleedEffect
+    -      -      -      - FileProcessor
+    -      -      -      - FreeRectChoiceHeuristic
+    -      -      -      - GridPacker
+    -      -      -      - IFileProcessor
+    -      -      -      - ImageProcessor
+    -      -      -      - IPacker
+    -      -      -      - MaxRectsPacker
+    -      -      -      - ResamplingExtensions
+    -      -      -      - TexturePacker
+    -      -      -      - TexturePackerAlias
+    -      -      -      - TexturePackerFileProcessor
+    -      -      -      - TexturePackerInputImage
+    -      -      -      - TexturePackerPage
+    -      -      -      - TexturePackerProgressListener
+    -      -      -      - TexturePackerRect
+    -      -      -      - TexturePackerSettings
+    -      -      -      - TexturePackerWriter
+    -      -      -      - TextureUnpacker
+
+
+LUGHSHARP/SOURCE/GRAPHICS/PACKING/TILEDMAPPACKER
+------------------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - IP   - IP   -      - TiledMapPacker
+    -      -      -      - TiledMapPackerTest
+    -      -      -      - TiledMapPackerTestRenderer
+    - DONE - DONE - DONE - TileSetLayout
+
 
 LUGHSHARP/SOURCE/GRAPHICS/SHADERS
 ---------------------------------
@@ -1153,8 +1217,10 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
       ----   ----   ------
     - DONE - DONE - DONE - FPSLogger
     - DONE - DONE - DONE - IPreferences
+    -      -      -      - IStateManager
     - DONE - DONE - DONE - Logger
     - DONE - DONE - DONE - Preferences
+    - IP   - IP   - DONE - StateID
     - DONE - DONE - DONE - Stats
 
 LUGHSHARP/SOURCE/UTILS/POOLING
@@ -1190,10 +1256,8 @@ LUGHSHARP/EXTENSIONS/SOURCE
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE - DONE - Animator
     - DONE - DONE - DONE - FontUtils
     -      -      - DONE - GameSprite2D
-    - IP   -      - DONE - ImageValidator
     - DONE - DONE - DONE - Scene2DUtils
 
 LUGHSHARP/EXTENSIONS/SOURCE/BOX2D
@@ -1272,68 +1336,6 @@ LUGHSHARP/EXTENSIONS/SOURCE/BOX2D/JOINTS
     -      -      -      - WeldJointDef
     -      -      -      - WheelJoint
     -      -      -      - WheelJointDef
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-LUGHSHARP/EXTENSIONS/SOURCE/FONTS
----------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      -      - FontManager
-    - IP   - IP   -      - FreeType
-    - IP   - IP   -      - FreeTypeFontGenerator
-    - IP   - IP   -      - FreeTypeFontGeneratorLoader
-    - IP   - IP   -      - FreeTypeFontLoader
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-LUGHSHARP/EXTENSIONS/SOURCE/IMAGEPACKER
----------------------------------------
-
-Q: Do I actually need this class if I already have TexturePacker?
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - ImagePacker
-
-LUGHSHARP/EXTENSIONS/SOURCE/TEXTUREPACKER
------------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      -      - ColorBleedEffect
-    -      -      -      - FileProcessor
-    -      -      -      - FreeRectChoiceHeuristic
-    -      -      -      - GridPacker
-    -      -      -      - IFileProcessor
-    -      -      -      - ImageProcessor
-    -      -      -      - IPacker
-    -      -      -      - MaxRectsPacker
-    -      -      -      - ResamplingExtensions
-    -      -      -      - TexturePacker
-    -      -      -      - TexturePackerAlias
-    -      -      -      - TexturePackerFileProcessor
-    -      -      -      - TexturePackerInputImage
-    -      -      -      - TexturePackerPage
-    -      -      -      - TexturePackerProgressListener
-    -      -      -      - TexturePackerRect
-    -      -      -      - TexturePackerSettings
-    -      -      -      - TexturePackerWriter
-    -      -      -      - TextureUnpacker
-
-
-LUGHSHARP/EXTENSIONS/SOURCE/TILEDMAPPACKER
-------------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - IP   - IP   -      - TileMapPacker
-    -      -      -      - TiledMapPackerTest
-    -      -      -      - TiledMapPackerTestRenderer
-    - DONE - DONE - DONE - TileSetLayout
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

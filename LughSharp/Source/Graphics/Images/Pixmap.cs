@@ -68,7 +68,7 @@ public class Pixmap : IDisposable
     /// </summary>
     /// <param name="width">The width in pixels.</param>
     /// <param name="height">The height in pixels.</param>
-    /// <param name="format">The <see cref="PixelFormat"/> </param>
+    /// <param name="format">The <see cref="PixFormat"/> </param>
     public Pixmap( int width, int height, int format )
     {
         try
@@ -175,13 +175,13 @@ public class Pixmap : IDisposable
     /// Returns the OpenGL pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_RGB, GL_RGBA, GL_LUMINANCE, or GL_LUMINANCE_ALPHA.</returns>
-    public int GLPixelFormat => PixelFormat.ToGLFormat( Gdx2DPixmap.ColorFormat );
+    public int GLPixelFormat => PixFormat.ToGLFormat( Gdx2DPixmap.ColorFormat );
 
     /// <summary>
     /// Returns the OpenGL internal pixel format of this Pixmap.
     /// </summary>
     /// <returns> one of GL_ALPHA, GL_LUMINANCE_ALPHA, GL_RGB8, GL_RGBA8, GL_RGB565, or GL_RGBA4.</returns>
-    public int GLInternalPixelFormat => PixelFormat.ToGLInternalFormat( Gdx2DPixmap.ColorFormat );
+    public int GLInternalPixelFormat => PixFormat.ToGLInternalFormat( Gdx2DPixmap.ColorFormat );
 
     /// <summary>
     /// Returns the OpenGL Data Type of this Pixmap.
@@ -585,7 +585,7 @@ public class Pixmap : IDisposable
     {
         Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
                     + $"( {Width} x {Height} ) : {Gdx2DPixmap.ColorFormat}: "
-                    + $"{PixelFormat.GetFormatString( Gdx2DPixmap.ColorFormat )}" );
+                    + $"{PixFormat.GetFormatString( Gdx2DPixmap.ColorFormat )}" );
         Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
         byte[] a = Gdx2DPixmap.PixmapBuffer.BackingArray();

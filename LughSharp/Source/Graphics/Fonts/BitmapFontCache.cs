@@ -78,10 +78,14 @@ public class BitmapFontCache : IDisposable
     private const int   AlphaBitShift        = 24;
     private const float AlphaScale           = 254f;
 
+    // ========================================================================
+
     private FlushablePool< GlyphLayout > _pooledLayouts = new()
     {
         NewObjectFactory = () => new GlyphLayout()
     };
+
+    // ========================================================================
 
     private Color _tempColor = new( 1f, 1f, 1f, 1f );
     private uint  _currentTint;

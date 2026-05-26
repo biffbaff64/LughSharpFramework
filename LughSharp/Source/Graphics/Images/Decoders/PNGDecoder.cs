@@ -232,7 +232,7 @@ public class PNGDecoder
         byte bitDepth  = IHDRchunk.BitDepth;
 
         BytesPerPixel  = GetBytesPerPixel( colorType, bitDepth );
-        PNGPixelFormat = PixelFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
+        PNGPixelFormat = PixFormat.FromPNGColorAndBitDepth( colorType, bitDepth );
 
         if ( PNGPixelFormat == LughFormat.Invalid )
         {
@@ -759,7 +759,7 @@ public class PNGDecoder
             throw new RuntimeException( "Cannot perform PNG conversion as Input data is null." );
         }
 
-        int bytesPerPixel = PixelFormat.BytesPerPixel( format );
+        int bytesPerPixel = PixFormat.BytesPerPixel( format );
 
         if ( rawRgba.Length != ( width * height * bytesPerPixel ) )
         {
@@ -1021,7 +1021,7 @@ public class PNGDecoder
         Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
         Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
         Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
-        Logger.Debug( $"- PixelFormat   : {PixelFormat.GetFormatString( PNGPixelFormat )} :: ( {PNGPixelFormat} )" );
+        Logger.Debug( $"- PixelFormat   : {PixFormat.GetFormatString( PNGPixelFormat )} :: ( {PNGPixelFormat} )" );
         Logger.Debug( $"- BytesPerPixel : {BytesPerPixel}" );
         Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
         Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );

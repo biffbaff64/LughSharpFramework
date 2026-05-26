@@ -22,12 +22,11 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using Extensions.Source.Freetype;
-
 using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.Fonts.Freetype;
 using LughSharp.Source.Utils.Logging;
 
 namespace Extensions.Source;

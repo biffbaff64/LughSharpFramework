@@ -84,7 +84,7 @@ public class TextureUtils
     /// <param name="height"></param>
     /// <param name="internalFormat"></param>
     /// <returns></returns>
-    public static uint CreateTexture2D( int width, int height, PixelInternalFormat internalFormat )
+    public static uint CreateTexture2D( int width, int height, InternalPixFormat internalFormat )
     {
         uint textureHandle = Engine.GL.GenTexture();
 
@@ -103,7 +103,7 @@ public class TextureUtils
                                   width,
                                   height,
                                   0,
-                                  ( int )GLPixelFormat.Rgba,
+                                  ( int )GLPixFormat.Rgba,
                                   ( int )PixelType.UnsignedByte );
         }
 

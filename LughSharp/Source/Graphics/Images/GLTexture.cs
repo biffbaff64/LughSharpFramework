@@ -457,7 +457,7 @@ public abstract class GLTexture : IDisposable
             disposePixmap = true;
         }
 
-        Engine.GL.SetGLUnpackAlignment( pixmap, PixelFormat.GetAlignment( pixmap ) );
+        Engine.GL.SetGLUnpackAlignment( pixmap, PixFormat.GetAlignment( pixmap ) );
         CheckGLError( "SetGLUnpackAlignment" );
 
         if ( data.UseMipMaps )
@@ -553,12 +553,12 @@ public abstract class GLTexture : IDisposable
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorFormat}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixelFormat.GetFormatString( pixmap.Gdx2DPixmap.ColorFormat )}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixFormat.GetFormatString( pixmap.Gdx2DPixmap.ColorFormat )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
-            Logger.Debug( $"pixmap.GLFormat Name   : {PixelFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );
+            Logger.Debug( $"pixmap.GLFormat Name   : {PixFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );
             Logger.Debug( $"pixmap.GLType          : {pixmap.GLDataType}" );
-            Logger.Debug( $"pixmap.GLType Name     : {PixelFormat.GetGLTypeName( pixmap.GLDataType )}" );
+            Logger.Debug( $"pixmap.GLType Name     : {PixFormat.GetGLTypeName( pixmap.GLDataType )}" );
             Logger.Debug( $"Number of Pixels       : {pixmap.Width * pixmap.Height}" );
             Logger.Debug( $"pixmap.PixelData.Length: {pixmap.PixelData.Length}" );
 

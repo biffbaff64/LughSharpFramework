@@ -26,10 +26,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
 
-using Extensions.Source.ImagePacker;
-
 using JetBrains.Annotations;
 
+using LughSharp.Source.Graphics.Packing.ImagePacker;
 using LughSharp.Source.IO;
 
 using NUnit.Framework;

@@ -75,7 +75,7 @@ public class FileTextureArrayData : ITextureArrayData
     /// <summary>
     /// the GL Data type of this TextureArray
     /// </summary>
-    public int GLDataType => Graphics.PixelFormat.ToGLDataType( PixelFormat );
+    public int GLDataType => Graphics.PixFormat.ToGLDataType( PixelFormat );
 
     // ========================================================================
 

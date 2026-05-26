@@ -170,7 +170,7 @@ public class Gdx2DPixmap : IDisposable
         Blend       = ( uint )Pixmap.BlendType.Default;
         Scale       = ( uint )Pixmap.ScaleType.Default;
 
-        int length = width * height * PixelFormat.BytesPerPixel( format );
+        int length = width * height * PixFormat.BytesPerPixel( format );
 
         Pixels       = new byte[ length ];
         PixmapBuffer = new Buffer< byte >( length );
@@ -342,7 +342,7 @@ public class Gdx2DPixmap : IDisposable
     /// </summary>
     public void ClearWithColor( Color color )
     {
-        var size = ( uint )( Width * Height * PixelFormat.BytesPerPixel( ColorFormat ) );
+        var size = ( uint )( Width * Height * PixFormat.BytesPerPixel( ColorFormat ) );
 
         switch ( ColorFormat )
         {

@@ -90,7 +90,7 @@ public class FileTextureData : ITextureData
                 _pixelFormat = _pixmap.GetColorFormat();
             }
 
-            BytesPerPixel = PixelFormat.BytesPerPixel( _pixmap.GetColorFormat() );
+            BytesPerPixel = PixFormat.BytesPerPixel( _pixmap.GetColorFormat() );
         }
 
         IsOwned = false;

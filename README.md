@@ -77,6 +77,7 @@ TODO:
 - Box2D Physics support.
 - 3D Graphics needs testing and/or finishing.
 - 2D Particle System needs testing and/or finishing.
+- Distance Field Font generation.
 - Freetype Font generation.
 - SpriteFont support.
 - Add AnimatedTileBuilder to TiledMap support.

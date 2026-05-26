@@ -2,12 +2,9 @@
 
 using DesktopGLBackend;
 
-using Extensions.Source.TexturePacker;
-
 using LughSharp.Source;
+using LughSharp.Source.Graphics.Packing.TexturePacker;
 using LughSharp.Source.IO;
-
-using TestProject.Source.GameCore;
 
 namespace TestProject.Source;
 
