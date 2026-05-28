@@ -22,13 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
 
-namespace LughSharp.Source.Utils.Pooling;
+namespace Extensions.Source.Sprites;
 
 [PublicAPI]
-public interface IPoolSupplier< T >
+public enum GraphicID
 {
-    T Get();
+    
 }
 
 // ============================================================================

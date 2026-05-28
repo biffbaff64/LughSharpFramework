@@ -50,16 +50,16 @@ public class ByteOrder
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Private constructor. Creates a new ByteOrder with the specified name. Used in
+    /// creation of the constants <see cref="BigEndian" /> and <see cref="LittleEndian" />.
     /// </summary>
-    /// <param name="name"></param>
     private ByteOrder( string name )
     {
         _name = name;
     }
 
     /// <summary>
-    /// 
+    /// Returns the native byte order of the underlying platform.
     /// </summary>
     public static ByteOrder NativeOrder => BigEndian;
 

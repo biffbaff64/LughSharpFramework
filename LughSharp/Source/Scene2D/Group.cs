@@ -55,6 +55,9 @@ public class Group : Actor, ICullable
     /// </summary>
     public bool Transform { get; set; } = true;
 
+    /// <summary>
+    /// The area used for culling. If null, no culling is done.
+    /// </summary>
     public Rectangle? CullingArea { get; set; }
 
     // ========================================================================
@@ -448,11 +451,23 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
+    /// Determines the topmost child actor at the specified coordinates that is visible and,
+    /// if required, touchable.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="touchable"></param>
-    /// <returns></returns>
+    /// <remarks>
+    /// The method traverses child actors in reverse order, returning the first child that is 
+    /// hit. If no child is hit, the method delegates to the base implementation. Coordinates
+    /// are interpreted in the local coordinate system of each child.
+    /// </remarks>
+    /// <param name="x">The x-coordinate, in the parent's local coordinate system, to test for a hit.</param>
+    /// <param name="y">The y-coordinate, in the parent's local coordinate system, to test for a hit.</param>
+    /// <param name="touchable">
+    /// true to consider only actors that are touchable; otherwise, false to include all actors
+    /// regardless of their touchable state.</param>
+    /// <returns>
+    /// The topmost Actor at the specified coordinates that meets the visibility and touchability
+    /// criteria; otherwise, null if no such actor is found.
+    /// </returns>
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( touchable && ( Touchable == Touchable.Disabled ) )
@@ -853,8 +868,9 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
+    /// Enables debug mode for this group and all its children recursively.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> This group for chaining. </returns>
     public virtual Group DebugAll()
     {
         SetDebug( true, true );
@@ -875,16 +891,33 @@ public class Group : Actor, ICullable
     }
 
     /// <summary>
+    /// Appends a string representation of the current object and its child actors to the
+    /// specified buffer, using indentation to reflect the hierarchy.
     /// </summary>
-    /// <param name="buffer"></param>
-    /// <param name="indent"></param>
+    /// <remarks>
+    /// This method is intended for internal use to build a hierarchical textual representation
+    /// of the object and its children. It recursively processes child groups, increasing the
+    /// indentation for each level.
+    /// </remarks>
+    /// <param name="buffer">
+    /// The buffer to which the string representation is appended. Must not be null, otherwise
+    /// an exception will be thrown.
+    /// </param>
+    /// <param name="indent">
+    /// The number of indentation levels to apply for child actors. Must be zero or greater. If
+    /// a negative value is provided, it will default to zero
+    /// </param>
     private void ToString( StringBuilder buffer, int indent )
     {
+        Guard.Against.Null( buffer );
+        
         buffer.Append( base.ToString() ?? string.Empty );
         buffer.Append( '\n' );
 
         Actor?[] actors = Children.Begin();
 
+        indent = Math.Max( 0, indent );
+        
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             for ( var ii = 0; ii < indent; ii++ )

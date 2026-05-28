@@ -152,17 +152,17 @@ public class Stage : InputAdapter, IDisposable
         Viewport = viewport ?? throw new ArgumentException( "viewport cannot be null." );
         Batch    = batch ?? throw new ArgumentException( "batch cannot be null." );
 
-        Pools.RegisterPool< InputEvent >( new Pool< InputEvent >
+        PoolsMap.RegisterPool< InputEvent >( new Pool< InputEvent >
         {
             NewObjectFactory = () => new InputEvent()
         } );
 
-        Pools.RegisterPool< TouchFocus >( new Pool< TouchFocus >
+        PoolsMap.RegisterPool< TouchFocus >( new Pool< TouchFocus >
         {
             NewObjectFactory = () => new TouchFocus()
         } );
 
-        Pools.RegisterPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
+        PoolsMap.RegisterPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
         {
             NewObjectFactory = () => new FocusListener.FocusEvent()
         } );
@@ -296,7 +296,7 @@ public class Stage : InputAdapter, IDisposable
         // Exit overLast.
         if ( overLast != null )
         {
-            var inputEvent = Pools.Obtain< InputEvent >();
+            var inputEvent = PoolsMap.Obtain< InputEvent >();
 
             if ( inputEvent == null )
             {
@@ -311,13 +311,13 @@ public class Stage : InputAdapter, IDisposable
             inputEvent.RelatedActor = over;
 
             overLast.Fire( inputEvent );
-            Pools.Free< InputEvent >( inputEvent );
+            PoolsMap.Free< InputEvent >( inputEvent );
         }
 
         // Enter over.
         if ( over != null )
         {
-            var inputEvent = Pools.Obtain< InputEvent >();
+            var inputEvent = PoolsMap.Obtain< InputEvent >();
 
             if ( inputEvent == null )
             {
@@ -332,7 +332,7 @@ public class Stage : InputAdapter, IDisposable
             inputEvent.RelatedActor = overLast;
 
             over.Fire( inputEvent );
-            Pools.Free< InputEvent >( inputEvent );
+            PoolsMap.Free< InputEvent >( inputEvent );
         }
 
         return over;
@@ -342,7 +342,7 @@ public class Stage : InputAdapter, IDisposable
     {
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -357,7 +357,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.RelatedActor = actor;
 
         actor.Fire( inputEvent );
-        Pools.Free( inputEvent );
+        PoolsMap.Free( inputEvent );
     }
 
     /// <summary>
@@ -377,7 +377,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -407,7 +407,7 @@ public class Stage : InputAdapter, IDisposable
 
         bool handled = inputEvent.IsHandled;
 
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -431,7 +431,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -474,7 +474,7 @@ public class Stage : InputAdapter, IDisposable
 
         bool handled = inputEvent.IsHandled;
 
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -498,7 +498,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -537,13 +537,13 @@ public class Stage : InputAdapter, IDisposable
                 inputEvent.SetHandled();
             }
 
-            Pools.Free< TouchFocus >( focus );
+            PoolsMap.Free< TouchFocus >( focus );
         }
 
         TouchFocuses.End();
 
         bool handled = inputEvent.IsHandled;
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -565,7 +565,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -587,7 +587,7 @@ public class Stage : InputAdapter, IDisposable
         target.Fire( inputEvent );
         bool handled = inputEvent.IsHandled;
 
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -603,7 +603,7 @@ public class Stage : InputAdapter, IDisposable
 
         ScreenToStageCoordinates( _tempCoords.Set( _mouseScreenX, _mouseScreenY ) );
 
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -619,7 +619,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         bool handled = inputEvent.IsHandled;
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -632,7 +632,7 @@ public class Stage : InputAdapter, IDisposable
     public override bool OnKeyDown( int keyCode )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
-        var   inputEvent = Pools.Obtain< InputEvent >();
+        var   inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -645,7 +645,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         bool handled = inputEvent.IsHandled;
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -658,7 +658,7 @@ public class Stage : InputAdapter, IDisposable
     public override bool OnKeyUp( int keyCode )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
-        var   inputEvent = Pools.Obtain< InputEvent >();
+        var   inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -671,7 +671,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         bool handled = inputEvent.IsHandled;
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -684,7 +684,7 @@ public class Stage : InputAdapter, IDisposable
     public override bool OnKeyTyped( char character )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
-        var   inputEvent = Pools.Obtain< InputEvent >();
+        var   inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
@@ -697,7 +697,7 @@ public class Stage : InputAdapter, IDisposable
 
         target.Fire( inputEvent );
         bool handled = inputEvent.IsHandled;
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
 
         return handled;
     }
@@ -715,7 +715,7 @@ public class Stage : InputAdapter, IDisposable
                                int pointer,
                                int button )
     {
-        var focus = Pools.Obtain< TouchFocus >();
+        var focus = PoolsMap.Obtain< TouchFocus >();
 
         if ( focus == null )
         {
@@ -753,7 +753,7 @@ public class Stage : InputAdapter, IDisposable
               && ( focus.Button == button ) )
             {
                 TouchFocuses.RemoveAt( i );
-                Pools.Free< TouchFocus >( focus );
+                PoolsMap.Free< TouchFocus >( focus );
             }
         }
     }
@@ -785,7 +785,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( inputEvent == null )
             {
-                inputEvent = Pools.Obtain< InputEvent >();
+                inputEvent = PoolsMap.Obtain< InputEvent >();
 
                 inputEvent.Stage  = this;
                 inputEvent.Type   = InputEvent.EventType.TouchUp;
@@ -808,7 +808,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent != null )
         {
-            Pools.Free< InputEvent >( inputEvent );
+            PoolsMap.Free< InputEvent >( inputEvent );
         }
     }
 
@@ -829,7 +829,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="CancelTouchFocus() "/>
     public void CancelTouchFocusExcept( IEventListener? exceptListener, Actor? exceptActor )
     {
-        var inputEvent = Pools.Obtain< InputEvent >();
+        var inputEvent = PoolsMap.Obtain< InputEvent >();
 
         inputEvent.Stage  = this;
         inputEvent.Type   = InputEvent.EventType.TouchUp;
@@ -871,7 +871,7 @@ public class Stage : InputAdapter, IDisposable
 
         TouchFocuses.End();
 
-        Pools.Free< InputEvent >( inputEvent );
+        PoolsMap.Free< InputEvent >( inputEvent );
     }
 
     /// <summary>
@@ -1065,12 +1065,10 @@ public class Stage : InputAdapter, IDisposable
     public Actor? GetKeyboardFocus() => _keyboardFocus;
 
     /// <summary>
-    /// Sets the actor that will receive key events.
+    /// Sets the actor that will receive key events. If the specified actor is not
+    /// null, it will receive key events. If it is null, no actor will receive key events.
     /// </summary>
-    /// <param name="actor"> May be null. </param>
-    /// <returns>
-    /// true if the unfocus and focus events were not cancelled by a <see cref="FocusListener"/>.
-    /// </returns>
+    /// <param name="actor">The actor to receive key events, or null to clear the focus.</param>
     public void SetKeyboardFocus( Actor? actor )
     {
         if ( _keyboardFocus == actor )
@@ -1078,7 +1076,7 @@ public class Stage : InputAdapter, IDisposable
             return;
         }
 
-        var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
+        var focusEvent = PoolsMap.Obtain< FocusListener.FocusEvent >();
 
         focusEvent.Stage = this;
         focusEvent.Type  = FocusListener.FocusEvent.FocusEventType.Keyboard;
@@ -1114,7 +1112,7 @@ public class Stage : InputAdapter, IDisposable
             }
         }
 
-        Pools.Free< FocusListener.FocusEvent >( focusEvent );
+        PoolsMap.Free< FocusListener.FocusEvent >( focusEvent );
     }
 
     /// <summary>
@@ -1135,7 +1133,7 @@ public class Stage : InputAdapter, IDisposable
                 return;
             }
 
-            var focusEvent = Pools.Obtain< FocusListener.FocusEvent >();
+            var focusEvent = PoolsMap.Obtain< FocusListener.FocusEvent >();
 
             focusEvent.Stage = this;
             focusEvent.Type  = FocusListener.FocusEvent.FocusEventType.Scroll;
@@ -1170,7 +1168,7 @@ public class Stage : InputAdapter, IDisposable
                 }
             }
 
-            Pools.Free< FocusListener.FocusEvent >( focusEvent );
+            PoolsMap.Free< FocusListener.FocusEvent >( focusEvent );
         }
     }
 

@@ -480,7 +480,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             var lineStart = 0;
             var lastSpace = 0;
 
-            Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+            Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
             GlyphLayout         layout     = layoutPool.Obtain();
 
             for ( var i = 0; i < Text.Length; i++ )

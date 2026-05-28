@@ -153,7 +153,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 
         _prefWidth = 0;
 
-        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
 
         foreach ( T item in Items )

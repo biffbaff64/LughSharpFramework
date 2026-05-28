@@ -35,7 +35,10 @@ public class FrameBufferTextureAttachmentSpec( int internalFormat, int format, i
     public bool IsDepth        { get; init; }
     public bool IsStencil      { get; init; }
 
-    // ========================================================================
-
     public bool IsColorTexture => !IsDepth && !IsStencil;
 }
+
+// ============================================================================
+// ============================================================================
+
+

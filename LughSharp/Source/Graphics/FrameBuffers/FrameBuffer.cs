@@ -46,6 +46,10 @@ namespace LughSharp.Source.Graphics.FrameBuffers;
 [PublicAPI]
 public class FrameBuffer : GLFrameBuffer< Texture2D >
 {
+    /// <summary>
+    /// Creates an uninitialized FrameBuffer. You can use this constructor when you want to
+    /// manually configure the framebuffer before use.
+    /// </summary>
     public FrameBuffer()
     {
     }

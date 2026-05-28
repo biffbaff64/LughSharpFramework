@@ -26,14 +26,16 @@ using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.G2D;
 
-namespace Extensions.Source;
+namespace Extensions.Source.Sprites;
 
 [PublicAPI]
 public class GameSprite
 {
-    public required Sprite2D Sprite { get; set; }
+    public Sprite2D Sprite { get; set; } = new();
 
     //TODO: Add more functionality here later.
+    
+    // ========================================================================
 }
 
 // ============================================================================

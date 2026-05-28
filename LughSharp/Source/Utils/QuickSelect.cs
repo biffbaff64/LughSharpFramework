@@ -25,10 +25,12 @@
 namespace LughSharp.Source.Utils;
 
 /// <summary>
-/// Implementation of Tony Hoare's quickselect algorithm. Running time is generally
-/// O(n), but the worst case is O(n^2) Pivot choice is median of three method, providing
-/// better performance than a random pivot for partially sorted data.
-/// <para> http://en.wikipedia.org/wiki/Quickselect </para>
+/// Implementation of Tony Hoare's quickselect algorithm. Running time is generally O(n),
+/// but the worst case is O(n^2) Pivot choice is median of three method, providing better
+/// performance than a random pivot for partially sorted data.
+/// <para>
+/// See http://en.wikipedia.org/wiki/Quickselect.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class QuickSelect< T >
@@ -37,15 +39,16 @@ public class QuickSelect< T >
     private IComparer< T > _comp  = null!;
 
     // ========================================================================
-    
+
     /// <summary>
-    /// 
+    /// Selects the index of the element that is the kth smallest in the given array based on
+    /// the specified comparer.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="comp"></param>
-    /// <param name="n"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
+    /// <param name="items">The array of elements to search within.</param>
+    /// <param name="comp">The comparer used to define the ordering of the elements.</param>
+    /// <param name="n">The positional rank (1-based) of the desired element in the sorted array.</param>
+    /// <param name="size">The number of elements in the array to consider.</param>
+    /// <returns>The index of the kth smallest element in the array.</returns>
     public int Select( T[] items, IComparer< T > comp, int n, int size )
     {
         _array = items;
@@ -55,12 +58,14 @@ public class QuickSelect< T >
     }
 
     /// <summary>
-    /// 
+    /// Partitions the elements in the array within the specified range, rearranging them
+    /// so that all elements less than the pivot are moved to the left of the pivot and
+    /// all elements greater than or equal to the pivot are moved to the right.
     /// </summary>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <param name="pivot"></param>
-    /// <returns></returns>
+    /// <param name="left">The starting index of the range to partition.</param>
+    /// <param name="right">The ending index of the range to partition.</param>
+    /// <param name="pivot">The index of the pivot element.</param>
+    /// <returns>The new index of the pivot element after partitioning.</returns>
     private int Partition( int left, int right, int pivot )
     {
         T pivotValue = _array[ pivot ];
@@ -84,12 +89,13 @@ public class QuickSelect< T >
     }
 
     /// <summary>
-    /// 
+    /// Recursively selects the index of the element that is the kth smallest in the subarray
+    /// defined by the specified range [left, right].
     /// </summary>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <param name="k"></param>
-    /// <returns></returns>
+    /// <param name="left">The starting index of the subarray.</param>
+    /// <param name="right">The ending index of the subarray.</param>
+    /// <param name="k">The positional rank (1-based) of the desired element in the subarray.</param>
+    /// <returns>The index of the kth smallest element within the specified range.</returns>
     private int RecursiveSelect( int left, int right, int k )
     {
         if ( left == right )

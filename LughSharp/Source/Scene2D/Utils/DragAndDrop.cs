@@ -28,26 +28,11 @@ using LughSharp.Source.Scene2D.UI;
 namespace LughSharp.Source.Scene2D.Utils;
 
 /// <summary>
-/// Manages drag and drop operations through registered
-/// drag sources and drop targets.
+/// Manages drag and drop operations through registered drag sources and drop targets.
 /// </summary>
 [PublicAPI]
 public class DragAndDrop
 {
-    private static readonly Vector2                                _tmpVector       = new();
-    private readonly        Dictionary< DragSource, DragListener > _sourceListeners = new();
-    private readonly        List< DragTarget >                     _targets         = [ ];
-    private                 float                                  _dragActorX;
-    private                 float                                  _dragActorY;
-
-    private DragListener? _dragListener;
-    private long          _dragValidTime;
-    private bool          _isValidTarget;
-    private bool          _removeDragActor;
-    private float         _tapSquareSize = 8;
-    private float         _touchOffsetX;
-    private float         _touchOffsetY;
-
     /// <summary>
     /// Time in milliseconds that a drag must take before a drop will be
     /// considered valid. This ignores an accidental drag and drop that
@@ -58,8 +43,8 @@ public class DragAndDrop
     public DragSource? Source          { get; set; }
     public DragTarget? Target          { get; set; }
     public Actor?      DragActor       { get; set; }
-    public bool        KeepWithinStage { get; set; } = true;
     public Payload?    DragPayload     { get; set; }
+    public bool        KeepWithinStage { get; set; } = true;
     public int         Button          { get; set; }
 
     /// <summary>
@@ -70,9 +55,27 @@ public class DragAndDrop
     /// </summary>
     public bool CancelTouchFocus { get; set; } = true;
 
+    // ========================================================================
+
     protected int ActivePointer { get; set; } = -1;
 
     // ========================================================================
+
+    private readonly Dictionary< DragSource, DragListener > _sourceListeners = new();
+    private readonly List< DragTarget >                     _targets         = [ ];
+
+    private static readonly Vector2 _tmpVector = new();
+
+    private float         _dragActorX;
+    private float         _dragActorY;
+    private DragListener? _dragListener;
+    private long          _dragValidTime;
+    private bool          _isValidTarget;
+    private bool          _removeDragActor;
+    private float         _tapSquareSize = 8;
+    private float         _touchOffsetX;
+    private float         _touchOffsetY;
+
     // ========================================================================
 
     public void AddSource( DragSource source )
@@ -144,6 +147,11 @@ public class DragAndDrop
         _tapSquareSize = halfTapSquareSize;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dragActorX"></param>
+    /// <param name="dragActorY"></param>
     public void SetDragActorPosition( float dragActorX, float dragActorY )
     {
         _dragActorX = dragActorX;
@@ -162,6 +170,11 @@ public class DragAndDrop
         _touchOffsetY = touchOffsetY;
     }
 
+    /// <summary>
+    /// Returns <c>true</c> if the <see cref="DragPayload"/> object for this
+    /// DragAndDrop instance is not null and, therefore, being dragged.
+    /// </summary>
+    /// <returns></returns>
     public bool IsDragging()
     {
         return DragPayload != null;
@@ -180,13 +193,20 @@ public class DragAndDrop
     // ========================================================================
 
     /// <summary>
-    /// Class which extends the <see cref="DragListener"/> for drag &amp; drop operations.
+    /// Class which extends the <see cref="DragListener"/> for drag and drop operations.
     /// </summary>
+    [PublicAPI]
     public class DragListenerImpl : DragListener
     {
         private readonly DragAndDrop _parent;
         private readonly DragSource  _source;
 
+        // ====================================================================
+
+        /// <summary>
+        /// Creates a new DragListenerImpl instance, setting the DragAndDrop object parent,
+        /// and the <see cref="DragSource"/> source.
+        /// </summary>
         public DragListenerImpl( DragAndDrop parent, DragSource source )
         {
             _parent = parent;
@@ -298,8 +318,8 @@ public class DragAndDrop
             if ( _parent.Target != null )
             {
                 actor = _parent._isValidTarget
-                    ? _parent.DragPayload.ValidDragActor
-                    : _parent.DragPayload.InvalidDragActor;
+                            ? _parent.DragPayload.ValidDragActor
+                            : _parent.DragPayload.InvalidDragActor;
             }
 
             actor ??= _parent.DragPayload.DragActor;
@@ -375,7 +395,7 @@ public class DragAndDrop
                 float stageY = ev.StageY + _parent._touchOffsetY;
 
                 _parent.Target?.Actor.StageToLocalCoordinates( _tmpVector.Set( stageX, stageY ) );
-                _parent.Target?.Drop( _parent.Source!, _parent.DragPayload, _tmpVector.X, _tmpVector.Y, pointer );
+                _parent.Target?.Drop( _parent.Source, _parent.DragPayload, _tmpVector.X, _tmpVector.Y, pointer );
             }
 
             _parent.Source?.DragStop( ev,
@@ -385,7 +405,7 @@ public class DragAndDrop
                                       _parent.DragPayload,
                                       _parent._isValidTarget ? _parent.Target : null );
 
-            _parent.Target?.Reset( _parent.Source!, _parent.DragPayload );
+            _parent.Target?.Reset( _parent.Source, _parent.DragPayload );
 
             _parent.Source         = null;
             _parent.DragPayload    = null;
@@ -404,14 +424,19 @@ public class DragAndDrop
     [PublicAPI]
     public class DragSource
     {
+        public Actor Actor { get; set; }
+
+        // ====================================================================
+        
+        /// <summary>
+        /// Creates a new DragSource instance using the supplied Actor.
+        /// </summary>
         public DragSource( Actor actor )
         {
             Guard.Against.Null( actor );
 
             Actor = actor;
         }
-
-        public Actor Actor { get; set; }
 
         /// <summary>
         /// Called when a drag is started on the source. The coordinates
@@ -420,7 +445,7 @@ public class DragAndDrop
         /// <returns> If null the drag will not affect any targets. </returns>
         public virtual Payload? DragStart( InputEvent ev, float x, float y, int pointer )
         {
-            return default( Payload? );
+            return null;
         }
 
         /// <summary>
@@ -459,6 +484,10 @@ public class DragAndDrop
     [PublicAPI]
     public abstract class DragTarget
     {
+        public Actor Actor { get; set; }
+
+        // ====================================================================
+        
         /// <summary>
         /// Constructor, creates a new Drag Target.
         /// </summary>
@@ -477,14 +506,15 @@ public class DragAndDrop
             }
         }
 
-        public Actor Actor { get; set; }
-
         /// <summary>
         /// Called when the payload is dragged over the target. The coordinates
         /// are in the target's local coordinate system.
         /// </summary>
         /// <returns> true if this is a valid target for the payload. </returns>
-        public abstract bool Drag( DragSource source, Payload payload, float x, float y, int pointer );
+        public virtual bool Drag( DragSource source, Payload payload, float x, float y, int pointer )
+        {
+            return false;
+        }
 
         /// <summary>
         /// Called when the payload is no longer over the target, whether because the touch
@@ -494,7 +524,7 @@ public class DragAndDrop
         /// returned false.
         /// </para>
         /// </summary>
-        public virtual void Reset( DragSource source, Payload payload )
+        public virtual void Reset( DragSource? source, Payload payload )
         {
         }
 
@@ -506,7 +536,9 @@ public class DragAndDrop
         /// returned false.
         /// </para>
         /// </summary>
-        public abstract void Drop( DragSource source, Payload payload, float x, float y, int pointer );
+        public virtual void Drop( DragSource? source, Payload payload, float x, float y, int pointer )
+        {
+        }
     }
 
     // ========================================================================
@@ -530,3 +562,8 @@ public class DragAndDrop
         public object? Object           { get; set; }
     }
 }
+
+// ============================================================================
+// ============================================================================
+
+

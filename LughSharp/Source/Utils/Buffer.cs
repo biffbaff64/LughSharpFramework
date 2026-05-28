@@ -70,8 +70,6 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// </summary>
     public bool IsDirect { get; set; }
 
-    // ========================================================================
-
     /// <summary>
     /// Gets the capacity of the buffer in elements of type <typeparamref name="T"/>.
     /// </summary>
@@ -91,13 +89,13 @@ public class Buffer< T > : IDisposable where T : unmanaged
     // ========================================================================
 
     protected const bool IsReadOnlyDefault = false;
-    protected const bool IsDirectDefault    = false;
+    protected const bool IsDirectDefault   = false;
 
     // ========================================================================
 
-    private          byte[]         _backingArray;
-    private          Memory< byte > _memory;
-    private readonly int            _elementSize;
+    private byte[]         _backingArray;
+    private Memory< byte > _memory;
+    private int            _elementSize;
 
     // ========================================================================
 
@@ -120,8 +118,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// Creates a new Buffer that wraps the provided Memory{byte},
-    /// and with the specified byte order..
+    /// Creates a new Buffer that wraps the provided Memory{byte}, and with the specified
+    /// byte order..
     /// </summary>
     public Buffer( Memory< byte > memory, bool isBigEndian )
     {
@@ -134,13 +132,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
         _memory       = memory;
         _backingArray = memory.ToArray();
         IsBigEndian   = isBigEndian;
-        Capacity      = memory.Length; // Capacity is now derived from the provided Memory<byte>.Length
+        Capacity      = memory.Length; // Capacity is derived from the provided Memory<byte>.Length
         Limit         = Capacity;      // Initially Limit is Capacity for a new view
         Length        = 0;             // Initially Length is 0 for a new view
         Position      = 0;             // Initially Position is 0 for a new view
     }
-    
-    // ========================================================================
 
     /// <summary>
     /// Creates a Buffer that shares the same underlying memory as this buffer.
@@ -214,6 +210,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public T Get()
     {
         if ( ( Position + _elementSize ) > Limit )
@@ -227,6 +228,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return value;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="elementIndex"></param>
+    /// <returns></returns>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public T Get( int elementIndex )
     {
         int byteIndex = elementIndex * _elementSize;
@@ -237,15 +244,26 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         return ( byteIndex + _elementSize ) > Capacity
-            ? throw new IndexOutOfRangeException()
-            : MemoryMarshal.Read< T >( _memory.Span.Slice( byteIndex ) );
+                   ? throw new IndexOutOfRangeException()
+                   : MemoryMarshal.Read< T >( _memory.Span.Slice( byteIndex ) );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
     public void Get( T[] array )
     {
         Get( array, 0, array.Length );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="offset"></param>
+    /// <param name="count"></param>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public void Get( T[] array, int offset, int count )
     {
         int bytesToRead = count * _elementSize;
@@ -261,8 +279,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
         Position += bytesToRead;
     }
 
-    // ========================================================================
-
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="value"></param>
     public void Put( T value )
     {
         EnsureCapacity( Position + _elementSize );
@@ -276,6 +296,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="elementIndex"></param>
+    /// <param name="value"></param>
+    /// <exception cref="IndexOutOfRangeException"></exception>
     public void Put( int elementIndex, T value )
     {
         if ( ( elementIndex < 0 ) || ( elementIndex >= ElementCapacity ) )
@@ -294,16 +320,34 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
     public void Put( T[] array )
     {
         Put( array, 0, array.Length );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="offset"></param>
+    /// <param name="count"></param>
     public void Put( T[] array, int offset, int count )
     {
         Put( array, offset, Position, count );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="array"></param>
+    /// <param name="srcOffset"></param>
+    /// <param name="dstOffset"></param>
+    /// <param name="count"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void Put( T[] array, int srcOffset, int dstOffset, int count )
     {
         if ( ( srcOffset < 0 ) || ( ( srcOffset + count ) > array.Length ) )
@@ -316,11 +360,9 @@ public class Buffer< T > : IDisposable where T : unmanaged
             throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
         }
 
-        // Checks that count is positive
-//        Guard.ValidPositiveInteger( count );
-
         int dstByteOffset = dstOffset * _elementSize;
         int bytesToWrite  = count * _elementSize;
+        
         EnsureCapacity( dstByteOffset + bytesToWrite );
 
         array.AsSpan( srcOffset, count )
@@ -365,8 +407,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         short value = IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( Position ) );
+                          ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( Position ) )
+                          : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( Position ) );
 
         Position += 2;
 
@@ -381,8 +423,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( byteIndex ) )
-            : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( byteIndex ) );
+                   ? BinaryPrimitives.ReadInt16BigEndian( _memory.Span.Slice( byteIndex ) )
+                   : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
     public int GetInt()
@@ -393,8 +435,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         int value = IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( Position ) );
+                        ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( Position ) )
+                        : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( Position ) );
 
         Position += 4;
 
@@ -409,8 +451,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         return IsBigEndian
-            ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( byteIndex ) )
-            : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( byteIndex ) );
+                   ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( byteIndex ) )
+                   : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
     public float GetFloat()
@@ -421,8 +463,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         float value = IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
+                          ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
+                          : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
 
         Position += 4;
 
@@ -437,8 +479,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         return IsBigEndian
-            ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( byteIndex ) )
-            : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( byteIndex ) );
+                   ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( byteIndex ) )
+                   : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
     // ========================================================================
@@ -631,7 +673,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         if ( ( dstOffset + length ) > dst.Length )
         {
             throw new ArgumentOutOfRangeException( nameof( length ),
-                                                   "Length and destination offset exceed destination array bounds." );
+                                                   "Length plus destination offset exceeds destination array bounds." );
         }
 
         // Check if enough bytes remaining in buffer

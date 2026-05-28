@@ -50,11 +50,6 @@ namespace LughSharp.Source.Graphics.Fonts;
 [PublicAPI]
 public class GlyphLayout : IResetable, IPoolable
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="index"></param>
-    /// <param name="color"></param>
     public struct GlyphColor( int index, int color )
     {
         public int GlyphIndex { get; } = index;
@@ -98,7 +93,7 @@ public class GlyphLayout : IResetable, IPoolable
 
     private const float Epsilon = 0.0001f;
 
-    private readonly Pool< GlyphRun > _glyphRunPool = Pools.Get< GlyphRun >( () => new GlyphRun() );
+    private readonly Pool< GlyphRun > _glyphRunPool = PoolsMap.Get< GlyphRun >( () => new GlyphRun() );
     private readonly List< int >      _colorStack   = new( 4 );
 
     // ========================================================================
@@ -132,7 +127,9 @@ public class GlyphLayout : IResetable, IPoolable
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
     /// <param name="targetWidth"></param>
-    /// <param name="halign"></param>
+    /// <param name="halign">
+    /// Horizontal alignment of the text, see also <see cref="Align"/>.
+    /// </param>
     /// <param name="wrap"></param>
     public GlyphLayout( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
     {
@@ -140,6 +137,8 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
+    /// Creates a new GlyphLayout, using the supplied <see cref="BitmapFont"/>, text message,
+    /// <see cref="Color"/>, target width, horizontal alignment, wrap, and truncate string.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
@@ -150,10 +149,21 @@ public class GlyphLayout : IResetable, IPoolable
     /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
-    /// <param name="targetWidth"></param>
-    /// <param name="halign"></param>
+    /// <param name="targetWidth">
+    /// The width used for alignment, line wrapping, and truncation. May be zero if
+    /// those features are not used.
+    /// </param>
+    /// <param name="halign">
+    /// Horizontal alignment of the text, see also <see cref="Align"/>.
+    /// </param>
     /// <param name="wrap"></param>
-    /// <param name="truncate"></param>
+    /// <param name="truncate">
+    /// If not null and the width of the glyphs exceed targetWidth, the glyphs are
+    /// truncated and the glyphs for the specified truncate string are placed at the end.
+    /// Empty string can be used to truncate without adding glyphs. Truncate should not
+    /// be used with text that contains multiple lines. Wrap is ignored if truncate is
+    /// not null.
+    /// </param>
     public GlyphLayout( BitmapFont font,
                         string str,
                         int start,
@@ -189,8 +199,13 @@ public class GlyphLayout : IResetable, IPoolable
     /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color
     /// markup tags in the specified string may change the color for portions of the text.
     /// </param>
-    /// <param name="targetWidth"></param>
-    /// <param name="halign"></param>
+    /// <param name="targetWidth">
+    /// The width used for alignment, line wrapping, and truncation. May be zero if
+    /// those features are not used.
+    /// </param>
+    /// <param name="halign">
+    /// Horizontal alignment of the text, see also <see cref="Align"/>.
+    /// </param>
     /// <param name="wrap"></param>
     public void SetText( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
     {
@@ -198,11 +213,14 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
+    /// Sets the text of this GlyphLayout to the specified string, using the specified
+    /// <see cref="BitmapFont"/>, <see cref="Color"/>, target width, horizontal alignment,
+    /// and wrap. The string is split into individual glyphs and stored in this GlyphLayout.
     /// </summary>
     /// <param name="font"> The font to use. </param>
     /// <param name="str"> A string holding the text. </param>
-    /// <param name="start"></param>
-    /// <param name="end"></param>
+    /// <param name="start"> The starting index of the glyphs to be rendered. </param>
+    /// <param name="end"> The ending index of the glyphs to be rendered. </param>
     /// <param name="color">
     /// The default color to use for the text (the BitmapFont <see cref="BitmapFont.GetColor()"/>
     /// is not used). If <see cref="BitmapFontData.MarkupEnabled"/> is true, color

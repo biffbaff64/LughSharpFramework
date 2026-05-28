@@ -34,8 +34,24 @@ using Rectangle = LughSharp.Source.Maths.Rectangle;
 
 namespace LughSharp.Source.Scene2D;
 
+/// <summary>
+/// Represents a visual or interactive element in a scene graph, capable of handling events,
+/// actions, transformations, and hierarchical relationships with other actors. Provides core
+/// functionality for rendering, input processing, and coordinate transformations within a
+/// stage or group.
+/// </summary>
+/// <remarks>
+/// The Actor class serves as the base for all scene elements that participate in rendering,
+/// event handling, and layout within a stage. Actors can be organized in parent-child hierarchies,
+/// respond to user input, and execute actions over time. Most methods and properties are designed
+/// to be overridden or extended by derived classes to implement custom behavior. Thread safety is
+/// not guaranteed; interactions with actors should occur on the main thread.
+/// <para><b>
+/// Actors must be added to a Stage or Group to participate in rendering and event propagation.
+/// </b></para>
+/// </remarks>
 [PublicAPI]
-[ActorDefinition( Role = "UI" )]
+[ActorDefinition( Role = "BASE" )]
 public class Actor : IComparable< Actor >
 {
     public DelayedRemovalList< IEventListener > Listeners        { get; }      = [ ];
@@ -59,28 +75,37 @@ public class Actor : IComparable< Actor >
     private float _y;
     private float _width;
     private float _height;
-    
+
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Initializes static resources and object pools used by the Actor class.
+    /// </summary>
+    /// <remarks>
+    /// This static constructor registers object pools for commonly used types to improve
+    /// performance and reduce memory allocations when creating instances of these types
+    /// within the Actor class and related components. The pools are configured with default
+    /// factories for each type.
+    /// </remarks>
     static Actor()
     {
-        Pools.RegisterPool< Rectangle >( new Pool< Rectangle >
+        PoolsMap.RegisterPool< Rectangle >( new Pool< Rectangle >
         {
             NewObjectFactory = () => new Rectangle()
         } );
 
-        Pools.RegisterPool< List< Group > >( new Pool< List< Group > >
+        PoolsMap.RegisterPool< List< Group > >( new Pool< List< Group > >
         {
             NewObjectFactory = () => new List< Group >()
         } );
 
-        Pools.RegisterPool< GlyphLayout >( new Pool< GlyphLayout >
+        PoolsMap.RegisterPool< GlyphLayout >( new Pool< GlyphLayout >
         {
             NewObjectFactory = () => new GlyphLayout()
         } );
 
-        Pools.RegisterPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
+        PoolsMap.RegisterPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
         {
             NewObjectFactory = () => new ChangeListener.ChangeEvent()
         } );
@@ -94,29 +119,43 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
-    /// Compares the current instance with another object of the same type and returns
-    /// an integer that indicates whether the current instance precedes, follows, or
-    /// occurs in the same position in the sort order as the other object.
+    /// Compares the current instance with another object of the same type and returns an integer
+    /// that indicates whether the current instance precedes, follows, or occurs in the same position
+    /// in the sort order as the other object.
     /// </summary>
     /// <param name="other">An object to compare with this instance.</param>
     /// <returns>
-    /// A value that indicates the relative order of the objects being compared.
-    /// The return value has these meanings:
+    /// A value that indicates the relative order of the objects being compared. The return value
+    /// has these meanings:
     /// <list type="table">
     /// <listheader><term>Value</term><description>Meaning</description></listheader>
     /// <item><term> Less than zero</term>
-    /// <description> This instance precedes <paramref name="other" /> in the sort order.</description>
+    /// <description> This instance precedes <c>other</c> in the sort order.</description>
     /// </item>
-    /// <item><term> Zero</term>
-    /// <description> This instance occurs in the same position in the sort order as <paramref name="other" />.</description>
+    /// <item>
+    /// <term> Zero</term>
+    /// <description>
+    /// This instance occurs in the same position in the sort order as <c>other</c>.
+    /// </description>
     /// </item>
-    /// <item><term> Greater than zero</term>
-    /// <description> This instance follows <paramref name="other" /> in the sort order.</description></item>
+    /// <item>
+    /// <term> Greater than zero</term>
+    /// <description> This instance follows <c>other</c> in the sort order.</description>
+    /// </item>
     /// </list>
     /// </returns>
+    /// <remarks>
+    /// This method is provided because this class implements <see cref="IComparable{Actor}"/>
+    /// </remarks>
     public int CompareTo( Actor? other )
     {
-        return other == null ? 1 : 0;
+        if ( other == null || Stage == null ) return 1;
+
+        int index = GetZIndex();
+
+        if ( index == -1 ) return 1;
+
+        return index - other.GetZIndex();
     }
 
     /// <summary>
@@ -162,7 +201,7 @@ public class Actor : IComparable< Actor >
             for ( var i = 0; i < Actions.Count; i++ )
             {
                 SceneAction action = Actions[ i ];
-                
+
                 if ( action.Act( delta ) && ( i < Actions.Count ) )
                 {
                     SceneAction current     = Actions[ i ];
@@ -219,7 +258,7 @@ public class Actor : IComparable< Actor >
 
         // Collect ascendants so event propagation is unaffected by
         // hierarchy changes.
-        var    ascendants = Pools.Obtain< List< Group > >();
+        var    ascendants = PoolsMap.Obtain< List< Group > >();
         Group? parent     = Parent;
 
         while ( parent != null )
@@ -280,7 +319,7 @@ public class Actor : IComparable< Actor >
         {
             ascendants.Clear();
 
-            Pools.Free< List< Group > >( ascendants );
+            PoolsMap.Free< List< Group > >( ascendants );
         }
     }
 
@@ -361,10 +400,13 @@ public class Actor : IComparable< Actor >
     /// this actor is visible.
     /// </para>
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="touchable"></param>
-    /// <returns></returns>
+    /// <param name="x"> Hit point X coordinate. </param>
+    /// <param name="y"> Hit point Y coordinate. </param>
+    /// <param name="touchable">
+    /// Whether or not the should be touchable. If this is <c>true</c> and the actor does not have
+    /// touchable enabled, this method returns null.
+    /// </param>
+    /// <returns> This actor, or null. </returns>
     public virtual Actor? Hit( float x, float y, bool touchable )
     {
         if ( touchable && ( Touchable != Touchable.Enabled ) )
@@ -458,8 +500,10 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
+    /// Adds the specified action to this actor. The action will be updated and applied to
+    /// this actor during the actor's update cycle.
     /// </summary>
-    /// <param name="action"></param>
+    /// <param name="action">The action to add.</param>
     public void AddAction( SceneAction? action )
     {
         if ( action != null )
@@ -930,7 +974,7 @@ public class Actor : IComparable< Actor >
             OnPositionChanged();
         }
     }
-    
+
     /// <summary>
     /// The Y coordinate of the actor's left edge.
     /// </summary>
@@ -998,6 +1042,19 @@ public class Actor : IComparable< Actor >
         return _width;
     }
 
+    /// <summary>
+    /// Sets the width of the object if the specified value differs from the current width
+    /// by more than a defined tolerance.
+    /// </summary>
+    /// <remarks>
+    /// If the width is updated, the method triggers a size change notification. The comparison
+    /// uses a floating-point tolerance to avoid unnecessary updates due to minor precision 
+    /// differences.
+    /// </remarks>
+    /// <param name="width">
+    /// The new width value to set. The value is applied only if it differs from the current 
+    /// width by more than the allowed floating-point tolerance.
+    /// </param>
     public virtual void SetWidth( float width )
     {
         if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance )
@@ -1015,6 +1072,18 @@ public class Actor : IComparable< Actor >
         return _height;
     }
 
+    /// <summary>
+    /// Sets the height of the object if the specified value differs from the current height
+    /// by more than a defined tolerance.
+    /// </summary>
+    /// <remarks>
+    /// If the height is changed, this method triggers a size change notification. The method
+    /// does not update the height if the difference is within the floating-point tolerance.
+    /// </remarks>
+    /// <param name="height">
+    /// The new height value to set. The value is applied only if it differs from the current
+    /// height by more than the allowed floating-point tolerance.
+    /// </param>
     public virtual void SetHeight( float height )
     {
         if ( Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
@@ -1023,7 +1092,7 @@ public class Actor : IComparable< Actor >
             OnSizeChanged();
         }
     }
-    
+
     /// <summary>
     /// Sets the width and height.
     /// </summary>
@@ -1031,7 +1100,7 @@ public class Actor : IComparable< Actor >
     {
         if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance
           || Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
-        
+
         {
             _width  = width;
             _height = height;
@@ -1220,7 +1289,7 @@ public class Actor : IComparable< Actor >
     {
         ActorColor.Set( color );
     }
-    
+
     /// <summary>
     /// Changes the z-order for this actor so it is in front of all siblings.
     /// </summary>
@@ -1323,7 +1392,7 @@ public class Actor : IComparable< Actor >
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        Rectangle scissorBounds = Pools.Obtain< Rectangle >();
+        Rectangle scissorBounds = PoolsMap.Obtain< Rectangle >();
 
         Stage.CalculateScissors( tableBounds, scissorBounds );
 
@@ -1332,7 +1401,7 @@ public class Actor : IComparable< Actor >
             return true;
         }
 
-        Pools.Free< Rectangle >( scissorBounds );
+        PoolsMap.Free< Rectangle >( scissorBounds );
 
         return false;
     }
@@ -1342,7 +1411,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void ClipEnd()
     {
-        Pools.Free< Rectangle >( ScissorStack.PopScissors() );
+        PoolsMap.Free< Rectangle >( ScissorStack.PopScissors() );
     }
 
     /// <summary>
@@ -1353,8 +1422,8 @@ public class Actor : IComparable< Actor >
     public virtual Vector2 ScreenToLocalCoordinates( Vector2 screenCoords )
     {
         return Stage == null
-            ? screenCoords
-            : StageToLocalCoordinates( Stage.ScreenToStageCoordinates( screenCoords ) );
+                   ? screenCoords
+                   : StageToLocalCoordinates( Stage.ScreenToStageCoordinates( screenCoords ) );
     }
 
     /// <summary>
@@ -1418,8 +1487,8 @@ public class Actor : IComparable< Actor >
     public virtual Vector2 LocalToScreenCoordinates( Vector2 localCoords )
     {
         return Stage == null
-            ? localCoords
-            : Stage.StageToScreenCoordinates( LocalToAscendantCoordinates( null, localCoords ) );
+                   ? localCoords
+                   : Stage.StageToScreenCoordinates( LocalToAscendantCoordinates( null, localCoords ) );
     }
 
     /// <system>

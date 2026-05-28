@@ -34,14 +34,52 @@ public class ButtonStyle : ISceneStyle
 {
     public string Name { get; set; } = string.Empty;
 
+    /// <summary>
+    /// The button image for when the button is in its normal, unpressed, state. 
+    /// </summary>
     public ISceneDrawable? Up             { get; set; }
+    
+    /// <summary>
+    /// The button image for when the button is in its pressed, held down, state. 
+    /// </summary>
     public ISceneDrawable? Down           { get; set; }
+    
+    /// <summary>
+    /// The button image for when the mouse or touch is over the button.
+    /// </summary>
     public ISceneDrawable? Over           { get; set; }
+    
+    /// <summary>
+    /// The button image for when the button has keyboard focus.
+    /// </summary>
     public ISceneDrawable? Focused        { get; set; }
+    
+    /// <summary>
+    /// 
+    /// </summary>
     public ISceneDrawable? Disabled       { get; set; }
+    
+    /// <summary>
+    /// The button image for when the button is in its checked, toggled, state. 
+    /// </summary>
     public ISceneDrawable? Checked        { get; set; }
+    
+    /// <summary>
+    /// The button image for when the mouse or touch is over the button, and the button
+    /// is in its checked, toggled, state.
+    /// </summary>
     public ISceneDrawable? CheckedOver    { get; set; }
+    
+    /// <summary>
+    /// The button image for when the button is in its checked, toggled, state, and is
+    /// pressed down.
+    /// </summary>
     public ISceneDrawable? CheckedDown    { get; set; }
+
+    /// <summary>
+    /// The button image for when the button is in its checked, toggled, state, and has
+    /// keyboard focus.
+    /// </summary>
     public ISceneDrawable? CheckedFocused { get; set; }
 
     public float PressedOffsetX   { get; set; }

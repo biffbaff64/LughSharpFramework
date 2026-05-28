@@ -22,6 +22,8 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+
 using DotGLFW;
 
 using LughSharp.Source.Graphics.OpenGL.Enums;
@@ -183,11 +185,15 @@ public class LughGL
         /// <summary>
         /// A string describing the graphics vendor, i.e. "Intel Corporation"
         /// </summary>
+        /// <remarks>
+        /// <see cref="Marshal.PtrToStringUTF8(IntPtr)"/> reads the null-terminated UTF-8
+        /// byte pointer returned by OpenGL from unmanaged memory into a managed string.
+        /// </remarks>
         public static unsafe string VendorString
         {
             get
             {
-                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.Vendor ) );
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Vendor ) ) ?? string.Empty;
 
                 return field;
             }
@@ -196,11 +202,15 @@ public class LughGL
         /// <summary>
         /// A string describing the graphics hardware, i.e. "Intel(R) UHD Graphics 620"
         /// </summary>
+        /// <remarks>
+        /// <see cref="Marshal.PtrToStringUTF8(IntPtr)"/> reads the null-terminated UTF-8
+        /// byte pointer returned by OpenGL from unmanaged memory into a managed string.
+        /// </remarks>
         public static unsafe string RendererString
         {
             get
             {
-                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.Renderer ) );
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Renderer ) ) ?? string.Empty;
 
                 return field;
             }
@@ -209,11 +219,15 @@ public class LughGL
         /// <summary>
         /// A string describing the OpenGL version, i.e. "4.6.0"
         /// </summary>
+        /// <remarks>
+        /// <see cref="Marshal.PtrToStringUTF8(IntPtr)"/> reads the null-terminated UTF-8
+        /// byte pointer returned by OpenGL from unmanaged memory into a managed string.
+        /// </remarks>
         public static unsafe string VersionString
         {
             get
             {
-                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.Version ) );
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Version ) ) ?? string.Empty;
 
                 return field;
             }
@@ -222,11 +236,15 @@ public class LughGL
         /// <summary>
         /// A string describing the shading language version, i.e. "4.60"
         /// </summary>
+        /// <remarks>
+        /// <see cref="Marshal.PtrToStringUTF8(IntPtr)"/> reads the null-terminated UTF-8
+        /// byte pointer returned by OpenGL from unmanaged memory into a managed string.
+        /// </remarks>
         public static unsafe string ShadingLanguageVersionString
         {
             get
             {
-                field = BytePointerToString.Convert( Engine.GL.GetString( ( int )StringName.ShadingLanguageVersion ) );
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.ShadingLanguageVersion ) ) ?? string.Empty;
 
                 return field;
             }

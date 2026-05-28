@@ -136,7 +136,7 @@ public class HttpRequestBuilder
 //	}
 //
 //	/** Returns the {@link HttpRequest} that has been setup by this builder so far. After using the request, it should be returned
-//	 * to the pool via {@code Pools.free(request)}. */
+//	 * to the pool via {@code PoolsMap.free(request)}. */
 //	public HttpRequest build () {
 //		validate();
 //		HttpRequest request = httpRequest;

@@ -37,19 +37,25 @@ public class QuadTreeFloat : IResetable
     public const int Ypos    = 2;
     public const int Distsqr = 3;
 
-    // ========================================================================
+    public const int DefaultInitialCapacity = 128;
+    public const int DefaultMaxCapacity     = 4096;
+    public const int DefaultMaxDepth        = 8;
+    public const int DefaultMaxValues       = 16;
     
-    public int            MaxValues { get; }
-    public int            MaxDepth  { get; }
-    public float          X         { get; set; }
-    public float          Y         { get; set; }
-    public float          Width     { get; set; }
-    public float          Height    { get; set; }
-    public int            Depth     { get; set; }
-    public QuadTreeFloat? Nw        { get; set; }
-    public QuadTreeFloat? Ne        { get; set; }
-    public QuadTreeFloat? Sw        { get; set; }
-    public QuadTreeFloat? Se        { get; set; }
+    // ========================================================================
+
+    public int   MaxValues { get; }
+    public int   MaxDepth  { get; }
+    public float X         { get; set; }
+    public float Y         { get; set; }
+    public float Width     { get; set; }
+    public float Height    { get; set; }
+    public int   Depth     { get; set; }
+
+    public QuadTreeFloat? Nw { get; set; }
+    public QuadTreeFloat? Ne { get; set; }
+    public QuadTreeFloat? Sw { get; set; }
+    public QuadTreeFloat? Se { get; set; }
 
     // For each entry, stores the value, x, and y.
     public List< float > Values { get; set; }
@@ -58,8 +64,8 @@ public class QuadTreeFloat : IResetable
     public int Count { get; set; }
 
     // ========================================================================
-    
-    private readonly Pool< QuadTreeFloat > _pool = new( 128, 4096 )
+
+    private readonly Pool< QuadTreeFloat > _pool = new( DefaultInitialCapacity, DefaultMaxCapacity )
     {
         NewObjectFactory = GetNewObject
     };
@@ -69,7 +75,7 @@ public class QuadTreeFloat : IResetable
     /// <summary>
     /// Creates a quad tree with 16 for maxValues and 8 for maxDepth.
     /// </summary>
-    public QuadTreeFloat() : this( 16, 8 )
+    public QuadTreeFloat() : this( DefaultMaxValues, DefaultMaxDepth )
     {
     }
 
@@ -255,16 +261,13 @@ public class QuadTreeFloat : IResetable
     /// <returns></returns>
     private QuadTreeFloat? ObtainChild( float x, float y, float width, float height, int depth )
     {
-        QuadTreeFloat? child = _pool.Obtain();
+        QuadTreeFloat child = _pool.Obtain();
 
-        if ( child != null )
-        {
-            child.X      = x;
-            child.Y      = y;
-            child.Width  = width;
-            child.Height = height;
-            child.Depth  = depth;
-        }
+        child.X      = x;
+        child.Y      = y;
+        child.Width  = width;
+        child.Height = height;
+        child.Depth  = depth;
 
         return child;
     }
@@ -486,4 +489,3 @@ public class QuadTreeFloat : IResetable
 
 // ============================================================================
 // ============================================================================
-

@@ -24,6 +24,9 @@
 
 namespace LughSharp.Source.Scene2D;
 
+/// <summary>
+/// Enumeration for touchable state of an actor.
+/// </summary>
 [PublicAPI]
 public enum Touchable
 {
@@ -37,3 +40,7 @@ public enum Touchable
     /// receive events. Note that events on the children will still bubble to the parent.
     ChildrenOnly
 }
+
+// ============================================================================
+// ============================================================================
+

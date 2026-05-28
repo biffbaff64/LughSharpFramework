@@ -336,11 +336,13 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS
     - DONE - DONE - DONE - BitmapFont
     - DONE - DONE - DONE - BitmapFontCache          Dispose() needs completing
     - DONE - DONE - DONE - BitmapFontData
-    - IP   - IP   - DONE - DistanceFieldFont
-    - DONE - IP   - DONE - DistanceFieldFontCache
+    - DONE - DONE - DONE - DistanceFieldFont
+    - DONE - DONE - DONE - DistanceFieldFontCache
+    - DONE - DONE - DONE - FontUtils
     - DONE - DONE - DONE - Glyph
-    - IP   - IP   - DONE - GlyphLayout
-    -      -      - DONE - SpriteFont
+    - DONE - DONE - DONE - GlyphLayout
+    -      -      - DONE - SpriteFont               Addition to framework TBC
+    -      -      - DONE - SpriteFontData           Addition to framework TBC
 
 LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE
 ----------------------------------------
@@ -359,12 +361,12 @@ LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - FloatFrameBuffer
-    -      -      -      - FloatFrameBufferBuilder
-    -      -      -      - FrameBuffer
-    -      -      -      - FrameBufferBuilder
+    - DONE - DONE - DONE - FloatFrameBufferBuilder
+    - DONE - DONE - DONE - FrameBuffer
+    - DONE - DONE - DONE - FrameBufferBuilder
     -      -      -      - FrameBufferConfig
-    -      -      -      - FrameBufferCubemap
-    -      -      -      - FrameBufferCubemapBuilder
+    - DONE - DONE - DONE - FrameBufferCubemap
+    - DONE - DONE - DONE - FrameBufferCubemapBuilder
     -      -      -      - FrameBufferRenderBufferAttachmentSpec
     -      -      -      - FrameBufferTextureAttachmentSpec
     - DONE - IP   - DONE - GLFrameBuffer
@@ -850,10 +852,11 @@ LUGHSHARP/SOURCE/MATH/COLLISION
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - BoundingBox
-    -      -      -      - Ray
-    -      -      -      - Segment
-    -      -      -      - Sphere
+    - DONE - IP   - DONE - BoundingBox
+    - DONE - DONE - DONE - Box
+    -      -      - DONE - Ray
+    -      -      - DONE - Segment
+    -      -      - DONE - Sphere
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -923,9 +926,9 @@ LUGHSHARP/SOURCE/NETWORK
     -      -      - DONE - IServerSocket
     -      -      - DONE - ISocket
     - DONE - DONE - DONE - NetHandler
-    -      -      -      - NetImpl
-    -      -      -      - NetServerSocketImpl
-    -      -      -      - NetSocketImpl
+    -      -      - DONE - NetImpl
+    -      -      - DONE - NetServerSocketImpl
+    -      -      - DONE - NetSocketImpl
     -      -      - DONE - ServerSocketHints
     -      -      - DONE - SocketHints
 
@@ -938,14 +941,14 @@ LUGHSHARP/SOURCE/SCENE2D
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - Actor
+    - DONE - DONE - DONE - Actor
     - DONE - DONE - DONE - Event
-    - DONE - IP   - DONE - Group
+    - DONE - DONE - DONE - Group
     - DONE - DONE - DONE - IAction
-    -      -      -      - InputEvent
+    - DONE - DONE - DONE - InputEvent
     - DONE - DONE - DONE - SceneAction
-    -      -      -      - Stage
-    -      -      -      - Touchable
+    - DONE - DONE - DONE - Stage
+    - DONE - DONE - DONE - Touchable
 
 LUGHSHARP/SOURCE/SCENE2D/ACTIONS
 --------------------------------
@@ -1043,55 +1046,52 @@ LUGHSHARP/SOURCE/SCENE2D/REGISTRYSTYLES
 LUGHSHARP/SOURCE/SCENE2D/UI
 ---------------------------
 
-    TODO: Streamline the Button classes. Currently there is Button,
-          TextButton, ImageTextButton, ImageButton. Are all of them needed?
-
       CODE   DOCU   FOOTER IStyleable
       ----   ----   ------ ----------
-    - DONE - DONE - DONE - DONE - xxxx - Button               - 
-    - DONE - IP   - DONE - xxxx - xxxx - ButtonGroup              - 
-    - IP   - IP   - DONE - xxxx - xxxx - Cell                 - 
-    - IP   - IP   - DONE - DONE - xxxx - CheckBox             - 
-    -      -      -      - xxxx - xxxx - Container            - 
-    - IP   - IP   - DONE - DONE - xxxx - Dialog               - 
-    -      -      -      - xxxx - xxxx - HorizontalGroup      - 
-    - IP   - IP   - DONE - DONE - xxxx - ImageButton          - 
-    - IP   - IP   - DONE - DONE - xxxx - ImageTextButton      - 
-    -      -      -      - xxxx - xxxx - IOnScreenKeyboard    - 
-    - DONE - DONE - DONE - xxxx - xxxx - IStyleable           - 
-    -      -      -      - DONE - xxxx - Label                - 
-    -      -      -      - DONE - xxxx - ListBox              - 
-    -      -      -      - xxxx - xxxx - ParticleEffectActor  - 
-    - IP   - IP   - DONE - DONE - xxxx - ProgressBar          - 
-    -      -      -      - xxxx - xxxx - Scene2DImage         - 
-    -      -      -      - DONE - xxxx - ScrollPane           - 
-    -      -      -      - DONE - xxxx - SelectBox            - 
-    -      -      -      - xxxx - xxxx - Skin                 - 
-    - DONE - DONE - DONE - DONE - xxxx - Slider               - 
-    -      -      -      - DONE - xxxx - SplitPane            - 
-    -      -      -      - xxxx - xxxx - Stack                - 
-    - IP   - IP   - DONE - xxxx - xxxx - StyleFactory         -            
-    - IP   - IP   - DONE - xxxx - xxxx - StyleRegistry        -
-    -      -      -      - xxxx - xxxx - Table                - 
-    -      -      -      - DONE - xxxx - TextArea             - 
-    - IP   - IP   - DONE - DONE - xxxx - TextButton           - 
-    - IP   - IP   - DONE - DONE - xxxx - TextField            - 
-    - IP   - IP   - DONE - xxxx - xxxx - TextTooltip          - 
-    -      -      -      - xxxx - xxxx - TooltipManager       - 
-    - IP   - IP   - DONE - DONE - xxxx - Touchpad             - 
-    - IP   - IP   - DONE - xxxx - xxxx - Tree                 - 
-    -      -      -      - xxxx - xxxx - Value                - 
-    -      -      -      - xxxx - xxxx - VerticalGroup        - 
-    -      -      -      - xxxx - xxxx - Widget               - 
-    - DONE - DONE - DONE - xxxx - xxxx - WidgetGroup          - 
-    - IP   - IP   - DONE - DONE - xxxx - Window               - 
+    - DONE - DONE - DONE - DONE - ---- - Button               - 
+    - DONE - IP   - DONE - xxxx - ---- - ButtonGroup              - 
+    - IP   - IP   - DONE - xxxx - ---- - Cell                 - 
+    - IP   - IP   - DONE - DONE - ---- - CheckBox             - 
+    -      -      -      - xxxx - ---- - Container            - 
+    - IP   - IP   - DONE - DONE - ---- - Dialog               - 
+    -      -      -      - xxxx - ---- - HorizontalGroup      - 
+    - IP   - IP   - DONE - DONE - ---- - ImageButton          - 
+    - IP   - IP   - DONE - DONE - ---- - ImageTextButton      - 
+    -      -      -      - xxxx - ---- - IOnScreenKeyboard    - 
+    - DONE - DONE - DONE - xxxx - ---- - IStyleable           - 
+    -      -      -      - DONE - ---- - Label                - 
+    -      -      -      - DONE - ---- - ListBox              - 
+    -      -      -      - xxxx - ---- - ParticleEffectActor  - 
+    - IP   - IP   - DONE - DONE - ---- - ProgressBar          - 
+    -      -      -      - xxxx - ---- - Scene2DImage         - 
+    -      -      -      - DONE - ---- - ScrollPane           - 
+    -      -      -      - DONE - ---- - SelectBox            - 
+    -      -      -      - xxxx - ---- - Skin                 - 
+    - DONE - DONE - DONE - DONE - ---- - Slider               - 
+    -      -      -      - DONE - ---- - SplitPane            - 
+    -      -      -      - xxxx - ---- - Stack                - 
+    - IP   - IP   - DONE - xxxx - ---- - StyleFactory         -            
+    - IP   - IP   - DONE - xxxx - ---- - StyleRegistry        -
+    -      -      -      - xxxx - ---- - Table                - 
+    -      -      -      - DONE - ---- - TextArea             - 
+    - IP   - IP   - DONE - DONE - ---- - TextButton           - 
+    - IP   - IP   - DONE - DONE - ---- - TextField            - 
+    - IP   - IP   - DONE - xxxx - ---- - TextTooltip          - 
+    -      -      -      - xxxx - ---- - TooltipManager       - 
+    - IP   - IP   - DONE - DONE - ---- - Touchpad             - 
+    - IP   - IP   - DONE - xxxx - ---- - Tree                 - 
+    -      -      -      - xxxx - ---- - Value                - 
+    -      -      -      - xxxx - ---- - VerticalGroup        - 
+    -      -      -      - xxxx - ---- - Widget               - 
+    - DONE - DONE - DONE - xxxx - ---- - WidgetGroup          - 
+    - IP   - IP   - DONE - DONE - ---- - Window               - 
 
 LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
 ----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - ButtonStyle
+    - DONE - DONE - DONE - ButtonStyle
     -      -      - DONE - CheckBoxStyle
     -      -      - DONE - ImageButtonStyle
     -      -      - DONE - ImageTextButtonStyle
@@ -1118,7 +1118,7 @@ LUGHSHARP/SOURCE/SCENE2D/UTILS
       ----   ----   ------
     - DONE - DONE - DONE - ArraySelection
     - DONE - DONE - DONE - BaseDrawable
-    -      -      -      - DragAndDrop
+    - DONE - IP   - DONE - DragAndDrop
     - DONE - DONE - DONE - ICullable
     - DONE - DONE - DONE - IDisableable
     - DONE - DONE - DONE - ILayout
@@ -1130,6 +1130,7 @@ LUGHSHARP/SOURCE/SCENE2D/UTILS
     -      -      -      - SpriteDrawable
     -      -      -      - TextureRegionDrawable
     -      -      -      - TiledDrawable
+    - DONE - DONE - DONE - UIElementBuilder
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1147,18 +1148,14 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - BaseClassFactory
     - DONE - DONE - DONE - BinaryHeap
     - DONE - DONE - DONE - Bits
-    - DONE - IP   - DONE - Buffer<T>
+    - IP   - IP   - DONE - Buffer<T>                    Check todos
     - DONE - IP   - DONE - BufferUtils
-    - DONE - IP   - DONE - ByteOrder
-    - DONE - IP   - DONE - BytePointerToString
-    - DONE - IP   - DONE - CaseInsensitiveEnumArrayConverterFactory
-    -      -      -      - ComparableTimSort    Remove
+    - DONE - DONE - DONE - ByteOrder
+    - DONE - IP   - DONE - ComparableTimSort
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
     - DONE - DONE - DONE - HashHelpers
-    - DONE - IP   - DONE - IAsyncTask
     - DONE - DONE - DONE - IClipboard
-    - DONE - IP   - DONE - ICloseable
     - DONE - DONE - DONE - IDrawable
     - DONE - DONE - DONE - IManaged
     - DONE - DONE - DONE - IReadable
@@ -1168,14 +1165,14 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - PerformanceCounters
     - DONE - DONE - DONE - PropertiesUtils
     - DONE - IP   - DONE - QuadTreeFloat
-    - DONE - IP   - DONE - QuickSelect
+    - DONE - DONE - DONE - QuickSelect
     - DONE - DONE - DONE - Scaling
     - DONE - DONE - DONE - ScreenUtils
     - DONE - IP   - DONE - Selector
     - DONE - DONE - DONE - SortUtils
     - DONE - DONE - DONE - SystemArrayUtils
     - DONE - DONE - DONE - TimeUtils
-    -      -      -      - TimSort
+    - DONE - IP   - DONE - TimSort
 
 LUGHSHARP/SOURCE/UTILS/EXCEPTIONS
 ---------------------------------
@@ -1198,17 +1195,18 @@ LUGHSHARP/SOURCE/UTILS/JSON
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    - DONE - IP   - DONE - CaseInsensitiveEnumArrayConverterFactory
     - DONE - IP   - DONE - Json
-    - DONE -      - DONE - JsonFieldAttribute
-    - IP   -      - DONE - JsonMatcher          May not be needed / To Be Removed
-    - DONE -      - DONE - JsonNameAttribute
+    - DONE - IP   - DONE - JsonFieldAttribute
+    - IP   - IP   - DONE - JsonMatcher          May not be needed / To Be Removed
+    - DONE - IP   - DONE - JsonNameAttribute
     - DONE - IP   - DONE - JsonOutput
     - DONE - DONE - DONE - JsonOutputType
-    - IP   -      - DONE - JsonReader
-    - IP   -      - DONE - JsonSkimmer          May not be needed / To Be Removed
+    - IP   - IP   - DONE - JsonReader
+    - IP   - IP   - DONE - JsonSkimmer          May not be needed / To Be Removed
     - DONE - IP   - DONE - JsonString
     - DONE - IP   - DONE - JsonValue
-    - DONE -      - DONE - JsonWriter
+    - DONE - IP   - DONE - JsonWriter
 
 LUGHSHARP/SOURCE/UTILS/LOGGING
 ------------------------------
@@ -1217,10 +1215,9 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
       ----   ----   ------
     - DONE - DONE - DONE - FPSLogger
     - DONE - DONE - DONE - IPreferences
-    -      -      -      - IStateManager
     - DONE - DONE - DONE - Logger
     - DONE - DONE - DONE - Preferences
-    - IP   - IP   - DONE - StateID
+    - DONE - DONE - DONE - StateID
     - DONE - DONE - DONE - Stats
 
 LUGHSHARP/SOURCE/UTILS/POOLING
@@ -1229,12 +1226,11 @@ LUGHSHARP/SOURCE/UTILS/POOLING
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - FlushablePool
-    - DONE - IP   - DONE - IClearablePool
+    - DONE - DONE - DONE - IClearablePool
     - DONE - DONE - DONE - IPoolable
-    - DONE - IP   - DONE - IPoolSupplier
     - DONE - DONE - DONE - Pool
     - DONE - DONE - DONE - PooledLinkedList
-    - DONE - DONE - DONE - Pools
+    - DONE - DONE - DONE - PoolsMap
 
 LUGHSHARP/SOURCE/UTILS/XML
 --------------------------
@@ -1256,9 +1252,11 @@ LUGHSHARP/EXTENSIONS/SOURCE
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE - DONE - FontUtils
-    -      -      - DONE - GameSprite2D
-    - DONE - DONE - DONE - Scene2DUtils
+    -      -      - DONE - GameSprite
+    -      -      - DONE - GraphicID
+    -      -      - DONE - IGameSprite
+    -      -      - DONE - SpriteDescriptor
+    -      -      - DONE - TileID
 
 LUGHSHARP/EXTENSIONS/SOURCE/BOX2D
 ---------------------------------

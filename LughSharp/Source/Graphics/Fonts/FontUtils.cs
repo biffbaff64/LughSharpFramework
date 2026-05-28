@@ -22,23 +22,18 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Graphics;
-using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.Fonts.Freetype;
-using LughSharp.Source.Utils.Logging;
 
-namespace Extensions.Source;
+namespace LughSharp.Source.Graphics.Fonts;
 
 /// <summary>
 /// Provides utility methods for creating bitmap fonts from font files using FreeType font
 /// generation. FontUtils simplifies the process of generating bitmap fonts by handling font
 /// file loading, size specification, and error logging.
 /// <para>
-/// All font creation is performed via FreeTypeFontGenerator, and errors during font creation
-/// are logged. This class is intended for scenarios where dynamic font generation is required
-/// at runtime.
+/// All font creation is performed via <see cref="FreeTypeFontGenerator"/>, and errors during
+/// font creation are logged. This class is intended for scenarios where dynamic font generation
+/// is required at runtime.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -75,8 +70,8 @@ public class FontUtils
     }
 
     /// <summary>
-    /// Creates a <see cref="BitmapFont"/> from the specified font file and size.
-    /// Font creation is handled via <see cref="FreeTypeFontGenerator"/>.
+    /// Creates a <see cref="BitmapFont"/> from the specified font file and size. Font creation
+    /// is handled via <see cref="FreeTypeFontGenerator"/>.
     /// <para>
     /// This method handles exceptions and logs errors if font creation fails.
     /// </para>
@@ -90,16 +85,14 @@ public class FontUtils
 
         try
         {
-//            var generator = new FreeTypeFontGenerator( Engine.Files.Internal( fontFile ) );
-//            var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
-//            {
-//                Size = size
-//            };
-//
-//            font = generator.GenerateFont( parameter );
-//            font.SetColor( Color.White );
+            var generator = new FreeTypeFontGenerator( Engine.Files.Internal( fontFile ) );
+            var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
+            {
+                Size = size
+            };
 
-            font = new BitmapFont();
+            font = generator.GenerateFont( parameter );
+            font.SetColor( Color.White );
         }
         catch ( Exception e )
         {

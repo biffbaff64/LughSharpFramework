@@ -26,16 +26,39 @@ using LughSharp.Source.Graphics.Images;
 
 namespace LughSharp.Source.Graphics.FrameBuffers;
 
+/// <summary>
+/// Provides a builder for creating frame buffers with configurable width and height.
+/// </summary>
+/// <remarks>
+/// Use this class to configure and construct instances of <see cref="FrameBuffer"/> 
+/// for rendering operations that require high-precision color data. This builder 
+/// pattern allows for flexible setup before instantiating the frame buffer.
+/// </remarks>
 [PublicAPI]
 public class FrameBufferBuilder : GLFrameBufferBuilder< GLFrameBuffer< GLTexture > >
 {
+    /// <summary>
+    /// Creates a new FrameBufferBuilder with the specified width and height.
+    /// </summary>
+    /// <param name="width">The width of the frame buffer.</param>
+    /// <param name="height">The height of the frame buffer.</param>
     public FrameBufferBuilder( int width, int height )
         : base( width, height )
     {
     }
 
+    /// <summary>
+    /// Creates a new instance of the FrameBuffer class using the current configuration.
+    /// </summary>
+    /// <returns>
+    /// A FrameBuffer instance initialized with the settings defined in this builder.
+    /// </returns>
     public override FrameBuffer Build()
     {
         return new FrameBuffer( this );
     }
 }
+
+// ============================================================================
+// ============================================================================
+

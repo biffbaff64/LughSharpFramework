@@ -413,12 +413,12 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 
         if ( _programmaticChangeEvents )
         {
-            var  changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+            var  changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
             bool cancelled   = Fire( changeEvent );
 
             // It is safe to suppress nullability warnings for 'changeEvent'
             // here because Fire() will throw an exception is it is null.
-            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+            PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
 
             if ( cancelled )
             {
@@ -458,10 +458,10 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 
         if ( _programmaticChangeEvents )
         {
-            ChangeListener.ChangeEvent changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+            ChangeListener.ChangeEvent changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
             bool                       cancelled   = Fire( changeEvent );
 
-            Pools.Free( changeEvent );
+            PoolsMap.Free( changeEvent );
 
             if ( cancelled )
             {

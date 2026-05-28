@@ -24,6 +24,10 @@
 
 namespace LughSharp.Source.Utils;
 
+/// <summary>
+/// 
+/// </summary>
+[PublicAPI]
 public class AsyncExecutor : IDisposable
 {
     // C# mechanism to limit the number of concurrent tasks (the maxConcurrent property)
@@ -33,13 +37,18 @@ public class AsyncExecutor : IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new AsyncExecutor with the specified maximum number of concurrent tasks.
+    /// </summary>
+    /// <param name="maxConcurrent"></param>
+    /// <param name="name"></param>
     public AsyncExecutor( int maxConcurrent, string name = "" )
     {
         // Semaphore initialized with maxConcurrent concurrent slots
-
         _semaphore = new SemaphoreSlim( maxConcurrent, maxConcurrent );
+        
         // Thread naming is often ignored in .NET, relying on debugger tools, but name
-        // is used here for logging and debugging purposes.
+        // can be used here for logging and debugging purposes.
     }
 
     /// <summary>
@@ -47,7 +56,8 @@ public class AsyncExecutor : IDisposable
     /// </summary>
     /// <param name="task"> The AssetLoadingTask instance that implements the Call() method. </param>
     /// <returns> A Task that can be used like the original AsyncResult. </returns>
-    public Task Submit( IAssetTask task ) // No generics needed since AssetLoadingTask returns void
+    // No generics needed since AssetLoadingTask returns void
+    public Task Submit( IAssetTask task )
     {
         if ( _isDisposed )
         {
@@ -124,5 +134,7 @@ public class AsyncExecutor : IDisposable
     }
 }
 
-// ========================================================================
-// ========================================================================
+// ============================================================================
+// ============================================================================
+
+

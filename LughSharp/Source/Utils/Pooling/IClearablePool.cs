@@ -24,6 +24,9 @@
 
 namespace LughSharp.Source.Utils.Pooling;
 
+/// <summary>
+/// Pools implementing this interface can be cleared of all pooled objects.
+/// </summary>
 [PublicAPI]
 public interface IClearablePool
 {

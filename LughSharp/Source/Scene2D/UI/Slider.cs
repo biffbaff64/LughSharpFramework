@@ -509,12 +509,12 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
             {
                 // Fire an event on touchUp even if the value didn't change, so
                 // listeners can see when a drag ends via isDragging.
-                var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+                var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
 
                 Guard.Against.Null( changeEvent );
 
                 _parent.Fire( changeEvent );
-                Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+                PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
             }
         }
 

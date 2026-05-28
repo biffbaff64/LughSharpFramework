@@ -70,10 +70,10 @@ public class StateID
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Creates a new StateID with the specified ID and Name.
     /// </summary>
-    /// <param name="id"></param>
-    /// <param name="name"></param>
+    /// <param name="id">The unique identifier for the state.</param>
+    /// <param name="name">The name of the state.</param>
     protected StateID( int id, string name )
     {
         ID   = id;
@@ -81,30 +81,40 @@ public class StateID
     }
 
     /// <summary>
-    /// 
+    /// Determines whether the specified object is equal to the current StateID instance.   
     /// </summary>
-    /// <param name="obj"></param>
-    /// <returns></returns>
+    /// <param name="obj">The object to compare with the current StateID instance.</param>
+    /// <returns>
+    /// <c>true</c> if the specified object is a StateID and is equal to the current instance;
+    /// otherwise, <c>false</c>.
+    /// </returns>
     public override bool Equals( object? obj ) => obj is StateID other && Equals( other );
 
     /// <summary>
-    /// 
+    /// Returns a hash code for the current StateID instance.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A hash code for the current StateID instance.</returns>
     public override int GetHashCode() => ( ID * ID ) + Name.Length;
 
     /// <summary>
-    /// 
+    /// Determines whether the specified StateID is equal to the current StateID instance.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
+    /// <param name="other">The StateID to compare with the current instance.</param>
+    /// <returns>
+    /// <c>true</c> if the specified StateID is equal to the current instance;
+    /// otherwise, <c>false</c>.
+    /// </returns>
     public bool Equals( StateID other ) => ID == other.ID;
 
     /// <summary>
-    /// 
+    /// Compares the current StateID instance with another StateID instance.
     /// </summary>
-    /// <param name="other"></param>
-    /// <returns></returns>
+    /// <param name="other">The StateID to compare with the current instance.</param>
+    /// <returns>
+    /// A value less than zero if the current instance is less than the specified StateID;
+    /// zero if the current instance is equal to the specified StateID;
+    /// a value greater than zero if the current instance is greater than the specified StateID.
+    /// </returns>
     public int CompareTo( StateID other ) => ID - other.ID;
 
     /// <summary>

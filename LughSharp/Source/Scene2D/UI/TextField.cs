@@ -1020,7 +1020,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
         Text = newText;
 
-        var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+        var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
 
         bool cancelled = Fire( changeEvent );
 
@@ -1029,7 +1029,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             Text = oldText;
         }
 
-        Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+        PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
 
         return !cancelled;
     }

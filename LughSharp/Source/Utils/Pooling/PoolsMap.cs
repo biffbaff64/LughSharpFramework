@@ -30,7 +30,7 @@ namespace LughSharp.Source.Utils.Pooling;
 /// Stores a map of <see cref="Pool{T}" />s by type for convenient static access.
 /// </summary>
 [PublicAPI]
-public static class Pools
+public static class PoolsMap
 {
     // Use a ConcurrentDictionary for thread-safe access to the pools themselves.
     // Store object as base Pool<object> or dynamic cast when retrieving.

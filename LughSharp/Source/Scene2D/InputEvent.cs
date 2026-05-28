@@ -24,6 +24,11 @@
 
 namespace LughSharp.Source.Scene2D;
 
+/// <summary>
+/// A low-level input event. This is the type of event passed to listeners of types
+/// <see cref="Listeners.ClickListener"/>, <see cref="Listeners.ChangeListener"/>,
+/// <see cref="Listeners.DragScrollListener"/> etc.
+/// </summary>
 [PublicAPI]
 public class InputEvent : Event
 {

@@ -28,6 +28,9 @@ using LughSharp.Source.Graphics.OpenGL.Enums;
 
 namespace LughSharp.Source.Graphics.FrameBuffers;
 
+/// <summary>
+/// Represents a frame buffer that uses a cubemap texture.
+/// </summary>
 [PublicAPI]
 public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 {
@@ -43,14 +46,18 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
 
     // ========================================================================
 
+    /// <summary>
+    /// Initializes a new instance of the FrameBufferCubemap class. You can use this
+    /// constructor when you want to manually configure the framebuffer before use.
+    /// </summary>
     public FrameBufferCubemap()
     {
     }
 
     /// <summary>
-    /// Creates a GLFrameBuffer from the specifications provided by bufferBuilder
+    /// Creates a GLFrameBuffer from the specifications provided by the 
+    /// <see cref="FrameBufferCubemapBuilder"/>.
     /// </summary>
-    /// <param name="bufferBuilder"></param>
     public FrameBufferCubemap( FrameBufferCubemapBuilder bufferBuilder )
         : base( bufferBuilder )
     {
@@ -61,8 +68,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// a depth and a stencil buffer attached.
     /// </summary>
     /// <param name="format">
-    /// the format of the color buffer; according to the OpenGL ES 2.0 spec,
-    /// only RGB565, RGBA4444 and RGB5_A1 are color-renderable
+    /// the format of the color buffer.
     /// </param>
     /// <param name="width"> the width of the cubemap in pixels </param>
     /// <param name="height"> the height of the cubemap in pixels </param>

@@ -248,7 +248,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             _prefHeight = ( font.GetCapHeight() - ( font.GetDescent() * 2 ) );
         }
 
-        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
@@ -487,7 +487,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
-        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
+        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
         float               width      = 0;
 

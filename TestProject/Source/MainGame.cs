@@ -1,4 +1,7 @@
-﻿using JetBrains.Annotations;
+﻿using Extensions.Source;
+using Extensions.Source.Sprites;
+
+using JetBrains.Annotations;
 
 using LughSharp.Source;
 using LughSharp.Source.Assets;
@@ -41,7 +44,8 @@ public class MainGame : LughGame
     private Texture2D?     _texture;
     private TextureRegion? _textureRegion;
     private NinePatch?     _ninePatch;
-
+    private GameSprite?    _gameSprite;
+    
     private bool _disposed;
     private int  _runCount;
 
@@ -87,6 +91,8 @@ public class MainGame : LughGame
             Engine.Input.InputProcessor = _inputMultiplexer;
         }
 
+        CreateGameSprite();
+        
         Logger.Debug( "Done" );
     }
 
@@ -291,6 +297,11 @@ public class MainGame : LughGame
 //        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
 //        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
 //        _backgroundTexture = new Texture2D( Assets.Background );
+    }
+
+    private void CreateGameSprite()
+    {
+//        _gameSprite = new GameSprite();
     }
 }
 

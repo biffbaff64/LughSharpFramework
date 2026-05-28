@@ -289,14 +289,14 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 
         if ( fireEvent )
         {
-            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
+            var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
 
             if ( Fire( changeEvent ) )
             {
                 IsChecked = !isChecked;
             }
 
-            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
+            PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 

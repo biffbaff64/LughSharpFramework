@@ -22,27 +22,19 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-using LughSharp.Source;
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.Images;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Scene2D;
 using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Scene2D.UI.Styles;
-using LughSharp.Source.Scene2D.Utils;
-using LughSharp.Source.Utils;
 
-namespace Extensions.Source;
+namespace LughSharp.Source.Scene2D.Utils;
 
 /// <summary>
 /// A collection of convenience methods for creating UI elements in a Scene2D context.
 /// </summary>
 [PublicAPI]
-public class Scene2DUtils
+public class UIElementBuilder
 {
     /// <summary>
     /// Updates the stage, if it is not null, and isDrawingStage is true.
@@ -261,8 +253,7 @@ public class Scene2DUtils
     }
 
     /// <summary>
-    /// Make a <see cref="Slider"/> bar with a sliding indicator,
-    /// without adding it to the stage.
+    /// Make a <see cref="Slider"/> bar with a sliding indicator, without adding it to the stage.
     /// </summary>
     /// <param name="min"> The minimum value. </param>
     /// <param name="max"> The maximum value. </param>
