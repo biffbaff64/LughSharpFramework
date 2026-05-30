@@ -209,10 +209,10 @@ public class Gdx2DPixmap : IDisposable
 
         // --------------------------------------
 
-        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_load" )]
+        [DllImport( "lib/net9.0/gdx2d.dll", EntryPoint = "gdx2d_load" )]
         static extern IntPtr load( IntPtr nativeData, int len );
 
-        [DllImport( "lib/net8.0/gdx2d.dll", EntryPoint = "gdx2d_bytes_per_pixel" )]
+        [DllImport( "lib/net9.0/gdx2d.dll", EntryPoint = "gdx2d_bytes_per_pixel" )]
         static extern uint bytes_per_pixel( uint format );
     }
 
@@ -678,7 +678,7 @@ public class Gdx2DPixmap : IDisposable
     // ========================================================================
     // ========================================================================
 
-    private const string DllPath = "lib/net8.0/gdx2d.dll";
+    private const string DllPath = "lib/net9.0/gdx2d.dll";
 
     // ------------------------------------------
 

@@ -536,6 +536,8 @@ public class BitmapFontCache : IDisposable
         _pooledLayouts.Flush();
         Layouts.Clear();
 
+        _glyphCount = 0;
+        
         for ( int i = 0, n = _idx.Length; i < n; i++ )
         {
             _pageGlyphIndices[ i ].Clear();

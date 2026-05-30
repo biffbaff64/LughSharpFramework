@@ -24,21 +24,61 @@
 
 namespace LughSharp.Source.Graphics.FrameBuffers;
 
+/// <summary>
+/// A specification for a texture attachment to a framebuffer. This class encapsulates the internal
+/// format, format, and type of the texture, as well as flags indicating whether the texture is a 
+/// float texture, GPU-only, depth texture, or stencil texture.
+/// <para>
+/// This information is crucial for correctly configuring framebuffer attachments in OpenGL and 
+/// ensuring that the textures are created with the appropriate properties for rendering operations.
+/// </para>
+/// </summary>
+/// <param name="internalFormat">The internal format of the texture.</param>
+/// <param name="format">The format of the texture.</param>
+/// <param name="type">The type of the texture.</param>
 [PublicAPI]
 public class FrameBufferTextureAttachmentSpec( int internalFormat, int format, int type )
 {
-    public int  InternalFormat { get; } = internalFormat;
-    public int  Format         { get; } = format;
-    public int  Type           { get; } = type;
-    public bool IsFloat        { get; init; }
-    public bool IsGpuOnly      { get; init; }
-    public bool IsDepth        { get; init; }
-    public bool IsStencil      { get; init; }
+    /// <summary>
+    /// Gets the internal format identifier used by the resource.
+    /// </summary>
+    public int InternalFormat { get; } = internalFormat;
 
+    /// <summary>
+    /// Gets the format code associated with the current instance.
+    /// </summary>
+    public int Format { get; } = format;
+
+    /// <summary>
+    /// Gets the type identifier associated with the current instance.
+    /// </summary>
+    public int Type { get; } = type;
+
+    /// <summary>
+    /// Gets a value indicating whether the value is represented as a floating-point number.
+    /// </summary>
+    public bool IsFloat { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether the resource is restricted to GPU usage only.
+    /// </summary>
+    public bool IsGpuOnly { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether the current instance represents a depth measurement.
+    /// </summary>
+    public bool IsDepth { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether the object is used as a stencil.
+    /// </summary>
+    public bool IsStencil { get; init; }
+
+    /// <summary>
+    /// Gets a value indicating whether the texture represents a color texture.
+    /// </summary>
     public bool IsColorTexture => !IsDepth && !IsStencil;
 }
 
 // ============================================================================
 // ============================================================================
-
-

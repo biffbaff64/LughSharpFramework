@@ -90,3 +90,7 @@ public class FramebufferConfig
              + $"{Stencil}, num samples - {Samples}, coverage sampling - {CoverageSampling}";
     }
 }
+
+// ============================================================================
+// ============================================================================
+

@@ -113,7 +113,11 @@ public class FreeType
 
     // ========================================================================
 
-    private const string NativeLib = "lib/net8.0/freetype.dll";
+    #if NET8_0
+    private const string NativeLib = "lib/net8.0/freetype_x64.dll";
+    #elif NET9_0
+    private const string NativeLib = "lib/net9.0/freetype_x64.dll";
+    #endif
 
     // ========================================================================
 
@@ -132,7 +136,9 @@ public class FreeType
 
     public static Library InitFreeType()
     {
-        IntPtr address = InitFreeTypeJniNative();
+        IntPtr address = 0;
+
+        _ = InitFreeTypeNative( ref address );
 
         if ( address == IntPtr.Zero )
         {
@@ -147,7 +153,7 @@ public class FreeType
         // --------------------------------------
 
         [DllImport( NativeLib, EntryPoint = "FT_Init_FreeType", CallingConvention = CallingConvention.Cdecl )]
-        static extern IntPtr InitFreeTypeJniNative();
+        static extern int InitFreeTypeNative( ref IntPtr address );
     }
 
     private static int Encode( char a, char b, char c, char d )

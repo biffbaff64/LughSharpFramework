@@ -72,7 +72,7 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE
+LUGHSHARP/SOURCE - DONE
 ----------------
 
       CODE   DOCU   FOOTER
@@ -89,7 +89,7 @@ LUGHSHARP/SOURCE
     - DONE - DONE - DONE - Platform
     - DONE - DONE - DONE - ScreenAdapter
 
-LUGHSHARP/SOURCE/ASSETS
+LUGHSHARP/SOURCE/ASSETS - DONE
 -----------------------
 
       CODE   DOCU   FOOTER
@@ -103,7 +103,7 @@ LUGHSHARP/SOURCE/ASSETS
     - DONE - DONE - DONE - IAssetTask
     - DONE - DONE - DONE - RefCountedContainer
 
-LUGHSHARP/SOURCE/ASSETS/LOADERS
+LUGHSHARP/SOURCE/ASSETS/LOADERS - DONE
 -------------------------------
 
       CODE   DOCU   FOOTER
@@ -123,7 +123,7 @@ LUGHSHARP/SOURCE/ASSETS/LOADERS
     - DONE - DONE - DONE - TextureAtlasLoader
     - DONE - DONE - DONE - TextureLoader
 
-LUGHSHARP/SOURCE/ASSETS/LOADERS/RESOLVERS
+LUGHSHARP/SOURCE/ASSETS/LOADERS/RESOLVERS - DONE
 -----------------------------------------
 
       CODE   DOCU   FOOTER
@@ -260,7 +260,7 @@ LUGHSHARP/SOURCE/AUDIO/OPENAL
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/COLLECTIONS
+LUGHSHARP/SOURCE/COLLECTIONS - DONE
 ----------------------------
 
       CODE   DOCU   FOOTER
@@ -283,7 +283,7 @@ LUGHSHARP/SOURCE/COLLECTIONS
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/GRAPHICS
+LUGHSHARP/SOURCE/GRAPHICS - DONE
 -------------------------
 
       CODE   DOCU   FOOTER
@@ -304,7 +304,7 @@ LUGHSHARP/SOURCE/GRAPHICS
     - DONE - DONE - DONE - VertexAttributes
     - DONE - DONE - DONE - VertexDataType
 
-LUGHSHARP/SOURCE/GRAPHICS/ATLASES
+LUGHSHARP/SOURCE/GRAPHICS/ATLASES - DONE
 ---------------------------------
 
       CODE   DOCU   FOOTER
@@ -315,7 +315,7 @@ LUGHSHARP/SOURCE/GRAPHICS/ATLASES
     - DONE - DONE - DONE - TextureAtlas
     - DONE - DONE - DONE - TextureAtlasData
 
-LUGHSHARP/SOURCE/GRAPHICS/CAMERAS
+LUGHSHARP/SOURCE/GRAPHICS/CAMERAS - DONE
 ---------------------------------
 
       CODE   DOCU   FOOTER
@@ -328,7 +328,7 @@ LUGHSHARP/SOURCE/GRAPHICS/CAMERAS
     - DONE - DONE - DONE - PerspectiveCamera
     - DONE - DONE - DONE - Shake
 
-LUGHSHARP/SOURCE/GRAPHICS/FONTS
+LUGHSHARP/SOURCE/GRAPHICS/FONTS - DONE
 -------------------------------
 
       CODE   DOCU   FOOTER
@@ -341,11 +341,11 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS
     - DONE - DONE - DONE - FontUtils
     - DONE - DONE - DONE - Glyph
     - DONE - DONE - DONE - GlyphLayout
-    -      -      - DONE - SpriteFont               Addition to framework TBC
-    -      -      - DONE - SpriteFontData           Addition to framework TBC
 
 LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE
 ----------------------------------------
+
+    Possibly use SharpFont instead of these classes, as the work has already been done?
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -355,7 +355,7 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE
     - IP   - IP   - DONE - FreeTypeFontLoader
 
 
-LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS
+LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS - DONE
 --------------------------------------
 
       CODE   DOCU   FOOTER
@@ -364,12 +364,12 @@ LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS
     - DONE - DONE - DONE - FloatFrameBufferBuilder
     - DONE - DONE - DONE - FrameBuffer
     - DONE - DONE - DONE - FrameBufferBuilder
-    -      -      -      - FrameBufferConfig
+    - DONE - DONE - DONE - FrameBufferConfig
     - DONE - DONE - DONE - FrameBufferCubemap
     - DONE - DONE - DONE - FrameBufferCubemapBuilder
-    -      -      -      - FrameBufferRenderBufferAttachmentSpec
-    -      -      -      - FrameBufferTextureAttachmentSpec
-    - DONE - IP   - DONE - GLFrameBuffer
+    - DONE - DONE - DONE - FrameBufferRenderBufferAttachmentSpec
+    - DONE - DONE - DONE - FrameBufferTextureAttachmentSpec
+    - DONE - DONE - DONE - GLFrameBuffer
     - DONE - DONE - DONE - GLFrameBufferBuilder
 
 LUGHSHARP/SOURCE/GRAPHICS/G2D
@@ -662,7 +662,7 @@ LUGHSHARP/SOURCE/GRAPHICS/UTILS
     -      -      -      - VertexBufferObjectWithVAO
     -      -      -      - VertexConstants
 
-LUGHSHARP/SOURCE/GRAPHICS/VIEWPORTS
+LUGHSHARP/SOURCE/GRAPHICS/VIEWPORTS - DONE
 -----------------------------------
 
       CODE   DOCU   FOOTER
@@ -699,7 +699,7 @@ LUGHSHARP/SOURCE/INPUT
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/IO
+LUGHSHARP/SOURCE/IO - DONE
 -------------------
 
       CODE   DOCU   FOOTER
@@ -717,7 +717,7 @@ LUGHSHARP/SOURCE/IO
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/MAPS
+LUGHSHARP/SOURCE/MAPS - DONE
 ---------------------
 
       CODE   DOCU   FOOTER
@@ -732,7 +732,7 @@ LUGHSHARP/SOURCE/MAPS
     - DONE - DONE - DONE - MapObjects
     - DONE - DONE - DONE - MapProperties
 
-LUGHSHARP/SOURCE/MAPS/OBJECTS
+LUGHSHARP/SOURCE/MAPS/OBJECTS - DONE
 -----------------------------
 
       CODE   DOCU   FOOTER
@@ -744,7 +744,7 @@ LUGHSHARP/SOURCE/MAPS/OBJECTS
     - DONE - DONE - DONE - RectangleMapObject
     - DONE - DONE - DONE - TextureMapObject
 
-LUGHSHARP/SOURCE/MAPS/TILED
+LUGHSHARP/SOURCE/MAPS/TILED - DONE
 ---------------------------
 
       CODE   DOCU   FOOTER
@@ -915,6 +915,12 @@ LUGHSHARP/SOURCE/MOCK/NET
 LUGHSHARP/SOURCE/NETWORK
 ------------------------
 
+    These classes do not need to be completed as yet. I am leaving them here for
+    me to work on at my leisure, to learn more about Http and Sockets.
+    Users of this framework can use them as a reference for their own implementations
+    or, better still, use libraries such as RestSharp etc.
+
+
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      - DONE - HttpParameterUtils
@@ -936,7 +942,7 @@ LUGHSHARP/SOURCE/NETWORK
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/SCENE2D
+LUGHSHARP/SOURCE/SCENE2D - DONE
 ------------------------
 
       CODE   DOCU   FOOTER
@@ -1049,7 +1055,7 @@ LUGHSHARP/SOURCE/SCENE2D/UI
       CODE   DOCU   FOOTER IStyleable
       ----   ----   ------ ----------
     - DONE - DONE - DONE - DONE - ---- - Button               - 
-    - DONE - IP   - DONE - xxxx - ---- - ButtonGroup              - 
+    - DONE - IP   - DONE - xxxx - ---- - ButtonGroup          - 
     - IP   - IP   - DONE - xxxx - ---- - Cell                 - 
     - IP   - IP   - DONE - DONE - ---- - CheckBox             - 
     -      -      -      - xxxx - ---- - Container            - 
@@ -1174,7 +1180,7 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - TimeUtils
     - DONE - IP   - DONE - TimSort
 
-LUGHSHARP/SOURCE/UTILS/EXCEPTIONS
+LUGHSHARP/SOURCE/UTILS/EXCEPTIONS - DONE
 ---------------------------------
 
       CODE   DOCU   FOOTER
@@ -1208,7 +1214,7 @@ LUGHSHARP/SOURCE/UTILS/JSON
     - DONE - IP   - DONE - JsonValue
     - DONE - IP   - DONE - JsonWriter
 
-LUGHSHARP/SOURCE/UTILS/LOGGING
+LUGHSHARP/SOURCE/UTILS/LOGGING - DONE
 ------------------------------
 
       CODE   DOCU   FOOTER
@@ -1220,7 +1226,7 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
     - DONE - DONE - DONE - StateID
     - DONE - DONE - DONE - Stats
 
-LUGHSHARP/SOURCE/UTILS/POOLING
+LUGHSHARP/SOURCE/UTILS/POOLING - DONE
 ------------------------------
 
       CODE   DOCU   FOOTER
@@ -1232,7 +1238,7 @@ LUGHSHARP/SOURCE/UTILS/POOLING
     - DONE - DONE - DONE - PooledLinkedList
     - DONE - DONE - DONE - PoolsMap
 
-LUGHSHARP/SOURCE/UTILS/XML
+LUGHSHARP/SOURCE/UTILS/XML - DONE
 --------------------------
 
       CODE   DOCU   FOOTER

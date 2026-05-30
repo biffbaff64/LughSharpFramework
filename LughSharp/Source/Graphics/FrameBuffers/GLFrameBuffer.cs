@@ -29,7 +29,7 @@ using LughSharp.Source.Graphics.OpenGL;
 namespace LughSharp.Source.Graphics.FrameBuffers;
 
 /// <summary>
-/// Encapsulates OpenGL ES 2.0 frame buffer objects. This is a simple helper class which should
+/// Encapsulates OpenGLframe buffer objects. This is a simple helper class which should
 /// cover most FBO uses. It will automatically create a gltexture for the color attachment and a
 /// renderbuffer for the depth buffer.
 /// <para>
@@ -46,6 +46,14 @@ namespace LughSharp.Source.Graphics.FrameBuffers;
 [PublicAPI]
 public class GLFrameBuffer< T > : IDisposable where T : GLTexture
 {
+    /// <summary>
+    /// Represents the OpenGL constant for a 24-bit depth and 8-bit stencil renderbuffer format
+    /// (GL_DEPTH24_STENCIL8_OES).
+    /// </summary>
+    /// <remarks>
+    /// This constant is used with OpenGL ES APIs to specify a combined depth and stencil buffer
+    /// format, typically for framebuffer objects.
+    /// </remarks>
     public const int GLDepth24Stencil8Oes = 0x88F0;
 
     // ========================================================================
@@ -178,6 +186,7 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
+    /// Builds the framebuffer and its attachments.
     /// </summary>
     public virtual void Build()
     {
@@ -490,7 +499,13 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
+    /// Initializes the framebuffer handle for the current graphics context.
     /// </summary>
+    /// <remarks>
+    /// This method ensures that the default framebuffer handle is set if it has not been
+    /// initialized, and then generates and binds a new framebuffer. Call this method before
+    /// performing operations that require a valid framebuffer handle.
+    /// </remarks>
     private void InitialiseFrameBufferHandle()
     {
         if ( !DefaultFramebufferHandleInitialized )
@@ -581,9 +596,10 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
+    /// Adds a managed framebuffer to the list of framebuffers associated with the specified application.
     /// </summary>
-    /// <param name="app"></param>
-    /// <param name="frameBuffer"></param>
+    /// <param name="app">The application to associate the framebuffer with.</param>
+    /// <param name="frameBuffer">The framebuffer to be managed.</param>
     private void AddManagedFrameBuffer( IApplication app, GLFrameBuffer< T > frameBuffer )
     {
         if ( Buffers == null )
@@ -618,17 +634,24 @@ public class GLFrameBuffer< T > : IDisposable where T : GLTexture
     }
 
     /// <summary>
+    /// Removes all frame buffers associated with the specified application.
     /// </summary>
-    /// <param name="app"></param>
+    /// <param name="app">The application whose frame buffers are to be cleared. Cannot be null.</param>
     public void ClearAllFrameBuffers( IApplication app )
     {
         Buffers?.Remove( app );
     }
 
     /// <summary>
+    /// Appends a summary of the managed buffer counts for each application to the specified StringBuilder.
     /// </summary>
-    /// <param name="builder"></param>
-    /// <returns></returns>
+    /// <remarks>The appended information includes the count of buffers for each application if available;
+    /// otherwise, 'null' is appended if no buffer information exists.</remarks>
+    /// <param name="builder">
+    /// The StringBuilder instance to which the managed buffer status information is appended. 
+    /// Cannot be null.
+    /// </param>
+    /// <returns>The StringBuilder instance with the appended managed buffer status information.</returns>
     public StringBuilder GetManagedStatus( in StringBuilder builder )
     {
         builder.Append( "Managed buffers/app: { " );

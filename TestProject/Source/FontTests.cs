@@ -24,8 +24,10 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Source;
 using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.Fonts;
+using LughSharp.Source.Graphics.Fonts.Freetype;
 
 namespace TestProject.Source;
 
@@ -44,7 +46,7 @@ public class FontTests
     
     public BitmapFont CreateFreeTypeFont()
     {
-//        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
+        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
 //        var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
 //        {
 //            Size = 40
@@ -54,8 +56,8 @@ public class FontTests
 //        font.SetColor( Color.White );
         
 //        return font;
-
-        return new BitmapFont( new FileInfo( Assets.AmbleRegular26Font ) );
+        
+        return new BitmapFont( new FileInfo( Assets.ArialFont ) );
     }
 }
 

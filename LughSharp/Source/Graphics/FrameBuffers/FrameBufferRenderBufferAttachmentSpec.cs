@@ -24,13 +24,37 @@
 
 namespace LughSharp.Source.Graphics.FrameBuffers;
 
+/// <summary>
+/// Represents the specification for a renderbuffer attachment in a framebuffer, including
+/// its internal format.
+/// </summary>
+/// <remarks>
+/// Use this class to define the internal format of a renderbuffer when attaching it to a
+/// framebuffer. The internal format determines how pixel data is stored in the renderbuffer,
+/// which affects rendering and compatibility with framebuffer operations.
+/// </remarks>
 [PublicAPI]
 public class FrameBufferRenderBufferAttachmentSpec
 {
+    /// <summary>
+    /// Gets or sets the internal format identifier used for data processing or storage.
+    /// </summary>
+    public int InternalFormat { get; set; }
+    
+    /// <summary>
+    /// Initializes a new instance of the FrameBufferRenderBufferAttachmentSpec class with
+    /// the specified internal format.
+    /// </summary>
+    /// <param name="internalFormat">
+    /// The internal format to use for the render buffer attachment. The value typically 
+    /// specifies the color, depth, or stencil format as required by the graphics API.
+    /// </param>
     public FrameBufferRenderBufferAttachmentSpec( int internalFormat )
     {
         InternalFormat = internalFormat;
     }
-
-    public int InternalFormat { get; set; }
 }
+
+// ============================================================================
+// ============================================================================
+

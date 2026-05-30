@@ -44,7 +44,6 @@ public class MainGame : LughGame
     private Texture2D?     _texture;
     private TextureRegion? _textureRegion;
     private NinePatch?     _ninePatch;
-    private GameSprite?    _gameSprite;
     
     private bool _disposed;
     private int  _runCount;
@@ -63,13 +62,13 @@ public class MainGame : LughGame
         // as OpenGL will not be ready.
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
-        _atlasLoader  = new AtlasLoader( _assetManager );
-
-        _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
-                    .RegisterAtlas( Assets.ObjectsAtlas )
-                    .RegisterAtlas( Assets.InputAtlas )
-                    .RegisterAtlas( Assets.TextAtlas )
-                    .Load();
+        
+//        _atlasLoader  = new AtlasLoader( _assetManager );
+//        _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
+//                    .RegisterAtlas( Assets.ObjectsAtlas )
+//                    .RegisterAtlas( Assets.InputAtlas )
+//                    .RegisterAtlas( Assets.TextAtlas )
+//                    .Load();
 
         CreateCameras();
 
@@ -91,7 +90,7 @@ public class MainGame : LughGame
             Engine.Input.InputProcessor = _inputMultiplexer;
         }
 
-        CreateGameSprite();
+        _fontTests.CreateFreeTypeFont();
         
         Logger.Debug( "Done" );
     }
@@ -297,11 +296,6 @@ public class MainGame : LughGame
 //        _textureRegion     = new TextureRegion( new Texture2D( Assets.CompleteStar ) );
 //        _ninePatch         = new NinePatch( new Texture2D( Assets.Bar9 ), 1, 1, 1, 1 );
 //        _backgroundTexture = new Texture2D( Assets.Background );
-    }
-
-    private void CreateGameSprite()
-    {
-//        _gameSprite = new GameSprite();
     }
 }
 

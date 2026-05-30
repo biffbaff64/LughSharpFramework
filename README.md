@@ -96,4 +96,22 @@ FUTURE UPDATES:
 
 - Migrate to EventHandler based event system for Scene2D. This is a BIG task and will require a lot of work.
 - Use NUnit for testing properly.
-- 
+
+
+$bytes = [System.IO.File]::ReadAllBytes("C:\Development\Projects\CSharp\LughSharpFramework\LughSharp\lib\net9.0\freetype_x86.dll")
+$machine = [System.BitConverter]::ToUInt16($bytes, [System.BitConverter]::ToInt32($bytes, 0x3C) + 4)
+switch ($machine) { 0x014C {"x86 (32-bit)"} 0x8664 {"x64 (64-bit)"} 0xAA64 {"ARM64"} default {"Unknown: 0x{0:X4}" -f $machine} }
+
+PS C:\Users\richi> $bytes = [System.IO.File]::ReadAllBytes("C:\Development\Projects\CSharp\LughSharpFramework\LughSharp\lib\net9.0\freetype6.dll")
+PS C:\Users\richi> $machine = [System.BitConverter]::ToUInt16($bytes, [System.BitConverter]::ToInt32($bytes, 0x3C) + 4)
+Exception calling "ToUInt16" with "2" argument(s): "Index was out of range. Must be non-negative and less than the
+size of the collection.
+Parameter name: startIndex"
+At line:1 char:1
++ $machine = [System.BitConverter]::ToUInt16($bytes, [System.BitConvert ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [], MethodInvocationException
+    + FullyQualifiedErrorId : ArgumentOutOfRangeException
+
+PS C:\Users\richi> switch ($machine) { 0x014C {"x86 (32-bit)"} 0x8664 {"x64 (64-bit)"} 0xAA64 {"ARM64"} default {"Unknown: 0x{0:X4}" -f $machine} }
+Unknown: 0x
