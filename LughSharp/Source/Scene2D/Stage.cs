@@ -887,9 +887,9 @@ public class Stage : InputAdapter, IDisposable
     /// Removes a listener from the root.
     /// </summary>
     /// <see cref="Actor.RemoveListener(IEventListener) "/>
-    public bool RemoveListener( IEventListener listener )
+    public bool RemoveListener( IEventListener? listener )
     {
-        return RootGroup.RemoveListener( listener );
+        return listener != null && RootGroup.RemoveListener( listener );
     }
 
     /// <summary>
@@ -905,9 +905,9 @@ public class Stage : InputAdapter, IDisposable
     /// Removes a listener from the root.
     /// </summary>
     /// <see cref="Actor.RemoveCaptureListener(IEventListener) "/>
-    public bool RemoveCaptureListener( IEventListener listener )
+    public bool RemoveCaptureListener( IEventListener? listener )
     {
-        return RootGroup.RemoveCaptureListener( listener );
+        return listener != null && RootGroup.RemoveCaptureListener( listener );
     }
 
     /// <summary>
@@ -943,7 +943,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         Actor? focus = GetKeyboardFocus();
-        
+
         if ( ( focus != null ) && focus.IsDescendantOf( actor ) )
         {
             SetKeyboardFocus( null );

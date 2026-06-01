@@ -342,17 +342,17 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS - DONE
     - DONE - DONE - DONE - Glyph
     - DONE - DONE - DONE - GlyphLayout
 
-LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE
+LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE - SHELVED
 ----------------------------------------
 
     Possibly use SharpFont instead of these classes, as the work has already been done?
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - FreeType
-    - IP   - IP   - DONE - FreeTypeFontGenerator
-    - IP   - IP   - DONE - FreeTypeFontGeneratorLoader
-    - IP   - IP   - DONE - FreeTypeFontLoader
+    - IP   - IP   - DONE - FreeType                     - Shelved
+    - IP   - IP   - DONE - FreeTypeFontGenerator        - Shelved
+    - IP   - IP   - DONE - FreeTypeFontGeneratorLoader  - Shelved
+    - IP   - IP   - DONE - FreeTypeFontLoader           - Shelved
 
 
 LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS - DONE

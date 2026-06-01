@@ -44,7 +44,7 @@ public class MainGame : LughGame
     private Texture2D?     _texture;
     private TextureRegion? _textureRegion;
     private NinePatch?     _ninePatch;
-    
+
     private bool _disposed;
     private int  _runCount;
 
@@ -62,13 +62,22 @@ public class MainGame : LughGame
         // as OpenGL will not be ready.
         _spriteBatch  = new SpriteBatch();
         _assetManager = new AssetManager();
-        
-//        _atlasLoader  = new AtlasLoader( _assetManager );
-//        _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
-//                    .RegisterAtlas( Assets.ObjectsAtlas )
-//                    .RegisterAtlas( Assets.InputAtlas )
-//                    .RegisterAtlas( Assets.TextAtlas )
-//                    .Load();
+
+        try
+        {
+            _atlasLoader = new AtlasLoader( _assetManager );
+            _atlasLoader.RegisterAtlas( Assets.AnimationsAtlas )
+                        .RegisterAtlas( Assets.ObjectsAtlas )
+                        .RegisterAtlas( Assets.InputAtlas )
+                        .RegisterAtlas( Assets.TextAtlas )
+                        .Load();
+        }
+        catch ( Exception )
+        {
+            Logger.Divider();
+            Logger.Error( "Failed to load atlases - They may need rebuilding." );
+            Logger.Divider();
+        }
 
         CreateCameras();
 
@@ -90,8 +99,6 @@ public class MainGame : LughGame
             Engine.Input.InputProcessor = _inputMultiplexer;
         }
 
-        _fontTests.CreateFreeTypeFont();
-        
         Logger.Debug( "Done" );
     }
 

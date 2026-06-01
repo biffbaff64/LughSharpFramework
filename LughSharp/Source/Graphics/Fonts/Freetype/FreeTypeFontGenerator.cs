@@ -627,17 +627,14 @@ public class FreeTypeFontGenerator : IDisposable
 
                     int secondIndex = _face.GetCharIndex( secondChar );
 
-                    int kerning =
-                        _face.GetKerning( firstIndex, secondIndex, 0 ); // FT_KERNING_DEFAULT (scaled then rounded).
+                    int kerning = _face.GetKerning( firstIndex, secondIndex, FreeType.FtKerningDefault );
 
                     if ( kerning != 0 )
                     {
                         first.SetKerning( secondChar, NumberUtils.ToInt( kerning ) );
                     }
 
-                    kerning = _face.GetKerning( secondIndex,
-                                                firstIndex,
-                                                0 ); // FT_KERNING_DEFAULT (scaled then rounded).
+                    kerning = _face.GetKerning( secondIndex, firstIndex, FreeType.FtKerningDefault );
 
                     if ( kerning != 0 )
                     {
@@ -852,18 +849,18 @@ public class FreeTypeFontGenerator : IDisposable
             mainPixmap.SetColor( Color.Clear );
             mainPixmap.FillWithCurrentColor();
 
-            byte[] buf = mainBitmap.GetBuffer();
+//            byte[] buf = mainBitmap.GetBuffer();
 
-            for ( var h = 0; h < glyph.Height; h++ )
-            {
-                int idx = h * mainBitmap.GetPitch();
+//            for ( var h = 0; h < glyph.Height; h++ )
+//            {
+//                int idx = h * mainBitmap.GetPitch();
 
-                for ( var w = 0; w < ( glyph.Width + glyph.Xoffset ); w++ )
-                {
+//                for ( var w = 0; w < ( glyph.Width + glyph.Xoffset ); w++ )
+//                {
 //TODO:                    var bit = ( buf.GetInt( idx + ( w / 8 ) ) >>> ( 7 - ( w % 8 ) ) ) & 1;
 //TODO:                    mainPixmap.SetPixel( w, h, bit == 1 ? Color.White : Color.Clear );
-                }
-            }
+//                }
+//            }
         }
 
         Rectangle? rect = packer.Pack( mainPixmap );
@@ -935,7 +932,7 @@ public class FreeTypeFontGenerator : IDisposable
                             Hinting.AutoSlight => FreeType.FtLoadForceAutohint | FreeType.FtLoadTargetLight,
                             Hinting.AutoMedium => FreeType.FtLoadForceAutohint | FreeType.FtLoadTargetNormal,
                             Hinting.AutoFull   => FreeType.FtLoadForceAutohint | FreeType.FtLoadTargetMono,
-                            var _              => 0
+                            _                  => 0
                         };
 
         return loadingFlags;
@@ -952,10 +949,10 @@ public class FreeTypeFontGenerator : IDisposable
         }
     }
 
-    private bool LoadChar( int c, int flags = FreeType.FtLoadDefault | FreeType.FtLoadForceAutohint )
-    {
-        return _face.LoadChar( c, flags );
-    }
+    private bool LoadChar( int c )
+        => _face.LoadChar( c, FreeType.FtLoadDefault | FreeType.FtLoadForceAutohint );
+
+    private bool LoadChar( int c, int flags ) => _face.LoadChar( c, flags );
 
     private bool CheckForBitmapFont()
     {
@@ -964,11 +961,11 @@ public class FreeTypeFontGenerator : IDisposable
         if ( ( ( faceFlags & FreeType.FtFaceFlagFixedSizes ) == FreeType.FtFaceFlagFixedSizes )
           && ( ( faceFlags & FreeType.FtFaceFlagHorizontal ) == FreeType.FtFaceFlagHorizontal ) )
         {
-            if ( LoadChar( 32 ) ) //TODO:
+            if ( LoadChar( 32 ) ) //TODO: constant needed
             {
                 FreeType.GlyphSlot slot = _face.GetGlyph();
 
-                if ( slot.GetFormat() == 1651078259 ) //TODO:
+                if ( slot.GetFormat() == 1651078259 ) //TODO: constant needed
                 {
                     _bitmapped = true;
                 }
@@ -1065,14 +1062,14 @@ public class FreeTypeFontGenerator : IDisposable
                         Glyph other      = GlyphsList[ i ];
                         int   otherIndex = face.GetCharIndex( other.ID );
 
-                        int kerning = face.GetKerning( glyphIndex, otherIndex, 0 );
+                        int kerning = face.GetKerning( glyphIndex, otherIndex, FreeType.FtKerningDefault );
 
                         if ( kerning != 0 )
                         {
                             glyph.SetKerning( other.ID, NumberUtils.ToInt( kerning ) );
                         }
 
-                        kerning = face.GetKerning( otherIndex, glyphIndex, 0 );
+                        kerning = face.GetKerning( otherIndex, glyphIndex, FreeType.FtKerningDefault );
 
                         if ( kerning != 0 )
                         {

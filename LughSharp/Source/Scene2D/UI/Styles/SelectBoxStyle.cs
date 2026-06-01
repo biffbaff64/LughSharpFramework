@@ -39,11 +39,11 @@ public class SelectBoxStyle : ISceneStyle
     public required ListBoxStyle    ListBoxStyle    { get; set; }
     public required ISceneDrawable? Background      { get; set; }
 
-    public Color?          OverFontColor      { get; private set; }
-    public Color?          DisabledFontColor  { get; private set; }
-    public ISceneDrawable? BackgroundOver     { get; private set; }
-    public ISceneDrawable? BackgroundOpen     { get; private set; }
-    public ISceneDrawable? BackgroundDisabled { get; private set; }
+    public Color?          OverFontColor      { get; set; }
+    public Color?          DisabledFontColor  { get; set; }
+    public ISceneDrawable? BackgroundOver     { get; set; }
+    public ISceneDrawable? BackgroundOpen     { get; set; }
+    public ISceneDrawable? BackgroundDisabled { get; set; }
 
     // ====================================================================
 

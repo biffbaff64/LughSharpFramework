@@ -1100,7 +1100,6 @@ public class Actor : IComparable< Actor >
     {
         if ( Math.Abs( _width - width ) > NumberUtils.FloatTolerance
           || Math.Abs( _height - height ) > NumberUtils.FloatTolerance )
-
         {
             _width  = width;
             _height = height;

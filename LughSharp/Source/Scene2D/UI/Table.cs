@@ -70,8 +70,8 @@ public class Table : WidgetGroup
     public DebugType TableDebug { get; set; } = DebugType.None;
 
     /// <summary>
-    /// If true (the default), positions and sizes of child actors are
-    /// rounded and ceiled to the nearest integer value.
+    /// If true (the default), positions and sizes of child actors are rounded and
+    /// ceiled to the nearest integer value.
     /// </summary>
     public bool Round { get; set; } = true;
 
@@ -79,13 +79,18 @@ public class Table : WidgetGroup
     public int          Columns      { get; set; }
     public Cell         CellDefaults { get; set; }
     public List< Cell > Cells        { get; private set; } = new( 4 );
+    public Align        Alignment    { get; private set; } = Align.Center;
 
+    /// <value>
+    /// A reusable pool of <see cref="Cell"/> objects used by the table for efficient
+    /// memory management. This property ensures that cells are reused and reset instead
+    /// of creating new instances, optimizing performance and reducing garbage collection
+    /// overhead.
+    /// </value>
     public Pool< Cell > CellPool { get; } = new()
     {
         NewObjectFactory = GetNewObject
     };
-
-    public Align Alignment { get; private set; } = Align.Center;
 
     // ========================================================================
 
@@ -418,8 +423,8 @@ public class Table : WidgetGroup
         Guard.Against.Null( text );
 
         return Skin == null
-            ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : AddCell( new Label( text, Skin ) );
+                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   : AddCell( new Label( text, Skin ) );
     }
 
     /// <summary>
@@ -429,8 +434,8 @@ public class Table : WidgetGroup
     public Cell AddCell( string text, string labelStyleName )
     {
         return Skin == null
-            ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : AddCell( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
+                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   : AddCell( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
     }
 
     /// <summary>
@@ -440,8 +445,8 @@ public class Table : WidgetGroup
     public Cell AddCell( string? text, string fontName, Color color )
     {
         return Skin == null
-            ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : AddCell( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
+                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   : AddCell( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
     }
 
     /// <summary>
@@ -451,8 +456,9 @@ public class Table : WidgetGroup
     public Cell AddCell( string? text, string fontName, string colorName )
     {
         return Skin == null
-            ? throw new RuntimeException( "Table must have a skin set to use this method." )
-            : AddCell( new Label( text, new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
+                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   : AddCell( new Label( text,
+                                         new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
     }
 
     /// <summary>
@@ -1248,10 +1254,10 @@ public class Table : WidgetGroup
             // isn't additive, the larger is used. Also, no spacing around edges.
             c.ComputedPadLeft = ( c.PadLeft.Get( c.Actor )
                                 + ( c.Column == 0
-                                      ? 0
-                                      : Math.Max( 0f,
-                                                  ( float )( c.SpaceLeft.Get( c.Actor )
-                                                           - spaceRightLast ) ) ) )!;
+                                        ? 0
+                                        : Math.Max( 0f,
+                                                    ( float )( c.SpaceLeft.Get( c.Actor )
+                                                             - spaceRightLast ) ) ) )!;
 
             c.ComputedPadTop = c.PadTop.Get( c.Actor );
 
@@ -1451,8 +1457,8 @@ public class Table : WidgetGroup
             for ( int ii = column, nn = ii + colspan; ii < nn; ii++ )
             {
                 float ratio = totalExpandWidth == 0
-                    ? ( 1f / colspan )
-                    : ( expandWidth[ ii ] / totalExpandWidth );
+                                  ? ( 1f / colspan )
+                                  : ( expandWidth[ ii ] / totalExpandWidth );
 
                 columnMinWidth[ ii ]  += extraMinWidth * ratio;
                 columnPrefWidth[ ii ] += extraPrefWidth * ratio;
@@ -1584,7 +1590,7 @@ public class Table : WidgetGroup
             Cell   c      = cells[ i ];
             int    column = c.Column;
             int    row    = c.Row;
-            Actor? actor  = c.Actor; 
+            Actor? actor  = c.Actor;
 
             float spannedWeightedWidth = 0;
             int   colspan              = c.Colspan;

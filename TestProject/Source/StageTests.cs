@@ -106,8 +106,11 @@ public class StageTests : IDisposable
 
         if ( _stage != null )
         {
+            // Add the Stage to the input multiplexer so that it can receive input.
             inputMultiplexer.AddProcessor( _stage );
 
+            // These 2 calls are for testing actors only. They are not needed for
+            // Stage creation.
             CreateSkinActors();
             CreateStyleRegistryActors();
         }
@@ -131,10 +134,14 @@ public class StageTests : IDisposable
 
         Table  table;
         Window window;
-        var    skin = new Skin( new FileInfo( Assets.UiSkin ) );
+
+        var titleBackgroundDrawable = new TextureRegionDrawable( new Texture2D( Assets.TitleBackground ) );
+        var backgroundDrawable      = new TextureRegionDrawable( new Texture2D( Assets.Background ) );
+        var bar9Drawable            = new TextureRegionDrawable( new Texture2D( Assets.Bar9 ) );
+        var skin                    = new Skin( new FileInfo( Assets.UiSkin ) );
 
         // Lay out the table for the UI widgets etc.
-        TableActor();
+//        TableActor();
         WindowActor();
         // ----------------------------
 //        ImageActor();
@@ -168,6 +175,7 @@ public class StageTests : IDisposable
                 FillParent = true
             };
 
+            table.SetBackground( titleBackgroundDrawable );
             table.SetDebug( true );
 
             _stage?.AddActor( table );
@@ -184,6 +192,7 @@ public class StageTests : IDisposable
 
             window.TitleTable?.AddCell( new TextButton( "X", skin ) ).Height( window.GetPadTop() );
             window.SetPosition( 200, 200 );
+//            window.SetBackground( titleBackgroundDrawable );
             window.CellDefaults.SetSpaceBottom( 10 );
             window.AddRow()?.Fill().Expand();
             window.Pack();
@@ -202,13 +211,19 @@ public class StageTests : IDisposable
             };
 
             selectBox.SetAlignment( Align.Center );
-            selectBox.GetList().Alignment                          = Align.Center;
+            selectBox.GetList().Alignment = Align.Center;
+
+            selectBox.GetStyle().ScrollPaneStyle.Background = titleBackgroundDrawable;
+            selectBox.GetStyle().ListBoxStyle.Background    = bar9Drawable;
+
             selectBox.GetStyle().ListBoxStyle.Selection.RightWidth = 10;
             selectBox.GetStyle().ListBoxStyle.Selection.LeftWidth  = 20;
-            selectBox.SetItems( new List< string >( _newItems ) );
-            selectBox.SetSelected( "Rudd" );
+            selectBox.GetStyle().ListBoxStyle.Selection.TopHeight  = 5;
+            selectBox.GetStyle().ListBoxStyle.Selection.BottomHeight = 5;
 
-//            table.AddCell( selectBox ).SetMaxWidth( 100 );
+            selectBox.SetItems( new List< string >( _newItems ) );
+            selectBox.SetSelected( "Silver Bream" );
+
             window.AddCell( selectBox ).SetMaxWidth( 100 );
         }
 

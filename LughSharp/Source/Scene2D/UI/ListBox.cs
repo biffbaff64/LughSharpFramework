@@ -48,8 +48,8 @@ namespace LughSharp.Source.Scene2D.UI;
 public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 {
     public Rectangle?          CullingArea  { get; set; }
-    public InputListener?      KeyListener  { get; set; }
-    public ArraySelection< T > Selection    { get; set; } = null!;
+    public InputListener       KeyListener  { get; set; }
+    public ArraySelection< T > Selection    { get; set; }
     public List< T >           Items        { get; set; } = [ ];
     public float               ItemHeight   { get; set; }
     public Align               Alignment    { get; set; } = Align.Left;
@@ -93,11 +93,6 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
     /// <param name="boxStyle"> The ListStyle to use. </param>
     public ListBox( ListBoxStyle boxStyle )
     {
-        Create( boxStyle );
-    }
-
-    private void Create( ListBoxStyle boxStyle )
-    {
         Selection = new ArraySelection< T >( Items )
         {
             Actor    = this,
@@ -105,7 +100,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         };
 
         SetStyle( boxStyle );
-        SetSize( GetPrefWidth(), GetPrefHeight() );
+        SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
 
         KeyListener = new ListKeyListener( this );
 
@@ -416,11 +411,23 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         }
     }
 
-    public override float GetPrefWidth()
+    private float GetPrefWidthUnchecked()
     {
         Validate();
 
         return _prefWidth;
+    }
+
+    private float GetPrefHeightUnchecked()
+    {
+        Validate();
+
+        return _prefHeight;
+    }
+
+    public override float GetPrefWidth()
+    {
+        return GetPrefWidthUnchecked();   
     }
 
     public void SetPrefWidth( float value )
@@ -430,9 +437,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 
     public override float GetPrefHeight()
     {
-        Validate();
-
-        return _prefHeight;
+        return GetPrefHeightUnchecked();
     }
 
     public void SetPrefHeight( float value )

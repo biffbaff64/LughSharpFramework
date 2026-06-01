@@ -95,14 +95,12 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         AddListener( new SplitPaneInputListener( this ) );
     }
 
-    private float GetPrefWidthUnchecked() => GetPrefWidth();
-
-    private float GetPrefHeightUnchecked() => GetPrefHeight();
-
     /// <summary>
     /// Returns the preferred width of this actor.
     /// </summary>
-    public override float GetPrefWidth()
+    public override float GetPrefWidth() => GetPrefWidthUnchecked();
+
+    private float GetPrefWidthUnchecked()
     {
         float first = _firstWidget switch
                       {
@@ -132,7 +130,9 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// Returns the preferred height of this actor.
     /// </summary>
     /// <returns></returns>
-    public override float GetPrefHeight()
+    public override float GetPrefHeight() => GetPrefHeightUnchecked();
+
+    private float GetPrefHeightUnchecked()
     {
         float first = _firstWidget switch
                       {

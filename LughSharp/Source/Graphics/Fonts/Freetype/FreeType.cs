@@ -1,18 +1,18 @@
-﻿// /////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
-// 
+//
 //  Copyright (c) 2024 Richard Ikin
-// 
+//
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
 //  in the Software without restriction, including without limitation the rights
 //  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 //  copies of the Software, and to permit persons to whom the Software is
 //  furnished to do so, subject to the following conditions:
-// 
+//
 //  The above copyright notice and this permission notice shall be included in all
 //  copies or substantial portions of the Software.
-// 
+//
 //  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 //  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 //  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -27,9 +27,6 @@ using LughSharp.Source.IO;
 
 namespace LughSharp.Source.Graphics.Fonts.Freetype;
 
-/// <summary>
-/// 
-/// </summary>
 [PublicAPI]
 public class FreeType
 {
@@ -96,20 +93,20 @@ public class FreeType
 
     // ========================================================================
 
-    public readonly int FtEncodingAdobeCustom   = Encode( 'A', 'D', 'B', 'C' );
-    public readonly int FtEncodingAdobeExpert   = Encode( 'A', 'D', 'B', 'E' );
-    public readonly int FtEncodingAdobeLatin1   = Encode( 'l', 'a', 't', '1' );
-    public readonly int FtEncodingAdobeStandard = Encode( 'A', 'D', 'O', 'B' );
-    public readonly int FtEncodingAppleRoman    = Encode( 'a', 'r', 'm', 'n' );
-    public readonly int FtEncodingBig5          = Encode( 'b', 'i', 'g', '5' );
-    public readonly int FtEncodingGb2312        = Encode( 'g', 'b', ' ', ' ' );
-    public readonly int FtEncodingJohab         = Encode( 'j', 'o', 'h', 'a' );
-    public readonly int FtEncodingMsSymbol      = Encode( 's', 'y', 'm', 'b' );
-    public readonly int FtEncodingOldLatin2     = Encode( 'l', 'a', 't', '2' );
-    public readonly int FtEncodingSjis          = Encode( 's', 'j', 'i', 's' );
-    public readonly int FtEncodingUnicode       = Encode( 'u', 'n', 'i', 'c' );
-    public readonly int FtEncodingWansung       = Encode( 'w', 'a', 'n', 's' );
-    public readonly int FtEncodingNone;
+    public static readonly int FtEncodingAdobeCustom   = Encode( 'A', 'D', 'B', 'C' );
+    public static readonly int FtEncodingAdobeExpert   = Encode( 'A', 'D', 'B', 'E' );
+    public static readonly int FtEncodingAdobeLatin1   = Encode( 'l', 'a', 't', '1' );
+    public static readonly int FtEncodingAdobeStandard = Encode( 'A', 'D', 'O', 'B' );
+    public static readonly int FtEncodingAppleRoman    = Encode( 'a', 'r', 'm', 'n' );
+    public static readonly int FtEncodingBig5          = Encode( 'b', 'i', 'g', '5' );
+    public static readonly int FtEncodingGb2312        = Encode( 'g', 'b', ' ', ' ' );
+    public static readonly int FtEncodingJohab         = Encode( 'j', 'o', 'h', 'a' );
+    public static readonly int FtEncodingMsSymbol      = Encode( 's', 'y', 'm', 'b' );
+    public static readonly int FtEncodingOldLatin2     = Encode( 'l', 'a', 't', '2' );
+    public static readonly int FtEncodingSjis          = Encode( 's', 'j', 'i', 's' );
+    public static readonly int FtEncodingUnicode       = Encode( 'u', 'n', 'i', 'c' );
+    public static readonly int FtEncodingWansung       = Encode( 'w', 'a', 'n', 's' );
+    public static readonly int FtEncodingNone          = 0;
 
     // ========================================================================
 
@@ -121,29 +118,26 @@ public class FreeType
 
     // ========================================================================
 
-    /// <summary>
-    /// Returns the last error code FreeType reported.
-    /// </summary>
+    /// <summary>Returns the last error code FreeType reported.</summary>
     public static int GetLastErrorCode()
     {
         return GetLastErrorCodeNative();
 
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "getLastErrorCode", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Last_ErrorCode", CallingConvention = CallingConvention.Cdecl )]
         static extern int GetLastErrorCodeNative();
     }
 
     public static Library InitFreeType()
     {
-        IntPtr address = 0;
-
+        IntPtr address = IntPtr.Zero;
         _ = InitFreeTypeNative( ref address );
 
         if ( address == IntPtr.Zero )
         {
-            throw new RuntimeException( "Couldn't initialize FreeType library, FreeType error code: " +
-                                        GetLastErrorCode() );
+            throw new RuntimeException( "Couldn't initialize FreeType library, FreeType error code: "
+                                      + GetLastErrorCode() );
         }
 
         Logger.Debug( $"Freetype initialized successfully. Address: {address}" );
@@ -175,20 +169,15 @@ public class FreeType
     }
 
     // ========================================================================
-    // ========================================================================
 
     [PublicAPI]
     public class Library : Pointer, IDisposable
     {
-        // Using Dictionary<IntPtr, byte[]> to hold managed byte arrays associated
-        // with native addresses. When a font is loaded from memory, FreeType expects
-        // the memory to remain valid. The byte[] in C# is managed, so we need to
-        // ensure it's not garbage collected while FreeType uses it.
-        // This is primarily for fonts loaded via NewMemoryFace.
-        public Dictionary< IntPtr, byte[]? > FontData { get; private set; } = new();
+        // Maps face address → unmanaged buffer allocated with Marshal.AllocHGlobal.
+        // FT_New_Memory_Face retains a reference to the buffer for the lifetime of the face.
+        public Dictionary< IntPtr, IntPtr > FontData { get; } = new();
 
-        internal Library( IntPtr address )
-            : base( address )
+        internal Library( IntPtr address ) : base( address )
         {
         }
 
@@ -198,106 +187,61 @@ public class FreeType
 
             try
             {
-                // Attempt to map the file, if supported and safe.
-
-//                using ( var stream = File.ReadAllBytes( fontFile.FullName ) )
-//                {
-//                    using ( var ms = new MemoryStream() )
-//                    {
-//                        stream.CopyTo( ms );
-//                        data = ms.ToArray();
-//                    }
-//                }
+                data = File.ReadAllBytes( fontFile.FullName );
             }
-            catch ( RuntimeException )
+            catch ( IOException )
             {
-                // OK to ignore, some platforms do not support file mapping.
-                // The original Java code has an explicit try-catch for mapping.
-                // For C#, if mapping isn't directly available or fails, we fall back to stream reading.
+                // Fall through to stream-based fallback.
             }
 
             if ( ( data == null ) || ( data.Length == 0 ) )
             {
-                using ( FileStream input = fontFile.OpenRead() )
+                using FileStream input = fontFile.OpenRead();
+
+                try
                 {
-                    try
-                    {
-                        var fileSize = ( int )fontFile.Length;
+                    var fileSize = ( int )fontFile.Length;
 
-                        if ( fileSize == 0 )
-                        {
-                            data = StreamUtils.CopyStreamToByteArray( input, 1024 * 16 );
-                        }
-                        else
-                        {
-                            data = new byte[ fileSize ];
-
-                            StreamUtils.CopyStream( input, data ); // Assuming a method to copy stream to byte[]
-                        }
-                    }
-                    catch ( IOException ex )
+                    if ( fileSize == 0 )
                     {
-                        throw new RuntimeException( ex );
+                        data = StreamUtils.CopyStreamToByteArray( input, 1024 * 16 );
                     }
+                    else
+                    {
+                        data = new byte[ fileSize ];
+                        StreamUtils.CopyStream( input, data );
+                    }
+                }
+                catch ( IOException ex )
+                {
+                    throw new RuntimeException( ex );
                 }
             }
 
-            return NewMemoryFace( data, data.Length, faceIndex );
-        }
-
-        public Face NewMemoryFace( byte[] data, int dataSize, int faceIndex )
-        {
-            // In Java, BufferUtils.newUnsafeByteBuffer copies data.
-            // Here, we just use the byte[] directly, but need to pin it for native call.
             return NewMemoryFace( data, faceIndex );
         }
 
         public Face NewMemoryFace( byte[] buffer, int faceIndex )
         {
-            // Pin the byte array to get a stable memory address
-            GCHandle handle        = GCHandle.Alloc( buffer, GCHandleType.Pinned );
-            IntPtr   pinnedAddress = handle.AddrOfPinnedObject();
+            IntPtr unmanagedBuffer = Marshal.AllocHGlobal( buffer.Length );
+            Marshal.Copy( buffer, 0, unmanagedBuffer, buffer.Length );
 
-            IntPtr faceAddress = NewMemoryFaceNative( Address, pinnedAddress, buffer.Length, faceIndex );
-
-            // Unpin the handle immediately after the native call, as we'll manage the buffer's lifetime
-            // through the FontData dictionary. This is a bit tricky, the original Java implies
-            // that FreeType might take ownership/reference the memory.
-            // If FreeType truly needs the buffer for the lifetime of the Face, we need to keep it pinned,
-            // or ensure it's a "native" buffer. The original `fontData.put(face, buffer)` suggests
-            // the Java `Buffer< byte >` is managed by the `Library` and disposed later.
-            // For direct `byte[]` in C#, it's usually safest to copy to unmanaged memory if FreeType keeps a pointer.
-            // For simplicity here, let's assume FreeType makes an internal copy or the managed byte[] must stay.
-            // The original code uses `BufferUtils.newUnsafeByteBuffer`, which suggests unmanaged memory.
-            // Let's adapt that more closely.
-
-            // Re-doing NewMemoryFace to use unmanaged memory as in Java's BufferUtils.newUnsafeByteBuffer
-//TODO:            IntPtr unmanagedBufferAddress = BufferUtils.NewUnsafeByteBuffer( buffer.Length );
-//TODO:            Marshal.Copy( buffer, 0, unmanagedBufferAddress, buffer.Length );
-
-//TODO:            faceAddress = NewMemoryFaceNative( Address, unmanagedBufferAddress, buffer.Length, faceIndex );
+            IntPtr faceAddress = NewMemoryFaceNative( Address, unmanagedBuffer, buffer.Length, faceIndex );
 
             if ( faceAddress == IntPtr.Zero )
             {
-//TODO:                BufferUtils.DisposeUnsafeByteBuffer( unmanagedBufferAddress ); // Dispose if face creation fails
+                Marshal.FreeHGlobal( unmanagedBuffer );
 
                 throw new RuntimeException( "Couldn't load font, FreeType error code: " + GetLastErrorCode() );
             }
-            else
-            {
-                // Store the unmanaged buffer address so it can be disposed with the Library
-                FontData.Add( faceAddress, null ); // Store null or a marker, actual byte[] is gone.
 
-                // If the original byte[] is needed for some reason, copy it to FontData.
-                // But the key is the native address.
-//TODO:                return new Face( faceAddress, this, unmanagedBufferAddress ); // Pass the unmanaged buffer address
+            FontData[ faceAddress ] = unmanagedBuffer;
 
-                return new Face( faceAddress, this );
-            }
-            
+            return new Face( faceAddress, this );
+
             // ----------------------------------
 
-            [DllImport( NativeLib, EntryPoint = "newMemoryFace", CallingConvention = CallingConvention.Cdecl )]
+            [DllImport( NativeLib, EntryPoint = "FT_New_Memory_Face", CallingConvention = CallingConvention.Cdecl )]
             static extern IntPtr NewMemoryFaceNative( IntPtr library, IntPtr data, int dataSize, int faceIndex );
         }
 
@@ -307,19 +251,18 @@ public class FreeType
 
             if ( strokerAddress == IntPtr.Zero )
             {
-                throw new RuntimeException( "Couldn't create FreeType stroker, FreeType error code: " +
-                                            GetLastErrorCode() );
+                throw new RuntimeException( "Couldn't create FreeType stroker, FreeType error code: "
+                                          + GetLastErrorCode() );
             }
 
             return new Stroker( strokerAddress );
 
             // ----------------------------------
-            
-            [DllImport( NativeLib, EntryPoint = "strokerNew", CallingConvention = CallingConvention.Cdecl )]
+
+            [DllImport( NativeLib, EntryPoint = "FT_Stroker_New", CallingConvention = CallingConvention.Cdecl )]
             static extern IntPtr StrokerNewNative( IntPtr library );
         }
 
-        // Finalizer in case Dispose is not called explicitly
         ~Library()
         {
             Dispose( false );
@@ -333,31 +276,28 @@ public class FreeType
 
         protected virtual void Dispose( bool disposing )
         {
-            if ( disposing )
+            if ( Address == IntPtr.Zero ) return;
+
+            DoneFreeTypeNative( Address );
+            Address = IntPtr.Zero;
+
+            foreach ( IntPtr bufferPtr in FontData.Values )
             {
-                if ( Address != IntPtr.Zero )
+                if ( bufferPtr != IntPtr.Zero )
                 {
-                    DoneFreeTypeNative( Address );
-
-                    Address = IntPtr.Zero; // SetMark as disposed
-
-                    // Dispose of any pinned byte buffers
-//                    foreach ( byte[] buffer in FontData.Values )
-//                    {
-////TODO:                        if ( BufferUtils.IsUnsafeByteBuffer( buffer ) )
-//                        {
-////TODO:                            BufferUtils.DisposeUnsafeByteBuffer( buffer );
-//                        }
-//                    }
-
-                    FontData.Clear();
+                    Marshal.FreeHGlobal( bufferPtr );
                 }
             }
+
+            if ( disposing )
+            {
+                FontData.Clear();
+            }
         }
-        
+
         // --------------------------------------
 
-        [DllImport( NativeLib, EntryPoint = "doneFreeType", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Done_FreeType", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneFreeTypeNative( IntPtr library );
     }
 
@@ -366,14 +306,225 @@ public class FreeType
     [PublicAPI]
     public class Face : Pointer, IDisposable
     {
-        internal Library Library { get; private set; }
-        private  IntPtr  _associatedBufferAddress; // Store the address of the unmanaged buffer if created by this face
+        internal Library Library { get; }
+        
+        // ====================================================================
 
-        internal Face( IntPtr address, Library library, IntPtr associatedBufferAddress = default )
-            : base( address )
+        internal Face( IntPtr address, Library library ) : base( address )
         {
-            Library                  = library;
-            _associatedBufferAddress = associatedBufferAddress;
+            Library = library;
+        }
+
+        public int GetFaceFlags()
+        {
+            return GetFaceFlagsNative( Address );
+            
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Face", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetFaceFlagsNative( IntPtr face );
+        }
+
+        public int GetStyleFlags()
+        {
+            return GetStyleFlagsNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_StyleFlags", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetStyleFlagsNative( IntPtr face );
+        }
+
+        public int GetNumGlyphs()
+        {
+            return GetNumGlyphsNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_NumGlyphs", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetNumGlyphsNative( IntPtr face );
+        }
+
+        public int GetAscender()
+        {
+            return GetAscenderNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_Ascender", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetAscenderNative( IntPtr face );
+        }
+
+        public int GetDescender()
+        {
+            return GetDescenderNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_Descender", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetDescenderNative( IntPtr face );
+        }
+
+        public int GetHeight()
+        {
+            return GetHeightNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_Height", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetHeightNative( IntPtr face );
+        }
+
+        public int GetMaxAdvanceWidth()
+        {
+            return GetMaxAdvanceWidthNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_MaxAdvanceWidth", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetMaxAdvanceWidthNative( IntPtr face );
+        }
+
+        public int GetMaxAdvanceHeight()
+        {
+            return GetMaxAdvanceHeightNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib,
+                        EntryPoint = "FT_Get_MaxAdvanceHeight",
+                        CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetMaxAdvanceHeightNative( IntPtr face );
+        }
+
+        public int GetUnderlinePosition()
+        {
+            return GetUnderlinePositionNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib,
+                        EntryPoint = "FT_Get_UnderlinePosition",
+                        CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetUnderlinePositionNative( IntPtr face );
+        }
+
+        public int GetUnderlineThickness()
+        {
+            return GetUnderlineThicknessNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib,
+                        EntryPoint = "FT_Get_UnderlineThickness",
+                        CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetUnderlineThicknessNative( IntPtr face );
+        }
+
+        public bool HasKerning()
+        {
+            return HasKerningNative( Address );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_HasKerning", CallingConvention = CallingConvention.Cdecl )]
+            static extern bool HasKerningNative( IntPtr face );
+        }
+
+        public int GetCharIndex( int charCode )
+        {
+            return GetCharIndexNative( Address, charCode );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_CharIndex", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetCharIndexNative( IntPtr face, int charCode );
+        }
+
+        public bool SelectSize( int strikeIndex )
+        {
+            return SelectSizeNative( Address, strikeIndex );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_SelectSize", CallingConvention = CallingConvention.Cdecl )]
+            static extern bool SelectSizeNative( IntPtr face, int strikeIndex );
+        }
+
+        public bool SetCharSize( int charWidth, int charHeight, int horzResolution, int vertResolution )
+        {
+            return SetCharSizeNative( Address, charWidth, charHeight, horzResolution, vertResolution );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_SetCharSize", CallingConvention = CallingConvention.Cdecl )]
+            static extern bool SetCharSizeNative( IntPtr face, int charWidth, int charHeight,
+                                                  int horzResolution, int vertResolution );
+        }
+
+        public bool SetPixelSizes( int pixelWidth, int pixelHeight )
+        {
+            return SetPixelSizesNative( Address, pixelWidth, pixelHeight );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_SetPixelSizes", CallingConvention = CallingConvention.Cdecl )]
+            static extern bool SetPixelSizesNative( IntPtr face, int pixelWidth, int pixelHeight );
+        }
+
+        public bool LoadGlyph( int glyphIndex, int loadFlags )
+        {
+            return LoadGlyphNative( Address, glyphIndex, loadFlags );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_LoadGlyph", CallingConvention = CallingConvention.Cdecl )]
+            static extern bool LoadGlyphNative( IntPtr face, int glyphIndex, int loadFlags );
+        }
+
+        public bool LoadChar( int charCode, int loadFlags )
+        {
+            return LoadCharNative( Address, charCode, loadFlags );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_LoadChar", CallingConvention = CallingConvention.Cdecl )]
+            static extern bool LoadCharNative( IntPtr face, int charCode, int loadFlags );
+        }
+
+        public GlyphSlot GetGlyph()
+        {
+            return new GlyphSlot( GetGlyphNative( Address ) );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_Glyph", CallingConvention = CallingConvention.Cdecl )]
+            static extern IntPtr GetGlyphNative( IntPtr face );
+        }
+
+        public Size GetSize()
+        {
+            return new Size( GetSizeNative( Address ) );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_Size", CallingConvention = CallingConvention.Cdecl )]
+            static extern IntPtr GetSizeNative( IntPtr face );
+        }
+
+        public int GetKerning( int leftGlyph, int rightGlyph, int kernMode )
+        {
+            return GetKerningNative( Address, leftGlyph, rightGlyph, kernMode );
+
+            // ----------------------------------
+
+            [DllImport( NativeLib, EntryPoint = "FT_Get_Kerning", CallingConvention = CallingConvention.Cdecl )]
+            static extern int GetKerningNative( IntPtr face, int leftGlyph, int rightGlyph, int kernMode );
+        }
+
+        ~Face()
+        {
+            Dispose( false );
         }
 
         public void Dispose()
@@ -384,195 +535,27 @@ public class FreeType
 
         protected virtual void Dispose( bool disposing )
         {
-            if ( disposing )
+            if ( Address == IntPtr.Zero ) return;
+
+            DoneFaceNative( Address );
+
+            if ( Library.FontData.TryGetValue( Address, out IntPtr bufferPtr ) && ( bufferPtr != IntPtr.Zero ) )
             {
-                if ( Address != IntPtr.Zero )
+                Marshal.FreeHGlobal( bufferPtr );
+
+                if ( disposing )
                 {
-                    DoneFaceNative( Address );
-
-                    // If this face was created with an associated unmanaged buffer (NewMemoryFace)
-                    if ( ( _associatedBufferAddress != IntPtr.Zero ) && Library.FontData.ContainsKey( Address ) )
-                    {
-                        Library.FontData.Remove( Address );
-//TODO:                        BufferUtils.DisposeUnsafeByteBuffer( _associatedBufferAddress );
-                        _associatedBufferAddress = IntPtr.Zero; // SetMark as disposed
-                    }
-
-                    Address = IntPtr.Zero; // SetMark as disposed
+                    Library.FontData.Remove( Address );
                 }
             }
-        }
 
-        ~Face()
-        {
-            Dispose( false );
-        }
-
-        public int GetFaceFlags()
-        {
-            return GetFaceFlagsNative( Address );
-        }
-
-        public int GetStyleFlags()
-        {
-            return GetStyleFlagsNative( Address );
-        }
-
-        public int GetNumGlyphs()
-        {
-            return GetNumGlyphsNative( Address );
-        }
-
-        public int GetAscender()
-        {
-            return GetAscenderNative( Address );
-        }
-
-        public int GetDescender()
-        {
-            return GetDescenderNative( Address );
-        }
-
-        public int GetHeight()
-        {
-            return GetHeightNative( Address );
-        }
-
-        public int GetMaxAdvanceWidth()
-        {
-            return GetMaxAdvanceWidthNative( Address );
-        }
-
-        public int GetMaxAdvanceHeight()
-        {
-            return GetMaxAdvanceHeightNative( Address );
-        }
-
-        public int GetUnderlinePosition()
-        {
-            return GetUnderlinePositionNative( Address );
-        }
-
-        public int GetUnderlineThickness()
-        {
-            return GetUnderlineThicknessNative( Address );
-        }
-
-        public bool SelectSize( int strikeIndex )
-        {
-            return SelectSizeNative( Address, strikeIndex );
-        }
-
-        public bool SetCharSize( int charWidth, int charHeight, int horzResolution, int vertResolution )
-        {
-            return SetCharSizeNative( Address, charWidth, charHeight, horzResolution, vertResolution );
-        }
-
-        public bool SetPixelSizes( int pixelWidth, int pixelHeight )
-        {
-            return SetPixelSizesNative( Address, pixelWidth, pixelHeight );
-        }
-
-        public bool LoadGlyph( int glyphIndex, int loadFlags )
-        {
-            return LoadGlyphNative( Address, glyphIndex, loadFlags );
-        }
-
-        public bool LoadChar( int charCode, int loadFlags )
-        {
-            return LoadCharNative( Address, charCode, loadFlags );
-        }
-
-        public GlyphSlot GetGlyph()
-        {
-            return new GlyphSlot( GetGlyphNative( Address ) );
-        }
-
-        public Size GetSize()
-        {
-            return new Size( GetSizeNative( Address ) );
-        }
-
-        public bool HasKerning()
-        {
-            return HasKerningNative( Address );
-        }
-
-        public int GetKerning( int leftGlyph, int rightGlyph, int kernMode )
-        {
-            return GetKerningNative( Address, leftGlyph, rightGlyph, kernMode );
-        }
-
-        public int GetCharIndex( int charCode )
-        {
-            return GetCharIndexNative( Address, charCode );
+            Address = IntPtr.Zero;
         }
 
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "doneFace", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Done_Face", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneFaceNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getFaceFlags", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetFaceFlagsNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getStyleFlags", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetStyleFlagsNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getNumGlyphs", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetNumGlyphsNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetAscenderNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetDescenderNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetHeightNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getMaxAdvanceWidth", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetMaxAdvanceWidthNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getMaxAdvanceHeight", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetMaxAdvanceHeightNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getUnderlinePosition", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetUnderlinePositionNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getUnderlineThickness", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetUnderlineThicknessNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "selectSize", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool SelectSizeNative( IntPtr face, int strikeIndex );
-
-        [DllImport( NativeLib, EntryPoint = "setCharSize", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool SetCharSizeNative( IntPtr face, int charWidth, int charHeight, int horzResolution,
-                                                      int vertResolution );
-
-        [DllImport( NativeLib, EntryPoint = "setPixelSizes", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool SetPixelSizesNative( IntPtr face, int pixelWidth, int pixelHeight );
-
-        [DllImport( NativeLib, EntryPoint = "loadGlyph", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool LoadGlyphNative( IntPtr face, int glyphIndex, int loadFlags );
-
-        [DllImport( NativeLib, EntryPoint = "loadChar", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool LoadCharNative( IntPtr face, int charCode, int loadFlags );
-
-        [DllImport( NativeLib, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
-        private static extern IntPtr GetGlyphNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getSize", CallingConvention = CallingConvention.Cdecl )]
-        private static extern IntPtr GetSizeNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "hasKerning", CallingConvention = CallingConvention.Cdecl )]
-        private static extern bool HasKerningNative( IntPtr face );
-
-        [DllImport( NativeLib, EntryPoint = "getKerning", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetKerningNative( IntPtr face, int leftGlyph, int rightGlyph, int kernMode );
-
-        [DllImport( NativeLib, EntryPoint = "getCharIndex", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetCharIndexNative( IntPtr face, int charCode );
     }
 
     // ========================================================================
@@ -580,8 +563,7 @@ public class FreeType
     [PublicAPI]
     public class Size : Pointer
     {
-        internal Size( IntPtr address )
-            : base( address )
+        internal Size( IntPtr address ) : base( address )
         {
         }
 
@@ -590,9 +572,7 @@ public class FreeType
             return new SizeMetrics( GetMetricsNative( Address ) );
         }
 
-        // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Metrics", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetMetricsNative( IntPtr address );
     }
 
@@ -620,9 +600,9 @@ public class FreeType
             return GetXScaleNative( Address );
         }
 
-        public int GetYscale()
+        public int GetYScale()
         {
-            return GetYscaleNative( Address );
+            return GetYScaleNative( Address );
         }
 
         public int GetAscender()
@@ -646,29 +626,29 @@ public class FreeType
         }
 
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "getXppem", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Xppem", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetXppemNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getYppem", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Yppem", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetYppemNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getXscale", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Xscale", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetXScaleNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getYscale", CallingConvention = CallingConvention.Cdecl )]
-        private static extern int GetYscaleNative( IntPtr metrics );
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Yscale", CallingConvention = CallingConvention.Cdecl )]
+        private static extern int GetYScaleNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getAscender", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Ascender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAscenderNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getDescender", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Descender", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetDescenderNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Height", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getMaxAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_MaxAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetMaxAdvanceNative( IntPtr metrics );
     }
 
@@ -728,7 +708,7 @@ public class FreeType
 
         public bool RenderGlyph( int renderMode )
         {
-            return RenderGlyphNative( Address, renderMode );
+            return RenderGlyphNative( Address, ( int )renderMode );
         }
 
         public Glyph GetGlyph()
@@ -744,38 +724,38 @@ public class FreeType
         }
 
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "getMetrics", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Metrics", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetMetricsNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getLinearHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_LinearHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLinearHoriAdvanceNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getLinearVertAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_LinearVertAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLinearVertAdvanceNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getAdvanceX", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_AdvanceX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAdvanceXNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getAdvanceY", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_AdvanceY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetAdvanceYNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getFormat", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Format", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetFormatNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Bitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBitmapNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getBitmapLeft", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_BitmapLeft", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetBitmapLeftNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "getBitmapTop", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_BitmapTop", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetBitmapTopNative( IntPtr slot );
 
-        [DllImport( NativeLib, EntryPoint = "renderGlyph", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_renderGlyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern bool RenderGlyphNative( IntPtr slot, int renderMode );
 
-        [DllImport( NativeLib, EntryPoint = "getGlyph", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Glyph", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetGlyphFromSlotNative( IntPtr glyphSlot );
     }
 
@@ -786,44 +766,19 @@ public class FreeType
     {
         private bool _rendered;
 
-        internal Glyph( IntPtr address )
-            : base( address )
+        internal Glyph( IntPtr address ) : base( address )
         {
-        }
-
-        public void Dispose()
-        {
-            Dispose( true );
-            GC.SuppressFinalize( this );
-        }
-
-        protected virtual void Dispose( bool disposing )
-        {
-            if ( disposing )
-            {
-                if ( Address != IntPtr.Zero )
-                {
-                    DoneNative( Address );
-                    Address = IntPtr.Zero; // SetMark as disposed
-                }
-            }
-        }
-
-        ~Glyph()
-        {
-            Dispose( false );
         }
 
         public void StrokeBorder( Stroker? stroker, bool inside )
         {
             Guard.Against.Null( stroker );
-            
             Address = StrokeBorderNative( Address, stroker.Address, inside );
         }
 
         public void ToBitmap( int renderMode )
         {
-            IntPtr bitmapAddress = ToBitmapNative( Address, renderMode );
+            IntPtr bitmapAddress = ToBitmapNative( Address, ( int )renderMode );
 
             if ( bitmapAddress == IntPtr.Zero )
             {
@@ -836,52 +791,62 @@ public class FreeType
 
         public Bitmap GetBitmap()
         {
-            if ( !_rendered )
-            {
-                throw new RuntimeException( "Glyph is not yet rendered" );
-            }
+            if ( !_rendered ) throw new RuntimeException( "Glyph is not yet rendered" );
 
             return new Bitmap( GetBitmapFromGlyphNative( Address ) );
         }
 
         public int GetLeft()
         {
-            if ( !_rendered )
-            {
-                throw new RuntimeException( "Glyph is not yet rendered" );
-            }
+            if ( !_rendered ) throw new RuntimeException( "Glyph is not yet rendered" );
 
             return GetLeftNative( Address );
         }
 
         public int GetTop()
         {
-            if ( !_rendered )
-            {
-                throw new RuntimeException( "Glyph is not yet rendered" );
-            }
+            if ( !_rendered ) throw new RuntimeException( "Glyph is not yet rendered" );
 
             return GetTopNative( Address );
         }
 
+        ~Glyph()
+        {
+            Dispose( false );
+        }
+
+        public void Dispose()
+        {
+            Dispose( true );
+            GC.SuppressFinalize( this );
+        }
+
+        protected virtual void Dispose( bool disposing )
+        {
+            if ( Address == IntPtr.Zero ) return;
+
+            DoneNative( Address );
+            Address = IntPtr.Zero;
+        }
+
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Done", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneNative( IntPtr glyph );
 
-        [DllImport( NativeLib, EntryPoint = "toBitmap", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_To_Bitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr ToBitmapNative( IntPtr glyph, int renderMode );
 
-        [DllImport( NativeLib, EntryPoint = "strokeBorder", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_StrokeBorder", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr StrokeBorderNative( IntPtr glyph, IntPtr stroker, bool inside );
 
-        [DllImport( NativeLib, EntryPoint = "getBitmap", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Bitmap", CallingConvention = CallingConvention.Cdecl )]
         private static extern IntPtr GetBitmapFromGlyphNative( IntPtr glyph );
 
-        [DllImport( NativeLib, EntryPoint = "getLeft", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Left", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetLeftNative( IntPtr glyph );
 
-        [DllImport( NativeLib, EntryPoint = "getTop", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Top", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetTopNative( IntPtr glyph );
     }
 
@@ -890,8 +855,7 @@ public class FreeType
     [PublicAPI]
     public class Bitmap : Pointer
     {
-        internal Bitmap( IntPtr address )
-            : base( address )
+        internal Bitmap( IntPtr address ) : base( address )
         {
         }
 
@@ -910,29 +874,28 @@ public class FreeType
             return GetPitchNative( Address );
         }
 
+        public int GetNumGray()
+        {
+            return GetNumGrayNative( Address );
+        }
+
+        public int GetPixelMode()
+        {
+            return GetPixelModeNative( Address );
+        }
+
         public byte[] GetBuffer()
         {
             int rows  = GetRows();
-            int width = GetWidth();
             int pitch = Math.Abs( GetPitch() );
 
-            if ( rows == 0 )
-            {
-                // Return a dummy non-null, non-zero buffer as per original Java comment
-                return new byte[ 1 ];
-            }
+            if ( rows == 0 ) return new byte[ 1 ];
 
             IntPtr nativeBufferPtr = GetBufferNative( Address );
 
-            if ( nativeBufferPtr == IntPtr.Zero )
-            {
-                // This case should ideally not happen if rows > 0, but as a safeguard.
-                return new byte[ 1 ];
-            }
+            if ( nativeBufferPtr == IntPtr.Zero ) return new byte[ 1 ];
 
             var managedBuffer = new byte[ rows * pitch ];
-
-            // Copy data from native memory to managed byte array
             Marshal.Copy( nativeBufferPtr, managedBuffer, 0, managedBuffer.Length );
 
             return managedBuffer;
@@ -940,12 +903,12 @@ public class FreeType
 
         public Pixmap GetPixmap( int format, Color color, float gamma )
         {
-            int    width     = GetWidth();
-            int    rows      = GetRows();
-            byte[] src       = GetBuffer(); // Get the managed byte array copy of the native buffer
-            int    pixelMode = GetPixelMode();
-            int    rowBytes  = Math.Abs( GetPitch() );
-            Pixmap pixmap;
+            int         width     = GetWidth();
+            int         rows      = GetRows();
+            byte[]      src       = GetBuffer();
+            int pixelMode = GetPixelMode();
+            int         rowBytes  = Math.Abs( GetPitch() );
+            Pixmap      pixmap;
 
             if ( ( color == Color.White )
               && ( pixelMode == FtPixelModeGray )
@@ -953,28 +916,15 @@ public class FreeType
               && ( Math.Abs( gamma - 1f ) < NumberUtils.FloatTolerance ) )
             {
                 pixmap = new Pixmap( width, rows, LughFormat.Alpha );
-
-                // Assuming Pixmap has a way to directly set pixel data from a byte array
-                // or BufferUtils.copy can handle byte[] to Pixmap's internal buffer
-//TODO:                BufferUtils.Copy< byte >( src, 0, pixmap.ByteBuffer, 0, src.Length );
+//TODO: BufferUtils.Copy<byte>(src, 0, pixmap.ByteBuffer, 0, src.Length);
             }
             else
             {
                 pixmap = new Pixmap( width, rows, LughFormat.RGBA8888 );
 
-                uint rgba   = Color.ToRgba8888( color ); // Assuming Color has a ToRGBA8888 method
+                uint rgba   = Color.ToRgba8888( color );
                 var  srcRow = new byte[ rowBytes ];
                 var  dstRow = new int[ width ];
-
-                // Directly access Pixmap's pixel buffer, assuming it's a Buffer< byte > or similar
-                // and can be wrapped by an Buffer< int > for efficiency.
-                // For direct access and potentially better performance, you might need unsafe code
-                // or a Pixmap method that accepts an int[] directly.
-                // Here, we'll assume a method to write a row of int[] to the Pixmap.
-
-                // Assuming Pixmap.SetPixels(int[] rowData, int offset, int length) or similar
-                // or a way to get a direct int[] view of the Pixmap's buffer.
-                // For simplicity, I'll provide a conceptual approach for writing rows.
 
                 if ( pixelMode == FtPixelModeMono )
                 {
@@ -988,18 +938,11 @@ public class FreeType
 
                             for ( int ii = 0, n = Math.Min( 8, width - x ); ii < n; ii++ )
                             {
-                                if ( ( b & ( 1 << ( 7 - ii ) ) ) != 0 )
-                                {
-                                    dstRow[ x + ii ] = ( int )rgba;
-                                }
-                                else
-                                {
-                                    dstRow[ x + ii ] = 0;
-                                }
+                                dstRow[ x + ii ] = ( ( b & ( 1 << ( 7 - ii ) ) ) != 0 ) ? ( int )rgba : 0;
                             }
                         }
 
-//TODO:                        pixmap.SetPixels( y, dstRow ); // Conceptual: Set a row of pixels
+//TODO: pixmap.SetPixels(y, dstRow);
                     }
                 }
                 else
@@ -1015,73 +958,52 @@ public class FreeType
                         {
                             int alpha = srcRow[ x ] & 0xff;
 
-                            if ( alpha == 0 )
-                            {
-                                dstRow[ x ] = ( int )rgb;
-                            }
-                            else if ( alpha == 255 )
-                            {
-                                dstRow[ x ] = ( int )( rgb | a );
-                            }
-                            else
-                            {
-                                // Inverse gamma.
-                                dstRow[ x ] = ( int )( rgb | ( uint )( a * ( float )Math.Pow( alpha / 255f, gamma ) ) );
-                            }
+                            dstRow[ x ] = alpha switch
+                                          {
+                                              0   => ( int )rgb,
+                                              255 => ( int )( rgb | a ),
+                                              _ => ( int )
+                                                  ( rgb | ( uint )( a * ( float )Math.Pow( alpha / 255f, gamma ) ) ),
+                                          };
                         }
 
-//TODO:                        pixmap.SetPixels( y, dstRow ); // Conceptual: Set a row of pixels
+//TODO: pixmap.SetPixels(y, dstRow);
                     }
                 }
             }
 
-            Pixmap converted = pixmap;
+            if ( format == pixmap.GLPixelFormat ) return pixmap;
 
-            if ( format != pixmap.GLPixelFormat )
-            {
-                converted          = new Pixmap( pixmap.Width, pixmap.Height, format );
-                converted.Blending = Pixmap.BlendType.None;       // Assuming SetBlending method
-                converted.DrawPixmap( pixmap, 0, 0 );             // Assuming DrawPixmap method
-                converted.Blending = Pixmap.BlendType.SourceOver; // Assuming SetBlending method
-
-                pixmap.Dispose();
-            }
+            var converted = new Pixmap( pixmap.Width, pixmap.Height, format );
+            converted.Blending = Pixmap.BlendType.None;
+            converted.DrawPixmap( pixmap, 0, 0 );
+            converted.Blending = Pixmap.BlendType.SourceOver;
+            pixmap.Dispose();
 
             return converted;
         }
 
-        public int GetNumGray()
-        {
-            return GetNumGrayNative( Address );
-        }
-
-        public int GetPixelMode()
-        {
-            return GetPixelModeNative( Address );
-        }
-
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "getRows", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Rows", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetRowsNative( IntPtr bitmap );
 
-        [DllImport( NativeLib, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Width", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetWidthNative( IntPtr bitmap );
 
-        [DllImport( NativeLib, EntryPoint = "getPitch", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Pitch", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetPitchNative( IntPtr bitmap );
 
-        [DllImport( NativeLib, EntryPoint = "getBuffer", CallingConvention = CallingConvention.Cdecl )]
-        private static extern IntPtr GetBufferNative( IntPtr bitmap ); // Returns a pointer to the native buffer
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Buffer", CallingConvention = CallingConvention.Cdecl )]
+        private static extern IntPtr GetBufferNative( IntPtr bitmap );
 
-        [DllImport( NativeLib, EntryPoint = "getNumGray", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_NumGray", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetNumGrayNative( IntPtr bitmap );
 
-        [DllImport( NativeLib, EntryPoint = "getPixelMode", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_PixelMode", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetPixelModeNative( IntPtr bitmap );
     }
 
-    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
@@ -1133,32 +1055,31 @@ public class FreeType
 
         // --------------------------------------
 
-        [DllImport( NativeLib, EntryPoint = "getWidth", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Width", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetWidthNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getHeight", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_Height", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHeightNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getHoriBearingX", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_HoriBearingX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriBearingXNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getHoriBearingY", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_HoriBearingY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriBearingYNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getHoriAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_HoriAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetHoriAdvanceNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getVertBearingX", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_VertBearingX", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertBearingXNative( IntPtr metrics );
-        
-        [DllImport( NativeLib, EntryPoint = "getVertBearingY", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Get_VertBearingY", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertBearingYNative( IntPtr metrics );
 
-        [DllImport( NativeLib, EntryPoint = "getVertAdvance", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Get_VertAdvance", CallingConvention = CallingConvention.Cdecl )]
         private static extern int GetVertAdvanceNative( IntPtr metrics );
     }
 
-    // ========================================================================
     // ========================================================================
 
     [PublicAPI]
@@ -1170,7 +1091,12 @@ public class FreeType
 
         public void Set( int radius, int lineCap, int lineJoin, int miterLimit )
         {
-            SetNative( Address, radius, lineCap, lineJoin, miterLimit );
+            SetNative( Address, radius, ( int )lineCap, ( int )lineJoin, miterLimit );
+        }
+
+        ~Stroker()
+        {
+            Dispose( false );
         }
 
         public void Dispose()
@@ -1181,27 +1107,18 @@ public class FreeType
 
         protected virtual void Dispose( bool disposing )
         {
-            if ( disposing )
-            {
-                if ( Address != IntPtr.Zero )
-                {
-                    DoneStrokerNative( Address );
-                    Address = IntPtr.Zero; // SetMark as disposed
-                }
-            }
-        }
+            if ( Address == IntPtr.Zero ) return;
 
-        ~Stroker()
-        {
-            Dispose( false );
+            DoneStrokerNative( Address );
+            Address = IntPtr.Zero;
         }
 
         // --------------------------------------
-        
-        [DllImport( NativeLib, EntryPoint = "set", CallingConvention = CallingConvention.Cdecl )]
+
+        [DllImport( NativeLib, EntryPoint = "FT_Stroker_Set", CallingConvention = CallingConvention.Cdecl )]
         private static extern void SetNative( IntPtr stroker, int radius, int lineCap, int lineJoin, int miterLimit );
 
-        [DllImport( NativeLib, EntryPoint = "done", CallingConvention = CallingConvention.Cdecl )]
+        [DllImport( NativeLib, EntryPoint = "FT_Stroker_Done", CallingConvention = CallingConvention.Cdecl )]
         private static extern void DoneStrokerNative( IntPtr stroker );
     }
 }

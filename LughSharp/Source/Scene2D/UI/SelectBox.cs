@@ -71,14 +71,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     // ========================================================================
 
     /// <summary>
-    /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin,
-    /// </summary>
-    /// <param name="skin"></param>
-    public SelectBox( Skin skin ) : this( skin.Get< SelectBoxStyle >() )
-    {
-    }
-
-    /// <summary>
     /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin
     /// and style name, which defaults to "default".
     /// </summary>
@@ -107,7 +99,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         ScrollPane    = new SelectBoxScrollPane( this );
         ClickListener = new SelectBoxClickListener( this );
-        
+
         AddListener( ClickListener );
     }
 
@@ -153,11 +145,16 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         _style = new SelectBoxStyle
         {
-            Font            = style.Font,
-            FontColor       = style.FontColor,
-            ScrollPaneStyle = new ScrollPaneStyle( style.ScrollPaneStyle ),
-            ListBoxStyle    = new ListBoxStyle( style.ListBoxStyle ),
-            Background      = style.Background
+            Font               = style.Font,
+            FontColor          = style.FontColor,
+            ScrollPaneStyle    = new ScrollPaneStyle( style.ScrollPaneStyle ),
+            ListBoxStyle       = new ListBoxStyle( style.ListBoxStyle ),
+            Background         = style.Background,
+            BackgroundDisabled = style.BackgroundDisabled,
+            BackgroundOpen     = style.BackgroundOpen,
+            BackgroundOver     = style.BackgroundOver,
+            DisabledFontColor  = style.DisabledFontColor,
+            OverFontColor      = style.OverFontColor
         };
 
         if ( ScrollPane != null )
@@ -229,11 +226,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </exception>
     public override void Layout()
     {
-        if ( _style == null )
-        {
-            throw new RuntimeException( "SelectBoxStyle cannot be null in Layout()." );
-        }
-
         ISceneDrawable? bg   = _style.Background;
         BitmapFont      font = _style.Font;
 
@@ -260,7 +252,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             if ( selected != null )
             {
                 layout.SetText( font, ToString( selected ) );
-                _prefWidth = ( GetPrefWidth() + layout.Width );
+                _prefWidth += layout.Width;
             }
         }
         else
@@ -470,6 +462,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public void SetSelectedIndex( int index )
     {
+        if ( index < 0 || index >= Items.Count )
+        {
+            throw new IndexOutOfRangeException( "Index out of range: " + index );
+        }
+
         Selection.Set( Items[ index ] );
     }
 
@@ -491,9 +488,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         GlyphLayout         layout     = layoutPool.Obtain();
         float               width      = 0;
 
-        for ( var index = 0; index < Items.Count; index++ )
+        foreach ( T item in Items )
         {
-            layout.SetText( _style.Font, ToString( Items[ index ] ) );
+            layout.SetText( _style.Font, ToString( item ) );
             width = Math.Max( layout.Width, width );
         }
 
@@ -557,9 +554,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Disables scrolling of the list shown when the select box is open.
     /// </summary>
-    public void SetScrollingDisabled( bool state )
+    /// <param name="xstate"> true to disable horizontal scrolling, false to enable horizontal scrolling. </param>
+    /// <param name="ystate"> true to disable vertical scrolling, false to enable vertical scrolling. </param>
+    public void SetScrollingDisabled( bool xstate, bool ystate )
     {
-        ScrollPane?.SetScrollingDisabled( true, state );
+        ScrollPane?.SetScrollingDisabled( xstate, ystate );
 
         InvalidateHierarchy();
     }
@@ -580,7 +579,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <param name="below"></param>
     protected void OnShow( Actor selectBox, bool below )
     {
+        // Sets the fade in starting point to the current alpha value.
         selectBox.ActorColor.A = 0;
+
         selectBox.AddAction( SceneActions.FadeIn( 0.3f, Interpolation.Fade ) );
     }
 
@@ -590,21 +591,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <param name="selectBox"></param>
     protected void OnHide( Actor selectBox )
     {
+        // Sets the fade out starting point to the current alpha value.
         selectBox.ActorColor.A = 1f;
 
-        AlphaSceneAction       action1       = SceneActions.FadeOut( 0.15f, Interpolation.Fade );
-        RemoveActorSceneAction action2       = SceneActions.RemoveActor();
-        SequenceSceneAction    sequenceScene = SceneActions.Sequence( action1, action2 );
-
-        selectBox.AddAction( sequenceScene );
-    }
-
-    /// <summary>
-    /// Called when the actor's size has been changed.
-    /// </summary>
-    public override void OnSizeChanged()
-    {
-        Logger.Checkpoint();
+        selectBox.AddAction( SceneActions.Sequence( SceneActions.FadeOut( 0.15f, Interpolation.Fade ),
+                                                    SceneActions.RemoveActor()) );
     }
 
     /// <summary>
@@ -720,10 +711,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
                 return;
             }
 
+            Logger.Checkpoint();
+            
             stage.AddActor( this );
             stage.AddCaptureListener( _hideListener );
-            stage.AddListener( ListBox.KeyListener
-                            ?? throw new RuntimeException( "No ListBox KeyListener available!" ) );
+            stage.AddListener( ListBox.KeyListener );
 
             ParentSelectBox.LocalToStageCoordinates( _stagePosition.Set( 0, 0 ) );
 
@@ -732,16 +724,17 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             float itemHeight = ListBox.ItemHeight;
 
             float height = itemHeight * ( MaxListCount <= 0
-                ? ParentSelectBox.Items.Count
-                : Math.Min( MaxListCount, ParentSelectBox.Items.Count ) );
+                                              ? ParentSelectBox.Items.Count
+                                              : Math.Min( MaxListCount, ParentSelectBox.Items.Count ) );
 
             ISceneDrawable? scrollPaneBackground = GetStyle().Background;
-            ISceneDrawable? listBackground       = ListBox.GetStyle().Background;
 
             if ( scrollPaneBackground != null )
             {
                 height += scrollPaneBackground.TopHeight + scrollPaneBackground.BottomHeight;
             }
+
+            ISceneDrawable? listBackground = ListBox.GetStyle().Background;
 
             if ( listBackground != null )
             {
@@ -786,18 +779,24 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             if ( x + width > stage.Width )
             {
                 x -= width - ParentSelectBox.GetWidth() - 1;
-                x = Math.Max( x, 0 );
+
+                if ( x < 0 ) x = 0;
             }
 
             SetX( x );
             Validate();
 
-            ScrollTo( 0,
-                      ListBox.GetHeight() - ( ParentSelectBox.GetSelectedIndex() * itemHeight ) - ( itemHeight / 2 ),
-                      0,
-                      0,
-                      true,
-                      true );
+            int idx = ParentSelectBox.GetSelectedIndex();
+
+            if ( idx >= 0 )
+            {
+                ScrollTo( x: 0,
+                          y: ListBox.GetHeight() - ( idx * itemHeight ) - ( itemHeight / 2 ),
+                          width: 0,
+                          height: 0,
+                          centerHorizontal: true,
+                          centerVertical: true );
+            }
 
             UpdateVisualScroll();
 
@@ -831,16 +830,19 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             if ( Stage != null )
             {
-                Stage.RemoveCaptureListener( _hideListener );
-                Stage.RemoveListener( ListBox.KeyListener! );
+                // Returns false if '_hideListener' is null.
+                _ = Stage.RemoveCaptureListener( _hideListener );
 
-                if ( ( _previousScrollFocus != null ) && ( _previousScrollFocus.Stage == null ) )
+                // Returns false if 'ListBox.KeyListener' is null.
+                _ = Stage.RemoveListener( ListBox.KeyListener );
+
+                if ( _previousScrollFocus is { Stage: null } )
                 {
                     _previousScrollFocus = null;
                 }
 
                 Actor? actor = Stage.ScrollFocus;
-                
+
                 if ( ( actor == null ) || IsAscendantOf( actor ) )
                 {
                     Stage.ScrollFocus = _previousScrollFocus;
@@ -851,13 +853,18 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             ParentSelectBox.OnHide( this );
         }
 
+        private readonly Vector2 _drawTemp = new();
+
         public override void Draw( IBatch batch, float parentAlpha )
         {
-            ParentSelectBox.LocalToStageCoordinates( ParentSelectBox._temp.Set( 0, 0 ) );
+            ParentSelectBox.LocalToStageCoordinates( _drawTemp.Set( 0, 0 ) );
 
-            if ( !ParentSelectBox._temp.Equals( _stagePosition ) )
+            if ( Math.Abs( _drawTemp.X - _stagePosition.X ) > 0.01f
+              || Math.Abs( _drawTemp.Y - _stagePosition.Y ) > 0.01f )
             {
                 Hide();
+
+                return;
             }
 
             base.Draw( batch, parentAlpha );
@@ -871,12 +878,12 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         public override void SetStage( Stage? stage )
         {
-            var oldStage = Stage;
+            Stage? oldStage = Stage;
 
             if ( oldStage != null )
             {
                 oldStage.RemoveCaptureListener( _hideListener );
-                oldStage.RemoveListener( ListBox.KeyListener! );
+                oldStage.RemoveListener( ListBox.KeyListener );
             }
 
             base.SetStage( stage );
@@ -1018,10 +1025,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             if ( selected != null )
             {
                 _parent.ParentSelectBox.Selection.Clear();
+                _parent.ParentSelectBox.Selection.Choose( selected );
+                _parent.Hide();
             }
-
-            _parent.ParentSelectBox.Selection.Choose( selected! );
-            _parent.Hide();
         }
 
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )

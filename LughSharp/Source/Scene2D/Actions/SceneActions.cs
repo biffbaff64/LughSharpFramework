@@ -55,9 +55,9 @@ public class SceneActions
     public static T ObtainAction< T >() where T : SceneAction, new()
     {
         Logger.Debug( $"Obtaining new action of type {typeof( T ).Name}" );
-        
-        var pool   = GetPool< T >();
-        var action = pool.Obtain() as T;
+
+        IScenePool pool   = GetPool< T >();
+        var        action = pool.Obtain() as T;
 
         Guard.Against.Null( action );
 

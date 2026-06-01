@@ -190,7 +190,10 @@ public class Selection< T > : IDisableable, IDisposable
     /// </summary>
     public void Set( T? item )
     {
-        Guard.Against.Null( item );
+        if ( item == null )
+        {
+            return;
+        }
 
         if ( ( Selected.Count == 1 ) && Equals( Selected.First(), item ) )
         {

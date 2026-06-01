@@ -46,7 +46,7 @@ public class FontTests
     
     public BitmapFont CreateFreeTypeFont()
     {
-        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
+//        var generator = new FreeTypeFontGenerator( Engine.Files.Internal( Assets.AmbleRegular26Font ) );
 //        var parameter = new FreeTypeFontGenerator.FreeTypeFontParameter
 //        {
 //            Size = 40
