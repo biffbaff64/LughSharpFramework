@@ -134,7 +134,7 @@ public class DragAndDrop
             return;
         }
 
-        Stage? stage = except.Actor.Stage;
+        Stage? stage = except.Actor.GetStage();
 
         stage?.CancelTouchFocusExcept( listener, except.Actor );
     }
@@ -232,7 +232,7 @@ public class DragAndDrop
 
             if ( _parent is { CancelTouchFocus: true, DragPayload: not null } )
             {
-                Stage? stage = _source.Actor.Stage;
+                Stage? stage = _source.Actor.GetStage();
 
                 stage?.CancelTouchFocusExcept( this, _source.Actor );
             }
@@ -332,7 +332,7 @@ public class DragAndDrop
                 }
 
                 _parent.DragActor        = actor;
-                _parent._removeDragActor = actor?.Stage == null; // Only remove later if not already in the stage now.
+                _parent._removeDragActor = actor?.GetStage() == null; // Only remove later if not already in the stage now.
 
                 if ( _parent._removeDragActor )
                 {
@@ -498,7 +498,7 @@ public class DragAndDrop
             Guard.Against.Null( actor );
 
             Actor = actor;
-            Stage? stage = actor.Stage;
+            Stage? stage = actor.GetStage();
 
             if ( ( stage != null ) && ( actor == stage.RootGroup ) )
             {

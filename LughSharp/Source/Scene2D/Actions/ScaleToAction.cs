@@ -22,57 +22,55 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+namespace LughSharp.Source.Scene2D.Actions;
 
-namespace LughSharp.Source.Scene2D.Listeners;
-
-public sealed class DialogFocusListener : FocusListener
+[PublicAPI]
+public class ScaleToAction : TemporalAction
 {
-    private readonly Dialog _dialog;
+    private float _startX;
+    private float _startY;
+    public  float EndX { get; set; }
+    public  float EndY { get; set; }
 
-    public DialogFocusListener( Dialog dialog )
+    protected override void Begin()
     {
-        _dialog = dialog;
+        _startX = Target!.ScaleX;
+        _startY = Target.ScaleY;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    protected override void Update( float percent )
     {
-        if ( !focused )
+        float x, y;
+
+        if ( percent == 0 )
         {
-            FocusChanged( ev );
+            x = _startX;
+            y = _startY;
         }
+        else if ( percent is 1.0f )
+        {
+            x = EndX;
+            y = EndY;
+        }
+        else
+        {
+            x = _startX + ( ( EndX - _startX ) * percent );
+            y = _startY + ( ( EndY - _startY ) * percent );
+        }
+
+        Target?.SetScale( x, y );
     }
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    public void SetScale( float x, float y )
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
+        EndX = x;
+        EndY = y;
     }
 
-    private void FocusChanged( FocusEvent ev )
+    public void SetScale( float scale )
     {
-        if ( _dialog.GetStage() == null )
-        {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
-            {
-                ev.Cancel();
-            }
-        }
+        EndX = scale;
+        EndY = scale;
     }
 }
 

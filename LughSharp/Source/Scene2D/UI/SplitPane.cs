@@ -310,7 +310,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
 
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        Stage? stage = Stage;
+        Stage? stage = GetStage();
 
         if ( stage == null )
         {

@@ -105,7 +105,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
             return false;
         }
 
-        _parent.Stage?.ScrollFocus = _parent;
+        _parent.GetStage()?.ScrollFocus = _parent;
 
 //        if ( !_parent.FlickScroll )
         {

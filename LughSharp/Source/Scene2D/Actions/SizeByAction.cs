@@ -22,57 +22,38 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+namespace LughSharp.Source.Scene2D.Actions;
 
-namespace LughSharp.Source.Scene2D.Listeners;
-
-public sealed class DialogFocusListener : FocusListener
+/// <summary>
+/// Scales an actor by the the values in <see cref="AmountWidth"/>
+/// and <see cref="AmountHeight"/>.
+/// </summary>
+[PublicAPI]
+public class SizeByAction : RelativeTemporalAction
 {
-    private readonly Dialog _dialog;
+    public float AmountWidth  { get; set; }
+    public float AmountHeight { get; set; }
 
-    public DialogFocusListener( Dialog dialog )
+    // ========================================================================
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="percentDelta"></param>
+    protected override void UpdateRelative( float percentDelta )
     {
-        _dialog = dialog;
+        Target?.SizeBy( AmountWidth * percentDelta, AmountHeight * percentDelta );
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    /// <summary>
+    /// Sets the amounts by which to scale the width and height.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    public void SetAmount( float width, float height )
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
-
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
-    {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
-
-    private void FocusChanged( FocusEvent ev )
-    {
-        if ( _dialog.GetStage() == null )
-        {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
-            {
-                ev.Cancel();
-            }
-        }
+        AmountWidth  = width;
+        AmountHeight = height;
     }
 }
 

@@ -33,6 +33,9 @@ namespace LughSharp.Source.Maths.Collision;
 [PublicAPI]
 public class BoundingBox
 {
+    public Vector3 Max { get; set; } = new();
+    public Vector3 Min { get; set; } = new();
+
     // ========================================================================
 
     private static readonly Vector3 _tmpVector = new();
@@ -68,9 +71,6 @@ public class BoundingBox
     {
         Set( minimum, maximum );
     }
-
-    public Vector3 Max { get; set; } = new();
-    public Vector3 Min { get; set; } = new();
 
     // ========================================================================
 
@@ -171,6 +171,7 @@ public class BoundingBox
     }
 
     /// <summary>
+    /// 
     /// </summary>
     /// <param name="vec3"></param>
     /// <returns></returns>
@@ -454,12 +455,6 @@ public class BoundingBox
             && ( Max.Z >= v.Z );
     }
 
-    /// <inheritdoc />
-    public override string ToString()
-    {
-        return $"[ {Min} | {Max} ]";
-    }
-
     /// <summary>
     /// Extends the bounding box by the given vector.
     /// </summary>
@@ -471,6 +466,12 @@ public class BoundingBox
     {
         return Set( Min.Set( Math.Min( Min.X, x ), Math.Min( Min.Y, y ), Math.Min( Min.Z, z ) ),
                     Max.Set( Math.Max( Max.X, x ), Math.Max( Max.Y, y ), Math.Max( Max.Z, z ) ) );
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return $"[ {Min} | {Max} ]";
     }
 }
 

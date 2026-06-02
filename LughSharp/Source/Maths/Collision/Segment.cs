@@ -28,10 +28,14 @@ namespace LughSharp.Source.Maths.Collision;
 /// A Segment is a line in 3-space having a starting and an ending position.
 /// </summary>
 [Serializable]
+[PublicAPI]
 public class Segment
 {
-    // ========================================================================
+    public Vector3 VectorA { get; private set; } = new(); // the starting position
+    public Vector3 VectorB { get; private set; } = new(); // the ending position
 
+    // ========================================================================
+    
     private readonly Vector3 _vecA = new();
     private readonly Vector3 _vecB = new();
 
@@ -65,9 +69,6 @@ public class Segment
         VectorA.Set( aX, aY, aZ );
         VectorB.Set( bX, bY, bZ );
     }
-
-    public Vector3 VectorA { get; private set; } = new(); // the starting position
-    public Vector3 VectorB { get; private set; } = new(); // the ending position
 
     public virtual float Len()
     {

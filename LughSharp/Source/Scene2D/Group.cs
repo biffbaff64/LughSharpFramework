@@ -523,7 +523,7 @@ public class Group : Actor, ICullable
         Children.Add( actor );
 
         actor.Parent = this;
-        actor.Stage  = Stage;
+        actor.SetStage( GetStage() );
 
         ChildrenChanged();
     }
@@ -557,7 +557,7 @@ public class Group : Actor, ICullable
         }
 
         actor.Parent = this;
-        actor.Stage  = Stage;
+        actor.SetStage( GetStage() );
 
         ChildrenChanged();
     }
@@ -584,7 +584,7 @@ public class Group : Actor, ICullable
         Children.Insert( index, actor );
 
         actor.Parent = this;
-        actor.Stage  = Stage;
+        actor.SetStage( GetStage() );
 
         ChildrenChanged();
     }
@@ -619,7 +619,7 @@ public class Group : Actor, ICullable
         }
 
         actor.Parent = this;
-        actor.Stage  = Stage;
+        actor.SetStage( GetStage() );
 
         ChildrenChanged();
     }
@@ -656,15 +656,15 @@ public class Group : Actor, ICullable
     {
         Actor actor = Children.RemoveAt( index );
 
-        if ( Stage != null )
+        if ( GetStage() != null )
         {
             if ( unfocus )
             {
-                Stage.Unfocus( actor );
+                GetStage().Unfocus( actor );
             }
 
             actor.Parent = null;
-            actor.Stage  = null;
+            actor.SetStage( null );
         }
 
         ChildrenChanged();
@@ -687,10 +687,10 @@ public class Group : Actor, ICullable
             {
                 if ( unfocus )
                 {
-                    Stage?.Unfocus( child );
+                    GetStage()?.Unfocus( child );
                 }
 
-                child.Stage  = null;
+                child.SetStage( null );
                 child.Parent = null;
             }
         }
@@ -747,13 +747,13 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Sets the stage for this groups actors to act upon.
     /// </summary>
-    public virtual void SetStage( Stage? stage )
+    public override void SetStage( Stage? stage )
     {
-        Stage = stage;
+        base.SetStage( stage );
 
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
-            Children.GetAt( i ).Stage = stage;
+            Children.GetAt( i ).SetStage( stage );
         }
     }
 

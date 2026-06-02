@@ -92,10 +92,10 @@ public class Widget : Actor, ILayout
         {
             float parentWidth, parentHeight;
 
-            if ( ( Stage != null ) && ( parent == Stage.RootGroup ) )
+            if ( ( GetStage() != null ) && ( parent == GetStage().RootGroup ) )
             {
-                parentWidth  = Stage.Width;
-                parentHeight = Stage.Height;
+                parentWidth  = GetStage().Width;
+                parentHeight = GetStage().Height;
             }
             else
             {

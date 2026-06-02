@@ -89,7 +89,7 @@ public class Tooltip< T > : InputListener where T : Actor
 
     private void SetContainerPosition( Actor? actor, float x, float y )
     {
-        if ( actor?.Stage == null )
+        if ( actor?.GetStage() == null )
         {
             return;
         }
@@ -114,14 +114,14 @@ public class Tooltip< T > : InputListener where T : Actor
             point.X = dist;
         }
 
-        if ( ( point.X + Container.GetWidth() ) > ( actor.Stage.Width - dist ) )
+        if ( ( point.X + Container.GetWidth() ) > ( actor.GetStage().Width - dist ) )
         {
-            point.X = actor.Stage.Width - dist - Container.GetWidth();
+            point.X = actor.GetStage().Width - dist - Container.GetWidth();
         }
 
-        if ( ( point.Y + Container.GetHeight() ) > ( actor.Stage.Height - dist ) )
+        if ( ( point.Y + Container.GetHeight() ) > ( actor.GetStage().Height - dist ) )
         {
-            point.Y = actor.Stage.Height - dist - Container.GetHeight();
+            point.Y = actor.GetStage().Height - dist - Container.GetHeight();
         }
 
         Container.SetPosition( point.X, point.Y );
@@ -184,7 +184,7 @@ public class Tooltip< T > : InputListener where T : Actor
         {
             base.Act( delta );
 
-            if ( _parent.TargetActor is { Stage: null } )
+            if ( _parent.TargetActor != null && _parent.TargetActor.GetStage() == null )
             {
                 Remove();
             }

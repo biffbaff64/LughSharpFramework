@@ -225,7 +225,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
     /// </summary>
     public void TouchFocusCancel()
     {
-        Stage?.CancelTouchFocusExcept( _flickScrollListener, this );
+        GetStage()?.CancelTouchFocusExcept( _flickScrollListener, this );
     }
 
     /// <summary>
@@ -455,7 +455,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
 
         if ( animating )
         {
-            if ( Stage is { ActionsRequestRendering: true } )
+            if ( GetStage() is { ActionsRequestRendering: true } )
             {
                 Engine.Graphics.RequestRendering();
             }

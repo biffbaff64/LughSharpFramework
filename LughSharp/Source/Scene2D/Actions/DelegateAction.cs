@@ -24,75 +24,84 @@
 
 using LughSharp.Source.Scene2D.Utils;
 
-namespace LughSharp.Source.Scene2D;
+namespace LughSharp.Source.Scene2D.Actions;
 
 [PublicAPI]
-public abstract class SceneAction : IAction, IResetable
+public abstract class DelegateAction : SceneAction
 {
+    public SceneAction? Action { get; set; }
+
+    protected abstract bool Delegate( float delta );
+
+    // ========================================================================
+    
     /// <summary>
-    /// The pool of actions.
+    /// The actor this action is attached to, or null if it is not attached.
     /// </summary>
-    public IScenePool? Pool { get; set; }
+    public override Actor? Actor
+    {
+        get => base.Actor;
+        set
+        {
+            if ( Action != null )
+            {
+                Action.Actor = value;
+            }
+
+            base.Actor = value;
+        }
+    }
 
     /// <summary>
     /// The actor this action targets, or null if a target has not been set.
     /// </summary>
-    public virtual Actor? Target { get; set; }
-
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// The actor this action is attached to, or null if it is not attached.
-    /// </summary>
-    public virtual Actor? Actor
+    public override Actor? Target
     {
-        // Returns null if the action is not attached to an actor.
-        get;
-
-        // Sets the actor this action is attached to. This also sets the target actor if it
-        // is null. This method is called automatically when an action is added to an actor.
-        // This method is also called with null when an action is removed from an actor.
-        // When set to null, if the action has a pool then the action is returned to the pool
-        // (which calls reset()) and the pool is set to null. If the action does not have a
-        // pool, reset() is not called. This method is not typically a good place for an action
-        // subclass to query the actor's state because the action may not be executed for some
-        // time, eg it may be delayed. The actor's state is best queried in the first call to
-        // Act(float). For a TemporalAction, use TemporalAction#begin().
+        get => base.Target;
         set
         {
-            field = value;
-
-            Target ??= value;
-
-            if ( value == null )
+            if ( Action != null )
             {
-                if ( Pool != null )
-                {
-                    Pool.Free( this );
-                    Pool = null;
-                }
+                Action.Target = value;
             }
+
+            base.Target = value;
         }
     }
 
     /// <summary>
     /// Updates the action based on time.
-    /// Typically this is called each frame by <see cref="SceneAction.Actor"/>.
+    /// Typically this is called each frame by <see cref="Actor"/>.
     /// </summary>
     /// <param name="delta">Time in seconds since the last frame.</param>
     /// <returns>
     /// true if the action is done. This method may continue to be called after
     /// the action is done.
     /// </returns>
-    public abstract bool Act( float delta );
+    public override bool Act( float delta )
+    {
+        IScenePool? pool = Pool;
+
+        // Ensure this action can't be returned to the pool inside the delegate action.
+        Pool = null;
+
+        try
+        {
+            return Delegate( delta );
+        }
+        finally
+        {
+            Pool = pool;
+        }
+    }
 
     /// <summary>
     /// Sets the state of the action so it can be run again.
     /// Default implementation does nothing.
     /// </summary>
-    public virtual void Restart()
+    public override void Restart()
     {
+        Action?.Restart();
     }
 
     /// <summary>
@@ -107,13 +116,10 @@ public abstract class SceneAction : IAction, IResetable
     /// the optional state.
     /// </para>
     /// </summary>
-    public virtual void Reset()
+    public override void Reset()
     {
-        Actor  = null;
-        Target = null;
-        Pool   = null;
-
-        Restart();
+        base.Reset();
+        Action = null;
     }
 
     /// <summary>
@@ -122,24 +128,10 @@ public abstract class SceneAction : IAction, IResetable
     /// <returns>A string that represents the current object.</returns>
     public override string ToString()
     {
-        string name     = GetType().Name;
-        int    dotIndex = name.LastIndexOf( '.' );
-
-        if ( dotIndex != -1 )
-        {
-            // Note: equivalent to name.SubString(startIndex: dotIndex+1)
-            name = name[ ( dotIndex + 1 ).. ];
-        }
-
-        if ( name.EndsWith( "Action" ) )
-        {
-            // Note: equivalent to name.Substring( 0, name.Length - 6 );
-            name = name[ ..^6 ];
-        }
-
-        return name;
+        return base.ToString() + ( Action == null ? string.Empty : $"({Action})" );
     }
 }
 
 // ============================================================================
 // ============================================================================
+

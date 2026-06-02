@@ -22,57 +22,37 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+using System.Diagnostics;
 
-namespace LughSharp.Source.Scene2D.Listeners;
+using LughSharp.Source.Scene2D.Listeners;
 
-public sealed class DialogFocusListener : FocusListener
+namespace LughSharp.Source.Scene2D.Actions;
+
+public class RemoveListenerAction : SceneAction
 {
-    private readonly Dialog _dialog;
+    public IEventListener? Listener { get; set; }
+    public bool            Capture  { get; set; }
 
-    public DialogFocusListener( Dialog dialog )
+    public override bool Act( float delta )
     {
-        _dialog = dialog;
+        Debug.Assert( Listener != null, nameof( Listener ) + " != null" );
+
+        if ( Capture )
+        {
+            Target?.RemoveCaptureListener( Listener );
+        }
+        else
+        {
+            Target?.RemoveListener( Listener );
+        }
+
+        return true;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    public override void Reset()
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
-
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
-    {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
-
-    private void FocusChanged( FocusEvent ev )
-    {
-        if ( _dialog.GetStage() == null )
-        {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
-            {
-                ev.Cancel();
-            }
-        }
+        base.Reset();
+        Listener = null;
     }
 }
 

@@ -61,7 +61,6 @@ public class Actor : IComparable< Actor >
     public Touchable Touchable  { get; set; } = Touchable.Enabled;
     public bool      IsVisible  { get; set; } = true;
     public object?   UserObject { get; set; }
-    public Stage?    Stage      { get; set; }
     public Group?    Parent     { get; set; }
 
     // ========================================================================
@@ -71,10 +70,11 @@ public class Actor : IComparable< Actor >
 
     // ========================================================================
 
-    private float _x;
-    private float _y;
-    private float _width;
-    private float _height;
+    private float  _x;
+    private float  _y;
+    private float  _width;
+    private float  _height;
+    private Stage? _stage;
 
     // ========================================================================
     // ========================================================================
@@ -149,7 +149,7 @@ public class Actor : IComparable< Actor >
     /// </remarks>
     public int CompareTo( Actor? other )
     {
-        if ( other == null || Stage == null ) return 1;
+        if ( other == null || GetStage() == null ) return 1;
 
         int index = GetZIndex();
 
@@ -191,7 +191,7 @@ public class Actor : IComparable< Actor >
             return;
         }
 
-        if ( Stage is { ActionsRequestRendering: true } )
+        if ( GetStage() is { ActionsRequestRendering: true } )
         {
             Engine.Graphics.RequestRendering();
         }
@@ -253,7 +253,7 @@ public class Actor : IComparable< Actor >
     {
         Guard.Against.Null( ev );
 
-        ev.Stage       ??= Stage;
+        ev.Stage       ??= GetStage();
         ev.TargetActor =   this;
 
         // Collect ascendants so event propagation is unaffected by
@@ -357,7 +357,7 @@ public class Actor : IComparable< Actor >
 
         ev.ListenerActor =   this;
         ev.Capture       =   capture;
-        ev.Stage         ??= Stage;
+        ev.Stage         ??= GetStage();
 
         try
         {
@@ -512,7 +512,7 @@ public class Actor : IComparable< Actor >
 
             Actions.Add( action );
 
-            if ( Stage is { ActionsRequestRendering: true } )
+            if ( GetStage() is { ActionsRequestRendering: true } )
             {
                 Engine.Graphics.RequestRendering();
             }
@@ -752,13 +752,13 @@ public class Actor : IComparable< Actor >
         get;
         set
         {
-            if ( Stage != null )
+            if ( GetStage() != null )
             {
                 field = value;
 
                 if ( value )
                 {
-                    Stage.Debug = true;
+                    GetStage().Debug = true;
                 }
             }
         }
@@ -769,7 +769,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public bool HasKeyboardFocus()
     {
-        return ( Stage != null ) && ( Stage.GetKeyboardFocus() == this );
+        return ( GetStage() != null ) && ( GetStage().GetKeyboardFocus() == this );
     }
 
     /// <summary>
@@ -777,7 +777,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public bool HasScrollFocus()
     {
-        return ( Stage != null ) && ( Stage.ScrollFocus == this );
+        return ( GetStage() != null ) && ( GetStage().ScrollFocus == this );
     }
 
     /// <summary>
@@ -786,14 +786,14 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public bool IsTouchFocusTarget()
     {
-        if ( Stage == null )
+        if ( GetStage() == null )
         {
             return false;
         }
 
-        for ( int i = 0, n = Stage.TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = GetStage().TouchFocuses.Size; i < n; i++ )
         {
-            if ( Stage.TouchFocuses.GetAt( i ).Target == this )
+            if ( GetStage().TouchFocuses.GetAt( i ).Target == this )
             {
                 return true;
             }
@@ -808,14 +808,14 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public bool IsTouchFocusListener()
     {
-        if ( Stage == null )
+        if ( GetStage() == null )
         {
             return false;
         }
 
-        for ( int i = 0, n = Stage.TouchFocuses.Size; i < n; i++ )
+        for ( int i = 0, n = GetStage().TouchFocuses.Size; i < n; i++ )
         {
-            if ( Stage.TouchFocuses.GetAt( i ).ListenerActor == this )
+            if ( GetStage().TouchFocuses.GetAt( i ).ListenerActor == this )
             {
                 return true;
             }
@@ -915,6 +915,27 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public virtual void OnRotationChanged()
     {
+    }
+    
+    /// <summary>
+    /// Returns the stage that this actor is currently in, or null if not in a stage.
+    /// </summary>
+    /// <returns></returns>
+    public virtual Stage? GetStage()
+    {
+        return _stage;
+    }
+
+    /// <summary>
+    /// Called by the framework when this actor or any ascendant is added to a group
+    /// that is in the stage.
+    /// </summary>
+    /// <param name="stage">
+    /// May be null if the actor or any ascendant is no longer in a stage.
+    /// </param>
+    public virtual void SetStage( Stage? stage )
+    {
+        _stage = stage;
     }
 
     /// <summary>
@@ -1379,7 +1400,7 @@ public class Actor : IComparable< Actor >
             return false;
         }
 
-        if ( Stage == null )
+        if ( GetStage() == null )
         {
             return false;
         }
@@ -1393,7 +1414,7 @@ public class Actor : IComparable< Actor >
 
         Rectangle scissorBounds = PoolsMap.Obtain< Rectangle >();
 
-        Stage.CalculateScissors( tableBounds, scissorBounds );
+        GetStage().CalculateScissors( tableBounds, scissorBounds );
 
         if ( ScissorStack.PushScissors( scissorBounds ) )
         {
@@ -1420,9 +1441,9 @@ public class Actor : IComparable< Actor >
     /// <see cref="Stage.ScreenToStageCoordinates(Maths.Vector2)"/>
     public virtual Vector2 ScreenToLocalCoordinates( Vector2 screenCoords )
     {
-        return Stage == null
+        return GetStage() == null
                    ? screenCoords
-                   : StageToLocalCoordinates( Stage.ScreenToStageCoordinates( screenCoords ) );
+                   : StageToLocalCoordinates( GetStage().ScreenToStageCoordinates( screenCoords ) );
     }
 
     /// <summary>
@@ -1485,9 +1506,9 @@ public class Actor : IComparable< Actor >
     /// <see cref="Stage.StageToScreenCoordinates(Maths.Vector2)"/>
     public virtual Vector2 LocalToScreenCoordinates( Vector2 localCoords )
     {
-        return Stage == null
+        return GetStage() == null
                    ? localCoords
-                   : Stage.StageToScreenCoordinates( LocalToAscendantCoordinates( null, localCoords ) );
+                   : GetStage().StageToScreenCoordinates( LocalToAscendantCoordinates( null, localCoords ) );
     }
 
     /// <system>
@@ -1602,9 +1623,9 @@ public class Actor : IComparable< Actor >
 
         shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
-        if ( Stage != null )
+        if ( GetStage() != null )
         {
-            shapes.Color = Stage.DebugColor;
+            shapes.Color = GetStage().DebugColor;
         }
 
         shapes.Rect( _x, _y, OriginX, OriginY, _width, _height, ScaleX, ScaleY, Rotation );

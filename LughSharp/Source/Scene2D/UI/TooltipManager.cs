@@ -55,7 +55,7 @@ public class TooltipManager< T > where T : Actor
         //@formatter:off
         _showTask = new Task( () =>
         {
-            Stage? stage = _showTooltip.TargetActor?.Stage;
+            Stage? stage = _showTooltip.TargetActor?.GetStage();
 
             if ( stage == null )
             {

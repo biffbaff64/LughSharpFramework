@@ -782,9 +782,9 @@ public class VerticalGroup : WidgetGroup
 
         shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
-        if ( Stage != null )
+        if ( GetStage() != null )
         {
-            shapes.Color = Stage.DebugColor;
+            shapes.Color = GetStage().DebugColor;
         }
 
         shapes.Rect( GetX() + PadLeft,

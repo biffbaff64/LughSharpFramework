@@ -22,57 +22,66 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+using LughSharp.Source.Scene2D.Utils;
 
-namespace LughSharp.Source.Scene2D.Listeners;
+namespace LughSharp.Source.Scene2D.Actions;
 
-public sealed class DialogFocusListener : FocusListener
+/// <summary>
+/// An action that runs an <see cref="Action"/>. Alternatively, the <see cref="Run()"/>
+/// method can be overridden instead of setting a runnable.
+/// </summary>
+[PublicAPI]
+public class RunnableAction : SceneAction
 {
-    private readonly Dialog _dialog;
+    private bool    _ran;
+    public  Action? RunnableTask { get; set; }
 
-    public DialogFocusListener( Dialog dialog )
+    public override bool Act( float delta )
     {
-        _dialog = dialog;
+        if ( !_ran )
+        {
+            _ran = true;
+
+            Run();
+        }
+
+        return true;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    /// <summary>
+    /// Called to run the runnable.
+    /// </summary>
+    public virtual void Run()
     {
-        if ( !focused )
+        if ( RunnableTask == null )
         {
-            FocusChanged( ev );
+            throw new RuntimeException( "RunnableTask is not initialised!" );
+        }
+
+        IScenePool? pool = Pool;
+
+        // Ensure this action can't be returned to the pool inside the runnable.
+        Pool = null;
+
+        try
+        {
+            RunnableTask();
+        }
+        finally
+        {
+            Pool = pool;
         }
     }
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    public override void Restart()
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
+        _ran = false;
     }
 
-    private void FocusChanged( FocusEvent ev )
+    public override void Reset()
     {
-        if ( _dialog.GetStage() == null )
-        {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
-            {
-                ev.Cancel();
-            }
-        }
+        base.Reset();
+        RunnableTask = null!;
     }
 }
 

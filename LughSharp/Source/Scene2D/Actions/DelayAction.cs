@@ -22,57 +22,51 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+namespace LughSharp.Source.Scene2D.Actions;
 
-namespace LughSharp.Source.Scene2D.Listeners;
-
-public sealed class DialogFocusListener : FocusListener
+[PublicAPI]
+public class DelayAction : DelegateAction
 {
-    private readonly Dialog _dialog;
-
-    public DialogFocusListener( Dialog dialog )
+    public DelayAction() : this( 0 )
     {
-        _dialog = dialog;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    public DelayAction( float duration )
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
+        Duration = duration;
+        Time     = 0;
     }
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
-    {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
+    public float Duration { get; set; }
+    public float Time     { get; set; }
 
-    private void FocusChanged( FocusEvent ev )
+    protected override bool Delegate( float delta )
     {
-        if ( _dialog.GetStage() == null )
+        if ( Time < Duration )
         {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
+            Time += delta;
 
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
+            if ( Time < Duration )
             {
-                ev.Cancel();
+                return false;
             }
+
+            delta = Time - Duration;
         }
+
+        return ( Action == null ) || Action.Act( delta );
+    }
+
+    public void Finish()
+    {
+        Time = Duration;
+    }
+
+    public override void Restart()
+    {
+        base.Restart();
+
+        Time = 0;
     }
 }
 

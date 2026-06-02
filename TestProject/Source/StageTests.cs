@@ -46,19 +46,23 @@ namespace TestProject.Source;
 [PublicAPI]
 public class StageTests : IDisposable
 {
-    public Button?          Button           { get; private set; }
-    public Button?          Button2          { get; private set; }
-    public TextButton?      TextButton       { get; private set; }
-    public TextButton?      TextButton2      { get; private set; }
-    public ImageButton?     ImageButton      { get; private set; }
-    public ImageButton?     ImageButton2     { get; private set; }
-    public ImageTextButton? ImageTextButton  { get; private set; }
-    public ImageTextButton? ImageTextButton2 { get; private set; }
-    public CheckBox?        CheckBox         { get; private set; }
-    public ProgressBar?     ProgressBar      { get; private set; }
-    public Slider?          Slider           { get; private set; }
-    public Label?           Label            { get; private set; }
-    public Table?           Table            { get; private set; }
+    public Button?              Button           { get; private set; }
+    public Button?              Button2          { get; private set; }
+    public TextButton?          TextButton       { get; private set; }
+    public TextButton?          TextButton2      { get; private set; }
+    public ImageButton?         ImageButton      { get; private set; }
+    public ImageButton?         ImageButton2     { get; private set; }
+    public ImageTextButton?     ImageTextButton  { get; private set; }
+    public ImageTextButton?     ImageTextButton2 { get; private set; }
+    public CheckBox?            CheckBox         { get; private set; }
+    public ProgressBar?         ProgressBar      { get; private set; }
+    public ScrollPane?          ScrollPane       { get; private set; }
+    public TextField?           TextField        { get; private set; }
+    public TextArea?            TextArea         { get; private set; }
+    public SelectBox< string >? SelectBox        { get; private set; }
+    public Slider?              Slider           { get; private set; }
+    public Label?               Label            { get; private set; }
+    public Table?               Table            { get; private set; }
 
     // ========================================================================
 
@@ -122,6 +126,15 @@ public class StageTests : IDisposable
 
     public void Update( float deltaTime )
     {
+        if ( Engine.Input.IsKeyJustPressed( IInput.Keys.A ) )
+        {
+            SelectBox?.ShowScrollPane();
+        }
+
+        if ( Engine.Input.IsKeyJustPressed( IInput.Keys.D ) )
+        {
+            SelectBox?.HideScrollPane();
+        }
     }
 
     public void Render( bool isDrawingStage )
@@ -204,27 +217,27 @@ public class StageTests : IDisposable
 
         void SelectBoxActor()
         {
-            var selectBox = new SelectBox< string >( skin )
+            SelectBox = new SelectBox< string >( skin )
             {
                 IsVisible  = true,
                 IsDisabled = false,
             };
 
-            selectBox.SetAlignment( Align.Center );
-            selectBox.GetList().Alignment = Align.Center;
+            SelectBox.SetAlignment( Align.Center );
+            SelectBox.GetList().Alignment = Align.Center;
 
-            selectBox.GetStyle().ScrollPaneStyle.Background = titleBackgroundDrawable;
-            selectBox.GetStyle().ListBoxStyle.Background    = bar9Drawable;
+            SelectBox.GetStyle().ScrollPaneStyle.Background = titleBackgroundDrawable;
+            SelectBox.GetStyle().ListBoxStyle.Background    = bar9Drawable;
 
-            selectBox.GetStyle().ListBoxStyle.Selection.RightWidth = 10;
-            selectBox.GetStyle().ListBoxStyle.Selection.LeftWidth  = 20;
-            selectBox.GetStyle().ListBoxStyle.Selection.TopHeight  = 5;
-            selectBox.GetStyle().ListBoxStyle.Selection.BottomHeight = 5;
+            SelectBox.GetStyle().ListBoxStyle.Selection.RightWidth   = 10;
+            SelectBox.GetStyle().ListBoxStyle.Selection.LeftWidth    = 20;
+            SelectBox.GetStyle().ListBoxStyle.Selection.TopHeight    = 5;
+            SelectBox.GetStyle().ListBoxStyle.Selection.BottomHeight = 5;
 
-            selectBox.SetItems( new List< string >( _newItems ) );
-            selectBox.SetSelected( "Silver Bream" );
+            SelectBox.SetItems( new List< string >( _newItems ) );
+            SelectBox.SetSelected( "Silver Bream" );
 
-            window.AddCell( selectBox ).SetMaxWidth( 100 );
+            window.AddCell( SelectBox ).SetMaxWidth( 100 );
         }
 
         // --------------------------------------

@@ -104,28 +104,18 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// Set the max number of items to display when the select box is opened. Set to
-    /// 0 (the default) to display as many as fit in the stage height.
-    /// </summary>
-    public int MaxListCount
-    {
-        get => ScrollPane?.MaxListCount ?? DefaultMaxListCount;
-        set => ScrollPane?.MaxListCount = value;
-    }
-
-    /// <summary>
     /// Sets the stage this select box should be added to. If null, the selectbox
     /// will be hidden.
     /// </summary>
     /// <param name="stage"></param>
-    protected void SetStage( Stage? stage )
+    public override void SetStage( Stage? stage )
     {
         if ( stage == null )
         {
             ScrollPane?.Hide();
         }
 
-        Stage = stage;
+        base.SetStage( stage );
     }
 
     /// <summary>
@@ -167,6 +157,23 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
+    /// Clears the items from the select box.
+    /// </summary>
+    public void ClearItems()
+    {
+        if ( Items.Count == 0 )
+        {
+            return;
+        }
+
+        Items.Clear();
+        Selection.Clear();
+        ScrollPane?.ListBox.ClearItems();
+
+        InvalidateHierarchy();
+    }
+
+    /// <summary>
     /// Set the backing List that makes up the choices available in the SelectBox
     /// </summary>
     public void SetItems( T[] newItems )
@@ -195,23 +202,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     public void SetItems( List< T > newItems )
     {
         SetItems( newItems.ToArray() );
-    }
-
-    /// <summary>
-    /// Clears the items from the select box.
-    /// </summary>
-    public void ClearItems()
-    {
-        if ( Items.Count == 0 )
-        {
-            return;
-        }
-
-        Items.Clear();
-        Selection.Clear();
-        ScrollPane?.ListBox.ClearItems();
-
-        InvalidateHierarchy();
     }
 
     /// <summary>
@@ -302,44 +292,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// Returns appropriate background Drawable from the style based on the current select box state.
-    /// </summary>
-    protected ISceneDrawable GetBackgroundDrawable()
-    {
-        Guard.Against.Null( _style.Background );
-
-        if ( IsDisabled )
-        {
-            return _style.BackgroundDisabled ?? _style.Background;
-        }
-
-        if ( ScrollPane != null && ScrollPane.HasParent() )
-        {
-            return _style.BackgroundOpen ?? _style.Background;
-        }
-
-        return IsOver() ? _style.BackgroundOver ?? _style.Background : _style.Background;
-    }
-
-    /// <summary>
-    /// Returns the appropriate label font color from the style based on the current button state.
-    /// </summary>
-    protected Color GetFontColor()
-    {
-        if ( IsDisabled )
-        {
-            return _style.DisabledFontColor ?? _style.FontColor;
-        }
-
-        if ( IsOver() || ( ScrollPane != null && ScrollPane.HasParent() ) )
-        {
-            return _style.OverFontColor ?? _style.FontColor;
-        }
-
-        return _style.FontColor;
-    }
-
-    /// <summary>
     /// 
     /// </summary>
     /// <param name="batch"></param>
@@ -385,14 +337,42 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         font.Draw( batch, str, x, y, 0, str.Length, width, _alignment, false, "..." );
     }
 
-    protected string ToString( T item )
+    /// <summary>
+    /// Returns appropriate background Drawable from the style based on the current select box state.
+    /// </summary>
+    protected ISceneDrawable GetBackgroundDrawable()
     {
-        if ( item is string str )
+        Guard.Against.Null( _style.Background );
+
+        if ( IsDisabled )
         {
-            return str;
+            return _style.BackgroundDisabled ?? _style.Background;
         }
 
-        return item.ToString() ?? string.Empty;
+        if ( ScrollPane != null && ScrollPane.HasParent() )
+        {
+            return _style.BackgroundOpen ?? _style.Background;
+        }
+
+        return IsOver() ? _style.BackgroundOver ?? _style.Background : _style.Background;
+    }
+
+    /// <summary>
+    /// Returns the appropriate label font color from the style based on the current button state.
+    /// </summary>
+    protected Color GetFontColor()
+    {
+        if ( IsDisabled )
+        {
+            return _style.DisabledFontColor ?? _style.FontColor;
+        }
+
+        if ( IsOver() || ( ScrollPane != null && ScrollPane.HasParent() ) )
+        {
+            return _style.OverFontColor ?? _style.FontColor;
+        }
+
+        return _style.FontColor;
     }
 
     /// <summary>
@@ -471,42 +451,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// When true the pref width is based on the selected item.
-    /// </summary>
-    public void SetSelectedPrefWidth( bool selectedPrefWidth )
-    {
-        _selectedPrefWidth = selectedPrefWidth;
-    }
-
-    /// <summary>
-    /// Returns the pref width of the select box if the widest item was selected,
-    /// for use when <see cref="SetSelectedPrefWidth(bool)"/> is true.
-    /// </summary>
-    public float GetMaxSelectedPrefWidth()
-    {
-        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
-        GlyphLayout         layout     = layoutPool.Obtain();
-        float               width      = 0;
-
-        foreach ( T item in Items )
-        {
-            layout.SetText( _style.Font, ToString( item ) );
-            width = Math.Max( layout.Width, width );
-        }
-
-        ISceneDrawable? bg = _style.Background;
-
-        if ( bg != null )
-        {
-            width = Math.Max( width + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
-        }
-
-        layoutPool.Free( layout );
-
-        return width;
-    }
-
-    /// <summary>
     /// Disables the select box if the provided boolean is true, otherwise enables it.
     /// </summary>
     public void SetDisabled( bool disabled )
@@ -517,38 +461,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         }
 
         IsDisabled = disabled;
-    }
-
-    /// <summary>
-    /// Shows the ScrollPane containing the list of items shown when the select box is open.
-    /// </summary>
-    public void ShowScrollPane()
-    {
-        if ( Items.Count == 0 )
-        {
-            return;
-        }
-
-        if ( Stage != null )
-        {
-            ScrollPane?.Show( Stage );
-        }
-    }
-
-    /// <summary>
-    /// Hides the ScrollPane containing the list of items shown.
-    /// </summary>
-    public void HideScrollPane()
-    {
-        ScrollPane?.Hide();
-    }
-
-    /// <summary>
-    /// Returns the list shown when the select box is open.
-    /// </summary>
-    public ListBox< T > GetList()
-    {
-        return ScrollPane?.ListBox ?? throw new RuntimeException( "No ListBox available!" );
     }
 
     /// <summary>
@@ -595,7 +507,33 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         selectBox.ActorColor.A = 1f;
 
         selectBox.AddAction( SceneActions.Sequence( SceneActions.FadeOut( 0.15f, Interpolation.Fade ),
-                                                    SceneActions.RemoveActor()) );
+                                                    SceneActions.RemoveActor() ) );
+    }
+
+    /// <summary>
+    /// Shows the ScrollPane containing the list of items shown when the select box is open.
+    /// </summary>
+    public void ShowScrollPane()
+    {
+        if ( Items.Count == 0 )
+        {
+            return;
+        }
+
+        var stage = GetStage();
+        
+        if ( stage != null )
+        {
+            ScrollPane?.Show( stage );
+        }
+    }
+
+    /// <summary>
+    /// Hides the ScrollPane containing the list of items shown.
+    /// </summary>
+    public void HideScrollPane()
+    {
+        ScrollPane?.Hide();
     }
 
     /// <summary>
@@ -633,7 +571,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// method is a wrapper for <see cref="GetPrefHeight()"/>, and is provided to
     /// allow calling safely from constructors.
     /// </summary>
-    public float GetPrefHeightUnchecked()
+    private float GetPrefHeightUnchecked()
     {
         return GetPrefHeight();
     }
@@ -644,7 +582,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// safely from constructors.
     /// </summary>
     /// <returns></returns>
-    public float GetWidthUnchecked()
+    private float GetWidthUnchecked()
     {
         return GetWidth();
     }
@@ -658,6 +596,70 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     public float GetHeightUnchecked()
     {
         return GetHeight();
+    }
+
+    /// <summary>
+    /// When true the pref width is based on the selected item.
+    /// </summary>
+    public void SetSelectedPrefWidth( bool selectedPrefWidth )
+    {
+        _selectedPrefWidth = selectedPrefWidth;
+    }
+
+    /// <summary>
+    /// Returns the pref width of the select box if the widest item was selected,
+    /// for use when <see cref="SetSelectedPrefWidth(bool)"/> is true.
+    /// </summary>
+    public float GetMaxSelectedPrefWidth()
+    {
+        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
+        GlyphLayout         layout     = layoutPool.Obtain();
+        float               width      = 0;
+
+        foreach ( T item in Items )
+        {
+            layout.SetText( _style.Font, ToString( item ) );
+            width = Math.Max( layout.Width, width );
+        }
+
+        ISceneDrawable? bg = _style.Background;
+
+        if ( bg != null )
+        {
+            width = Math.Max( width + bg.LeftWidth + bg.RightWidth, bg.MinWidth );
+        }
+
+        layoutPool.Free( layout );
+
+        return width;
+    }
+
+    /// <summary>
+    /// Set the max number of items to display when the select box is opened. Set to
+    /// 0 (the default) to display as many as fit in the stage height.
+    /// </summary>
+    public int MaxListCount
+    {
+        get => ScrollPane?.MaxListCount ?? DefaultMaxListCount;
+        set => ScrollPane?.MaxListCount = value;
+    }
+
+    /// <summary>
+    /// Returns the list shown when the select box is open.
+    /// </summary>
+    public ListBox< T > GetList()
+    {
+        return ScrollPane?.ListBox ?? throw new RuntimeException( "No ListBox available!" );
+    }
+
+    protected string ToString( T item )
+    {
+        if ( item is string str )
+        {
+            return str;
+        }
+
+        return item.ToString() ?? string.Empty;
     }
 
     // ========================================================================
@@ -712,7 +714,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             }
 
             Logger.Checkpoint();
-            
+
             stage.AddActor( this );
             stage.AddCaptureListener( _hideListener );
             stage.AddListener( ListBox.KeyListener );
@@ -828,28 +830,29 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             ListBox.Touchable = Touchable.Disabled;
 
-            if ( Stage != null )
+            if ( GetStage() != null )
             {
                 // Returns false if '_hideListener' is null.
-                _ = Stage.RemoveCaptureListener( _hideListener );
+                _ = GetStage()?.RemoveCaptureListener( _hideListener );
 
                 // Returns false if 'ListBox.KeyListener' is null.
-                _ = Stage.RemoveListener( ListBox.KeyListener );
+                _ = GetStage()?.RemoveListener( ListBox.KeyListener );
 
-                if ( _previousScrollFocus is { Stage: null } )
+                if ( _previousScrollFocus != null && _previousScrollFocus.GetStage() == null )
                 {
                     _previousScrollFocus = null;
                 }
 
-                Actor? actor = Stage.ScrollFocus;
+                Actor? actor = GetStage()?.ScrollFocus;
 
                 if ( ( actor == null ) || IsAscendantOf( actor ) )
                 {
-                    Stage.ScrollFocus = _previousScrollFocus;
+                    GetStage()?.ScrollFocus = _previousScrollFocus;
                 }
             }
 
             ClearActions();
+
             ParentSelectBox.OnHide( this );
         }
 
@@ -878,7 +881,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         public override void SetStage( Stage? stage )
         {
-            Stage? oldStage = Stage;
+            Stage? oldStage = GetStage();
 
             if ( oldStage != null )
             {

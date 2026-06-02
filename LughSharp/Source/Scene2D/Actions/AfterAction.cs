@@ -22,57 +22,65 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+namespace LughSharp.Source.Scene2D.Actions;
 
-namespace LughSharp.Source.Scene2D.Listeners;
-
-public sealed class DialogFocusListener : FocusListener
+[PublicAPI]
+public class AfterAction : DelegateAction
 {
-    private readonly Dialog _dialog;
+    private readonly List< SceneAction > _waitForActions = new( 4 );
+    
+    // ========================================================================
 
-    public DialogFocusListener( Dialog dialog )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="target"></param>
+    public void SetTarget( Actor? target )
     {
-        _dialog = dialog;
+        if ( target != null )
+        {
+            _waitForActions.AddRange( target.Actions );
+        }
+
+        base.Target = target;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    /// <summary>
+    /// Sets the state of the action so it can be run again.
+    /// Default implementation does nothing.
+    /// </summary>
+    public override void Restart()
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
+        base.Restart();
+
+        _waitForActions.Clear();
     }
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <returns></returns>
+    protected override bool Delegate( float delta )
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
+        List< SceneAction >? currentActions = Target?.Actions;
 
-    private void FocusChanged( FocusEvent ev )
-    {
-        if ( _dialog.GetStage() == null )
+        if ( currentActions?.Count == 1 )
         {
-            return;
+            _waitForActions.Clear();
         }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
 
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
+        for ( int i = _waitForActions.Count - 1; i >= 0; i-- )
+        {
+            SceneAction sceneAction = _waitForActions[ i ];
+
+            if ( currentActions?.IndexOf( sceneAction ) == -1 )
             {
-                ev.Cancel();
+                _waitForActions.RemoveAt( i );
             }
         }
+
+        return ( _waitForActions.Count <= 0 ) && Action!.Act( delta );
     }
 }
 

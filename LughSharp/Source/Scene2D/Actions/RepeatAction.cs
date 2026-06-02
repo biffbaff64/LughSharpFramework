@@ -22,57 +22,68 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+namespace LughSharp.Source.Scene2D.Actions;
 
-namespace LughSharp.Source.Scene2D.Listeners;
-
-public sealed class DialogFocusListener : FocusListener
+[PublicAPI]
+public class RepeatAction : DelegateAction
 {
-    private readonly Dialog _dialog;
+    public const int Forever = -1;
 
-    public DialogFocusListener( Dialog dialog )
-    {
-        _dialog = dialog;
-    }
+    public int  RepeatCount   { get; set; }
+    public int  ExecutedCount { get; set; }
+    public bool Finished      { get; set; }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    // ========================================================================
+
+    protected override bool Delegate( float delta )
     {
-        if ( !focused )
+        if ( ExecutedCount == RepeatCount )
         {
-            FocusChanged( ev );
+            return true;
         }
-    }
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
-    {
-        if ( !focused )
+        if ( Action == null )
         {
-            FocusChanged( ev );
+            return false;
         }
-    }
 
-    private void FocusChanged( FocusEvent ev )
-    {
-        if ( _dialog.GetStage() == null )
+        if ( Action.Act( delta ) )
         {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
+            if ( Finished )
             {
-                ev.Cancel();
+                return true;
             }
+
+            if ( RepeatCount > 0 )
+            {
+                ExecutedCount++;
+            }
+
+            if ( ExecutedCount == RepeatCount )
+            {
+                return true;
+            }
+
+            Action?.Restart();
         }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Causes the action to not repeat again.
+    /// </summary>
+    public void Finish()
+    {
+        Finished = true;
+    }
+
+    public override void Restart()
+    {
+        base.Restart();
+
+        ExecutedCount = 0;
+        Finished      = false;
     }
 }
 

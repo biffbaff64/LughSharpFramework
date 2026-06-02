@@ -345,6 +345,7 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS - DONE
 LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE - SHELVED
 ----------------------------------------
 
+    These classes do not need to be completed as yet.
     Possibly use SharpFont instead of these classes, as the work has already been done?
 
       CODE   DOCU   FOOTER
@@ -961,39 +962,39 @@ LUGHSHARP/SOURCE/SCENE2D/ACTIONS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - AddAction
-    -      -      -      - AddListenerAction
-    -      -      -      - AfterAction
-    -      -      -      - AlphaAction
-    -      -      -      - ColorAction
-    -      -      -      - CountdownEventAction
-    -      -      -      - DelayAction
-    -      -      -      - DelegateAction
-    -      -      -      - EventAction
-    -      -      -      - FloatAction
-    -      -      -      - IntAction
-    -      -      -      - LayoutAction
-    -      -      -      - MoveByAction
-    -      -      -      - MoveToAction
-    -      -      -      - ParallelAction
-    -      -      -      - RelativeTemporalAction
-    -      -      -      - RemoveAction
-    -      -      -      - RemoveActorAction
-    -      -      -      - RemoveListenerAction
-    -      -      -      - RepeatAction
-    -      -      -      - RotateByAction
-    -      -      -      - RotateToAction
-    -      -      -      - RunnableAction
-    -      -      -      - ScaleByAction
-    -      -      -      - ScaleToAction
-    -      -      -      - SceneActions
-    -      -      -      - SequenceAction
-    -      -      -      - SizeByAction
-    -      -      -      - SizeToAction
-    -      -      -      - TemporalAction
-    -      -      -      - TimeScaleAction
-    -      -      -      - TouchableAction
-    -      -      -      - VisibleAction
+    - DONE - DONE - DONE - AddAction
+    - DONE - DONE - DONE - AddListenerAction
+    - IP   - IP   - DONE - AfterAction
+    - IP   - DONE - DONE - AlphaAction
+    - IP   - IP   - DONE - ColorAction
+    - IP   - IP   - DONE - CountdownEventAction
+    - IP   - IP   - DONE - DelayAction
+    - IP   - IP   - DONE - DelegateAction
+    - IP   - IP   - DONE - EventAction
+    - IP   - IP   - DONE - FloatAction
+    - IP   - IP   - DONE - IntegerAction
+    - IP   - IP   - DONE - LayoutAction
+    - IP   - IP   - DONE - MoveByAction
+    - IP   - IP   - DONE - MoveToAction
+    - IP   - IP   - DONE - ParallelAction
+    - IP   - IP   - DONE - RelativeTemporalAction
+    - IP   - IP   - DONE - RemoveAction
+    - IP   - IP   - DONE - RemoveActorAction
+    - IP   - IP   - DONE - RemoveListenerAction
+    - IP   - IP   - DONE - RepeatAction
+    - IP   - IP   - DONE - RotateByAction
+    - IP   - IP   - DONE - RotateToAction
+    - IP   - IP   - DONE - RunnableAction
+    - IP   - IP   - DONE - ScaleByAction
+    - IP   - IP   - DONE - ScaleToAction
+    - IP   - IP   - DONE - SceneActions
+    - IP   - IP   - DONE - SequenceAction
+    - IP   - IP   - DONE - SizeByAction
+    - IP   - IP   - DONE - SizeToAction
+    - IP   - IP   - DONE - TemporalAction
+    - IP   - IP   - DONE - TimeScaleAction
+    - DONE - DONE - DONE - TouchableAction
+    - DONE - DONE - DONE - VisibleAction
 
 LUGHSHARP/SOURCE/SCENE2D/LISTENERS
 ----------------------------------

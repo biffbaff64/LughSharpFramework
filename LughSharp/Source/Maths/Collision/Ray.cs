@@ -34,6 +34,8 @@ public class Ray
     public readonly Vector3 Direction = new();
     public readonly Vector3 Origin    = new();
 
+    // ========================================================================
+    
     /// <summary>
     /// Constructor, sets the starting position of the ray and the direction.
     /// </summary>
@@ -80,12 +82,6 @@ public class Ray
         Direction.Set( _tmp.Sub( Origin ) ).Nor();
 
         return this;
-    }
-
-    /// <inheritdoc />
-    public override string ToString()
-    {
-        return "ray [" + Origin + ":" + Direction + "]";
     }
 
     /// <summary>
@@ -160,6 +156,12 @@ public class Ray
         result = ( Prime * result ) + Origin.GetHashCode();
 
         return result;
+    }
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        return "ray [" + Origin + ":" + Direction + "]";
     }
 }
 

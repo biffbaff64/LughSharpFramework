@@ -1185,7 +1185,7 @@ public class Stage : InputAdapter, IDisposable
             field = value;
 
             value.Parent = null;
-            value.Stage  = this;
+            value.SetStage( this );
         }
     }
 

@@ -511,7 +511,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
             }
         }
 
-        if ( Stage is { ActionsRequestRendering: true }
+        if ( GetStage() is { ActionsRequestRendering: true }
           && ( IsPressed != ClickListener?.Pressed ) )
         {
             Engine.Graphics.RequestRendering();

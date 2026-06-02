@@ -203,7 +203,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
         {
             _animateTime -= delta;
 
-            if ( Stage is { ActionsRequestRendering: true } )
+            if ( GetStage() is { ActionsRequestRendering: true } )
             {
                 Engine.Graphics.RequestRendering();
             }

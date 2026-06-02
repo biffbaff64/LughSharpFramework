@@ -141,12 +141,12 @@ public class Window : Table, IStyleable< WindowStyle >
     /// </summary>
     public void EnsureWithinStage()
     {
-        if ( !KeepWithinStage || ( Stage == null ) )
+        if ( !KeepWithinStage || ( GetStage() == null ) )
         {
             return;
         }
 
-        Stage stage        = Stage;
+        Stage stage        = GetStage();
         float parentWidth  = stage.Width;
         float parentHeight = stage.Height;
 
@@ -218,13 +218,13 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <param name="parentAlpha"></param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        if ( Stage != null )
+        if ( GetStage() != null )
         {
-            Stage stage = Stage;
+            Stage stage = GetStage();
 
             if ( stage.GetKeyboardFocus() == null )
             {
-                Stage.SetKeyboardFocus( this );
+                GetStage().SetKeyboardFocus( this );
             }
 
             EnsureWithinStage();
@@ -232,7 +232,7 @@ public class Window : Table, IStyleable< WindowStyle >
             if ( GetStyle().StageBackground != null )
             {
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
-                StageToLocalCoordinates( _tmpSize.Set( Stage.Width, Stage.Height ) );
+                StageToLocalCoordinates( _tmpSize.Set( GetStage().Width, GetStage().Height ) );
 
                 DrawStageBackground( batch,
                                      parentAlpha,
@@ -479,7 +479,7 @@ public class Window : Table, IStyleable< WindowStyle >
             float  windowY   = _window.GetY();
             float  minWidth  = _window.GetMinWidth();
             float  minHeight = _window.GetMinHeight();
-            Stage? stage     = _window.Stage;
+            Stage? stage     = _window.GetStage();
 
             bool clampPosition = _window.KeepWithinStage
                               && ( stage != null )

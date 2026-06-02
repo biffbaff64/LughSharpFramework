@@ -573,9 +573,9 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
                     return true;
 
                 case IInput.Keys.Escape:
-                    if ( _parent.Stage != null )
+                    if ( _parent.GetStage() != null )
                     {
-                        _parent.Stage.SetKeyboardFocus( null );
+                        _parent.GetStage().SetKeyboardFocus( null );
                     }
 
                     return true;
@@ -655,9 +655,9 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
                 return true;
             }
 
-            if ( _parent.Stage != null )
+            if ( _parent.GetStage() != null )
             {
-                _parent.Stage.SetKeyboardFocus( _parent );
+                _parent.GetStage().SetKeyboardFocus( _parent );
             }
 
             if ( _parent.Items.Count == 0 )

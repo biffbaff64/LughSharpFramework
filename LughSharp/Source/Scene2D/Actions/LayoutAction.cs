@@ -22,57 +22,44 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+using LughSharp.Source.Scene2D.Utils;
 
-namespace LughSharp.Source.Scene2D.Listeners;
+namespace LughSharp.Source.Scene2D.Actions;
 
-public sealed class DialogFocusListener : FocusListener
+[PublicAPI]
+public class LayoutAction : SceneAction
 {
-    private readonly Dialog _dialog;
+    public bool Enabled { get; set; }
 
-    public DialogFocusListener( Dialog dialog )
+    public void SetTarget( Actor actor )
     {
-        _dialog = dialog;
+        if ( ( actor != null ) && actor is not ILayout )
+        {
+            throw new RuntimeException( "Actor must implement layout: " + actor );
+        }
+
+        base.Target = actor;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    /// <summary>
+    /// Updates the action based on time.
+    /// Typically this is called each frame by <see cref="Actor"/>.
+    /// </summary>
+    /// <param name="delta">Time in seconds since the last frame.</param>
+    /// <returns>
+    /// true if the action is done. This method may continue to be called after
+    /// the action is done.
+    /// </returns>
+    public override bool Act( float delta )
     {
-        if ( !focused )
+        if ( base.Target == null )
         {
-            FocusChanged( ev );
+            return false;
         }
-    }
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
-    {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
+        ( ( ILayout )base.Target ).LayoutEnabled = Enabled;
 
-    private void FocusChanged( FocusEvent ev )
-    {
-        if ( _dialog.GetStage() == null )
-        {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
-            {
-                ev.Cancel();
-            }
-        }
+        return true;
     }
 }
 

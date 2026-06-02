@@ -105,6 +105,8 @@ public class MainGame : LughGame
     /// <inheritdoc />
     public override void Update( float delta )
     {
+        _stageTests.Update( delta );
+        
         if ( Engine.Input.IsKeyJustPressed( IInput.Keys.Enter ) )
         {
             Shake.ScreenShakeAllowed = true;

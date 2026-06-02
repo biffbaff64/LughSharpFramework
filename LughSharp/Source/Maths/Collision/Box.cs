@@ -38,8 +38,8 @@ public class Box
     // ========================================================================
 
     /// <summary>
-    /// Initializes a new instance of the Box class with all coordinates and dimensions
-    /// set to zero.
+    /// Initializes a new instance of the Box class with all coordinates and
+    /// dimensions set to zero.
     /// </summary>
     public Box()
     {

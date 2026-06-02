@@ -895,7 +895,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     /// </param>
     public void Next( bool up )
     {
-        if ( Stage == null || Parent == null )
+        if ( GetStage() == null || Parent == null )
         {
             return;
         }
@@ -905,7 +905,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
         while ( true )
         {
-            TextField? textField = current.FindNextTextField( Stage.Actors, null, _tmp1, currentCoords, up );
+            TextField? textField = current.FindNextTextField( GetStage().Actors, null, _tmp1, currentCoords, up );
 
             if ( textField == null )
             {
@@ -919,7 +919,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                     currentCoords.Set( float.MaxValue, float.MaxValue );
                 }
 
-                textField = current.FindNextTextField( Stage.Actors, null, _tmp1, currentCoords, up );
+                textField = current.FindNextTextField( GetStage().Actors, null, _tmp1, currentCoords, up );
             }
 
             if ( textField == null )
@@ -929,7 +929,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                 break;
             }
 
-            if ( Stage.GetKeyboardFocus() == textField )
+            if ( GetStage().GetKeyboardFocus() == textField )
             {
                 textField.SelectAll();
 
@@ -1281,9 +1281,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             SetCursorPosition( x, y );
             _tf.SelectionStart = _tf.Cursor;
 
-            if ( _tf.Stage != null )
+            if ( _tf.GetStage() != null )
             {
-                _tf.Stage.SetKeyboardFocus( _tf );
+                _tf.GetStage().SetKeyboardFocus( _tf );
             }
 
             _tf._keyboard.Show( true );

@@ -22,57 +22,28 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI;
+namespace LughSharp.Source.Scene2D.Actions;
 
-namespace LughSharp.Source.Scene2D.Listeners;
-
-public sealed class DialogFocusListener : FocusListener
+/// <summary>
+/// An EventAction that is complete once it receives X number of events.
+/// </summary>
+[PublicAPI]
+public class CountdownEventAction< T > : EventAction< T > where T : Event
 {
-    private readonly Dialog _dialog;
+    private readonly int _count;
+    private          int _current;
 
-    public DialogFocusListener( Dialog dialog )
+    public CountdownEventAction( T eventClass, int count )
+        : base( eventClass )
     {
-        _dialog = dialog;
+        _count = count;
     }
 
-    public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
+    public override bool HandleDelegate( Event ev )
     {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
+        _current++;
 
-    public override void ScrollFocusChanged( FocusEvent ev, Actor? actor, bool focused )
-    {
-        if ( !focused )
-        {
-            FocusChanged( ev );
-        }
-    }
-
-    private void FocusChanged( FocusEvent ev )
-    {
-        if ( _dialog.GetStage() == null )
-        {
-            return;
-        }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
-        {
-            // Dialog is top most actor.
-            Actor? newFocusedActor = ev.RelatedActor;
-
-            if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
-            {
-                ev.Cancel();
-            }
-        }
+        return _current >= _count;
     }
 }
 

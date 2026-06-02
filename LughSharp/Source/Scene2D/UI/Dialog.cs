@@ -292,13 +292,13 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// </param>
     public void Hide( SceneAction? action )
     {
-        Stage? stage = Stage;
+        Stage? stage = GetStage();
 
         if ( stage != null )
         {
             RemoveListener( _dialogFocusListener );
 
-            if ( PreviousKeyboardFocus is { Stage: null } )
+            if ( PreviousKeyboardFocus?.GetStage() == null )
             {
                 PreviousKeyboardFocus = null;
             }
@@ -310,7 +310,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
                 stage.SetKeyboardFocus( PreviousKeyboardFocus );
             }
 
-            if ( PreviousScrollFocus is { Stage: null } )
+            if ( PreviousScrollFocus?.GetStage() == null )
             {
                 PreviousScrollFocus = null;
             }
