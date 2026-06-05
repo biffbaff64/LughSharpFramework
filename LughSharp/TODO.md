@@ -808,45 +808,45 @@ LUGHSHARP/SOURCE/MATHS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Affine2
-    -      -      -      - Bezier
-    -      -      -      - Bresenham2
-    -      -      -      - BSpline
-    -      -      -      - CatmullRomSpline
-    -      -      -      - Circle
+    - DONE - DONE - DONE - Affine2
+    -      -      - DONE - Bezier
+    -      -      - DONE - Bresenham2
+    -      -      - DONE - BSpline
+    -      -      - DONE - CatmullRomSpline
+    -      -      - DONE - Circle
     - DONE - DONE - DONE - Compare
-    -      -      -      - ConvexHull
-    -      -      -      - CumulativeDistribution
-    -      -      -      - DelaunayTriangulator        Unsure about method ComputeTriangles()
-    -      -      -      - EarClippingTriangulator     Needs some testing
-    -      -      -      - Ellipse
-    -      -      -      - FloatCounter
-    -      -      -      - FloatMatrixStructs
-    -      -      -      - Frustrum
-    -      -      -      - GeometryUtils
-    -      -      -      - GridPoint2
-    -      -      -      - GridPoint3
-    -      -      -      - Interpolation
-    -      -      -      - Intersector
-    -      -      -      - IPath
-    -      -      -      - IShape2D
-    -      -      -      - IVector
-    -      -      -      - MathUtils
-    -      -      -      - Matrix3
-    -      -      -      - Matrix4
-    -      -      -      - NumberUtils
-    -      -      -      - Plane
-    -      -      -      - Point2D
-    -      -      -      - Polygon
-    -      -      -      - Polyline
-    -      -      -      - Quaternion
-    -      -      -      - RandomXS128
-    -      -      -      - Rectangle
-    -      -      -      - SimpleVectors
-    -      -      -      - Vector2
-    -      -      -      - Vector3
-    -      -      -      - Vector4
-    -      -      -      - WindowedMean
+    -      -      - DONE - ConvexHull
+    -      -      - DONE - CumulativeDistribution
+    -      -      - DONE - DelaunayTriangulator        Unsure about method ComputeTriangles()
+    -      -      - DONE - EarClippingTriangulator     Needs some testing
+    -      -      - DONE - Ellipse
+    -      -      - DONE - FloatCounter
+    -      -      - DONE - FloatMatrixStructs
+    -      -      - DONE - Frustrum
+    -      -      - DONE - GeometryUtils
+    -      -      - DONE - GridPoint2
+    -      -      - DONE - GridPoint3
+    -      -      - DONE - Interpolation
+    -      -      - DONE - Intersector
+    -      -      - DONE - IPath
+    -      -      - DONE - IShape2D
+    -      -      - DONE - IVector
+    -      -      - DONE - MathUtils
+    -      -      - DONE - Matrix3
+    -      -      - DONE - Matrix4
+    -      -      - DONE - NumberUtils
+    -      -      - DONE - Plane
+    -      -      - DONE - Point2D
+    -      -      - DONE - Polygon
+    -      -      - DONE - Polyline
+    -      -      - DONE - Quaternion
+    -      -      - DONE - RandomXS128
+    -      -      - DONE - Rectangle
+    -      -      - DONE - SimpleVectors
+    -      -      - DONE - Vector2
+    -      -      - DONE - Vector3
+    -      -      - DONE - Vector4
+    -      -      - DONE - WindowedMean
 
 LUGHSHARP/SOURCE/MATH/COLLISION
 -------------------------------

@@ -323,3 +323,7 @@ public class Polygon : IShape2D
         return GeometryUtils.PolygonArea( TransformedVertices!, 0, TransformedVertices!.Length );
     }
 }
+
+// ========================================================================
+// ========================================================================
+

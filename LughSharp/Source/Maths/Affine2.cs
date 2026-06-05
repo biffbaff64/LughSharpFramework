@@ -43,6 +43,8 @@ public class Affine2
 
     // constant: m21 = 0, m21 = 1, m22 = 1
 
+    // ========================================================================
+    
     /// <summary>
     /// Constructs an identity matrix.
     /// </summary>
@@ -496,9 +498,9 @@ public class Affine2
 
     /// <summary>
     /// Premultiplies this matrix with the provided matrix and stores the result in this matrix. For example:
-    /// <pre>
+    /// <code>
     /// A.preMul(B) results in A := BA
-    /// </pre>
+    /// </code>
     /// </summary>
     /// <param name="other"> The other Matrix to multiply by </param>
     /// <returns> This matrix for the purpose of chaining operations.  </returns>

@@ -718,3 +718,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
         return NumberUtils.FloatToRawIntBits( Y ) == NumberUtils.FloatToRawIntBits( other.Y );
     }
 }
+
+// ========================================================================
+// ========================================================================
+
