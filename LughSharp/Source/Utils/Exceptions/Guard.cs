@@ -36,7 +36,8 @@ public class Guard
     /// does not exist.
     /// </summary>
     public static void ThrowIfFileNullOrNotExist(
-        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull]
+        FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {
@@ -61,7 +62,8 @@ public class Guard
     /// does not exist.
     /// </summary>
     public static void ThrowIfNotFileOrDirectory(
-        [System.Diagnostics.CodeAnalysis.NotNull] FileSystemInfo? argumentValue,
+        [System.Diagnostics.CodeAnalysis.NotNull]
+        FileSystemInfo? argumentValue,
         [CallerArgumentExpression( nameof( argumentValue ) )]
         string argumentName = "" )
     {
@@ -83,7 +85,7 @@ public class Guard
                 throw new ArgumentException( $"The file {argumentName} does not exist" );
         }
     }
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -145,6 +147,22 @@ public class Guard
                                      string argumentName = "" )
         {
             if ( value < 0 )
+            {
+                throw new ArgumentException( argumentName );
+            }
+        }
+
+        /// <summary>
+        /// Throws ArgumentException if <paramref name="value"/> is &lt;= 0.
+        /// Provides a clear error message with the argumentName.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="argumentName"></param>
+        public static void NegativeOrZero( int value,
+                                           [CallerArgumentExpression( nameof( value ) )]
+                                           string argumentName = "" )
+        {
+            if ( value <= 0 )
             {
                 throw new ArgumentException( argumentName );
             }

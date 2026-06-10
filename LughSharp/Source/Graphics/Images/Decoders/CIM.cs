@@ -34,8 +34,8 @@ public static class CIM
 {
     private const int BufferSize = 32000;
 
-    private static readonly byte[] _writeBuffer = new byte[ BufferSize ];
-    private static readonly byte[] _readBuffer  = new byte[ BufferSize ];
+    private static byte[] _writeBuffer = new byte[ BufferSize ];
+    private static byte[] _readBuffer  = new byte[ BufferSize ];
 
     // ========================================================================
 
@@ -68,13 +68,15 @@ public static class CIM
 
             lock ( _writeBuffer )
             {
+                var writeBufferSize = _writeBuffer.Length;
+            
                 for ( var i = 0; i < iterations; i++ )
                 {
-                    pixelBuf.GetBytes( _writeBuffer );
+                    _writeBuffer = pixelBuf.GetBytes( writeBufferSize );
                     output.Write( _writeBuffer );
                 }
 
-                pixelBuf.GetBytes( _writeBuffer, 0, remainingBytes );
+                _writeBuffer = pixelBuf.GetBytes( 0, remainingBytes );
                 output.Write( _writeBuffer, 0, remainingBytes );
             }
 

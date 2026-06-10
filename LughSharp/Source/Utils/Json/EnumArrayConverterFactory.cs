@@ -32,7 +32,7 @@ namespace LughSharp.Source.Utils.Json;
 /// enabling case-insensitive deserialization of enum values from JSON string arrays.
 /// </summary>
 [PublicAPI]
-public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
+public class EnumArrayConverterFactory : JsonConverterFactory
 {
     /// <summary>
     /// Determines whether the specified type can be converted by this factory.
@@ -64,7 +64,7 @@ public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
     public override JsonConverter? CreateConverter( Type typeToConvert, JsonSerializerOptions options )
     {
         Type? elementType   = typeToConvert.GetElementType();
-        Type  converterType = typeof( CaseInsensitiveEnumArrayConverter<> ).MakeGenericType( elementType! );
+        Type  converterType = typeof( EnumArrayConverter<> ).MakeGenericType( elementType! );
 
         return ( JsonConverter? )Activator.CreateInstance( converterType );
     }
@@ -78,7 +78,7 @@ public class CaseInsensitiveEnumArrayConverterFactory : JsonConverterFactory
 /// The enum type to convert. Must be a struct and an <see cref="Enum"/>.
 /// </typeparam>
 [PublicAPI]
-public class CaseInsensitiveEnumArrayConverter< TEnum > : JsonConverter< TEnum[] > where TEnum : struct, Enum
+public class EnumArrayConverter< TEnum > : JsonConverter< TEnum[] > where TEnum : struct, Enum
 {
     /// <summary>
     /// Reads and converts a JSON array of strings to an array of enum values,

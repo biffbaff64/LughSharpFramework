@@ -136,10 +136,17 @@ public static class ScreenUtils
         return textureRegion;
     }
 
-    /// <inheritdoc cref="Pixmap.CreateFromFrameBuffer"/>
-    public static Pixmap GetFrameBufferPixmap( int x, int y, int w, int h )
+    /// <summary>
+    /// Creates a Pixmap from a part of the current framebuffer.
+    /// </summary>
+    /// <param name="x"> Framebuffer region x </param>
+    /// <param name="y"> Framebuffer region y </param>
+    /// <param name="width"> Framebuffer region width </param>
+    /// <param name="height"> Framebuffer region height </param>
+    /// <returns> The new Pixmap. </returns>
+    public static Pixmap GetFrameBufferPixmap( int x, int y, int width, int height )
     {
-        return Pixmap.CreateFromFrameBuffer( x, y, w, h );
+        return Pixmap.CreateFromFrameBuffer( x, y, width, height );
     }
 
     /// <summary>
@@ -203,14 +210,13 @@ public static class ScreenUtils
             {
                 pixels.Position = ( h - i - 1 ) * numBytesPerLine;
 
-                pixels.GetBytes( lines, i * numBytesPerLine, numBytesPerLine );
+                lines = pixels.GetBytes( i * numBytesPerLine, numBytesPerLine );
             }
         }
         else
         {
             pixels.Clear();
-
-            pixels.GetBytes( lines );
+            lines = pixels.GetBytes( lines.Length );
         }
 
         return lines;

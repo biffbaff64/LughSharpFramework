@@ -25,12 +25,13 @@
 namespace LughSharp.Source.Utils;
 
 /// <summary>
-/// 
+/// A simple asynchronous task executor that limits the number of concurrent tasks
+/// using a SemaphoreSlim.
 /// </summary>
 [PublicAPI]
 public class AsyncExecutor : IDisposable
 {
-    // C# mechanism to limit the number of concurrent tasks (the maxConcurrent property)
+    // A mechanism to limit the number of concurrent tasks (the maxConcurrent property)
     private readonly SemaphoreSlim _semaphore;
 
     private bool _isDisposed;
@@ -40,8 +41,8 @@ public class AsyncExecutor : IDisposable
     /// <summary>
     /// Creates a new AsyncExecutor with the specified maximum number of concurrent tasks.
     /// </summary>
-    /// <param name="maxConcurrent"></param>
-    /// <param name="name"></param>
+    /// <param name="maxConcurrent">The maximum number of concurrent tasks allowed.</param>
+    /// <param name="name">An optional name for the executor, useful for logging and debugging.</param>
     public AsyncExecutor( int maxConcurrent, string name = "" )
     {
         // Semaphore initialized with maxConcurrent concurrent slots
@@ -111,6 +112,13 @@ public class AsyncExecutor : IDisposable
         GC.SuppressFinalize( this );
     }
 
+    /// <summary>
+    /// Disposes the resources used by the AsyncExecutor. This method is called by both
+    /// the Dispose() method and the finalizer.
+    /// </summary>
+    /// <param name="disposing">
+    /// Indicates whether the method is called from Dispose() (true) or the finalizer (false).
+    /// </param>
     private void Dispose( bool disposing )
     {
         if ( !_isDisposed )
@@ -124,7 +132,7 @@ public class AsyncExecutor : IDisposable
                 // TODO: If it turns out I absolutely need to wait for all *currently running* tasks,
                 // I will need to implement a more complex tracking mechanism. This would need a
                 // concurrent collection to track all the Tasks returned by Submit().
-                // As it stands currently, relying on the semaphore to prevent *new* tasks is often enough.
+                // As it stands currently, relying on the semaphore to prevent *new* tasks is enough.
 
                 _semaphore.Dispose();
             }

@@ -212,6 +212,11 @@ public class Json
     /// <summary>
     /// The specified field will be treated as if it has or does not have the <c>Deprecated</c> annotation.
     /// </summary>
+    /// <param name="type"> The <c>Type</c> of the field. </param>
+    /// <param name="fieldName"> The <c>name</c> of the field. </param>
+    /// <param name="deprecated">
+    /// True to set the field to be treated as if it has the <c>Deprecated</c> annotation, false otherwise.
+    /// </param>
     public void SetDeprecated( Type type, string fieldName, bool deprecated )
     {
         FieldMetadata? metadata = GetFields( type ).Get( fieldName );
@@ -223,8 +228,6 @@ public class Json
 
         metadata.Deprecated = deprecated;
     }
-
-    // ========================================================================
 
     /// <summary>
     /// 
@@ -303,29 +306,6 @@ public class Json
         }
 
         return ReadValue< T >( type, elementType, jsonData );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="jsonData"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public virtual T? ReadValue< T >( Type? type, JsonValue jsonData )
-    {
-        return ReadValue< T >( type, null, jsonData );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="jsonData"></param>
-    /// <returns></returns>
-    public virtual object? ReadValue( Type? type, JsonValue jsonData )
-    {
-        return ReadValue< object >( type, null, jsonData );
     }
 
     /// <summary>

@@ -809,7 +809,7 @@ LUGHSHARP/SOURCE/MATHS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - Affine2
-    -      -      - DONE - Bezier
+    - DONE - DONE - DONE - Bezier
     -      -      - DONE - Bresenham2
     -      -      - DONE - BSpline
     -      -      - DONE - CatmullRomSpline
@@ -1150,12 +1150,12 @@ LUGHSHARP/SOURCE/UTILS
       ----   ----   ------
     - DONE - DONE - DONE - ActorDefinitionAttribute
     - DONE - DONE - DONE - Align
-    - DONE - IP   - DONE - AsyncExecutor
-    - DONE - IP   - DONE - AsyncResult
+    - DONE - DONE - DONE - AsyncExecutor
+    - DONE - DONE - DONE - AsyncResult
     - DONE - DONE - DONE - BaseClassFactory
     - DONE - DONE - DONE - BinaryHeap
     - DONE - DONE - DONE - Bits
-    - IP   - IP   - DONE - Buffer<T>                    Check todos
+    - DONE - IP   - DONE - Buffer<T>
     - DONE - IP   - DONE - BufferUtils
     - DONE - DONE - DONE - ByteOrder
     - DONE - IP   - DONE - ComparableTimSort
@@ -1202,9 +1202,9 @@ LUGHSHARP/SOURCE/UTILS/JSON
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - CaseInsensitiveEnumArrayConverterFactory
+    - DONE - DONE - DONE - EnumArrayConverterFactory
     - DONE - IP   - DONE - Json
-    - DONE - IP   - DONE - JsonFieldAttribute
+    - DONE - DONE - DONE - JsonFieldAttribute
     - IP   - IP   - DONE - JsonMatcher          May not be needed / To Be Removed
     - DONE - IP   - DONE - JsonNameAttribute
     - DONE - IP   - DONE - JsonOutput

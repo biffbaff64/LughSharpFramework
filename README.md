@@ -95,3 +95,28 @@ FUTURE UPDATES:
 - SpriteFont support.
 - Add AnimatedTileBuilder to TiledMap support.
 - Network / HTTP etc.
+
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+ref (method parameters)
+-----------------------
+
+- pass by reference. Variable passed must be initialised first. (check other uses of ref).
+- the method MAY modify parameter.
+
+out (method parameters)
+-----------------------
+
+- Like ref but variable does not need to be initialised.
+- the method MUST modify parameter.
+
+in (method parameters)
+----------------------
+
+- pass by reference but disable modification.
+- the method CANNOT modify parameter.
+
+

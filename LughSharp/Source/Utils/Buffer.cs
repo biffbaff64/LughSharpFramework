@@ -104,14 +104,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// </summary>
     public Buffer( int elementCount )
     {
-        IsBigEndian = !BitConverter.IsLittleEndian;
-        IsReadOnly  = IsReadOnlyDefault;
-        IsDirect    = IsDirectDefault;
-
-        _elementSize = Unsafe.SizeOf< T >();
-
-        Capacity = elementCount * _elementSize; // Always store as bytes
-
+        IsBigEndian   = !BitConverter.IsLittleEndian;
+        IsReadOnly    = IsReadOnlyDefault;
+        IsDirect      = IsDirectDefault;
+        _elementSize  = Unsafe.SizeOf< T >();
+        Capacity      = elementCount * _elementSize; // Always store as bytes
         _backingArray = new byte[ Capacity ];
         _memory       = _backingArray.AsMemory();
         Limit         = Capacity;
@@ -211,10 +208,13 @@ public class Buffer< T > : IDisposable where T : unmanaged
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Reads the next element of type <typeparamref name="T"/> from the buffer at the current
+    /// position and advances the position by the size of the element.
     /// </summary>
-    /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <returns>The next element of type <typeparamref name="T"/>.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if the next element is beyond the buffer's limit.
+    /// </exception>
     public T Get()
     {
         if ( ( Position + _elementSize ) > Limit )
@@ -229,11 +229,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// 
+    /// Reads the element of type <typeparamref name="T"/> at the specified index from the buffer.
     /// </summary>
-    /// <param name="elementIndex"></param>
-    /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="elementIndex">The index of the element to read.</param>
+    /// <returns>The element of type <typeparamref name="T"/> at the specified index.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified index is out of range.</exception>
     public T Get( int elementIndex )
     {
         int byteIndex = elementIndex * _elementSize;
@@ -249,21 +249,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// 
+    /// Reads <c>count</c> elements from the buffer into the specified array, starting at the given offset.
     /// </summary>
-    /// <param name="array"></param>
-    public void Get( T[] array )
-    {
-        Get( array, 0, array.Length );
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="array"></param>
-    /// <param name="offset"></param>
-    /// <param name="count"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="array">The array to read elements into.</param>
+    /// <param name="offset">The starting index in the array to begin writing elements.</param>
+    /// <param name="count">The number of elements to read from the buffer.</param>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified range is out of the buffer's bounds.</exception>
     public void Get( T[] array, int offset, int count )
     {
         int bytesToRead = count * _elementSize;
@@ -280,9 +271,10 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// 
+    /// Writes the specified element of type <typeparamref name="T"/> to the buffer at
+    /// the current position and advances the position by the size of the element.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">The element to write to the buffer.</param>
     public void Put( T value )
     {
         EnsureCapacity( Position + _elementSize );
@@ -297,11 +289,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// 
+    /// Writes the specified element of type <typeparamref name="T"/> to the buffer at the given index.
     /// </summary>
-    /// <param name="elementIndex"></param>
-    /// <param name="value"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="elementIndex">The index at which to write the element.</param>
+    /// <param name="value">The element to write to the buffer.</param>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified index is out of range.</exception>
     public void Put( int elementIndex, T value )
     {
         if ( ( elementIndex < 0 ) || ( elementIndex >= ElementCapacity ) )
@@ -310,6 +302,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
 
         int byteIndex = elementIndex * _elementSize;
+
         EnsureCapacity( byteIndex + _elementSize );
 
         MemoryMarshal.Write( _memory.Span.Slice( byteIndex ), in value );
@@ -321,48 +314,52 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// 
+    /// Writes the elements of the specified array to the buffer at the current position
+    /// and advances the position by the number of elements written.
     /// </summary>
-    /// <param name="array"></param>
+    /// <param name="array">The array of elements to write to the buffer.</param>
     public void Put( T[] array )
     {
         Put( array, 0, array.Length );
     }
 
     /// <summary>
-    /// 
+    /// Writes the elements of the specified array to the buffer at the given offset and
+    /// advances the position by the number of elements written.
     /// </summary>
-    /// <param name="array"></param>
-    /// <param name="offset"></param>
-    /// <param name="count"></param>
+    /// <param name="array">The array of elements to write to the buffer.</param>
+    /// <param name="offset">The starting index in the array to begin reading elements.</param>
+    /// <param name="count">The number of elements to write to the buffer.</param>
     public void Put( T[] array, int offset, int count )
     {
         Put( array, offset, Position, count );
     }
 
     /// <summary>
-    /// 
+    /// Writes the elements of the specified array to the buffer at the given source and destination offsets.
     /// </summary>
-    /// <param name="array"></param>
-    /// <param name="srcOffset"></param>
-    /// <param name="dstOffset"></param>
-    /// <param name="count"></param>
+    /// <param name="array">The array of elements to write to the buffer.</param>
+    /// <param name="srcOffset">The starting index in the array to begin reading elements.</param>
+    /// <param name="dstOffset">The starting index in the buffer to begin writing elements.</param>
+    /// <param name="count">The number of elements to write to the buffer.</param>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void Put( T[] array, int srcOffset, int dstOffset, int count )
     {
         if ( ( srcOffset < 0 ) || ( ( srcOffset + count ) > array.Length ) )
         {
-            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ),
+                                                   "Source offset is out of range." );
         }
 
         if ( dstOffset < 0 )
         {
-            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ),
+                                                   "Destination offset cannot be negative." );
         }
 
         int dstByteOffset = dstOffset * _elementSize;
         int bytesToWrite  = count * _elementSize;
-        
+
         EnsureCapacity( dstByteOffset + bytesToWrite );
 
         array.AsSpan( srcOffset, count )
@@ -375,7 +372,20 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
 
+    #region Get / Put BYTE operations
+
+    /// <summary>
+    /// Reads the next byte from the buffer at the current position and advances
+    /// the position by one byte.
+    /// </summary>
+    /// <returns>The byte read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the current position is out of range.</exception>
     public byte GetByte()
     {
         if ( ( Position + 1 ) > Limit )
@@ -389,6 +399,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return value;
     }
 
+    /// <summary>
+    /// Reads the byte at the specified index from the buffer without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index of the byte to read.</param>
+    /// <returns>The byte read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified index is out of range.</exception>
     public byte GetByte( int byteIndex )
     {
         if ( ( byteIndex < 0 ) || ( byteIndex >= Capacity ) )
@@ -399,6 +415,182 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return _memory.Span[ byteIndex ];
     }
 
+    /// <summary>
+    /// Reads the specified number of bytes from the buffer into a new byte array,
+    /// starting at position 0.
+    /// </summary>
+    /// <param name="numBytes"> The number of bytes to read. </param>
+    /// <returns></returns>
+    public byte[] GetBytes( int numBytes )
+    {
+        return GetBytes( 0, numBytes );
+    }
+
+    /// <summary>
+    /// Reads a specified number of bytes from the buffer starting at the given offset.
+    /// </summary>
+    /// <param name="offset">The zero-based position within the buffer to start reading from.</param>
+    /// <param name="length">The number of bytes to read from the buffer.</param>
+    /// <returns>A byte array containing the requested number of bytes.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the buffer does not contain enough remaining bytes to fulfill the request.
+    /// </exception>
+    public byte[] GetBytes( int offset, int length )
+    {
+        Guard.Against.Negative( offset );
+        Guard.Against.NegativeOrZero( length );
+
+        // Check if enough bytes remaining in buffer
+        if ( ( Position + length ) > Limit )
+        {
+            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
+        }
+
+        var dst = new byte[ length ];
+
+        // Efficient copy to dst array
+        _memory.Span.Slice( Position, length ).CopyTo( dst.AsSpan( offset, length ) );
+
+        // Update Position by the number of bytes read
+        Position += length;
+
+        return dst;
+    }
+
+    /// <summary>
+    /// Writes the specified byte to the buffer at the current position and advances
+    /// the position by one byte.
+    /// </summary>
+    /// <param name="value">The byte value to write to the buffer.</param>
+    public void PutByte( byte value )
+    {
+        EnsureCapacity( Position + 1 );
+
+        _memory.Span[ Position ] =  value;
+        Position                 += 1;
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    /// <summary>
+    /// Writes the specified byte to the buffer at the given index without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index at which to write the byte.</param>
+    /// <param name="value">The byte value to write to the buffer.</param>
+    public void PutByte( int byteIndex, byte value )
+    {
+        if ( ( byteIndex < 0 ) || ( byteIndex >= Capacity ) )
+        {
+            EnsureCapacity( byteIndex + 1 );
+        }
+
+        _memory.Span[ byteIndex ] = value;
+
+        if ( ( byteIndex + 1 ) > Length )
+        {
+            Length = byteIndex + 1;
+        }
+    }
+
+    /// <summary>
+    /// Writes the specified byte array to the buffer, starting at position 0.
+    /// </summary>
+    /// <param name="src">The source byte array.</param>
+    public void PutBytes( byte[] src )
+    {
+        PutBytes( src, 0, 0, src.Length );
+    }
+
+    /// <summary>
+    /// Writes the specified number of bytes from the source array to the buffer.
+    /// </summary>
+    /// <param name="src">The source byte array.</param>
+    /// <param name="srcOffset">The offset in the source array from which to start reading.</param>
+    /// <param name="numBytes">The number of bytes to write.</param>
+    public void PutBytes( byte[] src, int srcOffset, int numBytes )
+    {
+        PutBytes( src, srcOffset, Position, numBytes );
+    }
+
+    /// <summary>
+    /// Writes the specified number of bytes from the source array to the buffer, starting
+    /// at the given source offset and the given destination offset in the buffer. The position
+    /// in the buffer will be updated if the write extends beyond the current position.
+    /// </summary>
+    /// <param name="src">The source byte array.</param>
+    /// <param name="srcOffset">The offset in the source array from which to start reading.</param>
+    /// <param name="dstOffset">The offset in the buffer at which to start writing.</param>
+    /// <param name="numBytes">The number of bytes to write.</param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
+    /// <exception cref="IndexOutOfRangeException"></exception>
+    public void PutBytes( byte[] src, int srcOffset, int dstOffset, int numBytes )
+    {
+        ArgumentNullException.ThrowIfNull( src );
+
+        EnsureCapacity( dstOffset + numBytes );
+
+        if ( srcOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+        }
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        if ( numBytes < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( numBytes ), "numBytes cannot be negative." );
+        }
+
+        if ( ( srcOffset + numBytes ) > src.Length )
+        {
+            throw new ArgumentOutOfRangeException( nameof( numBytes ),
+                                                   "Length and source offset exceed source array bounds." );
+        }
+
+        // Check for space in destination buffer using dstOffset
+        if ( ( dstOffset + numBytes ) > Capacity )
+        {
+            throw new IndexOutOfRangeException( "Not enough space in buffer to put the "
+                                              + "requested length at the given destination offset." );
+        }
+
+        // Copy from src to buffer at dstOffset
+        src.AsSpan( srcOffset, numBytes ).CopyTo( _memory.Span.Slice( dstOffset, numBytes ) );
+
+        if ( ( dstOffset + numBytes ) > Position )
+        {
+            Position = dstOffset + numBytes;
+        }
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    #endregion Get / Put BYTE operations
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region Get / Put SHORT operations
+
+    /// <summary>
+    /// Reads the next short (2 bytes) from the buffer at the current position, taking
+    /// into account the endianness, and advances the position by 2 bytes.
+    /// </summary>
+    /// <returns>The short value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the current position is out of range.</exception>
     public short GetShort()
     {
         if ( ( Position + 2 ) > Limit )
@@ -415,6 +607,13 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return value;
     }
 
+    /// <summary>
+    /// Reads the short (2 bytes) at the specified index from the buffer, taking into
+    /// account the endianness, without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index of the byte to read.</param>
+    /// <returns>The short value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified index is out of range.</exception>
     public short GetShort( int byteIndex )
     {
         if ( ( byteIndex < 0 ) || ( ( byteIndex + 2 ) > Capacity ) )
@@ -427,92 +626,66 @@ public class Buffer< T > : IDisposable where T : unmanaged
                    : BinaryPrimitives.ReadInt16LittleEndian( _memory.Span.Slice( byteIndex ) );
     }
 
-    public int GetInt()
+    /// <summary>
+    /// Reads the specified number of shorts from the buffer into a new short array,
+    /// starting at position 0.
+    /// </summary>
+    /// <param name="numShorts"> The number of short to read. </param>
+    /// <returns></returns>
+    public short[] GetShorts( int numShorts )
     {
-        if ( ( Position + 4 ) > Limit )
-        {
-            throw new IndexOutOfRangeException();
-        }
-
-        int value = IsBigEndian
-                        ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( Position ) )
-                        : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( Position ) );
-
-        Position += 4;
-
-        return value;
+        return GetShorts( 0, numShorts );
     }
 
-    public int GetInt( int byteIndex )
+    /// <summary>
+    /// Reads a specified number of 16-bit short values from the buffer, starting at the specified offset.
+    /// </summary>
+    /// <param name="offset">The starting index in the destination array where the values will be stored.</param>
+    /// <param name="length">The number of short values to read from the buffer.</param>
+    /// <returns>An array of 16-bit short values read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the buffer does not have enough remaining bytes to read the requested length.
+    /// </exception>
+    public short[] GetShorts( int offset, int length )
     {
-        if ( ( byteIndex < 0 ) || ( ( byteIndex + 4 ) > Capacity ) )
+        Guard.Against.Negative( offset );
+        Guard.Against.NegativeOrZero( length );
+
+        int byteCount = length * 2;
+
+        if ( ( Position + byteCount ) > Limit )
         {
-            throw new IndexOutOfRangeException();
+            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
         }
 
-        return IsBigEndian
-                   ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( byteIndex ) )
-                   : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( byteIndex ) );
+        var          dst = new short[ length ];
+        Span< byte > src = _memory.Span.Slice( Position, byteCount );
+
+        if ( IsBigEndian )
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ offset + i ] = BinaryPrimitives.ReadInt16BigEndian( src.Slice( i * 2 ) );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ offset + i ] = BinaryPrimitives.ReadInt16LittleEndian( src.Slice( i * 2 ) );
+            }
+        }
+
+        Position += byteCount;
+
+        return dst;
     }
 
-    public float GetFloat()
-    {
-        if ( ( Position + 4 ) > Limit )
-        {
-            throw new IndexOutOfRangeException();
-        }
-
-        float value = IsBigEndian
-                          ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
-                          : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
-
-        Position += 4;
-
-        return value;
-    }
-
-    public float GetFloat( int byteIndex )
-    {
-        if ( ( byteIndex < 0 ) || ( ( byteIndex + 4 ) > Capacity ) )
-        {
-            throw new IndexOutOfRangeException();
-        }
-
-        return IsBigEndian
-                   ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( byteIndex ) )
-                   : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( byteIndex ) );
-    }
-
-    // ========================================================================
-
-    public void PutByte( byte value )
-    {
-        EnsureCapacity( Position + 1 );
-
-        _memory.Span[ Position ] =  value;
-        Position                 += 1;
-
-        if ( Position > Length )
-        {
-            Length = Position;
-        }
-    }
-
-    public void PutByte( int byteIndex, byte value )
-    {
-        if ( ( byteIndex < 0 ) || ( byteIndex >= Capacity ) )
-        {
-            EnsureCapacity( byteIndex + 1 );
-        }
-
-        _memory.Span[ byteIndex ] = value;
-
-        if ( ( byteIndex + 1 ) > Length )
-        {
-            Length = byteIndex + 1;
-        }
-    }
-
+    /// <summary>
+    /// Writes the specified short (2 bytes) to the buffer at the current position, taking
+    /// into account the endianness, and advances the position by 2 bytes.
+    /// </summary>
+    /// <param name="value">The short value to write to the buffer.</param>
     public void PutShort( short value )
     {
         EnsureCapacity( Position + 2 );
@@ -534,6 +707,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// Writes the specified short (2 bytes) to the buffer at the given index, taking into account the endianness, without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index at which to write the short.</param>
+    /// <param name="value">The short value to write to the buffer.</param>
     public void PutShort( int byteIndex, short value )
     {
         EnsureCapacity( byteIndex + 2 );
@@ -553,6 +731,178 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    public void PutShorts( short[] src )
+    {
+        PutShorts( src, 0, 0, src.Length );
+    }
+
+    public void PutShorts( short[] src, int srcOffset, int numBytes )
+    {
+        PutShorts( src, srcOffset, Position, numBytes );
+    }
+
+    public void PutShorts( short[] src, int srcOffset, int dstOffset, int numBytes )
+    {
+        ArgumentNullException.ThrowIfNull( src );
+
+        if ( ( srcOffset < 0 ) || ( ( srcOffset + numBytes ) > src.Length ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
+        }
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        int byteCount = numBytes * 2;
+
+        EnsureCapacity( dstOffset + byteCount );
+
+        Span< byte > dstSpan = _memory.Span.Slice( dstOffset, byteCount );
+
+        if ( IsBigEndian )
+        {
+            for ( var i = 0; i < numBytes; i++ )
+            {
+                BinaryPrimitives.WriteInt16BigEndian( dstSpan.Slice( i * 2 ), src[ srcOffset + i ] );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < numBytes; i++ )
+            {
+                BinaryPrimitives.WriteInt16LittleEndian( dstSpan.Slice( i * 2 ), src[ srcOffset + i ] );
+            }
+        }
+
+        if ( ( dstOffset + byteCount ) > Position )
+        {
+            Position = dstOffset + byteCount;
+        }
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    #endregion Get / Put SHORT operations
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region Get / Put INT operations
+
+    /// <summary>
+    /// Reads the next int (4 bytes) from the buffer at the current position, taking
+    /// into account the endianness, and advances the position by 4 bytes.
+    /// </summary>
+    /// <returns>The int value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the current position is out of range.</exception>
+    public int GetInt()
+    {
+        if ( ( Position + 4 ) > Limit )
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        int value = IsBigEndian
+                        ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( Position ) )
+                        : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( Position ) );
+
+        Position += 4;
+
+        return value;
+    }
+
+    /// <summary>
+    /// Reads the int (4 bytes) at the specified index from the buffer, taking into
+    /// account the endianness, without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index of the byte to read.</param>
+    /// <returns>The int value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified index is out of range.</exception>
+    public int GetInt( int byteIndex )
+    {
+        if ( ( byteIndex < 0 ) || ( ( byteIndex + 4 ) > Capacity ) )
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        return IsBigEndian
+                   ? BinaryPrimitives.ReadInt32BigEndian( _memory.Span.Slice( byteIndex ) )
+                   : BinaryPrimitives.ReadInt32LittleEndian( _memory.Span.Slice( byteIndex ) );
+    }
+
+    /// <summary>
+    /// Reads the specified number of ints from the buffer into a new int array,
+    /// starting at position 0.
+    /// </summary>
+    /// <param name="numInts">The number of ints to read.</param>
+    public int[] GetInts( int numInts )
+    {
+        return GetInts( 0, numInts );
+    }
+
+    /// <summary>
+    /// Reads a specified number of ints from the buffer starting at the given offset.
+    /// </summary>
+    /// <param name="offset">The zero-based position within the destination array to start writing.</param>
+    /// <param name="length">The number of ints to read from the buffer.</param>
+    /// <returns>An int array containing the requested number of ints.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the buffer does not contain enough remaining bytes to fulfill the request.
+    /// </exception>
+    public int[] GetInts( int offset, int length )
+    {
+        Guard.Against.Negative( offset );
+
+        int byteCount = length * 4;
+        var dst       = new int[ length ];
+
+        if ( ( offset < 0 ) || ( ( offset + length ) > dst.Length ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( offset ),
+                                                   "Destination offset and length exceed array bounds." );
+        }
+
+        if ( ( Position + byteCount ) > Limit )
+        {
+            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
+        }
+
+        Span< byte > src = _memory.Span.Slice( Position, byteCount );
+
+        if ( IsBigEndian )
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ offset + i ] = BinaryPrimitives.ReadInt32BigEndian( src.Slice( i * 4 ) );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ offset + i ] = BinaryPrimitives.ReadInt32LittleEndian( src.Slice( i * 4 ) );
+            }
+        }
+
+        Position += byteCount;
+
+        return dst;
+    }
+
+    /// <summary>
+    /// Writes the specified int (4 bytes) to the buffer at the current position, taking
+    /// into account the endianness, and advances the position by 4 bytes.
+    /// </summary>
+    /// <param name="value">The int value to write to the buffer.</param>
     public void PutInt( int value )
     {
         EnsureCapacity( Position + 4 );
@@ -574,6 +924,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// Writes the specified int (4 bytes) to the buffer at the given index, taking into
+    /// account the endianness, without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index at which to write the int.</param>
+    /// <param name="value">The int value to write to the buffer.</param>
     public void PutInt( int byteIndex, int value )
     {
         EnsureCapacity( byteIndex + 4 );
@@ -593,6 +949,214 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    public void PutInts( int[] src )
+    {
+        PutInts( src, 0, 0, src.Length );
+    }
+
+    public void PutInts( int[] src, int srcOffset, int numBytes )
+    {
+        PutInts( src, srcOffset, Position, numBytes );
+    }
+
+    public void PutInts( int[] src, int srcOffset, int dstOffset, int numBytes )
+    {
+        ArgumentNullException.ThrowIfNull( src );
+
+        if ( ( srcOffset < 0 ) || ( ( srcOffset + numBytes ) > src.Length ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
+        }
+
+        if ( dstOffset < 0 )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
+        }
+
+        int byteCount = numBytes * 4;
+
+        EnsureCapacity( dstOffset + byteCount );
+
+        Span< byte > dstSpan = _memory.Span.Slice( dstOffset, byteCount );
+
+        if ( IsBigEndian )
+        {
+            for ( var i = 0; i < numBytes; i++ )
+            {
+                BinaryPrimitives.WriteInt32BigEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < numBytes; i++ )
+            {
+                BinaryPrimitives.WriteInt32LittleEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
+            }
+        }
+
+        if ( ( dstOffset + byteCount ) > Position )
+        {
+            Position = dstOffset + byteCount;
+        }
+
+        if ( Position > Length )
+        {
+            Length = Position;
+        }
+    }
+
+    #endregion Get / Put INT operations
+
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region Get / Put FLOAT operations
+
+    /// <summary>
+    /// Reads the next float (4 bytes) from the buffer at the current position, taking
+    /// into account the endianness, and advances the position by 4 bytes.
+    /// </summary>
+    /// <returns>The float value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the current position is out of range.</exception>
+    public float GetFloat()
+    {
+        if ( ( Position + 4 ) > Limit )
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        float value = IsBigEndian
+                          ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( Position ) )
+                          : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( Position ) );
+
+        Position += 4;
+
+        return value;
+    }
+
+    /// <summary>
+    /// Reads the float (4 bytes) at the specified index from the buffer, taking into
+    /// account the endianness, without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index of the byte to read.</param>
+    /// <returns>The float value read from the buffer.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the specified index is out of range.</exception>
+    public float GetFloat( int byteIndex )
+    {
+        if ( ( byteIndex < 0 ) || ( ( byteIndex + 4 ) > Capacity ) )
+        {
+            throw new IndexOutOfRangeException();
+        }
+
+        return IsBigEndian
+                   ? BinaryPrimitives.ReadSingleBigEndian( _memory.Span.Slice( byteIndex ) )
+                   : BinaryPrimitives.ReadSingleLittleEndian( _memory.Span.Slice( byteIndex ) );
+    }
+
+    /// <summary>
+    /// Reads the specified number of floats from the buffer into a new float array,
+    /// starting at position 0.
+    /// </summary>
+    /// <param name="numFloats">The number of floats to read.</param>
+    public float[] GetFloats( int numFloats )
+    {
+        return GetFloats( 0, numFloats );
+    }
+
+    /// <summary>
+    /// Reads a specified number of floats from the buffer starting at the given offset.
+    /// </summary>
+    /// <param name="offset">The zero-based position within the destination array to start writing.</param>
+    /// <param name="length">The number of floats to read from the buffer.</param>
+    /// <returns>A float array containing the requested number of floats.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the buffer does not contain enough remaining bytes to fulfill the request.
+    /// </exception>
+    public float[] GetFloats( int offset, int length )
+    {
+        Guard.Against.Negative( offset );
+        Guard.Against.NegativeOrZero( length );
+
+        int byteCount = length * 4;
+
+        if ( ( Position + byteCount ) > Limit )
+        {
+            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
+        }
+
+        var          dst = new float[ length ];
+        Span< byte > src = _memory.Span.Slice( Position, byteCount );
+
+        if ( IsBigEndian )
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ offset + i ] = BinaryPrimitives.ReadSingleBigEndian( src.Slice( i * 4 ) );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ offset + i ] = BinaryPrimitives.ReadSingleLittleEndian( src.Slice( i * 4 ) );
+            }
+        }
+
+        Position += byteCount;
+
+        return dst;
+    }
+
+    public void GetFloats( float[] dst )
+    {
+        GetFloats( dst, 0, dst.Length );
+    }
+
+    public void GetFloats( float[] dst, int dstOffset, int length )
+    {
+        ArgumentNullException.ThrowIfNull( dst );
+
+        if ( ( dstOffset < 0 ) || ( ( dstOffset + length ) > dst.Length ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( dstOffset ),
+                                                   "Destination offset and length exceed array bounds." );
+        }
+
+        int byteCount = length * 4;
+
+        if ( ( Position + byteCount ) > Limit )
+        {
+            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
+        }
+
+        Span< byte > src = _memory.Span.Slice( Position, byteCount );
+
+        if ( IsBigEndian )
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ dstOffset + i ] = BinaryPrimitives.ReadSingleBigEndian( src.Slice( i * 4 ) );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < length; i++ )
+            {
+                dst[ dstOffset + i ] = BinaryPrimitives.ReadSingleLittleEndian( src.Slice( i * 4 ) );
+            }
+        }
+
+        Position += byteCount;
+    }
+
+    /// <summary>
+    /// Writes the specified float (4 bytes) to the buffer at the current position, taking into account the endianness, and advances the position by 4 bytes.
+    /// </summary>
+    /// <param name="value">The float value to write to the buffer.</param>
     public void PutFloat( float value )
     {
         EnsureCapacity( Position + 4 );
@@ -633,99 +1197,35 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
-    // ========================================================================
-
-    public void GetBytes( byte[] dst )
+    /// <summary>
+    /// Writes all floats from the source array to the buffer.
+    /// </summary>
+    /// <param name="src">The source float array.</param>
+    public void PutFloats( float[] src )
     {
-        GetBytes( dst, 0, dst.Length );
+        PutFloats( src, 0, 0, src.Length );
     }
 
-    public void GetInts( int[] dst )
+    /// <summary>
+    /// Writes the specified number of bytes from the source float array to the buffer, starting
+    /// at the given source offset and the current position in the buffer. The position in the 
+    /// buffer will be advanced by the number of bytes written.
+    /// </summary>
+    /// <param name="src">The source float array.</param>
+    /// <param name="srcOffset">The offset in the source array from which to start reading.</param>
+    /// <param name="numBytes">The number of bytes to write to the buffer.</param>
+    public void PutFloats( float[] src, int srcOffset, int numBytes )
     {
-        GetInts( dst, 0, dst.Length );
+        PutFloats( src, srcOffset, Position, numBytes );
     }
 
-    public void GetShorts( short[] dst )
-    {
-        GetShorts( dst, 0, dst.Length );
-    }
-
-    public void GetFloats( float[] dst )
-    {
-        GetFloats( dst, 0, dst.Length );
-    }
-
-    public void GetBytes( byte[] dst, int dstOffset, int length )
-    {
-        ArgumentNullException.ThrowIfNull( dst );
-
-        if ( dstOffset < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
-        }
-
-        if ( length < 0 )
-        {
-            throw new ArgumentOutOfRangeException( nameof( length ), "Length cannot be negative." );
-        }
-
-        // Check if dstOffset + length exceeds dst array bounds
-        if ( ( dstOffset + length ) > dst.Length )
-        {
-            throw new ArgumentOutOfRangeException( nameof( length ),
-                                                   "Length plus destination offset exceeds destination array bounds." );
-        }
-
-        // Check if enough bytes remaining in buffer
-        if ( ( Position + length ) > Limit )
-        {
-            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
-        }
-
-        // Efficient copy to dst array
-        _memory.Span.Slice( Position, length ).CopyTo( dst.AsSpan( dstOffset, length ) );
-
-        // Update Position by the number of bytes read
-        Position += length;
-    }
-
-    public void GetInts( int[] dst, int dstOffset, int length )
-    {
-        //TODO:
-    }
-
-    public void GetShorts( short[] dst, int dstOffset, int length )
-    {
-        //TODO:
-    }
-
-    public void GetFloats( float[] dst, int dstOffset, int length )
-    {
-        //TODO:
-    }
-
-    // ========================================================================
-
-    public void PutBytes( byte[] src )
-    {
-        PutBytes( src, 0, 0, src.Length );
-    }
-
-    public void PutBytes( byte[] src, int srcOffset, int numBytes )
-    {
-        PutBytes( src, srcOffset, Position, numBytes );
-    }
-
-    public void PutBytes( byte[] src, int srcOffset, int dstOffset, int numBytes )
+    public void PutFloats( float[] src, int srcOffset, int dstOffset, int numBytes )
     {
         ArgumentNullException.ThrowIfNull( src );
 
-//        EnsureCapacity( dstOffset + 1 + numBytes );
-        EnsureCapacity( dstOffset + numBytes );
-
-        if ( srcOffset < 0 )
+        if ( ( srcOffset < 0 ) || ( ( srcOffset + numBytes ) > src.Length ) )
         {
-            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset cannot be negative." );
+            throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
         }
 
         if ( dstOffset < 0 )
@@ -733,30 +1233,30 @@ public class Buffer< T > : IDisposable where T : unmanaged
             throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
         }
 
-        if ( numBytes < 0 )
+        int byteCount = numBytes * 4;
+
+        EnsureCapacity( dstOffset + byteCount );
+
+        Span< byte > dstSpan = _memory.Span.Slice( dstOffset, byteCount );
+
+        if ( IsBigEndian )
         {
-            throw new ArgumentOutOfRangeException( nameof( numBytes ), "numBytes cannot be negative." );
+            for ( var i = 0; i < numBytes; i++ )
+            {
+                BinaryPrimitives.WriteSingleBigEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
+            }
+        }
+        else
+        {
+            for ( var i = 0; i < numBytes; i++ )
+            {
+                BinaryPrimitives.WriteSingleLittleEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
+            }
         }
 
-        if ( ( srcOffset + numBytes ) > src.Length )
+        if ( ( dstOffset + byteCount ) > Position )
         {
-            throw new ArgumentOutOfRangeException( nameof( numBytes ),
-                                                   "Length and source offset exceed source array bounds." );
-        }
-
-        // Check for space in destination buffer using dstOffset
-        if ( ( dstOffset + numBytes ) > Capacity )
-        {
-            throw new
-                IndexOutOfRangeException( "Not enough space in buffer to put the requested length at the given destination offset." );
-        }
-
-        // Copy from src to buffer at dstOffset
-        src.AsSpan( srcOffset, numBytes ).CopyTo( _memory.Span.Slice( dstOffset, numBytes ) );
-
-        if ( ( dstOffset + numBytes ) > Position )
-        {
-            Position = dstOffset + numBytes;
+            Position = dstOffset + byteCount;
         }
 
         if ( Position > Length )
@@ -765,51 +1265,13 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
-    public void PutInts( int[] src )
-    {
-        PutInts( src, 0, 0, src.Length );
-    }
+    #endregion Get / Put FLOAT operations
 
-    public void PutInts( int[] src, int srcOffset, int numBytes )
-    {
-        PutInts( src, srcOffset, Position, numBytes );
-    }
-
-    public void PutInts( int[] src, int srcOffset, int dstOffset, int numBytes )
-    {
-        //TODO:
-    }
-
-    public void PutShorts( short[] src )
-    {
-        PutShorts( src, 0, 0, src.Length );
-    }
-
-    public void PutShorts( short[] src, int srcOffset, int numBytes )
-    {
-        PutShorts( src, srcOffset, Position, numBytes );
-    }
-
-    public void PutShorts( short[] src, int srcOffset, int dstOffset, int numBytes )
-    {
-        //TODO:
-    }
-
-    public void PutFloats( float[] src )
-    {
-        PutFloats( src, 0, 0, src.Length );
-    }
-
-    public void PutFloats( float[] src, int srcOffset, int numBytes )
-    {
-        PutFloats( src, srcOffset, Position, numBytes );
-    }
-
-    public void PutFloats( float[] src, int srcOffset, int dstOffset, int numBytes )
-    {
-        //TODO:
-    }
-
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -892,6 +1354,16 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
+    /// <summary>
+    /// Resizes the buffer by increasing its capacity by the specified number of bytes. The
+    /// new capacity will be the current capacity plus the extra capacity. If the extra capacity
+    /// is zero, no resizing will occur.
+    /// <para>
+    /// If the extra capacity is negative, an <see cref="ArgumentOutOfRangeException"/> will be thrown.
+    /// </para>
+    /// </summary>
+    /// <param name="extraCapacityInBytes">The number of bytes to increase the buffer's capacity by.</param>
+    /// <exception cref="ArgumentOutOfRangeException">If <paramref name="extraCapacityInBytes" /> is negative.</exception>
     public void Resize( int extraCapacityInBytes )
     {
         switch ( extraCapacityInBytes )
@@ -912,6 +1384,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
         Capacity = newCapacity;
     }
 
+    /// <summary>
+    /// Ensures that the buffer has at least the specified capacity in bytes. If the current
+    /// capacity is less than the required capacity, the buffer is resized to accommodate
+    /// the required capacity.
+    /// </summary>
+    /// <param name="requiredBytes">The minimum required capacity in bytes.</param>
     public void EnsureCapacity( int requiredBytes )
     {
         if ( Capacity < requiredBytes )
@@ -921,27 +1399,27 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// 
+    /// Returns the underlying byte array of the buffer.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The byte array that backs the buffer.</returns>
     public byte[] BackingArray()
     {
         return _backingArray;
     }
 
     /// <summary>
-    /// 
+    /// Returns a memory representation of the buffer's underlying byte array.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A <see cref="Memory{Byte}"/> representing the buffer's data.</returns>
     public Memory< byte > Memory()
     {
         return _memory;
     }
 
     /// <summary>
-    /// 
+    /// Converts the buffer's contents to a new array of type <typeparamref name="T"/>.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A new array containing the buffer's data.</returns>
     public T[] ToArray()
     {
         int elementCount = Length / _elementSize;
@@ -1203,6 +1681,11 @@ public class Buffer< T > : IDisposable where T : unmanaged
         GC.SuppressFinalize( this );
     }
 
+    /// <summary>
+    /// Releases all resources used by the buffer. This method clears the underlying byte array
+    /// and resets the buffer's properties to their default values.
+    /// </summary>
+    /// <param name="disposing">Indicates whether the method is being called from the Dispose method.</param>
     protected virtual void Dispose( bool disposing )
     {
         if ( disposing )

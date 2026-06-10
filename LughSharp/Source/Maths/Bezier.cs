@@ -27,7 +27,9 @@ namespace LughSharp.Source.Maths;
 /// <summary>
 /// Implementation of the Bezier curve.
 /// </summary>
-/// <typeparam name="T">The type of the points on the Bezier curve, which must implement IVector&lt;T&gt;.</typeparam>
+/// <typeparam name="T">
+/// The type of the points on the Bezier curve, which must implement IVector&lt;T&gt;.
+/// </typeparam>
 [PublicAPI]
 public class Bezier< T > : IPath< T > where T : IVector< T >
 {
