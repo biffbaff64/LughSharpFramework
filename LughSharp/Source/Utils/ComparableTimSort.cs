@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+#if ALLOW_ASSERTS
+using System.Diagnostics;
+#endif
+
 namespace LughSharp.Source.Utils;
 
 /// <summary>
@@ -75,7 +79,7 @@ public class ComparableTimSort< T >
     private readonly int[] _runLen;
 
     // The array being sorted.
-    private T[]? _a;
+    private T[]? _array;
 
     // This controls when we get *into* galloping mode. It is initialized to Min_Gallop.
     // The mergeLo and mergeHi methods nudge it higher for random data, and lower for
@@ -98,6 +102,13 @@ public class ComparableTimSort< T >
 
     // ========================================================================
 
+    /// <summary>
+    /// Provides a TimSort implementation for sorting arrays of objects that implement the
+    /// <see cref="IComparable"/> interface without requiring a separate comparator.
+    /// </summary>
+    /// <typeparam name="T">
+    /// The type of elements to be sorted, which must implement <see cref="IComparable{T}"/>.
+    /// </typeparam>
     public ComparableTimSort()
     {
         _tmp     = new T[ InitialTmpStorageLength ];
@@ -108,13 +119,13 @@ public class ComparableTimSort< T >
     /// <summary>
     /// Creates a TimSort instance to maintain the state of an ongoing sort.
     /// </summary>
-    /// <param name="a"> the array to be sorted  </param>
-    private ComparableTimSort( T[] a )
+    /// <param name="array"> the array to be sorted  </param>
+    private ComparableTimSort( T[] array )
     {
-        _a = a;
+        _array = array;
 
         // Allocate temp storage (which may be increased later if necessary)
-        int len = a.Length;
+        int len = array.Length;
 
         var newArray = new T[ len < ( 2 * InitialTmpStorageLength )
             ? len >>> 1
@@ -133,15 +144,15 @@ public class ComparableTimSort< T >
 
     /// <summary>
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="array"></param>
     /// <param name="lo"></param>
     /// <param name="hi"></param>
-    public void DoSort( T[]? a, int lo, int hi )
+    public void DoSort( T[]? array, int lo, int hi )
     {
-        ArgumentNullException.ThrowIfNull( a );
+        ArgumentNullException.ThrowIfNull( array );
 
         _stackSize = 0;
-        RangeCheck( a.Length, lo, hi );
+        RangeCheck( array.Length, lo, hi );
 
         int nRemaining = hi - lo;
 
@@ -153,14 +164,14 @@ public class ComparableTimSort< T >
         // If array is small, do a "mini-TimSort" with no merges
         if ( nRemaining < MinMerge )
         {
-            int initRunLen = CountRunAndMakeAscending( a, lo, hi );
+            int initRunLen = CountRunAndMakeAscending( array, lo, hi );
 
-            BinarySort( a, lo, hi, lo + initRunLen );
+            BinarySort( array, lo, hi, lo + initRunLen );
 
             return;
         }
 
-        _a        = a;
+        _array        = array;
         _tmpCount = 0;
 
         // March over the array once, left to right, finding natural runs, extending
@@ -171,13 +182,13 @@ public class ComparableTimSort< T >
         do
         {
             // Identify next run
-            int runLen = CountRunAndMakeAscending( a, lo, hi );
+            int runLen = CountRunAndMakeAscending( array, lo, hi );
 
             // If run is short, extend to min(minRun, nRemaining)
             if ( runLen < minRun )
             {
                 int force = nRemaining <= minRun ? nRemaining : minRun;
-                BinarySort( a, lo, lo + force, lo + runLen );
+                BinarySort( array, lo, lo + force, lo + runLen );
                 runLen = force;
             }
 
@@ -192,17 +203,17 @@ public class ComparableTimSort< T >
         while ( nRemaining != 0 );
 
         #if ALLOW_ASSERTS
-        DebugAssert( lo == hi );
+        Debug.Assert( lo == hi );
         #endif
 
         // Merge all remaining runs to complete sort
         MergeForceCollapse();
 
         #if ALLOW_ASSERTS
-        DebugAssert( _stackSize == 1 );
+        Debug.Assert( _stackSize == 1 );
         #endif
 
-        _a = null;
+        _array = null;
 
         for ( int i = 0, n = _tmpCount; i < n; i++ )
         {
@@ -212,20 +223,20 @@ public class ComparableTimSort< T >
 
     /// <summary>
     /// </summary>
-    /// <param name="a"></param>
-    public static void Sort( T[] a )
+    /// <param name="array"></param>
+    public static void Sort( T[] array )
     {
-        Sort( a, 0, a.Length );
+        Sort( array, 0, array.Length );
     }
 
     /// <summary>
     /// </summary>
-    /// <param name="a"></param>
+    /// <param name="array"></param>
     /// <param name="lo"></param>
     /// <param name="hi"></param>
-    public static void Sort( T[] a, int lo, int hi )
+    public static void Sort( T[] array, int lo, int hi )
     {
-        RangeCheck( a.Length, lo, hi );
+        RangeCheck( array.Length, lo, hi );
         int nRemaining = hi - lo;
 
         if ( nRemaining < 2 )
@@ -236,28 +247,28 @@ public class ComparableTimSort< T >
         // If array is small, do a "mini-TimSort" with no merges
         if ( nRemaining < MinMerge )
         {
-            int initRunLen = CountRunAndMakeAscending( a, lo, hi );
-            BinarySort( a, lo, hi, lo + initRunLen );
+            int initRunLen = CountRunAndMakeAscending( array, lo, hi );
+            BinarySort( array, lo, hi, lo + initRunLen );
 
             return;
         }
 
         // March over the array once, left to right, finding natural runs, extending short
         // natural runs to minRun elements, and merging runs to maintain stack invariant. 
-        var ts     = new ComparableTimSort< T >( a );
+        var ts     = new ComparableTimSort< T >( array );
         int minRun = MinRunLength( nRemaining );
 
         do
         {
             // Identify next run
-            int runLen = CountRunAndMakeAscending( a, lo, hi );
+            int runLen = CountRunAndMakeAscending( array, lo, hi );
 
             // If run is short, extend to min(minRun, nRemaining)
             if ( runLen < minRun )
             {
                 int force = nRemaining <= minRun ? nRemaining : minRun;
 
-                BinarySort( a, lo, lo + force, lo + runLen );
+                BinarySort( array, lo, lo + force, lo + runLen );
                 runLen = force;
             }
 
@@ -272,14 +283,14 @@ public class ComparableTimSort< T >
         while ( nRemaining != 0 );
 
         #if ALLOW_ASSERTS
-        DebugAssert( lo == hi );
+        Debug.Assert( lo == hi );
         #endif
 
         // Merge all remaining runs to complete sort
         ts.MergeForceCollapse();
 
         #if ALLOW_ASSERTS
-        DebugAssert( ts._stackSize == 1 );
+        Debug.Assert( ts._stackSize == 1 );
         #endif
     }
 
@@ -291,17 +302,17 @@ public class ComparableTimSort< T >
     /// advantage of it: the method assumes that the elements from index <tt>lo</tt>, inclusive,
     /// to <tt>start</tt>, exclusive are already sorted.
     /// </summary>
-    /// <param name="a"> the array in which a range is to be sorted </param>
+    /// <param name="array"> the array in which a range is to be sorted </param>
     /// <param name="lo"> the index of the first element in the range to be sorted </param>
     /// <param name="hi"> the index after the last element in the range to be sorted </param>
     /// <param name="start">
     /// the index of the first element in the range that is not already known to be sorted
     /// <tt>lo &lt;= start &lt;= hi</tt>
     /// </param>
-    private static void BinarySort( T[] a, int lo, int hi, int start )
+    private static void BinarySort( T[] array, int lo, int hi, int start )
     {
         #if ALLOW_ASSERTS
-        DebugAssert( ( lo <= start ) && ( start <= hi ) );
+        Debug.Assert( ( lo <= start ) && ( start <= hi ) );
         #endif
 
         if ( start == lo )
@@ -311,14 +322,14 @@ public class ComparableTimSort< T >
 
         for ( ; start < hi; start++ )
         {
-            var pivot = ( IComparable< T > )a[ start ]!;
+            var pivot = ( IComparable< T > )array[ start ]!;
 
             // Set left (and right) to the index where a[start] (pivot) belongs
             int left  = lo;
             int right = start;
 
             #if ALLOW_ASSERTS
-            DebugAssert( left <= right );
+            Debug.Assert( left <= right );
             #endif
 
             // Invariants: pivot >= all in [lo, left). pivot < all in [right, start).
@@ -326,7 +337,7 @@ public class ComparableTimSort< T >
             {
                 int mid = ( left + right ) >>> 1;
 
-                if ( pivot?.CompareTo( a[ mid ] ) < 0 )
+                if ( pivot?.CompareTo( array[ mid ] ) < 0 )
                 {
                     right = mid;
                 }
@@ -337,7 +348,7 @@ public class ComparableTimSort< T >
             }
 
             #if ALLOW_ASSERTS
-            DebugAssert( left == right );
+            Debug.Assert( left == right );
             #endif
 
             // The invariants still hold: pivot >= all in [lo, left) and pivot < all in
@@ -352,17 +363,17 @@ public class ComparableTimSort< T >
             {
                 if ( n == 2 )
                 {
-                    a[ left + 2 ] = a[ left + 1 ];
+                    array[ left + 2 ] = array[ left + 1 ];
                 }
 
-                a[ left + 1 ] = a[ left ];
+                array[ left + 1 ] = array[ left ];
             }
             else
             {
-                Array.Copy( a, left, a, left + 1, n );
+                Array.Copy( array, left, array, left + 1, n );
             }
 
-            a[ left ] = ( T )pivot!;
+            array[ left ] = ( T )pivot!;
         }
     }
 
@@ -391,19 +402,19 @@ public class ComparableTimSort< T >
     /// descending is needed so that the call can safely reverse a descending sequence
     /// without violating stability.
     /// </summary>
-    /// <param name="a"> the array in which a run is to be counted and possibly reversed </param>
+    /// <param name="array"> the array in which a run is to be counted and possibly reversed </param>
     /// <param name="lo"> index of the first element in the run </param>
     /// <param name="hi">
     /// index after the last element that may be contained in the run. It is required
     /// that <tt>lo &lt; hi</tt>.
     /// </param>
     /// <returns> the length of the run beginning at the specified position in the specified array  </returns>
-    private static int CountRunAndMakeAscending( T[] a, int lo, int hi )
+    private static int CountRunAndMakeAscending( T[] array, int lo, int hi )
     {
-        ArgumentNullException.ThrowIfNull( a );
+        ArgumentNullException.ThrowIfNull( array );
 
         #if ALLOW_ASSERTS
-        DebugAssert( lo < hi );
+        Debug.Assert( lo < hi );
         #endif
 
         int runHi = lo + 1;
@@ -414,22 +425,22 @@ public class ComparableTimSort< T >
         }
 
         // Find end of run, and reverse range if descending
-        if ( ( ( IComparable< T > )a[ runHi++ ]! ).CompareTo( a[ lo ] ) < 0 )
+        if ( ( ( IComparable< T > )array[ runHi++ ]! ).CompareTo( array[ lo ] ) < 0 )
         {
             // Descending
             while ( ( runHi < hi )
-                 && ( ( ( IComparable< T > )a[ runHi ]! ).CompareTo( a[ runHi - 1 ] ) < 0 ) )
+                 && ( ( ( IComparable< T > )array[ runHi ]! ).CompareTo( array[ runHi - 1 ] ) < 0 ) )
             {
                 runHi++;
             }
 
-            ReverseRange( a, lo, runHi );
+            ReverseRange( array, lo, runHi );
         }
         else
         {
             // Ascending
             while ( ( runHi < hi )
-                 && ( ( ( IComparable< T > )a[ runHi ]! ).CompareTo( a[ runHi - 1 ] ) >= 0 ) )
+                 && ( ( ( IComparable< T > )array[ runHi ]! ).CompareTo( array[ runHi - 1 ] ) >= 0 ) )
             {
                 runHi++;
             }
@@ -441,18 +452,18 @@ public class ComparableTimSort< T >
     /// <summary>
     /// Reverse the specified range of the specified array.
     /// </summary>
-    /// <param name="a"> the array in which a range is to be reversed </param>
+    /// <param name="array"> the array in which a range is to be reversed </param>
     /// <param name="lo"> the index of the first element in the range to be reversed </param>
     /// <param name="hi"> the index after the last element in the range to be reversed  </param>
-    private static void ReverseRange( T[] a, int lo, int hi )
+    private static void ReverseRange( T[] array, int lo, int hi )
     {
         hi--;
 
         while ( lo < hi )
         {
-            T t = a[ lo ];
-            a[ lo++ ] = a[ hi ];
-            a[ hi-- ] = t;
+            T t = array[ lo ];
+            array[ lo++ ] = array[ hi ];
+            array[ hi-- ] = t;
         }
     }
 
@@ -469,23 +480,23 @@ public class ComparableTimSort< T >
     /// less than, an exact power of 2.
     /// </para>
     /// </summary>
-    /// <param name="n"> the length of the array to be sorted </param>
+    /// <param name="length"> the length of the array to be sorted </param>
     /// <returns> the length of the minimum run to be merged  </returns>
-    private static int MinRunLength( int n )
+    private static int MinRunLength( int length )
     {
         #if ALLOW_ASSERTS
-        DebugAssert( n >= 0 );
+        Debug.Assert( length >= 0 );
         #endif
 
         var r = 0; // Becomes 1 if any 1 bits are shifted off
 
-        while ( n >= MinMerge )
+        while ( length >= MinMerge )
         {
-            r |=  n & 1;
-            n >>= 1;
+            r |=  length & 1;
+            length >>= 1;
         }
 
-        return n + r;
+        return length + r;
     }
 
     /// <summary>
@@ -564,48 +575,48 @@ public class ComparableTimSort< T >
     /// antepenultimate run on the stack. In other words, i must be equal to stackSize-2
     /// or stackSize-3.
     /// </summary>
-    /// <param name="i"> stack index of the first of the two runs to merge  </param>
-    private void MergeAt( int i )
+    /// <param name="index"> stack index of the first of the two runs to merge  </param>
+    private void MergeAt( int index )
     {
         #if ALLOW_ASSERTS
-        DebugAssert( _stackSize >= 2 );
-        DebugAssert( i >= 0 );
-        DebugAssert( ( i == ( _stackSize - 2 ) ) || ( i == ( _stackSize - 3 ) ) );
+        Debug.Assert( _stackSize >= 2 );
+        Debug.Assert( index >= 0 );
+        Debug.Assert( ( index == ( _stackSize - 2 ) ) || ( index == ( _stackSize - 3 ) ) );
         #endif
 
-        int base1 = _runBase[ i ];
-        int len1  = _runLen[ i ];
-        int base2 = _runBase[ i + 1 ];
-        int len2  = _runLen[ i + 1 ];
+        int base1 = _runBase[ index ];
+        int len1  = _runLen[ index ];
+        int base2 = _runBase[ index + 1 ];
+        int len2  = _runLen[ index + 1 ];
 
         #if ALLOW_ASSERTS
-        DebugAssert( ( len1 > 0 ) && ( len2 > 0 ) );
-        DebugAssert( ( base1 + len1 ) == base2 );
+        Debug.Assert( ( len1 > 0 ) && ( len2 > 0 ) );
+        Debug.Assert( ( base1 + len1 ) == base2 );
         #endif
 
         // Record the length of the combined runs; if i is the 3rd-last run now, also
         // slide over the last run (which isn't involved in this merge). The current
         // run (i+1) goes away in any case.
-        _runLen[ i ] = len1 + len2;
+        _runLen[ index ] = len1 + len2;
 
-        if ( i == ( _stackSize - 3 ) )
+        if ( index == ( _stackSize - 3 ) )
         {
-            _runBase[ i + 1 ] = _runBase[ i + 2 ];
-            _runLen[ i + 1 ]  = _runLen[ i + 2 ];
+            _runBase[ index + 1 ] = _runBase[ index + 2 ];
+            _runLen[ index + 1 ]  = _runLen[ index + 2 ];
         }
 
         _stackSize--;
 
         #if ALLOW_ASSERTS
-        DebugAssert( _a != null, nameof( _a ) + " != null" );
+        Debug.Assert( _array != null, nameof( _array ) + " != null" );
         #endif
 
         // Find where the first element of run2 goes in run1. Prior elements
         // in run1 can be ignored (because they're already in place).
-        int k = GallopRight( ( IComparable< T > )_a![ base2 ]!, _a, base1, len1, 0 );
+        int k = GallopRight( ( IComparable< T > )_array![ base2 ]!, _array, base1, len1, 0 );
 
         #if ALLOW_ASSERTS
-        DebugAssert( k >= 0 );
+        Debug.Assert( k >= 0 );
         #endif
 
         base1 += k;
@@ -618,10 +629,10 @@ public class ComparableTimSort< T >
 
         // Find where the last element of run1 goes in run2. Subsequent elements in run2
         // can be ignored (because they're already in place).
-        len2 = GallopLeft( ( IComparable< T > )_a[ base1 + len1 - 1 ]!, _a, base2, len2, len2 - 1 );
+        len2 = GallopLeft( ( IComparable< T > )_array[ base1 + len1 - 1 ]!, _array, base2, len2, len2 - 1 );
 
         #if ALLOW_ASSERTS
-        DebugAssert( len2 >= 0 );
+        Debug.Assert( len2 >= 0 );
         #endif
 
         if ( len2 == 0 )
@@ -646,7 +657,7 @@ public class ComparableTimSort< T >
     /// of the leftmost equal element.
     /// </summary>
     /// <param name="key"> the key whose insertion point to search for </param>
-    /// <param name="a"> the array in which to search </param>
+    /// <param name="array"> the array in which to search </param>
     /// <param name="first"> the index of the first element in the range </param>
     /// <param name="len"> the length of the range; must be > 0 </param>
     /// <param name="hint">
@@ -659,21 +670,21 @@ public class ComparableTimSort< T >
     /// key belongs at index b + k; or in other words, the first k elements of a should
     /// precede key, and the last n - k should follow it.
     /// </returns>
-    private static int GallopLeft( IComparable< T > key, T[] a, int first, int len, int hint )
+    private static int GallopLeft( IComparable< T > key, T[] array, int first, int len, int hint )
     {
         #if ALLOW_ASSERTS
-        DebugAssert( ( len > 0 ) && ( hint >= 0 ) && ( hint < len ) );
+        Debug.Assert( ( len > 0 ) && ( hint >= 0 ) && ( hint < len ) );
         #endif
 
         var lastOfs = 0;
         var ofs     = 1;
 
-        if ( key.CompareTo( a[ first + hint ] ) > 0 )
+        if ( key.CompareTo( array[ first + hint ] ) > 0 )
         {
             // Gallop right until a[first+hint+lastOfs] < key <= a[first+hint+ofs]
             int maxOfs = len - hint;
 
-            while ( ( ofs < maxOfs ) && ( key.CompareTo( a[ first + hint + ofs ] ) > 0 ) )
+            while ( ( ofs < maxOfs ) && ( key.CompareTo( array[ first + hint + ofs ] ) > 0 ) )
             {
                 lastOfs = ofs;
                 ofs     = ( ofs << 1 ) + 1;
@@ -699,7 +710,7 @@ public class ComparableTimSort< T >
             // Gallop left until a[first+hint-ofs] < key <= a[first+hint-lastOfs]
             int maxOfs = hint + 1;
 
-            while ( ( ofs < maxOfs ) && ( key.CompareTo( a[ first + hint - ofs ] ) <= 0 ) )
+            while ( ( ofs < maxOfs ) && ( key.CompareTo( array[ first + hint - ofs ] ) <= 0 ) )
             {
                 lastOfs = ofs;
                 ofs     = ( ofs << 1 ) + 1;
@@ -723,7 +734,7 @@ public class ComparableTimSort< T >
         }
 
         #if ALLOW_ASSERTS
-        DebugAssert( ( -1 <= lastOfs ) && ( lastOfs < ofs ) && ( ofs <= len ) );
+        Debug.Assert( ( -1 <= lastOfs ) && ( lastOfs < ofs ) && ( ofs <= len ) );
         #endif
 
         // Now a[first+lastOfs] < key <= a[first+ofs], so key belongs somewhere to the right
@@ -735,7 +746,7 @@ public class ComparableTimSort< T >
         {
             int m = lastOfs + ( ( ofs - lastOfs ) >>> 1 );
 
-            if ( key.CompareTo( a[ first + m ] ) > 0 )
+            if ( key.CompareTo( array[ first + m ] ) > 0 )
             {
                 lastOfs = m + 1; // a[first + m] < key
             }
@@ -746,7 +757,7 @@ public class ComparableTimSort< T >
         }
 
         #if ALLOW_ASSERTS
-        DebugAssert( lastOfs == ofs ); // so a[first + ofs - 1] < key <= a[first + ofs]
+        Debug.Assert( lastOfs == ofs ); // so a[first + ofs - 1] < key <= a[first + ofs]
         #endif
 
         return ofs;
@@ -757,7 +768,7 @@ public class ComparableTimSort< T >
     /// gallopRight returns the index after the rightmost equal element.
     /// </summary>
     /// <param name="key"> the key whose insertion point to search for </param>
-    /// <param name="a"> the array in which to search </param>
+    /// <param name="array"> the array in which to search </param>
     /// <param name="first"> the index of the first element in the range </param>
     /// <param name="len"> the length of the range; must be > 0 </param>
     /// <param name="hint">
@@ -765,23 +776,23 @@ public class ComparableTimSort< T >
     /// to the result, the faster this method will run.
     /// </param>
     /// <returns> the int k, 0 &lt;= k &lt;= n such that a[b + k - 1] &lt;= key &lt; a[b + k]  </returns>
-    private static int GallopRight( IComparable< T > key, T[] a, int first, int len, int hint )
+    private static int GallopRight( IComparable< T > key, T[] array, int first, int len, int hint )
     {
-        ArgumentNullException.ThrowIfNull( a );
+        ArgumentNullException.ThrowIfNull( array );
 
         #if ALLOW_ASSERTS
-        DebugAssert( ( len > 0 ) && ( hint >= 0 ) && ( hint < len ) );
+        Debug.Assert( ( len > 0 ) && ( hint >= 0 ) && ( hint < len ) );
         #endif
 
         var ofs     = 1;
         var lastOfs = 0;
 
-        if ( key.CompareTo( a[ first + hint ] ) < 0 )
+        if ( key.CompareTo( array[ first + hint ] ) < 0 )
         {
             // Gallop left until a[b+hint - ofs] <= key < a[b+hint - lastOfs]
             int maxOfs = hint + 1;
 
-            while ( ( ofs < maxOfs ) && ( key.CompareTo( a[ first + hint - ofs ] ) < 0 ) )
+            while ( ( ofs < maxOfs ) && ( key.CompareTo( array[ first + hint - ofs ] ) < 0 ) )
             {
                 lastOfs = ofs;
                 ofs     = ( ofs << 1 ) + 1;
@@ -808,7 +819,7 @@ public class ComparableTimSort< T >
             // Gallop right until a[b+hint + lastOfs] <= key < a[b+hint + ofs]
             int maxOfs = len - hint;
 
-            while ( ( ofs < maxOfs ) && ( key.CompareTo( a[ first + hint + ofs ] ) >= 0 ) )
+            while ( ( ofs < maxOfs ) && ( key.CompareTo( array[ first + hint + ofs ] ) >= 0 ) )
             {
                 lastOfs = ofs;
                 ofs     = ( ofs << 1 ) + 1;
@@ -830,7 +841,7 @@ public class ComparableTimSort< T >
         }
 
         #if ALLOW_ASSERTS
-        DebugAssert( ( -1 <= lastOfs ) && ( lastOfs < ofs ) && ( ofs <= len ) );
+        Debug.Assert( ( -1 <= lastOfs ) && ( lastOfs < ofs ) && ( ofs <= len ) );
         #endif
 
         // Now a[b + lastOfs] <= key < a[b + ofs], so key belongs somewhere to the right of lastOfs but no farther right than ofs.
@@ -841,7 +852,7 @@ public class ComparableTimSort< T >
         {
             int m = lastOfs + ( ( ofs - lastOfs ) >>> 1 );
 
-            if ( key?.CompareTo( a[ first + m ] ) < 0 )
+            if ( key?.CompareTo( array[ first + m ] ) < 0 )
             {
                 ofs = m; // key < a[b + m]
             }
@@ -852,7 +863,7 @@ public class ComparableTimSort< T >
         }
 
         #if ALLOW_ASSERTS
-        DebugAssert( lastOfs == ofs ); // so a[b + ofs - 1] <= key < a[b + ofs]
+        Debug.Assert( lastOfs == ofs ); // so a[b + ofs - 1] <= key < a[b + ofs]
         #endif
 
         return ofs;
@@ -875,34 +886,36 @@ public class ComparableTimSort< T >
     private void MergeLo( int base1, int len1, int base2, int len2 )
     {
         #if ALLOW_ASSERTS
-        DebugAssert( ( len1 > 0 ) && ( len2 > 0 ) && ( ( base1 + len1 ) == base2 ) );
+        Debug.Assert( ( len1 > 0 ) && ( len2 > 0 ) && ( ( base1 + len1 ) == base2 ) );
         #endif
 
         // Copy first run into temp array
-        T[]  a   = _a!; // For performance
-        T?[] tmp = EnsureCapacity( len1 );
+        T[]?  array = _array; // For performance
+        T?[] tmp   = EnsureCapacity( len1 );
 
-        Array.Copy( a, base1, tmp, 0, len1 );
+        Guard.Against.Null( array );
+        
+        Array.Copy( array, base1, tmp, 0, len1 );
 
         var cursor1 = 0;     // Indexes into tmp array
         int cursor2 = base2; // Indexes int a
         int dest    = base1; // Indexes int a
 
         // Move first element of second run and deal with degenerate cases
-        a[ dest++ ] = a[ cursor2++ ];
+        array[ dest++ ] = array[ cursor2++ ];
 
         if ( --len2 == 0 )
         {
-            Array.Copy( tmp, cursor1, a, dest, len1 );
+            Array.Copy( tmp, cursor1, array, dest, len1 );
 
             return;
         }
 
         if ( len1 == 1 )
         {
-            Array.Copy( a, cursor2, a, dest, len2 );
+            Array.Copy( array, cursor2, array, dest, len2 );
 
-            a[ dest + len2 ] = tmp[ cursor1 ]!; // Last elt of run 1 to end of merge
+            array[ dest + len2 ] = tmp[ cursor1 ]!; // Last elt of run 1 to end of merge
 
             return;
         }
@@ -918,12 +931,12 @@ public class ComparableTimSort< T >
             do
             {
                 #if ALLOW_ASSERTS
-                DebugAssert( ( len1 > 1 ) && ( len2 > 0 ) );
+                Debug.Assert( ( len1 > 1 ) && ( len2 > 0 ) );
                 #endif
 
-                if ( ( ( IComparable< T > )a[ cursor2 ]! ).CompareTo( tmp[ cursor1 ] ) < 0 )
+                if ( ( ( IComparable< T > )array[ cursor2 ]! ).CompareTo( tmp[ cursor1 ] ) < 0 )
                 {
-                    a[ dest++ ] = a[ cursor2++ ];
+                    array[ dest++ ] = array[ cursor2++ ];
                     count2++;
                     count1 = 0;
 
@@ -934,7 +947,7 @@ public class ComparableTimSort< T >
                 }
                 else
                 {
-                    a[ dest++ ] = tmp[ cursor1++ ]!;
+                    array[ dest++ ] = tmp[ cursor1++ ]!;
                     count1++;
                     count2 = 0;
 
@@ -952,14 +965,14 @@ public class ComparableTimSort< T >
             do
             {
                 #if ALLOW_ASSERTS
-                DebugAssert( ( len1 > 1 ) && ( len2 > 0 ) );
+                Debug.Assert( ( len1 > 1 ) && ( len2 > 0 ) );
                 #endif
 
-                count1 = GallopRight( ( IComparable< T > )a[ cursor2 ]!, tmp!, cursor1, len1, 0 );
+                count1 = GallopRight( ( IComparable< T > )array[ cursor2 ]!, tmp!, cursor1, len1, 0 );
 
                 if ( count1 != 0 )
                 {
-                    Array.Copy( tmp, cursor1, a, dest, count1 );
+                    Array.Copy( tmp, cursor1, array, dest, count1 );
 
                     dest    += count1;
                     cursor1 += count1;
@@ -971,18 +984,18 @@ public class ComparableTimSort< T >
                     }
                 }
 
-                a[ dest++ ] = a[ cursor2++ ];
+                array[ dest++ ] = array[ cursor2++ ];
 
                 if ( --len2 == 0 )
                 {
                     goto outer;
                 }
 
-                count2 = GallopLeft( ( IComparable< T > )tmp[ cursor1 ]!, a, cursor2, len2, 0 );
+                count2 = GallopLeft( ( IComparable< T > )tmp[ cursor1 ]!, array, cursor2, len2, 0 );
 
                 if ( count2 != 0 )
                 {
-                    Array.Copy( a, cursor2, a, dest, count2 );
+                    Array.Copy( array, cursor2, array, dest, count2 );
                     dest    += count2;
                     cursor2 += count2;
                     len2    -= count2;
@@ -993,7 +1006,7 @@ public class ComparableTimSort< T >
                     }
                 }
 
-                a[ dest++ ] = tmp[ cursor1++ ]!;
+                array[ dest++ ] = tmp[ cursor1++ ]!;
 
                 if ( --len1 == 1 )
                 {
@@ -1021,12 +1034,12 @@ public class ComparableTimSort< T >
             case 1:
             {
                 #if ALLOW_ASSERTS
-                DebugAssert( len2 > 0 );
+                Debug.Assert( len2 > 0 );
                 #endif
 
-                Array.Copy( a, cursor2, a, dest, len2 );
+                Array.Copy( array, cursor2, array, dest, len2 );
 
-                a[ dest + len2 ] = tmp[ cursor1 ]!; // Last elt of run 1 to end of merge
+                array[ dest + len2 ] = tmp[ cursor1 ]!; // Last elt of run 1 to end of merge
 
                 break;
             }
@@ -1039,11 +1052,11 @@ public class ComparableTimSort< T >
             default:
             {
                 #if ALLOW_ASSERTS
-                DebugAssert( len2 == 0 );
-                DebugAssert( len1 > 1 );
+                Debug.Assert( len2 == 0 );
+                Debug.Assert( len1 > 1 );
                 #endif
 
-                Array.Copy( tmp, cursor1, a, dest, len1 );
+                Array.Copy( tmp, cursor1, array, dest, len1 );
 
                 break;
             }
@@ -1061,25 +1074,27 @@ public class ComparableTimSort< T >
     private void MergeHi( int base1, int len1, int base2, int len2 )
     {
         #if ALLOW_ASSERTS
-        DebugAssert( ( len1 > 0 ) && ( len2 > 0 ) && ( ( base1 + len1 ) == base2 ) );
+        Debug.Assert( ( len1 > 0 ) && ( len2 > 0 ) && ( ( base1 + len1 ) == base2 ) );
         #endif
 
         // Copy second run into temp array
-        T[]? a   = _a; // For performance
-        T[]  tmp = EnsureCapacity( len2 );
+        T[]? array = _array; // For performance
+        T[]  tmp   = EnsureCapacity( len2 );
 
-        Array.Copy( a!, base2, tmp, 0, len2 );
+        Guard.Against.Null( array );
+        
+        Array.Copy( array, base2, tmp, 0, len2 );
 
         int cursor1 = base1 + len1 - 1; // Indexes into a
         int cursor2 = len2 - 1;         // Indexes into tmp array
         int dest    = base2 + len2 - 1; // Indexes into a
 
         // Move last element of first run and deal with degenerate cases
-        a![ dest-- ] = a[ cursor1-- ];
+        array[ dest-- ] = array[ cursor1-- ];
 
         if ( --len1 == 0 )
         {
-            Array.Copy( tmp, 0, a, dest - ( len2 - 1 ), len2 );
+            Array.Copy( tmp, 0, array, dest - ( len2 - 1 ), len2 );
 
             return;
         }
@@ -1089,9 +1104,9 @@ public class ComparableTimSort< T >
             dest    -= len1;
             cursor1 -= len1;
 
-            Array.Copy( a, cursor1 + 1, a, dest + 1, len1 );
+            Array.Copy( array, cursor1 + 1, array, dest + 1, len1 );
 
-            a[ dest ] = tmp[ cursor2 ]!;
+            array[ dest ] = tmp[ cursor2 ]!;
 
             return;
         }
@@ -1107,12 +1122,12 @@ public class ComparableTimSort< T >
             do
             {
                 #if ALLOW_ASSERTS
-                DebugAssert( ( len1 > 0 ) && ( len2 > 1 ) );
+                Debug.Assert( ( len1 > 0 ) && ( len2 > 1 ) );
                 #endif
 
-                if ( ( ( IComparable< T >? )tmp[ cursor2 ] )!.CompareTo( a[ cursor1 ] ) < 0 )
+                if ( ( ( IComparable< T >? )tmp[ cursor2 ] )!.CompareTo( array[ cursor1 ] ) < 0 )
                 {
-                    a[ dest-- ] = a[ cursor1-- ];
+                    array[ dest-- ] = array[ cursor1-- ];
                     count1++;
                     count2 = 0;
 
@@ -1123,7 +1138,7 @@ public class ComparableTimSort< T >
                 }
                 else
                 {
-                    a[ dest-- ] = tmp[ cursor2-- ]!;
+                    array[ dest-- ] = tmp[ cursor2-- ]!;
                     count2++;
                     count1 = 0;
 
@@ -1141,10 +1156,10 @@ public class ComparableTimSort< T >
             do
             {
                 #if ALLOW_ASSERTS
-                DebugAssert( ( len1 > 0 ) && ( len2 > 1 ) );
+                Debug.Assert( ( len1 > 0 ) && ( len2 > 1 ) );
                 #endif
 
-                count1 = len1 - GallopRight( ( IComparable< T >? )tmp[ cursor2 ]!, a, base1, len1, len1 - 1 );
+                count1 = len1 - GallopRight( ( IComparable< T >? )tmp[ cursor2 ]!, array, base1, len1, len1 - 1 );
 
                 if ( count1 != 0 )
                 {
@@ -1152,7 +1167,7 @@ public class ComparableTimSort< T >
                     cursor1 -= count1;
                     len1    -= count1;
 
-                    Array.Copy( a, cursor1 + 1, a, dest + 1, count1 );
+                    Array.Copy( array, cursor1 + 1, array, dest + 1, count1 );
 
                     if ( len1 == 0 )
                     {
@@ -1160,21 +1175,21 @@ public class ComparableTimSort< T >
                     }
                 }
 
-                a[ dest-- ] = tmp[ cursor2-- ];
+                array[ dest-- ] = tmp[ cursor2-- ];
 
                 if ( --len2 == 1 )
                 {
                     goto outer;
                 }
 
-                count2 = len2 - GallopLeft( ( IComparable< T > )a[ cursor1 ]!, tmp, 0, len2, len2 - 1 );
+                count2 = len2 - GallopLeft( ( IComparable< T > )array[ cursor1 ]!, tmp, 0, len2, len2 - 1 );
 
                 if ( count2 != 0 )
                 {
                     dest    -= count2;
                     cursor2 -= count2;
                     len2    -= count2;
-                    Array.Copy( tmp, cursor2 + 1, a, dest + 1, count2 );
+                    Array.Copy( tmp, cursor2 + 1, array, dest + 1, count2 );
 
                     if ( len2 <= 1 )
                     {
@@ -1182,7 +1197,7 @@ public class ComparableTimSort< T >
                     }
                 }
 
-                a[ dest-- ] = a[ cursor1-- ];
+                array[ dest-- ] = array[ cursor1-- ];
 
                 if ( --len1 == 0 )
                 {
@@ -1208,15 +1223,15 @@ public class ComparableTimSort< T >
         if ( len2 == 1 )
         {
             #if ALLOW_ASSERTS
-            DebugAssert( len1 > 0 );
+            Debug.Assert( len1 > 0 );
             #endif
 
             dest    -= len1;
             cursor1 -= len1;
 
-            Array.Copy( a, cursor1 + 1, a, dest + 1, len1 );
+            Array.Copy( array, cursor1 + 1, array, dest + 1, len1 );
 
-            a[ dest ] = tmp[ cursor2 ]; // Move first elt of run2 to front of merge
+            array[ dest ] = tmp[ cursor2 ]; // Move first elt of run2 to front of merge
         }
         else if ( len2 == 0 )
         {
@@ -1225,11 +1240,11 @@ public class ComparableTimSort< T >
         else
         {
             #if ALLOW_ASSERTS
-            DebugAssert( len1 == 0 );
-            DebugAssert( len2 > 0 );
+            Debug.Assert( len1 == 0 );
+            Debug.Assert( len2 > 0 );
             #endif
 
-            Array.Copy( tmp, 0, a, dest - ( len2 - 1 ), len2 );
+            Array.Copy( tmp, 0, array, dest - ( len2 - 1 ), len2 );
         }
     }
 
@@ -1256,7 +1271,7 @@ public class ComparableTimSort< T >
             newSize |= newSize >> 16;
             newSize++;
 
-            newSize = newSize < 0 ? minCapacity : Math.Min( newSize, _a!.Length >>> 1 );
+            newSize = newSize < 0 ? minCapacity : Math.Min( newSize, _array!.Length >>> 1 );
 
             var newArray = new T[ newSize ];
 

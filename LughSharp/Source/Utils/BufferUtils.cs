@@ -24,9 +24,15 @@
 
 namespace LughSharp.Source.Utils;
 
+/// <summary>
+/// Provides utility methods for working with buffers.
+/// </summary>
 [PublicAPI]
 public class BufferUtils
 {
+    //TODO: the byte-by-byte loops in these methods are a performance liability for large
+    // vertex/index uploads — replace them with MemoryMarshal.Cast + Span<T>.CopyTo eventually. 
+    
     /// <summary>
     /// Copies the content of the source buffer to the destination buffer.
     /// </summary>
@@ -70,8 +76,6 @@ public class BufferUtils
     /// <param name="destination">The destination buffer.</param>
     /// <param name="destinationOffset">The starting position in the destination buffer to copy to.</param>
     /// <param name="length">The number of bytes to copy.</param>
-
-    // ... (Overload with offsets and length for more control) ...
     public static void Copy< T >( Buffer< T > source,
                                   int sourceOffset,
                                   Buffer< T > destination,

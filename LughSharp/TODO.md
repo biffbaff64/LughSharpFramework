@@ -1155,7 +1155,7 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - BaseClassFactory
     - DONE - DONE - DONE - BinaryHeap
     - DONE - DONE - DONE - Bits
-    - DONE - IP   - DONE - Buffer<T>
+    - DONE - DONE - DONE - Buffer<T>
     - DONE - IP   - DONE - BufferUtils
     - DONE - DONE - DONE - ByteOrder
     - DONE - IP   - DONE - ComparableTimSort

@@ -87,6 +87,7 @@
         <Content Include="lib\net9.0\freetype_x64.dll" Pack="true" PackagePath="lib\net9.0\">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <None Remove="AlisonTrout.txt" />
     </ItemGroup>
 
     <ItemGroup>
