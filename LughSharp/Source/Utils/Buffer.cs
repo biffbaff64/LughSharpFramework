@@ -708,7 +708,8 @@ public class Buffer< T > : IDisposable where T : unmanaged
     }
 
     /// <summary>
-    /// Writes the specified short (2 bytes) to the buffer at the given index, taking into account the endianness, without changing the position.
+    /// Writes the specified short (2 bytes) to the buffer at the given index, taking into
+    /// account the endianness, without changing the position.
     /// </summary>
     /// <param name="byteIndex">The index at which to write the short.</param>
     /// <param name="value">The short value to write to the buffer.</param>
@@ -731,16 +732,40 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// Writes the specified short array to the buffer, starting at position 0.
+    /// 2 bytes per short.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
     public void PutShorts( short[] src )
     {
         PutShorts( src, 0, 0, src.Length );
     }
 
+    /// <summary>
+    /// Writes the specified number of shorts from the source array to the buffer.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset in the source array. </param>
+    /// <param name="numBytes"> The number of bytes to write. </param>
     public void PutShorts( short[] src, int srcOffset, int numBytes )
     {
         PutShorts( src, srcOffset, Position, numBytes );
     }
 
+    /// <summary>
+    /// Writes the specified number of shorts from the source array to the buffer, starting
+    /// at the given source offset and the given destination offset in the buffer. The position
+    /// in the buffer will be updated if the write extends beyond the current position.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset in the source array. </param>
+    /// <param name="dstOffset"> The offset in the buffer. </param>
+    /// <param name="numBytes"> The number of bytes to write. </param>
+    /// <exception cref="ArgumentNullException"> THrown if the source array is null. </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the source offset is out of range or the destination offset is negative.
+    /// </exception>
     public void PutShorts( short[] src, int srcOffset, int dstOffset, int numBytes )
     {
         ArgumentNullException.ThrowIfNull( src );
@@ -855,6 +880,9 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// <param name="offset">The zero-based position within the destination array to start writing.</param>
     /// <param name="length">The number of ints to read from the buffer.</param>
     /// <returns>An int array containing the requested number of ints.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the source offset is out of range or the destination offset is negative.
+    /// </exception>
     /// <exception cref="IndexOutOfRangeException">
     /// Thrown when the buffer does not contain enough remaining bytes to fulfill the request.
     /// </exception>
@@ -949,21 +977,44 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// Writes the specified int array to the buffer, starting at position 0.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
     public void PutInts( int[] src )
     {
         PutInts( src, 0, 0, src.Length );
     }
 
-    public void PutInts( int[] src, int srcOffset, int numBytes )
+    /// <summary>
+    /// Writes the specified number of ints from the source array to the buffer.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset in the source array. </param>
+    /// <param name="numInts"> The number of ints to write. </param>
+    public void PutInts( int[] src, int srcOffset, int numInts )
     {
-        PutInts( src, srcOffset, Position, numBytes );
+        PutInts( src, srcOffset, Position, numInts );
     }
 
-    public void PutInts( int[] src, int srcOffset, int dstOffset, int numBytes )
+    /// <summary>
+    /// Writes the specified number of ints from the source array to the buffer, starting
+    /// at the given source offset and the given destination offset in the buffer. The position
+    /// in the buffer will be updated if the write extends beyond the current position.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset in the source array. </param>
+    /// <param name="dstOffset"> The offset in the buffer. </param>
+    /// <param name="numInts"> The number of ints to write. </param>
+    /// <exception cref="ArgumentNullException"> THrown if the source array is null. </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the source offset is out of range or the destination offset is negative.
+    /// </exception>
+    public void PutInts( int[] src, int srcOffset, int dstOffset, int numInts )
     {
         ArgumentNullException.ThrowIfNull( src );
 
-        if ( ( srcOffset < 0 ) || ( ( srcOffset + numBytes ) > src.Length ) )
+        if ( ( srcOffset < 0 ) || ( ( srcOffset + numInts ) > src.Length ) )
         {
             throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
         }
@@ -973,7 +1024,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
             throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
         }
 
-        int byteCount = numBytes * 4;
+        int byteCount = numInts * 4;
 
         EnsureCapacity( dstOffset + byteCount );
 
@@ -981,14 +1032,14 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
         if ( IsBigEndian )
         {
-            for ( var i = 0; i < numBytes; i++ )
+            for ( var i = 0; i < numInts; i++ )
             {
                 BinaryPrimitives.WriteInt32BigEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
             }
         }
         else
         {
-            for ( var i = 0; i < numBytes; i++ )
+            for ( var i = 0; i < numInts; i++ )
             {
                 BinaryPrimitives.WriteInt32LittleEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
             }
@@ -1073,22 +1124,30 @@ public class Buffer< T > : IDisposable where T : unmanaged
     /// <param name="offset">The zero-based position within the destination array to start writing.</param>
     /// <param name="length">The number of floats to read from the buffer.</param>
     /// <returns>A float array containing the requested number of floats.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the source offset is out of range or the destination offset is negative.
+    /// </exception>
     /// <exception cref="IndexOutOfRangeException">
     /// Thrown when the buffer does not contain enough remaining bytes to fulfill the request.
     /// </exception>
     public float[] GetFloats( int offset, int length )
     {
         Guard.Against.Negative( offset );
-        Guard.Against.NegativeOrZero( length );
 
         int byteCount = length * 4;
+        var dst       = new float[ length ];
+
+        if ( ( offset < 0 ) || ( ( offset + length ) > dst.Length ) )
+        {
+            throw new ArgumentOutOfRangeException( nameof( offset ),
+                                                   "Destination offset and length exceed array bounds." );
+        }
 
         if ( ( Position + byteCount ) > Limit )
         {
             throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
         }
 
-        var          dst = new float[ length ];
         Span< byte > src = _memory.Span.Slice( Position, byteCount );
 
         if ( IsBigEndian )
@@ -1111,50 +1170,9 @@ public class Buffer< T > : IDisposable where T : unmanaged
         return dst;
     }
 
-    public void GetFloats( float[] dst )
-    {
-        GetFloats( dst, 0, dst.Length );
-    }
-
-    public void GetFloats( float[] dst, int dstOffset, int length )
-    {
-        ArgumentNullException.ThrowIfNull( dst );
-
-        if ( ( dstOffset < 0 ) || ( ( dstOffset + length ) > dst.Length ) )
-        {
-            throw new ArgumentOutOfRangeException( nameof( dstOffset ),
-                                                   "Destination offset and length exceed array bounds." );
-        }
-
-        int byteCount = length * 4;
-
-        if ( ( Position + byteCount ) > Limit )
-        {
-            throw new IndexOutOfRangeException( "Not enough remaining bytes in buffer to read the requested length." );
-        }
-
-        Span< byte > src = _memory.Span.Slice( Position, byteCount );
-
-        if ( IsBigEndian )
-        {
-            for ( var i = 0; i < length; i++ )
-            {
-                dst[ dstOffset + i ] = BinaryPrimitives.ReadSingleBigEndian( src.Slice( i * 4 ) );
-            }
-        }
-        else
-        {
-            for ( var i = 0; i < length; i++ )
-            {
-                dst[ dstOffset + i ] = BinaryPrimitives.ReadSingleLittleEndian( src.Slice( i * 4 ) );
-            }
-        }
-
-        Position += byteCount;
-    }
-
     /// <summary>
-    /// Writes the specified float (4 bytes) to the buffer at the current position, taking into account the endianness, and advances the position by 4 bytes.
+    /// Writes the specified float (4 bytes) to the buffer at the current position, taking
+    /// into account the endianness, and advances the position by 4 bytes.
     /// </summary>
     /// <param name="value">The float value to write to the buffer.</param>
     public void PutFloat( float value )
@@ -1178,6 +1196,12 @@ public class Buffer< T > : IDisposable where T : unmanaged
         }
     }
 
+    /// <summary>
+    /// Writes the specified float (4 bytes) to the buffer at the given index, taking into
+    /// account the endianness, without changing the position.
+    /// </summary>
+    /// <param name="byteIndex">The index at which to write the float.</param>
+    /// <param name="value">The float value to write to the buffer.</param>
     public void PutFloat( int byteIndex, float value )
     {
         EnsureCapacity( byteIndex + 4 );
@@ -1218,12 +1242,25 @@ public class Buffer< T > : IDisposable where T : unmanaged
     {
         PutFloats( src, srcOffset, Position, numBytes );
     }
-
-    public void PutFloats( float[] src, int srcOffset, int dstOffset, int numBytes )
+    
+    /// <summary>
+    /// Writes the specified number of ints from the source array to the buffer, starting
+    /// at the given source offset and the given destination offset in the buffer. The position
+    /// in the buffer will be updated if the write extends beyond the current position.
+    /// </summary>
+    /// <param name="src"> The source array. </param>
+    /// <param name="srcOffset"> The offset in the source array. </param>
+    /// <param name="dstOffset"> The offset in the buffer. </param>
+    /// <param name="numFloats"> The number of ints to write. </param>
+    /// <exception cref="ArgumentNullException"> THrown if the source array is null. </exception>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// Thrown if the source offset is out of range or the destination offset is negative.
+    /// </exception>
+    public void PutFloats( float[] src, int srcOffset, int dstOffset, int numFloats )
     {
         ArgumentNullException.ThrowIfNull( src );
 
-        if ( ( srcOffset < 0 ) || ( ( srcOffset + numBytes ) > src.Length ) )
+        if ( ( srcOffset < 0 ) || ( ( srcOffset + numFloats ) > src.Length ) )
         {
             throw new ArgumentOutOfRangeException( nameof( srcOffset ), "Source offset is out of range." );
         }
@@ -1233,7 +1270,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
             throw new ArgumentOutOfRangeException( nameof( dstOffset ), "Destination offset cannot be negative." );
         }
 
-        int byteCount = numBytes * 4;
+        int byteCount = numFloats * 4;
 
         EnsureCapacity( dstOffset + byteCount );
 
@@ -1241,14 +1278,14 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
         if ( IsBigEndian )
         {
-            for ( var i = 0; i < numBytes; i++ )
+            for ( var i = 0; i < numFloats; i++ )
             {
                 BinaryPrimitives.WriteSingleBigEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
             }
         }
         else
         {
-            for ( var i = 0; i < numBytes; i++ )
+            for ( var i = 0; i < numFloats; i++ )
             {
                 BinaryPrimitives.WriteSingleLittleEndian( dstSpan.Slice( i * 4 ), src[ srcOffset + i ] );
             }

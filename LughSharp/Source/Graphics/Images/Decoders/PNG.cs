@@ -32,7 +32,9 @@ using LughSharp.Source.Collections;
 namespace LughSharp.Source.Graphics.Images.Decoders;
 
 /// <summary>
-/// 
+/// Represents a PNG encoder/decoder utility for handling and writing PNG images.
+/// This class provides functionality for setting compression levels and writing
+/// pixmap data to files or streams.
 /// </summary>
 [PublicAPI]
 public class PNG : IDisposable
@@ -81,6 +83,8 @@ public class PNG : IDisposable
     // ====================================================================
 
     /// <summary>
+    /// Creates a new instance of the <see cref="PNG"/> class, and sets the
+    /// initial buffer size to 128x128.
     /// </summary>
     /// <param name="initialBufferSize"></param>
     public PNG( int initialBufferSize = 128 * 128 )
@@ -179,7 +183,7 @@ public class PNG : IDisposable
             if ( isRgba8888 )
             {
                 pixmap.ByteBuffer.Position = py * lineLen;
-                pixmap.ByteBuffer.GetBytes( curLine, 0, lineLen );
+                curLine = pixmap.ByteBuffer.GetBytes( 0, lineLen );
             }
             else
             {
@@ -265,26 +269,41 @@ public class PNG : IDisposable
         GC.SuppressFinalize( this );
     }
 
-    // ====================================================================
+    // ========================================================================
+    // ========================================================================
 
+    /// <summary>
+    /// Provides a specialized buffer for managing PNG chunks with integrated CRC32
+    /// checksum calculation. This class extends <see cref="BinaryWriter"/> to facilitate
+    /// writing binary data for PNG chunk operations.
+    /// </summary>
     [PublicAPI]
     public class ChunkBuffer : BinaryWriter
     {
         private readonly MemoryStream _buffer;
         private readonly Crc32        _crc;
+        
+        // ====================================================================
 
-        public ChunkBuffer( int initialSize )
-            : this( new MemoryStream( initialSize ), new Crc32() )
+        /// <summary>
+        /// Creates a new instance of the <see cref="ChunkBuffer"/> class with the
+        /// specified initial size.
+        /// </summary>
+        /// <param name="initialSize"> The initial size of the buffer in bytes. </param>
+        public ChunkBuffer( int initialSize ) : base( new MemoryStream( initialSize ) )
         {
+            _buffer = ( MemoryStream ) base.BaseStream;
+            _crc    = new Crc32();
         }
 
-        private ChunkBuffer( MemoryStream buffer, Crc32 crc )
-            : base( new MemoryStream() /*new CheckedOutputStream( buffer, crc )*/ )
-        {
-            _buffer = buffer;
-            _crc    = crc;
-        }
-
+        /// <summary>
+        /// Completes the current PNG chunk by writing its length, content, and CRC32
+        /// checksum to the specified <see cref="BinaryWriter"/> target.
+        /// </summary>
+        /// <param name="target">
+        /// The <see cref="BinaryWriter"/> to which the chunk's data, length, and checksum
+        /// will be written.
+        /// </param>
         public void EndChunk( BinaryWriter target )
         {
             Flush();
