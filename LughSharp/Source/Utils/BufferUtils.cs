@@ -119,13 +119,17 @@ public class BufferUtils
     }
 
     /// <summary>
-    /// 
+    /// Copies data from a source buffer to a destination buffer.
     /// </summary>
-    /// <param name="source"></param>
-    /// <param name="sourceOffset"></param>
-    /// <param name="length"></param>
-    /// <param name="destination"></param>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <typeparam name="T">The type of the elements contained in the buffers. Must be unmanaged.</typeparam>
+    /// <param name="source">The source buffer to copy data from.</param>
+    /// <param name="destination">The destination buffer to copy data to.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="source"/> or <paramref name="destination"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the buffers are incompatible or if the destination buffer does not have sufficient capacity.
+    /// </exception>
     public static void Copy( byte[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         Guard.Against.Null( source );
@@ -146,12 +150,21 @@ public class BufferUtils
     }
 
     /// <summary>
+    /// Copies elements from a source array of type <see cref="short"/> into a destination buffer.
     /// </summary>
-    /// <param name="source"></param>
-    /// <param name="sourceOffset"></param>
-    /// <param name="length"></param>
-    /// <param name="destination"></param>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="source">The source array containing the short elements to copy.</param>
+    /// <param name="sourceOffset">The offset in the source array at which to begin copying.</param>
+    /// <param name="length">The number of elements to copy from the source array.</param>
+    /// <param name="destination">The destination buffer where the elements will be copied.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="source"/> or <paramref name="destination"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <paramref name="sourceOffset"/> or <paramref name="length"/> is negative.
+    /// </exception>
+    /// <exception cref="RuntimeException">
+    /// Thrown if the destination buffer cannot accommodate the required capacity.
+    /// </exception>
     public static void Copy( short[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         Guard.Against.Null( source );
@@ -172,12 +185,19 @@ public class BufferUtils
     }
 
     /// <summary>
+    /// Copies a specified range of elements from the source array to the destination buffer.
     /// </summary>
-    /// <param name="source"></param>
-    /// <param name="sourceOffset"></param>
-    /// <param name="length"></param>
-    /// <param name="destination"></param>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="source">The source array containing the data to copy.</param>
+    /// <param name="sourceOffset">The starting index in the source array from where data will be copied.</param>
+    /// <param name="length">The number of elements to copy from the source array.</param>
+    /// <param name="destination">The destination buffer to which the data will be copied.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="source"/> or <paramref name="destination"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <paramref name="sourceOffset"/> or <paramref name="length"/> is negative,
+    /// or if the destination buffer does not have sufficient capacity.
+    /// </exception>
     public static void Copy( float[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         Guard.Against.Null( source );
@@ -198,12 +218,19 @@ public class BufferUtils
     }
 
     /// <summary>
+    /// Copies a range of integers from the source array to the destination buffer.
     /// </summary>
-    /// <param name="source"></param>
-    /// <param name="sourceOffset"></param>
-    /// <param name="length"></param>
-    /// <param name="destination"></param>
-    /// <exception cref="NotImplementedException"></exception>
+    /// <param name="source">The source array to copy data from.</param>
+    /// <param name="sourceOffset">The starting position in the source array.</param>
+    /// <param name="length">The number of integers to copy.</param>
+    /// <param name="destination">The destination buffer where the data will be copied to.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if either <paramref name="source"/> or <paramref name="destination"/> is null.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown if <paramref name="sourceOffset"/> or <paramref name="length"/> is negative, or if
+    /// the destination buffer does not have enough capacity.
+    /// </exception>
     public static void Copy( int[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
         Guard.Against.Null( source );

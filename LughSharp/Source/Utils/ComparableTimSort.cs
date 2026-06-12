@@ -143,10 +143,19 @@ public class ComparableTimSort< T >
     }
 
     /// <summary>
+    /// Sorts a subarray within the specified range using the TimSort algorithm, designed
+    /// for objects that implement the <see cref="IComparable{T}"/> interface.
     /// </summary>
-    /// <param name="array"></param>
-    /// <param name="lo"></param>
-    /// <param name="hi"></param>
+    /// <param name="array">
+    /// The array to be sorted. The input array should not be null.
+    /// </param>
+    /// <param name="lo">
+    /// The starting index (inclusive) of the range to sort.
+    /// </param>
+    /// <param name="hi">
+    /// The ending index (exclusive) of the range to sort. This must be greater than or
+    /// equal to <paramref name="lo"/> and within the bounds of the array.
+    /// </param>
     public void DoSort( T[]? array, int lo, int hi )
     {
         ArgumentNullException.ThrowIfNull( array );
@@ -222,18 +231,30 @@ public class ComparableTimSort< T >
     }
 
     /// <summary>
+    /// Sorts the specified array in ascending order using a TimSort algorithm for objects
+    /// that implement the <see cref="IComparable"/> interface.
     /// </summary>
-    /// <param name="array"></param>
+    /// <param name="array">
+    /// The array of elements to be sorted. All elements in the array must implement
+    /// <see cref="IComparable{T}"/>.
+    /// </param>
     public static void Sort( T[] array )
     {
         Sort( array, 0, array.Length );
     }
 
     /// <summary>
+    /// Sorts the specified range of the array in ascending order using the TimSort algorithm.
     /// </summary>
-    /// <param name="array"></param>
-    /// <param name="lo"></param>
-    /// <param name="hi"></param>
+    /// <param name="array">
+    /// The array to be sorted. This must not be null.
+    /// </param>
+    /// <param name="lo">
+    /// The starting index of the range to be sorted (inclusive).
+    /// </param>
+    /// <param name="hi">
+    /// The ending index of the range to be sorted (exclusive).
+    /// </param>
     public static void Sort( T[] array, int lo, int hi )
     {
         RangeCheck( array.Length, lo, hi );

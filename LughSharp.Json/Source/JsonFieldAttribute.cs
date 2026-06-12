@@ -22,16 +22,40 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.Utils;
+using JetBrains.Annotations;
 
-namespace LughSharp.Source.Scene2D.UI.RegistryStyles;
+namespace LughSharp.Json.Source;
 
+/// <summary>
+/// An attribute that provides additional metadata for fields or properties
+/// when serializing or deserializing JSON. This attribute allows specifying
+/// the field name to use in the JSON and whether the field is required.
+/// </summary>
+/// <remarks>
+/// This attribute can be applied to fields or properties in a class and is
+/// typically used to customize how those members are represented in JSON.
+/// It integrates with functionality that processes annotated fields during
+/// deserialization or serialization.
+/// </remarks>
 [PublicAPI]
-public record TouchpadStyleRecord
+[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
+public class JsonFieldAttribute : Attribute
 {
-    // Stretched in both directions.
-    public ISceneDrawable Background { get; set; } = new BaseDrawable();
-    public ISceneDrawable Knob       { get; set; } = new BaseDrawable();
+    public string? Name     { get; set; }
+    public bool    Required { get; set; }
+
+    // ========================================================================
+    
+    /// <summary>
+    /// Creates a new JsonFieldAttribute instance.
+    /// </summary>
+    /// <param name="name"> The name of the field. </param>
+    /// <param name="required"> True if the field is required, false otherwise. </param>
+    public JsonFieldAttribute( string? name = null, bool required = false )
+    {
+        Name     = name;
+        Required = required;
+    }
 }
 
 // ============================================================================

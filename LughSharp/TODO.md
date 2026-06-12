@@ -1023,33 +1023,6 @@ Button.AddListener( new ChangeListener( ( ev, actor ) =>
 } ) );
 ```
 
-LUGHSHARP/SOURCE/SCENE2D/REGISTRYSTYLES
----------------------------------------
-
-( Styles to use with StyleRegistry / StyleFactory )
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - IP   - DONE - ButtonStyleRecord
-    - DONE - IP   - DONE - CheckBoxStyleRecord
-    - DONE - IP   - DONE - DialogStyleRecord
-    - DONE - IP   - DONE - ImageButtonStyleRecord
-    - DONE - IP   - DONE - ImageTextButtonStyleRecord
-    - DONE - IP   - DONE - LabelStyleRecord
-    - DONE - IP   - DONE - ListBoxStyleRecord
-    - DONE - IP   - DONE - ProgressBarStyleRecord
-    - DONE - IP   - DONE - ScrollPaneStyleRecord
-    - DONE - IP   - DONE - SelectBoxStyleRecord
-    - DONE - IP   - DONE - SliderStyleRecord
-    - DONE - IP   - DONE - SplitPaneStyleRecord
-    - DONE - IP   - DONE - TextAreaStyleRecord
-    - DONE - IP   - DONE - TextButtonStyleRecord
-    - DONE - IP   - DONE - TextFieldStyleRecord
-    - DONE - IP   - DONE - TextTooltipStyleRecord
-    - DONE - IP   - DONE - TouchpadStyleRecord
-    - DONE - IP   - DONE - TreeStyleRecord
-    - DONE - IP   - DONE - WindowStyleRecord
-
 LUGHSHARP/SOURCE/SCENE2D/UI
 ---------------------------
 
@@ -1143,7 +1116,7 @@ LUGHSHARP/SOURCE/SCENE2D/UTILS
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/UTILS
+LUGHSHARP/SOURCE/UTILS - DONE
 ----------------------
 
       CODE   DOCU   FOOTER
@@ -1156,9 +1129,9 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - BinaryHeap
     - DONE - DONE - DONE - Bits
     - DONE - DONE - DONE - Buffer<T>
-    - DONE - IP   - DONE - BufferUtils
+    - DONE - DONE - DONE - BufferUtils
     - DONE - DONE - DONE - ByteOrder
-    - DONE - IP   - DONE - ComparableTimSort
+    - DONE - DONE - DONE - ComparableTimSort
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
     - DONE - DONE - DONE - HashHelpers
@@ -1171,15 +1144,15 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - PerformanceCounter
     - DONE - DONE - DONE - PerformanceCounters
     - DONE - DONE - DONE - PropertiesUtils
-    - DONE - IP   - DONE - QuadTreeFloat
+    - DONE - DONE - DONE - QuadTreeFloat
     - DONE - DONE - DONE - QuickSelect
     - DONE - DONE - DONE - Scaling
     - DONE - DONE - DONE - ScreenUtils
-    - DONE - IP   - DONE - Selector
+    - DONE - DONE - DONE - Selector
     - DONE - DONE - DONE - SortUtils
     - DONE - DONE - DONE - SystemArrayUtils
     - DONE - DONE - DONE - TimeUtils
-    - DONE - IP   - DONE - TimSort
+    - DONE - DONE - DONE - TimSort
 
 LUGHSHARP/SOURCE/UTILS/EXCEPTIONS - DONE
 ---------------------------------
@@ -1192,28 +1165,6 @@ LUGHSHARP/SOURCE/UTILS/EXCEPTIONS - DONE
     - DONE - DONE - DONE - ListenerFailureException
     - DONE - DONE - DONE - RuntimeException
     - DONE - DONE - DONE - SerializationException
-
-LUGHSHARP/SOURCE/UTILS/JSON
----------------------------
-
-    ///////////////////////////////////////////////
-    ALL JSON CLASSES NEED FULLY TESTING!!!
-    ///////////////////////////////////////////////
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - EnumArrayConverterFactory
-    - DONE - IP   - DONE - Json
-    - DONE - DONE - DONE - JsonFieldAttribute
-    - IP   - IP   - DONE - JsonMatcher          May not be needed / To Be Removed
-    - DONE - IP   - DONE - JsonNameAttribute
-    - DONE - IP   - DONE - JsonOutput
-    - DONE - DONE - DONE - JsonOutputType
-    - IP   - IP   - DONE - JsonReader
-    - IP   - IP   - DONE - JsonSkimmer          May not be needed / To Be Removed
-    - DONE - IP   - DONE - JsonString
-    - DONE - IP   - DONE - JsonValue
-    - DONE - IP   - DONE - JsonWriter
 
 LUGHSHARP/SOURCE/UTILS/LOGGING - DONE
 ------------------------------
@@ -1341,6 +1292,34 @@ LUGHSHARP/EXTENSIONS/SOURCE/BOX2D/JOINTS
     -      -      -      - WeldJointDef
     -      -      -      - WheelJoint
     -      -      -      - WheelJointDef
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LUGHSHARP/JSON/SOURCE
+---------------------
+
+    ///////////////////////////////////////////////
+    ALL JSON CLASSES NEED FULLY TESTING!!!
+    ///////////////////////////////////////////////
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - EnumArrayConverterFactory
+    - DONE - IP   - DONE - Json
+    - DONE - DONE - DONE - JsonFieldAttribute
+    - IP   - IP   - DONE - JsonMatcher          May not be needed / To Be Removed
+    - DONE - IP   - DONE - JsonNameAttribute
+    - DONE - IP   - DONE - JsonOutput
+    - DONE - DONE - DONE - JsonOutputType
+    - IP   - IP   - DONE - JsonReader
+    - IP   - IP   - DONE - JsonSkimmer          May not be needed / To Be Removed
+    - DONE - IP   - DONE - JsonString
+    - DONE - IP   - DONE - JsonValue
+    - DONE - IP   - DONE - JsonWriter
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

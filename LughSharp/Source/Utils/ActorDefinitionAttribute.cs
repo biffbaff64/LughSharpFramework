@@ -55,7 +55,7 @@ namespace LughSharp.Source.Utils;
 public class ActorDefinitionAttribute : Attribute
 {
     /// <summary>
-    /// The role of the actor. This is used for identifying the actor in the,
+    /// The role of the actor. This is used for identifying the actor in the stage,
     /// and is a user-defined string.
     /// <br/>
     /// For instance:-

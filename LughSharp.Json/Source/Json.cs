@@ -23,11 +23,15 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
+using System.Reflection;
+
+using JetBrains.Annotations;
 
 using LughSharp.Source.Collections;
 using LughSharp.Source.IO;
+using LughSharp.Source.Utils.Exceptions;
 
-namespace LughSharp.Source.Utils.Json;
+namespace LughSharp.Json.Source;
 
 /// <summary>
 /// Reads / Writes objects to / from JSON, automatically.
@@ -106,11 +110,15 @@ public class Json
     }
 
     /// <summary>
-    /// 
+    /// Copies the values of the fields in the first object to the fields in
+    /// the second object.
     /// </summary>
-    /// <param name="from"></param>
-    /// <param name="to"></param>
-    /// <exception cref="SerializationException"></exception>
+    /// <param name="from"> The object to copy from. </param>
+    /// <param name="to"> The object to copy to. </param>
+    /// <exception cref="System.Runtime.Serialization.SerializationException">
+    /// Thrown if the <paramref name="from"/> object is missing a field that is
+    /// required by the <paramref name="to"/> object.
+    /// </exception>
     public void CopyFields( object from, object to )
     {
         Dictionary< string, FieldMetadata > toFields = GetFields( to.GetType() );
@@ -140,8 +148,8 @@ public class Json
     /// Sets a tag to use instead of the fully qualified class name. This can make
     /// the Json easier to read.
     /// </summary>
-    /// <param name="tag"></param>
-    /// <param name="type"></param>
+    /// <param name="tag"> The tag to set. </param>
+    /// <param name="type"> The type to associate with the tag. </param>
     public void AddClassTag( string tag, Type type )
     {
         _tagToType.Add( tag, type );
@@ -193,10 +201,12 @@ public class Json
     /// each element in the collection does not need to be written unless different from the
     /// element type.
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="fieldName"></param>
-    /// <param name="elementType"></param>
-    /// <exception cref="SerializationException"></exception>
+    /// <param name="type"> The <c>Type</c> of the collection. </param>
+    /// <param name="fieldName"> The <c>name</c> of the field. </param>
+    /// <param name="elementType"> The <c>Type</c> of the elements in the collection. </param>
+    /// <exception cref="SerializationException">
+    /// Thrown if the specified field is not found.
+    /// </exception>
     public void SetElementType( Type type, string fieldName, Type elementType )
     {
         FieldMetadata? metadata = GetFields( type ).Get( fieldName );
@@ -230,27 +240,28 @@ public class Json
     }
 
     /// <summary>
-    /// 
+    /// Reads a value from the provided JSON data, with optional type and element type specifications.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="type"></param>
-    /// <param name="jsonMap"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
+    /// <typeparam name="T">The type of the value to be read.</typeparam>
+    /// <param name="name">The name of the field to read from the JSON map.</param>
+    /// <param name="type">The type to which the value should be converted. Can be null for inferred types.</param>
+    /// <param name="jsonMap">The JSON data from which the value is read. Can be null if no value is available.</param>
+    /// <returns>The value read from the JSON data, or default of <typeparamref name="T"/> if not found or conversion fails.</returns>
     public virtual T? ReadValue< T >( string name, Type? type, JsonValue jsonMap )
     {
         return ReadValue< T >( type, null, jsonMap.Get( name ) );
     }
 
     /// <summary>
-    /// 
+    /// Reads a value from a JSON map based on the specified parameters and returns the result.
+    /// If the value is not found, the provided default value is returned.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="type"></param>
-    /// <param name="defaultValue"></param>
-    /// <param name="jsonMap"></param>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
+    /// <typeparam name="T">The type of the value being read.</typeparam>
+    /// <param name="name">The name of the field to read from the JSON map.</param>
+    /// <param name="type">The type of the field to read. Can be null.</param>
+    /// <param name="defaultValue">The default value to return if the field is not found in the JSON map.</param>
+    /// <param name="jsonMap">The JSON map from which the value is being read.</param>
+    /// <returns>The value read from the JSON map or the default value if the field is not found.</returns>
     public virtual T? ReadValue< T >( string name, Type? type, T defaultValue, JsonValue jsonMap )
     {
         JsonValue? jsonValue = jsonMap.Get( name );

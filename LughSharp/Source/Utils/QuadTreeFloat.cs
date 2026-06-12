@@ -101,7 +101,8 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Resets this quad tree and all child nodes, freeing them to the pool. After
+    /// resetting, the quad tree can be reused.
     /// </summary>
     public void Reset()
     {
@@ -141,12 +142,12 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Sets the bounds of the quad tree node by specifying its origin and dimensions.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="x"> The x-coordinate of the origin of the bounds. </param>
+    /// <param name="y"> The y-coordinate of the origin of the bounds. </param>
+    /// <param name="width"> The width of the bounds. </param>
+    /// <param name="height"> The height of the bounds. </param>
     public void SetBounds( float x, float y, float width, float height )
     {
         X      = x;
@@ -156,11 +157,11 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Adds a new entry to the quad tree with the specified value, x-coordinate, and y-coordinate.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="valueX"></param>
-    /// <param name="valueY"></param>
+    /// <param name="value">The value to associate with the point being added.</param>
+    /// <param name="valueX">The x-coordinate of the point being added.</param>
+    /// <param name="valueY">The y-coordinate of the point being added.</param>
     public void Add( float value, float valueX, float valueY )
     {
         int count = Count;
@@ -194,11 +195,11 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Divides the current quad tree node into four child nodes and redistributes existing values among them.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="valueX"></param>
-    /// <param name="valueY"></param>
+    /// <param name="value">The value to be added to the appropriate child node after splitting.</param>
+    /// <param name="valueX">The X coordinate associated with the value being added.</param>
+    /// <param name="valueY">The Y coordinate associated with the value being added.</param>
     private void Split( float value, float valueX, float valueY )
     {
         for ( var i = 0; i < MaxValues; i += 3 )
@@ -213,11 +214,11 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Adds a value along with its X and Y coordinates to the appropriate child node of the quad tree.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="valueX"></param>
-    /// <param name="valueY"></param>
+    /// <param name="value">The value to be added.</param>
+    /// <param name="valueX">The X coordinate associated with the value.</param>
+    /// <param name="valueY">The Y coordinate associated with the value.</param>
     private void AddToChild( float value, float valueX, float valueY )
     {
         QuadTreeFloat? child;
@@ -250,15 +251,17 @@ public class QuadTreeFloat : IResetable
         child?.Add( value, valueX, valueY );
     }
 
-    /// <summary>
-    /// 
+    /// <summary>  
+    /// Obtains a quad tree child node with the specified bounds and depth.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="depth"></param>
-    /// <returns></returns>
+    /// <param name="x">The x-coordinate of the child node's top-left corner.</param>
+    /// <param name="y">The y-coordinate of the child node's top-left corner.</param>
+    /// <param name="width">The width of the child node.</param>
+    /// <param name="height">The height of the child node.</param>
+    /// <param name="depth">The depth of the child node within the quad tree.</param>
+    /// <returns>
+    /// A quad tree child node configured with the specified properties.
+    /// </returns>
     private QuadTreeFloat? ObtainChild( float x, float y, float width, float height, int depth )
     {
         QuadTreeFloat child = _pool.Obtain();
@@ -282,29 +285,35 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
+    /// Queries the quad tree for all points within a circular area defined by a center point and radius.
     /// </summary>
-    /// <param name="centerX"></param>
-    /// <param name="centerY"></param>
-    /// <param name="radius"></param>
-    /// <param name="results">
-    /// For each entry found within the radius, if any, the value, x, y, and
-    /// square of the distance to the entry are added to this array.
-    /// </param>
+    /// <param name="centerX">The x-coordinate of the center of the search area.</param>
+    /// <param name="centerY">The y-coordinate of the center of the search area.</param>
+    /// <param name="radius">The radius of the circular search area.</param>
+    /// <param name="results">A list to store the results found within the search area.
+    /// Each result consists of the value, x, y, and the square of the distance to the entry.</param>
     public void Query( float centerX, float centerY, float radius, List< float > results )
     {
         Query( centerX, centerY, radius * radius, centerX - radius, centerY - radius, radius * 2, results );
     }
 
     /// <summary>
-    /// 
+    /// Queries the quad tree to find all entries within a circular area defined by the
+    /// given center and radius.
     /// </summary>
-    /// <param name="centerX"></param>
-    /// <param name="centerY"></param>
-    /// <param name="radiusSqr"></param>
-    /// <param name="rectX"></param>
-    /// <param name="rectY"></param>
-    /// <param name="rectSize"></param>
-    /// <param name="results"></param>
+    /// <param name="centerX">The x-coordinate of the center of the circular area.</param>
+    /// <param name="centerY">The y-coordinate of the center of the circular area.</param>
+    /// <param name="radiusSqr">The square of the radius of the circular area.</param>
+    /// <param name="rectX">
+    /// The x-coordinate of the top-left corner of the bounding rectangle for the circular area.
+    /// </param>
+    /// <param name="rectY">
+    /// The y-coordinate of the top-left corner of the bounding rectangle for the circular area.
+    /// </param>
+    /// <param name="rectSize">
+    /// The size (width and height) of the bounding rectangle for the circular area.
+    /// </param>
+    /// <param name="results">The list to store entries found within the circular area.</param>
     private void Query( float centerX,
                         float centerY,
                         float radiusSqr,
@@ -354,17 +363,20 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
+    /// Finds the nearest point to the specified coordinates (x, y) within the quad tree,
+    /// returning the result in the provided list.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x">The x-coordinate of the target point.</param>
+    /// <param name="y">The y-coordinate of the target point.</param>
     /// <param name="result">
-    /// For the entry nearest to the specified point, the value, x, y, and square
-    /// of the distance to the value are added to this array after it is cleared.
+    /// A list to store the details of the nearest point. The list will be cleared and populated with:
+    /// - Value (index 0): The value of the nearest point.
+    /// - X (index 1): The x-coordinate of the nearest point.
+    /// - Y (index 2): The y-coordinate of the nearest point.
+    /// - DistanceSquared (index 3): The squared distance of the nearest point from (x, y).
     /// </param>
     /// <returns>
-    /// False if no entry was found because the quad tree was empty or the specified
-    /// point is farther than the larger of the quad tree's width or height from an
-    /// entry. If false is returned the result array is empty.
+    /// True if a near point is found; otherwise, false if no contents are available.
     /// </returns>
     public bool Nearest( float x, float y, List< float > result )
     {
@@ -422,11 +434,15 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Finds the nearest value to the given coordinates within the current quad tree
+    /// node and updates the result.
     /// </summary>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="result"></param>
+    /// <param name="x">The x-coordinate of the point to search for.</param>
+    /// <param name="y">The y-coordinate of the point to search for.</param>
+    /// <param name="result">
+    /// A list containing the current nearest value, x-coordinate, y-coordinate, and squared distance.
+    /// This list will be updated with the nearest value found during the search.
+    /// </param>
     private void FindNearestInternal( float x, float y, List< float > result )
     {
         if ( !( ( X < x )
@@ -478,7 +494,8 @@ public class QuadTreeFloat : IResetable
     }
 
     /// <summary>
-    /// 
+    /// Creates a new <see cref="QuadTreeFloat" /> object. This method is called by
+    /// the pool when a pooled object is being reused.
     /// </summary>
     /// <returns></returns>
     public static QuadTreeFloat GetNewObject()

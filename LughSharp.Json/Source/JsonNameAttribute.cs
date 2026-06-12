@@ -22,17 +22,22 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Scene2D.UI.Styles;
-using LughSharp.Source.Scene2D.Utils;
+using JetBrains.Annotations;
 
-namespace LughSharp.Source.Scene2D.UI.RegistryStyles;
+namespace LughSharp.Json.Source;
 
 [PublicAPI]
-public record TextTooltipStyleRecord
+[AttributeUsage( AttributeTargets.Field )]
+public class JsonNameAttribute : Attribute
 {
-    public LabelStyle     Label      { get; set; } = new();
-    public ISceneDrawable Background { get; set; } = new BaseDrawable();
-    public float          WrapWidth  { get; set; }
+    public string Name { get; }
+
+    // ========================================================================
+    
+    public JsonNameAttribute( string name )
+    {
+        Name = name;
+    }
 }
 
 // ============================================================================

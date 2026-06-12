@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Utils.Json;
+using JetBrains.Annotations;
+
+namespace LughSharp.Json.Source;
 
 /// <summary>
 /// Lightweight event-based JSON parser. All values are provided as strings to reduce work

@@ -25,7 +25,9 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace LughSharp.Source.Utils.Json;
+using JetBrains.Annotations;
+
+namespace LughSharp.Json.Source;
 
 /// <summary>
 /// A <see cref="JsonConverterFactory"/> that creates converters for arrays of enum types,

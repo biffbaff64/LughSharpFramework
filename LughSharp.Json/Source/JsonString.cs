@@ -24,10 +24,14 @@
 
 using System.Globalization;
 using System.Numerics;
+using System.Text;
+
+using JetBrains.Annotations;
 
 using LughSharp.Source.Collections;
+using LughSharp.Source.Maths;
 
-namespace LughSharp.Source.Utils.Json;
+namespace LughSharp.Json.Source;
 
 /// <summary>
 /// Builder API for emitting JSON to a string.

@@ -48,13 +48,17 @@ public class Selector< T >
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Selects the element in the array that corresponds to the k-th lowest value
+    /// based on the provided comparer.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="comp"></param>
-    /// <param name="kthLowest"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
+    /// <param name="items">The array containing the elements to be evaluated.</param>
+    /// <param name="comp">The comparer used to determine the relative order of the elements.</param>
+    /// <param name="kthLowest">The rank of the element to select (1-based index).</param>
+    /// <param name="size">The number of elements in the array to consider. Must be greater than 0.</param>
+    /// <returns>The element in the array corresponding to the k-th lowest value.</returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown if the size is less than 1 or if the k-th rank exceeds the number of elements considered.
+    /// </exception>
     public T Select( T[] items, IComparer< T > comp, int kthLowest, int size )
     {
         int idx = SelectIndex( items, comp, kthLowest, size );
@@ -63,14 +67,17 @@ public class Selector< T >
     }
 
     /// <summary>
-    /// 
+    /// Selects the index of the element in the array that corresponds to the k-th lowest value
+    /// based on the provided comparer.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="comp"></param>
-    /// <param name="kthLowest"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="items">The array containing the elements to be evaluated.</param>
+    /// <param name="comp">The comparer used to determine the relative order of the elements.</param>
+    /// <param name="kthLowest">The rank of the element to select (1-based index).</param>
+    /// <param name="size">The number of elements in the array to consider. Must be greater than 0.</param>
+    /// <returns>The index of the element in the array corresponding to the k-th lowest value.</returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown if the size is less than 1 or if the k-th rank exceeds the number of elements considered.
+    /// </exception>
     public int SelectIndex( T[] items, IComparer< T > comp, int kthLowest, int size )
     {
         if ( size < 1 )
@@ -110,15 +117,20 @@ public class Selector< T >
     }
 
     /// <summary>
-    /// 
+    /// Finds the index of the minimum element in the given array based on the provided comparer.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="comp"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
+    /// <param name="items">The array of items to search for the minimum element.</param>
+    /// <param name="comp">The comparer used to determine the relative order of the elements in the array.</param>
+    /// <param name="size">The number of elements in the array to consider. Must be greater than 0.</param>
+    /// <returns>The index of the minimum element in the array as determined by the comparer.</returns>
     /// <remarks> Faster than <see cref="QuickSelect{T}"/> for n = min. </remarks>
     private static int FastMin( T[] items, IComparer< T > comp, int size )
     {
+        if ( size < 1 )
+        {
+            throw new RuntimeException( "cannot select from empty array (size < 1)" );
+        }
+
         var lowestIdx = 0;
 
         for ( var i = 1; i < size; i++ )
@@ -135,14 +147,19 @@ public class Selector< T >
     }
 
     /// <summary>
-    /// 
+    /// Finds the index of the maximum element in the given array based on the provided comparer.
     /// </summary>
-    /// <param name="items"></param>
-    /// <param name="comp"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
+    /// <param name="items">The array of items to search for the maximum element.</param>
+    /// <param name="comp">The comparer used to determine the relative order of the elements in the array.</param>
+    /// <param name="size">The number of elements in the array to consider. Must be greater than 0.</param>
+    /// <returns>The index of the maximum element in the array as determined by the comparer.</returns>
     private static int FastMax( T[] items, IComparer< T > comp, int size )
     {
+        if ( size < 1 )
+        {
+            throw new RuntimeException( "cannot select from empty array (size < 1)" );
+        }
+        
         var highestIdx = 0;
 
         for ( var i = 1; i < size; i++ )

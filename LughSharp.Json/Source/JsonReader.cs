@@ -22,9 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.Serialization;
+using System.Text;
+
+using JetBrains.Annotations;
+
 using LughSharp.Source.Collections;
 
-namespace LughSharp.Source.Utils.Json;
+namespace LughSharp.Json.Source;
 
 /// <summary>
 /// Lightweight JSON parser.
