@@ -31,6 +31,8 @@ using LughSharp.Source.Scene2D.Utils;
 namespace LughSharp.Source.Scene2D.UI;
 
 [PublicAPI]
+[UnstableApi( "Style system is still in active development and the API may change." )]
+[Experimental( "LUGH_UI_001" )]
 public class StyleFactory
 {
     /// <summary>

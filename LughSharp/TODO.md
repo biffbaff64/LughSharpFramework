@@ -265,10 +265,10 @@ LUGHSHARP/SOURCE/COLLECTIONS - DONE
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - ByteArray                Look into removing this.
     - IP   - IP   - DONE - ObjectMap                Look into removing this.
     - IP   - IP   - DONE - OrderedMap               Look into removing this.
 
+    - DONE - DONE - DONE - ByteArray
     - DONE - DONE - DONE - Collections
     - DONE - DONE - DONE - DelayedRemovalList
     - DONE - DONE - DONE - DictionaryExtensions
@@ -571,8 +571,6 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL/ENUMS
 LUGHSHARP/SOURCE/GRAPHICS/PACKING/IMAGEPACKER
 ---------------------------------------------
 
-Q: Do I actually need this class if I already have TexturePacker?
-
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ImagePacker
@@ -608,7 +606,7 @@ LUGHSHARP/SOURCE/GRAPHICS/PACKING/TILEDMAPPACKER
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   -      - TiledMapPacker
+    - IP   - IP   - DONE - TiledMapPacker
     -      -      -      - TiledMapPackerTest
     -      -      -      - TiledMapPackerTestRenderer
     - DONE - DONE - DONE - TileSetLayout
@@ -623,21 +621,12 @@ LUGHSHARP/SOURCE/GRAPHICS/SHADERS
     - DONE - IP   - DONE - ShaderProgram
     - DONE - DONE - DONE - ShaderStrings
 
-LUGHSHARP/SOURCE/GRAPHICS/TEXT
-------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - CharacterUtils
-    -      -      -      - RegexUtils
-    -      -      -      - Subset
-    -      -      -      - UnicodeBlock
-
 LUGHSHARP/SOURCE/GRAPHICS/UTILS
 -------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    - DONE - DONE - DONE - CharacterUtils
     - DONE - DONE - DONE - DrawableUtils
     - IP   - IP   - DONE - ETC1
     - DONE - DONE - DONE - HdpiUtils
@@ -653,9 +642,12 @@ LUGHSHARP/SOURCE/GRAPHICS/UTILS
     -      -      -      - InstanceBufferObjectSubData
     -      -      -      - IVertexData
     -      -      -      - MipMapGenerator
+    -      -      -      - RegexUtils
     -      -      -      - ShaderConstants
     -      -      -      - ShapeRenderer
+    -      -      -      - Subset
     -      -      -      - TextureUtils
+    -      -      -      - UnicodeBlock
     -      -      -      - Vertex
     -      -      -      - VertexArray
     -      -      -      - VertexBufferObject
@@ -686,15 +678,17 @@ LUGHSHARP/SOURCE/INPUT
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      -      - AbstractInput
-    -      -      -      - GestureDetector
-    -      -      -      - IInput
+    -      -      -      - GestureDetector          - Mobile devices, do i keep this?
+    -      -      - DONE - IInput
     -      -      -      - IInputProcessor
     -      -      -      - InputAdapter
     -      -      -      - InputEventQueue
-    -      -      -      - InputMultiplexer
-    -      -      -      - InputUtils
-    -      -      -      - RemoteInput
-    -      -      -      - RemoteSender
+    - DONE - DONE - DONE - InputMultiplexer
+    - DONE - DONE - DONE - InputUtils
+    - DONE - DONE - DONE - ITextInputWrapper
+    - DONE - DONE - DONE - NativeInputConfiguration
+    -      -      - DONE - RemoteInput
+    -      -      - DONE - RemoteSender
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1153,6 +1147,7 @@ LUGHSHARP/SOURCE/UTILS - DONE
     - DONE - DONE - DONE - SystemArrayUtils
     - DONE - DONE - DONE - TimeUtils
     - DONE - DONE - DONE - TimSort
+    - DONE - DONE - DONE - UnstableApiAttribute
 
 LUGHSHARP/SOURCE/UTILS/EXCEPTIONS - DONE
 ---------------------------------

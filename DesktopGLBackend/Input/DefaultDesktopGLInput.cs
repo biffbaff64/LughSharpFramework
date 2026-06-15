@@ -224,11 +224,11 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     /// <inheritdoc />
-    public override void SetCursorOverridden( bool caught )
+    public override void SetCursorOverridden( bool overridden )
     {
         DotGLFW.Glfw.SetInputMode( _window.GlfwWindow,
                                    DotGLFW.InputMode.Cursor,
-                                   caught ? DotGLFW.CursorMode.Disabled : DotGLFW.CursorMode.Normal );
+                                   overridden ? DotGLFW.CursorMode.Disabled : DotGLFW.CursorMode.Normal );
     }
 
     /// <inheritdoc />

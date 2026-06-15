@@ -46,69 +46,45 @@ namespace LughSharp.Source.Input;
 [PublicAPI]
 public interface IInput
 {
-    // ====================================================================
-    // ====================================================================
-
-    /// <summary>
-    /// Keyboard Types
-    /// </summary>
-    [PublicAPI]
-    public enum OnscreenKeyboardType
-    {
-        Default,
-        NumberPad,
-        PhonePad,
-        Email,
-        Password,
-        Uri
-    }
-
-    // ====================================================================
-    // ====================================================================
-
-    /// <summary>
-    /// Screen orientation types.
-    /// </summary>
-    [PublicAPI]
-    public enum Orientation
-    {
-        Landscape,
-        Portrait
-    }
-
-    // ====================================================================
-    // ====================================================================
-
-    /// <summary>
-    /// Supported peripherals.
-    /// </summary>
-    [PublicAPI]
-    public enum Peripheral
-    {
-        HardwareKeyboard,
-        OnscreenKeyboard,
-        MultitouchScreen,
-        Accelerometer,
-        Compass,
-        Vibrator,
-        Gyroscope,
-        RotationVector,
-        Pressure
-    }
-
     /// <summary>
     /// The currently set <see cref="IInputProcessor"/>.
     /// </summary>
     IInputProcessor? InputProcessor { get; set; }
 
-    // ========================================================================
-
+    /// <summary>
+    /// Returns the maximum number of pointers.
+    /// </summary>
     int GetMaxPointers();
+
+    /// <summary>
+    /// Returns the x coordinate in screen coordinates of the given pointer. Pointers are
+    /// indexed from 0 to n. The pointer id identifies the order in which the fingers went
+    /// down on the screen, e.g. 0 is the first finger, 1 is the second and so on. When two
+    /// fingers are touched down and the first one is lifted the second one keeps its index.
+    /// If another finger is placed on the touch screen the first free index will be used.
+    /// </summary>
     int GetX( int pointer = 0 );
+
+    /// <summary>
+    /// |Returns the different between the current pointer location and the last pointer
+    /// location on the x-axis.
+    /// </summary>
     int GetDeltaX( int pointer = 0 );
+
+    /// <summary>
+    /// Returns the y coordinate in screen coordinates of the given pointer. Pointers are
+    /// indexed from 0 to n. The pointer id identifies the order in which the fingers went
+    /// down on the screen, e.g. 0 is the first finger, 1 is the second and so on. When two
+    /// fingers are touched down and the first one is lifted the second one keeps its index.
+    /// If another finger is placed on the touch screen the first free index will be used.
+    /// </summary>
     int GetY( int pointer = 0 );
+
+    /// <summary>
+    /// |Returns the different between the current pointer location and the last pointer
+    /// location on the y-axis.
+    /// </summary>
     int GetDeltaY( int pointer = 0 );
-    int GetRotation();
 
     bool IsButtonPressed( int button );
     bool IsButtonJustPressed( int button );
@@ -124,7 +100,183 @@ public interface IInput
 
     long GetCurrentEventTime();
 
+    // ====================================================================
+    // ====================================================================
+
+    #region Textfields
+    
+    /// <summary>
+    /// Sets the on-screen keyboard visible if available.
+    /// </summary>
+    /// <param name="configuration"> The configuration for the native input field </param> 
+    void OpenTextInputField( NativeInputConfiguration configuration );
+
+    /// <summary>
+    /// Closes the native input field and applies the result to the input wrapper.
+    /// </summary>
+    /// <param name="isConfirmative">
+    /// Whether the closing can be considered confirmative. Will be passed to the
+    /// <see cref="NativeInputCloseCallback"/>
+    /// </param>
+    /// <param name="callback">
+    /// An optional callback to also run, when the close was processed. Will be called
+    /// on the main thread. Will be called after <see cref="NativeInputCloseCallback"/>
+    /// </param>
+    void CloseTextInputField( bool isConfirmative, NativeInputCloseCallback? callback = null );
+
+    /// <summary>
+    /// Returns if a native input field is currently open
+    /// </summary>
+    bool IsTextInputFieldOpened();
+
+    public interface IKeyboardHeightObserver
+    {
+        /// <summary>
+        /// This will be called always with the keyboard height as observed by the operating
+        /// system. This will include the EditField height when <see cref="OpenTextInputField"/>
+        /// is used.
+        /// This will be called after <see cref="OnKeyboardShow"/> or <see cref="OnKeyboardHide"/>.
+        /// </summary>
+        void OnKeyboardHeightChanged( int height );
+
+        /// <summary>
+        /// This will be called, if the keyboard is visible and will report the visible height.
+        /// This will include the EditField height when <see cref="OpenTextInputField"/> is used.
+        /// This may be called multiple times without closing, if the keyboard reshapes. On
+        /// android SDK &lt; 30 and floating keyboards, this will be always called, even if the
+        /// keyboard becomes invisible.
+        /// There is no way to track the keyboard visibleness in this specific configuration.
+        /// </summary>
+        void OnKeyboardShow( int height );
+
+        /// <summary>
+        /// This will be called, when the keyboard is getting invisible. This method is best
+        /// effort on pre-android sdk 30. This method will never be called on android SDK &lt;
+        /// 30 and floating keyboards.
+        /// </summary>
+        void OnKeyboardHide();
+    }
+
+    /// <summary>
+    /// This will set a keyboard height callback. This will get called, whenever the keyboard
+    /// height changes. Note: When using <see cref="OpenTextInputField"/>, it will report the
+    /// height of the native input field too.
+    /// </summary>
+    /// <param name="observer"> The observer to set. </param>
+    public void SetKeyboardHeightObserver( IKeyboardHeightObserver observer );
+
+    #endregion Textfields
+    
+    // ====================================================================
+    // ====================================================================
+
+    #region Mobile Devices
+
+    /// <summary>
+    /// Returns the rotation of the device with respect to its native orientation.
+    /// </summary>
+    int GetRotation();
+
     Orientation GetNativeOrientation();
+
+    float GetAccelerometerX();
+    float GetAccelerometerY();
+    float GetAccelerometerZ();
+    float GetGyroscopeX();
+    float GetGyroscopeY();
+    float GetGyroscopeZ();
+    float GetPressure( int pointer = 0 );
+    float GetAzimuth();
+    float GetPitch();
+    float GetRoll();
+    void SetOnscreenKeyboardVisible( bool visible );
+    void SetOnscreenKeyboardVisible( bool visible, OnscreenKeyboardType? type );
+    void Vibrate( int milliseconds );
+    void Vibrate( long[] pattern, int repeat );
+    void CancelVibrate();
+    void GetRotationMatrix( float[] matrix );
+    bool IsTouched( int pointer = 0 );
+    bool JustTouched();
+
+    #endregion Mobile Devices
+
+    // ========================================================================
+
+    #region override keys
+
+    /// <summary>
+    /// "Override key" refers to a mechanism for overriding the default system actions of specific
+    /// keys (like BACK and MENU), allowing the application to handle them instead. It's used to
+    /// prevent unwanted system behaviors and provide custom input handling for these special keys
+    /// within games and applications.
+    /// </summary>
+    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
+    /// <param name="addKey"> True to add the key to the Override Key group, false to remove it. </param>
+    void SetOverrideKey( int keycode, bool addKey );
+
+    /// <summary>
+    /// Adds a key to the Override Key group.
+    /// </summary>
+    /// <param name="keycode"> The <see cref="Keys"/> code of the key to add. </param>
+    void AddOverrideKey( int keycode );
+
+    /// <summary>
+    /// Removes a key from the Override Key group.
+    /// </summary>
+    /// <param name="keycode"> The <see cref="Keys"/> code of the key to remove. </param>
+    void RemoveOverrideKey( int keycode );
+
+    /// <summary>
+    /// Checks to see if the provided keycode applies to a key that is a member of the
+    /// 'Override Key' group of keys.
+    /// </summary>
+    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
+    /// <returns> True if the key is an Override Key, otherwise false. </returns>
+    bool IsOverrideKey( int keycode );
+
+    /// <summary>
+    /// Only viable on the desktop. Returns true if the mouse cursor is currently overridden.
+    /// </summary>
+    bool IsCursorOverridden();
+
+    /// <summary>
+    /// Only viable on the desktop. Will confine the mouse cursor location to the window
+    /// and hide the mouse cursor. X and y coordinates are still reported as if the mouse
+    /// was not overridden.
+    /// </summary>
+    void SetCursorOverridden( bool caught );
+
+    /// <summary>
+    /// Only viable on the desktop. Will set the mouse cursor location to the given window
+    /// coordinates (origin top-left corner).
+    /// </summary>
+    /// <param name="x"> The X-Coordinate </param>
+    /// <param name="y"> The Y-Coordinate </param>
+    void SetCursorPosition( int x, int y );
+
+    // Mobile device Back Key
+    bool IsOverrideBackKey();
+    void SetOverrideBackKey( bool catchBack );
+
+    // Mobile device Menu Key
+    bool IsOverrideMenuKey();
+    void SetOverrideMenuKey( bool catchMenu );
+
+    #endregion override keys
+
+    // ====================================================================
+    // ====================================================================
+
+    [PublicAPI]
+    public interface IInputStringValidator
+    {
+        /// <summary>
+        /// Checks if the given string is acceptable.
+        /// </summary>
+        /// <param name="toCheck"> The string that should be validated </param>
+        /// <returns> true, if the string is acceptable, false if not. </returns>
+        bool Validate( string toCheck );
+    }
 
     // ====================================================================
     // ====================================================================
@@ -536,7 +688,7 @@ public interface IInput
                               CapsLock         => "Caps Lock",
                               ScrollLock       => "Scroll Lock",
                               Pause            => "Pause",
-                              PrintScreen      => verbose ? "Print Screen": "PrtSc",
+                              PrintScreen      => verbose ? "Print Screen" : "PrtSc",
                               var _            => null
                           };
 
@@ -560,67 +712,52 @@ public interface IInput
     // ====================================================================
     // ====================================================================
 
-    #region Mobile Devices
+    /// <summary>
+    /// Keyboard Types
+    /// </summary>
+    [PublicAPI]
+    public enum OnscreenKeyboardType
+    {
+        Default,
+        NumberPad,
+        PhonePad,
+        Email,
+        Password,
+        Uri
+    }
 
-    float GetAccelerometerX();
-    float GetAccelerometerY();
-    float GetAccelerometerZ();
-    float GetGyroscopeX();
-    float GetGyroscopeY();
-    float GetGyroscopeZ();
-    float GetPressure( int pointer = 0 );
-    float GetAzimuth();
-    float GetPitch();
-    float GetRoll();
-    void SetOnscreenKeyboardVisible( bool visible );
-    void SetOnscreenKeyboardVisible( bool visible, OnscreenKeyboardType? type );
-    void Vibrate( int milliseconds );
-    void Vibrate( long[] pattern, int repeat );
-    void CancelVibrate();
-    void GetRotationMatrix( float[] matrix );
-    bool IsTouched( int pointer = 0 );
-    bool JustTouched();
-
-    #endregion Mobile Devices
-
-    // ========================================================================
-
-    #region override keys
+    // ====================================================================
+    // ====================================================================
 
     /// <summary>
-    /// "Override key" refers to a mechanism for overriding the default system actions of specific
-    /// keys (like BACK and MENU), allowing the application to handle them instead. It's used to
-    /// prevent unwanted system behaviors and provide custom input handling for these special keys
-    /// within games and applications.
+    /// Screen orientation types.
     /// </summary>
-    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
-    /// <param name="addKey"> True to add the key to the Override Key group, false to remove it. </param>
-    void SetOverrideKey( int keycode, bool addKey );
+    [PublicAPI]
+    public enum Orientation
+    {
+        Landscape,
+        Portrait
+    }
 
-    void AddOverrideKey( int keycode );
-    void RemoveOverrideKey( int keycode );
-    
+    // ====================================================================
+    // ====================================================================
+
     /// <summary>
-    /// Checks to see if the provided keycode applies to a key that is a member of the
-    /// 'Override Key' group of keys.
+    /// Potentially available peripherals.
     /// </summary>
-    /// <param name="keycode"> The <see cref="Keys"/> code. </param>
-    /// <returns> True if the key is an Override Key, otherwise false. </returns>
-    bool IsOverrideKey( int keycode );
-
-    bool IsCursorOverridden();
-    void SetCursorOverridden( bool caught );
-    void SetCursorPosition( int x, int y );
-
-    // Mobile device Back Key
-    bool IsOverrideBackKey();
-    void SetOverrideBackKey( bool catchBack );
-
-    // Mobile device Menu Key
-    bool IsOverrideMenuKey();
-    void SetOverrideMenuKey( bool catchMenu );
-
-    #endregion override keys
+    [PublicAPI]
+    public enum Peripheral
+    {
+        HardwareKeyboard,
+        OnscreenKeyboard,
+        MultitouchScreen,
+        Accelerometer,
+        Compass,
+        Vibrator,
+        Gyroscope,
+        RotationVector,
+        Pressure
+    }
 }
 
 // ============================================================================

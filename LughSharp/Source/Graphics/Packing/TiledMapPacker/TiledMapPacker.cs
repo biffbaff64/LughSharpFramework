@@ -52,6 +52,12 @@ namespace LughSharp.Source.Graphics.Packing.TiledMapPacker;
 [PublicAPI]
 public class TiledMapPacker
 {
+    public DirectoryInfo? InputDir;
+    public DirectoryInfo? OutputDir;
+    public DirectoryInfo? CurrentDir;
+
+    // ========================================================================
+    
     private static readonly string _tilesetsOutputDir = "tileset";
     private static readonly string _atlasOutputName   = "packed";
 
@@ -60,10 +66,6 @@ public class TiledMapPacker
     private Dictionary< string, TiledMapTileSet > _tilesetsToPack = [ ];
     private TiledMap                              _map            = null!;
     private TiledMapPackerSettings                _settings;
-
-    public DirectoryInfo? InputDir;
-    public DirectoryInfo? OutputDir;
-    public DirectoryInfo? CurrentDir;
 
     // ========================================================================
 
@@ -160,11 +162,13 @@ public class TiledMapPacker
     }
 
     /// <summary>
-    /// 
+    /// Processes a single Tiled map file, modifies it according to the current settings,
+    /// and writes the updated map. Optionally strips unused tiles or combines tilesets
+    /// based on the configuration.
     /// </summary>
-    /// <param name="mapFile"></param>
-    /// <param name="dirHandle"></param>
-    /// <param name="texturePackerSettings"></param>
+    /// <param name="mapFile">The Tiled map file to process.</param>
+    /// <param name="dirHandle">The directory where the map file is located.</param>
+    /// <param name="texturePackerSettings">Settings for configuring the texture packing process.</param>
     private void ProcessSingleMap( FileInfo mapFile,
                                    DirectoryInfo dirHandle,
                                    TexturePackerSettings texturePackerSettings )
@@ -210,8 +214,14 @@ public class TiledMapPacker
     }
 
     /// <summary>
-    /// 
+    /// Removes all unused tiles from the current map instance. This operation involves
+    /// iterating through each layer and inspecting tile cells to identify and handle unused tiles.
+    /// Only applies to layers of type <see cref="TiledMapTileLayer"/> while ignoring other layer types.
     /// </summary>
+    /// <remarks>
+    /// Ensures that the map (_map) is not null before performing the operation. The method determines
+    /// the map's width, height, and number of layers to appropriately calculate and process tiles.
+    /// </remarks>
     private void StripUnusedTiles()
     {
         Guard.Against.Null( _map );
@@ -256,10 +266,11 @@ public class TiledMapPacker
     }
 
     /// <summary>
-    /// 
+    /// Adds a tile to the appropriate bucket based on its tile ID and the specified bucket size.
+    /// Tracks the tileset of the provided tile for potential packing if it is not already tracked.
     /// </summary>
-    /// <param name="tile"></param>
-    /// <param name="bucketSize"></param>
+    /// <param name="tile">The tiled map tile to be added. This contains properties such as the tile ID.</param>
+    /// <param name="bucketSize">The size of the bucket used to group tiles for processing.</param>
     private void AddTile( ITiledMapTile tile, int bucketSize )
     {
         var          tileid      = ( int )( tile.ID & ~0xE0000000 );
@@ -288,11 +299,13 @@ public class TiledMapPacker
     }
 
     /// <summary>
-    /// 
+    /// Determines the name of the tileset associated with the given tile ID within a specified TiledMap.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="tileid"></param>
-    /// <returns></returns>
+    /// <param name="map">The TiledMap containing the tilesets to search through.</param>
+    /// <param name="tileid">The ID of the tile whose associated tileset name will be retrieved.</param>
+    /// <returns>
+    /// The name of the tileset associated with the given tile ID, or an empty string if no match is found.
+    /// </returns>
     private string TilesetNameFromTileID( TiledMap map, int tileid )
     {
         var name = string.Empty;
@@ -487,8 +500,15 @@ public class TiledMapPacker
         return null!;
     }
 
-//	/** If the child node or attribute doesn't exist, it is created. Usage example: Node property =
-//	 * getFirstChildByAttrValue(properties, "property", "name"); */
+    /// <summary>
+    /// If the child node or attribute doesn't exist, it is created.
+    /// <para>
+    /// Usage example:
+    /// <code>
+    ///      Node property = GetFirstChildByAttrValue( properties, "property", "name" );
+    /// </code>
+    /// </para>
+    /// </summary>
     private static XNode GetFirstChildByNameAttrValue( XNode node, string childName, string attr, string value )
     {
 //		var childNodes = node.getChildNodes();

@@ -104,9 +104,10 @@ public class ShaderProgram : IDisposable
     // ========================================================================
 
     /// <summary>
+    /// Creates a new shader program with the given vertex and fragment shader sources.
     /// </summary>
-    /// <param name="vertexShader"></param>
-    /// <param name="fragmentShader"></param>
+    /// <param name="vertexShader">The source code for the vertex shader.</param>
+    /// <param name="fragmentShader">The source code for the fragment shader.</param>
     public ShaderProgram( string vertexShader, string fragmentShader )
     {
         VertexShaderSource   = vertexShader;
@@ -116,9 +117,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
+    /// Creates a new shader program with the given vertex and fragment shader sources.
     /// </summary>
-    /// <param name="vertexShader"> the vertex shader </param>
-    /// <param name="fragmentShader"> the fragment shader </param>
+    /// <param name="vertexShader">The vertex shader source code.</param>
+    /// <param name="fragmentShader">The fragment shader source code.</param>
     public ShaderProgram( FileSystemInfo vertexShader, FileSystemInfo fragmentShader )
         : this( File.ReadAllText( vertexShader.Name ), File.ReadAllText( fragmentShader.Name ) )
     {
@@ -178,11 +180,11 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Checks if the shader program has been compiled successfully.
     /// </summary>
-    /// <param name="shader"></param>
-    /// <param name="shaderType"></param>
-    /// <exception cref="Exception"></exception>
+    /// <param name="shader">The shader handle.</param>
+    /// <param name="shaderType">The type of shader (vertex or fragment).</param>
+    /// <exception cref="Exception">Thrown if the shader compilation fails.</exception>
     private unsafe void CheckShaderLoadError( int shader, int shaderType )
     {
         int* status = stackalloc int[ 1 ];
@@ -202,16 +204,17 @@ public class ShaderProgram : IDisposable
             _shaderLog += shaderType == IGL.GLVertexShader ? "Vertex shader\n" : "Fragment shader:\n";
             _shaderLog += infoLog;
 
-            throw new Exception( $"Failed to loader shader {shader}: {infoLog}" );
+            throw new Exception( $"Failed to load shader {shader}: {infoLog}" );
         }
     }
 
     /// <summary>
+    /// Sets the values of a matrix uniform variable in a shader program.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="matrix"></param>
-    /// <param name="transpose"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="name">The name of the uniform variable.</param>
+    /// <param name="matrix">The matrix values to set.</param>
+    /// <param name="transpose">Whether to transpose the matrix before setting.</param>
+    /// <typeparam name="T">The type of the matrix.</typeparam>
     public virtual void SetUniformMatrix< T >( string name, ref T matrix, bool transpose = false )
         where T : unmanaged
     {
@@ -274,27 +277,23 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Gets the location of a uniform variable in the shader program.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">The name of the uniform variable.</param>
+    /// <returns>The location of the uniform variable.</returns>
     public virtual int GetAttributeLocation( string name )
     {
-        int location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
-
-        return location;
+        return Engine.GL.GetAttribLocation( ShaderProgramHandle, name );
     }
 
     /// <summary>
-    ///
+    /// Gets the location of a uniform variable in the shader program.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">The name of the uniform variable.</param>
+    /// <returns>The location of the uniform variable.</returns>
     public virtual int GetUniformLocation( string name )
     {
-        int location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
-
-        return location;
+        return Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
     }
 
     /// <summary>
@@ -315,10 +314,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Sets a float uniform variable in the shader program by its name.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
+    /// <param name="name">The name of the uniform variable in the shader program.</param>
+    /// <param name="value">The float value to set for the specified uniform variable.</param>
     public virtual void SetUniformf( string name, float value )
     {
         int location = GetUniformLocation( name );
@@ -364,10 +363,11 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
+    /// must be bound for this to work.
     /// </summary>
-    /// <param name="location"></param>
-    /// <param name="matrix"></param>
+    /// <param name="location">The location of the uniform matrix in the shader program.</param>
+    /// <param name="matrix">The matrix to set for the specified uniform variable.</param>
     public virtual void SetUniformMatrix( int location, Matrix4 matrix )
     {
         LogInvalidMatrix( matrix.Values );
@@ -381,11 +381,12 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Sets the uniform matrix with the given name. The <see cref="ShaderProgram"/>
+    /// must be bound for this to work.
     /// </summary>
-    /// <param name="location"></param>
-    /// <param name="matrix"></param>
-    /// <param name="transpose"></param>
+    /// <param name="location">The location of the uniform matrix in the shader program.</param>
+    /// <param name="matrix">The matrix to set for the specified uniform variable.</param>
+    /// <param name="transpose">Whether to transpose the matrix before setting it.</param>
     public virtual void SetUniformMatrix( int location, Matrix4 matrix, bool transpose )
     {
         LogInvalidMatrix( matrix.Values );
@@ -395,13 +396,13 @@ public class ShaderProgram : IDisposable
             return;
         }
 
-        Engine.GL.UniformMatrix4Fv( location, transpose, matrix.Val );
+        Engine.GL.UniformMatrix4Fv( location, transpose, matrix.Values );
     }
 
     /// <summary>
-    ///
+    /// Enables the vertex attribute at the specified location.
     /// </summary>
-    /// <param name="location"></param>
+    /// <param name="location">The location of the vertex attribute within the shader program.</param>
     public virtual void EnableVertexAttribute( int location )
     {
         if ( location == Invalid )
@@ -443,10 +444,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Sets the values of a 4x4 floating-point matrix uniform variable in the shader program using its name.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="values"></param>
+    /// <param name="name">The name of the uniform variable to set.</param>
+    /// <param name="values">An array of floating-point values representing the matrix, in column-major order.</param>
     public virtual void SetUniformMatrix4Fv( string name, params float[] values )
     {
         int location = GetUniformLocation( name );
@@ -460,10 +461,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Sets a 4x4 matrix uniform variable in the shader program at the specified location.
     /// </summary>
-    /// <param name="location"></param>
-    /// <param name="values"></param>
+    /// <param name="location">The location of the uniform variable in the shader program.</param>
+    /// <param name="values">The float array representing the matrix values in column-major order.</param>
     public virtual void SetUniformMatrix4Fv( int location, params float[] values )
     {
         if ( location == Invalid )
@@ -475,9 +476,9 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Disables the vertex attribute at the specified location.
     /// </summary>
-    /// <param name="location"></param>
+    /// <param name="location">The location of the vertex attribute to disable.</param>
     public virtual void DisableVertexAttribute( int location )
     {
         if ( location == Invalid )
@@ -489,9 +490,10 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    ///
+    /// Disables the vertex attribute associated with the specified name,
+    /// making it unavailable for rendering.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The name of the vertex attribute to disable.</param>
     public virtual void DisableVertexAttribute( string name )
     {
         int location = GetAttributeLocation( name );
@@ -524,7 +526,7 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Activates the shader program, making it the current program used by the rendering pipeline.
     /// </summary>
     public void Use()
     {

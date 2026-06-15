@@ -30,9 +30,10 @@ namespace LughSharp.Source.Input;
 [PublicAPI]
 public abstract class AbstractInput : IInput
 {
-    // ========================================================================
+    /// <inheritdoc />
+    public IInputProcessor? InputProcessor { get; set; }
 
-    private readonly List< int > _keysToOverride = [ ];
+    // ========================================================================
 
     /// <summary>
     /// A List of keys that are currently pressed.
@@ -54,8 +55,9 @@ public abstract class AbstractInput : IInput
     /// </summary>
     protected int PressedKeyCount { get; set; }
 
-    /// <inheritdoc />
-    public IInputProcessor? InputProcessor { get; set; }
+    // ========================================================================
+
+    private readonly List< int > _keysToOverride = [ ];
 
     // ========================================================================
 
@@ -151,11 +153,55 @@ public abstract class AbstractInput : IInput
         SetOverrideKey( IInput.Keys.Menu, addKey );
     }
 
+    /// <summary>
+    /// Sets the on-screen keyboard visible if available.
+    /// </summary>
+    /// <param name="configuration"> The configuration for the native input field </param> 
+    public virtual void OpenTextInputField( NativeInputConfiguration configuration )
+    {
+    }
+
+    /// <summary>
+    /// Closes the native input field and applies the result to the input wrapper.
+    /// </summary>
+    /// <param name="isConfirmative">
+    /// Whether the closing can be considered confirmative. Will be passed to the
+    /// <see cref="NativeInputCloseCallback"/>
+    /// </param>
+    /// <param name="callback">
+    /// An optional callback to also run, when the close was processed. Will be called
+    /// on the main thread. Will be called after <see cref="NativeInputCloseCallback"/>
+    /// </param>
+    public virtual void CloseTextInputField( bool isConfirmative, NativeInputCloseCallback? callback = null )
+    {
+    }
+
+    /// <summary>
+    /// Returns if a native input field is currently open
+    /// </summary>
+    public virtual bool IsTextInputFieldOpened()
+    {
+        return false;
+    }
+
     // ========================================================================
-    // Abstract methods to be implemented by any inheriting classes.
+    // ========================================================================
+    // ========================================================================
     // ========================================================================
 
-    //@formatter:off
+    #region Mobile Devices
+
+    /// <summary>
+    /// This will set a keyboard height callback. This will get called, whenever the keyboard
+    /// height changes. Note: When using <see cref="IInput.OpenTextInputField"/>, it will report the
+    /// height of the native input field too.
+    /// </summary>
+    /// <param name="observer"> The observer to set. </param>
+    public void SetKeyboardHeightObserver( IInput.IKeyboardHeightObserver observer )
+    {
+        throw new NotImplementedException();
+    }
+
     public virtual float GetAccelerometerX() => 0;
     public virtual float GetAccelerometerY() => 0;
     public virtual float GetAccelerometerZ() => 0;
@@ -170,6 +216,7 @@ public abstract class AbstractInput : IInput
     public virtual float GetPressure( int pointer = 0 ) => 0;
     public virtual int GetRotation() => 0;
     public virtual IInput.Orientation GetNativeOrientation() => 0;
+
     public virtual int GetMaxPointers() => 0;
     public virtual int GetX( int pointer = 0 ) => 0;
     public virtual int GetY( int pointer = 0 ) => 0;
@@ -181,20 +228,47 @@ public abstract class AbstractInput : IInput
     public virtual long GetCurrentEventTime() => 0;
     public virtual bool IsCursorOverridden() => false;
 
-    public virtual void Vibrate( int milliseconds ) {}
-    public virtual void Vibrate( long[] pattern, int repeat ) {}
-    public virtual void CancelVibrate() {}
-    public virtual void GetRotationMatrix( float[] matrix ) {}
-    public virtual void SetCursorOverridden( bool caught ) {}
-    public virtual void SetCursorPosition( int x, int y ) {}
-    public virtual void SetOnscreenKeyboardVisible( bool visible ) {}
-    public virtual void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type ) {}
+    public virtual void Vibrate( int milliseconds )
+    {
+    }
+
+    public virtual void Vibrate( long[] pattern, int repeat )
+    {
+    }
+
+    public virtual void CancelVibrate()
+    {
+    }
+
+    public virtual void GetRotationMatrix( float[] matrix )
+    {
+    }
+
+    public virtual void SetCursorOverridden( bool overridden )
+    {
+    }
+
+    public virtual void SetCursorPosition( int x, int y )
+    {
+    }
+
+    public virtual void SetOnscreenKeyboardVisible( bool visible )
+    {
+    }
+
+    public virtual void SetOnscreenKeyboardVisible( bool visible, IInput.OnscreenKeyboardType? type )
+    {
+    }
+
     public virtual void GetTextInput( IInput.ITextInputListener listener,
                                       string title,
                                       string text,
                                       string hint,
-                                      IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default ) {}
-    //@formatter:on
+                                      IInput.OnscreenKeyboardType? type = IInput.OnscreenKeyboardType.Default )
+    {
+    }
+    
+    #endregion // Mobile Devices
 }
 
 // ============================================================================

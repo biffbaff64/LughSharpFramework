@@ -22,19 +22,23 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Scene2D.UI.Styles;
 using LughSharp.Source.Scene2D.Utils;
+using LughSharp.Source.Utils;
 
 namespace LughSharp.Source.Scene2D.UI;
 
 /// <summary>
-/// 
+///
 /// </summary>
 [PublicAPI]
+[UnstableApi( "Style system is still in active development and the API may change." )]
+[Experimental( "LUGH_UI_001" )]
 public class StyleRegistry
 {
     private Dictionary< string, Dictionary< string, object > > _data = [ ];

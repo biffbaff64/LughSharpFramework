@@ -112,7 +112,7 @@ public class InputMultiplexer : IInputProcessor
     /// <summary>
     /// Called when a key was typed
     /// </summary>
-    /// <param name="character"></param>
+    /// <param name="character"> The Unicode code point of the key that was typed. </param>
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnKeyTyped( char character )
     {
@@ -141,8 +141,10 @@ public class InputMultiplexer : IInputProcessor
     /// </summary>
     /// <param name="screenX"> Screen touch X coordinate. </param>
     /// <param name="screenY"> Screen touch Y coordinate. </param>
-    /// <param name="pointer"></param>
-    /// <param name="button"></param>
+    /// <param name="pointer">
+    /// The <b>touch pointer index</b>, essentially which finger triggered the touch event.
+    /// </param>
+    /// <param name="button"> The mouse or touch button. </param>
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchDown( int screenX, int screenY, int pointer, int button )
     {
@@ -169,10 +171,12 @@ public class InputMultiplexer : IInputProcessor
     /// <summary>
     /// Called when a screen touch is lifted or mouse button is released.
     /// </summary>
-    /// <param name="screenX"></param>
-    /// <param name="screenY"></param>
-    /// <param name="pointer"></param>
-    /// <param name="button"></param>
+    /// <param name="screenX"> Screen touch X coordinate. </param>
+    /// <param name="screenY"> Screen touch Y coordinate. </param>
+    /// <param name="pointer">
+    /// The <b>touch pointer index</b>, essentially which finger triggered the touch event.
+    /// </param>
+    /// <param name="button"> The mouse or touch button. </param>
     /// <returns>TRUE if the input was processed.</returns>
     public bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
@@ -309,8 +313,7 @@ public class InputMultiplexer : IInputProcessor
     }
 
     /// <summary>
-    /// Remove the <see cref="IInputProcessor"/> at the given index from
-    /// the multiplexer.
+    /// Remove the <see cref="IInputProcessor"/> at the given index from the multiplexer.
     /// </summary>
     public void RemoveProcessor( int index )
     {
@@ -329,7 +332,6 @@ public class InputMultiplexer : IInputProcessor
     /// <summary>
     /// Returns the number of <see cref="IInputProcessor"/>s in the list.
     /// </summary>
-    /// <returns></returns>
     public int Size()
     {
         return Processors.Size;

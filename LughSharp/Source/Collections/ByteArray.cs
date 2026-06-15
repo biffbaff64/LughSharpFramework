@@ -167,10 +167,14 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Sets the value at the specified index in the array.
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="value"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="index">The zero-based index of the element to set.</param>
+    /// <param name="value">The byte value to set at the specified index.</param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the index is less than zero or greater than or equal to the current
+    /// size of the array.
+    /// </exception>
     public void Set( int index, byte value )
     {
         if ( index < 0 )
@@ -187,10 +191,13 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Increments the value at the specified index by the given value.
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="value"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="index">The index of the byte in the array to increment.</param>
+    /// <param name="value">The amount to add to the byte at the specified index.</param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if the specified index is less than 0 or greater than or equal to the size of the array.
+    /// </exception>
     public void Increment( int index, byte value )
     {
         if ( index < 0 )
@@ -207,8 +214,9 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Increments all elements in the array by the specified value.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">The value to be added to each element in the array.</param>
     public void Increment( byte value )
     {
         for ( int i = 0, n = Size; i < n; i++ )
@@ -241,8 +249,9 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Multiplies every element in the array by the specified value.
     /// </summary>
-    /// <param name="value"></param>
+    /// <param name="value">The value by which each element in the array will be multiplied.</param>
     public void Multiply( byte value )
     {
         for ( int i = 0, n = Size; i < n; i++ )
@@ -252,10 +261,15 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Inserts a value at the specified index in the array. If the array is ordered,
+    /// shifts the elements after the index to the right. If unordered, places the last
+    /// element in the position of the inserted index to avoid copying elements.
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="value"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="index">The position at which to insert the value. Must be a value between 0 and the current size of the array, inclusive.</param>
+    /// <param name="value">The byte value to insert into the array.</param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown if the index is less than 0 or greater than or equal to the current size of the array.
+    /// </exception>
     public void Insert( int index, byte value )
     {
         if ( index < 0 )
@@ -288,9 +302,15 @@ public class ByteArray
     }
 
     /// <summary>
-    /// Inserts the specified number of items at the specified index. The new items
-    /// will have values equal to the values at those indices before the insertion.
+    /// Inserts a specified number of items at the specified index in the byte array.
+    /// The new items are initialized with values derived from the current items at
+    /// the same indices prior to the insertion.
     /// </summary>
+    /// <param name="index">The index at which the items are to be inserted.</param>
+    /// <param name="count">The number of items to insert.</param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the specified index is less than 0 or greater than or equal to the current size of the array.
+    /// </exception>
     public void InsertRange( int index, int count )
     {
         if ( index < 0 )
@@ -316,10 +336,14 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Swaps the byte values at the specified indices within the array.
     /// </summary>
-    /// <param name="first"></param>
-    /// <param name="second"></param>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="first">The index of the first byte to swap.</param>
+    /// <param name="second">The index of the second byte to swap.</param>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when either the <paramref name="first"/> or <paramref name="second"/> index
+    /// is greater than or equal to the size of the array.
+    /// </exception>
     public void Swap( int first, int second )
     {
         if ( first >= Size )
@@ -336,9 +360,10 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Determines whether the specified value exists in the byte array.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The value to locate in the array.</param>
+    /// <returns>True if the value is found in the array; otherwise, false.</returns>
     public bool Contains( byte value )
     {
         int i = Size - 1;
@@ -355,9 +380,10 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Searches for the specified value within the array and returns the index of its first occurrence.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The byte value to locate in the array.</param>
+    /// <returns>The zero-based index of the value if found; otherwise, -1.</returns>
     public int IndexOf( byte value )
     {
         for ( int i = 0, n = Size; i < n; i++ )
@@ -372,9 +398,10 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Finds the last occurrence of a specified byte value within the array.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The byte value to locate in the array.</param>
+    /// <returns>The zero-based index of the last occurrence of the specified value if found; otherwise, -1.</returns>
     public int LastIndexOf( byte value )
     {
         for ( int i = Size - 1; i >= 0; i-- )
@@ -389,9 +416,10 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Removes the first occurrence of the specified value from the array.
     /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="value">The value to be removed from the array.</param>
+    /// <returns>True if the value was successfully removed; otherwise, false.</returns>
     public bool RemoveValue( byte value )
     {
         for ( int i = 0, n = Size; i < n; i++ )
@@ -410,9 +438,11 @@ public class ByteArray
     /// <summary>
     /// Removes and returns the item at the specified index.
     /// </summary>
-    /// <param name="index"></param>
-    /// <returns></returns>
-    /// <exception cref="IndexOutOfRangeException"></exception>
+    /// <param name="index">The index of the item to remove.</param>
+    /// <returns>The value of the removed item.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Thrown when the <paramref name="index"/> is out of range.
+    /// </exception>
     public int RemoveIndex( int index )
     {
         if ( index < 0 )
@@ -480,7 +510,7 @@ public class ByteArray
     /// <summary>
     /// Removes from this array all of elements contained in the specified array.
     /// </summary>
-    /// <param name="array"></param>
+    /// <param name="array"> The array whose elements are to be removed from this array. </param>
     /// <returns> true if this array was modified. </returns>
     public bool RemoveAll( ByteArray array )
     {
@@ -515,7 +545,7 @@ public class ByteArray
     }
 
     /// <summary>
-    /// Returns the last item.
+    /// Returns the last item without removing it. 
     /// </summary>
     public byte Peek()
     {
@@ -523,7 +553,7 @@ public class ByteArray
     }
 
     /// <summary>
-    /// Returns the first item.
+    /// Returns the first item without removing it.
     /// </summary>
     public byte First()
     {
@@ -552,6 +582,7 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Clears the array by resetting its size to zero. The capacity remains unchanged.
     /// </summary>
     public void Clear()
     {
@@ -596,11 +627,12 @@ public class ByteArray
     }
 
     /// <summary>
-    /// Sets the array size, leaving any values beyond the current size undefined.
+    /// Sets the size of the byte array to the specified value. If the new size is greater than
+    /// the current capacity, the array is resized to accommodate the new size.
     /// </summary>
-    /// <param name="newSize"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="newSize">The desired size for the byte array. Must be a non-negative value.</param>
+    /// <returns>The underlying byte array after resizing, if applicable.</returns>
+    /// <exception cref="ArgumentException">Thrown when the provided newSize is less than 0.</exception>
     public byte[] SetSize( int newSize )
     {
         if ( newSize < 0 )
@@ -619,9 +651,11 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Resizes the internal array to the specified new size, preserving the existing
+    /// elements up to the new size limit.
     /// </summary>
-    /// <param name="newSize"></param>
-    /// <returns></returns>
+    /// <param name="newSize">The new capacity of the array.</param>
+    /// <returns>A resized array containing the elements from the original array.</returns>
     protected byte[] Resize( int newSize )
     {
         var    newItems = new byte[ newSize ];
@@ -635,6 +669,7 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Sorts the elements of the byte array in ascending order.
     /// </summary>
     public void Sort()
     {
@@ -642,6 +677,7 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Reverses the order of the elements in the array.
     /// </summary>
     public void Reverse()
     {
@@ -654,6 +690,7 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Randomly shuffles the elements in the array, rearranging them in a randomized order.
     /// </summary>
     public void Shuffle()
     {
@@ -687,8 +724,9 @@ public class ByteArray
     }
 
     /// <summary>
+    /// Returns a new array containing all elements in the ByteArray, preserving the order.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>A new array of bytes representing the current elements in the ByteArray.</returns>
     public byte[] ToArray()
     {
         var array = new byte[ Size ];

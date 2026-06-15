@@ -1097,6 +1097,7 @@ public class Color : ICloneable, IEquatable< Color >
     /// <param name="value"> The string color code. </param>
     /// <param name="registry"> The registry. </param>
     /// <returns></returns>
+    [Experimental( "LUGH_UI_001" )]
     public static Color ParseColor( string value, StyleRegistry registry )
     {
         if ( string.IsNullOrWhiteSpace( value ) )
