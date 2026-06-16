@@ -78,6 +78,10 @@ public class DragAndDrop
 
     // ========================================================================
 
+    /// <summary>
+    /// Adds the specified source to the drag-and-drop system.
+    /// </summary>
+    /// <param name="source">The drag source to add to the system.</param>
     public void AddSource( DragSource source )
     {
         _dragListener = new DragListenerImpl( this, source );
@@ -90,6 +94,10 @@ public class DragAndDrop
         _sourceListeners[ source ] = _dragListener;
     }
 
+    /// <summary>
+    /// Removes the specified source from the list of sources.
+    /// </summary>
+    /// <param name="source"> The source to remove from the list of sources. </param>
     public void RemoveSource( DragSource source )
     {
         _sourceListeners.Remove( source, out DragListener? dragListener );
@@ -97,11 +105,19 @@ public class DragAndDrop
         source.Actor.RemoveCaptureListener( dragListener! );
     }
 
+    /// <summary>
+    /// Adds a target to the list of targets.
+    /// </summary>
+    /// <param name="target"> The target to add to the list of targets. </param>
     public void AddTarget( DragTarget target )
     {
         _targets.Add( target );
     }
 
+    /// <summary>
+    /// Removes the specified target from the list of targets.
+    /// </summary>
+    /// <param name="target"></param>
     public void RemoveTarget( DragTarget target )
     {
         _targets.Remove( target );
@@ -148,10 +164,10 @@ public class DragAndDrop
     }
 
     /// <summary>
-    /// 
+    /// Sets the position of the drag actor relative to its current location.
     /// </summary>
-    /// <param name="dragActorX"></param>
-    /// <param name="dragActorY"></param>
+    /// <param name="dragActorX">The horizontal offset to set for the drag actor.</param>
+    /// <param name="dragActorY">The vertical offset to set for the drag actor.</param>
     public void SetDragActorPosition( float dragActorX, float dragActorY )
     {
         _dragActorX = dragActorX;
@@ -162,8 +178,8 @@ public class DragAndDrop
     /// Sets an offset in stage coordinates from the touch position which
     /// is used to determine the drop location. Default is 0,0.
     /// </summary>
-    /// <param name="touchOffsetX"></param>
-    /// <param name="touchOffsetY"></param>
+    /// <param name="touchOffsetX">The horizontal offset to set for touch position.</param>
+    /// <param name="touchOffsetY">The vertical offset to set for touch position.</param>
     public void SetTouchOffset( float touchOffsetX, float touchOffsetY )
     {
         _touchOffsetX = touchOffsetX;
@@ -174,7 +190,6 @@ public class DragAndDrop
     /// Returns <c>true</c> if the <see cref="DragPayload"/> object for this
     /// DragAndDrop instance is not null and, therefore, being dragged.
     /// </summary>
-    /// <returns></returns>
     public bool IsDragging()
     {
         return DragPayload != null;
@@ -459,10 +474,10 @@ public class DragAndDrop
         /// Called when a drag for the source is stopped. The coordinates are
         /// in the source's local coordinate system.
         /// </summary>
-        /// <param name="ev"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="pointer"></param>
+        /// <param name="ev"> The input event that triggered the drag stop. </param>
+        /// <param name="x"> The horizontal position of the drag stop event. </param>
+        /// <param name="y"> The vertical position of the drag stop event. </param>
+        /// <param name="pointer"> The pointer index associated with the drag stop event. </param>
         /// <param name="payload"> null if dragStart returned null. </param>
         /// <param name="target"> null if not dropped on a valid target. </param>
         public virtual void DragStop( InputEvent ev,
@@ -491,7 +506,7 @@ public class DragAndDrop
         /// <summary>
         /// Constructor, creates a new Drag Target.
         /// </summary>
-        /// <param name="actor"></param>
+        /// <param name="actor"> The actor associated with this drag target. </param>
         /// <exception cref="ArgumentException"></exception>
         protected DragTarget( Actor actor )
         {

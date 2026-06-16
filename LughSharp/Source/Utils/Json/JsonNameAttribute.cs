@@ -22,9 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 [PublicAPI]
 [AttributeUsage( AttributeTargets.Field )]

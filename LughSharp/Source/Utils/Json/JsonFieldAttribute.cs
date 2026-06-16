@@ -22,48 +22,39 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 /// <summary>
-/// Specifies the output format for JSON serialization.
+/// An attribute that provides additional metadata for fields or properties
+/// when serializing or deserializing JSON. This attribute allows specifying
+/// the field name to use in the JSON and whether the field is required.
 /// </summary>
+/// <remarks>
+/// This attribute can be applied to fields or properties in a class and is
+/// typically used to customize how those members are represented in JSON.
+/// It integrates with functionality that processes annotated fields during
+/// deserialization or serialization.
+/// </remarks>
 [PublicAPI]
-public enum JsonOutputType
+[AttributeUsage( AttributeTargets.Field | AttributeTargets.Property )]
+public class JsonFieldAttribute : Attribute
 {
-    /// <summary>
-    /// Normal JSON, with all its double quotes.
-    /// </summary>
-    Json,
+    public string? Name     { get; set; }
+    public bool    Required { get; set; }
 
+    // ========================================================================
+    
     /// <summary>
-    /// Like JSON, but names are only double quoted if necessary.
+    /// Creates a new JsonFieldAttribute instance.
     /// </summary>
-    Javascript,
-
-    /// <summary>
-    /// Like JSON, but:
-    /// <li>
-    /// Names only require double quotes if they start with <c>space</c> or any of
-    /// <c>":,}/</c> or they contain <c>//</c> or <c>/*</c> or <c>:</c>.
-    /// </li>
-    /// <li>
-    /// Values only require double quotes if they start with <c>space</c> or any of
-    /// <c>":,{[]/</c> or they contain <c>//</c> or <c>/*</c> or any of <c>}],</c>
-    /// or they are equal to <c>true</c>, <c>false</c>, or <c>null</c>.
-    /// </li>
-    /// <li>
-    /// Newlines are treated as commas, making commas optional in many cases.
-    /// </li>
-    /// <li>
-    /// C style comments may be used: <c>//...</c> or <c>/*...*<b></b>/</c>
-    /// </li>
-    /// <br/>
-    /// </summary>
-    Minimal
+    /// <param name="name"> The name of the field. </param>
+    /// <param name="required"> True if the field is required, false otherwise. </param>
+    public JsonFieldAttribute( string? name = null, bool required = false )
+    {
+        Name     = name;
+        Required = required;
+    }
 }
 
 // ============================================================================
 // ============================================================================
-

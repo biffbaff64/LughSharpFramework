@@ -22,9 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 /// <summary>
 /// Efficient JSON parser that extracts values matching specified patterns using a single pass.

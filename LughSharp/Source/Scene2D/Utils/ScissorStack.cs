@@ -143,11 +143,30 @@ public class ScissorStack
         return old;
     }
 
+    /// <summary>
+    /// Retrieves the rectangle at the top of the scissor stack without removing it.
+    /// If the stack is empty, returns null.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Rectangle"/> at the top of the stack, or null if the stack is empty.
+    /// </returns>
     public static Rectangle? PeekScissors()
     {
         return _scissors.Count == 0 ? null : _scissors.Peek();
     }
 
+    /// <summary>
+    /// Adjusts the properties of a <see cref="Rectangle"/> to ensure its
+    /// dimensions and position are consistent and properly aligned.
+    /// Rounds the position and size values to the nearest whole number
+    /// and ensures the rectangle's width and height are non-negative.
+    /// If a dimension is negative, it inverts the value and adjusts
+    /// the position accordingly.
+    /// </summary>
+    /// <param name="rect">
+    /// The <see cref="Rectangle"/> object to be fixed. Its X, Y, Width, and Height
+    /// properties may be modified by this method to ensure consistency.
+    /// </param>
     private static void Fix( Rectangle rect )
     {
         rect.X      = ( float )Math.Round( rect.X );
@@ -247,3 +266,7 @@ public class ScissorStack
         return _viewport;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

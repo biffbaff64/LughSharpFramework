@@ -27,6 +27,13 @@ using LughSharp.Source.Utils.Pooling;
 
 namespace LughSharp.Source.Scene2D.Utils;
 
+/// <summary>
+/// Provides an adapter for managing pooled instances of <see cref="SceneAction"/> objects.
+/// </summary>
+/// <typeparam name="T">
+/// Specifies the type of <see cref="SceneAction"/> managed by the pool. Must be a class
+/// inheriting <see cref="SceneAction"/> and have a parameterless constructor.
+/// </typeparam>
 [PublicAPI]
 public sealed class ScenePoolAdapter< T > : IScenePool where T : SceneAction, new()
 {
@@ -34,12 +41,25 @@ public sealed class ScenePoolAdapter< T > : IScenePool where T : SceneAction, ne
     {
         NewObjectFactory = () => new T()
     };
-    
+
+    /// <summary>
+    /// Retrieves an instance of the <see cref="SceneAction"/> object from the underlying pool.
+    /// </summary>
+    /// <returns>
+    /// An instance of <see cref="SceneAction"/> of the specified type, ready for use.
+    /// </returns>
     public SceneAction Obtain()
     {
         return _inner.Obtain();
     }
-    
+
+    /// <summary>
+    /// Releases the specified <see cref="SceneAction"/> instance back to the underlying pool.
+    /// </summary>
+    /// <param name="action">
+    /// The <see cref="SceneAction"/> instance to be released. If the provided action is of
+    /// the appropriate type, it will be returned to the pool; otherwise, no action is taken.
+    /// </param>
     public void Free( SceneAction action )
     {
         if ( action is T typed )

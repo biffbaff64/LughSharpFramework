@@ -46,6 +46,7 @@ public class Selection< T > : IDisableable, IDisposable
     public T?             LastSelected             { get; set; }
     public bool           Toggle                   { get; set; }
     public bool           ProgrammaticChangeEvents { get; set; } = true;
+    public bool           IsDisabled               { get; set; }
 
     /// <summary>
     /// <param name="value">
@@ -55,8 +56,7 @@ public class Selection< T > : IDisableable, IDisposable
     /// </summary>
     public Actor? Actor { get; set; }
 
-    public bool IsEmpty    => Selected.Count == 0;
-    public bool IsDisabled { get; set; }
+    public bool IsEmpty => Selected.Count == 0;
 
     // ========================================================================
     // ========================================================================
@@ -137,16 +137,25 @@ public class Selection< T > : IDisableable, IDisposable
         return !IsEmpty;
     }
 
+    /// <summary>
+    /// Returns the number of items in the selection.
+    /// </summary>
     public int Size()
     {
         return Selected.Count;
     }
 
+    /// <summary>
+    /// Returns true if the selection has items in it.
+    /// </summary>
     public bool HasItems()
     {
         return Selected.Count > 0;
     }
 
+    /// <summary>
+    /// Returns the items in the selection.
+    /// </summary>
     public SortedSet< T > Items()
     {
         return Selected;
@@ -160,6 +169,9 @@ public class Selection< T > : IDisableable, IDisposable
         return Selected.Count == 0 ? default( T? ) : Selected.First();
     }
 
+    /// <summary>
+    /// Creates a snapshot of the current selection.
+    /// </summary>
     public void Snapshot()
     {
         _old.Clear();
@@ -170,6 +182,9 @@ public class Selection< T > : IDisableable, IDisposable
         }
     }
 
+    /// <summary>
+    /// Reverts the selection to the snapshot taken by <see cref="Snapshot()"/>.
+    /// </summary>
     public void Revert()
     {
         Selected.Clear();
@@ -180,6 +195,9 @@ public class Selection< T > : IDisableable, IDisposable
         }
     }
 
+    /// <summary>
+    /// Clears the snapshot.
+    /// </summary>
     public void Cleanup()
     {
         _old.Clear();
@@ -217,8 +235,18 @@ public class Selection< T > : IDisableable, IDisposable
         Cleanup();
     }
 
+    /// <summary>
+    /// Sets the selection to the specified items.
+    /// </summary>
+    /// <param name="items"> The items to set the selection to. </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="items"/> is null. </exception>
     public void SetAll( List< T > items )
     {
+        if ( items == null )
+        {
+            throw new ArgumentNullException( nameof( items ) );
+        }
+
         var added = false;
 
         Snapshot();
@@ -321,6 +349,10 @@ public class Selection< T > : IDisableable, IDisposable
         Cleanup();
     }
 
+    /// <summary>
+    /// Removes the item from the selection.
+    /// </summary>
+    /// <param name="item"> The item to remove. </param>
     public void Remove( T item )
     {
         Guard.Against.Null( item );
@@ -341,11 +373,18 @@ public class Selection< T > : IDisableable, IDisposable
         }
     }
 
+    /// <summary>
+    /// Removes all specified items from the selection.
+    /// </summary>
+    /// <param name="items"> The items to remove. </param>
+    /// <exception cref="ArgumentNullException"> Thrown if <paramref name="items"/> is null. </exception>
     public void RemoveAll( List< T > items )
     {
         var removed = false;
 
         Snapshot();
+
+        Guard.Against.Null( items );
 
         for ( int i = 0, n = items.Count; i < n; i++ )
         {
@@ -378,6 +417,17 @@ public class Selection< T > : IDisableable, IDisposable
         Cleanup();
     }
 
+    /// <summary>
+    /// Clears all selected items from the selection.
+    /// Ensures that any state or references linked to the previously
+    /// selected items are reset appropriately.
+    /// <para>
+    /// If programmatic change events are enabled and a change event
+    /// is fired but canceled, the selection state will revert to its
+    /// previous state. Otherwise, the selection is cleared, the last
+    /// selected item is reset, and the necessary cleanup is performed.
+    /// </para>
+    /// </summary>
     public void Clear()
     {
         if ( Selected.Count == 0 )
@@ -438,6 +488,9 @@ public class Selection< T > : IDisableable, IDisposable
         }
     }
 
+    /// <summary>
+    /// Returns true if the selection contains the specified item.
+    /// </summary>
     public bool Contains( T? item )
     {
         return ( item != null ) && Selected.Contains( item );
@@ -457,11 +510,19 @@ public class Selection< T > : IDisableable, IDisposable
         return Selected.Count > 0 ? Selected.First() : default( T? );
     }
 
+    /// <summary>
+    /// Returns a list of the selected items.
+    /// </summary>
     public List< T > ToArray()
     {
         return Selected.ToList();
     }
 
+    /// <summary>
+    /// Converts the selected items and the provided array into a single list of items.
+    /// </summary>
+    /// <param name="array">A list of items to be combined with the selected items.</param>
+    /// <returns>A list containing all selected items and the items from the provided array.</returns>
     public List< T > ToArray( List< T > array )
     {
         List< T > list = Selected.ToList();
@@ -471,6 +532,10 @@ public class Selection< T > : IDisableable, IDisposable
         return list;
     }
 
+    /// <summary>
+    /// Returns a string that represents the current object.
+    /// </summary>
+    /// <returns>A string that represents the current object.</returns>
     public override string? ToString()
     {
         return Selected.ToString();
@@ -484,6 +549,8 @@ public class Selection< T > : IDisableable, IDisposable
     public void Dispose()
     {
         Dispose( true );
+        
+        GC.SuppressFinalize( this );
     }
 
     protected void Dispose( bool disposing )
@@ -495,3 +562,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     #endregion dispose pattern
 }
+
+// ============================================================================
+// ============================================================================
+

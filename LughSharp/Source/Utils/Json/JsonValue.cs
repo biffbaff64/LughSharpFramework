@@ -23,16 +23,10 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Globalization;
-using System.Text;
-
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
 
 using SerializationException = System.Runtime.Serialization.SerializationException;
 
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 [PublicAPI]
 public class JsonValue : IDisposable

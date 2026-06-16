@@ -80,13 +80,15 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Draw the <see cref="NinePatch"/>
+    /// Draws the NinePatch image using the specified parameters.
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
-    /// <param name="region"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
+    /// <param name="batch">The batch object used to render the drawable.</param>
+    /// <param name="region">
+    /// The rectangular region specifying the dimensions and position to render the drawable.
+    /// </param>
+    /// <param name="origin">The origin point for scaling and rotation.</param>
+    /// <param name="scale">The scaling factors to apply to the width and height of the drawable.</param>
+    /// <param name="rotation">The rotation angle, in degrees, to apply to the drawable.</param>
     public void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         Patch?.Draw( batch,
@@ -102,9 +104,12 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
-    /// Sets this drawable's ninepatch and set the min width, min height, top height,
-    /// right width, bottom height, and left width to the patch's padding.
+    /// Sets the nine-patch for this drawable and updates its dimensions and paddings.
     /// </summary>
+    /// <param name="patch">
+    /// The <see cref="NinePatch"/> to be set. If null, no patch will be associated with
+    /// the drawable.
+    /// </param>
     public void SetPatch( NinePatch patch )
     {
         Patch = patch;

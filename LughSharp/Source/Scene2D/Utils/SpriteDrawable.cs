@@ -28,7 +28,8 @@ using LughSharp.Source.Graphics.G2D;
 namespace LughSharp.Source.Scene2D.Utils;
 
 /// <summary>
-/// Drawable for a <see cref="Sprite"/>.
+/// Drawable for a <see cref="Sprite2D"/>, which is a <see cref="ISceneDrawable"/>
+/// that can be drawn using <see cref="Sprite2D.Draw(IBatch)"/>.
 /// </summary>
 [PublicAPI]
 public class SpriteDrawable : BaseDrawable, ITransformDrawable
@@ -44,18 +45,27 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     {
     }
 
+    /// <summary>
+    /// Creates a new SpriteDrawable using the specified <see cref="Sprite2D"/>.
+    /// </summary>
+    /// <param name="sprite"> The <see cref="Sprite2D"/> to use. </param>
     public SpriteDrawable( Sprite2D sprite )
     {
         Sprite = sprite;
     }
 
+    /// <summary>
+    /// Creates a new SpriteDrawable, initialised with the <see cref="Sprite2D"/>
+    /// from another SpriteDrawable.
+    /// </summary>
+    /// <param name="drawable"> The <see cref="SpriteDrawable"/> to copy. </param>
     public SpriteDrawable( SpriteDrawable? drawable ) : base( drawable )
     {
         Sprite = drawable?.Sprite;
     }
 
     /// <summary>
-    /// The <see cref="Sprite"/> component of this <see cref="ISceneDrawable"/>.
+    /// The <see cref="Sprite2D"/> component of this <see cref="ISceneDrawable"/>.
     /// </summary>
     public Sprite2D? Sprite
     {
@@ -69,7 +79,11 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws this drawable at the specified bounds. The drawable should be tinted
+    /// with <see cref="IBatch.Color"/>, possibly by mixing its own color.
+    /// The default implementation does nothing.
+    /// </summary>
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
         if ( Sprite == null )
@@ -91,12 +105,14 @@ public class SpriteDrawable : BaseDrawable, ITransformDrawable
     }
 
     /// <summary>
+    /// Draws the sprite using the specified batch, applying transformations such as position,
+    /// scale, origin, and rotation.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="region"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
+    /// <param name="batch">The batch used to draw the sprite.</param>
+    /// <param name="region">The rectangular region where the sprite will be drawn.</param>
+    /// <param name="origin">The origin point for scaling and rotation of the sprite.</param>
+    /// <param name="scale">The scaling factors to be applied to the sprite along the X and Y axes.</param>
+    /// <param name="rotation">The rotation angle, in degrees, to be applied to the sprite.</param>
     public void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         if ( Sprite == null )

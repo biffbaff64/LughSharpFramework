@@ -108,7 +108,7 @@ public class Skin : IDisposable
         new( "NinePatchDrawable",       typeof( NinePatchDrawable ) ),
         new( "SpriteDrawable",          typeof( SpriteDrawable ) ),
         new( "TextureRegionDrawable",   typeof( TextureRegionDrawable ) ),
-        new( "TiledSceneDrawable",      typeof( TiledSceneDrawable ) ),
+        new( "TiledDrawable",           typeof( TiledDrawable ) ),
         // --------------------------------------
         new( "ButtonStyle",             typeof( ButtonStyle ) ),
         new( "TextButtonStyle",         typeof( TextButtonStyle ) ),
@@ -485,28 +485,28 @@ public class Skin : IDisposable
     /// region exists with the name, a tiled drawable is created from the region
     /// and stored in the skin.
     /// </summary>
-    public TiledSceneDrawable GetTiledDrawable( string name )
+    public TiledDrawable GetTiledDrawable( string name )
     {
-        var tiled = Optional< TiledSceneDrawable? >( name );
+        var tiled = Optional< TiledDrawable? >( name );
 
         if ( tiled != null )
         {
             return tiled;
         }
 
-        tiled = new TiledSceneDrawable( GetRegion( name ) )
+        tiled = new TiledDrawable( GetRegion( name ) )
         {
             Name = name
         };
 
         if ( Scale is not 1.0f )
         {
-            tiled = ( TiledSceneDrawable )ScaleDrawable( tiled );
+            tiled = ( TiledDrawable )ScaleDrawable( tiled );
 
             tiled.Scale = Scale;
         }
 
-        Add< TiledSceneDrawable >( name, tiled );
+        Add< TiledDrawable >( name, tiled );
 
         return tiled;
     }
@@ -744,7 +744,7 @@ public class Skin : IDisposable
     {
         return drawable switch
                {
-                   TiledSceneDrawable tiledDrawable     => new TiledSceneDrawable( tiledDrawable ),
+                   TiledDrawable tiledDrawable     => new TiledDrawable( tiledDrawable ),
                    TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
                    NinePatchDrawable patchDrawable      => new NinePatchDrawable( patchDrawable ),
                    SpriteDrawable spriteDrawable        => new SpriteDrawable( spriteDrawable ),

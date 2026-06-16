@@ -25,11 +25,7 @@
 using System.Globalization;
 using System.Numerics;
 
-using JetBrains.Annotations;
-
-using LughSharp.Source.Maths;
-
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 [PublicAPI]
 public class JsonWriter : IDisposable

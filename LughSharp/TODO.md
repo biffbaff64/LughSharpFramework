@@ -1,13 +1,12 @@
-﻿LUGHSHARP 2D GAME FRAMEWORK - ROUND 1
--------------------------------------
+﻿LUGHSHARP 2D GAME FRAMEWORK
+---------------------------
 
 ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 
 - STEP 1: Complete all conversions so that the code will build.
 - STEP 2: Refactor, where possible and necessary, to take advantage of C# language features.
-    - Some classes can become structs / records instead.
-    - Some/Most Get / Set method declarations in interfaces could become Properties.
+    - Change Get / Set method declarations to Properties only where appropriate.
     - switch expressions instead of switch statements where appropriate.
     - switch expressions instead of if...if/else...else where appropriate.
     - Check methods to see if they can be virtual.
@@ -35,7 +34,11 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-- Rename class Graphics.OpenGL.OpenGL
+- Rename class Graphics.OpenGL.OpenGL - DONE
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 - Sort out the mess that is GraphicsCapabilities and GraphicsDevice. Maybe merge
   them into one class? Maybe rename GraphicsDevice to something like GLContext or GLInfo?
 
@@ -1085,25 +1088,26 @@ LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
     -      -      - DONE - TreeStyle
     -      -      - DONE - WindowStyle
 
-LUGHSHARP/SOURCE/SCENE2D/UTILS
+LUGHSHARP/SOURCE/SCENE2D/UTILS - DONE
 ------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ArraySelection
     - DONE - DONE - DONE - BaseDrawable
-    - DONE - IP   - DONE - DragAndDrop
+    - DONE - DONE - DONE - DragAndDrop
     - DONE - DONE - DONE - ICullable
     - DONE - DONE - DONE - IDisableable
     - DONE - DONE - DONE - ILayout
     - DONE - DONE - DONE - ISceneDrawable
-    -      -      -      - ITransformDrawable
-    -      -      -      - NinePatchDrawable
-    -      -      -      - ScissorStack
-    -      -      -      - Selection
-    -      -      -      - SpriteDrawable
-    -      -      -      - TextureRegionDrawable
-    -      -      -      - TiledDrawable
+    - DONE - DONE - DONE - ITransformDrawable
+    - DONE - DONE - DONE - NinePatchDrawable
+    - DONE - DONE - DONE - ScenePoolAdapter
+    - DONE - DONE - DONE - ScissorStack
+    - DONE - DONE - DONE - Selection
+    - DONE - DONE - DONE - SpriteDrawable
+    - DONE - DONE - DONE - TextureRegionDrawable
+    - DONE - DONE - DONE - TiledDrawable
     - DONE - DONE - DONE - UIElementBuilder
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1160,6 +1164,28 @@ LUGHSHARP/SOURCE/UTILS/EXCEPTIONS - DONE
     - DONE - DONE - DONE - ListenerFailureException
     - DONE - DONE - DONE - RuntimeException
     - DONE - DONE - DONE - SerializationException
+
+LUGHSHARP/SOURCE/UTILS/JSON
+---------------------------
+
+    ///////////////////////////////////////////////
+    ALL JSON CLASSES NEED FULLY TESTING!!!
+    ///////////////////////////////////////////////
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - EnumArrayConverterFactory
+    - DONE - IP   - DONE - Json
+    - DONE - DONE - DONE - JsonFieldAttribute
+    - IP   - IP   - DONE - JsonMatcher          May not be needed / To Be Removed
+    - DONE - IP   - DONE - JsonNameAttribute
+    - DONE - IP   - DONE - JsonOutput
+    - DONE - DONE - DONE - JsonOutputType
+    - IP   - IP   - DONE - JsonReader
+    - IP   - IP   - DONE - JsonSkimmer          May not be needed / To Be Removed
+    - DONE - IP   - DONE - JsonString
+    - DONE - IP   - DONE - JsonValue
+    - DONE - IP   - DONE - JsonWriter
 
 LUGHSHARP/SOURCE/UTILS/LOGGING - DONE
 ------------------------------
@@ -1287,34 +1313,6 @@ LUGHSHARP/EXTENSIONS/SOURCE/BOX2D/JOINTS
     -      -      -      - WeldJointDef
     -      -      -      - WheelJoint
     -      -      -      - WheelJointDef
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-LUGHSHARP/JSON/SOURCE
----------------------
-
-    ///////////////////////////////////////////////
-    ALL JSON CLASSES NEED FULLY TESTING!!!
-    ///////////////////////////////////////////////
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - EnumArrayConverterFactory
-    - DONE - IP   - DONE - Json
-    - DONE - DONE - DONE - JsonFieldAttribute
-    - IP   - IP   - DONE - JsonMatcher          May not be needed / To Be Removed
-    - DONE - IP   - DONE - JsonNameAttribute
-    - DONE - IP   - DONE - JsonOutput
-    - DONE - DONE - DONE - JsonOutputType
-    - IP   - IP   - DONE - JsonReader
-    - IP   - IP   - DONE - JsonSkimmer          May not be needed / To Be Removed
-    - DONE - IP   - DONE - JsonString
-    - DONE - IP   - DONE - JsonValue
-    - DONE - IP   - DONE - JsonWriter
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

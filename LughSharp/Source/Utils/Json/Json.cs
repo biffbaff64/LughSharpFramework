@@ -23,15 +23,11 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Collections;
-using System.Reflection;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Collections;
 using LughSharp.Source.IO;
-using LughSharp.Source.Utils.Exceptions;
 
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 /// <summary>
 /// Reads / Writes objects to / from JSON, automatically.

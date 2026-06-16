@@ -22,15 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text;
-
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Utils;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
 
-namespace LughSharp.Json.Source;
+namespace LughSharp.Source.Utils.Json;
 
 [PublicAPI]
 public static class JsonOutput

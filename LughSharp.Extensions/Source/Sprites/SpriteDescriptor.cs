@@ -27,6 +27,7 @@ using JetBrains.Annotations;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Maths;
 using LughSharp.Source.Maths.Collision;
+using LughSharp.Source.Utils;
 
 namespace Extensions.Source.Sprites;
 
@@ -34,6 +35,7 @@ namespace Extensions.Source.Sprites;
 /// Used for storing relevant information for creating, placing and initialising sprites.
 /// </summary>
 [PublicAPI]
+[UnstableApi("This class is currently in development. Do not use it in production.")]
 public struct SpriteDescriptor
 {
     public String        Name;     // Name of the sprite, for debugging purposes.

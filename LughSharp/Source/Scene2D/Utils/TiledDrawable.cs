@@ -32,7 +32,7 @@ namespace LughSharp.Source.Scene2D.Utils;
 /// instead of stretching it.
 /// </summary>
 [PublicAPI]
-public class TiledSceneDrawable : TextureRegionDrawable
+public class TiledDrawable : TextureRegionDrawable
 {
     public Color Color { get; set; } = new( 1, 1, 1, 1 );
     public float Scale { set; get; } = 1;
@@ -42,7 +42,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
     /// <summary>
     /// Creates a new TiledDrawable, using the given <see cref="TextureRegion"/>
     /// </summary>
-    public TiledSceneDrawable( TextureRegion region )
+    public TiledDrawable( TextureRegion region )
         : base( region )
     {
     }
@@ -50,7 +50,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
     /// <summary>
     /// Creates a new TiledDrawable, using the given <see cref="TextureRegionDrawable"/>
     /// </summary>
-    public TiledSceneDrawable( TextureRegionDrawable drawable )
+    public TiledDrawable( TextureRegionDrawable drawable )
         : base( drawable )
     {
     }
@@ -59,7 +59,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
     /// Creates a new TiledDrawable, initialised with the same properties as the given drawable.
     /// </summary>
     /// <param name="drawable"></param>
-    public TiledSceneDrawable( TiledSceneDrawable drawable ) : base( drawable )
+    public TiledDrawable( TiledDrawable drawable ) : base( drawable )
     {
         Color = drawable.Color.Copy();
         Scale = drawable.Scale;
@@ -76,7 +76,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
 
         if ( region != null )
         {
-            float oldColor = batch.ColorPackedABGR;
+//            float oldColor = batch.ColorPackedABGR;
 
             batch.Color = Color.Mul( batch.Color );
 
@@ -193,9 +193,9 @@ public class TiledSceneDrawable : TextureRegionDrawable
     /// Creates a new drawable that renders the same as this drawable
     /// but tinted with the specified color.
     /// </summary>
-    public override TiledSceneDrawable Tint( Color tint )
+    public override TiledDrawable Tint( Color tint )
     {
-        var drawable = new TiledSceneDrawable( this );
+        var drawable = new TiledDrawable( this );
 
         drawable.Color.Set( tint );
         drawable.LeftWidth    = LeftWidth;
@@ -209,7 +209,7 @@ public class TiledSceneDrawable : TextureRegionDrawable
     /// <summary>
     /// Creates a copy of this drawable.
     /// </summary>
-    public override TiledSceneDrawable Copy() => new( this );
+    public override TiledDrawable Copy() => new( this );
 }
 
 // ============================================================================

@@ -33,13 +33,13 @@ namespace LughSharp.Source.Scene2D.Utils;
 public interface ITransformDrawable : ISceneDrawable
 {
     /// <summary>
-    /// Draws the drawable.
+    /// Draws the specified region with transformations applied.
     /// </summary>
-    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
-    /// <param name="region"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
+    /// <param name="batch">The batch used to render the region.</param>
+    /// <param name="region">The rectangular region to draw.</param>
+    /// <param name="origin">The origin point of the transformations.</param>
+    /// <param name="scale">The scaling factors applied to the region.</param>
+    /// <param name="rotation">The rotation angle, in degrees, to apply to the region.</param>
     void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation );
 }
 

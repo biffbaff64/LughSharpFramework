@@ -43,7 +43,10 @@ namespace LughSharp.Source.Utils;
 /// </code>
 /// </summary>
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct )]
+[AttributeUsage( AttributeTargets.Class
+               | AttributeTargets.Enum
+               | AttributeTargets.Interface
+               | AttributeTargets.Struct )]
 public class UnstableApiAttribute : Attribute
 {
     /// <param name="reason">A brief description of why this type is considered unstable.</param>

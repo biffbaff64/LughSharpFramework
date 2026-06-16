@@ -54,6 +54,16 @@ public class MockInput : IInput
         return 0;
     }
 
+    /// <summary>
+    /// This will set a keyboard height callback. This will get called, whenever the keyboard
+    /// height changes. Note: When using <see cref="IInput.OpenTextInputField"/>, it will report the
+    /// height of the native input field too.
+    /// </summary>
+    /// <param name="observer"> The observer to set. </param>
+    public void SetKeyboardHeightObserver( IInput.IKeyboardHeightObserver observer )
+    {
+    }
+
     public int GetRotation()
     {
         return 0;
@@ -92,6 +102,37 @@ public class MockInput : IInput
     public long GetCurrentEventTime()
     {
         return 0;
+    }
+
+    /// <summary>
+    /// Sets the on-screen keyboard visible if available.
+    /// </summary>
+    /// <param name="configuration"> The configuration for the native input field </param> 
+    public void OpenTextInputField( NativeInputConfiguration configuration )
+    {
+    }
+
+    /// <summary>
+    /// Closes the native input field and applies the result to the input wrapper.
+    /// </summary>
+    /// <param name="isConfirmative">
+    /// Whether the closing can be considered confirmative. Will be passed to the
+    /// <see cref="NativeInputCloseCallback"/>
+    /// </param>
+    /// <param name="callback">
+    /// An optional callback to also run, when the close was processed. Will be called
+    /// on the main thread. Will be called after <see cref="NativeInputCloseCallback"/>
+    /// </param>
+    public void CloseTextInputField( bool isConfirmative, NativeInputCloseCallback? callback = null )
+    {
+    }
+
+    /// <summary>
+    /// Returns if a native input field is currently open
+    /// </summary>
+    public bool IsTextInputFieldOpened()
+    {
+        return false;
     }
 
     public IInput.Orientation GetNativeOrientation()

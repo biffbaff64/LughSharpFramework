@@ -24,9 +24,12 @@
 
 using JetBrains.Annotations;
 
+using LughSharp.Source.Utils;
+
 namespace Extensions.Source.Sprites;
 
 [PublicAPI]
+[UnstableApi("This class is currently in development. Do not use it in production.")]
 public enum GraphicID
 {
     

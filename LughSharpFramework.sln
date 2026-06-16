@@ -18,8 +18,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Tests", "LughShar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{22F59D9F-A1A9-4411-80F2-5CE7D7CBD9F8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LughSharp.Json", "LughSharp.Json\LughSharp.Json.csproj", "{DF634F5C-D013-4707-8711-1ED24593FCA6}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,10 +44,6 @@ Global
 		{22F59D9F-A1A9-4411-80F2-5CE7D7CBD9F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{22F59D9F-A1A9-4411-80F2-5CE7D7CBD9F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{22F59D9F-A1A9-4411-80F2-5CE7D7CBD9F8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DF634F5C-D013-4707-8711-1ED24593FCA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF634F5C-D013-4707-8711-1ED24593FCA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF634F5C-D013-4707-8711-1ED24593FCA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF634F5C-D013-4707-8711-1ED24593FCA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

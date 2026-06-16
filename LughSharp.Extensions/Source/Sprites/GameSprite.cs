@@ -25,10 +25,12 @@
 using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.G2D;
+using LughSharp.Source.Utils;
 
 namespace Extensions.Source.Sprites;
 
 [PublicAPI]
+[UnstableApi("This class is currently in development. Do not use it in production.")]
 public class GameSprite
 {
     public Sprite2D Sprite { get; set; } = new();

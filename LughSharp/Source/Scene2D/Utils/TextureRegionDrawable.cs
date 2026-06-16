@@ -63,7 +63,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new TextureRegionDrawable using the <see cref="TextureRegion"/> from
     /// the given TextureRegionDrawable.
     /// </summary>
-    /// <param name="drawable"></param>
+    /// <param name="drawable"> The source TextureRegionDrawable. </param>
     public TextureRegionDrawable( TextureRegionDrawable? drawable )
         : base( drawable )
     {
@@ -93,6 +93,11 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// with <see cref="IBatch.Color"/>, possibly by mixing its own color.
     /// The default implementation does nothing.
     /// </summary>
+    /// <param name="batch"> The batch to draw to. </param>
+    /// <param name="x"> The x-coordinate of the drawable. </param>
+    /// <param name="y"> The y-coordinate of the drawable. </param>
+    /// <param name="width"> The width of the drawable. </param>
+    /// <param name="height"> The height of the drawable. </param>
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
         if ( Region != null )
@@ -104,6 +109,11 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// <summary>
     /// Draws this drawable at the specified bounds.
     /// </summary>
+    /// <param name="batch"> The batch to draw to. </param>
+    /// <param name="region"> The destination rectangle in which to draw the drawable. </param>
+    /// <param name="origin"> The origin of the drawable. </param>
+    /// <param name="scale"> The scale of the drawable. </param>
+    /// <param name="rotation"> The rotation of the drawable. </param>
     public virtual void Draw( IBatch batch, GRect region, Point2D origin, Point2D scale, float rotation )
     {
         if ( Region != null )
@@ -116,6 +126,7 @@ public class TextureRegionDrawable : BaseDrawable, ITransformDrawable
     /// Creates a new drawable that renders the same as this drawable
     /// but tinted with the specified color.
     /// </summary>
+    /// <param name="tint"> The color to tint the drawable with. </param>
     public virtual ISceneDrawable Tint( Color tint )
     {
         if ( Region == null )
