@@ -35,9 +35,25 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class WindowStyle : ISceneStyle
 {
-    public BitmapFont?     TitleFont       { get; set; }
-    public Color           TitleFontColor  { get; set; }
-    public ISceneDrawable? Background      { get; set; }
+    /// <summary>
+    /// The <see cref="BitmapFont"/> used for the window title.
+    /// </summary>
+    public BitmapFont? TitleFont { get; set; }
+
+    /// <summary>
+    /// The color of the font used in the Title.
+    /// </summary>
+    public Color TitleFontColor { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to render the background of the window.
+    /// It defines the visual look and padding of the window's background.
+    /// </summary>
+    public ISceneDrawable? Background { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> representing the background for the stage area in the window.
+    /// </summary>
     public ISceneDrawable? StageBackground { get; set; }
 
     // ====================================================================

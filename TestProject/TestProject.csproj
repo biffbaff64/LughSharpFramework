@@ -74,6 +74,9 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="DotGLFW" Version="1.2.0" />
+      <PackageReference Include="JetBrains.Annotations" Version="2026.2.0" />
       <PackageReference Include="SixLabors.Fonts" Version="3.0.0" />
+      <PackageReference Include="System.Drawing.Common" Version="10.0.9" />
     </ItemGroup>
 </Project>

@@ -50,22 +50,17 @@ public class ImagePackerTest
     {
         var rand   = new Random( 0 );
         var packer = new ImagePacker( 2048, 2048, 1, true );
-        var images = new Bitmap[ 100 ];
 
-        for ( var i = 0; i < images.Length; i++ )
-        {
-            Color color = Color.FromArgb( 255,
-                                          ( byte )rand.Next( 256 ),
-                                          ( byte )rand.Next( 256 ),
-                                          ( byte )rand.Next( 256 ) );
-
-            int width  = rand.Next( 10, 61 );
-            int height = rand.Next( 10, 61 );
-
-            images[ i ] = ImagePacker.CreateImage( width, height, PixelFormat.Format32bppArgb, color );
-        }
-
-        Array.Sort( images, ( a, b ) => ( b.Width * b.Height ) - ( a.Width * a.Height ) );
+        var images = Enumerable.Range( 0, 100 )
+                               .Select( _ => ImagePacker.CreateImage( rand.Next( 10, 61 ),
+                                                                       rand.Next( 10, 61 ),
+                                                                       PixelFormat.Format32bppArgb,
+                                                                       Color.FromArgb( 255,
+                                                                                       ( byte ) rand.Next( 256 ),
+                                                                                       ( byte ) rand.Next( 256 ),
+                                                                                       ( byte ) rand.Next( 256 ) ) ) )
+                               .OrderByDescending( img => img.Width * img.Height )
+                               .ToArray();
 
         for ( var i = 0; i < images.Length; i++ )
         {

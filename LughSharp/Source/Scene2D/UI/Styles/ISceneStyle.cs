@@ -24,6 +24,9 @@
 
 namespace LughSharp.Source.Scene2D.UI.Styles;
 
+/// <summary>
+/// The base interface for all scene styles. Acts as a marker interface.
+/// </summary>
 [PublicAPI]
 public interface ISceneStyle;
 

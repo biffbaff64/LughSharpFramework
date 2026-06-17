@@ -26,29 +26,83 @@ using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI.Styles;
 
+/// <summary>
+/// The style for a <see cref="Slider"/>.
+/// </summary>
 [PublicAPI]
-public class SliderStyle : ProgressBarStyle, ISceneStyle
+public class SliderStyle : ProgressBarStyle
 {
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the Slider's background when the
+    /// mouse or touch is over the slider knob.
+    /// </summary>
     public ISceneDrawable? BackgroundOver { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the Slider's background when
+    /// the slider knob is pressed down and/or being dragged.
+    /// </summary>
     public ISceneDrawable? BackgroundDown { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the Slider's knob portion before the
+    /// current value when the mouse or touch is over the slider knob.
+    /// </summary>
     public ISceneDrawable? KnobBeforeOver { get; set; }
-    public ISceneDrawable? KnobOver       { get; set; }
-    public ISceneDrawable? KnobAfterOver  { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the Slider's knob portion after the
+    /// current value when the mouse or touch is over the slider knob.
+    /// </summary>
+    public ISceneDrawable? KnobOver { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the slider's knob portion after the knob
+    /// when the mouse or touch is over this area.
+    /// </summary>
+    public ISceneDrawable? KnobAfterOver { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the Slider's knob portion before the
+    /// current value when the slider knob is pressed down and/or being dragged.
+    /// </summary>
     public ISceneDrawable? KnobBeforeDown { get; set; }
-    public ISceneDrawable? KnobDown       { get; set; }
-    public ISceneDrawable? KnobAfterDown  { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the Slider's knob when it is actively
+    /// being pressed or dragged by the user.
+    /// </summary>
+    public ISceneDrawable? KnobDown { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used for the slider's knob portion after the
+    /// knob when the slider knob is pressed down and/or being dragged.
+    /// </summary>
+    public ISceneDrawable? KnobAfterDown { get; set; }
 
     // ====================================================================
 
+    /// <summary>
+    /// Creates a new, uninitialized SliderStyle.
+    /// </summary>
     public SliderStyle()
     {
     }
 
+    /// <summary>
+    /// Creates a new SliderStyle with the given ISceneDrawables.
+    /// </summary>
+    /// <param name="background"> The background <see cref="ISceneDrawable"/>. </param>
+    /// <param name="knob"> The <see cref="ISceneDrawable"/> to use for the default slider knob. </param>
     public SliderStyle( ISceneDrawable background, ISceneDrawable knob )
         : base( background, knob )
     {
     }
 
+    /// <summary>
+    /// Creates a new SliderStyle using the <see cref="ISceneDrawable"/>s from the given SliderStyle.
+    /// </summary>
+    /// <param name="style"> The SliderStyle to copy the <see cref="ISceneDrawable"/>s from. </param>
     public SliderStyle( SliderStyle style ) : base( style )
     {
         BackgroundOver = style.BackgroundOver;
@@ -67,4 +121,3 @@ public class SliderStyle : ProgressBarStyle, ISceneStyle
 
 // ============================================================================
 // ============================================================================
-

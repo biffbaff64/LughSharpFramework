@@ -759,7 +759,7 @@ LUGHSHARP/SOURCE/MAPS/TILED/LOADERS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - AtlasTmxMapLoader
+    - DONE - DONE - DONE - AtlasTmxMapLoader
     - DONE - IP   - DONE - BaseTmxMapLoader
     - DONE - IP   - DONE - TmxMapLoader
 
@@ -1069,24 +1069,25 @@ LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ButtonStyle
-    -      -      - DONE - CheckBoxStyle
-    -      -      - DONE - ImageButtonStyle
-    -      -      - DONE - ImageTextButtonStyle
-    -      -      - DONE - ISceneStyle
+    - DONE - DONE - DONE - CheckBoxStyle
+    - DONE - DONE - DONE - DialogStyle
+    - DONE - DONE - DONE - ImageButtonStyle
+    - DONE - DONE - DONE - ImageTextButtonStyle
+    - DONE - DONE - DONE - ISceneStyle
     - DONE - DONE - DONE - LabelStyle
     -      -      - DONE - ListBoxStyle
     -      -      - DONE - ProgressBarStyle
     -      -      - DONE - ScrollPaneStyle
     -      -      - DONE - SelectBoxStyle
-    -      -      - DONE - SliderStyle
+    - DONE - DONE - DONE - SliderStyle
     -      -      - DONE - SplitPaneStyle
     - DONE - DONE - DONE - TextAreaStyle
     -      -      - DONE - TextButtonStyle
     -      -      - DONE - TextFieldStyle
     -      -      - DONE - TextTooltipStyle
     -      -      - DONE - TouchpadStyle
-    -      -      - DONE - TreeStyle
-    -      -      - DONE - WindowStyle
+    - DONE - DONE - DONE - TreeStyle
+    - DONE - DONE - DONE - WindowStyle
 
 LUGHSHARP/SOURCE/SCENE2D/UTILS - DONE
 ------------------------------

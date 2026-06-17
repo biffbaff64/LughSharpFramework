@@ -48,7 +48,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledMapLoaderParameters >( resolver )
 {
     protected readonly List< Texture2D > TrackedTextures = [ ];
-    protected          IAtlasResolver? AtlasResolver;
+    protected          IAtlasResolver?   AtlasResolver;
 
     // ========================================================================
     // ========================================================================
@@ -101,7 +101,14 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         return map;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Asynchronously loads an asset using the specified parameters.
+    /// </summary>
+    /// <typeparam name="TP">The type of the parameters for loading the asset.</typeparam>
+    /// <param name="manager">The asset manager responsible for managing the asset loading process.</param>
+    /// <param name="filename">The name of the asset to be loaded.</param>
+    /// <param name="file">The file information of the asset, if available.</param>
+    /// <param name="parameter">An optional set of parameters used for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager? manager,
                                           string filename,
                                           FileInfo? tmxFile,
@@ -114,10 +121,18 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         Map = LoadTiledMap( tmxFile, parameter as AtlasTiledMapLoaderParameters, AtlasResolver );
     }
 
-    /// <inheritdoc />
-    public override TiledMap? LoadSync< TP >( AssetManager manager,
-                                              FileInfo file,
-                                              TP? parameter ) where TP : class
+    /// <summary>
+    /// Synchronously loads an asset from the specified file using the provided asset
+    /// manager and parameters.
+    /// </summary>
+    /// <param name="manager">The asset manager responsible for managing the asset loading process.</param>
+    /// <param name="file">The file information of the asset to be loaded.</param>
+    /// <param name="parameter">The optional parameters used for customizing the asset loading process.</param>
+    /// <typeparam name="TP">The type of the asset loader parameters.</typeparam>
+    /// <return>Returns the loaded asset object or null if the loading process fails.</return>
+    public override TiledMap LoadSync< TP >( AssetManager manager,
+                                             FileInfo file,
+                                             TP? parameter ) where TP : class
     {
         if ( parameter is AtlasTiledMapLoaderParameters p )
         {
@@ -127,7 +142,13 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         return Map;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Returns the assets this asset requires to be loaded first. This method may be
+    /// called on a thread other than the GL thread.
+    /// </summary>
+    /// <param name="filename">name of the asset to load</param>
+    /// <param name="file">the resolved file to load</param>
+    /// <param name="p">parameters for loading the asset</param>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? p ) where TP : class
@@ -148,7 +169,18 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         return descriptors;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Adds static tiles to the map using the specified parameters. This implemengtation is
+    /// abstract and must be overridden by subclasses.
+    /// </summary>
+    /// <param name="element">The XML element representing the current tile or node to process.</param>
+    /// <param name="tileContext">The context associated with the tile layer being processed.</param>
+    /// <param name="tileElements">A list of XML elements representing tiles to be added.</param>
+    /// <param name="tileMetrics">Metrics that define the dimensions and properties of the tiles.</param>
+    /// <param name="source">The source path or identifier of the tileset being used.</param>
+    /// <param name="offsetX">The horizontal offset for tile placement, in pixels.</param>
+    /// <param name="offsetY">The vertical offset for tile placement, in pixels.</param>
+    /// <param name="imageDetails">Details about the image or texture associated with the tiles.</param>
     protected override void AddStaticTiles( XmlReader.Element? element,
                                             TileContext tileContext,
                                             List< XmlReader.Element? >? tileElements,
@@ -236,6 +268,16 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         }
     }
 
+    /// <summary>
+    /// Resolves and retrieves the file handle for the associated texture atlas based on
+    /// the provided TMX file.
+    /// </summary>
+    /// <param name="tmxFile">The TMX file from which the atlas file path is determined.</param>
+    /// <returns>The file handle of the resolved texture atlas.</returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown when the map is missing a properties node, the 'atlas' property is not
+    /// specified, or the atlas file cannot be found.
+    /// </exception>
     protected FileInfo GetAtlasFileHandle( FileInfo? tmxFile )
     {
         XmlReader.Element? properties = XmlRoot?.GetChildByName( "properties" );
@@ -279,6 +321,11 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         throw new RuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
     }
 
+    /// <summary>
+    /// Sets the minification and magnification filters for all textures tracked by this loader.
+    /// </summary>
+    /// <param name="min"> The minification filter mode to apply to all tracked textures. </param>
+    /// <param name="mag"> The magnification filter mode to apply to all tracked textures. </param>
     protected void SetTextureFilters( TextureFilterMode min, TextureFilterMode mag )
     {
         foreach ( Texture2D texture in TrackedTextures )
@@ -307,7 +354,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         public TextureAtlas? GetAtlas();
 
         // ====================================================================
-        
+
         public class DirectAtlasResolver( TextureAtlas atlas )
             : IAtlasResolver
         {
@@ -323,7 +370,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         }
 
         // ====================================================================
-        
+
         public class AssetManagerAtlasResolver( AssetManager? assetManager, string atlasName )
             : IAtlasResolver
         {

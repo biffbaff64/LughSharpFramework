@@ -37,44 +37,44 @@ public class ButtonStyle : ISceneStyle
     /// <summary>
     /// The button image for when the button is in its normal, unpressed, state. 
     /// </summary>
-    public ISceneDrawable? Up             { get; set; }
-    
+    public ISceneDrawable? Up { get; set; }
+
     /// <summary>
     /// The button image for when the button is in its pressed, held down, state. 
     /// </summary>
-    public ISceneDrawable? Down           { get; set; }
-    
+    public ISceneDrawable? Down { get; set; }
+
     /// <summary>
     /// The button image for when the mouse or touch is over the button.
     /// </summary>
-    public ISceneDrawable? Over           { get; set; }
-    
+    public ISceneDrawable? Over { get; set; }
+
     /// <summary>
     /// The button image for when the button has keyboard focus.
     /// </summary>
-    public ISceneDrawable? Focused        { get; set; }
-    
+    public ISceneDrawable? Focused { get; set; }
+
     /// <summary>
     /// 
     /// </summary>
-    public ISceneDrawable? Disabled       { get; set; }
-    
+    public ISceneDrawable? Disabled { get; set; }
+
     /// <summary>
     /// The button image for when the button is in its checked, toggled, state. 
     /// </summary>
-    public ISceneDrawable? Checked        { get; set; }
-    
+    public ISceneDrawable? Checked { get; set; }
+
     /// <summary>
     /// The button image for when the mouse or touch is over the button, and the button
     /// is in its checked, toggled, state.
     /// </summary>
-    public ISceneDrawable? CheckedOver    { get; set; }
-    
+    public ISceneDrawable? CheckedOver { get; set; }
+
     /// <summary>
     /// The button image for when the button is in its checked, toggled, state, and is
     /// pressed down.
     /// </summary>
-    public ISceneDrawable? CheckedDown    { get; set; }
+    public ISceneDrawable? CheckedDown { get; set; }
 
     /// <summary>
     /// The button image for when the button is in its checked, toggled, state, and has
@@ -82,11 +82,34 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ISceneDrawable? CheckedFocused { get; set; }
 
+    /// <summary>
+    /// The X offset of the button image when the button is in its pressed, held down, state.
+    /// </summary>
     public float PressedOffsetX   { get; set; }
+    
+    /// <summary>
+    /// The Y offset of the button image when the button is in its pressed, held down, state.
+    /// </summary>
     public float PressedOffsetY   { get; set; }
+    
+    /// <summary>
+    /// The X offset of the button image when the button is in its normal, unpressed, state.
+    /// </summary>
     public float UnpressedOffsetX { get; set; }
+    
+    /// <summary>
+    /// The Y offset of the button image when the button is in its normal, unpressed, state.
+    /// </summary>
     public float UnpressedOffsetY { get; set; }
+    
+    /// <summary>
+    /// The X offset of the button image when the button is in its checked, toggled, state.
+    /// </summary>
     public float CheckedOffsetX   { get; set; }
+    
+    /// <summary>
+    /// The Y offset of the button image when the button is in its checked, toggled, state.
+    /// </summary>
     public float CheckedOffsetY   { get; set; }
 
     // ====================================================================
@@ -105,7 +128,7 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     /// <param name="up"> The ISceneDrawable image for button UP. </param>
     /// <param name="down"> The ISceneDrawable image for button DOWN. </param>
-    /// <param name="chcked"></param>
+    /// <param name="chcked"> The ISceneDrawable image for button CHECKED. </param>
     public ButtonStyle( ISceneDrawable? up, ISceneDrawable? down, ISceneDrawable? chcked )
     {
         Up      = up;
@@ -139,8 +162,8 @@ public class ButtonStyle : ISceneStyle
     /// Sets the properties of this ButtonStyle to the properties from the given
     /// style, which must be a ButtonStyle, or a subclass of it.
     /// </summary>
-    /// <param name="style"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="style"> The ButtonStyle to copy properties from. </param>
+    /// <typeparam name="T"> The type of the style to copy properties from. </typeparam>
     public void Set< T >( T style ) where T : ButtonStyle
     {
         Up               = style.Up;

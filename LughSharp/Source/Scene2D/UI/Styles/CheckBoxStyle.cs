@@ -33,11 +33,38 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class CheckBoxStyle : TextButtonStyle
 {
-    public ISceneDrawable? CheckboxOn          { get; set; }
-    public ISceneDrawable? CheckboxOff         { get; set; }
-    public ISceneDrawable? CheckboxOnOver      { get; set; }
-    public ISceneDrawable? CheckboxOver        { get; set; }
-    public ISceneDrawable? CheckboxOnDisabled  { get; set; }
+    /// <summary>
+    /// Gets or sets the drawable used to represent the ON state of the checkbox.
+    /// </summary>
+    public ISceneDrawable? CheckboxOn { get; set; }
+
+    /// <summary>
+    /// Gets or sets the drawable used to represent the OFF state of the checkbox.
+    /// </summary>
+    public ISceneDrawable? CheckboxOff { get; set; }
+
+    /// <summary>
+    /// Gets or sets the drawable used to represent the ON state of the checkbox when the mouse
+    /// or touch is over the checkbox.
+    /// </summary>
+    public ISceneDrawable? CheckboxOnOver { get; set; }
+
+    /// <summary>
+    /// Gets or sets the drawable used to represent the OFF state of the checkbox when the mouse
+    /// or touch is over the checkbox.
+    /// </summary>
+    public ISceneDrawable? CheckboxOver { get; set; }
+
+    /// <summary>
+    /// Gets or sets the drawable used to represent the ON state of the checkbox when the checkbox
+    /// is disabled.
+    /// </summary>
+    public ISceneDrawable? CheckboxOnDisabled { get; set; }
+
+    /// <summary>
+    /// Gets or sets the drawable used to represent the OFF state of the checkbox when the checkbox
+    /// is disabled.
+    /// </summary>
     public ISceneDrawable? CheckboxOffDisabled { get; set; }
 
     // ========================================================================
@@ -71,7 +98,7 @@ public class CheckBoxStyle : TextButtonStyle
     /// <summary>
     /// Creates a new CheckBoxStyle with the same properties as the supplied style.
     /// </summary>
-    /// <param name="style"></param>
+    /// <param name="style"> The CheckBoxStyle to copy properties from. </param>
     public CheckBoxStyle( CheckBoxStyle style ) : base( style )
     {
         CheckboxOn          = style.CheckboxOn;

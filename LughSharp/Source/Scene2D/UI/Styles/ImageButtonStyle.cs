@@ -32,12 +32,41 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ImageButtonStyle : ButtonStyle, ISceneStyle
 {
+    /// <summary>
+    /// The button image for when the button is in its normal, unpressed, state.
+    /// </summary>
     public ISceneDrawable? ImageUp;
+    
+    /// <summary>
+    /// The button image for when the button is in its pressed, held down, state.
+    /// </summary>
     public ISceneDrawable? ImageDown;
+    
+    /// <summary>
+    /// The button image for when the mouse or touch is over the button.
+    /// </summary>
     public ISceneDrawable? ImageOver;
+    
+    /// <summary>
+    /// The button image for when the button is disabled.
+    /// </summary>
     public ISceneDrawable? ImageDisabled;
+    
+    /// <summary>
+    /// The button image for when the button is in its checked, toggled, state.
+    /// </summary>
     public ISceneDrawable? ImageChecked;
+    
+    /// <summary>
+    /// The button image for when the button is in its checked, toggled, state, and is
+    /// pressed down.
+    /// </summary>
     public ISceneDrawable? ImageCheckedDown;
+    
+    /// <summary>
+    /// The button image for when the mouse or touch is over the button, and the button
+    /// is in its checked, toggled, state.
+    /// </summary>
     public ISceneDrawable? ImageCheckedOver;
 
     // ========================================================================

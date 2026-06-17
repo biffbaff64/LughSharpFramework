@@ -32,20 +32,58 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TreeStyle : ISceneStyle
 {
-    public ISceneDrawable? Plus       { get; set; }
-    public ISceneDrawable? Minus      { get; set; }
-    public ISceneDrawable? PlusOver   { get; set; }
-    public ISceneDrawable? MinusOver  { get; set; }
-    public ISceneDrawable? Over       { get; set; }
-    public ISceneDrawable? Selection  { get; set; }
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/>s used for the Plus sign.
+    /// </summary>
+    public ISceneDrawable? Plus { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/>s used for the Minus sign.
+    /// </summary>
+    public ISceneDrawable? Minus { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to represent the hovered state of the Plus sign,
+    /// typically displayed when the user moves the cursor over the expand icon in a tree view.
+    /// </summary>
+    public ISceneDrawable? PlusOver { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to represent the hovered state of the Minus sign,
+    /// typically displayed when the user moves the cursor over the collapse icon in a tree view.
+    /// </summary>
+    public ISceneDrawable? MinusOver { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to represent the hovered state of the tree view.
+    /// </summary>
+    public ISceneDrawable? Over { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to represent the selected state of the tree view.
+    /// </summary>
+    public ISceneDrawable? Selection { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to represent the background of the tree view.
+    /// </summary>
     public ISceneDrawable? Background { get; set; }
 
     // ====================================================================
 
+    /// <summary>
+    /// Creates a new, uninitialized <see cref="TreeStyle"/>.
+    /// </summary>
     public TreeStyle()
     {
     }
 
+    /// <summary>
+    /// Creates a new <see cref="TreeStyle"/> with the given <see cref="ISceneDrawable"/>s. 
+    /// </summary>
+    /// <param name="plus"> The drawable to use for the plus sign. </param>
+    /// <param name="minus"> The drawable to use for the minus sign. </param>
+    /// <param name="selection"> The drawable to use for the selection. </param>
     public TreeStyle( ISceneDrawable plus, ISceneDrawable minus, ISceneDrawable? selection )
     {
         Plus      = plus;
@@ -53,6 +91,10 @@ public class TreeStyle : ISceneStyle
         Selection = selection;
     }
 
+    /// <summary>
+    /// Creates a new <see cref="TreeStyle"/> using the given <see cref="TreeStyle"/> as a template.
+    /// </summary>
+    /// <param name="style"> The <see cref="TreeStyle"/> to use as a template. </param>
     public TreeStyle( TreeStyle style )
     {
         Plus       = style.Plus;

@@ -33,8 +33,20 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class LabelStyle : ISceneStyle
 {
-    public BitmapFont      Font       { get; set; }
-    public Color?          FontColor  { get; set; }
+    /// <summary>
+    /// The <see cref="BitmapFont"/> used for the label.
+    /// </summary>
+    public BitmapFont Font { get; set; }
+
+    /// <summary>
+    /// The color of the font used in the label. If set to null, the default color is used.
+    /// </summary>
+    public Color? FontColor { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to render the background of the label.
+    /// It defines the visual look and padding of the label's background.
+    /// </summary>
     public ISceneDrawable? Background { get; set; }
 
     // ====================================================================
@@ -67,10 +79,10 @@ public class LabelStyle : ISceneStyle
     public LabelStyle( LabelStyle? style )
     {
         Guard.Against.Null( style );
-        
+
         Font       = style.Font;
         Background = style.Background;
-        
+
         if ( style.FontColor != null )
         {
             FontColor = new Color( style.FontColor );
