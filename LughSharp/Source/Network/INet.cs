@@ -31,7 +31,7 @@ namespace LughSharp.Source.Network;
 /// managing sockets, and handling URIs.
 /// </summary>
 [PublicAPI]
-public interface INet
+public interface INet : IDisposable
 {
     /// <summary>
     /// Represents the supported network protocols.

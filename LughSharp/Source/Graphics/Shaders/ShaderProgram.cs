@@ -534,27 +534,29 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Determines if the shader program contains a uniform variable with the specified name.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The name of the uniform variable to check for in the shader program.</param>
+    /// <returns>True if the uniform variable exists, otherwise false.</returns>
     public bool HasUniform( string name )
     {
         return _uniformLocations.ContainsKey( name );
     }
 
     /// <summary>
-    /// 
+    /// Returns true if the shader program contains the given attribute name.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The name of the attribute to check for in the shader program.</param>
+    /// <returns>True if the attribute exists, otherwise false.</returns>
     public bool HasAttribute( string name )
     {
         return _attributeLocations.ContainsKey( name );
     }
 
     /// <summary>
-    /// 
+    /// Caches the location of a uniform variable in the shader program for future use.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The name of the uniform variable to be cached.</param>
     private void CacheUniform( string name )
     {
         int location = Engine.GL.GetUniformLocation( ShaderProgramHandle, name );
@@ -562,9 +564,9 @@ public class ShaderProgram : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Caches the location of a shader program attribute to improve performance during rendering.
     /// </summary>
-    /// <param name="name"></param>
+    /// <param name="name">The name of the attribute to cache within the shader program.</param>
     private void CacheAttribute( string name )
     {
         int location = Engine.GL.GetAttribLocation( ShaderProgramHandle, name );

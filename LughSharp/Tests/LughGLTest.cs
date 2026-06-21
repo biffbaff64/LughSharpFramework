@@ -22,17 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 
-using NUnit.Framework;
-
 using GLBindings = LughSharp.Source.Graphics.OpenGL.Bindings.GLBindings;
 
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [PublicAPI]
 public unsafe class LughGLTest : ILughTest

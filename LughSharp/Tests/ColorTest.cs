@@ -22,11 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using NUnit.Framework;
-
 using Color = LughSharp.Source.Graphics.Color;
 
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 [TestOf( typeof( Color ) )]

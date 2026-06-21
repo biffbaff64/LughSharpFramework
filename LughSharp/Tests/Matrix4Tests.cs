@@ -22,11 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Maths;
-
-using NUnit.Framework;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 public class Matrix4Tests

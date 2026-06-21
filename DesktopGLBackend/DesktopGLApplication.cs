@@ -46,7 +46,7 @@ namespace DesktopGLBackend;
 /// Creates, and manages, an application to for Windows OpenGL backends.
 /// </summary>
 [PublicAPI]
-public class DesktopGLApplication : IApplication, IDisposable
+public class DesktopGLApplication : IApplication
 {
     /// <summary>
     /// Persistant properties manager instance.
@@ -746,7 +746,7 @@ public class DesktopGLApplication : IApplication, IDisposable
 
         if ( config.WindowIconPaths != null )
         {
-            DesktopGLWindow.SetIcon( windowHandle, config.WindowIconPaths, config.WindowIconFileType );
+            DesktopGLWindow.SetIcon( windowHandle, config.WindowIconPaths, config.WindowIconPathType );
         }
 
         DotGLFW.Glfw.MakeContextCurrent( windowHandle );

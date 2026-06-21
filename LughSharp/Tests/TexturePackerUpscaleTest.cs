@@ -22,9 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [PublicAPI]
 public class TexturePackerUpscaleTest

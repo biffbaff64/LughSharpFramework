@@ -85,7 +85,7 @@ namespace LughSharp.Source;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IApplication
+public interface IApplication : IDisposable
 {
     /// <summary>
     /// What <see cref="Platform.ApplicationType"/> the application has.

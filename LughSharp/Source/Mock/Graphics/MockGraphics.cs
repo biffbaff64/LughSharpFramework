@@ -498,6 +498,12 @@ public class MockGraphics : IGraphicsDevice
     public void SetSystemCursor( ICursor.SystemCursor systemCursor )
     {
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize( this );
+    }
 }
 
 // ============================================================================

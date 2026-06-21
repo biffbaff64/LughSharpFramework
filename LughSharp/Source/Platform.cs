@@ -29,7 +29,7 @@ namespace LughSharp.Source;
 /// <summary>
 /// Platform specific flags and methods.
 /// </summary>
-/// <seealso cref="GraphicsBackend"/>
+/// <seealso cref="GraphicsDevice"/>
 /// <seealso cref="LibraryVersion"/>
 [PublicAPI]
 public static class Platform

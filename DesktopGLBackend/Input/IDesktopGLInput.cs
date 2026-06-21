@@ -29,7 +29,7 @@ using LughSharp.Source.Input;
 namespace DesktopGLBackend.Input;
 
 [PublicAPI]
-public interface IDesktopGLInput : IInput, IDisposable
+public interface IDesktopGLInput : IInput
 {
     /// <summary>
     /// Resets polling states and updates callbacks if the window

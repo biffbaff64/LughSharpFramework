@@ -37,9 +37,22 @@ namespace LughSharp.Source.Maps.Tiled.Objects;
 [PublicAPI]
 public class TiledMapTileMapObject : TextureMapObject
 {
-    public ITiledMapTile Tile             { get; set; }
-    public bool          FlipHorizontally { get; set; }
-    public bool          FlipVertically   { get; set; }
+    /// <summary>
+    /// The <see cref="ITiledMapTile"/> attached to this <see cref="MapObject"/>.
+    /// </summary>
+    public ITiledMapTile Tile { get; set; }
+
+    /// <summary>
+    /// Indicates whether the <see cref="TiledMapTileMapObject"/> is flipped horizontally.
+    /// When set to <c>true</c>, the associated texture region is mirrored along the vertical axis.
+    /// </summary>
+    public bool FlipHorizontally { get; set; }
+
+    /// <summary>
+    /// Indicates whether the <see cref="TiledMapTileMapObject"/> is flipped vertically.
+    /// When set to <c>true</c>, the associated texture region is mirrored along the horizontal axis.
+    /// </summary>
+    public bool FlipVertically { get; set; }
 
     // ========================================================================
 

@@ -30,12 +30,35 @@ namespace LughSharp.Source.Maps.Tiled.Objects;
 [PublicAPI]
 public record TileMetrics
 {
-    public required string? Name       { get; init; }
-    public required uint    Firstgid   { get; init; }
-    public required int     Tilewidth  { get; init; }
-    public required int     Tileheight { get; init; }
-    public          int     Spacing    { get; init; }
-    public          int     Margin     { get; init; }
+    /// <summary>
+    /// The name of the tileset this tile belongs to.
+    /// </summary>
+    public required string? Name { get; init; }
+
+    /// <summary>
+    /// The first tile ID in the tileset.
+    /// </summary>
+    public required uint Firstgid { get; init; }
+
+    /// <summary>
+    /// The width of a tile in the tileset.
+    /// </summary>
+    public required int Tilewidth { get; init; }
+
+    /// <summary>
+    /// The height of a tile in the tileset.
+    /// </summary>
+    public required int Tileheight { get; init; }
+
+    /// <summary>
+    /// The spacing between tiles in the tileset. 
+    /// </summary>
+    public int Spacing { get; init; }
+
+    /// <summary>
+    /// The margin around the edges of the tileset.
+    /// </summary>
+    public int Margin { get; init; }
 
     // ========================================================================
 
@@ -49,14 +72,9 @@ public record TileMetrics
     }
 
     /// <summary>
-    /// Source Info: Data about the tileset structure
+    /// Represents details about a tileset structure, including its name, tile dimensions,
+    /// and spacing/margin configuration.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="firstGid"></param>
-    /// <param name="tileWidth"></param>
-    /// <param name="tileHeight"></param>
-    /// <param name="spacing"></param>
-    /// <param name="margin"></param>
     public TileMetrics( string? name,
                         uint firstGid,
                         int tileWidth,
@@ -71,25 +89,7 @@ public record TileMetrics
         Spacing    = spacing;
         Margin     = margin;
     }
-
-    public void Deconstruct( out string? name,
-                             out uint firstGid,
-                             out int tileWidth,
-                             out int tileHeight,
-                             out int spacing,
-                             out int margin )
-    {
-        name       = Name;
-        firstGid   = Firstgid;
-        tileWidth  = Tilewidth;
-        tileHeight = Tileheight;
-        spacing    = Spacing;
-        margin     = Margin;
-    }
 }
-
-[PublicAPI]
-public record Tile( int Id, int Width, int Height );
 
 // ============================================================================
 // ============================================================================

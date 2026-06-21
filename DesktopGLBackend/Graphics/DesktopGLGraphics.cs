@@ -51,7 +51,7 @@ namespace DesktopGLBackend.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class DesktopGLGraphics : GraphicsDevice, IDisposable
+public class DesktopGLGraphics : GraphicsDevice
 {
     public DesktopGLWindow? GLWindow { get; set; }
 
@@ -642,7 +642,7 @@ public class DesktopGLGraphics : GraphicsDevice, IDisposable
     /// Performs application-defined tasks associated with freeing, releasing,
     /// or resetting unmanaged resources.
     /// </summary>
-    public void Dispose()
+    public override void Dispose()
     {
         Dispose( true );
         GC.SuppressFinalize( this );

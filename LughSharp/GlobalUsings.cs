@@ -41,6 +41,12 @@ global using JetBrains.Annotations;
 // ============================================================================
 // ============================================================================
 
+global using NSubstitute;
+global using NUnit.Framework;
+
+// ============================================================================
+// ============================================================================
+
 global using LughSharp.Source.Assets;
 global using LughSharp.Source.Audio;
 global using LughSharp.Source.Graphics;

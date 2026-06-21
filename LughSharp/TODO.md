@@ -83,12 +83,12 @@ LUGHSHARP/SOURCE - DONE
     - DONE - DONE - DONE - ApplicationAdapter
     - DONE - DONE - DONE - ApplicationConfiguration
     - DONE - DONE - DONE - Engine
-    - DONE - DONE - DONE - Game
     - DONE - DONE - DONE - IApplication
     - DONE - DONE - DONE - IApplicationListener
     - DONE - DONE - DONE - ILifecycleListener
     - DONE - DONE - DONE - IScreen
     - DONE - DONE - DONE - LibraryVersion
+    - DONE - DONE - DONE - LughGame
     - DONE - DONE - DONE - Platform
     - DONE - DONE - DONE - ScreenAdapter
 
@@ -263,14 +263,11 @@ LUGHSHARP/SOURCE/AUDIO/OPENAL
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/COLLECTIONS - DONE
+LUGHSHARP/SOURCE/COLLECTIONS
 ----------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - ObjectMap                Look into removing this.
-    - IP   - IP   - DONE - OrderedMap               Look into removing this.
-
     - DONE - DONE - DONE - ByteArray
     - DONE - DONE - DONE - Collections
     - DONE - DONE - DONE - DelayedRemovalList
@@ -279,6 +276,8 @@ LUGHSHARP/SOURCE/COLLECTIONS - DONE
     - DONE - DONE - DONE - IPredicate
     - DONE - DONE - DONE - LinkedHashMap
     - DONE - DONE - DONE - ListExtensions
+    - DONE - DONE - DONE - ObjectMap
+    - DONE - IP   - DONE - OrderedMap
     - DONE - DONE - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
 
@@ -349,14 +348,14 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE - SHELVED
 ----------------------------------------
 
     These classes do not need to be completed as yet.
-    Possibly use SharpFont instead of these classes, as the work has already been done?
+    Possibly advocate using SharpFont instead of these classes, as the work has already been done?
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - FreeType                     - Shelved
-    - IP   - IP   - DONE - FreeTypeFontGenerator        - Shelved
-    - IP   - IP   - DONE - FreeTypeFontGeneratorLoader  - Shelved
-    - IP   - IP   - DONE - FreeTypeFontLoader           - Shelved
+    - IP   - IP   - DONE - FreeType
+    - IP   - IP   - DONE - FreeTypeFontGenerator
+    - IP   - IP   - DONE - FreeTypeFontGeneratorLoader
+    - IP   - IP   - DONE - FreeTypeFontLoader
 
 
 LUGHSHARP/SOURCE/GRAPHICS/FRAMEBUFFERS - DONE
@@ -385,7 +384,7 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
     - DONE - DONE - DONE - Animator
     - IP   - IP   - DONE - CpuSpriteBatch                  Some methods have too many parameters
     - DONE - DONE - DONE - IBatch
-    -      -      -      - IPolygonBatch                   Some methods have too many parameters
+    - DONE - DONE - DONE - IPolygonBatch                   Some methods have too many parameters
     -      -      -      - ParticleEffect
     -      -      -      - ParticleEffectPool
     -      -      -      - ParticleEmitter
@@ -610,18 +609,16 @@ LUGHSHARP/SOURCE/GRAPHICS/PACKING/TILEDMAPPACKER
       CODE   DOCU   FOOTER
       ----   ----   ------
     - IP   - IP   - DONE - TiledMapPacker
-    -      -      -      - TiledMapPackerTest
-    -      -      -      - TiledMapPackerTestRenderer
     - DONE - DONE - DONE - TileSetLayout
 
 
-LUGHSHARP/SOURCE/GRAPHICS/SHADERS
+LUGHSHARP/SOURCE/GRAPHICS/SHADERS - DONE
 ---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ShaderLoader
-    - DONE - IP   - DONE - ShaderProgram
+    - DONE - DONE - DONE - ShaderProgram
     - DONE - DONE - DONE - ShaderStrings
 
 LUGHSHARP/SOURCE/GRAPHICS/UTILS
@@ -632,6 +629,7 @@ LUGHSHARP/SOURCE/GRAPHICS/UTILS
     - DONE - DONE - DONE - CharacterUtils
     - DONE - DONE - DONE - DrawableUtils
     - IP   - IP   - DONE - ETC1
+    - IP   - IP   - DONE - ETC1Data
     - DONE - DONE - DONE - HdpiUtils
     -      -      -      - IImmediateModeRenderer
     -      -      -      - IIndexData
@@ -754,24 +752,24 @@ LUGHSHARP/SOURCE/MAPS/TILED - DONE
     - DONE - DONE - DONE - TiledMapTileSet
     - DONE - DONE - DONE - TiledMapTileSets
 
-LUGHSHARP/SOURCE/MAPS/TILED/LOADERS
+LUGHSHARP/SOURCE/MAPS/TILED/LOADERS - DONE
 -----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - AtlasTmxMapLoader
-    - DONE - IP   - DONE - BaseTmxMapLoader
-    - DONE - IP   - DONE - TmxMapLoader
+    - DONE - DONE - DONE - BaseTmxMapLoader
+    - DONE - DONE - DONE - TmxMapLoader
 
-LUGHSHARP/SOURCE/MAPS/TILED/OBJECTS
+LUGHSHARP/SOURCE/MAPS/TILED/OBJECTS - DONE
 -----------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - ImageDetails
-    - DONE - IP   - DONE - TileContext
-    - DONE - IP   - DONE - TiledMapTileMapObject
-    - DONE - IP   - DONE - TileMetrics
+    - DONE - DONE - DONE - ImageDetails
+    - DONE - DONE - DONE - TileContext
+    - DONE - DONE - DONE - TiledMapTileMapObject
+    - DONE - DONE - DONE - TileMetrics
 
 LUGHSHARP/SOURCE/MAPS/TILED/RENDERERS
 -------------------------------------
@@ -1329,7 +1327,9 @@ LUGHSHARP/TESTS
     -      -      -      - InputTest
     -      -      -      - MockEngine
     -      -      -      - OpenGLTest
-    -      -      -      - 
+    -      -      -      - ShaderLoaderTest
+    -      -      -      - TiledMapPackerTest
+    -      -      -      - TiledMapPackerTestRenderer
     -      -      -      - 
     -      -      -      - 
     -      -      -      - 

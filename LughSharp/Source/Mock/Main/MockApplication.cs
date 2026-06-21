@@ -106,6 +106,11 @@ public class MockApplication : IApplication
     {
         throw new NotImplementedException();
     }
+
+    public void Dispose()
+    {
+        throw new NotImplementedException();
+    }
 }
 
 // ============================================================================

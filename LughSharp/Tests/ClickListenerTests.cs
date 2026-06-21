@@ -22,16 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Scene2D;
 using LughSharp.Source.Scene2D.Listeners;
 
-using NSubstitute;
-
-using NUnit.Framework;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [PublicAPI]
 [TestFixture]

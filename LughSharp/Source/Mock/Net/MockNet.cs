@@ -93,6 +93,12 @@ public class MockNet : INet
     {
         throw new NotImplementedException();
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize( this );
+    }
 }
 
 // ============================================================================

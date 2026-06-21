@@ -421,6 +421,15 @@ public abstract class GraphicsDevice : IGraphicsDevice
     public abstract void SetSystemCursor( ICursor.SystemCursor systemCursor );
 
     // ========================================================================
+    // ========================================================================
+
+    public virtual void Dispose()
+    {
+        GC.SuppressFinalize( this );
+    }
+
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// The supported underlying graphics backends.

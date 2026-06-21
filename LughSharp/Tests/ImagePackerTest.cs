@@ -22,18 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.Versioning;
-
-using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.Packing.ImagePacker;
 using LughSharp.Source.IO;
 
-using NUnit.Framework;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 [PublicAPI]
@@ -55,7 +50,7 @@ public class ImagePackerTest
                                .Select( _ => ImagePacker.CreateImage( rand.Next( 10, 61 ),
                                                                        rand.Next( 10, 61 ),
                                                                        PixelFormat.Format32bppArgb,
-                                                                       Color.FromArgb( 255,
+                                                                       System.Drawing.Color.FromArgb( 255,
                                                                                        ( byte ) rand.Next( 256 ),
                                                                                        ( byte ) rand.Next( 256 ),
                                                                                        ( byte ) rand.Next( 256 ) ) ) )

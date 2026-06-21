@@ -44,7 +44,7 @@ namespace LughSharp.Source.Input;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IInput
+public interface IInput : IDisposable
 {
     /// <summary>
     /// The currently set <see cref="IInputProcessor"/>.

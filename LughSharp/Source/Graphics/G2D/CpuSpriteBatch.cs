@@ -222,22 +222,22 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture,
-                          region.X,
-                          region.Y,
-                          region.Width,
-                          region.Height,
-                          origin.X,
-                          origin.Y,
-                          scale.X,
-                          scale.Y,
-                          rotation,
-                          src.X,
-                          src.Y,
-                          src.Width,
-                          src.Height,
-                          flipX,
-                          flipY );
+            DrawAdjusted( texture,       // The texture
+                          region.X,      // X coordinate in pixels
+                          region.Y,      // Y coordinate in pixels
+                          region.Width,  // X Origin in pixels
+                          region.Height, // Y Origin in pixels
+                          origin.X,      // Width of Texture in pixels
+                          origin.Y,      // Height of Texture in pixels
+                          scale.X,       // Scale X
+                          scale.Y,       // Scale Y
+                          rotation,      // Rotation in radians
+                          src.X,         // Source X coordinate in pixels
+                          src.Y,         // Source Y coordinate in pixels
+                          src.Width,     // Source Width in pixels
+                          src.Height,    // Source Height in pixels
+                          flipX,         // Flip X
+                          flipY );       // Flip Y
         }
     }
 
@@ -263,22 +263,22 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture,
-                          region.X,
-                          region.Y,
-                          region.Width,
-                          region.Height,
-                          0,
-                          0,
-                          1,
-                          1,
-                          0,
-                          src.X,
-                          src.Y,
-                          src.Width,
-                          src.Height,
-                          flipX,
-                          flipY );
+            DrawAdjusted( texture,       // The texture
+                          region.X,      // X coordinate in pixels
+                          region.Y,      // Y coordinate in pixels
+                          region.Width,  // X Origin in pixels
+                          region.Height, // Y Origin in pixels
+                          0,             // Width of Texture in pixels
+                          0,             // Height of Texture in pixels
+                          1,             // Scale X
+                          1,             // Scale Y
+                          0,             // Rotation in radians
+                          src.X,         // Source X coordinate in pixels
+                          src.Y,         // Source Y coordinate in pixels
+                          src.Width,     // Source Width in pixels
+                          src.Height,    // Source Height in pixels
+                          flipX,         // Flip X
+                          flipY );       // Flip Y
         }
     }
 
@@ -299,22 +299,22 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture,
-                          x,
-                          y,
-                          src.Width,
-                          src.Height,
-                          0,
-                          0,
-                          1,
-                          1,
-                          0,
-                          src.X,
-                          src.Y,
-                          src.Width,
-                          src.Height,
-                          false,
-                          false );
+            DrawAdjusted( texture,    // The texture
+                          x,          // X coordinate in pixels
+                          y,          // Y coordinate in pixels
+                          src.Width,  // X Origin in pixels
+                          src.Height, // Y Origin in pixels
+                          0,          // Width of Texture in pixels
+                          0,          // Height of Texture in pixels
+                          1,          // Scale X
+                          1,          // Scale Y
+                          0,          // Rotation in radians
+                          src.X,      // Source X coordinate in pixels
+                          src.Y,      // Source Y coordinate in pixels
+                          src.Width,  // Source Width in pixels
+                          src.Height, // Source Height in pixels
+                          false,      // Flip X
+                          false );    // Flip Y
         }
     }
 
@@ -342,22 +342,22 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjustedUV( texture,
-                            region.X,
-                            region.Y,
-                            region.Width,
-                            region.Height,
-                            0,
-                            0,
-                            1,
-                            1,
-                            0,
-                            u,
-                            v,
-                            u2,
-                            v2,
-                            false,
-                            false );
+            DrawAdjustedUV( texture,       // The texture
+                            region.X,      // X coordinate in pixels
+                            region.Y,      // Y coordinate in pixels
+                            region.Width,  // X Origin in pixels
+                            region.Height, // Y Origin in pixels
+                            0,             // Width of Texture in pixels
+                            0,             // Height of Texture in pixels
+                            1,             // Scale X
+                            1,             // Scale Y
+                            0,             // Rotation in radians
+                            u,             // Source X coordinate in pixels
+                            v,             // Source Y coordinate in pixels
+                            u2,            // Source Width in pixels
+                            v2,            // Source Height in pixels
+                            false,         // Flip X
+                            false );       // Flip Y
         }
     }
 
@@ -377,22 +377,22 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture,
-                          x,
-                          y,
-                          0,
-                          0,
-                          texture.Width,
-                          texture.Height,
-                          1,
-                          1,
-                          0,
-                          0,
-                          1,
-                          1,
-                          0,
-                          false,
-                          false );
+            DrawAdjusted( texture,        // The texture
+                          x,              // X coordinate in pixels
+                          y,              // Y coordinate in pixels
+                          0,              // X Origin in pixels
+                          0,              // Y Origin in pixels
+                          texture.Width,  // Width of Texture in pixels
+                          texture.Height, // Height of Texture in pixels
+                          1,              // Scale X
+                          1,              // Scale Y
+                          0,              // Rotation in radians
+                          0,              // Source X coordinate in pixels
+                          1,              // Source Y coordinate in pixels
+                          1,              // Source Width in pixels
+                          0,              // Source Height in pixels
+                          false,          // Flip X
+                          false );        // Flip Y
         }
     }
 
@@ -415,22 +415,22 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( texture,
-                          posX,
-                          posY,
-                          0,
-                          0,
-                          width,
-                          height,
-                          1,
-                          1,
-                          0,
-                          0,
-                          1,
-                          1,
-                          0,
-                          false,
-                          false );
+            DrawAdjusted( texture, // The texture
+                          posX,    // X coordinate in pixels
+                          posY,    // Y coordinate in pixels
+                          0,       // X Origin in pixels
+                          0,       // Y Origin in pixels
+                          width,   // Width of Texture in pixels
+                          height,  // Height of Texture in pixels
+                          1,       // Scale X
+                          1,       // Scale Y
+                          0,       // Rotation in radians
+                          0,       // Source X coordinate in pixels
+                          1,       // Source Y coordinate in pixels
+                          1,       // Source Width in pixels
+                          0,       // Source Height in pixels
+                          false,   // Flip X
+                          false ); // Flip Y
         }
     }
 
@@ -450,16 +450,16 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( region,
-                          x,
-                          y,
-                          0,
-                          0,
-                          region.GetRegionWidth(),
-                          region.GetRegionHeight(),
-                          1,
-                          1,
-                          0 );
+            DrawAdjusted( region,                   // The texture
+                          x,                        // X coordinate in pixels
+                          y,                        // Y coordinate in pixels
+                          0,                        // X Origin in pixels
+                          0,                        // Y Origin in pixels
+                          region.GetRegionWidth(),  // Width of Texture in pixels
+                          region.GetRegionHeight(), // Height of Texture in pixels
+                          1,                        // Scale X
+                          1,                        // Scale Y
+                          0 );                      // Rotation in radians
         }
     }
 
@@ -485,7 +485,16 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( region, x, y, 0, 0, width, height, 1, 1, 0 );
+            DrawAdjusted( region, // The texture region to be drawn
+                          x,      // The X-coordinate in pixels
+                          y,      // The Y-coordinate in pixels
+                          0,      // The X origin of the texture region
+                          0,      // The Y origin of the texture region
+                          width,  // The width of the texture region to be drawn
+                          height, // The height of the texture region to be drawn
+                          1,      // The scale X
+                          1,      // The scale Y
+                          0 );    // The rotation in radians
         }
     }
 
@@ -512,27 +521,29 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( textureRegion,
-                          region.X,
-                          region.Y,
-                          origin.X,
-                          origin.Y,
-                          region.Width,
-                          region.Height,
-                          scale.X,
-                          scale.Y,
-                          rotation );
+            DrawAdjusted( textureRegion, // The texture region to be drawn  
+                          region.X,      // The X-coordinate in pixels
+                          region.Y,      // The Y-coordinate in pixels
+                          origin.X,      // The X origin of the texture region
+                          origin.Y,      // The Y origin of the texture region
+                          region.Width,  // The width of the texture region to be drawn
+                          region.Height, // The height of the texture region to be drawn
+                          scale.X,       // The scale X
+                          scale.Y,       // The scale Y
+                          rotation );    // The rotation in radians
         }
     }
 
     /// <summary>
+    /// Draws a texture region onto the sprite batch with specified parameters for position,
+    /// scale, rotation, and orientation.
     /// </summary>
-    /// <param name="textureRegion"></param>
-    /// <param name="region"></param>
-    /// <param name="origin"></param>
-    /// <param name="scale"></param>
-    /// <param name="rotation"></param>
-    /// <param name="clockwise"></param>
+    /// <param name="textureRegion">The texture region to be drawn.</param>
+    /// <param name="region">The rectangle defining where to draw the texture within the batch.</param>
+    /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
+    /// <param name="scale">The scale factor to apply to the texture region.</param>
+    /// <param name="rotation">The angle of rotation, in degrees.</param>
+    /// <param name="clockwise">Indicates whether the rotation is applied in a clockwise direction.</param>
     public override void Draw( TextureRegion? textureRegion,
                                GRect region,
                                Point2D origin,
@@ -548,21 +559,27 @@ public class CpuSpriteBatch : SpriteBatch
         }
         else
         {
-            DrawAdjusted( textureRegion,
-                          region.X,
-                          region.Y,
-                          origin.X,
-                          origin.Y,
-                          region.Width,
-                          region.Height,
-                          scale.X,
-                          scale.Y,
-                          rotation,
-                          clockwise );
+            DrawAdjusted( textureRegion, // The texture region to be drawn
+                          region.X,      // The X-coordinate in pixels
+                          region.Y,      // The Y-coordinate in pixels
+                          origin.X,      // The X origin of the texture region
+                          origin.Y,      // The Y origin of the texture region
+                          region.Width,  // The width of the texture region to be drawn
+                          region.Height, // The height of the texture region to be drawn
+                          scale.X,       // The scale X
+                          scale.Y,       // The scale Y
+                          rotation,      // The rotation in radians
+                          clockwise );   // Whether rotation is clockwise or not
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Renders a set of sprite vertices using the specified texture.
+    /// </summary>
+    /// <param name="texture">The texture to be used for rendering. Can be null if not needed.</param>
+    /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
+    /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
+    /// <param name="count">The number of vertices to process starting from the specified offset.</param>
     public override void Draw( Texture2D? texture, float[] spriteVertices, int offset, int count )
     {
         Guard.Against.Null( texture );
@@ -603,6 +620,18 @@ public class CpuSpriteBatch : SpriteBatch
         }
     }
 
+    /// <summary>
+    /// </summary>
+    /// <param name="region">The texture region to be drawn.</param>
+    /// <param name="x">The x-coordinate in pixels where the texture will be drawn.</param>
+    /// <param name="y">The y-coordinate in pixels where the texture will be drawn.</param>
+    /// <param name="originX">The x-origin in pixels for scaling and rotation transformations.</param>
+    /// <param name="originY">The y-origin in pixels for scaling and rotation transformations.</param>
+    /// <param name="width">The width of the texture region in pixels.</param>
+    /// <param name="height">The height of the texture region in pixels.</param>
+    /// <param name="scaleX">The scaling factor along the x-axis.</param>
+    /// <param name="scaleY">The scaling factor along the y-axis.</param>
+    /// <param name="rotation">The rotation angle in radians.</param>
     private void DrawAdjusted( TextureRegion? region,
                                float x,
                                float y,
@@ -635,6 +664,25 @@ public class CpuSpriteBatch : SpriteBatch
                         false );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="originX"></param>
+    /// <param name="originY"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="scaleX"></param>
+    /// <param name="scaleY"></param>
+    /// <param name="rotation"></param>
+    /// <param name="srcX"></param>
+    /// <param name="srcY"></param>
+    /// <param name="srcWidth"></param>
+    /// <param name="srcHeight"></param>
+    /// <param name="flipX"></param>
+    /// <param name="flipY"></param>
     private void DrawAdjusted( Texture2D? texture,
                                float x,
                                float y,
@@ -680,6 +728,26 @@ public class CpuSpriteBatch : SpriteBatch
                         flipY );
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"></param>
+    /// <param name="y"></param>
+    /// <param name="originX"></param>
+    /// <param name="originY"></param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="scaleX"></param>
+    /// <param name="scaleY"></param>
+    /// <param name="rotation"></param>
+    /// <param name="u"></param>
+    /// <param name="v"></param>
+    /// <param name="u2"></param>
+    /// <param name="v2"></param>
+    /// <param name="flipX"></param>
+    /// <param name="flipY"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     private void DrawAdjustedUV( Texture2D? texture,
                                  float x,
                                  float y,
@@ -1138,4 +1206,3 @@ public class CpuSpriteBatch : SpriteBatch
 
 // ============================================================================
 // ============================================================================
-

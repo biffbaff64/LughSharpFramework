@@ -176,6 +176,12 @@ public class MockFiles : IFiles
     {
         throw new NotImplementedException();
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize( this );
+    }
 }
 
 // ============================================================================

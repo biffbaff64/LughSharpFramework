@@ -40,7 +40,7 @@ namespace LughSharp.Source.Graphics;
 /// </para>
 /// </summary>
 [PublicAPI]
-public interface IGraphicsDevice
+public interface IGraphicsDevice : IDisposable
 {
     GraphicsDevice.BackendData BackendInfo  { get; set; }
 

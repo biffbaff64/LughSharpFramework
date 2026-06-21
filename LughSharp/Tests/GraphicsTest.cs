@@ -23,12 +23,9 @@
 // /////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source;
-using LughSharp.Source.Assets;
 using LughSharp.Source.Graphics.Images;
 
-using NUnit.Framework;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 public class GraphicsTest

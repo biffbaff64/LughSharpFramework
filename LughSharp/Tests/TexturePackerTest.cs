@@ -24,14 +24,10 @@
 
 using System.Runtime.Versioning;
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Packing.TexturePacker;
 using LughSharp.Source.IO;
 
-using NUnit.Framework;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 [PublicAPI]

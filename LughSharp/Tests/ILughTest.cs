@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin
+//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,19 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Graphics.Packing.TiledMapPacker;
+using LughSharp.Source.Graphics.G2D;
 
-/// <summary>
-/// Renders and, optionally, deletes maps processed by TiledMapPackerTest.
-/// Run TiledMapPackerTest before running this.
-/// </summary>
+namespace LughSharp.Tests;
+
 [PublicAPI]
-public class TiledMapPackerTestRenderer
+public interface ILughTest
 {
+    void Setup();
+    void Run();
+    void Update();
+    void Render( SpriteBatch spriteBatch );
+    void TearDown();
 }
 
 // ============================================================================
 // ============================================================================
-

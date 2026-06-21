@@ -22,19 +22,13 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Images.TextureData;
-using LughSharp.Source.Maths;
-using LughSharp.Source.Utils.Exceptions;
-using LughSharp.Source.Utils.Logging;
-
-using NUnit.Framework;
 
 using Color = LughSharp.Source.Graphics.Color;
 
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 public class SpriteBatchTests

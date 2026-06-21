@@ -22,17 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
-
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Scene2D.UI;
-using LughSharp.Source.Utils.Logging;
-
-using NUnit.Framework;
 
 using Color = LughSharp.Source.Graphics.Color;
 
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 [PublicAPI]

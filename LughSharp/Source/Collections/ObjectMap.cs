@@ -131,7 +131,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     /// </summary>
     /// <param name="initialCapacity">The initial capacity of the map. Defaults to 51.</param>
     /// <param name="loadFactor">
-    /// The load factor of the map. Must be greater than 0 and less than 1. Defaults to 0.8.
+    /// The load factor of the map. Must be greater than 0 and less than Defaults to 0.8.
     /// </param>
     /// <param name="debug"></param>
     /// <exception cref="ArgumentException">
@@ -195,8 +195,6 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         Size = map.Size;
     }
 
-    // ========================================================================
-
     /// <summary>
     /// Returns an index between 0 and <see cref="Mask" /> for the specified <c>item</c>.
     /// Uses Fibonacci hashing to distribute hash codes, then selects the appropriate bits.
@@ -258,35 +256,42 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the value associated with the specified key in the <see cref="ObjectMap{TK, TV}" />.
+    /// If the key is not found, a <see cref="KeyNotFoundException" /> is thrown.
     /// </summary>
-    /// <param name="key"></param>
-    /// <returns></returns>
-    /// <exception cref="KeyNotFoundException"></exception>
+    /// <param name="key">The key whose associated value is to be located.</param>
+    /// <returns>The value associated with the specified key.</returns>
+    /// <exception cref="KeyNotFoundException">
+    /// Thrown when the specified key is not found in the <see cref="ObjectMap{TK, TV}" />.
+    /// </exception>
     public TV? LocateValue( TK key )
     {
-        // 1. Use the existing helper to find the index of the key.
+        // Use the existing helper to find the index of the key.
         int index = LocateKey( key );
 
-        // 2. If the key is found (index is not -1), return the value from the parallel array.
+        // If the key is found (index is not -1), return the value from the parallel array.
         return index >= 0
-            ?
+                   ?
 
-            // ValueTable[index] contains the value associated with the key at that index.
-            ValueTable[ index ]
-            : throw
+                   // ValueTable[index] contains the value associated with the key at that index.
+                   ValueTable[ index ]
+                   : throw
 
-                // 3. If the key is not found, throw the standard Dictionary exception.
-                // This is the common dictionary behavior when a lookup fails.
-                new KeyNotFoundException( $"The key '{key}' was not found in the ObjectMap." );
+                         // If the key is not found, throw the standard Dictionary exception.
+                         // This is the common dictionary behavior when a lookup fails.
+                         new KeyNotFoundException( $"The key '{key}' was not found in the ObjectMap." );
     }
 
     /// <summary>
-    /// 
+    /// Attempts to add the specified key and value to the map.
+    /// If the key already exists in the map, the method does nothing and returns false.
     /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="key">The key to add to the map. Must not be null.</param>
+    /// <param name="value">The value associated with the key to be added. Can be null.</param>
+    /// <returns>
+    /// Returns true if the key and value were successfully added to the map.
+    /// Returns false if the key already exists in the map.
+    /// </returns>
     public bool TryAdd( TK key, TV? value )
     {
         if ( ContainsKey( key ) )
@@ -321,9 +326,9 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     /// Replaces the value associated with the specified key, and returns the old value.
     /// If the key is not found, the value is added at the end of the map and null is returned.
     /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="key">The key whose value is to be replaced.</param>
+    /// <param name="value">The new value to associate with the key.</param>
+    /// <returns>The old value associated with the key, or null if the key was not found.</returns>
     public virtual TV? Put( TK key, TV? value )
     {
         int i = LocateKey( key );
@@ -426,11 +431,17 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     }
 
     /// <summary>
-    /// 
+    /// Attempts to retrieve the value associated with the specified key in the map.
     /// </summary>
-    /// <param name="key"></param>
-    /// <param name="value"></param>
-    /// <returns></returns>
+    /// <param name="key">The key whose associated value is to be retrieved.</param>
+    /// <param name="value">
+    /// When this method returns, contains the value associated with the specified key,
+    /// if the key is found; otherwise, the default value for the type of the value
+    /// parameter. This parameter is passed uninitialized.
+    /// </param>
+    /// <returns>
+    /// True if the map contains the specified key; otherwise, false.
+    /// </returns>
     public bool TryGetValue( TK key, [MaybeNullWhen( false )] out TV value )
     {
         int index = LocateKey( key );
@@ -448,11 +459,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
 
         // Key Not Found:
 
-        // a. Assign the default value for TV (e.g. null, 0) to the out parameter.
+        // Assign the default value for TV (e.g. null, 0) to the out parameter.
         // This is required for all out parameters, regardless of success.
         value = default( TV );
 
-        // b. Return false to indicate failure.
+        // Return false to indicate failure.
         return false;
     }
 
@@ -467,23 +478,23 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     {
         get
         {
-            // 1. Search for the key's index
+            // Search for the key's index
             int index = LocateKey( key );
 
-            // 2. If the key is found, return the corresponding value
+            // If the key is found, return the corresponding value
             return index >= 0
-                ?
+                       ?
 
-                // Use ValueTable with the found index
-                ValueTable[ index ]
-                : throw
+                       // Use ValueTable with the found index
+                       ValueTable[ index ]
+                       : throw
 
-                    // 3. If the key is NOT found, throw the standard Dictionary exception
-                    new KeyNotFoundException();
+                             // If the key is NOT found, throw the standard Dictionary exception
+                             new KeyNotFoundException();
         }
         set
         {
-            // 1. Search for the key's index
+            // Search for the key's index
             int index = LocateKey( key );
 
             if ( index >= 0 )
@@ -565,7 +576,8 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     }
 
     /// <summary>
-    /// Clears the map.
+    /// Removes all keys and values from the map, resetting it to its initial state.
+    /// This implementation clears the key and value tables and sets the size to zero.
     /// </summary>
     public virtual void Clear()
     {
@@ -771,7 +783,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         Shift     = int.LeadingZeroCount( Mask );
 
         // Store the old tables
-        TK[] oldKeyTable   = KeyTable;
+        TK[]  oldKeyTable   = KeyTable;
         TV?[] oldValueTable = ValueTable;
 
         // Initialize the new tables with the new size
@@ -913,7 +925,6 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     /// constructor for nested or multithreaded iteration.
     /// </para>
     /// </summary>
-    /// <returns></returns>
     public virtual ValuesIterator GetValues()
     {
         if ( Collections.AllocateIterators )
@@ -954,7 +965,6 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     /// constructor for nested or multithreaded iteration.
     /// </para>
     /// </summary>
-    /// <returns></returns>
     public virtual KeysIterator GetKeys()
     {
         if ( Collections.AllocateIterators )
@@ -1010,11 +1020,23 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         return ToString( ", ", true );
     }
 
+    /// <summary>
+    /// Returns a string representation of the map, using the specified separator for each entry.
+    /// </summary>
+    /// <param name="separator"> The separator to use between each entry. </param>
+    /// <returns> The string representation of the map. </returns>
     public virtual string ToString( string separator )
     {
         return ToString( separator, false );
     }
 
+    /// <summary>
+    /// Returns a string representation of the map, using the specified separator for each entry,
+    /// and optionally including the braces in the output.
+    /// </summary>
+    /// <param name="separator"></param>
+    /// <param name="braces"></param>
+    /// <returns></returns>
     protected virtual string ToString( string separator, bool braces )
     {
         if ( Size == 0 )
@@ -1091,18 +1113,39 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
     /// </summary>
     private class ObjectMapEnumerator : IEnumerator< KeyValuePair< TK, TV > >
     {
-        private readonly ObjectMap< TK, TV >    _map;
-        private          int                    _currentIndex = -1;
-        private          int                    _nextIndex    = -1;
-        private          bool                   _hasNext      = true;
-        private          KeyValuePair< TK, TV > _current;
+        private ObjectMap< TK, TV >    _map;
+        private int                    _currentIndex = -1;
+        private int                    _nextIndex    = -1;
+        private bool                   _hasNext      = true;
+        private KeyValuePair< TK, TV > _current;
 
+        /// <summary>
+        /// Creates a new ObjectMapEnumerator object, for the provided ObjectMap.
+        /// </summary>
         public ObjectMapEnumerator( ObjectMap< TK, TV > map )
         {
             _map = map;
             Reset();
         }
 
+        /// <summary>
+        /// Resets the enumerator to the beginning of the collection.
+        /// </summary>
+        public void Reset()
+        {
+            _currentIndex = -1;
+            _nextIndex    = -1;
+
+            FindNextIndex();
+        }
+
+        /// <summary>
+        /// Advances the enumerator to the next element of the collection.
+        /// </summary>
+        /// <returns>
+        /// True if the enumerator was successfully advanced to the next element; false
+        /// if the enumerator has passed the end of the collection.
+        /// </returns>
         public bool MoveNext()
         {
             if ( !_hasNext )
@@ -1124,14 +1167,11 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
             return false;
         }
 
-        public void Reset()
-        {
-            _currentIndex = -1;
-            _nextIndex    = -1;
-
-            FindNextIndex();
-        }
-
+        /// <summary>
+        /// Searches for the next non-null key in the key table of the associated map
+        /// and updates the `_nextIndex` field to point to its position. Adjusts the
+        /// `_hasNext` flag to indicate if there are any remaining elements to iterate through.
+        /// </summary>
         private void FindNextIndex()
         {
             for ( int n = _map.KeyTable.Length; ++_nextIndex < n; )
@@ -1147,13 +1187,20 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
             _hasNext = false;
         }
 
+        /// <summary>
+        /// Retrieves the current element in the enumeration.
+        /// </summary>
         public KeyValuePair< TK, TV > Current => _current;
 
+        /// <summary>
+        /// Gets the element in the collection at the current position of the enumerator.
+        /// </summary>
         object IEnumerator.Current => Current;
 
         public void Dispose()
         {
-            // Nothing to dispose.
+            // Nothing to dispose, but this method is required by the IEnumerator interface.
+            // '_map' and '_current' will be released when the enumerator is no longer in use.
         }
     }
 
@@ -1213,10 +1260,10 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         protected MapIterator( ObjectMap< TK, TV > map )
         {
             Map = map;
-            SafeReset();
+            ResetUnchecked();
         }
 
-        private void SafeReset()
+        private void ResetUnchecked()
         {
             Reset();
         }

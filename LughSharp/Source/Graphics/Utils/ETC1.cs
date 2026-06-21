@@ -22,18 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.IO.Compression;
-
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL;
-
-using Exception = System.Exception;
 
 namespace LughSharp.Source.Graphics.Utils;
 
 /// <summary>
-/// Class for encoding and decoding ETC1 compressed images.
-/// Also provides methods to add a PKM header.
+/// Class for encoding and decoding ETC1 ( Ericsson Texture Compression ) compressed
+/// images. Also provides methods to add a PKM header. ETC1 has no alpha channel, and
+/// is supported on most mobile devices.
 /// </summary>
 [PublicAPI]
 public class ETC1
@@ -57,8 +54,6 @@ public class ETC1
         int            pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
         Buffer< byte > compressedData = EncodeImage( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
 
-//        BufferUtils.NewUnsafeByteBuffer( compressedData );
-
         return new ETC1Data( pixmap.Width, pixmap.Height, compressedData, 0, this );
     }
 
@@ -73,8 +68,6 @@ public class ETC1
     {
         int            pixelSize      = GetPixelSize( pixmap.GetColorFormat() );
         Buffer< byte > compressedData = EncodeImagePkm( pixmap.ByteBuffer, 0, pixmap.Width, pixmap.Height, pixelSize );
-
-//        BufferUtils.NewUnsafeByteBuffer( compressedData );
 
         return new ETC1Data( pixmap.Width, pixmap.Height, compressedData, 16, this );
     }
@@ -280,176 +273,7 @@ public class ETC1
         throw new NotImplementedException();
     }
 
-    // ========================================================================
-    // ========================================================================
-
-    /// <summary>
-    /// Class for storing ETC1 compressed image data.
-    /// </summary>
-    [PublicAPI]
-    public class ETC1Data : IDisposable
-    {
-        private readonly ETC1 _etc1;
-
-        public ETC1Data( int width, int height, Buffer< byte > compressedData, int dataOffset, ETC1 etc1 )
-        {
-            _etc1          = etc1;
-            Width          = width;
-            Height         = height;
-            CompressedData = compressedData;
-            DataOffset     = dataOffset;
-
-            CheckNpot();
-        }
-
-        public ETC1Data( FileInfo pkmFile, ETC1 etc )
-        {
-            var           buffer = new byte[ 1024 * 10 ];
-            BinaryReader? input  = null;
-
-            _etc1 = etc;
-
-            try
-            {
-                var zipStream      = new GZipStream( pkmFile.OpenRead(), CompressionMode.Decompress );
-                var bufferedStream = new BufferedStream( zipStream );
-
-                input = new BinaryReader( bufferedStream );
-
-                int fileSize = input.ReadInt32();
-
-                CompressedData = new Buffer< byte >( fileSize );
-
-                int readBytes;
-
-                while ( ( readBytes = input.Read( buffer ) ) != -1 )
-                {
-                    CompressedData.Put( buffer, 0, 0, readBytes );
-                }
-
-                CompressedData.Position = 0;
-                CompressedData.Limit    = CompressedData.Capacity;
-            }
-            catch ( Exception e )
-            {
-                throw new RuntimeException( "Couldn't load pkm file '" + pkmFile + "'", e );
-            }
-            finally
-            {
-                input?.Close();
-            }
-
-            Width      = _etc1.GetWidthPkm( CompressedData, 0 );
-            Height     = _etc1.GetHeightPkm( CompressedData, 0 );
-            DataOffset = PkmHeaderSize;
-
-            CompressedData.Position = DataOffset;
-            CheckNpot();
-        }
-
-        /// <summary>
-        /// the width in pixels.
-        /// </summary>
-        public int Width { get; set; }
-
-        /// <summary>
-        /// the height in pixels.
-        /// </summary>
-        public int Height { get; set; }
-
-        /// <summary>
-        /// the optional PKM header and compressed image data.
-        /// </summary>
-        public Buffer< byte > CompressedData { get; set; }
-
-        /// <summary>
-        /// the offset in bytes to the actual compressed data.
-        /// Might be 16 if this contains a PKM header, 0 otherwise.
-        /// </summary>
-        public int DataOffset { get; set; }
-
-        /// <summary>
-        /// Returns whether this ETC1Data has a PKM header.
-        /// </summary>
-        public bool HasPkmHeader()
-        {
-            return DataOffset == 16;
-        }
-
-        private void CheckNpot()
-        {
-            if ( !MathUtils.IsPowerOfTwo( Width ) || !MathUtils.IsPowerOfTwo( Height ) )
-            {
-                Console.WriteLine( "ETC1Data warning: non-power-of-two ETC1textures may crash the driver of PowerVR GPUs" );
-            }
-        }
-
-        /// <summary>
-        /// Writes the ETC1Data with a PKM header to the given file.
-        /// </summary>
-        /// <param name="file"> the file. </param>
-        public void Write( FileInfo file )
-        {
-//            DataOutputStream? write        = null;
-//            var               buffer       = new sbyte[ 10 * 1024 ];
-//            var               writtenBytes = 0;
-
-//            CompressedData.Position = 0;
-//            CompressedData.Limit    = CompressedData.Capacity;
-
-//            try
-//            {
-//                write = new DataOutputStream( new GZIPOutputStream( file.Write( false ) ) );
-//                write.WriteInt( CompressedData.Capacity );
-
-//                while ( writtenBytes != CompressedData.Capacity )
-//                {
-//                    var bytesToWrite = Math.Min( CompressedData.Remaining(), buffer.Length );
-
-//                    CompressedData.Get( buffer, 0, bytesToWrite );
-
-//                    write.Write( buffer, 0, bytesToWrite );
-//                    writtenBytes += bytesToWrite;
-//                }
-//            }
-//            catch ( System.Exception e )
-//            {
-//                throw new RuntimeException( "Couldn't write PKM file to '" + file + "'", e );
-//            }
-//            finally
-//            {
-//                StreamUtils.CloseQuietly( write );
-//            }
-
-//            CompressedData.Position = DataOffset;
-//            CompressedData.Limit    = CompressedData.Capacity;
-        }
-
-        /// <inheritdoc />
-        public override string ToString()
-        {
-            if ( HasPkmHeader() )
-            {
-                return $"{( _etc1.IsValidPkm( CompressedData, 0 ) ? "valid" : "invalid" )} "
-                     + $"pkm [{_etc1.GetWidthPkm( CompressedData, 0 )}x{_etc1.GetHeightPkm( CompressedData, 0 )}], "
-                     + $"compressed: {CompressedData.Capacity - PkmHeaderSize}";
-            }
-
-            return $"raw [{Width}x{Height}], compressed: {CompressedData.Capacity - PkmHeaderSize}";
-        }
-
-        /// <summary>
-        /// Releases the native resources of the ETC1Data instance.
-        /// </summary>
-        public void Dispose()
-        {
-            CompressedData.Dispose();
-
-            GC.SuppressFinalize( this );
-        }
-    }
-
-//    {
+    //    {
 //            int compressedSize = etc1_get_encoded_data_size(width, height);
 //            etc1_byte* compressed = (etc1_byte*)malloc(compressedSize + ETC_PKM_HEADER_SIZE);
 //            etc1_pkm_format_header(compressed, width, height);

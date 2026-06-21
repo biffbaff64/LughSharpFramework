@@ -54,17 +54,11 @@ public class BufferUtils
             throw new ArgumentException( "Source and destination buffers cannot be the same instance." );
         }
 
-        // Copy up to the smaller remaining size
-        int bytesToCopy = Math.Min( source.Remaining(), destination.Remaining() );
-
-        if ( bytesToCopy < 0 )
-        {
-            bytesToCopy = 0; // Ensure non-negative if somehow Remaining is negative
-        }
+        var bytesToCopy = Math.Max( 0, Math.Min( source.Remaining(), destination.Remaining() ) );
 
         for ( var i = 0; i < bytesToCopy; i++ )
         {
-            destination.PutByte( source.GetByte() ); // Sequential byte-by-byte copy - optimize for bulk copy if needed.
+            destination.PutByte( source.GetByte() );
         }
     }
 
@@ -89,14 +83,10 @@ public class BufferUtils
         {
             if ( sourceOffset == destinationOffset )
             {
-                return; // No copy needed if same buffer and offsets are same
+                return;
             }
 
-            // Handle overlapping copy within the same buffer carefully if needed (more complex)
-            // For now, throw exception if source and destination are same instance with different offsets:
-            throw new ArgumentException( "In-place copy within the same buffer with different offsets is " +
-                                         "not yet supported. Use different buffer instances or implement " +
-                                         "in-place copy logic." );
+            throw new ArgumentException( "In-place copy within the same buffer with different offsets is not supported." );
         }
 
         if ( ( sourceOffset < 0 ) || ( destinationOffset < 0 ) || ( length < 0 ) )
@@ -113,7 +103,6 @@ public class BufferUtils
 
         for ( var i = 0; i < length; i++ )
         {
-            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
             destination.PutByte( destinationOffset + i, source.GetByte( sourceOffset + i ) );
         }
     }
@@ -132,19 +121,10 @@ public class BufferUtils
     /// </exception>
     public static void Copy( byte[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
-        Guard.Against.Null( source );
-        Guard.Against.Null( destination );
-
-        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
-        {
-            throw new RuntimeException( "Offset and length must be non-negative." );
-        }
-
-        destination.EnsureCapacity( length * sizeof( byte ) );
+        ValidateArrayCopyArgs( source, destination, sourceOffset, length, sizeof( byte ) );
 
         for ( var i = 0; i < length; i++ )
         {
-            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
             destination.PutByte( i, source[ sourceOffset + i ] );
         }
     }
@@ -167,19 +147,10 @@ public class BufferUtils
     /// </exception>
     public static void Copy( short[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
-        Guard.Against.Null( source );
-        Guard.Against.Null( destination );
-
-        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
-        {
-            throw new RuntimeException( "Offset and length must be non-negative." );
-        }
-
-        destination.EnsureCapacity( length * sizeof( short ) );
+        ValidateArrayCopyArgs( source, destination, sourceOffset, length, sizeof( short ) );
 
         for ( var i = 0; i < length; i++ )
         {
-            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
             destination.PutShort( i, source[ sourceOffset + i ] );
         }
     }
@@ -200,19 +171,10 @@ public class BufferUtils
     /// </exception>
     public static void Copy( float[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
-        Guard.Against.Null( source );
-        Guard.Against.Null( destination );
-
-        if ( ( sourceOffset < 0 ) || ( length < 0 ) )
-        {
-            throw new RuntimeException( "Offset and length must be non-negative." );
-        }
-
-        destination.EnsureCapacity( length * sizeof( float ) );
+        ValidateArrayCopyArgs( source, destination, sourceOffset, length, sizeof( float ) );
 
         for ( var i = 0; i < length; i++ )
         {
-            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
             destination.PutFloat( i, source[ sourceOffset + i ] );
         }
     }
@@ -233,6 +195,32 @@ public class BufferUtils
     /// </exception>
     public static void Copy( int[] source, int sourceOffset, int length, Buffer< byte > destination )
     {
+        ValidateArrayCopyArgs( source, destination, sourceOffset, length, sizeof( int ) );
+
+        for ( var i = 0; i < length; i++ )
+        {
+            destination.PutInt( i, source[ sourceOffset + i ] );
+        }
+    }
+
+    /// <summary>
+    /// Validates the arguments for an array copy operation to ensure they meet the
+    /// necessary conditions.
+    /// </summary>
+    /// <param name="source">The source array from which data will be copied.</param>
+    /// <param name="destination">The destination buffer to which data will be copied.</param>
+    /// <param name="sourceOffset">The starting index in the source array.</param>
+    /// <param name="length">The number of elements to copy.</param>
+    /// <param name="elementSize">The size of each element in bytes.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if <paramref name="source"/> or <paramref name="destination"/> is null.
+    /// </exception>
+    /// <exception cref="RuntimeException">
+    /// Thrown if <paramref name="sourceOffset"/> or <paramref name="length"/> is negative.
+    /// </exception>
+    private static void ValidateArrayCopyArgs( Array source, Buffer< byte > destination, int sourceOffset, int length,
+                                               int elementSize )
+    {
         Guard.Against.Null( source );
         Guard.Against.Null( destination );
 
@@ -241,13 +229,7 @@ public class BufferUtils
             throw new RuntimeException( "Offset and length must be non-negative." );
         }
 
-        destination.EnsureCapacity( length * sizeof( int ) );
-
-        for ( var i = 0; i < length; i++ )
-        {
-            // Indexed byte-by-byte copy - optimize for bulk copy if needed.
-            destination.PutInt( i, source[ sourceOffset + i ] );
-        }
+        destination.EnsureCapacity( length * elementSize );
     }
 }
 

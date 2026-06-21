@@ -136,9 +136,12 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     }
 
     /// <summary>
+    /// Puts all the key-value pairs from the specified map into this map.
     /// </summary>
-    /// <param name="map"></param>
-    /// <exception cref="NullReferenceException"></exception>
+    /// <param name="map"> The map whose key-value pairs to put into this map. </param>
+    /// <exception cref="NullReferenceException">
+    /// Thrown if the specified map is null.
+    /// </exception>
     public void PutAll( OrderedMap< TK, TV > map )
     {
         EnsureCapacity( map.Size );
@@ -259,6 +262,10 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         return _keys;
     }
 
+    /// <summary>
+    /// Returns the iterator for the entries in the map. Remove is supported.
+    /// </summary>
+    /// <returns></returns>
     public EntriesIterator Iterator()
     {
         return GetEntries();
@@ -345,7 +352,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     /// <summary>
     /// Returns an iterator for the keys in the map. Remove is supported.
     /// <para>
-    /// If <see cref="ObjectMap{T,V}.AllocateIterators"/> is false, the same iterator instance is
+    /// If <see cref="Collections.AllocateIterators"/> is false, the same iterator instance is
     /// returned each time this method is called. Use the <see cref="OrderedMapValues"/> constructor
     /// for nested or multithreaded iteration.
     /// </para>

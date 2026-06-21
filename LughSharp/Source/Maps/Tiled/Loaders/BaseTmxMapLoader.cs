@@ -98,7 +98,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// or performing other cleanup tasks after the map data and associated resources have
     /// been fully loaded.
     /// </summary>
-    public List< Action >? RunOnEndOfLoadTiled { get; set; }
+    public List< ( uint id, string propName, MapProperties? targetProps ) >? RunOnEndOfLoadTiled { get; set; }
 
     // ========================================================================
 
@@ -138,7 +138,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
         Map                 = new TiledMap();
         IdToObject          = new Dictionary< uint, MapObject >();
-        RunOnEndOfLoadTiled = new List< Action >();
+        RunOnEndOfLoadTiled = new List< (uint, string, MapProperties?) >();
 
         if ( loadParams != null )
         {
@@ -236,10 +236,11 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
         }
 
         // --------------------------------------
+        // Process any post-load actions.
 
-        foreach ( Action action in RunOnEndOfLoadTiled )
+        foreach ( var (id, propName, targetProps) in RunOnEndOfLoadTiled )
         {
-            action();
+            ExecutePropertyAssignment( id, propName, targetProps );
         }
 
         RunOnEndOfLoadTiled.Clear();
@@ -338,6 +339,22 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     // ========================================================================
     // Load map components - layers, tilesets, groups etc
 
+    /// <summary>
+    /// Loads a tiledmap layer from the provided XML element and adds it to the parent
+    /// layers of the specified map
+    /// </summary>
+    /// <param name="map">The map instance to which the layer group will be added.</param>
+    /// <param name="parentLayers">
+    /// The group of layers to which the newly loaded layers will be added.
+    /// </param>
+    /// <param name="element">The XML element representing the layer group to be processed.</param>
+    /// <param name="tmxFile">The TMX file associated with the map, if available.</param>
+    /// <param name="imageResolver">
+    /// The resolver used to handle image references within the layer group.
+    /// </param>
+    /// <exception cref="RuntimeException">
+    /// Thrown if the specified XML element is not recognized as a valid layer type.
+    /// </exception>
     protected void LoadLayer( TiledMap map, MapLayers parentLayers,
                               XmlReader.Element? element,
                               FileInfo? tmxFile,
@@ -440,11 +457,12 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     }
 
     /// <summary>
+    /// Loads a tile layer into the provided <see cref="TiledMap"/> from the specified XML element.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="parentLayers"> The actual layer group belonging to the map. </param>
-    /// <param name="element"> The xml node being processed. </param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="map">The <see cref="TiledMap"/> into which the tile layer will be loaded.</param>
+    /// <param name="parentLayers">The layer group within the map that the tile layer belongs to.</param>
+    /// <param name="element">The XML element representing the tile layer to be processed.</param>
+    /// <exception cref="ArgumentException">Thrown when the element's name is null.</exception>
     protected void LoadTileLayer( TiledMap map, MapLayers parentLayers, XmlReader.Element element )
     {
         if ( element.Name == null )
@@ -502,11 +520,17 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     }
 
     /// <summary>
+    /// Processes and loads an object group layer from the provided XML element
+    /// into the given parent map layers within the specified tiled map.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="parentLayers"> The actual layer group belonging to the map. </param>
-    /// <param name="element"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="map">The tiled map instance to which the object group layer is being added.</param>
+    /// <param name="parentLayers">
+    /// The collection of existing map layers that will include the newly loaded object group layer.
+    /// </param>
+    /// <param name="element">
+    /// The XML element representing the object group layer to be processed and added.
+    /// </param>
+    /// <exception cref="ArgumentException">Thrown when the provided XML element has a null name.</exception>
     protected void LoadObjectGroup( TiledMap map, MapLayers parentLayers, XmlReader.Element element )
     {
         if ( element.Name == null )
@@ -617,9 +641,10 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     }
 
     /// <summary>
+    /// Initializes the basic properties of a map layer using the data from the specified XML element.
     /// </summary>
-    /// <param name="layer"></param>
-    /// <param name="element"></param>
+    /// <param name="layer">The target layer to populate with information.</param>
+    /// <param name="element">The XML element containing the layer data.</param>
     protected void LoadBasicLayerInfo( MapLayer layer, XmlReader.Element element )
     {
         layer.Name      = element.GetAttribute( "name", null );
@@ -632,57 +657,65 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     }
 
     /// <summary>
+    /// Processes an individual object element from the XML node and associates it with
+    /// the specified tiled map and layer.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="layer"></param>
-    /// <param name="node"></param>
+    /// <param name="map">The tiled map to which the object belongs.</param>
+    /// <param name="layer">The map layer containing the objects.</param>
+    /// <param name="node">The XML element representing the object data.</param>
     protected void LoadObject( TiledMap map, MapLayer layer, XmlReader.Element? node )
     {
-        LoadObject( map, layer.Objects, node, MapHeightInPixels );
+        LoadObject( map, layer.Objects, node, MapTileHeight );
     }
 
     /// <summary>
+    /// Processes an individual object element from the XML node and associates it with
+    /// the specified tiled map and tile.
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="tile"></param>
-    /// <param name="node"></param>
+    /// <param name="map"> The tiled map to which the object belongs. </param>
+    /// <param name="tile"> The tile to which the object belongs. </param>
+    /// <param name="node">The XML element representing the object data.</param>
     protected void LoadObject( TiledMap? map, ITiledMapTile tile, XmlReader.Element? node )
     {
         LoadObject( map, tile.MapObjects, node, tile.TextureRegion.GetRegionHeight() );
     }
 
     /// <summary>
+    /// Processes an individual object element from the XML node and associates it with
+    /// the specified tiled map and tile. 
     /// </summary>
-    /// <param name="map"></param>
-    /// <param name="objects"></param>
-    /// <param name="element"></param>
-    /// <param name="heightInPixels"></param>
-    /// <exception cref="ArgumentException"></exception>
-    protected void LoadObject( TiledMap? map, MapObjects? objects, XmlReader.Element? element, float heightInPixels )
+    /// <param name="map"> The tiled map to which the object belongs. </param>
+    /// <param name="objects"> The map objects collection to which the object belongs. </param>
+    /// <param name="node">The XML element representing the object data.</param>
+    /// <param name="heightInPixels"> THe height in pixels of the tile to which the object belongs. </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if the provided XML element, node, or map are null. 
+    /// </exception>
+    protected void LoadObject( TiledMap? map, MapObjects? objects, XmlReader.Element? node, float heightInPixels )
     {
         Guard.Against.Null( map );
         Guard.Against.Null( objects );
-        Guard.Against.Null( element );
+        Guard.Against.Null( node );
 
-        if ( element.Name.Equals( "object" ) )
+        if ( node.Name.Equals( "object" ) )
         {
             MapObject? mapObject = null;
 
             float scaleX = ConvertObjectToTileSpace ? 1.0f / MapTileWidth : 1.0f;
             float scaleY = ConvertObjectToTileSpace ? 1.0f / MapTileHeight : 1.0f;
 
-            float x = element.GetFloatAttribute( "x" ) * scaleX;
-            float y = ( FlipY ? heightInPixels - element.GetFloatAttribute( "y" ) : element.GetFloatAttribute( "y" ) )
+            float x = node.GetFloatAttribute( "x" ) * scaleX;
+            float y = ( FlipY ? heightInPixels - node.GetFloatAttribute( "y" ) : node.GetFloatAttribute( "y" ) )
                     * scaleY;
 
-            float width  = element.GetFloatAttribute( "width" ) * scaleX;
-            float height = element.GetFloatAttribute( "height" ) * scaleY;
+            float width  = node.GetFloatAttribute( "width" ) * scaleX;
+            float height = node.GetFloatAttribute( "height" ) * scaleY;
 
-            if ( element.GetChildCount() > 0 )
+            if ( node.GetChildCount() > 0 )
             {
                 XmlReader.Element? child;
 
-                if ( ( child = element.GetChildByName( "polygon" ) ) != null )
+                if ( ( child = node.GetChildByName( "polygon" ) ) != null )
                 {
                     string[]? points   = child.GetAttribute( "points" )?.Split( " " );
                     var       vertices = new float[ points!.Length * 2 ];
@@ -698,7 +731,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     polygon.SetPosition( x, y );
                     mapObject = new PolygonMapObject( polygon );
                 }
-                else if ( ( child = element.GetChildByName( "polyline" ) ) != null )
+                else if ( ( child = node.GetChildByName( "polyline" ) ) != null )
                 {
                     string[]? points   = child.GetAttribute( "points" )?.Split( " " );
                     var       vertices = new float[ points!.Length * 2 ];
@@ -714,7 +747,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     polyline.SetPosition( x, y );
                     mapObject = new PolylineMapObject( polyline );
                 }
-                else if ( element.GetChildByName( "ellipse" ) != null )
+                else if ( node.GetChildByName( "ellipse" ) != null )
                 {
                     mapObject = new EllipseMapObject( x, FlipY ? y - height : y, width, height );
                 }
@@ -726,7 +759,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             {
                 string? gid;
 
-                if ( ( gid = element.GetAttribute( "gid", null ) ) != null )
+                if ( ( gid = node.GetAttribute( "gid", null ) ) != null )
                 {
                     id = ( uint )long.Parse( gid );
 
@@ -740,12 +773,12 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     tiledMapTileMapObject.X = x;
                     tiledMapTileMapObject.Y = FlipY ? y : y - height;
 
-                    float objectWidth  = element.GetFloatAttribute( "width", textureRegion.GetRegionWidth() );
-                    float objectHeight = element.GetFloatAttribute( "height", textureRegion.GetRegionHeight() );
+                    float objectWidth  = node.GetFloatAttribute( "width", textureRegion.GetRegionWidth() );
+                    float objectHeight = node.GetFloatAttribute( "height", textureRegion.GetRegionHeight() );
 
                     tiledMapTileMapObject.ScaleX   = scaleX * ( objectWidth / textureRegion.GetRegionWidth() );
                     tiledMapTileMapObject.ScaleY   = scaleY * ( objectHeight / textureRegion.GetRegionHeight() );
-                    tiledMapTileMapObject.Rotation = element.GetFloatAttribute( "rotation" );
+                    tiledMapTileMapObject.Rotation = node.GetFloatAttribute( "rotation" );
 
                     mapObject = tiledMapTileMapObject;
                 }
@@ -755,23 +788,23 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 }
             }
 
-            mapObject.Name = element.GetAttribute( "name", string.Empty ) ?? string.Empty;
+            mapObject.Name = node.GetAttribute( "name", string.Empty ) ?? string.Empty;
 
             string? rotation;
 
-            if ( ( rotation = element.GetAttribute( "rotation", null ) ) != null )
+            if ( ( rotation = node.GetAttribute( "rotation", null ) ) != null )
             {
                 mapObject.Properties.Put( "rotation", float.Parse( rotation ) );
             }
 
             string? type;
 
-            if ( ( type = element.GetAttribute( "type", null ) ) != null )
+            if ( ( type = node.GetAttribute( "type", null ) ) != null )
             {
                 mapObject.Properties.Put( "type", type );
             }
 
-            if ( ( id = element.GetUIntAttribute( "id" ) ) != 0 )
+            if ( ( id = node.GetUIntAttribute( "id" ) ) != 0 )
             {
                 mapObject.Properties.Put( "id", id );
             }
@@ -789,9 +822,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
             mapObject.Properties.Put( "width", width );
             mapObject.Properties.Put( "height", height );
-            mapObject.IsVisible = element.GetIntAttribute( "visible", 1 ) == 1;
+            mapObject.IsVisible = node.GetIntAttribute( "visible", 1 ) == 1;
 
-            XmlReader.Element? properties = element.GetChildByName( "properties" );
+            XmlReader.Element? properties = node.GetChildByName( "properties" );
 
             if ( properties != null )
             {
@@ -804,6 +837,17 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
         }
     }
 
+    /// <summary>
+    /// Loads properties from the specified XML element and assigns them to the given
+    /// map properties. If the element is null, or has no name, no properties are loaded.
+    /// </summary>
+    /// <param name="properties">
+    /// The target <see cref="MapProperties"/> object in which to store the loaded properties.
+    /// </param>
+    /// <param name="element">The XML element containing the properties data.</param>
+    /// <exception cref="RuntimeException">
+    /// Thrown when an error occurs during the property loading process.
+    /// </exception>
     protected void LoadProperties( MapProperties? properties, XmlReader.Element? element )
     {
         if ( element?.Name == null )
@@ -832,8 +876,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                         string        propName    = name!;
                         MapProperties targetProps = properties;
 
-                        //TODO: Refactor to remove capture of variables and 'this'
-                        RunOnEndOfLoadTiled?.Add( () => { ExecutePropertyAssignment( id, propName, targetProps ); } );
+                        RunOnEndOfLoadTiled?.Add( ( id, propName, targetProps ) );
                     }
                     catch ( Exception )
                     {
@@ -843,13 +886,23 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 }
                 else
                 {
-                    object? castValue = CastProperty( name, value, type );
+                    object? castValue = ParseProperty( name, value, type );
                     properties?.Put< object? >( name!, castValue );
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Assigns a <see cref="MapObject"/> retrieved by its unique identifier to a specified property
+    /// within the provided <see cref="MapProperties"/>. If the object does not exist or the target
+    /// properties are null, no operation will be performed.
+    /// </summary>
+    /// <param name="id">The unique identifier of the <see cref="MapObject"/> to assign.</param>
+    /// <param name="name">The name of the property to which the object will be assigned.</param>
+    /// <param name="mapProps">
+    /// The <see cref="MapProperties"/> instance that will store the assigned property.
+    /// </param>
     private void ExecutePropertyAssignment( uint id, string name, MapProperties? mapProps )
     {
         MapObject? obj = IdToObject?[ id ];
@@ -857,27 +910,41 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     }
 
     /// <summary>
+    /// Converts a property value from a string representation to the specified type.
+    /// Supported types include string, int, float, bool, and color (or colour).
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="value"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
-    protected object? CastProperty( string? name, string? value, string? type )
+    /// <param name="name">The name of the property being converted.</param>
+    /// <param name="value">The string representation of the property value to convert.</param>
+    /// <param name="type">The target type to which the value should be converted.</param>
+    /// <returns>
+    /// The converted property value as an object of the specified type, or null if the value is null.
+    /// </returns>
+    /// <exception cref="RuntimeException">
+    /// Thrown when the specified type is neither null nor one of the supported types
+    /// (string, int, float, bool, color, or colour).
+    /// </exception>
+    protected object? ParseProperty( string? name, string? value, string? type )
     {
+        if ( value is null )
+        {
+            Logger.Error( "Property value is null!" );
+
+            return null;
+        }
+
         switch ( type )
         {
             case null:
                 return value;
 
             case "int":
-                return int.Parse( value! );
+                return int.Parse( value );
 
             case "float":
-                return float.Parse( value! );
+                return float.Parse( value );
 
             case "bool":
-                return bool.Parse( value! );
+                return bool.Parse( value );
 
             case "color":
             case "colour":

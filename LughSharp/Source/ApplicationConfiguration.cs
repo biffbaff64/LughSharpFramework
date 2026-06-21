@@ -37,31 +37,63 @@ public class ApplicationConfiguration
     // General Application Configuration
     // ========================================================================
 
-    public HdpiMode        HdpiMode                       { get; set; } = HdpiMode.Logical;
-    public GLEmulationType GLEmulation                    { get; set; } = GLEmulationType.GL20;
-    public string          PreferencesDirectory           { get; set; } = ".prefs/";
-    public PathType        PreferencesFileType            { get; set; } = PathType.External;
-    public int             AudioDeviceSimultaneousSources { get; set; } = 16;
-    public int             AudioDeviceBufferSize          { get; set; } = 512;
-    public int             AudioDeviceBufferCount         { get; set; } = 9;
-    public int             Depth                          { get; set; } = 16;
-    public int             Stencil                        { get; set; }
-    public int             Samples                        { get; set; }
-    public int             IdleFPS                        { get; set; } = 60;
-    public int             ForegroundFPS                  { get; set; }
-    public int             GLContextMajorVersion          { get; set; }
-    public int             GLContextMinorVersion          { get; set; }
-    public int             GLContextRevision              { get; set; }
-    public int             Red                            { get; set; } = 8;
-    public int             Green                          { get; set; } = 8;
-    public int             Blue                           { get; set; } = 8;
-    public int             Alpha                          { get; set; } = 8;
-    public bool            DisableAudio                   { get; set; }
-    public bool            Debug                          { get; set; }
-    public bool            TransparentFramebuffer         { get; set; }
-    public bool            PauseWhenLostFocus             { get; set; } = true;
-    public bool            PauseWhenMinimized             { get; set; } = true;
-    public bool            GLProfilingEnabled             { get; set; } = true;
+    public HdpiMode HdpiMode             { get; set; } = HdpiMode.Logical;
+    
+    // ------------------------------------------
+    
+    public string   PreferencesDirectory { get; set; } = ".prefs/";
+    public PathType PreferencesFileType  { get; set; } = PathType.External;
+
+    // ------------------------------------------
+
+    public int IdleFPS       { get; set; } = 60;
+    public int ForegroundFPS { get; set; }
+
+    // ------------------------------------------
+
+    public int  AudioDeviceSimultaneousSources { get; set; } = 16;
+    public int  AudioDeviceBufferSize          { get; set; } = 512;
+    public int  AudioDeviceBufferCount         { get; set; } = 9;
+    public bool DisableAudio                   { get; set; }
+
+    // ------------------------------------------
+
+    public int  Depth                  { get; set; } = 16;
+    public int  Stencil                { get; set; }
+    public int  Samples                { get; set; }
+    public int  Red                    { get; set; } = 8;
+    public int  Green                  { get; set; } = 8;
+    public int  Blue                   { get; set; } = 8;
+    public int  Alpha                  { get; set; } = 8;
+    public bool TransparentFramebuffer { get; set; }
+
+    // ------------------------------------------
+
+    public int GLContextMajorVersion { get; set; }
+    public int GLContextMinorVersion { get; set; }
+    public int GLContextRevision     { get; set; }
+
+    // ------------------------------------------
+    
+    public GLEmulationType GLEmulation { get; set; } = GLEmulationType.GL20;
+    public bool            Debug       { get; set; }
+
+    /// <summary>
+    /// Determines whether the application should pause when it loses focus.
+    /// Default is <c>true</c>.
+    /// </summary>
+    public bool PauseWhenLostFocus { get; set; } = true;
+
+    /// <summary>
+    /// Determines whether the application should pause when it is minimized.
+    /// Default is <c>true</c>.
+    /// </summary>
+    public bool PauseWhenMinimized { get; set; } = true;
+
+    /// <summary>
+    /// Enable / Disable GL Profiling tests.
+    /// </summary>
+    public bool GLProfilingEnabled { get; set; } = true;
 
     /// <summary>
     /// The maximum number of threads to use for network requests.
@@ -81,7 +113,7 @@ public class ApplicationConfiguration
     public int       WindowMinHeight    { get; set; } = DefaultWindowMinHeight;
     public int       WindowMaxWidth     { get; set; } = DefaultWindowMaxWidth;
     public int       WindowMaxHeight    { get; set; } = DefaultWindowMaxHeight;
-    public PathType  WindowIconFileType { get; set; }
+    public PathType  WindowIconPathType { get; set; }
     public string[]? WindowIconPaths    { get; set; }
 
     /// <summary>
@@ -137,11 +169,12 @@ public class ApplicationConfiguration
     public string? Title { get; set; } = string.Empty;
 
     // ========================================================================
+    // Default window size and position settings.
 
-    protected const int DefaultWindowWidth      = 640;
-    protected const int DefaultWindowHeight     = 480;
-    protected const int DefaultWindowX          = 80;
-    protected const int DefaultWindowY          = 80;
+    protected const int DefaultWindowWidth     = 640;
+    protected const int DefaultWindowHeight    = 480;
+    protected const int DefaultWindowX         = 80;
+    protected const int DefaultWindowY         = 80;
     protected const int DefaultWindowMinWidth  = 320;
     protected const int DefaultWindowMinHeight = 240;
     protected const int DefaultWindowMaxWidth  = 1280;
@@ -211,7 +244,7 @@ public class ApplicationConfiguration
         WindowMinHeight                = config.WindowMinHeight;
         WindowMaxWidth                 = config.WindowMaxWidth;
         WindowMaxHeight                = config.WindowMaxHeight;
-        WindowIconFileType             = config.WindowIconFileType;
+        WindowIconPathType             = config.WindowIconPathType;
         WindowIconPaths                = config.WindowIconPaths;
         InitialVisibility              = config.InitialVisibility;
         VSyncEnabled                   = config.VSyncEnabled;
@@ -357,7 +390,7 @@ public class ApplicationConfiguration
         WindowDecorated    = config.WindowDecorated;
         WindowMaximized    = config.WindowMaximized;
         AutoIconify        = config.AutoIconify;
-        WindowIconFileType = config.WindowIconFileType;
+        WindowIconPathType = config.WindowIconPathType;
 
         if ( config.WindowIconPaths != null )
         {
@@ -432,7 +465,7 @@ public class ApplicationConfiguration
     /// </param>
     public void SetWindowIcon( PathType fileType, params string[] filePaths )
     {
-        WindowIconFileType = fileType;
+        WindowIconPathType = fileType;
         WindowIconPaths    = filePaths;
     }
 }

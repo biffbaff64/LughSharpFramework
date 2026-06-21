@@ -22,9 +22,10 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Graphics.Packing.TiledMapPacker;
 using LughSharp.Source.IO;
 
-namespace LughSharp.Source.Graphics.Packing.TiledMapPacker;
+namespace LughSharp.Tests;
 
 /// <summary>
 /// Processes the maps located in <c>{ContentRoot}/maps/source:</c>. Creates the

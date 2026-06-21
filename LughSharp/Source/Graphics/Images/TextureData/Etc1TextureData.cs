@@ -60,7 +60,7 @@ public class Etc1TextureData : ITextureData
     // ========================================================================
 
     private readonly FileInfo?      _file;
-    private          ETC1.ETC1Data? _data;
+    private          ETC1Data? _data;
     private          ETC1           _etc1;
 
     // ========================================================================
@@ -82,7 +82,7 @@ public class Etc1TextureData : ITextureData
     /// </summary>
     /// <param name="encodedImage"></param>
     /// <param name="useMipMaps"></param>
-    public Etc1TextureData( ETC1.ETC1Data encodedImage, bool useMipMaps )
+    public Etc1TextureData( ETC1Data encodedImage, bool useMipMaps )
     {
         _data      = encodedImage;
         _etc1      = new ETC1();
@@ -108,7 +108,7 @@ public class Etc1TextureData : ITextureData
 
         if ( _file != null )
         {
-            _data = new ETC1.ETC1Data( _file, _etc1 );
+            _data = new ETC1Data( _file, _etc1 );
         }
 
         if ( _data == null )

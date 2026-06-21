@@ -30,9 +30,20 @@ namespace LughSharp.Source.Maps.Tiled.Objects;
 [PublicAPI]
 public record TileContext
 {
-    public required FileInfo        TmxFile       { get; init; }
-    public required IImageResolver  ImageResolver { get; init; }
-    public required TiledMapTileSet Tileset       { get; init; }
+    /// <summary>
+    /// The TiledMap file.
+    /// </summary>
+    public required FileInfo TmxFile { get; init; }
+
+    /// <summary>
+    /// The ImageResolver to use for loading images.
+    /// </summary>
+    public required IImageResolver ImageResolver { get; init; }
+
+    /// <summary>
+    /// The TileSet to use for rendering.
+    /// </summary>
+    public required TiledMapTileSet Tileset { get; init; }
 
     // ========================================================================
 
@@ -54,15 +65,6 @@ public record TileContext
         this.TmxFile       = TmxFile;
         this.ImageResolver = ImageResolver;
         Tileset            = tileSet;
-    }
-
-    public void Deconstruct( out FileInfo tmxFile,
-                             out IImageResolver imageResolver,
-                             out TiledMapTileSet tileSet )
-    {
-        tmxFile       = TmxFile;
-        imageResolver = ImageResolver;
-        tileSet       = Tileset;
     }
 }
 

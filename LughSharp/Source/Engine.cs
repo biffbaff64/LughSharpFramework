@@ -106,7 +106,7 @@ public static class Engine
     /// <summary>
     /// The time, in seconds, that has elapsed since the last frame was rendered.
     /// <para>
-    /// This property provides a way to track time progression in your application,
+    /// This property provides a way to track time progression in an application,
     /// allowing for operations that depend on frame-to-frame timing, such as animations
     /// or physics simulations, to properly account for frame delays or variable update rates.
     /// </para>
@@ -199,9 +199,17 @@ public static class Engine
     /// <returns> True if a match is found. </returns>
     private static bool CheckEnvironmentVar( string envVar, string value )
     {
-        return Environment.GetEnvironmentVariables().Contains( envVar )
-            && Environment.GetEnvironmentVariable( envVar )!
-                          .Equals( value, StringComparison.CurrentCultureIgnoreCase );
+        if ( Environment.GetEnvironmentVariables().Contains( envVar ) )
+        {
+            string? match = Environment.GetEnvironmentVariable( envVar );
+
+            if ( match != null )
+            {
+                return match.Equals( value, StringComparison.CurrentCultureIgnoreCase );
+            }
+        }
+
+        return false;
     }
 
     // ========================================================================
@@ -212,18 +220,24 @@ public static class Engine
     /// </summary>
     public static void Shutdown()
     {
-        //TODO: Add shutdown operations here.
+        Graphics.Dispose();
+        Audio.Dispose();
+        Input.Dispose();
+        App.Dispose();
+        Net.Dispose();
+        Files.Dispose();
     }
 
     // ========================================================================
     // ========================================================================
 
     public const string APrayerToTheGoddess =
-        "Oh Blessed Goddess, enlighten what is dark in me. "
-      + "Strengthen what is weak in me. "
-      + "Mend what is broken in me. "
-      + "Bind what is bruised in me. "
-      + "Heal what is sick in me. "
+        "Oh Blessed Goddess, "
+      + "Enlighten what is dark in me, "
+      + "Strengthen what is weak in me, "
+      + "Mend what is broken in me, "
+      + "Bind what is bruised in me, "
+      + "Heal what is sick in me, "
       + "Revive whatever peace & love has died in me.";
 }
 

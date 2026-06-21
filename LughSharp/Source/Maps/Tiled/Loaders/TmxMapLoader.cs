@@ -122,9 +122,9 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// <summary>
     /// Loads the OpenGL part of the asset.
     /// </summary>
-    /// <param name="manager"></param>
+    /// <param name="manager">The asset manager responsible for loading the asset.</param>
     /// <param name="tmxFile"> the resolved file to load </param>
-    /// <param name="parameter"></param>
+    /// <param name="parameter">The parameters for loading the asset.</param>
     public override TiledMap LoadSync< TP >( AssetManager manager,
                                              FileInfo tmxFile,
                                              TP? parameter ) where TP : class
@@ -147,12 +147,15 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     }
 
     /// <summary>
+    /// Retrieves a list of asset descriptors for the dependencies of the provided TMX file.
     /// </summary>
-    /// <param name="tmxFile"></param>
-    /// <param name="textureParameter"></param>
-    /// <returns></returns>
+    /// <param name="tmxFile">The resolved file from which to load dependencies.</param>
+    /// <param name="loadParams">Parameters for loading the asset dependencies.</param>
+    /// <returns>
+    /// A list of <see cref="AssetDescriptor"/> objects representing the dependencies of the TMX file.
+    /// </returns>
     protected List< AssetDescriptor > GetDependencyAssetDescriptors( FileInfo tmxFile,
-                                                                     AssetLoaderParameters textureParameter )
+                                                                     AssetLoaderParameters loadParams )
     {
         var descriptors = new List< AssetDescriptor >();
 
@@ -160,7 +163,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
         foreach ( FileInfo handle in fileHandles )
         {
-            descriptors.Add( new AssetDescriptor( handle, typeof( Texture2D ), textureParameter ) );
+            descriptors.Add( new AssetDescriptor( handle, typeof( Texture2D ), loadParams ) );
         }
 
         return descriptors;

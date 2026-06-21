@@ -29,6 +29,12 @@ using Rectangle = LughSharp.Source.Maths.Rectangle;
 
 namespace LughSharp.Source.Graphics.G2D;
 
+/// <summary>
+/// Represents a 2D sprite that can be drawn using a <see cref="Texture2D"/> or
+/// a <see cref="TextureRegion"/>. A Sprite2D contains properties such as position,
+/// size, scale, rotation, and color, and provides methods to manipulate and control
+/// its rendering.
+/// </summary>
 [PublicAPI]
 public class Sprite2D : TextureRegion
 {
@@ -38,7 +44,9 @@ public class Sprite2D : TextureRegion
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// The vertex data of the sprite, represented as a float array.
+    /// This array contains positional, color, and texture coordinate information
+    /// for each of the sprite's four corners.
     /// </summary>
     public float[] Vertices { get; set; } = new float[ SpriteSize ];
 
@@ -188,9 +196,11 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
+    /// Sets the size and origin of the sprite based on the provided width and height.
+    /// The origin is set to the center of the sprite.
     /// </summary>
-    /// <param name="srcWidth"></param>
-    /// <param name="srcHeight"></param>
+    /// <param name="srcWidth">The width of the sprite in pixels.</param>
+    /// <param name="srcHeight">The height of the sprite in pixels.</param>
     private void SetSizeAndOrigin( int srcWidth, int srcHeight )
     {
         SetSize( srcWidth, srcHeight );
@@ -198,11 +208,14 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
+    /// Updates the texture region coordinates for this sprite. This determines
+    /// which portion of the texture is used when rendering the sprite. The method
+    /// modifies the UV coordinates stored in the sprite's vertex data array.
     /// </summary>
-    /// <param name="u"></param>
-    /// <param name="v"></param>
-    /// <param name="u2"></param>
-    /// <param name="v2"></param>
+    /// <param name="u">The U coordinate of the top-left corner of the region.</param>
+    /// <param name="v">The V coordinate of the top-left corner of the region.</param>
+    /// <param name="u2">The U coordinate of the bottom-right corner of the region.</param>
+    /// <param name="v2">The V coordinate of the bottom-right corner of the region.</param>
     public override void SetRegion( float u, float v, float u2, float v2 )
     {
         base.SetRegion( u, v, u2, v2 );
@@ -222,8 +235,6 @@ public class Sprite2D : TextureRegion
 
     /// <summary>
     /// Make this sprite a copy in every way of the specified sprite
-    /// </summary>
-    /// <summary>
     /// Sets the properties of this Sprite to match those of the provided Sprite.
     /// </summary>
     /// <param name="sprite">The Sprite whose properties will be copied.</param>
@@ -726,6 +737,14 @@ public class Sprite2D : TextureRegion
         return Vertices;
     }
 
+    /// <summary>
+    /// Draws the sprite using the specified batch. This method must be called to render the sprite
+    /// on the screen. It sends the vertices data to the batch, which handles the drawing process.
+    /// </summary>
+    /// <param name="batch">
+    /// The batch used to draw the sprite. It must be an implementation of the <see cref="IBatch"/> interface
+    /// and should be properly initialized beforehand.
+    /// </param>
     public void Draw( IBatch batch )
     {
         if ( Texture != null )
@@ -734,6 +753,15 @@ public class Sprite2D : TextureRegion
         }
     }
 
+    /// <summary>
+    /// Draws the sprite using the specified batch. This method must be called to render the sprite
+    /// on the screen. It sends the vertices data to the batch, which handles the drawing process.
+    /// </summary>
+    /// <param name="batch">
+    /// The batch used to draw the sprite. It must be an implementation of the <see cref="IBatch"/> interface
+    /// and should be properly initialized beforehand.
+    /// </param>
+    /// <param name="alphaModulation"> The alpha modulation value to apply to the sprite's color. </param>
     public void Draw( IBatch batch, float alphaModulation )
     {
         float oldAlpha = Alpha;
@@ -769,9 +797,11 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
+    /// Flips the sprite along the specified axes. If the sprite is already flipped
+    /// on the given axis, no changes are made.
     /// </summary>
-    /// <param name="flipx"> perform horizontal flip </param>
-    /// <param name="flipy"> perform vertical flip  </param>
+    /// <param name="flipx">If true, flips the sprite horizontally.</param>
+    /// <param name="flipy">If true, flips the sprite vertically.</param>
     public override void Flip( bool flipx, bool flipy )
     {
         base.Flip( flipx, flipy );
@@ -847,6 +877,10 @@ public class Sprite2D : TextureRegion
 
     // ========================================================================
 
+    /// <summary>
+    /// Sets the U-coordinate for the texture region and updates the corresponding vertex positions.
+    /// </summary>
+    /// <param name="u">The U-coordinate value to be set for the texture region.</param>
     public override void SetU( float u )
     {
         base.SetU( u );

@@ -36,8 +36,8 @@ public abstract class LughGame : IApplicationListener
     private bool _isDisposed;
 
     /// <summary>
-    /// Sets the current screen. Screen.hide() is called on any old screen, and
-    /// Screen.show() is called on the new screen, if any.
+    /// Sets the current screen. Screen.hide() is called on the old screen, if any,
+    /// and Screen.show() is called on the new screen, if any.
     /// </summary>
     public IScreen? Screen
     {

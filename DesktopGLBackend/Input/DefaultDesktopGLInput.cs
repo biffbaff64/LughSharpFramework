@@ -423,7 +423,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     // ========================================================================
 
     /// <inheritdoc />
-    public void Dispose()
+    public override void Dispose()
     {
         Dispose( true );
         GC.SuppressFinalize( this );

@@ -277,6 +277,12 @@ public class MockInput : IInput
     public void SetOverrideMenuKey( bool catchMenu )
     {
     }
+
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        GC.SuppressFinalize( this );
+    }
 }
 
 // ============================================================================

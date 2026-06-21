@@ -24,15 +24,11 @@
 
 using System.Runtime.Versioning;
 
-using JetBrains.Annotations;
-
 using LughSharp.Source;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.G2D;
 
-using NUnit.Framework;
-
-namespace LughSharp.Tests.Source;
+namespace LughSharp.Tests;
 
 [TestFixture]
 [PublicAPI]

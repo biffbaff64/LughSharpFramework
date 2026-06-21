@@ -32,7 +32,7 @@ namespace LughSharp.Source.IO;
 /// of storage locations.
 /// </summary>
 [PublicAPI]
-public interface IFiles
+public interface IFiles : IDisposable
 {
     /// <summary>
     /// Returns a handle representing a file or directory.

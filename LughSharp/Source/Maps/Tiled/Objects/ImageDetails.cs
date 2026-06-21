@@ -30,10 +30,25 @@ namespace LughSharp.Source.Maps.Tiled.Objects;
 [PublicAPI]
 public record ImageDetails
 {
-    public required string?   ImageSource { get; init; }
-    public required int       Width       { get; init; }
-    public required int       Height      { get; init; }
-    public required FileInfo? Image       { get; init; }
+    /// <summary>
+    /// The TileSet source image name.
+    /// </summary>
+    public required string? ImageSource { get; init; }
+
+    /// <summary>
+    /// Image width in pixels.
+    /// </summary>
+    public required int Width { get; init; }
+
+    /// <summary>
+    /// Image height in pixels.
+    /// </summary>
+    public required int Height { get; init; }
+
+    /// <summary>
+    /// FileInfo object pointing to the image.
+    /// </summary>
+    public required FileInfo? Image { get; init; }
 
     // ========================================================================
 
@@ -57,17 +72,6 @@ public record ImageDetails
         this.Width       = Width;
         this.Height      = Height;
         this.Image       = Image;
-    }
-
-    public void Deconstruct( out string? imageSource,
-                             out int width,
-                             out int height,
-                             out FileInfo? image )
-    {
-        imageSource = ImageSource;
-        width       = Width;
-        height      = Height;
-        image       = Image;
     }
 }
 
