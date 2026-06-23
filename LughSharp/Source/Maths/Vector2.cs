@@ -722,7 +722,7 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Returns a value that indicates whether each pair of elements in two specified vectors is equal.</summary>
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
-    /// <returns><see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns><c>true</c> if <paramref name="left"/> and <paramref name="right"/> are equal; otherwise, <c>false</c>.</returns>
     /// <remarks>Two <see cref="Vector2"/> objects are equal if each value in <paramref name="left"/> is equal to the corresponding value in <paramref name="right"/>.</remarks>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static bool operator ==( Vector2 left, Vector2 right )
@@ -734,7 +734,7 @@ public class Vector2 : IVector< Vector2 >
     /// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>
     /// <param name="left">The first vector to compare.</param>
     /// <param name="right">The second vector to compare.</param>
-    /// <returns><see langword="true"/> if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, <see langword="false"/>.</returns>
+    /// <returns><c>true</c> if <paramref name="left"/> and <paramref name="right"/> are not equal; otherwise, <c>false</c>.</returns>
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static bool operator !=( Vector2 left, Vector2 right )
     {

@@ -42,43 +42,130 @@ namespace LughSharp.Source.Graphics.G2D;
 [PublicAPI]
 public class SpriteBatch : IBatch
 {
+    /// <summary>
+    /// Rendering option flag: flip the sprite horizontally.
+    /// </summary>
     public const int RenderingOptionFlipX = 1 << 0;
+
+    /// <summary>
+    /// Rendering option flag: flip the sprite vertically.
+    /// </summary>
     public const int RenderingOptionFlipY = 1 << 1;
-    public const int RenderingOptionFont  = 1 << 2;
+
+    /// <summary>
+    /// Rendering option flag: render as a font glyph.
+    /// </summary>
+    public const int RenderingOptionFont = 1 << 2;
 
     // ========================================================================
 
-    public Matrix4   CombinedMatrix    { get; set; }         = new();
-    public Matrix4   ProjectionMatrix  { get; set; }         = new();
-    public Matrix4   TransformMatrix   { get; set; }         = new();
-    public BlendMode BlendSrcFunc      { get; private set; } = BlendMode.SrcAlpha;
-    public BlendMode BlendDstFunc      { get; private set; } = BlendMode.OneMinusSrcAlpha;
+    /// <summary>
+    /// The combined projection and transform matrix sent to the shader.
+    /// </summary>
+    public Matrix4 CombinedMatrix { get; set; } = new();
+
+    /// <summary>
+    /// The orthographic projection matrix applied to the batch.
+    /// </summary>
+    public Matrix4 ProjectionMatrix { get; set; } = new();
+
+    /// <summary>
+    /// The model/world transform matrix applied before projection.
+    /// </summary>
+    public Matrix4 TransformMatrix { get; set; } = new();
+
+    /// <summary>
+    /// The source blend factor used for RGB channels.
+    /// </summary>
+    public BlendMode BlendSrcFunc { get; private set; } = BlendMode.SrcAlpha;
+
+    /// <summary>
+    /// The destination blend factor used for RGB channels.
+    /// </summary>
+    public BlendMode BlendDstFunc { get; private set; } = BlendMode.OneMinusSrcAlpha;
+
+    /// <summary>
+    /// The source blend factor used for the alpha channel.
+    /// </summary>
     public BlendMode BlendSrcFuncAlpha { get; private set; } = BlendMode.One;
+
+    /// <summary>
+    /// The destination blend factor used for the alpha channel.
+    /// </summary>
     public BlendMode BlendDstFuncAlpha { get; private set; } = BlendMode.OneMinusDstAlpha;
 
-    public float[] Vertices          { get; set; } = [ ];
-    public int     TextureOffset     { get; set; }
-    public int     RenderCalls       { get; set; }
-    public long    TotalRenderCalls  { get; set; }
-    public int     MaxSpritesInBatch { get; set; }
-    public bool    BlendingEnabled   { get; set; }
-    public float   InvTexHeight      { get; set; }
-    public float   InvTexWidth       { get; set; }
+    /// <summary>
+    /// The interleaved vertex data buffer uploaded to the GPU each flush.
+    /// </summary>
+    public float[] Vertices { get; set; } = [ ];
 
+    /// <summary>
+    /// The byte offset into <see cref="Vertices"/> where texture coordinates begin.
+    /// </summary>
+    public int TextureOffset { get; set; }
+
+    /// <summary>
+    /// The number of draw calls issued during the current <see cref="Begin"/>/<see cref="End"/> block.
+    /// </summary>
+    public int RenderCalls { get; set; }
+
+    /// <summary>
+    /// The cumulative number of draw calls issued across all <see cref="Begin"/>/<see cref="End"/> blocks.
+    /// </summary>
+    public long TotalRenderCalls { get; set; }
+
+    /// <summary>
+    /// The largest number of sprites flushed in a single draw call during this session.
+    /// </summary>
+    public int MaxSpritesInBatch { get; set; }
+
+    /// <summary>
+    /// Whether alpha blending is currently enabled for this batch.
+    /// </summary>
+    public bool BlendingEnabled { get; set; }
+
+    /// <summary>
+    /// The reciprocal of the current texture height, used to convert pixel UVs to normalised coordinates.
+    /// </summary>
+    public float InvTexHeight { get; set; }
+
+    /// <summary>
+    /// The reciprocal of the current texture width, used to convert pixel UVs to normalised coordinates.
+    /// </summary>
+    public float InvTexWidth { get; set; }
+
+    /// <summary>
+    /// Returns <c>true</c> when the batch is between a <see cref="Begin"/> and <see cref="End"/> call.
+    /// </summary>
     public bool IsDrawing => CurrentBatchState == BatchState.Drawing;
 
     // ========================================================================
 
-    protected Texture2D?   LastTexture        { get; set; }
-    protected int          Idx                { get; set; }
-    protected BatchState?  CurrentBatchState  { get; set; }
+    /// <summary>
+    /// The texture that was bound during the most recent flush.
+    /// </summary>
+    protected Texture2D? LastTexture { get; set; }
+
+    /// <summary>
+    /// The current write position (in floats) within <see cref="Vertices"/>.
+    /// </summary>
+    protected int Idx { get; set; }
+
+    /// <summary>
+    /// Tracks whether the batch is idle, drawing, or flushing.
+    /// </summary>
+    protected BatchState? CurrentBatchState { get; set; }
+
+    /// <summary>
+    /// The cached OpenGL render state restored after each flush.
+    /// </summary>
     protected RenderState? CurrentRenderState { get; set; }
 
     // ========================================================================
 
     private const int VerticesPerSprite = 4;     // Number of vertices per sprite (quad)
     private const int IndicesPerSprite  = 6;     // Number of indices per sprite (two triangles)
-    private const int MaxVertexIndex    = 32767; //
+    private const int MaxVertexIndex    = 32767; // 
     private const int MaxSprites        = 8191;  // MaxVertexIndex / VerticesPerSprite = 8191 sprites max.
     private const int MaxQuads          = 100;   //
 
@@ -180,8 +267,8 @@ public class SpriteBatch : IBatch
         // OpenGL 3.0 and later support Vertex Buffer Objects (VBOs) with Vertex Array Objects (VAOs),
         // which are more efficient. Earlier versions use Vertex Arrays.
         VertexDataType vertexDataType = Engine.GL.GetOpenGLVersion().major >= 3
-            ? VertexDataType.VertexBufferObjectWithVAO
-            : VertexDataType.VertexArray;
+                                            ? VertexDataType.VertexBufferObjectWithVAO
+                                            : VertexDataType.VertexArray;
 
         // Define the vertex attributes for the mesh.
         // These attributes specify the layout of vertex data in the VBO.
@@ -589,15 +676,15 @@ public class SpriteBatch : IBatch
                 return;
             }
 
-            // 1. Bind the VAO and VBO so these settings "stick" to this batch
+            // Bind the VAO and VBO so these settings "stick" to this batch
             Engine.GL.BindVertexArray( _vao );
             Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, _vbo );
 
-            // 2. Define constants in BYTES
+            // Define constants in BYTES
             const int FSize  = sizeof( float );
             const int Stride = VertexConstants.VertexSize * FSize; // 5 * 4 = 20 bytes
 
-            // 3. Position: Location 0 (a_position vec2)
+            // Position: Location 0 (a_position vec2)
             int posLoc = program.GetAttributeLocation( "a_position" );
 
             if ( posLoc >= 0 )
@@ -611,7 +698,7 @@ public class SpriteBatch : IBatch
                                             0 ); // Offset 0
             }
 
-            // 4. Color: Location 1 (a_color float)
+            // Color: Location 1 (a_color float)
             int colLoc = program.GetAttributeLocation( "a_color" );
 
             if ( colLoc >= 0 )
@@ -626,7 +713,7 @@ public class SpriteBatch : IBatch
                                             2 * FSize ); // Offset 8 bytes
             }
 
-            // 5. UVs: Location 2 (a_texCoord0 vec2)
+            // UVs: Location 2 (a_texCoord0 vec2)
             int texLoc = program.GetAttributeLocation( "a_texCoord0" );
 
             if ( texLoc >= 0 )
@@ -990,29 +1077,13 @@ public class SpriteBatch : IBatch
             const float U2 = 1;
             const float V2 = 0;
 
-            SetVertices( posX,
-                         posY,
-                         ColorPackedRGBA,
-                         U,
-                         V,
+            SetVertices( posX, posY, ColorPackedRGBA, U, V,
                          // -----------
-                         posX,
-                         fy2,
-                         ColorPackedRGBA,
-                         U,
-                         V2,
+                         posX, fy2, ColorPackedRGBA, U, V2,
                          // -----------
-                         fx2,
-                         fy2,
-                         ColorPackedRGBA,
-                         U2,
-                         V2,
+                         fx2, fy2, ColorPackedRGBA, U2, V2,
                          // -----------
-                         fx2,
-                         posY,
-                         ColorPackedRGBA,
-                         U2,
-                         V );
+                         fx2, posY, ColorPackedRGBA, U2, V );
         }
     }
 
@@ -1138,29 +1209,13 @@ public class SpriteBatch : IBatch
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( x1,
-                         y1,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( x1, y1, ColorPackedRGBA, u, v,
                          // -----------
-                         x2,
-                         y2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         x2, y2, ColorPackedRGBA, u, v2,
                          // -----------
-                         x3,
-                         y3,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         x3, y3, ColorPackedRGBA, u2, v2,
                          // -----------
-                         x4,
-                         y4,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         x4, y4, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1204,29 +1259,13 @@ public class SpriteBatch : IBatch
                 ( v, v2 ) = ( v2, v );
             }
 
-            SetVertices( destination.X,
-                         destination.Y,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( destination.X, destination.Y, ColorPackedRGBA, u, v,
                          // -----------
-                         destination.X,
-                         fy2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         destination.X, fy2, ColorPackedRGBA, u, v2,
                          // -----------
-                         fx2,
-                         fy2,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
                          // -----------
-                         fx2,
-                         destination.Y,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         fx2, destination.Y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1259,29 +1298,13 @@ public class SpriteBatch : IBatch
             float fx2 = x + src.Width;
             float fy2 = y + src.Height;
 
-            SetVertices( x,
-                         y,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( x, y, ColorPackedRGBA, u, v,
                          // -----------
-                         x,
-                         fy2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         x, fy2, ColorPackedRGBA, u, v2,
                          // -----------
-                         fx2,
-                         fy2,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
                          // -----------
-                         fx2,
-                         y,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         fx2, y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1312,29 +1335,13 @@ public class SpriteBatch : IBatch
             int fx2 = destination.X + destination.Width;
             int fy2 = destination.Y + destination.Height;
 
-            SetVertices( destination.X,
-                         destination.Y,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( destination.X, destination.Y, ColorPackedRGBA, u, v,
                          // -----------
-                         destination.X,
-                         fy2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         destination.X, fy2, ColorPackedRGBA, u, v2,
                          // -----------
-                         fx2,
-                         fy2,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
                          // -----------
-                         fx2,
-                         destination.Y,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         fx2, destination.Y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1453,29 +1460,13 @@ public class SpriteBatch : IBatch
             float u2  = region.U2;
             float v2  = region.V;
 
-            SetVertices( x,
-                         y,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( x, y, ColorPackedRGBA, u, v,
                          // -----------
-                         x,
-                         fy2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         x, fy2, ColorPackedRGBA, u, v2,
                          // -----------
-                         fx2,
-                         fy2,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
                          // -----------
-                         fx2,
-                         y,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         fx2, y, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1582,29 +1573,13 @@ public class SpriteBatch : IBatch
             float u2 = textureRegion.U2;
             float v2 = textureRegion.V;
 
-            SetVertices( x1,
-                         y1,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( x1, y1, ColorPackedRGBA, u, v,
                          // -----------
-                         x2,
-                         y2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         x2, y2, ColorPackedRGBA, u, v2,
                          // -----------
-                         x3,
-                         y3,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         x3, y3, ColorPackedRGBA, u2, v2,
                          // -----------
-                         x4,
-                         y4,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         x4, y4, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1746,29 +1721,13 @@ public class SpriteBatch : IBatch
                 v4 = textureRegion.V2;
             }
 
-            SetVertices( x1,
-                         y1,
-                         ColorPackedRGBA,
-                         u1,
-                         v1,
+            SetVertices( x1, y1, ColorPackedRGBA, u1, v1,
                          // -----------
-                         x2,
-                         y2,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         x2, y2, ColorPackedRGBA, u2, v2,
                          // -----------
-                         x3,
-                         y3,
-                         ColorPackedRGBA,
-                         u3,
-                         v3,
+                         x3, y3, ColorPackedRGBA, u3, v3,
                          // -----------
-                         x4,
-                         y4,
-                         ColorPackedRGBA,
-                         u4,
-                         v4 );
+                         x4, y4, ColorPackedRGBA, u4, v4 );
         }
     }
 
@@ -1809,29 +1768,13 @@ public class SpriteBatch : IBatch
             float u2 = region.U2;
             float v2 = region.V;
 
-            SetVertices( x1,
-                         y1,
-                         ColorPackedRGBA,
-                         u,
-                         v,
+            SetVertices( x1, y1, ColorPackedRGBA, u, v,
                          // -----------
-                         x2,
-                         y2,
-                         ColorPackedRGBA,
-                         u,
-                         v2,
+                         x2, y2, ColorPackedRGBA, u, v2,
                          // -----------
-                         x3,
-                         y3,
-                         ColorPackedRGBA,
-                         u2,
-                         v2,
+                         x3, y3, ColorPackedRGBA, u2, v2,
                          // -----------
-                         x4,
-                         y4,
-                         ColorPackedRGBA,
-                         u2,
-                         v );
+                         x4, y4, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -2075,13 +2018,6 @@ public class SpriteBatch : IBatch
             VertexCount     = vertexCount;
             TransformMatrix = transformMatrix;
         }
-
-        private void Deconstruct( out Texture2D? texture, out int vertexCount, out Matrix4 transformMatrix )
-        {
-            texture         = CurrentTexture;
-            vertexCount     = VertexCount;
-            transformMatrix = TransformMatrix;
-        }
     }
 
     // ========================================================================
@@ -2108,4 +2044,3 @@ public class SpriteBatch : IBatch
 
 // ============================================================================
 // ============================================================================
-

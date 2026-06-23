@@ -77,15 +77,21 @@ namespace LughSharp.Source.Graphics.G2D;
 [PublicAPI]
 public class SpriteCache
 {
-    public int     RenderCallsSinceBegin { get; set; }
-    public int     TotalRenderCalls      { get; set; }
-    public Color   Color                 { get; set; } = new( 1, 1, 1, 1 );
-    public Matrix4 ProjectionMatrix      { get; set; } = new();
-    public Matrix4 TransformMatrix       { get; set; } = new();
-    public bool    IsDrawing             { get; private set; }
+    /// <summary>
+    /// Represents the tint color applied to all sprites rendered by the batch.
+    /// </summary>
+    public Color Color { get; set; } = new( 1, 1, 1, 1 );
 
-    //TODO: Update this documentation, this is GL not GLES
-    //
+    /// <summary>
+    /// The orthographic projection matrix applied to the batch.
+    /// </summary>
+    public Matrix4 ProjectionMatrix { get; set; } = new();
+
+    /// <summary>
+    /// The model/world transform matrix applied before projection.
+    /// </summary>
+    public Matrix4 TransformMatrix { get; set; } = new();
+
     /// <summary>
     /// Sets the shader to be used in a GL environment. Vertex position attribute is called "a_position",
     /// the texture coordinates attribute is called called "a_texCoords", the color attribute is called
@@ -98,15 +104,30 @@ public class SpriteCache
     /// </summary>
     public ShaderProgram? CustomShader { get; set; }
 
+    /// <summary>
+    /// Logs the number of render calls since the last call to Begin.
+    /// </summary>
+    public int RenderCallsSinceBegin { get; set; }
+
+    /// <summary>
+    /// Logs the total number of render calls since the SpriteCache was created.
+    /// </summary>
+    public int TotalRenderCalls { get; set; }
+
+    /// <summary>
+    /// Returns true if the SpriteCache is currently drawing, false otherwise.
+    /// </summary>
+    public bool IsDrawing { get; private set; }
+
     // ========================================================================
 
     private static readonly float[] _tempVertices = new float[ Sprite2D.VertexSize * 6 ];
 
-    private readonly List< Cache >   _caches         = new();
-    private readonly Matrix4         _combinedMatrix = new();
-    private readonly List< int >     _counts         = new( 8 );
-    private readonly Mesh            _mesh;
-    private readonly ShaderProgram?  _shader;
+    private readonly List< Cache >     _caches         = new();
+    private readonly Matrix4           _combinedMatrix = new();
+    private readonly List< int >       _counts         = new( 8 );
+    private readonly Mesh              _mesh;
+    private readonly ShaderProgram?    _shader;
     private readonly List< Texture2D > _textures = new( 8 );
 
     private Cache? _currentCache;
@@ -1298,8 +1319,8 @@ public class SpriteCache
         internal readonly int    Offset;
         internal          int[]? Counts;
 
-        internal int        MaxCount;
-        internal int        TextureCount;
+        internal int          MaxCount;
+        internal int          TextureCount;
         internal Texture2D[]? Textures;
 
         internal Cache( int id, int offset )
@@ -1315,41 +1336,41 @@ public class SpriteCache
     private static ShaderProgram CreateDefaultShader()
     {
         const string VertexShader = "in vec4 "
-                                   + "a_position"
-                                   + ";\n" //
-                                   + "in vec4 "
-                                   + "a_color"
-                                   + ";\n" //
-                                   + "in vec2 "
-                                   + "u_texCoord" + "0;\n"                    //
-                                   + "uniform mat4 u_projectionViewMatrix;\n" //
-                                   + "out vec4 v_color;\n"                    //
-                                   + "out vec2 v_texCoords;\n"                //
-                                   + "\n"                                     //
-                                   + "void main()\n"                          //
-                                   + "{\n"                                    //
-                                   + "   v_color = "
-                                   + "a_color"
-                                   + ";\n"                                         //
-                                   + "   v_color.a = v_color.a * (255.0/254.0);\n" //
-                                   + "   v_texCoords = "
-                                   + "u_texCoord" + "0;\n" //
-                                   + "   gl_Position =  u_projectionViewMatrix * "
-                                   + "a_position"
-                                   + ";\n" //
-                                   + "}\n";
+                                  + "a_position"
+                                  + ";\n" //
+                                  + "in vec4 "
+                                  + "a_color"
+                                  + ";\n" //
+                                  + "in vec2 "
+                                  + "u_texCoord" + "0;\n"                    //
+                                  + "uniform mat4 u_projectionViewMatrix;\n" //
+                                  + "out vec4 v_color;\n"                    //
+                                  + "out vec2 v_texCoords;\n"                //
+                                  + "\n"                                     //
+                                  + "void main()\n"                          //
+                                  + "{\n"                                    //
+                                  + "   v_color = "
+                                  + "a_color"
+                                  + ";\n"                                         //
+                                  + "   v_color.a = v_color.a * (255.0/254.0);\n" //
+                                  + "   v_texCoords = "
+                                  + "u_texCoord" + "0;\n" //
+                                  + "   gl_Position =  u_projectionViewMatrix * "
+                                  + "a_position"
+                                  + ";\n" //
+                                  + "}\n";
 
         const string FragmentShader = "#ifdef GL_ES\n"
-                                     + "#define LOWP lowp\n"
-                                     + "precision mediump float;\n"
-                                     + "#endif\n"
-                                     + "in vec4 v_color;\n"
-                                     + "in vec2 v_texCoords;\n"
-                                     + "uniform sampler2D u_texture;\n"
-                                     + "void main()\n"
-                                     + "{\n"                                                             //
-                                     + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
-                                     + "}";
+                                    + "#define LOWP lowp\n"
+                                    + "precision mediump float;\n"
+                                    + "#endif\n"
+                                    + "in vec4 v_color;\n"
+                                    + "in vec2 v_texCoords;\n"
+                                    + "uniform sampler2D u_texture;\n"
+                                    + "void main()\n"
+                                    + "{\n"                                                             //
+                                    + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
+                                    + "}";
 
         var shader = new ShaderProgram( VertexShader, FragmentShader );
 
@@ -1364,4 +1385,3 @@ public class SpriteCache
 
 // ============================================================================
 // ============================================================================
-

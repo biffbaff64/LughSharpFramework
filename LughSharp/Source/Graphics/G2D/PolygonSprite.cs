@@ -38,32 +38,6 @@ public class PolygonSprite
     public float          ScaleY   { get; set; } = 1f;
     public float          Rotation { get; set; }
 
-    // ========================================================================
-
-    private readonly Rectangle _bounds = new();
-
-    private bool     _dirty;
-    private float[]? _vertices;
-    private float    _x;
-    private float    _y;
-
-    // ========================================================================
-
-    public PolygonSprite( PolygonRegion region )
-    {
-        SetRegion( region );
-        SetSize( region.Region.GetRegionWidth(), region.Region.GetRegionHeight() );
-        SetOrigin( Width / 2, Height / 2 );
-    }
-
-    /// <summary>
-    /// Creates a sprite that is a copy in every way of the specified sprite.
-    /// </summary>
-    public PolygonSprite( PolygonSprite sprite )
-    {
-        Set( sprite );
-    }
-
     /// <summary>
     /// Sets the x position where the sprite will be drawn. If origin, rotation,
     /// or scale are changed, it is slightly more efficient to set the position
@@ -96,6 +70,40 @@ public class PolygonSprite
     /// </summary>
     public Color Color { get; } = new( 1f, 1f, 1f, 1f );
 
+    // ========================================================================
+
+    private readonly Rectangle _bounds = new();
+
+    private bool     _dirty;
+    private float[]? _vertices;
+    private float    _x;
+    private float    _y;
+
+    // ========================================================================
+
+    /// <summary>
+    /// Creates a new PolygonSprite with the specified <see cref="PolygonRegion"/>".
+    /// </summary>
+    /// <param name="region"></param>
+    public PolygonSprite( PolygonRegion region )
+    {
+        SetRegion( region );
+        SetSize( region.Region.GetRegionWidth(), region.Region.GetRegionHeight() );
+        SetOrigin( Width / 2, Height / 2 );
+    }
+
+    /// <summary>
+    /// Creates a sprite that is a copy in every way of the specified <see cref="PolygonSprite"/>.
+    /// </summary>
+    public PolygonSprite( PolygonSprite sprite )
+    {
+        Set( sprite );
+    }
+
+    /// <summary>
+    /// Sets this PolygonSprite to be a copy in every way of the provided PolygonSprite.
+    /// </summary>
+    /// <param name="sprite"> The PolygonSprite to copy. </param>
     public void Set( PolygonSprite sprite )
     {
         Guard.Against.Null( sprite );
@@ -218,6 +226,10 @@ public class PolygonSprite
         }
     }
 
+    /// <summary>
+    /// Sets the color used to tint this sprite. Default is <see cref="Color.White"/>.
+    /// </summary>
+    /// <param name="tint">The color to tint the sprite with.</param>
     public void SetColor( Color tint )
     {
         Color.Set( tint );
@@ -230,6 +242,13 @@ public class PolygonSprite
         }
     }
 
+    /// <summary>
+    /// Sets the color used to tint this sprite.
+    /// </summary>
+    /// <param name="r"> The red component. </param>
+    /// <param name="g"> The green component. </param>
+    /// <param name="b"> The blue component. </param>
+    /// <param name="a"> The alpha component. </param>
     public void SetColor( float r, float g, float b, float a )
     {
         Color.Set( r, g, b, a );
@@ -250,6 +269,10 @@ public class PolygonSprite
         _dirty  = true;
     }
 
+    /// <summary>
+    /// Sets the rotation of the sprite in degrees. Rotation is centered on the origin
+    /// set in <see cref="SetOrigin(float, float)"/>
+    /// </summary>
     public void SetRotation( float degrees )
     {
         Rotation = degrees;
@@ -265,6 +288,12 @@ public class PolygonSprite
         _dirty   =  true;
     }
 
+    /// <summary>
+    /// Sets the sprite's scale for both X and Y uniformly. The sprite scales
+    /// out from the origin. This will not affect the values returned by
+    /// <see cref="Width"/> and <see cref="Height"/>
+    /// </summary>
+    /// <param name="scaleXY"> The uniform scale. </param>
     public void SetScale( float scaleXY )
     {
         ScaleX = scaleXY;
@@ -272,6 +301,13 @@ public class PolygonSprite
         _dirty = true;
     }
 
+    /// <summary>
+    /// Sets the sprite's scale for both X and Y. The sprite scales out from
+    /// the origin. This will not affect the values returned by
+    /// <see cref="Width"/> and <see cref="Height"/>
+    /// </summary>
+    /// <param name="scaleX"> The scale for the X axis. </param>
+    /// <param name="scaleY"> The scale for the Y axis. </param>
     public void SetScale( float scaleX, float scaleY )
     {
         ScaleX = scaleX;
@@ -282,6 +318,7 @@ public class PolygonSprite
     /// <summary>
     /// Sets the sprite's scale relative to the current scale.
     /// </summary>
+    /// <param name="amount"> The amount to add to the current scale. </param>
     public void Scale( float amount )
     {
         ScaleX += amount;
@@ -370,9 +407,12 @@ public class PolygonSprite
     }
 
     /// <summary>
-    /// 
+    /// Draws the current <see cref="PolygonSprite"/> using the specified
+    /// <see cref="PolygonSpriteBatch"/>.
     /// </summary>
-    /// <param name="spriteBatch"></param>
+    /// <param name="spriteBatch">
+    /// The <see cref="PolygonSpriteBatch"/> used to render the sprite.
+    /// </param>
     public void Draw( PolygonSpriteBatch spriteBatch )
     {
         if ( Region?.Region.Texture == null )
@@ -390,10 +430,13 @@ public class PolygonSprite
     }
 
     /// <summary>
-    /// 
+    /// Draws the current <see cref="PolygonSprite"/> using the specified
+    /// <see cref="PolygonSpriteBatch"/>.
     /// </summary>
-    /// <param name="spriteBatch"></param>
-    /// <param name="alphaModulation"></param>
+    /// <param name="spriteBatch">
+    /// The <see cref="PolygonSpriteBatch"/> used to render the sprite.
+    /// </param>
+    /// <param name="alphaModulation"> The alpha modulation to apply. </param>
     public void Draw( PolygonSpriteBatch spriteBatch, float alphaModulation )
     {
         Color color    = Color;
@@ -427,9 +470,12 @@ public class PolygonSprite
     }
 
     /// <summary>
-    /// 
+    /// Sets the <see cref="PolygonRegion"/> to be associated with this <see cref="PolygonSprite"/>.
     /// </summary>
-    /// <param name="region"></param>
+    /// <param name="region">
+    /// The <see cref="PolygonRegion"/> defining the texture coordinates and vertices for
+    /// this sprite. If null, no region is set.
+    /// </param>
     public void SetRegion( PolygonRegion? region )
     {
         if ( region == null )

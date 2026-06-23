@@ -388,16 +388,14 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
     -      -      -      - ParticleEffect
     -      -      -      - ParticleEffectPool
     -      -      -      - ParticleEmitter
-    -      -      -      - PixmapPacker
-    -      -      -      - PixmapPackerIO
     -      -      -      - PolygonRegion
     -      -      -      - PolygonRegionLoader
-    -      -      -      - PolygonSprite
+    - DONE - DONE - DONE - PolygonSprite
     -      -      -      - PolygonSpriteBatch              Some methods have too many parameters
     -      -      -      - RepeatablePolygonSprite
-    -      -      -      - Sprite2D
+    - DONE - DONE - DONE - Sprite2D
     - DONE - DONE - DONE - SpriteBatch
-    - IP   - IP   - DONE - SpriteCache
+    - DONE - DONE - DONE - SpriteCache
 
 LUGHSHARP/SOURCE/GRAPHICS/G3D
 -----------------------------
@@ -424,6 +422,8 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES
     -      -      -      - PixmapData
     -      -      -      - PixmapDownloader
     -      -      -      - PixmapIO
+    -      -      -      - PixmapPacker
+    -      -      -      - PixmapPackerIO
     - DONE - DONE - DONE - Texture2D
     - DONE - IP   - DONE - TextureRegion
 

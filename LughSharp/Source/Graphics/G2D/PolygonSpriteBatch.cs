@@ -69,21 +69,57 @@ namespace LughSharp.Source.Graphics.G2D;
 [PublicAPI]
 public class PolygonSpriteBatch : IPolygonBatch
 {
-    // The maximum number of triangles rendered in one batch so far.
+    /// <summary>
+    /// The maximum number of triangles rendered in one batch so far.
+    /// </summary>
     public int MaxTrianglesInBatch { get; set; }
 
-    // Number of render calls since the last call to Begin()
+    /// <summary>
+    /// Number of render calls since the last call to Begin()
+    /// </summary>
     public int RenderCalls { get; set; }
 
-    // Number of rendering calls, ever. Will not be reset unless set manually.
-    public int       TotalRenderCalls  { get; set; }
-    public BlendMode BlendSrcFunc      { get; private set; } = BlendMode.SrcAlpha;
-    public BlendMode BlendDstFunc      { get; private set; } = BlendMode.OneMinusSrcAlpha;
+    /// <summary>
+    /// Number of rendering calls since this PolygonSpriteBatch was created
+    /// Will not be reset unless set manually.
+    /// </summary>
+    public int TotalRenderCalls { get; set; }
+
+    /// <summary>
+    /// The source blend factor used for RGB channels.
+    /// </summary>
+    public BlendMode BlendSrcFunc { get; private set; } = BlendMode.SrcAlpha;
+
+    /// <summary>
+    /// The destination blend factor used for RGB channels.
+    /// </summary>
+    public BlendMode BlendDstFunc { get; private set; } = BlendMode.OneMinusSrcAlpha;
+
+    /// <summary>
+    /// The source blend factor used for the alpha channel.
+    /// </summary>
     public BlendMode BlendSrcFuncAlpha { get; private set; } = BlendMode.SrcAlpha;
+
+    /// <summary>
+    /// The destination blend factor used for the alpha channel.
+    /// </summary>
     public BlendMode BlendDstFuncAlpha { get; private set; } = BlendMode.OneMinusSrcAlpha;
-    public Matrix4   ProjectionMatrix  { get; set; }         = new();
-    public Matrix4   TransformMatrix   { get; set; }         = new();
-    public bool      IsDrawing         { get; set; }
+
+    /// <summary>
+    /// The orthographic projection matrix applied to the batch.
+    /// </summary>
+    public Matrix4 ProjectionMatrix { get; set; } = new();
+
+    /// <summary>
+    /// The model/world transform matrix applied before projection.
+    /// </summary>
+    public Matrix4 TransformMatrix { get; set; } = new();
+
+    /// <summary>
+    /// Returns <c>true</c> when the batch is between a <see cref="Begin"/> and
+    /// <see cref="End"/> call.
+    /// </summary>
+    public bool IsDrawing { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -101,7 +137,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     private ShaderProgram? _customShader;
     private float          _invTexHeight;
     private float          _invTexWidth;
-    private Texture2D?       _lastTexture;
+    private Texture2D?     _lastTexture;
     private int            _triangleIndex;
     private int            _vertexIndex;
     private bool           _originalDepthMask;
@@ -185,6 +221,14 @@ public class PolygonSpriteBatch : IPolygonBatch
         ProjectionMatrix.SetToOrtho2D( 0, 0, Engine.Graphics.WindowWidth, Engine.Graphics.WindowHeight );
     }
 
+    /// <summary>
+    /// Sets up the Batch for drawing. This will disable depth buffer writing. It enables blending
+    /// and texturing. If you have more texture units enabled than the first one you have to disable
+    /// them before calling this. Uses a screen coordinate system by default where everything is
+    /// given in pixels. You can specify your own projection and modelview matrices via
+    /// <see cref="IBatch.SetProjectionMatrix"/> and <see cref="IBatch.SetTransformMatrix"/>.
+    /// </summary>
+    /// <param name="depthMaskEnabled"> Enable or Disable DepthMask. Defaults to false. </param>
     public void Begin( bool depthMaskEnabled = false )
     {
         if ( IsDrawing )
@@ -211,6 +255,10 @@ public class PolygonSpriteBatch : IPolygonBatch
         IsDrawing = true;
     }
 
+    /// <summary>
+    /// Finishes off rendering. Enables depth writes, disables blending and texturing.
+    /// Must always be called after a call to <see cref="IBatch.Begin"/>
+    /// </summary>
     public void End()
     {
         if ( !IsDrawing )
@@ -234,6 +282,9 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <returns>
+    /// The rendering color of this Batch.
+    /// </returns>
     public Color Color
     {
         get => _color;
@@ -244,29 +295,28 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Sets the rendering color of this Batch.
+    /// </summary>
+    /// <param name="r"> The red component of the color </param>
+    /// <param name="g"> The green component of the color </param>
+    /// <param name="b"> The blue component of the color </param>
+    /// <param name="a"> The aalpha component of the color </param>
     public void SetColor( float r, float g, float b, float a )
     {
         _color.Set( r, g, b, a );
         _colorPacked = _color.ToFloatBitsRgba();
     }
 
-    public float ColorPackedABGR
-    {
-        get => throw new NotImplementedException();
-        set => throw new NotImplementedException();
-    }
+    /// <summary>
+    /// This batch's Color packed into a float ABGR format.
+    /// </summary>
+    public float ColorPackedABGR => Color.ToFloatBitsAbgr( Color.A, Color.B, Color.G, Color.R );
 
-    public float ColorPackedRGBA
-    {
-        get => _colorPacked;
-        set
-        {
-            Color color = Color;
-
-            Color.Rgba8888ToColor( ref color, ( uint )value );
-            _colorPacked = value;
-        }
-    }
+    /// <summary>
+    /// This batch's Color packed into a float RGBA format.
+    /// </summary>
+    public float ColorPackedRGBA => Color.ToFloatBitsRgba( Color.R, Color.G, Color.B, Color.A );
 
     /// <summary>
     /// Draws the supplied <see cref="PolygonRegion"/> at the given corrdinates.
@@ -274,7 +324,9 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// <param name="region"> The Polygon Region to draw </param>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="RuntimeException">
+    /// Thrown if this method was called before a call to Begin().
+    /// </exception>
     public void Draw( PolygonRegion region, float x, float y )
     {
         if ( !IsDrawing )
@@ -314,6 +366,18 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Draws a polygon region with the bottom left corner at x,y and stretching
+    /// the region to cover the given width and height.
+    /// </summary>
+    /// <param name="region"> The region to draw. </param>
+    /// <param name="x"> X coordinate </param>
+    /// <param name="y"> Y coordinate </param>
+    /// <param name="width"> Width of the region. </param>
+    /// <param name="height"> Height of the region. </param>
+    /// <exception cref="RuntimeException">
+    /// Thrown if this method was called before a call to Begin().
+    /// </exception>
     public void Draw( PolygonRegion region, float x, float y, float width, float height )
     {
         if ( !IsDrawing )
@@ -358,6 +422,23 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Draws the polygon region with the bottom left corner at x,y and stretching the region to
+    /// cover the given width and height. The polygon region is offset by originX, originY relative
+    /// to the origin. Scale specifies the scaling factor by which the polygon region should be
+    /// scaled around originX, originY. Rotation specifies the angle of counter clockwise rotation
+    /// of the rectangle around originX originY.
+    /// </summary>
+    /// <param name="region"> The region to draw. </param>
+    /// <param name="x"> X coordinate </param>
+    /// <param name="y"> Y coordinate </param>
+    /// <param name="originX"> X coordinate of the origin. </param>
+    /// <param name="originY"> Y coordinate of the origin. </param>
+    /// <param name="width"> Width of the region. </param>
+    /// <param name="height"> Height of the region. </param>
+    /// <param name="scaleX"> Scale factor along the x-axis. </param>
+    /// <param name="scaleY"> Scale factor along the y-axis. </param>
+    /// <param name="rotation">The rotation angle of the texture in radians.</param>
     public void Draw( PolygonRegion region,
                       float x,
                       float y,
@@ -418,6 +499,24 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Draws a polygon using the specified texture, vertices, and triangles.
+    /// </summary>
+    /// <param name="texture"> The texture to apply to the polygon. </param>
+    /// <param name="polygonVertices"> An array of vertex coordinates defining the polygon. </param>
+    /// <param name="verticesOffset">
+    /// The starting offset in the vertex array to begin reading vertices.
+    /// </param>
+    /// <param name="verticesCount"> The number of vertices to read from the vertex array. </param>
+    /// <param name="polygonTriangles">
+    /// An array of triangle indices defining how the vertices are connected.
+    /// </param>
+    /// <param name="trianglesOffset">
+    /// The starting offset in the triangle array to begin reading indices.
+    /// </param>
+    /// <param name="trianglesCount">
+    /// The number of triangle indices to read from the triangle array.
+    /// </param>
     public void Draw( Texture2D texture,
                       float[] polygonVertices,
                       int verticesOffset,
@@ -452,6 +551,34 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertexIndex += verticesCount;
     }
 
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at regionX, regionX having the given width
+    /// and height, from region.Width and region.Height, in pixels. The rectangle is offset by origin.X,
+    /// origin.Y relative to the origin. Scale specifies the scaling factor by which the rectangle
+    /// should be scaled around originX, originY. Rotation specifies the angle of counter clockwise
+    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture2D"/>
+    /// given by srcX, srcY and srcWidth, srcHeight is used.
+    /// <para>
+    /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
+    /// portion should be flipped horizontally or vertically.
+    /// </para>
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="region">
+    /// the x &amp; y coordinates in screen space, and width &amp; height of the rectangle.
+    /// </param>
+    /// <param name="origin">
+    /// the x &amp; y coordinates of the scaling and rotation origin relative to the screen space coordinates
+    /// </param>
+    /// <param name="scale"> the scale of the rectangle around originX/originY in x &amp; y </param>
+    /// <param name="rotation">
+    /// the angle of counter clockwise rotation of the rectangle around originX/originY
+    /// </param>
+    /// <param name="src">
+    /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
+    /// </param>
+    /// <param name="flipX"> whether to flip the sprite horizontally </param>
+    /// <param name="flipY"> whether to flip the sprite vertically </param>
     public void Draw( Texture2D texture,
                       GRect region,
                       Point2D origin,
@@ -603,6 +730,21 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
+    /// specify whether the texture portion should be flipped horizontally or vertically.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="region">
+    /// the x &amp; y coordinates in screen space, and width &amp; height of the rectangle.
+    /// </param>
+    /// <param name="src">
+    /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
+    /// </param>
+    /// <param name="flipX"> whether to flip the sprite horizontally </param>
+    /// <param name="flipY"> whether to flip the sprite vertically </param>
     public void Draw( Texture2D texture,
                       GRect region,
                       GRect src,
@@ -675,6 +817,17 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight are used. These coordinates and sizes are given in texels.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space </param>
+    /// <param name="src">
+    /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
+    /// </param>
     public void Draw( Texture2D texture, float x, float y, GRect src )
     {
         if ( !IsDrawing )
@@ -733,6 +886,20 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by u, v and u2, v2 are used.
+    /// These coordinates and sizes are given in texture size percentage. The rectangle will
+    /// have the given tint <see cref="IBatch.Color"/>.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="region">
+    /// the x &amp; y coordinates in screen space, and width &amp; height of the rectangle.
+    /// </param>
+    /// <param name="u">  The u-coordinate in texture space </param>
+    /// <param name="v">  The v-coordinate in texture space </param>
+    /// <param name="u2"> The u2-coordinate in texture space </param>
+    /// <param name="v2"> The v2-coordinate in texture space </param>
     public void Draw( Texture2D texture, GRect region, float u, float v, float u2, float v2 )
     {
         if ( !IsDrawing )
@@ -787,12 +954,27 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Draws a texture with the bottom left corner at x,y having the width and
+    /// height of the texture.
+    /// </summary>
+    /// <param name="texture"> The texture to draw </param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space  </param>
     public void Draw( Texture2D texture, float x, float y )
     {
         Draw( texture, x, y, texture.Width, texture.Height );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y and stretching the region
+    /// to cover the given width and height.
+    /// </summary>
+    /// <param name="texture"> The texture to draw </param>
+    /// <param name="posX"> the x-coordinate in screen space </param>
+    /// <param name="posY"> the y-coordinate in screen space  </param>
+    /// <param name="width"> The width of the rectangle </param>
+    /// <param name="height"> The height of the rectangle </param>
     public void Draw( Texture2D texture, float posX, float posY, float width, float height )
     {
         if ( !IsDrawing )
@@ -851,6 +1033,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Renders a set of sprite vertices using the specified texture.
+    /// </summary>
+    /// <param name="texture">The texture to be used for rendering. Can be null if not needed.</param>
+    /// <param name="spriteVertices">An array of vertex data describing the sprites to be rendered.</param>
+    /// <param name="offset">The starting index in the vertex array from which to begin processing.</param>
+    /// <param name="count">The number of vertices to process starting from the specified offset.</param>
     public void Draw( Texture2D texture, float[] spriteVertices, int offset, int count )
     {
         if ( !IsDrawing )
@@ -920,11 +1109,27 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Draws a texture region with the bottom left corner at x,y having the width and
+    /// height of the texture region.
+    /// </summary>
+    /// <param name="region"> The texture to draw </param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space  </param>
     public void Draw( TextureRegion region, float x, float y )
     {
         Draw( region, x, y, region.GetRegionWidth(), region.GetRegionHeight() );
     }
 
+    /// <summary>
+    /// Draws a texture region with the bottom left corner at x,y and stretching the region
+    /// to cover the given width and height.
+    /// </summary>
+    /// <param name="region"> The texture to draw </param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space  </param>
+    /// <param name="width"> The width of the rectangle </param>
+    /// <param name="height"> The height of the rectangle </param>
     public void Draw( TextureRegion region, float x, float y, float width, float height )
     {
         if ( !IsDrawing )
@@ -990,6 +1195,18 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y and stretching the region to
+    /// cover the given width and height. The rectangle is offset by originX, originY relative
+    /// to the origin. Scale specifies the scaling factor by which the rectangle should be scaled
+    /// around originX, originY. Rotation specifies the angle of counter clockwise rotation
+    /// of the rectangle around originX, originY.
+    /// </summary>
+    /// <param name="textureRegion">The texture region to be drawn.</param>
+    /// <param name="region">The rectangular region where the texture will be drawn.</param>
+    /// <param name="origin">The origin point for transformations such as scaling and rotation.</param>
+    /// <param name="scale">The scale factor to be applied to the texture region.</param>
+    /// <param name="rotation">The rotation angle in radians to be applied to the texture region.</param>
     public void Draw( TextureRegion textureRegion,
                       GRect region,
                       Point2D origin,
@@ -1135,6 +1352,25 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom
+    /// left corner at x,y and stretching the region to cover the given width and height.
+    /// The rectangle is offset by originX, originY relative to the origin. Scale specifies
+    /// the scaling factor by which the rectangle should be scaled around originX, originY.
+    /// Rotation specifies the angle of counter clockwise rotation of the rectangle around
+    /// originX, originY.
+    /// </summary>
+    /// <param name="textureRegion"></param>
+    /// <param name="region">
+    /// the x &amp; y coordinates in screen space, and width &amp; height of the rectangle.
+    /// </param>
+    /// <param name="origin"></param>
+    /// <param name="scale"></param>
+    /// <param name="rotation"></param>
+    /// <param name="clockwise">
+    /// If true, the texture coordinates are rotated 90 degrees clockwise.
+    /// If false, they are rotated 90 degrees counter clockwise.
+    /// </param>
     public void Draw( TextureRegion textureRegion,
                       GRect region,
                       Point2D origin,
@@ -1432,6 +1668,14 @@ public class PolygonSpriteBatch : IPolygonBatch
         SetBlendFunctionSeparate( srcFunc, dstFunc, srcFunc, dstFunc );
     }
 
+    /// <summary>
+    /// Sets the Blend Functions to use when rendering. The provided
+    /// methods handle Color or Alpha functions.
+    /// </summary>
+    /// <param name="srcFuncColor"> Source Function for Color. </param>
+    /// <param name="dstFuncColor"> Destination Function for Color. </param>
+    /// <param name="srcFuncAlpha"> Source Function for Alpha. </param>
+    /// <param name="dstFuncAlpha"> Destination Function for Alpha. </param>
     public void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha,
                                           BlendMode dstFuncAlpha )
     {
@@ -1451,6 +1695,9 @@ public class PolygonSpriteBatch : IPolygonBatch
         BlendDstFuncAlpha = dstFuncAlpha;
     }
 
+    /// <summary>
+    /// Disposes of the resources used by this PolygonSpriteBatch.
+    /// </summary>
     public void Dispose()
     {
         _mesh.Dispose();
@@ -1461,6 +1708,10 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Sets the projection matrix used for drawing.
+    /// </summary>
+    /// <param name="projection">The new projection matrix to be applied.</param>
     public void SetProjectionMatrix( Matrix4 projection )
     {
         if ( IsDrawing )
@@ -1476,6 +1727,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Sets the transformation matrix to be applied to the SpriteBatch during
+    /// the rendering process.
+    /// </summary>
+    /// <param name="transform">
+    /// A Matrix4 representing the new transformation to be applied.
+    /// </param>
     public void SetTransformMatrix( Matrix4 transform )
     {
         if ( IsDrawing )
@@ -1491,6 +1749,10 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// The shader program used for rendering polygons. This can be set to a custom
+    /// shader or defaults to the internal shader if not specified.
+    /// </summary>
     public ShaderProgram? Shader
     {
         get => _customShader ?? _shader;
@@ -1519,6 +1781,10 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Configures the combined matrix by multiplying the projection and transform matrices,
+    /// and uploads it to the active shader program. Additionally sets the texture uniform.
+    /// </summary>
     public void SetupMatrices()
     {
         _combinedMatrix.Set( ProjectionMatrix ).Mul( TransformMatrix );
@@ -1535,14 +1801,21 @@ public class PolygonSpriteBatch : IPolygonBatch
         }
     }
 
+    /// <summary>
+    /// Flushes the sprite batch, then sets the last texture to the given texture.
+    /// </summary>
     private void SwitchTexture( Texture2D texture )
     {
         Flush();
+
         _lastTexture  = texture;
         _invTexWidth  = 1.0f / texture.Width;
         _invTexHeight = 1.0f / texture.Height;
     }
 
+    /// <summary>
+    /// Returns <c>true</c> if blending is enabled.
+    /// </summary>
     public bool IsBlendingEnabled()
     {
         return !_blendingDisabled;

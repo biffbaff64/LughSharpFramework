@@ -608,7 +608,7 @@ public partial interface IGLBindings
     /// Enable or disable writing into the depth buffer.
     /// </summary>
     /// <param name="flag">
-    /// Specifies whether depth buffer writing is enabled or disabled. If flag is <see langword="false"/>,
+    /// Specifies whether depth buffer writing is enabled or disabled. If flag is <c>false</c>,
     /// depth buffer writing is disabled. Otherwise, it is enabled. Initially, depth buffer writing is enabled.
     /// </param>
     void DepthMask( GLboolean flag );
@@ -1668,8 +1668,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="texture">Specifies a value that may be the name of a texture.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="texture"/> is currently the name of a texture. Otherwise,
-    /// <see langword="false"/> is returned.
+    /// <c>true</c> if <paramref name="texture"/> is currently the name of a texture. Otherwise,
+    /// <c>false</c> is returned.
     /// </returns>
     bool IsGLTexture( uint texture );
 
@@ -1983,7 +1983,7 @@ public partial interface IGLBindings
     /// </param>
     /// <param name="invert">
     /// Specify a single boolean value representing if the coverage masks should be inverted. The intial
-    /// value is <see langword="false"/>.
+    /// value is <c>false</c>.
     /// </param>
     void SampleCoverage( float value, bool invert );
 
@@ -2670,7 +2670,7 @@ public partial interface IGLBindings
     /// Determine if a name corresponds to a query object.
     /// </summary>
     /// <param name="id">Specifies a value that may be the name of a query object.</param>
-    /// <returns><see langword="true"/> if <paramref name="id"/> is query object name, otherwise <see langword="false"/>.</returns>
+    /// <returns><c>true</c> if <paramref name="id"/> is query object name, otherwise <c>false</c>.</returns>
     bool IsQuery( uint id );
 
     /// <summary>
@@ -2833,7 +2833,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="buffer">A value that may be the name of a buffer object.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="buffer"/> is a buffer object name. <see langword="false"/>
+    /// <c>true</c> if <paramref name="buffer"/> is a buffer object name. <c>false</c>
     /// otherwise.
     /// </returns>
     bool IsBuffer( uint buffer );
@@ -3022,9 +3022,9 @@ public partial interface IGLBindings
     /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <returns>
-    /// <see langword="true"/> unless the data store contents have become corrupt during the time the data store was
+    /// <c>true</c> unless the data store contents have become corrupt during the time the data store was
     /// mapped. This can occur for system-specific reasons that affect the availability of graphics memory, such as screen
-    /// mode changes. In such situations, <see cref="UnmapBuffer"/> may return <see langword="false"/> to
+    /// mode changes. In such situations, <see cref="UnmapBuffer"/> may return <c>false</c> to
     /// indicate that
     /// the contents of the buffer have become corrupt and should be considered undefined. An application must detect this
     /// rare condition and reinitialize the data store.
@@ -3673,7 +3673,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="program">Specifies a potential program object.</param>
     /// <returns>
-    /// <see langword="true"/> if program is currently the name of a program object. <see langword="false"/>
+    /// <c>true</c> if program is currently the name of a program object. <c>false</c>
     /// otherwise.
     /// </returns>
     bool IsProgram( int program );
@@ -3683,7 +3683,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="shader">Specifies a potential shader object.</param>
     /// <returns>
-    /// <see langword="true"/> if shader is currently the name of a shader object. <see langword="false"/>
+    /// <c>true</c> if shader is currently the name of a shader object. <c>false</c>
     /// otherwise.
     /// </returns>
     bool IsShader( int shader );
@@ -4552,8 +4552,8 @@ public partial interface IGLBindings
     /// initial value is <see cref="IGL.GLFloat"/>.
     /// </param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized <see langword="true"/> or
-    /// converted directly as fixed-point values <see langword="false"/> when they are accessed.
+    /// Specifies whether fixed-point data values should be normalized <c>true</c> or
+    /// converted directly as fixed-point values <c>false</c> when they are accessed.
     /// </param>
     /// <param name="stride">
     /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the
@@ -4579,8 +4579,8 @@ public partial interface IGLBindings
     /// initial value is <see cref="IGL.GLFloat"/>.
     /// </param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized <see langword="true"/> or
-    /// converted directly as fixed-point values <see langword="false"/> when they are accessed.
+    /// Specifies whether fixed-point data values should be normalized <c>true</c> or
+    /// converted directly as fixed-point values <c>false</c> when they are accessed.
     /// </param>
     /// <param name="stride">
     /// Specifies the byte offset between consecutive generic vertex attributes. If stride is 0, the
@@ -4953,8 +4953,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">Specifies the target to be clamped. Must be <see cref="IGL.GLClampReadColor"/>.</param>
     /// <param name="clamp">
-    /// Specifies whether to apply color clamping. <see langword="true"/> specifies that clamping is
-    /// enabled, <see langword="false"/> specifies that clamping is disabled.
+    /// Specifies whether to apply color clamping. <c>true</c> specifies that clamping is
+    /// enabled, <c>false</c> specifies that clamping is disabled.
     /// </param>
     void ClampColor( int target, int clamp );
 
@@ -5754,8 +5754,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="renderbuffer">Specifies a value that may be the name of a renderbuffer object.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="renderbuffer"/> is the name of a renderbuffer object.
-    /// <see langword="false"/> otherwise.
+    /// <c>true</c> if <paramref name="renderbuffer"/> is the name of a renderbuffer object.
+    /// <c>false</c> otherwise.
     /// </returns>
     bool IsRenderbuffer( uint renderbuffer );
 
@@ -5858,8 +5858,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="framebuffer">Specifies a value that may be the name of a framebuffer object.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="framebuffer"/> is the name of a framebuffer object.
-    /// <see langword="false"/> otherwise.
+    /// <c>true</c> if <paramref name="framebuffer"/> is the name of a framebuffer object.
+    /// <c>false</c> otherwise.
     /// </returns>
     bool IsFramebuffer( uint framebuffer );
 
@@ -6201,8 +6201,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="array">Specifies a value that may be the name of a vertex array object.</param>
     /// <returns>
-    /// Returns <see langword="true"/> if <paramref name="array"/> is the name of a vertex array object. Otherwise,
-    /// returns <see langword="false"/>.
+    /// Returns <c>true</c> if <paramref name="array"/> is the name of a vertex array object. Otherwise,
+    /// returns <c>false</c>.
     /// </returns>
     bool IsVertexArray( uint array );
 
@@ -6722,8 +6722,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="sync">Specifies a value that may be the name of a sync object.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="sync"/> is a name of a sync object. Otherwise,
-    /// <see langword="false"/>.
+    /// <c>true</c> if <paramref name="sync"/> is a name of a sync object. Otherwise,
+    /// <c>false</c>.
     /// </returns>
     bool IsSync( IntPtr sync );
 
@@ -7031,8 +7031,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="sampler">Specifies a value that may be the name of a sampler object.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="sampler"/> is a value generated by OpenGL; otherwise,
-    /// <see langword="false"/>.
+    /// <c>true</c> if <paramref name="sampler"/> is a value generated by OpenGL; otherwise,
+    /// <c>false</c>.
     /// </returns>
     bool IsSampler( uint sampler );
 
@@ -7273,8 +7273,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP1UI( uint index, int type, bool normalized, uint value );
@@ -7285,8 +7285,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP1Uiv( uint index, int type, bool normalized, uint* value );
@@ -7297,8 +7297,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP1Uiv( uint index, int type, bool normalized, uint[] value );
@@ -7309,8 +7309,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP2UI( uint index, int type, bool normalized, uint value );
@@ -7321,8 +7321,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP2Uiv( uint index, int type, bool normalized, uint* value );
@@ -7333,8 +7333,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP2Uiv( uint index, int type, bool normalized, uint[] value );
@@ -7345,8 +7345,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP3UI( uint index, int type, bool normalized, uint value );
@@ -7357,8 +7357,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP3Uiv( uint index, int type, bool normalized, uint* value );
@@ -7369,8 +7369,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP3Uiv( uint index, int type, bool normalized, uint[] value );
@@ -7381,8 +7381,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP4UI( uint index, int type, bool normalized, uint value );
@@ -7393,8 +7393,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies a pointer to the value of the vertex attribute.</param>
     unsafe void VertexAttribP4Uiv( uint index, int type, bool normalized, uint* value );
@@ -7405,8 +7405,8 @@ public partial interface IGLBindings
     /// <param name="index">Specifies the index of the generic vertex attribute to be modified.</param>
     /// <param name="type">Specifies the data type of the vertex attribute value.</param>
     /// <param name="normalized">
-    /// Specifies whether fixed-point data values should be normalized (<see langword="true"/>), or
-    /// converted directly as fixed-point values (<see langword="false"/>).
+    /// Specifies whether fixed-point data values should be normalized (<c>true</c>), or
+    /// converted directly as fixed-point values (<c>false</c>).
     /// </param>
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP4Uiv( uint index, int type, bool normalized, uint[] value );

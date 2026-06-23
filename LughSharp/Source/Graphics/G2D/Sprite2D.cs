@@ -239,7 +239,7 @@ public class Sprite2D : TextureRegion
     /// </summary>
     /// <param name="sprite">The Sprite whose properties will be copied.</param>
     /// <exception cref="ArgumentNullException">Thrown if the provided sprite is null.</exception>
-    public void Set( Sprite2D sprite )
+    public virtual void Set( Sprite2D sprite )
     {
         Guard.Against.Null( sprite );
 
@@ -420,7 +420,7 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the position where the sprite will be drawn, relative to its current origin.
     /// </summary>
-    public void SetOriginBasedPosition( float x, float y )
+    public virtual void SetOriginBasedPosition( float x, float y )
     {
         SetPosition( x - OriginX, y - OriginY );
     }
@@ -428,7 +428,7 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the position so that the sprite is centered on (x, y)
     /// </summary>
-    public void SetCenter( float x, float y )
+    public virtual void SetCenter( float x, float y )
     {
         SetPosition( x - ( Width / 2 ), y - ( Height / 2 ) );
     }
@@ -436,7 +436,7 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the x position so that it is centered on the given x parameter
     /// </summary>
-    public void SetCenterX( float value )
+    public virtual void SetCenterX( float value )
     {
         _x = value - ( Width / 2 );
     }
@@ -444,7 +444,7 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the y position so that it is centered on the given y parameter
     /// </summary>
-    public void SetCenterY( float value )
+    public virtual void SetCenterY( float value )
     {
         _y = value - ( Height / 2 );
     }
@@ -454,7 +454,7 @@ public class Sprite2D : TextureRegion
     /// be drawn. If origin, rotation, or scale are changed, it is slightly more
     /// efficient to translate after those operations.
     /// </summary>
-    public void TranslateX( float xAmount )
+    public virtual void TranslateX( float xAmount )
     {
         _x += xAmount;
 
@@ -481,7 +481,7 @@ public class Sprite2D : TextureRegion
     /// be drawn. If origin, rotation, or scale are changed, it is slightly more
     /// efficient to translate after those operations.
     /// </summary>
-    public void TranslateY( float yAmount )
+    public virtual void TranslateY( float yAmount )
     {
         _y += yAmount;
 
@@ -508,7 +508,7 @@ public class Sprite2D : TextureRegion
     /// be drawn. If origin, rotation, or scale are changed, it is slightly more
     /// efficient to translate after those operations.
     /// </summary>
-    public void Translate( float xAmount, float yAmount )
+    public virtual void Translate( float xAmount, float yAmount )
     {
         _x += xAmount;
         _y += yAmount;
@@ -562,7 +562,7 @@ public class Sprite2D : TextureRegion
     /// Sets the sprite's rotation in degrees relative to the current rotation.
     /// Rotation is centered on the origin set in <see cref="SetOrigin(float, float)"/>
     /// </summary>
-    public void Rotate( float degrees )
+    public virtual void Rotate( float degrees )
     {
         if ( degrees == 0 )
         {
@@ -619,7 +619,7 @@ public class Sprite2D : TextureRegion
     /// out from the origin. This will not affect the values returned by
     /// <see cref="Width"/> and <see cref="Height"/>
     /// </summary>
-    public void SetScale( float scaleXY )
+    public virtual void SetScale( float scaleXY )
     {
         ScaleX   = scaleXY;
         ScaleY   = scaleXY;
@@ -631,7 +631,7 @@ public class Sprite2D : TextureRegion
     /// the origin. This will not affect the values returned by
     /// <see cref="Width"/> and <see cref="Height"/>
     /// </summary>
-    public void SetScale( float scaleX, float scaleY )
+    public virtual void SetScale( float scaleX, float scaleY )
     {
         ScaleX   = scaleX;
         ScaleY   = scaleY;
@@ -646,7 +646,7 @@ public class Sprite2D : TextureRegion
     /// returned by <see cref="Width"/> and <see cref="Height"/>
     /// </para>
     /// </summary>
-    public void AddScale( float amount )
+    public virtual void AddScale( float amount )
     {
         ScaleX   += amount;
         ScaleY   += amount;
@@ -657,7 +657,7 @@ public class Sprite2D : TextureRegion
     /// Returns the packed vertices, colors, and texture coordinates
     /// for this sprite.
     /// </summary>
-    public float[] GetVertices()
+    public virtual float[] GetVertices()
     {
         if ( !_isDirty )
         {
@@ -738,14 +738,15 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Draws the sprite using the specified batch. This method must be called to render the sprite
-    /// on the screen. It sends the vertices data to the batch, which handles the drawing process.
+    /// Draws the sprite using the specified batch. This method must be called to render
+    /// the sprite on the screen. It sends the vertices data to the batch, which handles
+    /// the drawing process.
     /// </summary>
     /// <param name="batch">
-    /// The batch used to draw the sprite. It must be an implementation of the <see cref="IBatch"/> interface
-    /// and should be properly initialized beforehand.
+    /// The batch used to draw the sprite. It must be an implementation of the <see cref="IBatch"/>
+    /// interface and should be properly initialized beforehand.
     /// </param>
-    public void Draw( IBatch batch )
+    public virtual void Draw( IBatch batch )
     {
         if ( Texture != null )
         {
@@ -754,15 +755,16 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Draws the sprite using the specified batch. This method must be called to render the sprite
-    /// on the screen. It sends the vertices data to the batch, which handles the drawing process.
+    /// Draws the sprite using the specified batch. This method must be called to render
+    /// the sprite on the screen. It sends the vertices data to the batch, which handles
+    /// the drawing process.
     /// </summary>
     /// <param name="batch">
-    /// The batch used to draw the sprite. It must be an implementation of the <see cref="IBatch"/> interface
-    /// and should be properly initialized beforehand.
+    /// The batch used to draw the sprite. It must be an implementation of the <see cref="IBatch"/>
+    /// interface and should be properly initialized beforehand.
     /// </param>
     /// <param name="alphaModulation"> The alpha modulation value to apply to the sprite's color. </param>
-    public void Draw( IBatch batch, float alphaModulation )
+    public virtual void Draw( IBatch batch, float alphaModulation )
     {
         float oldAlpha = Alpha;
 
@@ -778,7 +780,7 @@ public class Sprite2D : TextureRegion
     /// </summary>
     /// <param name="flipx"> the desired horizontal flip state </param>
     /// <param name="flipy"> the desired vertical flip state  </param>
-    public void SetFlip( bool flipx, bool flipy )
+    public virtual void SetFlip( bool flipx, bool flipy )
     {
         var performX = false;
         var performY = false;
@@ -889,6 +891,10 @@ public class Sprite2D : TextureRegion
         Vertices[ IBatch.U2 ] = u;
     }
 
+    /// <summary>
+    /// Sets the V-coordinate for the texture region and updates the corresponding vertex positions.
+    /// </summary>
+    /// <param name="v"> The V-coordinate value to be set for the texture region. </param>
     public override void SetV( float v )
     {
         base.SetV( v );
@@ -897,6 +903,10 @@ public class Sprite2D : TextureRegion
         Vertices[ IBatch.V3 ] = v;
     }
 
+    /// <summary>
+    /// Sets the U2-coordinate for the texture region and updates the corresponding vertex positions.
+    /// </summary>
+    /// <param name="u2">The U2-coordinate value to be set for the texture region.</param>
     public override void SetU2( float u2 )
     {
         base.SetU2( u2 );
@@ -905,6 +915,10 @@ public class Sprite2D : TextureRegion
         Vertices[ IBatch.U4 ] = u2;
     }
 
+    /// <summary>
+    /// Sets the V2-coordinate for the texture region and updates the corresponding vertex positions.
+    /// </summary>
+    /// <param name="v2"> The V2-coordinate value to be set for the texture region. </param>
     public override void SetV2( float v2 )
     {
         base.SetV2( v2 );
@@ -914,12 +928,13 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this sprite. The
-    /// rectangles x and y coordinates describe its bottom left corner. If you change the position
-    /// or size of the sprite, you have to fetch the triangle again for it to be recomputed.
+    /// Returns the bounding axis aligned <see cref="Rectangle"/> that bounds this sprite.
+    /// The rectangles x and y coordinates describe its bottom left corner. If you change
+    /// the position or size of the sprite, you have to fetch the triangle again for it to
+    /// be recomputed.
     /// </summary>
     /// <returns> the bounding Rectangle </returns>
-    public Rectangle GetBoundingRectangle()
+    public virtual Rectangle GetBoundingRectangle()
     {
         float[] vertices = GetVertices();
 
@@ -974,8 +989,8 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the rotation of the sprite in degrees. Rotation is centered on the origin set
-    /// in <see cref="SetOrigin(float, float)"/>
+    /// Sets the rotation of the sprite in degrees. Rotation is centered on the origin
+    /// set in <see cref="SetOrigin(float, float)"/>
     /// </summary>
     public float Rotation
     {
@@ -991,7 +1006,7 @@ public class Sprite2D : TextureRegion
     /// Returns the color of this sprite. If the returned instance is manipulated,
     /// <see cref="SetColor(Color)"/> must be called afterward.
     /// </summary>
-    public Color GetColor()
+    public virtual Color GetColor()
     {
         return _color;
     }
@@ -999,7 +1014,8 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the color used to tint this sprite. Default is <see cref="Color.White"/>.
     /// </summary>
-    public void SetColor( Color tint )
+    /// <param name="tint">The color to tint the sprite with.</param>
+    public virtual void SetColor( Color tint )
     {
         _color.Set( tint );
 
@@ -1014,7 +1030,11 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the color used to tint this sprite.
     /// </summary>
-    public void SetColor( float r, float g, float b, float a )
+    /// <param name="r"> The red component. </param>
+    /// <param name="g"> The green component. </param>
+    /// <param name="b"> The blue component. </param>
+    /// <param name="a"> The alpha component. </param>
+    public virtual void SetColor( float r, float g, float b, float a )
     {
         _color.Set( r, g, b, a );
 
@@ -1029,7 +1049,7 @@ public class Sprite2D : TextureRegion
     /// <summary>
     /// Sets the color of this sprite, expanding the alpha from 0-254 to 0-255.
     /// </summary>
-    public void SetPackedColor( float packedColor )
+    public virtual void SetPackedColor( float packedColor )
     {
         if ( Math.Abs( packedColor - this._packedColor ) > NumberUtils.FloatTolerance
           || ( ( packedColor == 0f ) && ( this._packedColor == 0f )
@@ -1064,9 +1084,10 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the x position where the sprite will be drawn. If origin, rotation, or scale are changed,
-    /// it is slightly more efficient to set the position after those operations. If both position and
-    /// size are to be changed, it is better to use <see cref="SetBounds(float, float, float, float)"/>.
+    /// Sets the x position where the sprite will be drawn. If origin, rotation, or
+    /// scale are changed, it is slightly more efficient to set the position after
+    /// those operations. If both position and size are to be changed, it is better
+    /// to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public virtual void SetX( float x )
     {
@@ -1091,9 +1112,10 @@ public class Sprite2D : TextureRegion
     }
 
     /// <summary>
-    /// Sets the y position where the sprite will be drawn. If origin, rotation, or scale are changed,
-    /// it is slightly more efficient to set the position after those operations. If both position and
-    /// size are to be changed, it is better to use <see cref="SetBounds(float, float, float, float)"/>.
+    /// Sets the y position where the sprite will be drawn. If origin, rotation, or
+    /// scale are changed, it is slightly more efficient to set the position after
+    /// those operations. If both position and size are to be changed, it is better
+    /// to use <see cref="SetBounds(float, float, float, float)"/>.
     /// </summary>
     public virtual void SetY( float y )
     {
@@ -1118,41 +1140,6 @@ public class Sprite2D : TextureRegion
     }
 
     // ========================================================================
-
-    public void PrintVertices( BitmapFont font, int x, int y, IBatch batch )
-    {
-        string[] verticesMsgs =
-        {
-            $"vertices[  0 ]: {Vertices[ IBatch.X1 ]} : X1",
-            $"vertices[  1 ]: {Vertices[ IBatch.Y1 ]} : Y1",
-            $"vertices[  2 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C1 ] ):X} : C1",
-            $"vertices[  3 ]: {Vertices[ IBatch.U1 ]} : U1",
-            $"vertices[  4 ]: {Vertices[ IBatch.V1 ]} : V1",
-            $"vertices[  5 ]: {Vertices[ IBatch.X2 ]} : X2",
-            $"vertices[  6 ]: {Vertices[ IBatch.Y2 ]} : Y2",
-            $"vertices[  7 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C2 ] ):X} : C2",
-            $"vertices[  8 ]: {Vertices[ IBatch.U2 ]} : U2",
-            $"vertices[  9 ]: {Vertices[ IBatch.V2 ]} : V2",
-            $"vertices[ 10 ]: {Vertices[ IBatch.X3 ]} : X3",
-            $"vertices[ 11 ]: {Vertices[ IBatch.Y3 ]} : Y3",
-            $"vertices[ 12 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C3 ] ):X} : C3",
-            $"vertices[ 13 ]: {Vertices[ IBatch.U3 ]} : U3",
-            $"vertices[ 14 ]: {Vertices[ IBatch.V3 ]} : V3",
-            $"vertices[ 15 ]: {Vertices[ IBatch.X4 ]} : X4",
-            $"vertices[ 16 ]: {Vertices[ IBatch.Y4 ]} : Y4",
-            $"vertices[ 17 ]: {NumberUtils.FloatToUintBits( Vertices[ IBatch.C4 ] ):X} : C4",
-            $"vertices[ 18 ]: {Vertices[ IBatch.U4 ]} : U4",
-            $"vertices[ 19 ]: {Vertices[ IBatch.V4 ]} : V4",
-        };
-
-        foreach ( string verticesMsg in verticesMsgs )
-        {
-            font.Draw( batch, new GlyphLayout( font, verticesMsg ), x, y );
-
-            // move down the screen 1 line
-            y -= 20;
-        }
-    }
 
     public void DebugVertices()
     {

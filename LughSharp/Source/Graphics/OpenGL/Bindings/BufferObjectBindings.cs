@@ -136,7 +136,7 @@ public unsafe partial class GLBindings
     /// </summary>
     /// <param name="buffer">A value that may be the name of a buffer object.</param>
     /// <returns>
-    /// <see langword="true"/> if <paramref name="buffer"/> is a buffer object name. <see langword="false"/>
+    /// <c>true</c> if <paramref name="buffer"/> is a buffer object name. <c>false</c>
     /// otherwise.
     /// </returns>
     public GLboolean IsBuffer( GLuint buffer )
@@ -418,9 +418,9 @@ public unsafe partial class GLBindings
     /// <see cref="IGL.GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <returns>
-    /// <see langword="true"/> unless the data store contents have become corrupt during the time the data store was
+    /// <c>true</c> unless the data store contents have become corrupt during the time the data store was
     /// mapped. This can occur for system-specific reasons that affect the availability of graphics memory, such as screen
-    /// mode changes. In such situations, <see cref="IGLBindings.UnmapBuffer"/> may return <see langword="false"/> to
+    /// mode changes. In such situations, <see cref="IGLBindings.UnmapBuffer"/> may return <c>false</c> to
     /// indicate that
     /// the contents of the buffer have become corrupt and should be considered undefined. An application must detect this
     /// rare condition and reinitialize the data store.
