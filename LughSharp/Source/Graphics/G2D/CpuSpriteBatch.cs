@@ -72,7 +72,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// </para>
     /// <para>
     /// Note: The real transform matrix <em>must</em> be invertible. If a singular matrix
-    /// is detected, RuntimeException will be thrown.
+    /// is detected, a <see cref="RuntimeException"/> will be thrown.
     /// </para>
     /// </summary>
     public virtual void FlushAndSyncTransformMatrix()
@@ -96,8 +96,13 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <summary>
-    /// Returns a <see cref="Matrix4"/> holding the transform matrix.
+    /// Retrieves the current transformation matrix applied to the sprite batch.
+    /// If an adjustment is required, returns the virtual transformation matrix; otherwise,
+    /// returns the default transformation matrix.
     /// </summary>
+    /// <returns>
+    /// The current transformation matrix of type <see cref="Matrix4"/>.
+    /// </returns>
     public virtual Matrix4 GetTransformMatrix()
     {
         return _adjustNeeded ? _virtualMatrix : TransformMatrix;
@@ -157,6 +162,9 @@ public class CpuSpriteBatch : SpriteBatch
     /// or <see cref="SpriteBatch.End"/>.
     /// </para>
     /// </summary>
+    /// <param name="transform">
+    /// A Matrix4 representing the new transformation to be applied.
+    /// </param>
     public virtual void SetTransformMatrix( Affine2 transform )
     {
         if ( CheckEqual( TransformMatrix, transform ) )
@@ -466,9 +474,15 @@ public class CpuSpriteBatch : SpriteBatch
     /// <summary>
     /// Draws a texture region onto the batch with specified position and dimensions.
     /// </summary>
-    /// <param name="region">The texture region to be drawn, which includes the texture and UV coordinates.</param>
-    /// <param name="x">The X-coordinate of the bottom-left corner where the texture will be drawn.</param>
-    /// <param name="y">The Y-coordinate of the bottom-left corner where the texture will be drawn.</param>
+    /// <param name="region">
+    /// The texture region to be drawn, which includes the texture and UV coordinates.
+    /// </param>
+    /// <param name="x">
+    /// The X-coordinate of the bottom-left corner where the texture will be drawn.
+    /// </param>
+    /// <param name="y">
+    /// The Y-coordinate of the bottom-left corner where the texture will be drawn.
+    /// </param>
     /// <param name="width">The width of the texture region to be drawn.</param>
     /// <param name="height">The height of the texture region to be drawn.</param>
     public override void Draw( TextureRegion? region,
@@ -621,17 +635,23 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <summary>
+    /// Draws a rectangular region of the specified texture using CPU-adjusted vertex
+    /// positions for the current virtual transform matrix.
     /// </summary>
-    /// <param name="region">The texture region to be drawn.</param>
-    /// <param name="x">The x-coordinate in pixels where the texture will be drawn.</param>
-    /// <param name="y">The y-coordinate in pixels where the texture will be drawn.</param>
-    /// <param name="originX">The x-origin in pixels for scaling and rotation transformations.</param>
-    /// <param name="originY">The y-origin in pixels for scaling and rotation transformations.</param>
-    /// <param name="width">The width of the texture region in pixels.</param>
-    /// <param name="height">The height of the texture region in pixels.</param>
-    /// <param name="scaleX">The scaling factor along the x-axis.</param>
-    /// <param name="scaleY">The scaling factor along the y-axis.</param>
-    /// <param name="rotation">The rotation angle in radians.</param>
+    /// <param name="region">The texture region to be drawn, representing a portion of a texture.</param>
+    /// <param name="x">The X-coordinate of the position where the texture should be drawn in pixels.</param>
+    /// <param name="y">The Y-coordinate of the position where the texture should be drawn in pixels.</param>
+    /// <param name="originX">
+    /// The X origin of the texture region in pixels, used for transformations like scaling or rotation.
+    /// </param>
+    /// <param name="originY">
+    /// The Y origin of the texture region in pixels, used for transformations like scaling or rotation.
+    /// </param>
+    /// <param name="width">The width of the texture region to be drawn in pixels.</param>
+    /// <param name="height">The height of the texture region to be drawn in pixels.</param>
+    /// <param name="scaleX">The scaling factor along the X-axis for the drawn texture.</param>
+    /// <param name="scaleY">The scaling factor along the Y-axis for the drawn texture.</param>
+    /// <param name="rotation">The rotation angle of the texture in radians, applied around the origin.</param>
     private void DrawAdjusted( TextureRegion? region,
                                float x,
                                float y,
@@ -665,24 +685,25 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <summary>
-    /// 
+    /// Draws a rectangular region of the specified texture using CPU-adjusted vertex
+    /// positions for the current virtual transform matrix.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="originX"></param>
-    /// <param name="originY"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="scaleX"></param>
-    /// <param name="scaleY"></param>
-    /// <param name="rotation"></param>
-    /// <param name="srcX"></param>
-    /// <param name="srcY"></param>
-    /// <param name="srcWidth"></param>
-    /// <param name="srcHeight"></param>
-    /// <param name="flipX"></param>
-    /// <param name="flipY"></param>
+    /// <param name="texture">The texture containing the source region to draw.</param>
+    /// <param name="x">The X-coordinate of the destination rectangle in pixels.</param>
+    /// <param name="y">The Y-coordinate of the destination rectangle in pixels.</param>
+    /// <param name="originX">The X-coordinate of the origin used for scaling and rotation.</param>
+    /// <param name="originY">The Y-coordinate of the origin used for scaling and rotation.</param>
+    /// <param name="width">The destination width of the drawn texture region in pixels.</param>
+    /// <param name="height">The destination height of the drawn texture region in pixels.</param>
+    /// <param name="scaleX">The horizontal scale factor applied around the origin.</param>
+    /// <param name="scaleY">The vertical scale factor applied around the origin.</param>
+    /// <param name="rotation">The rotation angle, in degrees, applied around the origin.</param>
+    /// <param name="srcX">The X-coordinate of the source region within the texture, in pixels.</param>
+    /// <param name="srcY">The Y-coordinate of the source region within the texture, in pixels.</param>
+    /// <param name="srcWidth">The width of the source region within the texture, in pixels.</param>
+    /// <param name="srcHeight">The height of the source region within the texture, in pixels.</param>
+    /// <param name="flipX">Whether to flip the source region horizontally.</param>
+    /// <param name="flipY">Whether to flip the source region vertically.</param>
     private void DrawAdjusted( Texture2D? texture,
                                float x,
                                float y,
@@ -729,25 +750,25 @@ public class CpuSpriteBatch : SpriteBatch
     }
 
     /// <summary>
-    /// 
+    /// Draws a texture with adjusted UV coordinates, allowing for transformations such as
+    /// scaling, rotation, and flipping, as well as position and origin adjustments.
     /// </summary>
-    /// <param name="texture"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="originX"></param>
-    /// <param name="originY"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="scaleX"></param>
-    /// <param name="scaleY"></param>
-    /// <param name="rotation"></param>
-    /// <param name="u"></param>
-    /// <param name="v"></param>
-    /// <param name="u2"></param>
-    /// <param name="v2"></param>
-    /// <param name="flipX"></param>
-    /// <param name="flipY"></param>
-    /// <exception cref="InvalidOperationException"></exception>
+    /// <param name="texture">The texture to be drawn. Can be null.</param>
+    /// <param name="x">The x-coordinate of the texture's position.</param>
+    /// <param name="y">The y-coordinate of the texture's position.</param>
+    /// <param name="originX">The x-coordinate of the texture's origin point for transformations.</param>
+    /// <param name="originY">The y-coordinate of the texture's origin point for transformations.</param>
+    /// <param name="width">The width of the texture region to be drawn.</param>
+    /// <param name="height">The height of the texture region to be drawn.</param>
+    /// <param name="scaleX">The horizontal scaling factor.</param>
+    /// <param name="scaleY">The vertical scaling factor.</param>
+    /// <param name="rotation">The angle of rotation in radians around the origin.</param>
+    /// <param name="u">The U-coordinate of the texture's top-left corner in UV space.</param>
+    /// <param name="v">The V-coordinate of the texture's top-left corner in UV space.</param>
+    /// <param name="u2">The U-coordinate of the texture's bottom-right corner in UV space.</param>
+    /// <param name="v2">The V-coordinate of the texture's bottom-right corner in UV space.</param>
+    /// <param name="flipX">Whether to flip the texture horizontally.</param>
+    /// <param name="flipY">Whether to flip the texture vertically.</param>
     private void DrawAdjustedUV( Texture2D? texture,
                                  float x,
                                  float y,
@@ -897,6 +918,31 @@ public class CpuSpriteBatch : SpriteBatch
         Idx += Sprite2D.SpriteSize;
     }
 
+    /// <summary>
+    /// Renders a texture region on the screen, with transformations applied including translation,
+    /// scaling, rotation, and optional affine adjustments.
+    /// </summary>
+    /// <param name="region">
+    /// The texture region to draw. The texture must match the previously used texture or a new
+    /// batch must be started.
+    /// </param>
+    /// <param name="x">The x-coordinate of the position where the texture region should be drawn.</param>
+    /// <param name="y">The y-coordinate of the position where the texture region should be drawn.</param>
+    /// <param name="originX">
+    /// The horizontal origin point relative to the texture region, used for scaling and rotation.
+    /// </param>
+    /// <param name="originY">
+    /// The vertical origin point relative to the texture region, used for scaling and rotation.
+    /// </param>
+    /// <param name="width">The width of the texture region to draw, after scaling.</param>
+    /// <param name="height">The height of the texture region to draw, after scaling.</param>
+    /// <param name="scaleX">The scaling factor in the horizontal direction.</param>
+    /// <param name="scaleY">The scaling factor in the vertical direction.</param>
+    /// <param name="rotation">The rotation of the texture region, in degrees.</param>
+    /// <param name="clockwise">
+    /// Indicates whether the texture region's UV coordinates should be rotated clockwise or
+    /// counterclockwise.
+    /// </param>
     private void DrawAdjusted( TextureRegion? region,
                                float x,
                                float y,
@@ -1055,6 +1101,16 @@ public class CpuSpriteBatch : SpriteBatch
         Idx += Sprite2D.SpriteSize;
     }
 
+    /// <summary>
+    /// Renders a texture region onto the sprite batch with an adjusted affine transformation.
+    /// </summary>
+    /// <param name="region">The texture region to render. Cannot be null.</param>
+    /// <param name="width">The width of the region in world space.</param>
+    /// <param name="height">The height of the region in world space.</param>
+    /// <param name="transform">The affine transformation applied to the region.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown if the method is invoked outside of a valid drawing context.
+    /// </exception>
     private void DrawAdjusted( TextureRegion? region, float width, float height, Affine2 transform )
     {
         if ( !IsDrawing )
@@ -1116,6 +1172,16 @@ public class CpuSpriteBatch : SpriteBatch
         Idx += Sprite2D.SpriteSize;
     }
 
+    /// <summary>
+    /// Renders a portion of a sprite batch with adjusted input parameters.
+    /// </summary>
+    /// <param name="texture">The texture to be used for rendering. Must not be null.</param>
+    /// <param name="spriteVertices">An array of vertex attributes defining the sprites.</param>
+    /// <param name="offset">The starting index in the spriteVertices array from which rendering begins.</param>
+    /// <param name="count">The number of vertices to process starting from the offset.</param>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when the method is called outside of a valid drawing operation.
+    /// </exception>
     private void DrawAdjusted( Texture2D? texture, float[] spriteVertices, int offset, int count )
     {
         if ( !IsDrawing )
@@ -1161,6 +1227,13 @@ public class CpuSpriteBatch : SpriteBatch
         while ( count > 0 );
     }
 
+    /// <summary>
+    /// Compares a 2D transformation matrix with a second 2D transformation matrix
+    /// to determine if they are equivalent.
+    /// </summary>
+    /// <param name="a"> The first 2D transformation matrix to compare. </param>
+    /// <param name="b"> The second 2D transformation matrix to compare. </param>
+    /// <returns> <c>true</c> if the matrices are equivalent; otherwise, <c>false</c>. </returns>
     private static bool CheckEqual( Matrix4 a, Matrix4 b )
     {
         if ( a == b )
@@ -1177,6 +1250,15 @@ public class CpuSpriteBatch : SpriteBatch
             && a.Val[ Matrix4.M1313 ].Equals( b.Val[ Matrix4.M1313 ] );
     }
 
+    /// <summary>
+    /// Compares a 2D transformation matrix with an affine transformation to
+    /// determine if they are equivalent.
+    /// </summary>
+    /// <param name="matrix">The 2D transformation matrix to compare.</param>
+    /// <param name="affine">The affine transformation to compare against the matrix.</param>
+    /// <returns>
+    /// True if the matrix and affine transformation are equivalent; otherwise, false.
+    /// </returns>
     private static bool CheckEqual( Matrix4 matrix, Affine2 affine )
     {
         float[] val = matrix.Values;
@@ -1190,6 +1272,13 @@ public class CpuSpriteBatch : SpriteBatch
             && val[ Matrix4.M1313 ].Equals( affine.M12 );
     }
 
+    /// <summary>
+    /// Checks if the given 4x4 matrix is an identity matrix for 2D transformations.
+    /// </summary>
+    /// <param name="matrix">The matrix to be checked.</param>
+    /// <returns>
+    /// True if the given matrix is the identity matrix for 2D transformations; otherwise, false.
+    /// </returns>
     private static bool CheckIdt( Matrix4 matrix )
     {
         float[] val = matrix.Values;

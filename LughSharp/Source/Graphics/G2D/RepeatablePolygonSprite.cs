@@ -157,8 +157,8 @@ public class RepeatablePolygonSprite
     /// Offsets polygon to 0 coordinate for ease of calculations, later
     /// offset is put back on final render.
     /// </summary>
-    /// <param name="vertices"></param>
-    /// <returns> offsetted vertices </returns>
+    /// <param name="vertices">The vertices to offset.</param>
+    /// <returns>Offsetted vertices.</returns>
     private float[] Offset( float[]? vertices )
     {
         Guard.Against.Null( vertices );
@@ -188,8 +188,7 @@ public class RepeatablePolygonSprite
     }
 
     /// <summary>
-    /// Builds final vertices with vertex attributes like coordinates,
-    /// color and region u/v
+    /// Builds final vertices with vertex attributes like coordinates, color and region u/v
     /// </summary>
     private void BuildVertices()
     {
@@ -254,6 +253,10 @@ public class RepeatablePolygonSprite
         _dirty = false;
     }
 
+    /// <summary>
+    /// Draws the repeatable polygon sprite using the specified polygon sprite batch.
+    /// </summary>
+    /// <param name="batch">The polygon sprite batch used for rendering the sprite.</param>
     public void Draw( PolygonSpriteBatch batch )
     {
         Guard.Against.Null( _region?.Texture );
@@ -276,14 +279,18 @@ public class RepeatablePolygonSprite
     }
 
     /// <summary>
+    /// Sets the tint color to be applied to the entire polygon.
     /// </summary>
-    /// <param name="color"> Tint color to be applied to entire polygon </param>
+    /// <param name="color">The color to use as the tint.</param>
     public void SetColor( Color color )
     {
         _color = color;
         _dirty = true;
     }
 
+    /// <summary>
+    /// Sets the position where the sprite will be drawn.
+    /// </summary>
     public void SetPosition( float x, float y )
     {
         X      = x;
@@ -291,3 +298,7 @@ public class RepeatablePolygonSprite
         _dirty = true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

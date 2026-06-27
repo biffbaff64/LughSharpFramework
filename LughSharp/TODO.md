@@ -382,17 +382,17 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
       ----   ----   ------
     - DONE - DONE - DONE - Animation
     - DONE - DONE - DONE - Animator
-    - IP   - IP   - DONE - CpuSpriteBatch                  Some methods have too many parameters
+    - DONE - DONE - DONE - CpuSpriteBatch
     - DONE - DONE - DONE - IBatch
-    - DONE - DONE - DONE - IPolygonBatch                   Some methods have too many parameters
+    - DONE - DONE - DONE - IPolygonBatch
     -      -      -      - ParticleEffect
     -      -      -      - ParticleEffectPool
     -      -      -      - ParticleEmitter
     -      -      -      - PolygonRegion
     -      -      -      - PolygonRegionLoader
     - DONE - DONE - DONE - PolygonSprite
-    -      -      -      - PolygonSpriteBatch              Some methods have too many parameters
-    -      -      -      - RepeatablePolygonSprite
+    - DONE - DONE - DONE - PolygonSpriteBatch
+    - DONE - DONE - DONE - RepeatablePolygonSprite
     - DONE - DONE - DONE - Sprite2D
     - DONE - DONE - DONE - SpriteBatch
     - DONE - DONE - DONE - SpriteCache
@@ -1225,7 +1225,7 @@ LUGHSHARP/SOURCE/UTILS/XML - DONE
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-LUGHSHARP/EXTENSIONS/SOURCE
+LUGHSHARP/EXTENSIONS/SOURCE - SHELVED
 ---------------------------
 
       CODE   DOCU   FOOTER
@@ -1236,7 +1236,7 @@ LUGHSHARP/EXTENSIONS/SOURCE
     -      -      - DONE - SpriteDescriptor
     -      -      - DONE - TileID
 
-LUGHSHARP/EXTENSIONS/SOURCE/BOX2D
+LUGHSHARP/EXTENSIONS/SOURCE/BOX2D - TO BE MOVED TO A SEPARATE PROJECT
 ---------------------------------
 
     - It's most likely best to recommend the use of an already available C# port.

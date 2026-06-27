@@ -29,14 +29,52 @@ namespace LughSharp.Source.Graphics.G2D;
 [PublicAPI]
 public class PolygonSprite
 {
-    public PolygonRegion? Region   { get; private set; }
-    public float          Width    { get; set; }
-    public float          Height   { get; set; }
-    public float          OriginX  { get; set; }
-    public float          OriginY  { get; set; }
-    public float          ScaleX   { get; set; } = 1f;
-    public float          ScaleY   { get; set; } = 1f;
-    public float          Rotation { get; set; }
+    /// <summary>
+    /// The <see cref="PolygonRegion"/> to associate with this sprite.
+    /// </summary>
+    public PolygonRegion? Region { get; private set; }
+
+    /// <summary>
+    /// The width of the sprite, in pixels, not accounting for scale.
+    /// </summary>
+    public float Width { get; set; }
+
+    /// <summary>
+    /// The height of the sprite, in pixels, not accounting for scale.
+    /// </summary>
+    public float Height { get; set; }
+
+    /// <summary>
+    /// The origin influences <see cref="SetPosition(float, float)"/>,
+    /// <see cref="Rotation"/> and the expansion direction of scaling
+    /// <see cref="SetScale(float, float)"/>
+    /// </summary>
+    public float OriginX { get; set; }
+
+    /// <summary>
+    /// The origin influences <see cref="SetPosition(float, float)"/>,
+    /// <see cref="Rotation"/> and the expansion direction of scaling
+    /// <see cref="SetScale(float, float)"/>
+    /// </summary>
+    public float OriginY { get; set; }
+
+    /// <summary>
+    /// X scale of the sprite, independent of size set
+    /// by <see cref="SetSize(float, float)"/>
+    /// </summary>
+    public float ScaleX { get; set; } = 1f;
+
+    /// <summary>
+    /// Y scale of the sprite, independent of size set
+    /// by <see cref="SetSize(float, float)"/>
+    /// </summary>
+    public float ScaleY { get; set; } = 1f;
+
+    /// <summary>
+    /// Sets the rotation of the sprite in degrees. Rotation is centered on the origin
+    /// set in <see cref="SetOrigin(float, float)"/>
+    /// </summary>
+    public float Rotation { get; set; }
 
     /// <summary>
     /// Sets the x position where the sprite will be drawn. If origin, rotation,
@@ -509,4 +547,3 @@ public class PolygonSprite
 
 // ============================================================================
 // ============================================================================
-

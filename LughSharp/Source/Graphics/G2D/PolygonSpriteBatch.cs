@@ -57,11 +57,6 @@ namespace LughSharp.Source.Graphics.G2D;
 /// in your program.
 /// </para>
 /// <para>
-/// A PolygonSpriteBatch works with OpenGL ES 1.x and 2.0. In the case of a 2.0 context
-/// it will use its own custom shader to Draw all provided sprites. You can set your own
-/// custom shader via <see cref="Shader"/>.
-/// </para>
-/// <para>
 /// A PolygonSpriteBatch has to be disposed if it is no longer used.
 /// </para>
 /// </summary>
@@ -1537,6 +1532,13 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v4;
     }
 
+    /// <summary>
+    /// Draws a texture using a specified region, dimensions, and transformation parameters.
+    /// </summary>
+    /// <param name="region">The specific texture region to be drawn.</param>
+    /// <param name="width">The width of the drawn texture.</param>
+    /// <param name="height">The height of the drawn texture.</param>
+    /// <param name="transform">The transformation to be applied to the texture.</param>
     public void Draw( TextureRegion region, float width, float height, Affine2 transform )
     {
         if ( !IsDrawing )
@@ -1610,6 +1612,12 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v;
     }
 
+    /// <summary>
+    /// Renders the current batch of vertices and triangles to the graphics device.
+    /// This method processes the existing data in the batch, applies the appropriate
+    /// rendering settings, and clears the batch for new draw operations.
+    /// It is automatically called when the batch is full or can be invoked manually.
+    /// </summary>
     public void Flush()
     {
         if ( _vertexIndex == 0 )
@@ -1651,18 +1659,30 @@ public class PolygonSpriteBatch : IPolygonBatch
         _triangleIndex = 0;
     }
 
+    /// <summary>
+    /// Disables blending.
+    /// </summary>
     public void DisableBlending()
     {
         Flush();
         _blendingDisabled = true;
     }
 
+    /// <summary>
+    /// Enables blending.
+    /// </summary>
     public void EnableBlending()
     {
         Flush();
         _blendingDisabled = false;
     }
 
+    /// <summary>
+    /// Sets the Blend Functions to use when rendering. The provided
+    /// methods handle both Color and Alpha functions.
+    /// </summary>
+    /// <param name="srcFunc"> Source Function for Color and Alpha. </param>
+    /// <param name="dstFunc"> Destination Function for Color and Alpha. </param>
     public void SetBlendFunction( BlendMode srcFunc, BlendMode dstFunc )
     {
         SetBlendFunctionSeparate( srcFunc, dstFunc, srcFunc, dstFunc );
@@ -1706,6 +1726,8 @@ public class PolygonSpriteBatch : IPolygonBatch
         {
             _shader.Dispose();
         }
+        
+        GC.SuppressFinalize( this );
     }
 
     /// <summary>

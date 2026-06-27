@@ -207,6 +207,13 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Saves the current state of all particle emitters in the effect to the specified output stream.
+    /// </summary>
+    /// <param name="output">
+    /// The StreamWriter to which the particle emitters' states will be written. Each emitter's data is written
+    /// in sequence, separated by newline characters.
+    /// </param>
     public void Save( StreamWriter output )
     {
         var index = 0;
@@ -224,12 +231,28 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Loads the particle effect configuration and associated images for rendering.
+    /// </summary>
+    /// <param name="effectFile">
+    /// The file containing the particle effect configuration.
+    /// </param>
+    /// <param name="imagesDir">
+    /// The directory containing image files for the particle effect.
+    /// </param>
     public void Load( FileInfo effectFile, DirectoryInfo imagesDir )
     {
         LoadEmitters( effectFile );
         LoadEmitterImages( imagesDir );
     }
 
+    /// <summary>
+    /// Loads particle emitters and their associated images from the specified
+    /// <paramref name="effectFile"/>.
+    /// </summary>
+    /// <param name="effectFile">The file containing the particle effect configuration.</param>
+    /// <param name="atlas">The texture atlas containing the particle emitter images.</param>
+    /// <param name="atlasPrefix">The prefix used to identify the particle emitter images in the atlas.</param>
     public void Load( FileInfo effectFile, TextureAtlas atlas, string? atlasPrefix = null )
     {
         LoadEmitters( effectFile );
@@ -440,7 +463,7 @@ public class ParticleEffect : IDisposable
     /// in this effect. If this effect originated from a <see cref="ParticleEffectPool"/>,
     /// the scale will be reset when it is returned to the pool.
     /// </summary>
-    /// <param name="scaleFactor"></param>
+    /// <param name="scaleFactor">The factor by which to scale the size and motion of particles.</param>
     public void ScaleEffect( float scaleFactor )
     {
         ScaleEffect( scaleFactor, scaleFactor, scaleFactor );
@@ -451,8 +474,8 @@ public class ParticleEffect : IDisposable
     /// in this effect. If this effect originated from a <see cref="ParticleEffectPool"/>,
     /// the scale will be reset when it is returned to the pool.
     /// </summary>
-    /// <param name="scaleFactor"></param>
-    /// <param name="motionScaleFactor"></param>
+    /// <param name="scaleFactor">The factor by which to scale the size and motion of particles.</param>
+    /// <param name="motionScaleFactor">The factor by which to scale the motion of particles.</param>
     public void ScaleEffect( float scaleFactor, float motionScaleFactor )
     {
         ScaleEffect( scaleFactor, scaleFactor, motionScaleFactor );
@@ -463,9 +486,9 @@ public class ParticleEffect : IDisposable
     /// in this effect. If this effect originated from a <see cref="ParticleEffectPool"/>,
     /// the scale will be reset when it is returned to the pool.
     /// </summary>
-    /// <param name="xSizeScaleFactor"></param>
-    /// <param name="ySizeScaleFactor"></param>
-    /// <param name="motionScaleFactor"></param>
+    /// <param name="xSizeScaleFactor">The factor by which to scale the X size of particles.</param>
+    /// <param name="ySizeScaleFactor">The factor by which to scale the Y size of particles.</param>
+    /// <param name="motionScaleFactor">The factor by which to scale the motion of particles.</param>
     public void ScaleEffect( float xSizeScaleFactor, float ySizeScaleFactor, float motionScaleFactor )
     {
         XSizeScale  *= xSizeScaleFactor;
@@ -488,7 +511,7 @@ public class ParticleEffect : IDisposable
     /// to (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA) before that next object is drawn.
     /// </para>
     /// </summary>
-    /// <param name="cleanUpBlendFunction"></param>
+    /// <param name="cleanUpBlendFunction">Whether to clean up the blend function.</param>
     public void SetEmittersCleanUpBlendFunction( bool cleanUpBlendFunction )
     {
         for ( int i = 0, n = _emitters.Count; i < n; i++ )
@@ -497,6 +520,7 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    // ========================================================================
     // ========================================================================
 
     public void Dispose()

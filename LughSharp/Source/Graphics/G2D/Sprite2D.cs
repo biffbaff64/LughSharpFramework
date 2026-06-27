@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.Images;
 
 using Rectangle = LughSharp.Source.Maths.Rectangle;
@@ -103,7 +102,7 @@ public class Sprite2D : TextureRegion
     /// </summary>
     public Sprite2D()
     {
-        SetColor( Color.White );
+        SetColorUnchecked( Color.White );
     }
 
     /// <summary>
@@ -149,7 +148,7 @@ public class Sprite2D : TextureRegion
         Texture = texture ?? throw new ArgumentException( "texture cannot be null." );
 
         SetRegion( srcX, srcY, srcWidth, srcHeight );
-        SetColor( Color.White );
+        SetColorUnchecked( Color.White );
 
         SetSizeAndOrigin( Math.Abs( srcWidth ), Math.Abs( srcHeight ) );
     }
@@ -161,7 +160,7 @@ public class Sprite2D : TextureRegion
     public Sprite2D( TextureRegion region )
     {
         SetRegion( region, 0, 0, region.GetRegionWidth(), region.GetRegionHeight() );
-        SetColor( Color.White );
+        SetColorUnchecked( Color.White );
 
         SetSizeAndOrigin( region.GetRegionWidth(), region.GetRegionHeight() );
     }
@@ -182,7 +181,7 @@ public class Sprite2D : TextureRegion
     public Sprite2D( TextureRegion region, int srcX, int srcY, int srcWidth, int srcHeight )
     {
         SetRegion( region, srcX, srcY, srcWidth, srcHeight );
-        SetColor( Color.White );
+        SetColorUnchecked( Color.White );
 
         SetSizeAndOrigin( Math.Abs( srcWidth ), Math.Abs( srcHeight ) );
     }
@@ -192,7 +191,7 @@ public class Sprite2D : TextureRegion
     /// </summary>
     public Sprite2D( Sprite2D sprite )
     {
-        Set( sprite );
+        Clone( sprite );
     }
 
     /// <summary>
@@ -241,6 +240,16 @@ public class Sprite2D : TextureRegion
     /// <exception cref="ArgumentNullException">Thrown if the provided sprite is null.</exception>
     public virtual void Set( Sprite2D sprite )
     {
+        Clone( sprite );
+    }
+
+    /// <summary>
+    /// Copies the properties and state from the specified source sprite into the current sprite.
+    /// </summary>
+    /// <param name="sprite">The source <see cref="Sprite2D"/> to copy data from. Must not be null.</param>
+    /// <exception cref="InvalidOperationException">Thrown when the vertices array cannot be copied.</exception>
+    private void Clone( Sprite2D sprite )
+    {
         Guard.Against.Null( sprite );
 
         try
@@ -273,7 +282,7 @@ public class Sprite2D : TextureRegion
         SetRegionWidth( sprite.GetRegionWidth() );
         SetRegionHeight( sprite.GetRegionHeight() );
     }
-
+    
     /// <summary>
     /// Sets the position and size of the sprite when drawn, before scaling and
     /// rotation are applied, using the current values for <c>X</c>, <c>Y</c>,
@@ -1011,6 +1020,17 @@ public class Sprite2D : TextureRegion
         return _color;
     }
 
+    /// <summary>
+    /// Sets the color used to tint this sprite. Default is <see cref="Color.White"/>.
+    /// This method is used internally and should not be called directly. It is a
+    /// non-virtual method and, therfore, is safe to call from constructors.
+    /// </summary>
+    /// <param name="tint">The color to tint the sprite with.</param>
+    private void SetColorUnchecked( Color tint )
+    {
+        SetColor( tint );
+    }
+    
     /// <summary>
     /// Sets the color used to tint this sprite. Default is <see cref="Color.White"/>.
     /// </summary>
