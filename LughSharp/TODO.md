@@ -4,8 +4,8 @@
 ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 
-- STEP 1: Complete all conversions so that the code will build.
-- STEP 2: Refactor, where possible and necessary, to take advantage of C# language features.
+- Complete all conversions so that the code will build.
+- Refactor, where possible and necessary, to take advantage of C# language features.
     - Change Get / Set method declarations to Properties only where appropriate.
     - switch expressions instead of switch statements where appropriate.
     - switch expressions instead of if...if/else...else where appropriate.
@@ -14,22 +14,34 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
     - Use sealed classes only where strictly necessary.
     - Use of virtual for base classes/methods and classes that are likely to be extended is essential.
     - Constantly look for opportunities to improve this code.
-- STEP 3: Resolve ALL remaining TODOs.
-- STEP 4: Ensure code is fully documented.
+- Resolve ALL remaining TODOs.
+- Ensure code is fully documented.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+- STYLEGUIDE.md needs updating. Some of the information is incorrect.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+- Constructors should be positioned at the START of source files.
+- Finalizers should be positioned at the END of source files.
 - Methods like **Dispose(), ToString(), Equals(), GetHashCode() ( Essentially overridden system methods )**
 - should be positioned at the END of source files.
 - All source files should have a footer at the bottom of the file, consisting of two lines of '=' signs
-- 80 chars long.
+  80 chars long.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - Make all thrown exceptions clearly explain what went wrong and what the user should do
   to fix the problem, where possible.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+- Try to include sample code in the documentation comments where possible and appropriate.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

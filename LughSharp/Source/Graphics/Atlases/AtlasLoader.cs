@@ -26,6 +26,23 @@ using LughSharp.Source.IO;
 
 namespace LughSharp.Source.Graphics.Atlases;
 
+/// <summary>
+/// The <c>AtlasLoader</c> class is responsible for managing and loading texture atlases
+/// into an instance of <see cref="AssetManager"/>. It provides functionality to register
+/// and load multiple atlases at runtime.
+/// <para>
+/// An example useage is:-
+/// <code>
+/// private AtlasLoader atlasLoader;
+/// ...
+/// ...
+/// atlasLoader = new AtlasLoader( assetManager );
+/// atlasLoader.RegisterAtlas( "path/to/atlas.atlas" )
+///            .RegisterAtlas( "path/to/atlas2.atlas" )
+///            .Load();
+/// </code>
+/// </para>
+/// </summary>
 [PublicAPI]
 public class AtlasLoader
 {

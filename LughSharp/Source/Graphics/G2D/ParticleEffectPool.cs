@@ -72,8 +72,8 @@ public class ParticleEffectPool : Pool< ParticleEffectPool.PooledEffect >
           || !effect1.YSizeScale.Equals( _effect.YSizeScale )
           || !effect1.MotionScale.Equals( _effect.MotionScale ) )
         {
-            List< ParticleEmitter >  emitters         = effect1.GetEmitters();
-            List< ParticleEmitter >? templateEmitters = _effect.GetEmitters();
+            List< ParticleEmitter >  emitters         = effect1.Emitters;
+            List< ParticleEmitter >? templateEmitters = _effect.Emitters;
 
             for ( var i = 0; i < emitters.Count; i++ )
             {

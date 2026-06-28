@@ -14,11 +14,9 @@ Formatting guidelines
 Naming rules
 ------------
 
-Naming rules
-follow [Microsoft’s C# naming guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines).
+Naming rules follow [Microsoft’s C# naming guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines).
 Where Microsoft’s naming guidelines are unspecified (e.g. private and local variables), rules are taken
-from
-the [CoreFX C# coding guidelines](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md).
+fromthe [CoreFX C# coding guidelines](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md).
 
 Rule summary:
 -------------
@@ -40,10 +38,12 @@ Files
 -----
 
 - Filenames and directory names are PascalCase, e.g. MyFile.cs.
-- Where possible the file name should be the same as the name of the main class in the file, e.g. MyClass.cs.
+- Where possible the file name should be the same as the name of the main class
+  in the file, e.g. MyClass.cs.
 - In general, prefer one core class per file.
-  - All source files must have a copyright header, and have a footer comprised of 2 lines of '=' characters/
+  - All source files must have a copyright header, and have a footer comprised of 2 lines of '=' characters with a minimum length of 80 characters
     - eg:
+    
         // ============================================================================
         // ============================================================================
 
@@ -73,7 +73,6 @@ Organization
 -
 - Class member ordering:
     - Group class members in the following order:
-        - Nested classes, enums, delegates and events.
         - Static, const and readonly fields.
         - Fields and properties.
         - Constructors and finalizers.
@@ -83,6 +82,7 @@ Organization
             - Protected internal.
             - Protected.
             - Private.
+        - Nested classes, enums, delegates and events.
         - Where possible, group interface implementations together.
 
 Whitespace rules

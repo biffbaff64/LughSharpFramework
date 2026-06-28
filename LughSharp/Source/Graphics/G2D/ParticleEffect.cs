@@ -31,40 +31,69 @@ namespace LughSharp.Source.Graphics.G2D;
 [PublicAPI]
 public class ParticleEffect : IDisposable
 {
-    public float XSizeScale  { get; set; } = 1f;
+    /// <summary>
+    /// Gets or sets the horizontal scaling factor for the particle effect.
+    /// This property affects the size of particles along the X-axis.
+    /// A value of 1 (default) indicates no scaling, while values greater than 1 enlarge the effect
+    /// and values less than 1 reduce its size.
+    /// </summary>
+    public float XSizeScale { get;  set; } = 1f;
+    
+    /// <summary>
+    /// Gets or sets the veetical scaling factor for the particle effect.
+    /// This property affects the size of particles along the Y-axis.
+    /// A value of 1 (default) indicates no scaling, while values greater than 1 enlarge the effect
+    /// and values less than 1 reduce its size.
+    /// </summary>
     public float YSizeScale  { get; set; } = 1f;
+
+    /// <summary>
+    /// Gets or sets the scaling factor for the motion of the particle effect.
+    /// This property adjusts the speed or movement intensity of particles within the effect.
+    /// A value of 1 (default) maintains the original motion, values greater than 1 enhance the motion
+    /// intensity, and values less than 1 reduce it.
+    /// </summary>
     public float MotionScale { get; set; } = 1f;
 
+    public List< ParticleEmitter > Emitters { get; private set; }
+    
     // ========================================================================
 
     private const int DefaultEmittersSize = 8;
 
-    private readonly List< ParticleEmitter > _emitters;
     private          BoundingBox?            _bounds;
     private          bool                    _ownsTexture;
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ParticleEffect"/> class. Also
+    /// initializes the internal list of particle emitters to the default size.
+    /// </summary>
     public ParticleEffect()
     {
-        _emitters = new List< ParticleEmitter >( DefaultEmittersSize );
+        Emitters = new List< ParticleEmitter >( DefaultEmittersSize );
     }
 
     public ParticleEffect( ParticleEffect effect )
     {
-        _emitters = new List< ParticleEmitter >( effect._emitters.Count );
+        Emitters = new List< ParticleEmitter >( effect.Emitters.Count );
 
-        for ( int i = 0, n = effect._emitters.Count; i < n; i++ )
+        for ( int i = 0, n = effect.Emitters.Count; i < n; i++ )
         {
-            _emitters.Add( NewEmitter( effect._emitters[ i ] ) );
+            Emitters.Add( NewEmitter( effect.Emitters[ i ] ) );
         }
     }
 
+    /// <summary>
+    /// Starts the particle effect, iterating through the internal list of
+    /// particle emitters and starting each one.
+    /// </summary>
     public void Start()
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].Start();
+            Emitters[ i ].Start();
         }
     }
 
@@ -77,9 +106,9 @@ public class ParticleEffect : IDisposable
     /// </param>
     public void Reset( bool resetScaling = true )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].Reset();
+            Emitters[ i ].Reset();
         }
 
         if ( resetScaling && ( XSizeScale is not 1f || YSizeScale is not 1f || MotionScale is not 1f ) )
@@ -89,43 +118,67 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Updates the particle effect, allowing its emitters to update and draw.
+    /// </summary>
+    /// <param name="delta"> The time elapsed since the last update. </param>
     public void Update( float delta )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].Update( delta );
+            Emitters[ i ].Update( delta );
         }
     }
 
+    /// <summary>
+    /// Renders the particle effect using the specified <see cref="IBatch"/> instance.
+    /// Iterates through the internal list of particle emitters and draws each one.
+    /// </summary>
+    /// <param name="spriteBatch">The batch used to draw the particle effect.</param>
     public void Draw( IBatch spriteBatch )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].Draw( spriteBatch );
+            Emitters[ i ].Draw( spriteBatch );
         }
     }
 
+    /// <summary>
+    /// Renders the particle effect using the specified <see cref="IBatch"/> instance.
+    /// Iterates through the internal list of particle emitters and draws each one.
+    /// </summary>
+    /// <param name="spriteBatch">The batch used to draw the particle effect.</param>
+    /// <param name="delta">The time elapsed since the last draw.</param>
     public void Draw( IBatch spriteBatch, float delta )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].Draw( spriteBatch, delta );
+            Emitters[ i ].Draw( spriteBatch, delta );
         }
     }
 
+    /// <summary>
+    /// Iterates through the internal list of particle emitters and allows each one to complete.
+    /// </summary>
     public void AllowCompletion()
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].AllowCompletion();
+            Emitters[ i ].AllowCompletion();
         }
     }
 
+    /// <summary>
+    /// Iterates through the internal list of particle emitters and checks if each one is complete.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c> if all emitters are complete; otherwise, <c>false</c>.
+    /// </returns>
     public bool IsComplete()
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            ParticleEmitter emitter = _emitters[ i ];
+            ParticleEmitter emitter = Emitters[ i ];
 
             if ( !emitter.IsComplete() )
             {
@@ -138,9 +191,9 @@ public class ParticleEffect : IDisposable
 
     public void SetDuration( int duration )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            ParticleEmitter emitter = _emitters[ i ];
+            ParticleEmitter emitter = Emitters[ i ];
 
             emitter.Continuous    = false;
             emitter.Duration      = duration;
@@ -150,31 +203,26 @@ public class ParticleEffect : IDisposable
 
     public void SetPosition( float x, float y )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].SetPosition( x, y );
+            Emitters[ i ].SetPosition( x, y );
         }
     }
 
     public void SetFlip( bool flipX, bool flipY )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].SetFlip( flipX, flipY );
+            Emitters[ i ].SetFlip( flipX, flipY );
         }
     }
 
     public void FlipY()
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].FlipY();
+            Emitters[ i ].FlipY();
         }
-    }
-
-    public List< ParticleEmitter > GetEmitters()
-    {
-        return _emitters;
     }
 
     /// <summary>
@@ -182,9 +230,9 @@ public class ParticleEffect : IDisposable
     /// </summary>
     public ParticleEmitter? FindEmitter( string name )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            ParticleEmitter emitter = _emitters[ i ];
+            ParticleEmitter emitter = Emitters[ i ];
 
             if ( emitter.Name.Equals( name ) )
             {
@@ -201,7 +249,7 @@ public class ParticleEffect : IDisposable
     /// </summary>
     public void PreAllocateParticles()
     {
-        foreach ( ParticleEmitter emitter in _emitters )
+        foreach ( ParticleEmitter emitter in Emitters )
         {
             emitter.PreAllocateParticles();
         }
@@ -218,9 +266,9 @@ public class ParticleEffect : IDisposable
     {
         var index = 0;
 
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            ParticleEmitter emitter = _emitters[ i ];
+            ParticleEmitter emitter = Emitters[ i ];
 
             if ( index++ > 0 )
             {
@@ -283,7 +331,7 @@ public class ParticleEffect : IDisposable
     {
         Stream input = effectFile.OpenRead();
 
-        _emitters.Clear();
+        Emitters.Clear();
 
         try
         {
@@ -292,7 +340,7 @@ public class ParticleEffect : IDisposable
             while ( true )
             {
                 ParticleEmitter emitter = NewEmitter( reader );
-                _emitters.Add( emitter );
+                Emitters.Add( emitter );
 
                 if ( reader.ReadLine() == null )
                 {
@@ -328,9 +376,9 @@ public class ParticleEffect : IDisposable
     /// </remarks>
     public void LoadEmitterImages( TextureAtlas atlas, string? atlasPrefix = null )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            ParticleEmitter emitter = _emitters[ i ];
+            ParticleEmitter emitter = Emitters[ i ];
 
             if ( !emitter.ImagePaths.Any() )
             {
@@ -390,18 +438,18 @@ public class ParticleEffect : IDisposable
     {
         _ownsTexture = true;
 
-        Dictionary< string, Sprite2D? > loadedSprites = new( _emitters.Count );
+        Dictionary< string, Sprite2D? > loadedSprites = new( Emitters.Count );
 
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            if ( !_emitters[ i ].ImagePaths.Any() )
+            if ( !Emitters[ i ].ImagePaths.Any() )
             {
                 continue;
             }
 
             var sprites = new List< Sprite2D >();
 
-            foreach ( string imagePath in _emitters[ i ].ImagePaths )
+            foreach ( string imagePath in Emitters[ i ].ImagePaths )
             {
                 string imageName = Path.GetFileName( imagePath.Replace( '\\', '/' ) );
 
@@ -417,7 +465,7 @@ public class ParticleEffect : IDisposable
                 sprites.Add( sprite );
             }
 
-            _emitters[ i ].SetSprites( sprites );
+            Emitters[ i ].SetSprites( sprites );
         }
     }
 
@@ -450,7 +498,7 @@ public class ParticleEffect : IDisposable
         BoundingBox? box = _bounds;
         box.ToInfinity();
 
-        foreach ( ParticleEmitter emitter in _emitters )
+        foreach ( ParticleEmitter emitter in Emitters )
         {
             box.Extend( emitter.GetBoundingBox() );
         }
@@ -495,7 +543,7 @@ public class ParticleEffect : IDisposable
         YSizeScale  *= ySizeScaleFactor;
         MotionScale *= motionScaleFactor;
 
-        foreach ( ParticleEmitter particleEmitter in _emitters )
+        foreach ( ParticleEmitter particleEmitter in Emitters )
         {
             particleEmitter.ScaleSize( xSizeScaleFactor, ySizeScaleFactor );
             particleEmitter.ScaleMotion( motionScaleFactor );
@@ -514,9 +562,9 @@ public class ParticleEffect : IDisposable
     /// <param name="cleanUpBlendFunction">Whether to clean up the blend function.</param>
     public void SetEmittersCleanUpBlendFunction( bool cleanUpBlendFunction )
     {
-        for ( int i = 0, n = _emitters.Count; i < n; i++ )
+        for ( int i = 0, n = Emitters.Count; i < n; i++ )
         {
-            _emitters[ i ].CleansUpBlendFunction = cleanUpBlendFunction;
+            Emitters[ i ].CleansUpBlendFunction = cleanUpBlendFunction;
         }
     }
 
@@ -541,9 +589,9 @@ public class ParticleEffect : IDisposable
                 return;
             }
 
-            for ( int i = 0, n = _emitters.Count; i < n; i++ )
+            for ( int i = 0, n = Emitters.Count; i < n; i++ )
             {
-                ParticleEmitter emitter = _emitters[ i ];
+                ParticleEmitter emitter = Emitters[ i ];
 
                 foreach ( Sprite2D sprite in emitter.Sprites )
                 {
