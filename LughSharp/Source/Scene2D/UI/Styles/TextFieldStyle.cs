@@ -47,12 +47,25 @@ public class TextFieldStyle : ISceneStyle
 
     // ====================================================================
 
+    /// <summary>
+    /// Creates a new <see cref="TextFieldStyle"/> with default values.
+    /// </summary>
     public TextFieldStyle()
     {
         Font      = new BitmapFont();
         FontColor = Color.White;
     }
 
+    /// <summary>
+    /// Creates a new <see cref="TextFieldStyle"/> UI element. This style specifies the
+    /// appearance of text fields, including font, font color, cursor, selection, and background.
+    /// Implements <see cref="ISceneStyle"/>.
+    /// </summary>
+    /// <param name="font"> The <see cref="BitmapFont"/> to use for the TextField. </param>
+    /// <param name="fontColor"> The color to use for the font. </param>
+    /// <param name="cursor"> The cursor drawable for the TextFieldStyle. </param>
+    /// <param name="selection"> The selection drawable for the TextFieldStyle. </param>
+    /// <param name="background"> The background drawable for the TextFieldStyle. </param>
     public TextFieldStyle( BitmapFont font,
                            Color fontColor,
                            ISceneDrawable cursor,
@@ -66,6 +79,11 @@ public class TextFieldStyle : ISceneStyle
         Background = background;
     }
 
+    /// <summary>
+    /// Creates a new <see cref="TextFieldStyle"/> by copying the properties from the
+    /// provided <see cref="TextFieldStyle"/>.
+    /// </summary>
+    /// <param name="style"> The <see cref="TextFieldStyle"/> to copy. </param>
     public TextFieldStyle( TextFieldStyle style )
     {
         Font               = style.Font;

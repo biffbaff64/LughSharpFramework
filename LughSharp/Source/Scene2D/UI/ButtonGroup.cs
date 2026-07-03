@@ -35,7 +35,22 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class ButtonGroup< T > where T : Button
 {
-    public List< T > Buttons        { get; set; } = new();
+    /// <summary>
+    /// Gets or sets the list of buttons managed by the button group. The buttons in
+    /// this list can be checked or unchecked, depending on the rules defined for the
+    /// group, such as minimum or maximum number of buttons that can be checked at any
+    /// time. Each button in the list is assigned to this group, and adding or removing
+    /// a button from the list will update its associated group reference accordingly.
+    /// </summary>
+    public List< T > Buttons { get; set; } = new();
+
+    /// <summary>
+    /// Gets or sets the list of buttons that are currently checked within the group.
+    /// This property contains all the buttons from the group that have their checked
+    /// state set to true. Changes to this list will also affect the button states,
+    /// ensuring consistency with the group's rules for checked buttons, such as
+    /// minimum and maximum limits.
+    /// </summary>
     public List< T > CheckedButtons { get; set; } = new( 1 );
 
     // ========================================================================
@@ -47,11 +62,18 @@ public class ButtonGroup< T > where T : Button
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new button group with a minimum check count of 1.
+    /// </summary>
     public ButtonGroup()
     {
         _minCheckCount = 1;
     }
 
+    /// <summary>
+    /// Creates a new button group with the specified buttons and a minimum check count of 1.
+    /// </summary>
+    /// <param name="buttons"> The buttons to be added to the group. </param>
     public ButtonGroup( params T[] buttons )
     {
         _minCheckCount = 0;
@@ -61,6 +83,10 @@ public class ButtonGroup< T > where T : Button
         _minCheckCount = 1;
     }
 
+    /// <summary>
+    /// Adds the specified button to the group.
+    /// </summary>
+    /// <param name="button"> The button to be added to the group. </param>
     public void Add( T button )
     {
         button.ButtonGroup = null!;
@@ -75,6 +101,10 @@ public class ButtonGroup< T > where T : Button
         button.SetChecked( shouldCheck );
     }
 
+    /// <summary>
+    /// Adds the specified buttons to the group.
+    /// </summary>
+    /// <param name="buttons"> The buttons to be added to the group. </param>
     public void Add( T[] buttons )
     {
         for ( int i = 0, n = buttons.Length; i < n; i++ )
@@ -83,6 +113,19 @@ public class ButtonGroup< T > where T : Button
         }
     }
 
+    /// <summary>
+    /// Adds the specified buttons list to the group.
+    /// </summary>
+    /// <param name="buttons"></param>
+    public void Add( List< T > buttons )
+    {
+        Add( buttons.ToArray() );
+    }
+    
+    /// <summary>
+    /// Removes the specified button from the group.
+    /// </summary>
+    /// <param name="button"> The button to be removed from the group. </param>
     public void Remove( T button )
     {
         button.ButtonGroup = null!;
@@ -91,7 +134,11 @@ public class ButtonGroup< T > where T : Button
         CheckedButtons.Remove( button );
     }
 
-    public void Remove( params T[] buttons )
+    /// <summary>
+    /// Removes the specified buttons from the group.
+    /// </summary>
+    /// <param name="buttons"> The buttons to be removed from the group. </param>
+    public void Remove( T[] buttons )
     {
         for ( int i = 0, n = buttons.Length; i < n; i++ )
         {
@@ -99,6 +146,9 @@ public class ButtonGroup< T > where T : Button
         }
     }
 
+    /// <summary>
+    /// Clears the group of all buttons.
+    /// </summary>
     public void Clear()
     {
         Buttons.Clear();

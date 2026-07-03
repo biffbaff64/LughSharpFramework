@@ -33,22 +33,64 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ListBoxStyle : ISceneStyle
 {
-    public BitmapFont      Font                { get; set; }
-    public Color           FontColorSelected   { get; set; } = Color.White;
-    public Color           FontColorUnselected { get; set; } = Color.White;
-    public ISceneDrawable  Selection           { get; set; }
-    public ISceneDrawable? Down                { get; set; }
-    public ISceneDrawable? Over                { get; set; }
-    public ISceneDrawable? Background          { get; set; }
+    /// <summary>
+    /// The <see cref="BitmapFont"/> to use for the listbox.
+    /// </summary>
+    public BitmapFont Font { get; set; }
+
+    /// <summary>
+    /// The font color to use for the selected item in the listbox
+    /// </summary>
+    public Color FontColorSelected { get; set; } = Color.White;
+
+    /// <summary>
+    /// The font color to use for the unselected items in the listbox
+    /// </summary>
+    public Color FontColorUnselected { get; set; } = Color.White;
+
+    /// <summary>
+    /// The color to use for the highlight of the listbox selected item.
+    /// </summary>
+    public ISceneDrawable Selection { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> to render when a list item is pressed.
+    /// </summary>
+    public ISceneDrawable? Down { get; set; }
+
+    /// <summary>
+    /// The <see cref="ISceneDrawable"/> used to visually represent an item
+    /// when the mouse pointer is hovering over it in a listbox.
+    /// </summary>
+    public ISceneDrawable? Over { get; set; }
+
+    /// <summary>
+    /// The background, if any, to use for the list dropdown.
+    /// </summary>
+    public ISceneDrawable? Background { get; set; }
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new <see cref="ListBoxStyle"/> with default values.
+    /// <see cref="Font"/> is set to a new <see cref="BitmapFont"/>.
+    /// <see cref="Selection"/> is set to a new <see cref="BaseDrawable"/>.
+    /// </summary>
     public ListBoxStyle()
     {
         Font      = new BitmapFont();
         Selection = new BaseDrawable();
     }
 
+    /// <summary>
+    /// Creates a new <see cref="ListBoxStyle"/> with the specified values for
+    /// <see cref="Font"/>, <see cref="FontColorSelected"/>, <see cref="FontColorUnselected"/>,
+    /// and <see cref="Selection"/>.
+    /// </summary>
+    /// <param name="font"> The <see cref="BitmapFont"/> to use for rendering list items. </param>
+    /// <param name="fontColorSelected"> The color to use for rendering selected list items. </param>
+    /// <param name="fontColorUnselected"> The color to use for rendering unselected list items. </param>
+    /// <param name="selection"> The <see cref="ISceneDrawable"/> to render when a list item is selected. </param>
     public ListBoxStyle( BitmapFont font, Color fontColorSelected, Color fontColorUnselected,
                          ISceneDrawable selection )
     {
@@ -59,6 +101,10 @@ public class ListBoxStyle : ISceneStyle
         FontColorUnselected.Set( fontColorUnselected );
     }
 
+    /// <summary>
+    /// Creates a new <see cref="ListBoxStyle"/> using the specified <see cref="ListBoxStyle"/>.
+    /// </summary>
+    /// <param name="boxStyle"> The <see cref="ListBoxStyle"/> to copy. </param>
     public ListBoxStyle( ListBoxStyle boxStyle )
     {
         Font       = boxStyle.Font;

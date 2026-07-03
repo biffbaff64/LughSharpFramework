@@ -38,6 +38,11 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Container< T > : WidgetGroup where T : Actor
 {
+    /// <summary>
+    /// Gets or sets a value indicating whether the dimensions and positions of the
+    /// container's child actor are rounded to the nearest integer. Rounding can help
+    /// avoid subpixel rendering artifacts for visual elements.
+    /// </summary>
     public bool Rounding { get; set; } = true;
 
     // ========================================================================
@@ -63,7 +68,7 @@ public class Container< T > : WidgetGroup where T : Actor
     // ========================================================================
 
     /// <summary>
-    /// Creates a container with no actor.
+    /// Creates a container with no associated actor.
     /// </summary>
     public Container()
     {
@@ -77,6 +82,15 @@ public class Container< T > : WidgetGroup where T : Actor
     public Container( T? actor ) : this()
     {
         SetContainerActor( actor );
+    }
+
+    /// <summary>
+    /// Gets the background drawable.
+    /// </summary>
+    /// <returns> The background drawable. </returns>
+    public ISceneDrawable? GetBackground()
+    {
+        return _background;
     }
 
     /// <summary>
@@ -127,11 +141,10 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    public ISceneDrawable? GetBackground()
-    {
-        return _background;
-    }
-
+    /// <summary>
+    /// Positions and sizes children of the table using the cell associated with each child.
+    /// The values given are the position within the parent and size of the table.
+    /// </summary>
     public override void Layout()
     {
         if ( _actor == null )
@@ -230,6 +243,11 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
+    /// <summary>
+    /// Sets the culling area for the container's layout and, if applicable,
+    /// updates the culling area of the contained actor that implements ICullable.
+    /// </summary>
+    /// <param name="cullingArea">The rectangular area used for culling.</param>
     public void SetCullingArea( Rectangle cullingArea )
     {
         CullingArea = cullingArea;
@@ -240,11 +258,22 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
+    /// <summary>
+    /// Gets the actor associated with the container.
+    /// </summary>
+    /// <returns> The actor associated with the container. </returns>
     public T? GetContainerActor()
     {
         return _actor;
     }
 
+    /// <summary>
+    /// Sets the actor contained within the container.
+    /// </summary>
+    /// <param name="actor">
+    /// The actor to set within the container. Passing null will remove the current actor.
+    /// </param>
+    /// <exception cref="ArgumentException">Thrown when the actor is the container itself.</exception>
     public void SetContainerActor( T? actor )
     {
         if ( actor == this )
@@ -270,9 +299,11 @@ public class Container< T > : WidgetGroup where T : Actor
         }
     }
 
-    // ========================================================================
-    // ========================================================================
-
+    /// <summary>
+    /// Removes the specified actor from the container.
+    /// </summary>
+    /// <param name="actor">The actor to remove.</param>
+    /// <returns>True if the actor was removed, false otherwise.</returns>
     public bool RemoveActor( Actor actor )
     {
         Guard.Against.Null( actor );
@@ -287,6 +318,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return true;
     }
 
+    /// <summary>
+    /// Removes an actor from this group.
+    /// <param name="actor"> The actor to remove. </param>
+    /// <param name="unfocus"> Unfocuses the actor if true. </param>
+    /// </summary>
     public override bool RemoveActor( Actor actor, bool unfocus )
     {
         Guard.Against.Null( actor );
@@ -301,6 +337,15 @@ public class Container< T > : WidgetGroup where T : Actor
         return base.RemoveActor( actor, unfocus );
     }
 
+    /// <summary>
+    /// Removes an actor from this group. If the actor will not be used again and
+    /// has actions, they should be cleared using <see cref="Actor.ClearActions()"/>
+    /// so the actions will be returned to their <see cref="SceneAction.Pool"/>, if
+    /// any. This is not done automatically.
+    /// </summary>
+    /// <param name="index"> The group index of the actor to remove. </param>
+    /// <param name="unfocus"> Unfocuses the actor if true. </param>
+    /// <returns> The actor removed from this group. </returns>
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         Actor? actor = base.RemoveActorAt( index, unfocus );
@@ -317,6 +362,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and
     /// maxHeight to the specified values.
     /// </summary>
+    /// <returns> This container for chaining. </returns>
     public Container< T > Size( Value size )
     {
         Guard.Against.Null( size );
@@ -335,6 +381,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and
     /// maxHeight to the specified values.
     /// </summary>
+    /// <returns> This container for chaining. </returns>
     public Container< T > Size( Value width, Value height )
     {
         Guard.Against.Null( width );
@@ -354,6 +401,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and
     /// maxHeight to the specified values.
     /// </summary>
+    /// <returns> This container for chaining. </returns>
     public Container< T > Size( float size )
     {
         Size( Value.Fixed.ValueOf( size ) );
@@ -365,6 +413,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets the minWidth, prefWidth, maxWidth, minHeight, prefHeight, and
     /// maxHeight to the specified values.
     /// </summary>
+    /// <returns> This container for chaining. </returns>
     public Container< T > Size( float width, float height )
     {
         Size( Value.Fixed.ValueOf( width ), Value.Fixed.ValueOf( height ) );
@@ -372,9 +421,16 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    // ========================================================================
-    // ========================================================================
-
+    /// <summary>
+    /// Sets the fill values for the container along the X and Y axes.
+    /// </summary>
+    /// <param name="x">
+    /// The horizontal fill value. A value of 1 means full width, and 0 means no width. Default is 1.
+    /// </param>
+    /// <param name="y">
+    /// The vertical fill value. A value of 1 means full height, and 0 means no height. Default is 1.
+    /// </param>
+    /// <returns>The container instance, for method chaining.</returns>
     public Container< T > SetFill( float x = 1f, float y = 1f )
     {
         _fillX = x;
@@ -384,8 +440,10 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets fillX to 1.
+    /// Sets the horizontal fill value of the container to 1, ensuring the actor inside the container
+    /// will expand to fully occupy the container's width if possible.
     /// </summary>
+    /// <returns>The current container instance, allowing for method chaining.</returns>
     public Container< T > SetFillX()
     {
         _fillX = 1f;
@@ -394,8 +452,10 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets fillY to 1.
+    /// Sets the vertical fill value of the container to 1, ensuring the actor inside the container
+    /// will expand to fully occupy the container's height if possible.
     /// </summary>
+    /// <returns>The current container instance, allowing for method chaining.</returns>
     public Container< T > SetFillY()
     {
         _fillY = 1f;
@@ -404,8 +464,11 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets fillX and fillY to 1 if true, 0 if false.
+    /// Sets horizontal and vertical fill values based on the specified boolean conditions.
     /// </summary>
+    /// <param name="x">If true, sets the horizontal fill to 1; otherwise, sets it to 0.</param>
+    /// <param name="y">If true, sets the vertical fill to 1; otherwise, sets it to 0.</param>
+    /// <returns>Returns the current container instance with updated fill values.</returns>
     public Container< T > FillOnTrue( bool x, bool y )
     {
         _fillX = x ? 1f : 0;
@@ -415,8 +478,12 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets fillX and fillY to 1 if true, 0 if false.
+    /// Sets the container's horizontal and vertical fill values to 1 if the specified condition is true,
+    /// otherwise sets them to 0.
     /// </summary>
+    /// <param name="fill">A boolean value that determines whether the container should be filled
+    /// horizontally and vertically.</param>
+    /// <returns>The current instance of the container, with updated fill values.</returns>
     public Container< T > FillOnTrue( bool fill )
     {
         _fillX = fill ? 1f : 0;
@@ -425,19 +492,31 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    // ========================================================================
-    // ========================================================================
-
+    /// <summary>
+    /// Gets the horizontal fill value of the container.
+    /// </summary>
+    /// <returns> The horizontal fill value of the container. </returns>
     public float GetFillX()
     {
         return _fillX;
     }
 
+    /// <summary>
+    /// Gets the vertical fill value of the container.
+    /// </summary>
+    /// <returns> The vertical fill value of the container. </returns>
     public float GetFillY()
     {
         return _fillY;
     }
 
+    /// <summary>
+    /// Enables or disables clipping for this container.
+    /// </summary>
+    /// <param name="enabled">
+    /// If true, clipping will be enabled for the container; otherwise, it will be disabled.
+    /// </param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > Clip( bool enabled = true )
     {
         SetClip( enabled );
@@ -457,11 +536,33 @@ public class Container< T > : WidgetGroup where T : Actor
         InvalidateLayout();
     }
 
+    /// <summary>
+    /// Gets the clipping state of the container.
+    /// </summary>
+    /// <returns>True if clipping is enabled for the container; otherwise, false.</returns>
     public bool GetClip()
     {
         return _clip;
     }
 
+    /// <summary>
+    /// Determines the topmost child actor at the specified coordinates that is visible and,
+    /// if required, touchable.
+    /// </summary>
+    /// <remarks>
+    /// The method traverses child actors in reverse order, returning the first child that is 
+    /// hit. If no child is hit, the method delegates to the base implementation. Coordinates
+    /// are interpreted in the local coordinate system of each child.
+    /// </remarks>
+    /// <param name="x">The x-coordinate, in the parent's local coordinate system, to test for a hit.</param>
+    /// <param name="y">The y-coordinate, in the parent's local coordinate system, to test for a hit.</param>
+    /// <param name="touchable">
+    /// true to consider only actors that are touchable; otherwise, false to include all actors
+    /// regardless of their touchable state.</param>
+    /// <returns>
+    /// The topmost Actor at the specified coordinates that meets the visibility and touchability
+    /// criteria; otherwise, null if no such actor is found.
+    /// </returns>
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( _clip )
@@ -509,6 +610,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the MinWidth value.
+    /// </summary>
+    /// <param name="minWidth"> The minimum width value to set. </param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetMinWidth( Value minWidth )
     {
         Guard.Against.Null( minWidth );
@@ -518,6 +624,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the MinWidth value.
+    /// </summary>
+    /// <param name="minWidth"> The minimum width value to set. </param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetMinWidth( float minWidth )
     {
         _minWidth = Value.Fixed.ValueOf( minWidth );
@@ -525,16 +636,23 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Returns the minimum width of this container.
+    /// </summary>
+    /// <returns>The minimum width of this container.</returns>
     public override float GetMinWidth()
     {
         return _minWidth.Get( _actor ) + _padLeft.Get( this ) + _padRight.Get( this );
     }
 
-    public Value GetMinWidthValue()
-    {
-        return _minWidth;
-    }
-
+    /// <summary>
+    /// Calculates and returns the maximum width of the container, considering the
+    /// associated actor's width and any padding applied to the left and right sides
+    /// of the container.
+    /// </summary>
+    /// <returns>
+    /// The maximum width of the container, including the associated actor's width and any additional padding.
+    /// </returns>
     public override float GetMaxWidth()
     {
         float v = _maxWidth.Get( _actor );
@@ -545,11 +663,6 @@ public class Container< T > : WidgetGroup where T : Actor
         }
 
         return v;
-    }
-
-    public Value GetMaxWidthValue()
-    {
-        return _maxWidth;
     }
 
     #endregion widths
@@ -583,6 +696,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the MinHeight value.
+    /// </summary>
+    /// <param name="minHeight"> The minimum height value to set. </param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetMinHeight( Value minHeight )
     {
         Guard.Against.Null( minHeight );
@@ -592,6 +710,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the MinHeight value.
+    /// </summary>
+    /// <param name="minHeight"> The minimum height value to set. </param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetMinHeight( float minHeight )
     {
         _minHeight = Value.Fixed.ValueOf( minHeight );
@@ -599,16 +722,23 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Returns the minimum height of this container.
+    /// </summary>
+    /// <returns>The minimum height of this container.</returns>
     public override float GetMinHeight()
     {
         return _minHeight.Get( _actor ) + _padTop.Get( this ) + _padBottom.Get( this );
     }
 
-    public Value GetMinHeightValue()
-    {
-        return _minHeight;
-    }
-
+    /// <summary>
+    /// Calculates and returns the maximum height of the container, considering the
+    /// associated actor's height and any padding applied to the top and bottom
+    /// of the container.
+    /// </summary>
+    /// <returns>
+    /// The maximum height of the container, including the associated actor's height and any additional padding.
+    /// </returns>
     public override float GetMaxHeight()
     {
         float v = _maxHeight.Get( _actor );
@@ -619,11 +749,6 @@ public class Container< T > : WidgetGroup where T : Actor
         }
 
         return v;
-    }
-
-    public Value GetMaxHeightValue()
-    {
-        return _maxHeight;
     }
 
     #endregion heights
@@ -714,6 +839,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the maxWidth to the specified value.
+    /// </summary>
+    /// <param name="maxWidth"> The new maximum width </param>
+    /// <returns> This container for method chaining. </returns>
     public Container< T > SetMaxWidth( Value maxWidth )
     {
         Guard.Against.Null( maxWidth );
@@ -723,6 +853,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the maxHeight to the specified value.
+    /// </summary>
+    /// <param name="maxHeight"> The new maximum height </param>
+    /// <returns> This container for method chaining. </returns>
     public Container< T > SetMaxHeight( Value maxHeight )
     {
         Guard.Against.Null( maxHeight );
@@ -752,6 +887,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the maxWidth to the specified value.
+    /// </summary>
+    /// <param name="maxWidth"> The new maximum width </param>
+    /// <returns> This container for method chaining. </returns>
     public Container< T > SetMaxWidth( float maxWidth )
     {
         _maxWidth = Value.Fixed.ValueOf( maxWidth );
@@ -759,6 +899,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the maxHeight to the specified value.
+    /// </summary>
+    /// <param name="maxHeight"> The new maximum height </param>
+    /// <returns> This container for method chaining. </returns>
     public Container< T > SetMaxHeight( float maxHeight )
     {
         _maxHeight = Value.Fixed.ValueOf( maxHeight );
@@ -820,6 +965,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the preferred width for the container.
+    /// </summary>
+    /// <param name="prefWidth">The value representing the preferred width to set. Cannot be null.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPrefWidth( Value prefWidth )
     {
         Guard.Against.Null( prefWidth );
@@ -829,6 +979,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the preferred width of the container.
+    /// </summary>
+    /// <param name="prefWidth">The preferred width for the container in pixels.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPrefWidth( float prefWidth )
     {
         _prefWidth = Value.Fixed.ValueOf( prefWidth );
@@ -836,6 +991,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the preferred height for the container.
+    /// </summary>
+    /// <param name="prefHeight">The value representing the preferred height to set. Cannot be null.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPrefHeight( Value prefHeight )
     {
         Guard.Against.Null( prefHeight );
@@ -845,6 +1005,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the preferred height of the container.
+    /// </summary>
+    /// <param name="prefHeight">The preferred height for the container in pixels.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPrefHeight( float prefHeight )
     {
         _prefHeight = Value.Fixed.ValueOf( prefHeight );
@@ -852,6 +1017,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Calculates and returns the preferred width of the container, including adjustments for padding
+    /// and consideration of the associated actor and background's minimum width.
+    /// </summary>
+    /// <returns>The preferred width of the container.</returns>
     public override float GetPrefWidth()
     {
         float v = _prefWidth.Get( _actor );
@@ -864,6 +1034,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return Math.Max( GetMinWidth(), v + _padLeft.Get( this ) + _padRight.Get( this ) );
     }
 
+    /// <summary>
+    /// Calculates and returns the preferred height of the container, including adjustments for padding
+    /// and consideration of the associated actor and background's minimum height.
+    /// </summary>
+    /// <returns>The preferred height of the container.</returns>
     public override float GetPrefHeight()
     {
         float v = _prefHeight.Get( _actor );
@@ -886,6 +1061,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// <summary>
     /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
     /// </summary>
+    /// <param name="pad"> The value to set for all padding sides. Cannot be null.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadding( Value pad )
     {
         Guard.Against.Null( pad );
@@ -901,6 +1078,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// <summary>
     /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
     /// </summary>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadding( Value top, Value left, Value bottom, Value right )
     {
         Guard.Against.Null( top );
@@ -919,6 +1097,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// <summary>
     /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
     /// </summary>
+    /// <param name="pad"> The value to set for all padding sides. Cannot be null.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadding( float pad )
     {
         Value value = Value.Fixed.ValueOf( pad );
@@ -931,6 +1111,14 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding values for the container.
+    /// </summary>
+    /// <param name="top">The padding value for the top edge.</param>
+    /// <param name="left">The padding value for the left edge.</param>
+    /// <param name="bottom">The padding value for the bottom edge.</param>
+    /// <param name="right">The padding value for the right edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadding( float top, float left, float bottom, float right )
     {
         _padTop    = Value.Fixed.ValueOf( top );
@@ -941,6 +1129,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the top padding value for the container.
+    /// </summary>
+    /// <param name="padTop">The padding value for the top edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadTop( Value padTop )
     {
         Guard.Against.Null( padTop );
@@ -950,6 +1143,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the left padding value for the container.
+    /// </summary>
+    /// <param name="padLeft">The padding value for the left edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadLeft( Value padLeft )
     {
         Guard.Against.Null( padLeft );
@@ -959,6 +1157,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the Bottom padding value for the container.
+    /// </summary>
+    /// <param name="padBottom">The padding value for the bottom edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadBottom( Value padBottom )
     {
         Guard.Against.Null( padBottom );
@@ -968,6 +1171,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the right padding value for the container.
+    /// </summary>
+    /// <param name="padRight">The padding value for the right edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadRight( Value padRight )
     {
         Guard.Against.Null( padRight );

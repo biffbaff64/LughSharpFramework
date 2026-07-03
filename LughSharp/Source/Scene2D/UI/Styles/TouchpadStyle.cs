@@ -32,22 +32,44 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TouchpadStyle : ISceneStyle
 {
-    // Stretched in both directions.
+    /// <summary>
+    /// Gets or sets the drawable object used to render the background.
+    /// The background is typically stretched in both directions to fit the component's bounds.
+    /// </summary>
     public ISceneDrawable? Background { get; set; }
-    public ISceneDrawable? Knob       { get; set; }
+
+    /// <summary>
+    /// Gets or sets the drawable object used to render the knob of the touchpad.
+    /// The knob's position typically reflects user input and is drawn within the bounds of the touchpad.
+    /// </summary>
+    public ISceneDrawable? Knob { get; set; }
 
     // ====================================================================
 
+    /// <summary>
+    /// Represents the styling definition for a touchpad in the user interface.
+    /// </summary>
     public TouchpadStyle()
     {
     }
 
+    /// <summary>
+    /// Represents the styling configuration for a touchpad in the user interface,
+    /// specifying its visual elements and layout.
+    /// </summary>
+    /// <param name="background">The drawable object used to render the background.</param>
+    /// <param name="knob">The drawable object used to render the knob of the touchpad.</param>
     public TouchpadStyle( ISceneDrawable background, ISceneDrawable knob )
     {
         Background = background;
         Knob       = knob;
     }
 
+    /// <summary>
+    /// Creates a new instance of the TouchpadStyle class by copying the properties
+    /// from the specified style.
+    /// </summary>
+    /// <param name="style"> The style to copy properties from. </param>
     public TouchpadStyle( TouchpadStyle style )
     {
         Background = style.Background;

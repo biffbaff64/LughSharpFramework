@@ -33,20 +33,53 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SelectBoxStyle : ISceneStyle
 {
-    public required BitmapFont      Font            { get; set; }
-    public required Color           FontColor       { get; set; }
-    public required ScrollPaneStyle ScrollPaneStyle { get; set; }
-    public required ListBoxStyle    ListBoxStyle    { get; set; }
-    public required ISceneDrawable? Background      { get; set; }
+    /// <summary>
+    /// The <see cref="BitmapFont"/> used to render the text.
+    /// </summary>
+    public BitmapFont Font { get; set; }
 
-    public Color?          OverFontColor      { get; set; }
-    public Color?          DisabledFontColor  { get; set; }
+    /// <summary>
+    /// The color used to render the text.
+    /// </summary>
+    public Color FontColor { get; set; }
+
+    /// <summary>
+    /// Defines the style for the ScrollPane., which is used to handle scrolling
+    /// of the list of options.
+    /// </summary>
+    public ScrollPaneStyle ScrollPaneStyle { get; set; }
+
+    /// <summary>
+    /// Defines the style for the ListBox, which is used to display the list of options.
+    /// </summary>
+    public ListBoxStyle ListBoxStyle { get; set; }
+
+    /// <summary>
+    /// The background drawable for the ScrollPane.
+    /// </summary>
+    public ISceneDrawable? Background { get; set; }
+
+    /// <summary>
+    /// The color of the font used when the mouse cursor is hovering over the element.
+    /// </summary>
+    public Color? OverFontColor      { get; set; }
+
+    /// <summary>
+    /// The color of the font used for the list box item when it is in a disabled state.
+    /// </summary>
+    public Color? DisabledFontColor  { get; set; }
+    
     public ISceneDrawable? BackgroundOver     { get; set; }
     public ISceneDrawable? BackgroundOpen     { get; set; }
     public ISceneDrawable? BackgroundDisabled { get; set; }
 
     // ====================================================================
 
+    /// <summary>
+    /// Creates a new instance of the SelectBoxStyle class, with default values for
+    /// properties <see cref="Font"/>, <see cref="FontColor"/>, <see cref="Background"/>,
+    /// <see cref="ScrollPaneStyle"/>, and <see cref="ListBoxStyle"/>.
+    /// </summary>
     public SelectBoxStyle()
     {
         Font            = new BitmapFont();
@@ -56,6 +89,16 @@ public class SelectBoxStyle : ISceneStyle
         Background      = new BaseDrawable();
     }
 
+    /// <summary>
+    /// Represents a style for a SelectBox UI component, defining visual and behavioral
+    /// properties such as font, font colors, background, and related styles for
+    /// associated components like ScrollPane and ListBox.
+    /// </summary>
+    /// <param name="font"> The <see cref="BitmapFont"/> to use for rendering text. </param>
+    /// <param name="fontColor"> The <see cref="Color"/> to use for rendering text. </param>
+    /// <param name="background"> The <see cref="ISceneDrawable"/> to use for rendering the background. </param>
+    /// <param name="scrollStyle"> The <see cref="ScrollPaneStyle"/> to use. </param>
+    /// <param name="listBoxStyle"> The <see cref="ListBoxStyle"/> to use. </param>
     public SelectBoxStyle( BitmapFont font,
                            Color fontColor,
                            ISceneDrawable background,
@@ -73,10 +116,11 @@ public class SelectBoxStyle : ISceneStyle
     }
 
     /// <summary>
-    /// Copy Constructor
+    /// Represents the style configuration for a <see cref="SelectBox{T}"/>.
+    /// Provides customization options such as fonts, colors, backgrounds, and styles
+    /// for various elements of the SelectBox.
     /// </summary>
-    /// <param name="style"></param>
-    /// <exception cref="NullReferenceException"></exception>
+    /// <param name="style"> The <see cref="SelectBoxStyle"/> to copy. </param>
     public SelectBoxStyle( SelectBoxStyle? style )
     {
         Guard.Against.Null( style );

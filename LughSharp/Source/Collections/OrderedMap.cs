@@ -108,7 +108,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Replaces the value associated with the specified key, and returns the old value.
+    /// If the key is not found, the value is added at the end of the map and null is returned.
+    /// </summary>
+    /// <param name="key">The key whose value is to be replaced.</param>
+    /// <param name="value">The new value to associate with the key.</param>
+    /// <returns>The old value associated with the key, or null if the key was not found.</returns>
     public override TV? Put( TK key, TV? value )
     {
         int i = LocateKey( key );
@@ -160,7 +166,14 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Removes the entry for the specified key from the map, if present.
+    /// </summary>
+    /// <param name="key">The key whose mapping is to be removed from the map.</param>
+    /// <returns>
+    /// The previous value associated with the specified key, or the default
+    /// value if the key was not found.
+    /// </returns>
     public override TV? Remove( TK key )
     {
         _keys.Remove( key );
@@ -240,14 +253,21 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         return true;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Clears the map and reduces the size of the backing arrays to be the
+    /// specified capacity / loadFactor, if they are larger.
+    /// </summary>
+    /// <param name="maximumCapacity"></param>
     public override void Clear( int maximumCapacity )
     {
         _keys.Clear();
         base.Clear( maximumCapacity );
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Removes all keys and values from the map, resetting it to its initial state.
+    /// This implementation clears the key and value tables and sets the size to zero.
+    /// </summary>
     public override void Clear()
     {
         _keys.Clear();
@@ -525,8 +545,17 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Represents an iterator for the keys of an <see cref="OrderedMap{TK, TV}"/>. This iterator provides
+    /// traversal functionality for accessing keys in the insertion order of the map. It inherits from
+    /// <see cref="KeysIterator"/> and includes additional methods for interacting with the ordered keys
+    /// as an array or resetting the iterator state.
     /// </summary>
+    /// <remarks>
+    /// This class operates on the keys of its corresponding <see cref="OrderedMap{TK, TV}"/> to ensure
+    /// they are iterated in the same order in which they were added. Modifications to the map during
+    /// iteration (such as adding or removing elements) must be handled with care to avoid unintended
+    /// behavior.
+    /// </remarks>
     [PublicAPI]
     public class OrderedMapKeys : KeysIterator
     {
@@ -538,7 +567,9 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             _keys = map._keys;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Resets the iterator to the start of the map.
+        /// </summary>
         public override void Reset()
         {
             CurrentIndex = -1;
@@ -546,7 +577,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             HasNext      = Map.Size > 0;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns the next key in the iteration.
+        /// </summary>
+        /// <returns>The next key in the map.</returns>
+        /// <exception cref="RuntimeException">
+        /// Thrown if there are no more keys to iterate over, or if the iterator is nested.
+        /// </exception>
         public override TK Next()
         {
             if ( !HasNext )
@@ -611,6 +648,17 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Represents an iterator for the values of an <see cref="OrderedMap{TK, TV}"/>.
+    /// Unlike a standard map values iterator, this implementation respects the order of key-value
+    /// insertion as maintained by the <see cref="OrderedMap{TK, TV}"/>.
+    /// </summary>
+    /// <remarks>
+    /// This class provides functionality to iterate over the values in their ordered sequence,
+    /// as well as utility methods for resetting the iteration state, removing entries during
+    /// iteration, and exporting the values to a list. Iteration order matches the insertion order
+    /// defined by the encapsulating ordered map.
+    /// </remarks>
     [PublicAPI]
     public class OrderedMapValues : ValuesIterator
     {
@@ -622,7 +670,9 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             _keys = map._keys;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Resets the iterator to the start of the map.
+        /// </summary>
         public override void Reset()
         {
             CurrentIndex = -1;
@@ -630,7 +680,13 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             HasNext      = Map.Size > 0;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns the next key in the iteration.
+        /// </summary>
+        /// <returns>The next key in the map.</returns>
+        /// <exception cref="RuntimeException">
+        /// Thrown if there are no more values to iterate over, or if the iterator is nested.
+        /// </exception>
         public override TV? Next()
         {
             if ( !HasNext )
@@ -652,7 +708,9 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             return value;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Removes the current key-value pair from the map.
+        /// </summary>
         public override void Remove()
         {
             if ( CurrentIndex < 0 )
@@ -666,7 +724,9 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             CurrentIndex = -1;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Adds the remaining values to the array.
+        /// </summary>
         public override List< TV > ToArray( List< TV > array )
         {
             int n = _keys.Count;
@@ -687,10 +747,16 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
             return array;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns a new array containing the remaining values.
+        /// </summary>
         public override List< TV > ToArray()
         {
             return ToArray( new List< TV >( _keys.Count - NextIndex ) );
         }
     }
 }
+
+// ============================================================================
+// ============================================================================
+

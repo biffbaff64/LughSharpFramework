@@ -56,6 +56,9 @@ public class CheckBox : TextButton, IStyleable< CheckBoxStyle >
     /// Creates a new CheckBox using the supplied <see cref="Skin"/>, text for the
     /// associated <see cref="Label"/>, and <see cref="CheckBoxStyle"/>.
     /// </summary>
+    /// <param name="text"> The text to assign to the Label. </param>
+    /// <param name="skin"> The skin holding the CheckBoxStyle. </param>
+    /// <param name="styleName"> The name of the CheckBoxStyle in the skin. </param>
     public CheckBox( string text, Skin skin, string styleName )
         : this( text, skin.Get< CheckBoxStyle >( styleName ) )
     {
@@ -65,6 +68,8 @@ public class CheckBox : TextButton, IStyleable< CheckBoxStyle >
     /// Creates a new CheckBox using the supplied <see cref="CheckBoxStyle"/>, and
     /// text for the associated <see cref="Label"/>.
     /// </summary>
+    /// <param name="text"> The text to assign to the Label. </param>
+    /// <param name="style"> The CheckBoxStyle to use. </param>
     public CheckBox( string text, CheckBoxStyle style ) : base( text, style )
     {
         Setup( style );
@@ -74,6 +79,7 @@ public class CheckBox : TextButton, IStyleable< CheckBoxStyle >
     /// Private setup method to allow calls to virtual methods that can't
     /// be called from constructors.
     /// </summary>
+    /// <param name="style"> The CheckBoxStyle to use. </param>
     private void Setup( CheckBoxStyle style )
     {
         SetStyle( style );
@@ -98,7 +104,7 @@ public class CheckBox : TextButton, IStyleable< CheckBoxStyle >
     /// Draws the CheckBox.
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
-    /// <param name="parentAlpha"></param>
+    /// <param name="parentAlpha"> The alpha, provided by the parent, to use when drawing. </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Image?.SetDrawable( GetImageDrawable() );
@@ -144,17 +150,16 @@ public class CheckBox : TextButton, IStyleable< CheckBoxStyle >
     /// <summary>
     /// Returns the <see cref="CheckBoxStyle"/> for this CheckBox.
     /// </summary>
-    /// <exception cref="ArgumentException">
-    /// Thrown if an attempt to set Style to null is made.
-    /// </exception>
-    public override CheckBoxStyle GetStyle() => _style;
+    /// <exception cref="ArgumentException"> Thrown if an attempt to set Style to null is made. </exception>
+    public override CheckBoxStyle GetStyle()
+    {
+        return _style;
+    }
 
     /// <summary>
     /// Returns the <see cref="CheckBoxStyle"/> for this CheckBox.
     /// </summary>
-    /// <exception cref="ArgumentException">
-    /// Thrown if an attempt to set Style to null is made.
-    /// </exception>
+    /// <exception cref="ArgumentException"> Thrown if an attempt to set Style to null is made. </exception>
     public void SetStyle( CheckBoxStyle value )
     {
         _style     = value ?? throw new ArgumentException( "style must be a CheckBoxStyle." );

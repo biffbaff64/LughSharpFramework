@@ -32,19 +32,38 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class SplitPaneStyle : ISceneStyle
 {
+    /// <summary>
+    /// The drawable element defining the appearance of the handle in a <see cref="SplitPane"/>.
+    /// This property determines how the dividing handle is rendered, including its visual style
+    /// and minimum size. The handle allows the user to resize the split panes interactively.
+    /// </summary>
     public ISceneDrawable? Handle { get; set; }
 
     // ========================================================================
-    
+
+    /// <summary>
+    /// Represents a style definition for a split pane component in a user interface.
+    /// </summary>
     public SplitPaneStyle()
     {
     }
 
+    /// <summary>
+    /// Defines a style for a split pane component in a user interface, providing customization
+    /// options for the appearance and behavior of the split pane.
+    /// </summary>
+    /// <param name="handle">
+    /// The drawable element defining the appearance of the handle in a <see cref="SplitPane"/>.
+    /// </param>
     public SplitPaneStyle( ISceneDrawable handle )
     {
         Handle = handle;
     }
 
+    /// <summary>
+    /// Creates a new SplitPaneStyle from the provided SplitPaneStyle.
+    /// </summary>
+    /// <param name="style">The SplitPaneStyle to copy.</param>
     public SplitPaneStyle( SplitPaneStyle style )
     {
         Handle = style.Handle;

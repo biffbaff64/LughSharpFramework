@@ -275,7 +275,7 @@ LUGHSHARP/SOURCE/AUDIO/OPENAL
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/COLLECTIONS
+LUGHSHARP/SOURCE/COLLECTIONS - DONE
 ----------------------------
 
       CODE   DOCU   FOOTER
@@ -289,7 +289,7 @@ LUGHSHARP/SOURCE/COLLECTIONS
     - DONE - DONE - DONE - LinkedHashMap
     - DONE - DONE - DONE - ListExtensions
     - DONE - DONE - DONE - ObjectMap
-    - DONE - IP   - DONE - OrderedMap
+    - DONE - DONE - DONE - OrderedMap
     - DONE - DONE - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
 
@@ -356,7 +356,7 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS - DONE
     - DONE - DONE - DONE - Glyph
     - DONE - DONE - DONE - GlyphLayout
 
-LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE - SHELVED
+LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE - TEMPORARILY SHELVED
 ----------------------------------------
 
     These classes do not need to be completed as yet.
@@ -920,7 +920,7 @@ LUGHSHARP/SOURCE/MOCK/NET
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/NETWORK
+LUGHSHARP/SOURCE/NETWORK - TEMPORARILY SHELVED
 ------------------------
 
     These classes do not need to be completed as yet. I am leaving them here for
@@ -1036,9 +1036,9 @@ LUGHSHARP/SOURCE/SCENE2D/UI
       CODE   DOCU   FOOTER IStyleable
       ----   ----   ------ ----------
     - DONE - DONE - DONE - DONE - ---- - Button               - 
-    - DONE - IP   - DONE - xxxx - ---- - ButtonGroup          - 
-    - IP   - IP   - DONE - xxxx - ---- - Cell                 - 
-    - IP   - IP   - DONE - DONE - ---- - CheckBox             - 
+    - DONE - DONE - DONE - xxxx - ---- - ButtonGroup          - 
+    - DONE - DONE - DONE - xxxx - ---- - Cell                 - 
+    - DONE - DONE - DONE - DONE - ---- - CheckBox             - 
     -      -      -      - xxxx - ---- - Container            - 
     - IP   - IP   - DONE - DONE - ---- - Dialog               - 
     -      -      -      - xxxx - ---- - HorizontalGroup      - 
@@ -1073,7 +1073,7 @@ LUGHSHARP/SOURCE/SCENE2D/UI
     - DONE - DONE - DONE - xxxx - ---- - WidgetGroup          - 
     - IP   - IP   - DONE - DONE - ---- - Window               - 
 
-LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
+LUGHSHARP/SOURCE/SCENE2D/UI/STYLES - DONE
 ----------------------------------
 
       CODE   DOCU   FOOTER
@@ -1085,17 +1085,17 @@ LUGHSHARP/SOURCE/SCENE2D/UI/STYLES
     - DONE - DONE - DONE - ImageTextButtonStyle
     - DONE - DONE - DONE - ISceneStyle
     - DONE - DONE - DONE - LabelStyle
-    -      -      - DONE - ListBoxStyle
-    -      -      - DONE - ProgressBarStyle
-    -      -      - DONE - ScrollPaneStyle
-    -      -      - DONE - SelectBoxStyle
+    - DONE - DONE - DONE - ListBoxStyle
+    - DONE - DONE - DONE - ProgressBarStyle
+    - DONE - DONE - DONE - ScrollPaneStyle
+    - DONE - DONE - DONE - SelectBoxStyle
     - DONE - DONE - DONE - SliderStyle
-    -      -      - DONE - SplitPaneStyle
+    - DONE - DONE - DONE - SplitPaneStyle
     - DONE - DONE - DONE - TextAreaStyle
-    -      -      - DONE - TextButtonStyle
-    -      -      - DONE - TextFieldStyle
-    -      -      - DONE - TextTooltipStyle
-    -      -      - DONE - TouchpadStyle
+    - DONE - DONE - DONE - TextButtonStyle
+    - DONE - DONE - DONE - TextFieldStyle
+    - DONE - DONE - DONE - TextTooltipStyle
+    - DONE - DONE - DONE - TouchpadStyle
     - DONE - DONE - DONE - TreeStyle
     - DONE - DONE - DONE - WindowStyle
 
@@ -1176,7 +1176,7 @@ LUGHSHARP/SOURCE/UTILS/EXCEPTIONS - DONE
     - DONE - DONE - DONE - RuntimeException
     - DONE - DONE - DONE - SerializationException
 
-LUGHSHARP/SOURCE/UTILS/JSON
+LUGHSHARP/SOURCE/UTILS/JSON - POSSIBLY BEING SHELVED
 ---------------------------
 
     ///////////////////////////////////////////////
@@ -1237,7 +1237,7 @@ LUGHSHARP/SOURCE/UTILS/XML - DONE
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 
-LUGHSHARP/EXTENSIONS/SOURCE - SHELVED
+LUGHSHARP/EXTENSIONS/SOURCE - TEMPORARILY SHELVED
 ---------------------------
 
       CODE   DOCU   FOOTER

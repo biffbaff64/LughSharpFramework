@@ -32,23 +32,56 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class TextTooltipStyle : ISceneStyle
 {
-    public LabelStyle      LabelStyle { get; set; }
+    /// <summary>
+    /// Gets or sets the <see cref="LabelStyle"/> that defines the font, font color,
+    /// and optional background style applied to the label displayed within the
+    /// <see cref="TextTooltip"/>.
+    /// </summary>
+    public LabelStyle LabelStyle { get; set; }
+
+    /// <summary>
+    /// Gets or sets the <see cref="ISceneDrawable"/> used to define the background
+    /// appearance and styling for the <see cref="TextTooltip"/>.
+    /// </summary>
     public ISceneDrawable? Background { get; set; }
-    public float           WrapWidth  { get; set; }
+
+    /// <summary>
+    /// Gets or sets the maximum width at which the content text will wrap for a
+    /// <see cref="TextTooltip"/>. This property determines the width constraint
+    /// applied to the tooltip's content, ensuring text wraps appropriately within
+    /// the UI layout.
+    /// </summary>
+    public float WrapWidth  { get; set; }
 
     // ========================================================================
 
+    /// <summary>
+    /// Defines a style for a <see cref="TextTooltip"/> UI element. This style includes
+    /// properties for configuring label appearance, tooltip background, and text wrapping
+    /// behavior. Implements <see cref="ISceneStyle"/>.
+    /// </summary>
     public TextTooltipStyle()
     {
         LabelStyle = new LabelStyle();
     }
 
+    /// <summary>
+    /// Defines a style for a <see cref="TextTooltip"/> UI element. This style specifies the
+    /// appearance of tooltips, including label styling, background customization, and text
+    /// wrapping behavior. Implements <see cref="ISceneStyle"/>.
+    /// </summary>
+    /// <param name="label"> The label to display withing the TextTooltip. </param>
+    /// <param name="background"> The background drawable for the TextTooltip. </param>
     public TextTooltipStyle( LabelStyle label, ISceneDrawable background )
     {
         LabelStyle = label;
         Background = background;
     }
 
+    /// <summary>
+    /// Creates a copy of the provided <see cref="TextTooltipStyle"/>.
+    /// </summary>
+    /// <param name="style"> The style to copy. </param>
     public TextTooltipStyle( TextTooltipStyle style )
     {
         LabelStyle = new LabelStyle( style.LabelStyle );

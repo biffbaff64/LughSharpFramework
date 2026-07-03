@@ -122,28 +122,28 @@ public class Cell : IPoolable, IResetable
     {
         CellAboveIndex = -1;
 
-        MinWidth    = Value.MinWidth;
-        MinHeight   = Value.MinHeight;
-        PrefWidth   = Value.PrefWidth;
-        PrefHeight  = Value.PrefHeight;
-        MaxWidth    = Value.MaxWidth;
-        MaxHeight   = Value.MaxHeight;
-        SpaceTop    = Value.Zero;
-        SpaceLeft   = Value.Zero;
-        SpaceBottom = Value.Zero;
-        SpaceRight  = Value.Zero;
-        PadTop      = Value.Zero;
-        PadLeft     = Value.Zero;
-        PadBottom   = Value.Zero;
-        PadRight    = Value.Zero;
-        FillX       = Zerof;
-        FillY       = Zerof;
-        Alignment   = Align.Center;
-        ExpandX     = Zeroi;
-        ExpandY     = Zeroi;
-        Colspan     = Onei;
-        UniformX    = false;
-        UniformY    = false;
+        MinWidth    = _default.MinWidth;
+        MinHeight   = _default.MinHeight;
+        PrefWidth   = _default.PrefWidth;
+        PrefHeight  = _default.PrefHeight;
+        MaxWidth    = _default.MaxWidth;
+        MaxHeight   = _default.MaxHeight;
+        SpaceTop    = _default.SpaceTop;
+        SpaceLeft   = _default.SpaceLeft;
+        SpaceBottom = _default.SpaceBottom;
+        SpaceRight  = _default.SpaceRight;
+        PadTop      = _default.PadTop;
+        PadLeft     = _default.PadLeft;
+        PadBottom   = _default.PadBottom;
+        PadRight    = _default.PadRight;
+        FillX       = _default.FillX;
+        FillY       = _default.FillY;
+        Alignment   = _default.Alignment;
+        ExpandX     = _default.ExpandX;
+        ExpandY     = _default.ExpandY;
+        Colspan     = _default.Colspan;
+        UniformX    = _default.UniformX;
+        UniformY    = _default.UniformY;
     }
 
     // ========================================================================
@@ -158,28 +158,28 @@ public class Cell : IPoolable, IResetable
         EndRow         = false;
         CellAboveIndex = -1;
 
-        MinWidth    = Value.MinWidth;
-        MinHeight   = Value.MinHeight;
-        PrefWidth   = Value.PrefWidth;
-        PrefHeight  = Value.PrefHeight;
-        MaxWidth    = Value.MaxWidth;
-        MaxHeight   = Value.MaxHeight;
-        SpaceTop    = Value.Zero;
-        SpaceLeft   = Value.Zero;
-        SpaceBottom = Value.Zero;
-        SpaceRight  = Value.Zero;
-        PadTop      = Value.Zero;
-        PadLeft     = Value.Zero;
-        PadBottom   = Value.Zero;
-        PadRight    = Value.Zero;
-        FillX       = Zerof;
-        FillY       = Zerof;
-        Alignment   = Align.Center;
-        ExpandX     = Zeroi;
-        ExpandY     = Zeroi;
-        Colspan     = Onei;
-        UniformX    = false;
-        UniformY    = false;
+        MinWidth    = _default.MinWidth;
+        MinHeight   = _default.MinHeight;
+        PrefWidth   = _default.PrefWidth;
+        PrefHeight  = _default.PrefHeight;
+        MaxWidth    = _default.MaxWidth;
+        MaxHeight   = _default.MaxHeight;
+        SpaceTop    = _default.SpaceTop;
+        SpaceLeft   = _default.SpaceLeft;
+        SpaceBottom = _default.SpaceBottom;
+        SpaceRight  = _default.SpaceRight;
+        PadTop      = _default.PadTop;
+        PadLeft     = _default.PadLeft;
+        PadBottom   = _default.PadBottom;
+        PadRight    = _default.PadRight;
+        FillX       = _default.FillX;
+        FillY       = _default.FillY;
+        Alignment   = _default.Alignment;
+        ExpandX     = _default.ExpandX;
+        ExpandY     = _default.ExpandY;
+        Colspan     = _default.Colspan;
+        UniformX    = _default.UniformX;
+        UniformY    = _default.UniformY;
     }
 
     /// <summary>
@@ -225,7 +225,7 @@ public class Cell : IPoolable, IResetable
     {
         return Actor != null;
     }
-    
+
     // ------------------------------------------------------------------------
 
     /// <summary>
@@ -289,7 +289,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the minWidth, prefWidth, and maxWidth to the specified value.
     /// </summary>
@@ -317,7 +317,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the minHeight, prefHeight, and maxHeight to the specified value.
     /// </summary>
@@ -344,7 +344,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the minWidth and minHeight to the specified value.
     /// </summary>
@@ -392,7 +392,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Convenience method which sets the <see cref="MinWidth"/> property and then
     /// returns this Cell for chaining.
@@ -420,7 +420,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Convenience method which sets the <see cref="MinHeight"/> property and then returns
     /// this Cell for chaining.
@@ -448,7 +448,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the prefWidth and prefHeight to the specified value.
     /// </summary>
@@ -480,7 +480,7 @@ public class Cell : IPoolable, IResetable
 
         return this;
     }
-    
+
     /// <summary>
     /// Sets the prefWidth and prefHeight to the specified value.
     /// </summary>
@@ -515,7 +515,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the <see cref="PrefWidth"/> for this Cell.
     /// </summary>
@@ -547,7 +547,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the <see cref="PrefHeight"/> for this Cell.
     /// </summary>
@@ -639,7 +639,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// If the maxWidth is 0, no maximum width is used.
     /// </summary>
@@ -666,7 +666,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// If the maxHeight is 0, no maximum height is used.
     /// </summary>
@@ -693,7 +693,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the space for all sides of the cell to the specified value.
     /// </summary>
@@ -747,14 +747,16 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// 
+    /// Sets the spacing values around the cell using fixed pixel values.
     /// </summary>
-    /// <param name="top"></param>
-    /// <param name="left"></param>
-    /// <param name="bottom"></param>
-    /// <param name="right"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="top">Amount of space to set at the top. Must be non-negative.</param>
+    /// <param name="left">Amount of space to set on the left. Must be non-negative.</param>
+    /// <param name="bottom">Amount of space to set at the bottom. Must be non-negative.</param>
+    /// <param name="right">Amount of space to set on the right. Must be non-negative.</param>
+    /// <returns>The current Cell instance with updated spacing values.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown if any of the input values (top, left, bottom, or right) are negative.
+    /// </exception>
     public Cell Space( float top, float left, float bottom, float right )
     {
         if ( top < 0 )
@@ -786,7 +788,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the space value for the top side of this Cell.
     /// </summary>
@@ -798,7 +800,7 @@ public class Cell : IPoolable, IResetable
 
         return this;
     }
-    
+
     /// <summary>
     /// Sets the space value for the top side of this Cell.
     /// </summary>
@@ -818,7 +820,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the space value for the left side of this Cell.
     /// </summary>
@@ -850,7 +852,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the space value for the bottom side of this Cell.
     /// </summary>
@@ -882,7 +884,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the space value for the right side of this Cell.
     /// </summary>
@@ -914,7 +916,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
     /// </summary>
@@ -977,7 +979,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the pad value for the top edge of this Cell.
     /// </summary>
@@ -999,7 +1001,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the pad value for the left side of this Cell.
     /// </summary>
@@ -1021,7 +1023,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the pad value for the bottom edge of this Cell.
     /// </summary>
@@ -1043,7 +1045,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the pad value for the right side of this Cell.
     /// </summary>
@@ -1063,7 +1065,7 @@ public class Cell : IPoolable, IResetable
 
         return this;
     }
-    
+
     // ------------------------------------------------------------------------
 
     /// <summary>
@@ -1213,7 +1215,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Grow this Cell in X and Y. Using this method is the equivalent of calling:-
     /// <code>
@@ -1256,7 +1258,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Expand this Cell in X.
     /// </summary>
@@ -1280,7 +1282,7 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Expand this Cell in X and Y.
+    /// Expand this Cell in X and Y by the provided values.
     /// </summary>
     /// <param name="x"> The value to expand in X. Default is <see cref="Onei"/>. </param>
     /// <param name="y"> The value to expand in Y. Default is <see cref="Onei"/>. </param>
@@ -1309,7 +1311,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the number of columns this cell spans.
     /// </summary>
@@ -1323,13 +1325,17 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
-    /// 
+    /// Configures whether this cell has uniform X and Y size with other cells in its row.
     /// </summary>
-    /// <param name="ux"></param>
-    /// <param name="uy"></param>
-    /// <returns></returns>
+    /// <param name="ux">
+    /// A boolean value indicating if the cell should have uniform X sizing. Defaults to true.
+    /// </param>
+    /// <param name="uy">
+    /// A boolean value indicating if the cell should have uniform Y sizing. Defaults to true.
+    /// </param>
+    /// <returns>The current instance of the <see cref="Cell"/> for method chaining.</returns>
     public Cell SetUniform( bool ux = true, bool uy = true )
     {
         UniformX = ux;
@@ -1339,10 +1345,12 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// 
+    /// Configures whether this cell has uniform X size with other cells in its row.
     /// </summary>
-    /// <param name="ux"></param>
-    /// <returns></returns>
+    /// <param name="ux">
+    /// A boolean value indicating if the cell should have uniform X sizing. Defaults to true.
+    /// </param>
+    /// <returns>The current instance of the <see cref="Cell"/> for method chaining.</returns>
     public Cell SetUniformX( bool ux = true )
     {
         UniformX = ux;
@@ -1351,10 +1359,12 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// 
+    /// Configures whether this cell has uniform Y size with other cells in its row.
     /// </summary>
-    /// <param name="uy"></param>
-    /// <returns></returns>
+    /// <param name="uy">
+    /// A boolean value indicating if the cell should have uniform Y sizing. Defaults to true.
+    /// </param>
+    /// <returns>The current instance of the <see cref="Cell"/> for method chaining.</returns>
     public Cell SetUniformY( bool uy = true )
     {
         UniformY = uy;
@@ -1363,7 +1373,7 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
     /// Sets the bounds for this Cell <see cref="Actor"/>.
     /// </summary>
@@ -1510,34 +1520,34 @@ public class Cell : IPoolable, IResetable
     }
 
     // ------------------------------------------------------------------------
-    
+
     /// <summary>
-    /// Resets constraint fields.
+    /// Resets constraint fields to their default values.
     /// </summary>
     public void Clear()
     {
-        MinWidth    = Value.Zero;
-        MinHeight   = Value.Zero;
-        PrefWidth   = Value.Zero;
-        PrefHeight  = Value.Zero;
-        MaxWidth    = Value.Zero;
-        MaxHeight   = Value.Zero;
-        SpaceTop    = Value.Zero;
-        SpaceLeft   = Value.Zero;
-        SpaceBottom = Value.Zero;
-        SpaceRight  = Value.Zero;
-        PadTop      = Value.Zero;
-        PadLeft     = Value.Zero;
-        PadBottom   = Value.Zero;
-        PadRight    = Value.Zero;
-        FillX       = 0;
-        FillY       = 0;
-        Alignment   = 0;
-        ExpandX     = 0;
-        ExpandY     = 0;
-        Colspan     = 0;
-        UniformX    = false;
-        UniformY    = false;
+        MinWidth    = _default.MinWidth;
+        MinHeight   = _default.MinHeight;
+        PrefWidth   = _default.PrefWidth;
+        PrefHeight  = _default.PrefHeight;
+        MaxWidth    = _default.MaxWidth;
+        MaxHeight   = _default.MaxHeight;
+        SpaceTop    = _default.SpaceTop;
+        SpaceLeft   = _default.SpaceLeft;
+        SpaceBottom = _default.SpaceBottom;
+        SpaceRight  = _default.SpaceRight;
+        PadTop      = _default.PadTop;
+        PadLeft     = _default.PadLeft;
+        PadBottom   = _default.PadBottom;
+        PadRight    = _default.PadRight;
+        FillX       = _default.FillX;
+        FillY       = _default.FillY;
+        Alignment   = _default.Alignment;
+        ExpandX     = _default.ExpandX;
+        ExpandY     = _default.ExpandY;
+        Colspan     = _default.Colspan;
+        UniformX    = _default.UniformX;
+        UniformY    = _default.UniformY;
     }
 
     /// <summary>

@@ -63,16 +63,30 @@ public class ProgressBarStyle : ISceneStyle
 
     // ====================================================================
 
+    /// <summary>
+    /// Represents the styling definition for a progress bar in the user interface.
+    /// </summary>
     public ProgressBarStyle()
     {
     }
 
+    /// <summary>
+    /// Represents the styling configuration for a progress bar in the user interface,
+    /// specifying its visual elements and layout.
+    /// </summary>
+    /// <param name="background">The drawable object used to render the background.</param>
+    /// <param name="knob">The drawable object used to render the knob of the progress bar.</param>
     public ProgressBarStyle( ISceneDrawable background, ISceneDrawable knob )
     {
         Background = background;
         Knob       = knob;
     }
 
+    /// <summary>
+    /// Creates a new instance of the ProgressBarStyle class by copying the properties
+    /// from the specified style.
+    /// </summary>
+    /// <param name="style"> The style to copy properties from. </param>
     public ProgressBarStyle( ProgressBarStyle style )
     {
         Background         = style.Background;
