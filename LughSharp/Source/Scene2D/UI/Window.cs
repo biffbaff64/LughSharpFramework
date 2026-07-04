@@ -146,7 +146,7 @@ public class Window : Table, IStyleable< WindowStyle >
             return;
         }
 
-        Stage stage        = GetStage();
+        Stage stage        = GetStage() ?? throw new InvalidOperationException( "Window is not attached to a stage." );
         float parentWidth  = stage.Width;
         float parentHeight = stage.Height;
 
@@ -214,17 +214,17 @@ public class Window : Table, IStyleable< WindowStyle >
     /// root group.
     /// The Window, and any children, will then be drawn.
     /// </summary>
-    /// <param name="batch"> The </param>
-    /// <param name="parentAlpha"></param>
+    /// <param name="batch"> The batch used for drawing. </param>
+    /// <param name="parentAlpha"> The alpha value of the parent actor. </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( GetStage() != null )
         {
-            Stage stage = GetStage();
+            Stage stage = GetStage() ?? throw new InvalidOperationException( "Window is not attached to a stage." );
 
             if ( stage.GetKeyboardFocus() == null )
             {
-                GetStage().SetKeyboardFocus( this );
+                stage.SetKeyboardFocus( this );
             }
 
             EnsureWithinStage();
@@ -232,7 +232,7 @@ public class Window : Table, IStyleable< WindowStyle >
             if ( GetStyle().StageBackground != null )
             {
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
-                StageToLocalCoordinates( _tmpSize.Set( GetStage().Width, GetStage().Height ) );
+                StageToLocalCoordinates( _tmpSize.Set( stage.Width, stage.Height ) );
 
                 DrawStageBackground( batch,
                                      parentAlpha,
@@ -249,12 +249,12 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <summary>
     /// Draws the stage background.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="parentAlpha"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="batch"> The batch used for drawing. </param>
+    /// <param name="parentAlpha"> The alpha value of the parent actor. </param>
+    /// <param name="x"> The x-coordinate of the stage background. </param>
+    /// <param name="y"> The y-coordinate of the stage background. </param>
+    /// <param name="width"> The width of the stage background. </param>
+    /// <param name="height"> The height of the stage background. </param>
     protected void DrawStageBackground( IBatch batch, float parentAlpha, float x, float y, float width, float height )
     {
         batch.SetColor( ActorColor.R, ActorColor.G, ActorColor.B, ActorColor.A * parentAlpha );
@@ -265,10 +265,10 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <summary>
     /// Draws the background of the window.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="parentAlpha"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="batch"> The batch used for drawing. </param>
+    /// <param name="parentAlpha"> The alpha value of the parent actor. </param>
+    /// <param name="x"> The x-coordinate of the window background. </param>
+    /// <param name="y"> The y-coordinate of the window background. </param>
     protected override void DrawBackground( IBatch batch, float parentAlpha, float x, float y )
     {
         base.DrawBackground( batch, parentAlpha, x, y );
@@ -293,7 +293,24 @@ public class Window : Table, IStyleable< WindowStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Determines the topmost child actor at the specified coordinates that is visible and,
+    /// if required, touchable.
+    /// </summary>
+    /// <remarks>
+    /// The method traverses child actors in reverse order, returning the first child that is 
+    /// hit. If no child is hit, the method delegates to the base implementation. Coordinates
+    /// are interpreted in the local coordinate system of each child.
+    /// </remarks>
+    /// <param name="x">The x-coordinate, in the parent's local coordinate system, to test for a hit.</param>
+    /// <param name="y">The y-coordinate, in the parent's local coordinate system, to test for a hit.</param>
+    /// <param name="touchable">
+    /// true to consider only actors that are touchable; otherwise, false to include all actors
+    /// regardless of their touchable state.</param>
+    /// <returns>
+    /// The topmost Actor at the specified coordinates that meets the visibility and touchability
+    /// criteria; otherwise, null if no such actor is found.
+    /// </returns>
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( !IsVisible ) return null;
@@ -333,22 +350,27 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <summary>
     /// Returns the preferred width of this window.
     /// </summary>
+    /// <returns>The preferred width of this window.</returns>
     public override float GetPrefWidth()
     {
         return TitleTable == null
-            ? base.GetPrefWidth()
-            : Math.Max( base.GetPrefWidth(), TitleTable.GetPrefWidth() + GetPadLeft() + GetPadRight() );
+                   ? base.GetPrefWidth()
+                   : Math.Max( base.GetPrefWidth(), TitleTable.GetPrefWidth() + GetPadLeft() + GetPadRight() );
     }
 
     /// <summary>
     /// Gets this windows <see cref="WindowStyle"/> property. Modifying the returned style
     /// may not have an effect until <see cref="SetStyle(WindowStyle)"/> is called.
     /// </summary>
+    /// <returns>The <see cref="WindowStyle"/> of this window.</returns>
     public virtual WindowStyle GetStyle() => _style;
 
     /// <summary>
-    /// Gets this windows <see cref="WindowStyle"/> property.
+    /// Sets the style of the window using the specified <see cref="WindowStyle"/>.
+    /// Updates the appearance of the window, including the background and title label font style,
+    /// to reflect the newly applied style.
     /// </summary>
+    /// <param name="style">The <see cref="WindowStyle"/> to be applied to the window.</param>
     public virtual void SetStyle( WindowStyle style )
     {
         _style = style;
@@ -363,6 +385,14 @@ public class Window : Table, IStyleable< WindowStyle >
         InvalidateHierarchy();
     }
 
+    /// <summary>
+    /// Sets the style of the window using the specified <see cref="WindowStyle"/>.
+    /// Updates the appearance of the window, including the background and title label font style,
+    /// to reflect the newly applied style. This method simply calls <see cref="SetStyle"/>
+    /// and is a convenience method for internal use, being non-virtual and callable from
+    /// constructors.
+    /// </summary>
+    /// <param name="style">The <see cref="WindowStyle"/> to be applied to the window.</param>
     private void SetStyleUnchecked( WindowStyle style )
     {
         SetStyle( style );
@@ -371,6 +401,13 @@ public class Window : Table, IStyleable< WindowStyle >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// An input listener designed for capturing events specifically for a <see cref="Window"/>.
+    /// <para>
+    /// The <see cref="WindowCaptureListener"/> ensures that the associated window is brought
+    /// to the front when a touch or click event occurs on the window.
+    /// </para>
+    /// </summary>
     [PublicAPI]
     public class WindowCaptureListener : InputListener
     {
@@ -402,6 +439,15 @@ public class Window : Table, IStyleable< WindowStyle >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Listener for handling input events specifically for instances of the <see cref="Window"/> class.
+    /// <para>
+    /// The <see cref="WindowInputListener"/> provides mechanisms to respond to various user input events,
+    /// including touch, mouse, scroll, and keyboard interactions, in the context of a window. The listener
+    /// is tightly coupled with the associated <see cref="Window"/> instance to enable interaction handling
+    /// such as window dragging, resizing, or other input-specific behaviors.
+    /// </para>
+    /// </summary>
     [PublicAPI]
     public class WindowInputListener : InputListener
     {
@@ -431,6 +477,12 @@ public class Window : Table, IStyleable< WindowStyle >
         /// over this actor, until touchUp is received. Also when true is returned,
         /// the event is handled by <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="x">The x-coordinate of the touch or mouse event.</param>
+        /// <param name="y">The y-coordinate of the touch or mouse event.</param>
+        /// <param name="pointer">The pointer index of the touch or mouse event.</param>
+        /// <param name="button">The button index of the touch or mouse event.</param>
+        /// <returns>True if the event was handled.</returns>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             Logger.Debug( $"x: {x}, y: {y}, button: {button}" );
@@ -454,6 +506,11 @@ public class Window : Table, IStyleable< WindowStyle >
         /// if touchDown previously returned true for the mouse button or touch.
         /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="x">The x-coordinate of the touch or mouse event.</param>
+        /// <param name="y">The y-coordinate of the touch or mouse event.</param>
+        /// <param name="pointer">The pointer index of the touch or mouse event.</param>
+        /// <param name="button">The button index of the touch or mouse event.</param>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             Logger.Checkpoint();
@@ -466,6 +523,10 @@ public class Window : Table, IStyleable< WindowStyle >
         /// if touchDown previously returned true for the mouse button or touch.
         /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="x">The x-coordinate of the touch or mouse event.</param>
+        /// <param name="y">The y-coordinate of the touch or mouse event.</param>
+        /// <param name="pointer">The pointer index of the touch or mouse event.</param>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             if ( !_window.Dragging )
@@ -575,6 +636,9 @@ public class Window : Table, IStyleable< WindowStyle >
         /// only occurs on the desktop. When true is returned, the event is handled
         /// by <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="x">The x-coordinate of the mouse event.</param>
+        /// <param name="y">The y-coordinate of the mouse event.</param>
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             UpdateEdge( x, y );
@@ -586,6 +650,11 @@ public class Window : Table, IStyleable< WindowStyle >
         /// Called when the mouse wheel has been scrolled. When true is returned,
         /// the event is handled in <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="x">The x-coordinate of the touch or mouse event.</param>
+        /// <param name="y">The y-coordinate of the touch or mouse event.</param>
+        /// <param name="amountX">The amount of scrolling in the x-direction.</param>
+        /// <param name="amountY">The amount of scrolling in the y-direction.</param>
         public override bool OnScrolled( InputEvent? ev, float x, float y, float amountX, float amountY )
         {
             return _window.IsModal;
@@ -595,6 +664,9 @@ public class Window : Table, IStyleable< WindowStyle >
         /// Called when a key goes down. When true is returned, the event is
         /// handled by <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="keycode">The keycode of the key that was pressed.</param>
+        /// <returns>True if the event was handled.</returns>
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             return _window.IsModal;
@@ -604,6 +676,9 @@ public class Window : Table, IStyleable< WindowStyle >
         /// Called when a key goes up. When true is returned, the event is
         /// handled by <see cref="Event.SetHandled"/>.
         /// </summary>
+        /// <param name="ev">The input event.</param>
+        /// <param name="keycode">The keycode of the key that was pressed.</param>
+        /// <returns>True if the event was handled.</returns>
         public override bool OnKeyUp( InputEvent? ev, int keycode )
         {
             return _window.IsModal;
@@ -617,6 +692,7 @@ public class Window : Table, IStyleable< WindowStyle >
         /// <param name="character">
         /// May be 0 for key typed events that don't map to a character (ctrl, shift, etc).
         /// </param>
+        /// <returns>True if the event was handled.</returns>
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             return _window.IsModal;
@@ -625,8 +701,8 @@ public class Window : Table, IStyleable< WindowStyle >
         /// <summary>
         /// Updates the edge of the window based on the specified coordinates.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x"> The x-coordinate. </param>
+        /// <param name="y"> The y-coordinate. </param>
         private void UpdateEdge( float x, float y )
         {
             float border    = _window.ResizeBorder / 2f;
@@ -696,16 +772,46 @@ public class Window : Table, IStyleable< WindowStyle >
 // ============================================================================
 // ============================================================================
 
+/// <summary>
+/// Represents the title section of a window, providing additional control
+/// over how the title is rendered and integrated within the window.
+/// <para>
+/// This class extends <see cref="Table"/> and is typically used as part
+/// of a window's composition. It relies on the associated <see cref="Window"/>
+/// to determine whether the title should be drawn.
+/// </para>
+/// <para>
+/// The drawing behavior depends on the <see cref="Window.DrawTitleTable"/>
+/// property. If enabled, the <see cref="WindowTitle"/> will render itself
+/// using the provided batch and parent alpha.
+/// </para>
+/// </summary>
 [PublicAPI]
 public class WindowTitle : Table
 {
     private readonly Window _window;
+    
+    // ========================================================================
 
+    /// <summary>
+    /// Represents the title section of a window, providing additional control
+    /// over how the title is rendered and integrated within the window.
+    /// </summary>
+    /// <param name="window">
+    /// The parent <see cref="Window"/> associated with this title. It determines the
+    /// rendering behavior and state of the <see cref="WindowTitle"/>.
+    /// </param>
     public WindowTitle( Window window )
     {
         _window = window;
     }
 
+    /// <summary>
+    /// Renders the window title table using the specified batch and parent alpha value,
+    /// if the window is configured to draw its title table.
+    /// </summary>
+    /// <param name="batch">The batch used for drawing the title table.</param>
+    /// <param name="parentAlpha">The alpha factor inherited from the parent element.</param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( _window.DrawTitleTable )

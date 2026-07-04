@@ -47,11 +47,9 @@ public class Dialog : Window, IStyleable< DialogStyle >
 
     // ========================================================================
 
-    private readonly IgnoreTouchDown _ignoreTouchDown = null!;
+    private readonly IgnoreTouchDown _ignoreTouchDown = new();
 
-    private ChangeListener _dialogChangeListener = null!;
-    private FocusListener  _dialogFocusListener  = null!;
-    private InputListener  _dialogInputListener  = null!;
+    private FocusListener _dialogFocusListener = null!;
 
     // ========================================================================
 
@@ -66,7 +64,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     }
 
     /// <summary>
-    /// 
+    /// Creates a new Dialog, using the supplied title, <see cref="Skin"/>, and <see cref="DialogStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"> The Skin holding the DialogStyle.</param>
@@ -91,6 +89,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <summary>
     /// Initialises the basic elements of this dialog, including the necessary listeners.
     /// </summary>
+    /// <param name="skin"> The Skin holding the DialogStyle.</param>
     private void Initialise( Skin skin )
     {
         Skin    = skin;
@@ -104,20 +103,17 @@ public class Dialog : Window, IStyleable< DialogStyle >
         ContentTable.CellDefaults.Space( 6 );
         ButtonTable.CellDefaults.Space( 6 );
 
-        _dialogFocusListener  = new DialogFocusListener( this );
-        _dialogChangeListener = new DialogChangeListener( this );
-        _dialogInputListener  = new DialogInputListener( this, 0, null ); //TODO: Correct param values needed
+        _dialogFocusListener = new DialogFocusListener( this );
 
         ButtonTable.AddListener( new ButtonTableChangeListener( this ) );
 
-        AddCaptureListener( _dialogChangeListener );
         AddCaptureListener( _dialogFocusListener );
-        AddCaptureListener( _dialogInputListener );
     }
 
     /// <summary>
     /// Sets the <see cref="Stage"/> on which this Dialog will act.
     /// </summary>
+    /// <param name="stage"> The stage to set. </param>
     public override void SetStage( Stage? stage )
     {
         if ( stage == null )
@@ -137,6 +133,8 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// with a <see cref="Skin"/> to use this method. If it hasn't, an exception will
     /// be throw.
     /// </summary>
+    /// <param name="text"> The text to display on the button. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Text( string? text )
     {
         if ( Skin == null )
@@ -150,6 +148,9 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <summary>
     /// Adds a label to the content table.
     /// </summary>
+    /// <param name="text"> The text to display on the button. </param>
+    /// <param name="labelStyle"> The style to use for the label. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Text( string? text, LabelStyle labelStyle )
     {
         return Text( new Label( text, labelStyle ) );
@@ -158,6 +159,8 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <summary>
     /// Adds the given Label to the content table
     /// </summary>
+    /// <param name="label"> The label to add. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Text( Label label )
     {
         ContentTable?.AddCell( label );
@@ -170,6 +173,12 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// if this button is clicked. The dialog must have been constructed with a skin to use this
     /// method.
     /// </summary>
+    /// <param name="text"> The text to display on the button. </param>
+    /// <param name="obj">
+    /// The object that will be passed to <see cref="ClickResult"/>
+    /// if this button is clicked. May be null.
+    /// </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Button( string text, object? obj = null )
     {
         if ( Skin == null )
@@ -184,12 +193,13 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <summary>
     /// Adds a text button to the button table.
     /// </summary>
-    /// <param name="text"></param>
+    /// <param name="text"> The text to display on the button. </param>
     /// <param name="obj">
     /// The object that will be passed to <see cref="ClickResult"/>
     /// if this button is clicked. May be null.
     /// </param>
-    /// <param name="buttonStyle"></param>
+    /// <param name="buttonStyle"> The style to use for the button. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Button( string text, object? obj, TextButtonStyle buttonStyle )
     {
         return Button( new TextButton( text, buttonStyle ), obj );
@@ -203,6 +213,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// The object that will be passed to <see cref="ClickResult"/> if this
     /// button is clicked. May be null.
     /// </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Button( Button button, object? obj = null )
     {
         ButtonTable?.AddCell( button );
@@ -221,6 +232,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// the dialog without performing any actions.
     /// </remarks>
     /// <param name="stage"> The Stage to act on. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Show( Stage stage )
     {
         Show( stage,
@@ -241,6 +253,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// </summary>
     /// <param name="stage"> The Stage to act on. </param>
     /// <param name="action"> May be null. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Show( Stage stage, SceneAction? action )
     {
         ClearActions();
@@ -347,51 +360,23 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <summary>
     /// Sets the object associated with the given button.
     /// </summary>
-    /// <param name="actor"></param>
-    /// <param name="obj"></param>
+    /// <param name="actor"> The actor to associate the object with. </param>
+    /// <param name="obj"> The object to associate with the actor. </param>
     public void SetObject( Actor actor, object obj )
     {
         Values?[ actor ] = obj;
     }
 
     /// <summary>
-    /// If this key is pressed, <see cref="ClickResult"/> is
-    /// called with the specified object.
+    /// If this key is pressed, <see cref="ClickResult"/> is called with the specified object.
     /// </summary>
+    /// <param name="keycode"> The keycode of the key to listen for. </param>
+    /// <param name="obj"> The object to pass to <see cref="ClickResult"/> when the key is pressed. </param>
+    /// <returns> This dialog, for chaining. </returns>
     public Dialog Key( int keycode, object obj )
     {
-        //TODO:
-        //        AddListener
-        //            ( new InputListener
-        //                  (
-        //                  _ =>
-        //                  {
-        //                      public bool keyDown( InputEvent ev, int keycode2 )
-        //                      {
-        //                          if ( keycode == keycode2 )
-        //                          {
-        // Delay a frame to eat the keyTyped event.
-        //                              GdxApi.App.PostRunnable
-        //                                  ( new IRunnable
-        //                                        (
-        //                                        _ =>
-        //                                        {
-        //                                            public void Run()
-        //                                            {
-        //                                                result( object );
-        //                                                if ( !CancelHide )
-        //                                                {
-        //                                                    hide();
-        //                                                }
-        //                                                CancelHide = false;
-        //                                            }
-        //                                        }
-        //                                        );
-        //                          }
-        //                          return false;
-        //                      }
-        //                  }
-        //                  );
+        AddListener( new DialogInputListener( this, keycode, obj ) );
+
         return this;
     }
 
@@ -404,25 +389,52 @@ public class Dialog : Window, IStyleable< DialogStyle >
     {
     }
 
+    /// <summary>
+    /// Gets this Dialogs <see cref="DialogStyle"/> property. Modifying the returned style
+    /// may not have an effect until <see cref="SetStyle"/> is called.
+    /// </summary>
+    /// <returns> The DialogStyle. </returns>
     public override DialogStyle GetStyle() => ( DialogStyle )base.GetStyle();
 
+    /// <summary>
+    /// Sets the Dialogs <see cref="DialogStyle"/> property.
+    /// </summary>
+    /// <param name="style"> The new DialogStyle. </param>
     public void SetStyle( DialogStyle style ) => base.SetStyle( style );
 
     // ========================================================================
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// A listener that monitors the button table of a dialog for changes and invokes
+    /// appropriate actions based on the triggered events.
     /// </summary>
+    /// <remarks>
+    /// When a change is detected in the button table, it determines whether the triggering
+    /// actor is associated with a dialog action value. If a corresponding action value is
+    /// found, the dialog's click result is executed, followed by hiding the dialog unless
+    /// explicitly canceled.
+    /// </remarks>
     internal class ButtonTableChangeListener : ChangeListener
     {
         private readonly Dialog _dialog;
 
+        /// <summary>
+        /// Creates a new ButtonTableChangeListener for the specified dialog. 
+        /// </summary>
+        /// <param name="dialog"> The dialog to monitor for button table changes. </param>
         public ButtonTableChangeListener( Dialog dialog )
         {
             _dialog = dialog;
         }
 
+        /// <summary>
+        /// Handles any <see cref="ChangeListener.ChangeEvent"/>s generated.
+        /// </summary>
+        /// <param name="ev"> The change event. </param>
+        /// <param name="actor">
+        /// The event target, which is the actor that emitted the change event.
+        /// </param>
         public override void Changed( ChangeEvent ev, Actor? actor )
         {
             if ( ( _dialog.Values == null ) || ( actor == null ) )
@@ -452,7 +464,9 @@ public class Dialog : Window, IStyleable< DialogStyle >
     }
 
     /// <summary>
-    /// 
+    /// An input listener that automatically cancels touch-down events when triggered.
+    /// This can be used to ignore or prevent further processing of touch-down input actions
+    /// on a specific actor or widget.
     /// </summary>
     public class IgnoreTouchDown : InputListener
     {

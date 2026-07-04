@@ -1185,6 +1185,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the top padding value for the container.
+    /// </summary>
+    /// <param name="padTop">The padding value for the top edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadTop( float padTop )
     {
         _padTop = Value.Fixed.ValueOf( padTop );
@@ -1192,6 +1197,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the left padding value for the container.
+    /// </summary>
+    /// <param name="padLeft">The padding value for the left edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadLeft( float padLeft )
     {
         _padLeft = Value.Fixed.ValueOf( padLeft );
@@ -1199,6 +1209,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the Bottom padding value for the container.
+    /// </summary>
+    /// <param name="padBottom">The padding value for the bottom edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadBottom( float padBottom )
     {
         _padBottom = Value.Fixed.ValueOf( padBottom );
@@ -1206,6 +1221,11 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Sets the right padding value for the container.
+    /// </summary>
+    /// <param name="padRight">The padding value for the right edge.</param>
+    /// <returns>The current instance of the container, allowing for method chaining.</returns>
     public Container< T > SetPadRight( float padRight )
     {
         _padRight = Value.Fixed.ValueOf( padRight );
@@ -1213,52 +1233,56 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
-    public Value GetPadTopValue()
-    {
-        return _padTop;
-    }
-
+    /// <summary>
+    /// Gets the padding value for the top edge of the container.
+    /// </summary>
+    /// <returns>The padding value for the top edge.</returns>
     public float GetPadTop()
     {
         return _padTop.Get( this );
     }
 
-    public Value GetPadLeftValue()
-    {
-        return _padLeft;
-    }
-
+    /// <summary>
+    /// Gets the padding value for the left edge of the container.
+    /// </summary>
+    /// <returns>The padding value for the left edge.</returns>
     public float GetPadLeft()
     {
         return _padLeft.Get( this );
     }
 
-    public Value GetPadBottomValue()
-    {
-        return _padBottom;
-    }
-
+    /// <summary>
+    /// Gets the padding value for the bottom edge of the container.
+    /// </summary>
+    /// <returns>The padding value for the bottom edge.</returns>
     public float GetPadBottom()
     {
         return _padBottom.Get( this );
     }
 
-    public Value GetPadRightValue()
-    {
-        return _padRight;
-    }
-
+    /// <summary>
+    /// Gets the padding value for the right edge of the container.
+    /// </summary>
+    /// <returns>The padding value for the right edge.</returns>
     public float GetPadRight()
     {
         return _padRight.Get( this );
     }
 
-    public float GetPadX()
+    /// <summary>
+    /// Calculates and returns the total horizontal padding of the container.
+    /// </summary>
+    /// <returns>The sum of the left and right padding values.</returns>
+    public float GetTotalHorizontalPadding()
     {
         return _padLeft.Get( this ) + _padRight.Get( this );
     }
 
-    public float GetPadY()
+    /// <summary>
+    /// Calculates and returns the total vertical padding of the container.
+    /// </summary>
+    /// <returns>The sum of the top and bottom padding values.</returns>
+    public float GetTotalVerticalPadding()
     {
         return _padTop.Get( this ) + _padBottom.Get( this );
     }
@@ -1276,6 +1300,8 @@ public class Container< T > : WidgetGroup where T : Actor
     /// <see cref="Align.Bottom"/>, <see cref="Align.Left"/>,
     /// <see cref="Align.Right"/>, or any combination of those.
     /// </summary>
+    /// <param name="align">The alignment to set.</param>
+    /// <returns>The container instance for method chaining.</returns>
     public Container< T > SetAlignment( Align align )
     {
         _align = align;
@@ -1287,6 +1313,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets the alignment of the actor within the container to <see cref="Align.Center"/>.
     /// This clears any other alignment.
     /// </summary>
+    /// <returns>The container instance for method chaining.</returns>
     public Container< T > AlignCenter()
     {
         _align = Align.Center;
@@ -1298,6 +1325,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of the actor within the container.
     /// </summary>
+    /// <returns>The container instance for method chaining.</returns>
     public Container< T > AlignTop()
     {
         _align |= Align.Top;
@@ -1310,6 +1338,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of the actor within the container.
     /// </summary>
+    /// <returns>The container instance for method chaining.</returns>
     public Container< T > AlignLeft()
     {
         _align |= Align.Left;
@@ -1322,6 +1351,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for
     /// the alignment of the actor within the container.
     /// </summary>
+    /// <returns>The container instance for method chaining.</returns>
     public Container< T > AlignBottom()
     {
         _align |= Align.Bottom;
@@ -1334,6 +1364,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for the
     /// alignment of the actor within the container.
     /// </summary>
+    /// <returns>The container instance for method chaining.</returns>
     public Container< T > AlignRight()
     {
         _align |= Align.Right;
@@ -1342,6 +1373,10 @@ public class Container< T > : WidgetGroup where T : Actor
         return this;
     }
 
+    /// <summary>
+    /// Returns the alignment of the actor within the container.
+    /// </summary>
+    /// <returns>The alignment.</returns>
     public Align GetAlignment()
     {
         return _align;
@@ -1354,6 +1389,11 @@ public class Container< T > : WidgetGroup where T : Actor
 
     #region drawing
 
+    /// <summary>
+    /// Renders the container and its children.
+    /// </summary>
+    /// <param name="batch">The batch to draw with.</param>
+    /// <param name="parentAlpha">The parent alpha value.</param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -1411,6 +1451,10 @@ public class Container< T > : WidgetGroup where T : Actor
         _background.Draw( batch, x, y, GetWidth(), GetHeight() );
     }
 
+    /// <summary>
+    /// Renders the debug representation of the container and its children.
+    /// </summary>
+    /// <param name="shapes">The shape renderer to draw with.</param>
     public override void DrawDebug( ShapeRenderer shapes )
     {
         Validate();

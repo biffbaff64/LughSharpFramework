@@ -83,13 +83,15 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Represents a UI progress bar that visualizes the progress within a specific range of values.
+    /// The range is defined by a minimum and maximum value, and the progress increments are determined
+    /// by a step size parameter. The progress bar supports both horizontal and vertical orientations.
     /// </summary>
-    /// <param name="min"></param>
-    /// <param name="max"></param>
-    /// <param name="stepSize"></param>
-    /// <param name="vertical"></param>
-    /// <param name="skin"></param>
+    /// <param name="min">The minimum value of the progress bar.</param>
+    /// <param name="max">The maximum value of the progress bar.</param>
+    /// <param name="stepSize">The value increment step size for the progress bar.</param>
+    /// <param name="vertical">Indicates whether the progress bar is vertical. If false, it is horizontal.</param>
+    /// <param name="skin">The <see cref="Skin"/> used to retrieve the style of the progress bar.</param>
     public ProgressBar( float min, float max, float stepSize, bool vertical, Skin skin )
         : this( min,
                 max,
@@ -100,14 +102,16 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// 
+    /// Represents a UI progress bar that visualizes the progress within a specific range of values.
+    /// The range is defined by a minimum and maximum value, and the progress increments are determined
+    /// by a step size parameter. The progress bar supports both horizontal and vertical orientations.
     /// </summary>
-    /// <param name="min"></param>
-    /// <param name="max"></param>
-    /// <param name="stepSize"></param>
-    /// <param name="vertical"></param>
-    /// <param name="skin"></param>
-    /// <param name="styleName"></param>
+    /// <param name="min">The minimum value of the progress bar.</param>
+    /// <param name="max">The maximum value of the progress bar.</param>
+    /// <param name="stepSize">The value increment step size for the progress bar.</param>
+    /// <param name="vertical">Indicates whether the progress bar is vertical. If false, it is horizontal.</param>
+    /// <param name="skin">The <see cref="Skin"/> used to retrieve the style of the progress bar.</param>
+    /// <param name="styleName">The name of the style to be applied to the progress bar from the skin.</param>
     public ProgressBar( float min, float max, float stepSize, bool vertical, Skin skin, string styleName )
         : this( min, max, stepSize, vertical, skin.Get< ProgressBarStyle >( styleName ) )
     {

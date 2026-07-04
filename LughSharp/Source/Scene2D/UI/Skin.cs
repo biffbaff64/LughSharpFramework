@@ -58,8 +58,21 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Skin : IDisposable
 {
-    public Dictionary< Type, Dictionary< string, object > > Resources     { get; set; } = [ ];
-    public Dictionary< string, Type >                       JsonClassTags { get; set; } = [ ];
+    /// <summary>
+    /// Stores a collection of resources grouped by their associated <see cref="Type"/>.
+    /// Each <see cref="Type"/> key is associated with a dictionary mapping resource names
+    /// to their corresponding objects. This property facilitates efficient organization
+    /// and retrieval of resources based on their types and names.
+    /// </summary>
+    public Dictionary< Type, Dictionary< string, object > > Resources { get; set; } = [ ];
+
+    /// <summary>
+    /// Maintains a mapping between string identifiers and their corresponding <see cref="Type"/>
+    /// definitions. This property is used for associating class type names in JSON data with
+    /// their actual .NET types, facilitating seamless deserialization within the context of
+    /// a <see cref="Skin"/> instance.
+    /// </summary>
+    public Dictionary< string, Type > JsonClassTags { get; set; } = [ ];
 
     /// <summary>
     /// Returns the <see cref="TextureAtlas"/> passed to this skin constructor, or null.
@@ -80,6 +93,14 @@ public class Skin : IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Represents a combination of a name and a type, used to define and tag resources
+    /// within the skin.
+    /// <para>
+    /// This struct is primarily used internally by the skin to manage and look up resources,
+    /// providing a mapping between string identifiers and their associated types.
+    /// </para>
+    /// </summary>
     protected struct Tag
     {
         public readonly string Name;
@@ -154,6 +175,7 @@ public class Skin : IDisposable
     /// added to the skin. The atlas is automatically disposed when the skin is
     /// disposed.
     /// </summary>
+    /// <param name="skinFile">The skin JSON file to load.</param>
     public Skin( FileInfo skinFile ) : this( skinFile, LoadAtlasIfExists( skinFile ) )
     {
     }
@@ -162,6 +184,7 @@ public class Skin : IDisposable
     /// Creates a skin containing the texture regions from the specified
     /// atlas. The atlas is automatically disposed when the skin is disposed.
     /// </summary>
+    /// <param name="atlas"> The atlas to load texture regions from. </param>
     public Skin( TextureAtlas atlas ) : this( null, atlas )
     {
     }
@@ -173,6 +196,8 @@ public class Skin : IDisposable
     /// The atlas is automatically disposed when the skin is disposed.
     /// </para>
     /// </summary>
+    /// <param name="skinFile">The skin JSON file to load.</param>
+    /// <param name="atlas"> The atlas to load texture regions from. </param>
     public Skin( FileInfo? skinFile, TextureAtlas? atlas )
     {
         Guard.Against.Null( atlas );
@@ -186,7 +211,7 @@ public class Skin : IDisposable
         AddRegions( atlas );
         Load( skinFile );
     }
-    
+
     /// <summary>
     /// Initialises the table of default tag classes into the working dictionary.
     /// Further tag classes can be added to the working dictionary if required.
@@ -195,7 +220,7 @@ public class Skin : IDisposable
     {
         // Start afresh
         JsonClassTags.Clear();
-        
+
         foreach ( Tag tag in DefaultTagClasses )
         {
             JsonClassTags.Add( tag.Name, tag.Type );
@@ -203,10 +228,17 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Attempts to load a texture atlas if an associated atlas file exists in the same
+    /// directory as the provided skin file.
     /// </summary>
-    /// <param name="skinFile"></param>
-    /// <returns></returns>
+    /// <param name="skinFile">
+    /// The file representing the skin, which is used to determine the atlas file's
+    /// location and name.
+    /// </param>
+    /// <returns>
+    /// A <see cref="TextureAtlas"/> instance if the associated atlas file exists;
+    /// otherwise, null.
+    /// </returns>
     private static TextureAtlas? LoadAtlasIfExists( FileInfo skinFile )
     {
         string skinHome  = skinFile.DirectoryName ?? string.Empty;
@@ -219,6 +251,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Adds all resources in the specified skin JSON file.
     /// </summary>
+    /// <param name="skinFile">The file representing the skin to load.</param>
     public void Load( FileInfo skinFile )
     {
         try
@@ -247,6 +280,7 @@ public class Skin : IDisposable
     /// Adds all named texture regions from the atlas. The atlas will not be
     /// automatically disposed when the skin is disposed.
     /// </summary>
+    /// <param name="atlas">The atlas containing the texture regions to add.</param>
     public void AddRegions( TextureAtlas atlas )
     {
         for ( int i = 0, n = atlas.Regions.Count; i < n; i++ )
@@ -278,22 +312,23 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Adds a resource to the skin with the specified name and type.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="resource"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The type of the resource to add.
+    /// <b>The type must be a reference type.</b></typeparam>
+    /// <param name="name">The name associated with the resource. Can be null.</param>
+    /// <param name="resource">The resource to add. Can be null.</param>
     public void Add< T >( string? name, T? resource ) where T : class
     {
         Add( name, resource, typeof( T ) );
     }
 
     /// <summary>
-    /// 
+    /// Adds a resource to the Skin instance under the specified name and type.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="resource"></param>
-    /// <param name="type"></param>
+    /// <param name="name">The name to associate with the resource. Must not be null.</param>
+    /// <param name="resource">The resource to add. Must not be null.</param>
+    /// <param name="type">The type of the resource being added. Must not be null.</param>
     public void Add( string? name, object? resource, Type type )
     {
         Guard.Against.Null( name );
@@ -317,10 +352,10 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Removes the specified resource of the given type from the skin.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="type"></param>
+    /// <param name="name">The name of the resource to remove.</param>
+    /// <param name="type">The type of the resource to remove.</param>
     public void Remove( string name, Type type )
     {
         Guard.Against.Null( name );
@@ -340,6 +375,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a named resource of the specified type.
     /// </summary>
+    /// <param name="name">The name of the resource to retrieve.</param>
     /// <exception cref="RuntimeException">if the resource was not found.</exception>
     public T Get< T >( string? name )
     {
@@ -349,6 +385,8 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a named resource of the specified type.
     /// </summary>
+    /// <param name="name">The name of the resource to retrieve.</param>
+    /// <param name="type">The type of the resource to retrieve.</param>
     /// <exception cref="RuntimeException">if the resource was not found.</exception>
     public object Get( string? name, Type? type )
     {
@@ -369,13 +407,14 @@ public class Skin : IDisposable
         }
 
         return !typeResources.TryGetValue( name, out object? resource )
-            ? throw new RuntimeException( $"No {type.FullName} registered with name: {name}" )
-            : resource;
+                   ? throw new RuntimeException( $"No {type.FullName} registered with name: {name}" )
+                   : resource;
     }
 
     /// <summary>
     /// Returns a named resource of the specified type.
     /// </summary>
+    /// <param name="name">The name of the resource to retrieve.</param>
     /// <returns> null if not found. </returns>
     public T? Optional< T >( string name )
     {
@@ -388,11 +427,11 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Checks if a resource with the specified name and type exists in the skin.
     /// </summary>
-    /// <param name="name"></param>
-    /// <param name="type"></param>
-    /// <returns></returns>
+    /// <param name="name">The name of the resource to check for.</param>
+    /// <param name="type">The type of the resource to check for.</param>
+    /// <returns>True if the resource exists; otherwise, false.</returns>
     public bool Has( string name, Type type )
     {
         return Resources.TryGetValue( type, out Dictionary< string, object >? resource )
@@ -400,19 +439,23 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns the name to resource mapping for the specified type, or null if no
-    /// resources of that type exist.
+    /// Retrieves all resources of the specified type from the skin.
     /// </summary>
+    /// <param name="type">The type of the resources to retrieve.</param>
+    /// <returns>
+    /// A dictionary containing the resources of the specified type, or null if no
+    /// resources of that type are found.
+    /// </returns>
     public Dictionary< string, object >? GetAll( Type type )
     {
         return Resources.GetValueOrDefault( type );
     }
 
     /// <summary>
-    /// 
+    /// Retrieves a color from the skin by the specified name.
     /// </summary>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="name">The name of the color to retrieve.</param>
+    /// <returns>The color object associated with the specified name.</returns>
     public Color GetColor( string name )
     {
         return Get< Color >( name );
@@ -432,6 +475,7 @@ public class Skin : IDisposable
     /// texture exists with the name, a region is created from the texture
     /// and stored in the skin.
     /// </summary>
+    /// <param name="name"> The name of the texture region to retrieve.</param>
     public TextureRegion GetRegion( string name )
     {
         var region = Optional< TextureRegion? >( name );
@@ -456,9 +500,16 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// Returns an array with the <see cref="TextureRegion"/> that have an index that
-    /// is not equal to -1, or null if none are found.
+    /// Retrieves a list of texture regions that match the specified region name.
     /// </summary>
+    /// <param name="regionName">
+    /// The name of the texture region to retrieve. The method will attempt to find
+    /// regions with names following the pattern "&lt;regionName&gt;_&lt;index&gt;".
+    /// </param>
+    /// <returns>
+    /// A list of texture regions matching the specified name pattern, or null if no
+    /// regions are found.
+    /// </returns>
     public List< TextureRegion >? GetRegions( string regionName )
     {
         var i = 0;
@@ -485,6 +536,8 @@ public class Skin : IDisposable
     /// region exists with the name, a tiled drawable is created from the region
     /// and stored in the skin.
     /// </summary>
+    /// <param name="name">The name of the tiled drawable to retrieve.</param>
+    /// <returns>The retrieved tiled drawable, or null if no tiled drawable is found.</returns>
     public TiledDrawable GetTiledDrawable( string name )
     {
         var tiled = Optional< TiledDrawable? >( name );
@@ -517,6 +570,8 @@ public class Skin : IDisposable
     /// region is an <see cref="AtlasRegion"/> then its split AtlasRegion Values
     /// are used, otherwise the ninepatch will have the region as the center patch.
     /// </summary>
+    /// <param name="name">The name of the ninepatch to retrieve.</param>
+    /// <returns>The retrieved ninepatch, or null if no ninepatch is found.</returns>
     public NinePatch GetPatch( string name )
     {
         var patch = Optional< NinePatch? >( name );
@@ -570,6 +625,8 @@ public class Skin : IDisposable
     /// If the region is an <see cref="AtlasRegion"/> then an <see cref="AtlasSprite"/>
     /// is used if the region has been whitespace stripped or packed rotated 90 degrees.
     /// </summary>
+    /// <param name="name">The name of the sprite to retrieve.</param>
+    /// <returns>The retrieved sprite, or null if no sprite is found.</returns>
     public Sprite2D GetSprite( string name )
     {
         Sprite2D? sprite;
@@ -615,6 +672,8 @@ public class Skin : IDisposable
     /// or sprite exists with the name, then the appropriate drawable is created and
     /// stored in the skin.
     /// </summary>
+    /// <param name="name"> The name of the drawable to retrieve. </param>
+    /// <returns> The retrieved drawable. </returns>
     public ISceneDrawable GetDrawable( string name )
     {
         var drawable = Optional< ISceneDrawable >( name );
@@ -699,6 +758,10 @@ public class Skin : IDisposable
     /// This compares potentially every style object in the skin of the same type as the
     /// specified style, which may be a somewhat expensive operation.
     /// </summary>
+    /// <param name="resource"> The resource to find. </param>
+    /// <returns>
+    /// The name of the specified style object, or null if it is not in the skin.
+    /// </returns>
     public string? Find( object resource )
     {
         if ( resource == null )
@@ -714,6 +777,8 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
+    /// <param name="name"> The name of the drawable to retrieve. </param>
+    /// <returns> The retrieved drawable. </returns>
     public ISceneDrawable NewDrawable( string name )
     {
         return NewDrawable( GetDrawable( name ) );
@@ -722,6 +787,12 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
+    /// <param name="name"> The name of the drawable to retrieve. </param>
+    /// <param name="r"> The red component of the tint. </param>
+    /// <param name="g"> The green component of the tint. </param>
+    /// <param name="b"> The blue component of the tint. </param>
+    /// <param name="a"> The alpha component of the tint. </param>
+    /// <returns> The retrieved drawable. </returns>
     public ISceneDrawable NewDrawable( string name, float r, float g, float b, float a )
     {
         return NewDrawable( GetDrawable( name ), new Color( r, g, b, a ) );
@@ -730,21 +801,26 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
+    /// <param name="name"> The name of the drawable to retrieve. </param>
+    /// <param name="tint"> The tint to apply to the drawable. </param>
+    /// <returns> The retrieved drawable. </returns>
     public ISceneDrawable NewDrawable( string? name, Color tint )
     {
         return string.IsNullOrEmpty( name )
-            ? throw new ArgumentException( "name cannot be null or empty." )
-            : NewDrawable( GetDrawable( name ), tint );
+                   ? throw new ArgumentException( "name cannot be null or empty." )
+                   : NewDrawable( GetDrawable( name ), tint );
     }
 
     /// <summary>
     /// Returns a copy of the specified drawable.
     /// </summary>
+    /// <param name="drawable"> The drawable to copy. </param>
+    /// <returns> The copied drawable. </returns>
     public static ISceneDrawable NewDrawable( ISceneDrawable drawable )
     {
         return drawable switch
                {
-                   TiledDrawable tiledDrawable     => new TiledDrawable( tiledDrawable ),
+                   TiledDrawable tiledDrawable          => new TiledDrawable( tiledDrawable ),
                    TextureRegionDrawable regionDrawable => new TextureRegionDrawable( regionDrawable ),
                    NinePatchDrawable patchDrawable      => new NinePatchDrawable( patchDrawable ),
                    SpriteDrawable spriteDrawable        => new SpriteDrawable( spriteDrawable ),
@@ -759,6 +835,12 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
+    /// <param name="drawable"> The drawable to copy. </param>
+    /// <param name="r"> The red component of the tint. </param>
+    /// <param name="g"> The green component of the tint. </param>
+    /// <param name="b"> The blue component of the tint. </param>
+    /// <param name="a"> The alpha component of the tint. </param>
+    /// <returns> The copied drawable. </returns>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, float r, float g, float b, float a )
     {
         return NewDrawable( drawable, new Color( r, g, b, a ) );
@@ -767,6 +849,9 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a tinted copy of a drawable found in the skin via <see cref="GetDrawable(string)"/>.
     /// </summary>
+    /// <param name="drawable"> The drawable to copy. </param>
+    /// <param name="tint"> The tint color. </param>
+    /// <returns> The copied drawable. </returns>
     public ISceneDrawable NewDrawable( ISceneDrawable drawable, Color tint )
     {
         //@formatter:off
@@ -807,6 +892,8 @@ public class Skin : IDisposable
     /// <li><see cref="ISceneDrawable.MinWidth"/></li>
     /// <li><see cref="ISceneDrawable.MinHeight"/></li>
     /// </summary>
+    /// <param name="drawable"> The drawable to scale. </param>
+    /// <returns> The scaled drawable. </returns>
     public ISceneDrawable ScaleDrawable( ISceneDrawable drawable )
     {
         drawable.LeftWidth    *= Scale;
@@ -827,6 +914,8 @@ public class Skin : IDisposable
     /// the actor doesn't have a "GetStyle" method or the style was not found in the
     /// skin, no exception is thrown and the actor is left unchanged.
     /// </summary>
+    /// <param name="actor"> The actor to set the enabled state on. </param>
+    /// <param name="enabled"> The enabled state to set. </param>
     public void SetEnabled( Actor actor, bool enabled )
     {
         // Get current style.
@@ -875,6 +964,10 @@ public class Skin : IDisposable
         }
     }
 
+    /// <summary>
+    /// Outputs a list of all loaded styles of the specified type to the console.
+    /// </summary>
+    /// <param name="style">The type representing the styles to be listed.</param>
     public void Debug( Type style )
     {
         // Debug: List all loaded TextButtonStyles
@@ -890,11 +983,15 @@ public class Skin : IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Searches for a method with the specified name in the provided type, including
+    /// public, non-public, instance, and static methods.
     /// </summary>
-    /// <param name="type"></param>
-    /// <param name="name"></param>
-    /// <returns></returns>
+    /// <param name="type">The type in which to search for the method. Can be null.</param>
+    /// <param name="name">The name of the method to look for. Can be null.</param>
+    /// <returns>
+    /// A <see cref="MethodInfo"/> object representing the found method, or null
+    /// if no method with the specified name is found.
+    /// </returns>
     private static MethodInfo? FindMethod( Type? type, string? name )
     {
         MethodInfo[] methods = type?.GetMethods( BindingFlags.Public
@@ -998,6 +1095,12 @@ public class Skin : IDisposable
                               token[ "a" ]?.Value< float >() ?? 1 );
         }
 
+        /// <summary>
+        /// Writes a JSON representation of a <see cref="Color"/> instance to the specified writer.
+        /// </summary>
+        /// <param name="writer">The JSON writer used to write the serialized JSON.</param>
+        /// <param name="value">The <see cref="Color"/> instance to serialize. Can be null.</param>
+        /// <param name="serializer">The serializer instance used for custom serialization behavior.</param>
         public override void WriteJson( JsonWriter writer, Color? value, JsonSerializer serializer )
         {
         }
@@ -1006,6 +1109,22 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// A custom JSON converter for the <see cref="Skin"/> class.
+    /// <para>
+    /// This converter is responsible for handling the deserialization of skin resources,
+    /// specifically the root structure defined with types, names, and resource mappings.
+    /// </para>
+    /// <para>
+    /// The converter integrates into the JSON serialization pipeline to resolve and
+    /// map skin resources from a file into corresponding objects within the <see cref="Skin"/> instance.
+    /// </para>
+    /// <para>
+    /// During the deserialization process, the converter processes the root structure of
+    /// the JSON data and utilizes auxiliary converters for handling specific object types
+    /// such as colors and references within the skin.
+    /// </para>
+    /// </summary>
     [PublicAPI]
     public class SkinConverter : JsonConverter< Skin >
     {
@@ -1058,8 +1177,8 @@ public class Skin : IDisposable
                 foreach ( JProperty resProperty in resources.Properties() )
                 {
                     object? finalObject = targetType == typeof( BitmapFont )
-                        ? ReadBitmapFont( resProperty.Value, _skinFile )
-                        : SerializeToObject( targetType, serializer, resProperty.Value );
+                                              ? ReadBitmapFont( resProperty.Value, _skinFile )
+                                              : SerializeToObject( targetType, serializer, resProperty.Value );
 
                     if ( finalObject != null )
                     {
@@ -1072,12 +1191,15 @@ public class Skin : IDisposable
         }
 
         /// <summary>
-        /// 
+        /// Serializes a JSON token into an object of the specified target type.
         /// </summary>
-        /// <param name="targetType"></param>
-        /// <param name="serializer"></param>
-        /// <param name="token"></param>
-        /// <returns></returns>
+        /// <param name="targetType">The type to which the token should be deserialized.</param>
+        /// <param name="serializer">The JSON serializer used for deserialization.</param>
+        /// <param name="token">The JSON token to be deserialized.</param>
+        /// <returns>
+        /// An object of the specified target type deserialized from the provided token,
+        /// or null if deserialization fails.
+        /// </returns>
         private object? SerializeToObject( Type targetType, JsonSerializer serializer, JToken token )
         {
             if ( token.Type == JTokenType.String )
@@ -1118,10 +1240,10 @@ public class Skin : IDisposable
         /// <summary>
         /// Extracts a <see cref="BitmapFont"/> from the specified JSON token./>
         /// </summary>
-        /// <param name="token"></param>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        /// <exception cref="JsonException"></exception>
+        /// <param name="token">The JSON token containing font information.</param>
+        /// <param name="file">The file associated with the JSON token.</param>
+        /// <returns>The extracted <see cref="BitmapFont"/> instance.</returns>
+        /// <exception cref="JsonException">Thrown when the font file is missing.</exception>
         private BitmapFont ReadBitmapFont( JToken token, FileInfo file )
         {
             string path   = token[ "file" ]?.ToString() ?? throw new JsonException( "Font file missing" );
@@ -1141,8 +1263,8 @@ public class Skin : IDisposable
             List< TextureRegion >? regions = _skin.GetRegions( regionName );
 
             BitmapFont font = regions is { Count: > 0 }
-                ? new BitmapFont( new BitmapFontData( fontFile ), regions )
-                : new BitmapFont( fontFile );
+                                  ? new BitmapFont( new BitmapFontData( fontFile ), regions )
+                                  : new BitmapFont( fontFile );
 
             font.FontData.MarkupEnabled = markup;
 
@@ -1152,9 +1274,9 @@ public class Skin : IDisposable
         /// <summary>
         /// Extracts a <see cref="TintedDrawable"/> from the specified JSON token.
         /// </summary>
-        /// <param name="token"></param>
-        /// <param name="serializer"></param>
-        /// <returns></returns>
+        /// <param name="token">The JSON token containing drawable information.</param>
+        /// <param name="serializer">The JSON serializer used for deserialization.</param>
+        /// <returns>The extracted <see cref="TintedDrawable"/> instance.</returns>
         private ISceneDrawable ReadTintedDrawable( JToken token, JsonSerializer serializer )
         {
             var   name  = token[ "name" ]?.ToString();
@@ -1177,18 +1299,44 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// A custom JSON converter for resolving references in a Skin instance.
+    /// This converter is used to map string names in JSON back to skin resources such as colors,
+    /// fonts, drawables, styles, or other related objects contained within the Skin.
+    /// <para>
+    /// The converter allows handling of complex object types, ensuring that references to
+    /// resources stored in the Skin are correctly resolved during deserialization.
+    /// </para>
+    /// <para>
+    /// It also manages exclusions to avoid infinite recursion issues when resolving nested objects
+    /// that reference the same Skin, by temporarily replacing itself with a specialized variant
+    /// during recursive deserialization.
+    /// </para>
+    /// </summary>
     [PublicAPI]
     public class SkinReferenceConverter : JsonConverter
     {
         private readonly Skin  _skin;
         private readonly Type? _excludedType;
 
+        /// <summary>
+        /// Provides a custom JSON converter for resolving string references to skin resources.
+        /// </summary>
+        /// <param name="skin">The Skin instance to which this converter is associated.</param>
+        /// <param name="excludedType">An optional type to exclude from conversion.</param>
         public SkinReferenceConverter( Skin skin, Type? excludedType = null )
         {
             _skin         = skin;
             _excludedType = excludedType;
         }
 
+        /// <summary>
+        /// Determines whether this instance can convert the specified object type.
+        /// </summary>
+        /// <param name="objectType">Type of the object.</param>
+        /// <returns>
+        /// <c>true</c> if this instance can convert the specified object type; otherwise, <c>false</c>.
+        /// </returns>
         public override bool CanConvert( Type objectType )
         {
             if ( _excludedType != null && objectType == _excludedType )
@@ -1200,10 +1348,18 @@ public class Skin : IDisposable
                    typeof( ISceneStyle ).IsAssignableFrom( objectType );
         }
 
+        /// <summary>
+        /// Reads the JSON representation of the object.
+        /// </summary>
+        /// <param name="reader">The <see cref="T:Newtonsoft.Json.JsonReader" /> to read from.</param>
+        /// <param name="objectType">Type of the object.</param>
+        /// <param name="existingValue">The existing value of object being read.</param>
+        /// <param name="serializer">The calling serializer.</param>
+        /// <returns>The object value.</returns>
         public override object? ReadJson( JsonReader reader, Type objectType, object? existingValue,
                                           JsonSerializer serializer )
         {
-            // 1. Handle string name lookup (e.g., "white", "button-down", "default")
+            // Handle string name lookup (e.g., "white", "button-down", "default")
             if ( reader.TokenType == JsonToken.String )
             {
                 var name = ( string )reader.Value!;
@@ -1211,7 +1367,7 @@ public class Skin : IDisposable
                 return _skin.Get( name, objectType );
             }
 
-            // 2. Handle inline object definition (e.g., { "r": 1, ... } or { "down": "button-down", ... })
+            // Handle inline object definition (e.g., { "r": 1, ... } or { "down": "button-down", ... })
             if ( reader.TokenType == JsonToken.StartObject )
             {
                 if ( typeof( ISceneStyle ).IsAssignableFrom( objectType ) )
@@ -1246,6 +1402,12 @@ public class Skin : IDisposable
             return null;
         }
 
+        /// <summary>
+        /// Writes the JSON representation of the object.
+        /// </summary>
+        /// <param name="writer">The <see cref="T:Newtonsoft.Json.JsonWriter" /> to write to.</param>
+        /// <param name="value">The value.</param>
+        /// <param name="serializer">The calling serializer.</param>
         public override void WriteJson( JsonWriter writer, object? value, JsonSerializer serializer )
         {
         }
@@ -1254,6 +1416,18 @@ public class Skin : IDisposable
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Represents a drawable object that can be tinted with a specified color.
+    /// <para>
+    /// A TintedDrawable associates a name with a color, enabling customizable
+    /// visual appearances by applying the specified color tint to the drawable resource.
+    /// </para>
+    /// <para>
+    /// It is often used in UI designs where visual elements need to share the same
+    /// base graphic but differ in color, providing a flexible and efficient way to
+    /// apply common assets while varying their presentation.
+    /// </para>
+    /// </summary>
     [PublicAPI]
     public record TintedDrawable
     {
