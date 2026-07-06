@@ -120,6 +120,16 @@ public abstract class Value
         return new LambdaValue( ctx => ctx is ILayout layout ? fromLayout( layout ) : fallback( ctx ) );
     }
 
+    /// <summary>
+    /// Calculates and returns a float value, which represents a contextual measurement or value
+    /// based on the provided actor (or defaults if the actor is null).
+    /// </summary>
+    /// <param name="context">
+    /// The actor context from which the value is derived. If null, defaults may be used.
+    /// </param>
+    /// <returns>
+    /// A floating-point value representing the calculated result for the given actor or context.
+    /// </returns>
     public abstract float Get( Actor? context = null );
 
     // ========================================================================
@@ -144,11 +154,26 @@ public abstract class Value
             _value = value;
         }
 
+        /// <summary>
+        /// Calculates and returns a float value, which represents a contextual measurement or value
+        /// based on the provided actor (or defaults if the actor is null).
+        /// </summary>
+        /// <param name="context">
+        /// The actor context from which the value is derived. If null, defaults may be used.
+        /// </param>
+        /// <returns>
+        /// A floating-point value representing the calculated result for the given actor or context.
+        /// </returns>
         public override float Get( Actor? context = null )
         {
             return _value;
         }
 
+        /// <summary>
+        /// Returns a fixed value representation of the specified float value.
+        /// </summary>
+        /// <param name="value">The float value to convert to a fixed value.</param>
+        /// <returns>A <see cref="Value.Fixed"/> instance corresponding to the specified value.</returns>
         public static Fixed ValueOf( float value )
         {
             if ( value == 0 )
@@ -194,11 +219,26 @@ public abstract class Value
 
         // ====================================================================
 
+        /// <summary>
+        /// Represents a value calculated dynamically using a provided delegate.
+        /// This is utilized for all internally defined layout-dependent calculations.
+        /// </summary>
+        /// <param name="getter">The delegate used to calculate the value.</param>
         public LambdaValue( Func< Actor?, float > getter )
         {
             _getter = getter;
         }
 
+        /// <summary>
+        /// Calculates and returns a float value, which represents a contextual measurement or value
+        /// based on the provided actor (or defaults if the actor is null).
+        /// </summary>
+        /// <param name="context">
+        /// The actor context from which the value is derived. If null, defaults may be used.
+        /// </param>
+        /// <returns>
+        /// A floating-point value representing the calculated result for the given actor or context.
+        /// </returns>
         public override float Get( Actor? context = null )
         {
             return _getter( context );

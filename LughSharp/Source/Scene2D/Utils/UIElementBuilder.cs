@@ -128,7 +128,7 @@ public class UIElementBuilder
 
         var label = new Label( labelText, label1Style )
         {
-            LabelAlign = Align.Center,
+            LabelAlignment = Align.Center,
         };
         label.SetPosition( pos.X, pos.Y );
 

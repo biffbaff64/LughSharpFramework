@@ -34,8 +34,13 @@ using LughSharp.Source.Utils;
 namespace LughSharp.Source.Scene2D.UI;
 
 /// <summary>
-///
+/// Represents a registry for managing, storing, and retrieving styles based on type and name.
+/// Provides functionality to add, query, and serialize styles within a structured system.
 /// </summary>
+/// <remarks>
+/// The style system is in active development and considered experimental.
+/// Changes to the API may occur in future versions.
+/// </remarks>
 [PublicAPI]
 [UnstableApi( "Style system is still in active development and the API may change." )]
 [Experimental( "LUGH_UI_001" )]
@@ -92,9 +97,12 @@ public class StyleRegistry
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the entire style registry containing styles organized by type and name.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// A dictionary where the key represents the type of the style as a string, and the
+    /// value is another dictionary that maps style names to their corresponding objects.
+    /// </returns>
     public Dictionary< string, Dictionary< string, object > > GetRegistry()
     {
         return _data;
@@ -268,11 +276,21 @@ public class StyleRegistry
     }
 
     /// <summary>
-    /// Loads styles from a JSON file.
+    /// Loads styles, colors, and fonts into the registry from a JSON file. The JSON file
+    /// is expected to contain structured data for "Color", "BitmapFont", and various style
+    /// definitions, which will be parsed and added to the registry.
     /// </summary>
-    /// <param name="jsonFile"></param>
-    /// <param name="atlas"></param>
-    /// <exception cref="FileNotFoundException"></exception>
+    /// <param name="jsonFile">
+    /// The JSON file containing the style definitions. This file must exist, or
+    /// a <see cref="FileNotFoundException"/> will be thrown.
+    /// </param>
+    /// <param name="atlas">
+    /// The <see cref="TextureAtlas"/> instance used for loading texture-related data
+    /// for fonts and other styles.
+    /// </param>
+    /// <exception cref="FileNotFoundException">
+    /// Thrown if the specified JSON file does not exist.
+    /// </exception>
     public void LoadFromJson( FileInfo jsonFile, TextureAtlas atlas )
     {
         if ( !jsonFile.Exists )
@@ -331,11 +349,12 @@ public class StyleRegistry
     }
 
     /// <summary>
-    /// 
+    /// Adds a style to the registry using the specified type name as a key.
+    /// Creates a new type section if it does not already exist.
     /// </summary>
-    /// <param name="typeName"></param>
-    /// <param name="styleName"></param>
-    /// <param name="style"></param>
+    /// <param name="typeName">The fully qualified type name of the style being added.</param>
+    /// <param name="styleName">The unique name of the style within its type section.</param>
+    /// <param name="style">The style object to be added to the registry.</param>
     private void AddByTypeName( string typeName, string styleName, object style )
     {
         string typeKey = style.GetType().FullName ?? style.GetType().Name;
@@ -350,9 +369,11 @@ public class StyleRegistry
     }
 
     /// <summary>
-    /// 
+    /// Saves the current state of the style registry to a JSON file.
     /// </summary>
-    /// <param name="jsonFile"></param>
+    /// <param name="jsonFile">
+    /// The file where the serialized JSON representation of the style registry will be saved.
+    /// </param>
     public void SaveToJson( FileInfo jsonFile )
     {
     }

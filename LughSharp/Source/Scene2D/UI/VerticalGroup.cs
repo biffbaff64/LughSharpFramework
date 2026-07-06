@@ -60,10 +60,25 @@ public class VerticalGroup : WidgetGroup
     /// </summary>
     public float WrapSpace { get; set; }
 
-    public float PadTop    { get; set; }
+    /// <summary>
+    /// The padding around the top of the vertical group.
+    /// </summary>
+    public float PadTop { get; set; }
+
+    /// <summary>
+    /// The padding around the bottom of the vertical group.
+    /// </summary>
     public float PadBottom { get; set; }
-    public float PadLeft   { get; set; }
-    public float PadRight  { get; set; }
+
+    /// <summary>
+    /// The padding around the left of the vertical group.
+    /// </summary>
+    public float PadLeft { get; set; }
+
+    /// <summary>
+    /// The padding around the right of the vertical group.
+    /// </summary>
+    public float PadRight { get; set; }
 
     /// <summary>
     /// Sets the alignment of all widgets within the vertical group. Set to
@@ -73,8 +88,16 @@ public class VerticalGroup : WidgetGroup
     /// </summary>
     public Align Alignment { get; set; } = Align.Top;
 
+    /// <summary>
+    /// Sets the amount of space to fill for each child along the vertical axis.
+    /// A value of 1 indicates the child will fill the available space completely,
+    /// while smaller values proportionally allocate less space.
+    /// </summary>
     public float Fill { get; set; } = 1f;
 
+    /// <summary>
+    /// Determines whether the children within the group expand to fill the available horizontal space.
+    /// </summary>
     public bool Expand { get; set; }
 
     /// <summary>
@@ -111,6 +134,9 @@ public class VerticalGroup : WidgetGroup
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new VerticalGroup, with Touchable set to ChildrenOnly.
+    /// </summary>
     public VerticalGroup()
     {
         Touchable = Touchable.ChildrenOnly;
@@ -129,6 +155,11 @@ public class VerticalGroup : WidgetGroup
         _sizeInvalid = true;
     }
 
+    /// <summary>
+    /// Calculates and updates the preferred size of the VerticalGroup based on its children
+    /// and layout constraints such as spacing, padding, wrapping, and rounding. This method
+    /// is internally invoked to ensure the size is accurate whenever required.
+    /// </summary>
     private void ComputeSize()
     {
         _sizeInvalid = false;
@@ -395,6 +426,13 @@ public class VerticalGroup : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Adjusts the positioning and layout of child widgets within the vertical group,
+    /// taking into account alignment, padding, spacing, wrapping, row sizes, and other
+    /// configuration settings such as reverse and wrapping behavior. The method ensures
+    /// that widgets are laid out correctly within the available space, and that the group's
+    /// hierarchy is invalidated if necessary.
+    /// </summary>
     private void LayoutWrapped()
     {
         float prefWidth = GetPrefWidth();
@@ -552,6 +590,12 @@ public class VerticalGroup : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Calculates and returns the preferred width of the vertical group.
+    /// If wrapping is enabled, the method returns 0. Otherwise, it computes
+    /// the size if it is marked as invalid and returns the cached preferred width value.
+    /// </summary>
+    /// <returns>The preferred width of the vertical group in units.</returns>
     public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
@@ -562,6 +606,11 @@ public class VerticalGroup : WidgetGroup
         return _prefWidth;
     }
 
+    /// <summary>
+    /// Returns the preferred height of the vertical group.
+    /// If the size is invalid, it recalculates the size before returning the result.
+    /// </summary>
+    /// <returns>The preferred height of the vertical group in units.</returns>
     public override float GetPrefHeight()
     {
         if ( Wrapping )
@@ -595,6 +644,10 @@ public class VerticalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Retrieves the reverse layout state of the VerticalGroup.
+    /// </summary>
+    /// <returns>A boolean indicating whether the layout is reversed (true) or not (false).</returns>
     public bool GetReverse()
     {
         return _reverse;
@@ -770,7 +823,9 @@ public class VerticalGroup : WidgetGroup
         return this;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws a rectangle for the bounds of this actor if <see cref="Actor.DebugActive"/> is true.
+    /// </summary>
     protected override void DrawDebugBounds( ShapeRenderer shapes )
     {
         base.DrawDebugBounds( shapes );

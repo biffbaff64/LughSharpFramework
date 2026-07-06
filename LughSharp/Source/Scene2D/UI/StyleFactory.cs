@@ -36,13 +36,31 @@ namespace LughSharp.Source.Scene2D.UI;
 public class StyleFactory
 {
     /// <summary>
-    /// 
+    /// Creates a style object based on the given type name and JSON description.
+    /// This method allows for the dynamic creation of style objects, applying inherited
+    /// properties when a parent style is specified and updating properties based on the
+    /// provided JSON metadata.
     /// </summary>
-    /// <param name="typeName"></param>
-    /// <param name="json"></param>
-    /// <param name="atlas"></param>
-    /// <param name="registry"></param>
-    /// <returns></returns>
+    /// <param name="typeName">
+    /// The name of the type to create. This should match the type name of a class representing
+    /// the style.
+    /// </param>
+    /// <param name="json">
+    /// A JSON object containing the style properties and metadata. The JSON can also include a
+    /// "parent" property to enable inheritance of properties from a parent style.
+    /// </param>
+    /// <param name="atlas">
+    /// A <see cref="TextureAtlas"/> instance to assist in resolving relevant graphics details
+    /// required during style creation.
+    /// </param>
+    /// <param name="registry">
+    /// A <see cref="StyleRegistry"/> instance used to fetch parent styles and resolve dependencies
+    /// during style creation.
+    /// </param>
+    /// <returns>
+    /// Returns the instantiated and initialized style object if the type and properties were
+    /// resolved successfully; otherwise, returns null if the specified type is not found.
+    /// </returns>
     public static object? CreateStyle( string typeName, JsonElement json, TextureAtlas atlas, StyleRegistry registry )
     {
         Type? type = AppDomain.CurrentDomain.GetAssemblies()
@@ -90,14 +108,35 @@ public class StyleFactory
     }
 
     /// <summary>
-    /// 
+    /// Applies a property value to the specified target object by resolving and converting
+    /// the input value to the appropriate type and assigning it to the provided property.
+    /// This method supports various property types, including primitives, <see cref="Color"/>,
+    /// <see cref="BitmapFont"/>, and drawable types, utilizing a registry or texture atlas
+    /// as needed for resolution.
     /// </summary>
-    /// <param name="registry"></param>
-    /// <param name="target"></param>
-    /// <param name="prop"></param>
-    /// <param name="value"></param>
-    /// <param name="atlas"></param>
-    private static void ApplyPropertyValue( StyleRegistry registry, object target, PropertyInfo prop, JsonElement value, TextureAtlas atlas )
+    /// <param name="registry">
+    /// A <see cref="StyleRegistry"/> instance used for managing named resources, such as fonts,
+    /// that are required to resolve and assign specific property values.
+    /// </param>
+    /// <param name="target">
+    /// The object on which the property value is to be applied. This is the style object
+    /// being configured.
+    /// </param>
+    /// <param name="prop">
+    /// A <see cref="PropertyInfo"/> object representing the property of the target for which
+    /// the value should be resolved and assigned.
+    /// </param>
+    /// <param name="value">
+    /// A <see cref="JsonElement"/> representing the raw value to be parsed, converted, and
+    /// assigned to the specified property. The actual type and content of the value depend
+    /// on the property type.
+    /// </param>
+    /// <param name="atlas">
+    /// A <see cref="TextureAtlas"/> instance used for resolving graphical resources, such as
+    /// texture regions, that may be required to assign drawable property values.
+    /// </param>
+    private static void ApplyPropertyValue( StyleRegistry registry, object target, PropertyInfo prop, JsonElement value,
+                                            TextureAtlas atlas )
     {
         // --- Handle Color ---
         if ( prop.PropertyType == typeof( Color ) )
@@ -169,9 +208,21 @@ public class StyleFactory
         }
     }
 
+    /// <summary>
+    /// Creates a shallow copy of the specified object using its MemberwiseClone method.
+    /// This method allows for duplicating an object instance, primarily for use with
+    /// classes that do not have a built-in cloning mechanism.
+    /// </summary>
+    /// <param name="source">
+    /// The object to be cloned. This can be any reference type that supports MemberwiseClone.
+    /// If the source is null, the method will return null.
+    /// </param>
+    /// <returns>
+    /// Returns a new object that is a shallow copy of the source object. If the source object
+    /// is null or the MemberwiseClone method is not accessible, the method will return null.
+    /// </returns>
     private static object? CloneObject( object? source )
     {
-        // Simple shallow clone for UI Styles (usually enough for Drawables/Colors)
         return source?.GetType().GetMethod( "MemberwiseClone",
                                             BindingFlags.Instance | BindingFlags.NonPublic )?.Invoke( source, null );
     }

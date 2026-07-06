@@ -114,6 +114,17 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
     /// </summary>
     public ListBoxStyle GetStyle() => _style;
 
+    /// <summary>
+    /// Sets the style of the list box to the specified <see cref="ListBoxStyle"/>.
+    /// This style determines the visual appearance of the list box, including colors,
+    /// fonts, and other visual properties.
+    /// </summary>
+    /// <param name="boxStyle">
+    /// The <see cref="ListBoxStyle"/> to apply to the list box. Cannot be null.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown when the provided <paramref name="boxStyle"/> is null.
+    /// </exception>
     public void SetStyle( ListBoxStyle boxStyle )
     {
         _style = boxStyle ?? throw new ArgumentException( "style cannot be null." );
@@ -171,7 +182,23 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
+    /// draw method is convenient to draw a rotated and scaled TextureRegion.
+    /// <para>
+    /// <see cref="IBatch.Begin"/> has already been called on the batch. If <see cref="IBatch.End()"/>
+    /// is called to draw without the batch then <see cref="IBatch.Begin"/> must be called before
+    /// the method returns.
+    /// </para>
+    /// <para>
+    /// <b>The default implementation does nothing. Child classes should override and implement.</b>
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha">
+    /// The parent alpha, to be multiplied with this actor's alpha,
+    /// allowing the parent's alpha to affect all children.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -278,6 +305,20 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         }
     }
 
+    /// <summary>
+    /// Draws an item in the ListBox at the specified position and size using the provided
+    /// font and render batch.
+    /// </summary>
+    /// <param name="batch">The rendering batch used to draw the item.</param>
+    /// <param name="font">The font used to render the text representation of the item.</param>
+    /// <param name="index">The index of the item in the list.</param>
+    /// <param name="item">The item to be drawn.</param>
+    /// <param name="x">The x-coordinate where the item should be drawn.</param>
+    /// <param name="y">The y-coordinate where the item should be drawn.</param>
+    /// <param name="width">The width available for rendering the item.</param>
+    /// <returns>
+    /// A <see cref="GlyphLayout"/> object that describes the resulting layout of the rendered item.
+    /// </returns>
     protected GlyphLayout DrawItem( IBatch batch, BitmapFont font, int index, T item, float x, float y, float width )
     {
         string str = ToString( item );
@@ -345,16 +386,37 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         }
     }
 
+    /// <summary>
+    /// Retrieves the item that is currently under the cursor or highlighted.
+    /// If no item is under the cursor, returns the default value of the item type.
+    /// </summary>
+    /// <returns>
+    /// The item currently under the cursor, or the default value of the item type
+    /// if no item is highlighted.
+    /// </returns>
     public T? GetOverItem()
     {
         return _overIndex == -1 ? default( T? ) : Items[ _overIndex ];
     }
 
+    /// <summary>
+    /// Retrieves the item currently pressed in the list box, or null if no item is pressed.
+    /// </summary>
+    /// <returns>
+    /// The pressed item of type <typeparamref name="T"/>, or null if no item is pressed.
+    /// </returns>
     public T? GetPressedItem()
     {
         return _pressedIndex == -1 ? default( T? ) : Items[ _pressedIndex ];
     }
 
+    /// <summary>
+    /// Retrieves the item at the specified vertical position within the list.
+    /// </summary>
+    /// <param name="y">The vertical position to check for an item, relative to the list's origin.</param>
+    /// <returns>
+    /// The item located at the specified vertical position, or <see langword="null"/> if no item is found.
+    /// </returns>
     public T? GetItemAt( float y )
     {
         int index = GetItemIndexAt( y );
@@ -365,8 +427,8 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
     /// <summary>
     /// Returns the index of the item at the passed y coordinate. The top item has an index of 0.
     /// </summary>
-    /// <param name="y"></param>
-    /// <returns></returns>
+    /// <param name="y">The vertical position to check for an item, relative to the list's origin.</param>
+    /// <returns>The index of the item at the specified vertical position, or -1 if no item is found.</returns>
     public int GetItemIndexAt( float y )
     {
         float           height     = GetHeight();
@@ -388,6 +450,10 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         return index;
     }
 
+    /// <summary>
+    /// Sets the items for the ListBox, replacing any existing items.
+    /// </summary>
+    /// <param name="newItems">The new items to populate the ListBox with.</param>
     public void SetItems( params T[] newItems )
     {
         Guard.Against.Null( newItems );
@@ -411,6 +477,11 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         }
     }
 
+    /// <summary>
+    /// Retrieves the preferred width of the ListBox without applying any external constraints
+    /// or recomputation. The value is used internally to determine the ListBox's optimal size.
+    /// </summary>
+    /// <returns>The preferred width of the ListBox.</returns>
     private float GetPrefWidthUnchecked()
     {
         Validate();
@@ -418,6 +489,12 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         return _prefWidth;
     }
 
+    /// <summary>
+    /// Returns the preferred height of the ListBox without applying layout validation.
+    /// This value is determined based on internal state and may not reflect
+    /// changes made to the layout or configuration since the last validation call.
+    /// </summary>
+    /// <returns>The preferred height of the ListBox.</returns>
     private float GetPrefHeightUnchecked()
     {
         Validate();
@@ -425,21 +502,44 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         return _prefHeight;
     }
 
+    /// <summary>
+    /// Calculates and returns the preferred width of the widget. This value is used
+    /// during layout to determine the optimal size for the widget while adhering to
+    /// its layout constraints and content requirements. Subclasses may override this
+    /// method to provide a specific calculation based on their individual behavior and content.
+    /// </summary>
+    /// <returns>
+    /// The preferred width of the widget, expressed as a floating-point value.
+    /// </returns>
     public override float GetPrefWidth()
     {
         return GetPrefWidthUnchecked();   
     }
 
+    /// <summary>
+    /// Sets the preferred width of the list box.
+    /// </summary>
+    /// <param name="value">The value to set as the preferred width.</param>
     public void SetPrefWidth( float value )
     {
         _prefWidth = value;
     }
 
+    /// <summary>
+    /// Returns the preferred height of the widget. This value is typically used to determine
+    /// the desired height of the widget for layout purposes. The value may vary depending
+    /// on the widget's contents, styling, or other attributes.
+    /// </summary>
+    /// <returns>The preferred height of the widget in pixels.</returns>
     public override float GetPrefHeight()
     {
         return GetPrefHeightUnchecked();
     }
 
+    /// <summary>
+    /// Sets the preferred height for the list box.
+    /// </summary>
+    /// <param name="value">The preferred height in pixels.</param>
     public void SetPrefHeight( float value )
     {
         _prefHeight = value;
@@ -473,7 +573,9 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
     }
 
     /// <summary>
-    /// 
+    /// Clears all items from the <see cref="ListBox{T}"/>. This includes resetting the indices for
+    /// hover and pressed items, clearing the selection, and invalidating the widget's hierarchy
+    /// to ensure proper layout updates.
     /// </summary>
     public void ClearItems()
     {
@@ -492,6 +594,12 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
         InvalidateHierarchy();
     }
 
+    /// <summary>
+    /// Returns a string representation of the specified object. If the object is null,
+    /// an empty string is returned.
+    /// </summary>
+    /// <param name="obj">The object to convert to a string.</param>
+    /// <returns>A string representation of the object.</returns>
     public string ToString( T? obj )
     {
         return obj?.ToString() ?? string.Empty;
@@ -500,6 +608,18 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// A listener that handles key input events for a <see cref="ListBox{T}"/>.
+    /// <para>
+    /// This listener manages navigation and selection within a list using keyboard input.
+    /// It supports various key actions, such as moving up and down the list, navigating
+    /// to the beginning or end, and performing selection operations.
+    /// </para>
+    /// <para>
+    /// The behavior of key events is influenced by the list's selection mode and the
+    /// current state of the modifier keys.
+    /// </para>
+    /// </summary>
     internal class ListKeyListener : InputListener
     {
         private readonly ListBox< T > _parent;
@@ -626,6 +746,14 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// A listener specifically designed to handle input events for a <see cref="ListBox{T}"/>.
+    /// <para>
+    /// The <see cref="ListInputListener"/> enables handling of touch, mouse, and gesture events
+    /// to support interaction with the items in the list. It determines the item index based on user input
+    /// and updates the selection accordingly.
+    /// </para>
+    /// </summary>
     public class ListInputListener : InputListener
     {
         private readonly ListBox< T > _parent;
@@ -657,7 +785,7 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 
             if ( _parent.GetStage() != null )
             {
-                _parent.GetStage().SetKeyboardFocus( _parent );
+                _parent.GetStage()?.SetKeyboardFocus( _parent );
             }
 
             if ( _parent.Items.Count == 0 )

@@ -132,8 +132,9 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     /// <param name="min"> the minimum value </param>
     /// <param name="max"> the maximum value </param>
     /// <param name="stepSize"> the step size between values </param>
-    /// <param name="vertical"></param>
-    /// <param name="style"> the <see cref="ProgressBarStyle"/>  </param>
+    /// <param name="vertical">
+    /// <c>True</c> if the progress bar is vertical, otherwise <c>False</c>. </param>
+    /// <param name="style"> the <see cref="ProgressBarStyle"/> to use. </param>
     public ProgressBar( float min, float max, float stepSize, bool vertical, ProgressBarStyle style )
     {
         if ( min > max )
@@ -160,12 +161,14 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Returns <c>True</c> if the progress bar is currently animating, otherwise <c>False</c>.
+    /// The bar is animating if the <see cref="_animateTime"/> is greater than zero.
     /// </summary>
     public bool IsAnimating => _animateTime > 0;
 
     /// <summary>
-    /// 
+    /// The step size between values. For instance, if the step size is 10, the progress bar
+    /// current length will increment by 10 each time the <see cref="Value"/> is incremented.
     /// </summary>
     /// <exception cref="ArgumentException"></exception>
     public float StepSize
@@ -183,14 +186,20 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// 
+    /// Returns the <see cref="ProgressBarStyle"/> currently being used by the progress bar.
     /// </summary>
+    /// <remarks>
+    /// This method is virtual and can be overridden to provide custom behavior.
+    /// </remarks>
     public virtual ProgressBarStyle GetStyle() => _style;
 
     /// <summary>
-    /// 
+    /// Sets the <see cref="ProgressBarStyle"/> to use for the progress bar.
     /// </summary>
-    public void SetStyle( ProgressBarStyle value )
+    /// <remarks>
+    /// This method is virtual and can be overridden to provide custom behavior.
+    /// </remarks>
+    public virtual void SetStyle( ProgressBarStyle value )
     {
         Guard.Against.Null( value );
 
@@ -198,7 +207,10 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
         InvalidateHierarchy();
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Handles all actions attached to this actor.
+    /// </summary>
+    /// <param name="delta"> Time in seconds since the last update. </param>
     public override void Act( float delta )
     {
         base.Act( delta );
@@ -214,7 +226,20 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
+    /// draw method is convenient to draw a rotated and scaled TextureRegion.
+    /// <para>
+    /// <see cref="IBatch.Begin"/> has already been called on the batch. If <see cref="IBatch.End()"/>
+    /// is called to draw without the batch then <see cref="IBatch.Begin"/> must be called before
+    /// the method returns.
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha">
+    /// The parent alpha, to be multiplied with this actor's alpha, allowing the parent's
+    /// alpha to affect all children.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         ISceneDrawable? knob        = _style.Knob;
@@ -369,14 +394,15 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// 
+    /// Draws a rounded UI element using the specified batch and drawable parameters,
+    /// ensuring that the element is rendered with rounded visual effects if supported.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="drawable"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="w"></param>
-    /// <param name="h"></param>
+    /// <param name="batch">The batching mechanism used to issue draw calls for rendering.</param>
+    /// <param name="drawable">The visual representation to be rendered.</param>
+    /// <param name="x">The x-coordinate of the element's position.</param>
+    /// <param name="y">The y-coordinate of the element's position.</param>
+    /// <param name="w">The width of the element.</param>
+    /// <param name="h">The height of the element.</param>
     private void DrawRound( IBatch batch, ISceneDrawable drawable, float x, float y, float w, float h )
     {
         if ( IsRound )
@@ -391,14 +417,13 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// Sets the progress bar position, rounded to the nearest step size and
-    /// clamped to the minimum and maximum values. <see cref="Clamp(float)"/>
-    /// can be overridden to allow values outside of the progress bar's min/max
-    /// range.
+    /// Sets the progress bar position, rounded to the nearest step size and clamped to
+    /// the minimum and maximum values. <see cref="Clamp(float)"/> can be overridden to
+    /// allow values outside of the progress bar's min/max range.
     /// </summary>
     /// <returns>
-    /// <tt>false</tt> if the value was not changed because the progress bar
-    /// already had the value or it was canceled by a listener.
+    /// <tt>false</tt> if the value was not changed because the progress bar already had
+    /// the value or it was canceled by a listener.
     /// </returns>
     public bool SetBarPosition( float value )
     {
@@ -485,9 +510,10 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// Rounds the value using the progress bar's step size.
-    /// This can be overridden to customize or disable rounding.
+    /// Rounds the value using the progress bar's step size. This can be overridden to
+    /// customize or disable rounding.
     /// </summary>
+    /// <param name="value">The value to be rounded.</param>
     private float Round( float value )
     {
         return ( float )( Math.Round( value / StepSize ) * StepSize );
@@ -497,14 +523,18 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     /// Clamps the value to the progress bar's min/max range. This can be overridden
     /// to allow a range different from the progress bar knob's range.
     /// </summary>
+    /// <param name="value">The value to be clamped.</param>
     private float Clamp( float value )
     {
         return MathUtils.Clamp( value, MinValue, MaxValue );
     }
 
     /// <summary>
-    /// Sets the range of this progress bar. The progress bar's current value is clamped to the range.
+    /// Sets the range of this progress bar. The progress bar's current value is clamped
+    /// to the range.
     /// </summary>
+    /// <param name="min"> The minimum value of the range. </param>
+    /// <param name="max"> The maximum value of the range. </param>
     public void SetRange( float min, float max )
     {
         if ( min > max )
@@ -525,16 +555,22 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Calculates and returns the preferred width of the progress bar.
+    /// This value is determined based on the internal layout and styling of the progress bar.
+    /// </summary>
+    /// <returns>The preferred width of the progress bar as a floating-point value.</returns>
     public override float GetPrefWidth()
     {
         return GetPrefWidthUnchecked();
     }
 
     /// <summary>
-    /// 
+    /// Calculates the preferred width of the progress bar without applying any constraints
+    /// or adjustments. This method determines the preferred width based on the orientation
+    /// of the progress bar and its associated style elements, such as the knob and background.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The preferred width of the progress bar as a floating-point value.</returns>
     protected float GetPrefWidthUnchecked()
     {
         if ( IsVertical )
@@ -548,16 +584,22 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
         return DefaultPrefWidth;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Calculates and returns the preferred height of the progress bar.
+    /// This value is determined based on the internal layout and styling of the progress bar.
+    /// </summary>
+    /// <returns>The preferred height of the progress bar as a floating-point value.</returns>
     public override float GetPrefHeight()
     {
         return GetPrefHeightUnchecked();
     }
 
     /// <summary>
-    /// 
+    /// Calculates the preferred height of the progress bar without applying any constraints
+    /// or adjustments. This method determines the preferred height based on the orientation
+    /// of the progress bar and its associated style elements, such as the knob and background.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The preferred height of the progress bar as a floating-point value.</returns>
     protected float GetPrefHeightUnchecked()
     {
         if ( IsVertical )
@@ -572,18 +614,21 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// If > 0, changes to the progress bar value via <see cref="Value"/>
-    /// will happen over this duration in seconds.
+    /// Sets the duration in seconds over which the progress bar value will animate.
+    /// If > 0, changes to the progress bar value via <see cref="Value"/> will happen over
+    /// this duration in seconds.
     /// </summary>
-    /// <param name="duration"></param>
+    /// <param name="duration">
+    /// The duration in seconds over which the progress bar value will animate.
+    /// </param>
     public void SetAnimateDuration( float duration )
     {
         _animateDuration = duration;
     }
 
     /// <summary>
-    /// If <see cref="SetAnimateDuration(float)"/> animating the progress bar value,
-    /// this returns the value current displayed.
+    /// If <see cref="SetAnimateDuration(float)"/> is animating the progress bar value,
+    /// this returns the value currently displayed.
     /// </summary>
     public float GetVisualValue()
     {
@@ -601,9 +646,11 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     /// Sets the visual value equal to the actual value. This can be used to set the
     /// value without animating.
     /// </summary>
+    /// <remarks>
+    /// This method is virtual and should be overidden by any inheriting classes.
+    /// </remarks>
     public virtual void UpdateVisualValue()
     {
-        //TODO:
         _animateTime = 0;
     }
 
@@ -642,9 +689,15 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the background drawable for the progress bar based on its current state.
+    /// If the progress bar is disabled and a disabled background is defined in the style,
+    /// the disabled background is returned. Otherwise, the regular background defined in
+    /// the style is returned.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The <see cref="ISceneDrawable"/> representing the background of the progress bar,
+    /// or null if no background is defined in the style.
+    /// </returns>
     private ISceneDrawable? GetBackgroundDrawable()
     {
         if ( IsDisabled && ( _style.DisabledBackground != null ) )

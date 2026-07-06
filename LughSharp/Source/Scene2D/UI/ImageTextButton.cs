@@ -28,6 +28,13 @@ using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI;
 
+/// <summary>
+/// Represents a UI button that combines an image and text, styled with <see cref="ImageTextButtonStyle"/>.
+/// </summary>
+/// <remarks>
+/// Designed for use in UI scenes where both an icon (image) and a textual label are required.
+/// Provides flexibility in styling and customization through a predefined or user-specified style.
+/// </remarks>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
 public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
@@ -148,6 +155,7 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
     /// Returns the appropriate image drawable from the style based on the
     /// current button state.
     /// </summary>
+    /// <returns> The drawable. </returns>
     public virtual ISceneDrawable? GetImageDrawable()
     {
         // The button is disabled.
@@ -284,7 +292,16 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
         return _style.FontColor ?? Color.White;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Renders the ImageTextButton using the specified drawing batch and alpha transparency.
+    /// </summary>
+    /// <param name="batch">
+    /// The <see cref="IBatch"/> used to draw the button and associated child elements.
+    /// </param>
+    /// <param name="parentAlpha">
+    /// The alpha value inherited from the parent, affecting the overall transparency of
+    /// the button during rendering.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         UpdateImage();
@@ -294,11 +311,24 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
         base.Draw( batch, parentAlpha );
     }
 
+    /// <summary>
+    /// Retrieves the <see cref="Cell"/> associated with the button's image.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Cell"/> containing the image, or null if no image is set.
+    /// </returns>
     public Cell? GetImageCell()
     {
         return GetCell( Image! );
     }
 
+    /// <summary>
+    /// Retrieves the <see cref="Cell"/> associated with the label in this button.
+    /// </summary>
+    /// <returns>
+    /// The <see cref="Cell"/> that holds the <see cref="Label"/> in the button,
+    /// or null if no such cell exists.
+    /// </returns>
     public Cell? GetLabelCell()
     {
         return GetCell( Label );
@@ -328,6 +358,7 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
     /// <summary>
     /// Sets the label's text.
     /// </summary>
+    /// <param name="text"> The new text for the label. </param>
     public void SetText( string text )
     {
         Label.GetText().Clear();

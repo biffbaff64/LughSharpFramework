@@ -25,6 +25,7 @@
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.UI.Styles;
+using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI;
 
@@ -36,9 +37,9 @@ namespace LughSharp.Source.Scene2D.UI;
 [ActorDefinition( Role = "UI" )]
 public class Label : Widget, IStyleable< LabelStyle >, IDisposable
 {
-    public Align       LabelAlign  { get; set; } = Align.Left;
-    public Align       LineAlign   { get; set; } = Align.Left;
-    public GlyphLayout GlyphLayout { get; set; } = new();
+    public Align       LabelAlignment { get; set; } = Align.Left;
+    public Align       LineAlignment  { get; set; } = Align.Left;
+    public GlyphLayout GlyphLayout    { get; set; } = new();
 
     // ========================================================================
 
@@ -84,6 +85,10 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont with
     /// the specified name from the skin and the specified color.
     /// </summary>
+    /// <param name="text"> The label text. </param>
+    /// <param name="skin"> The Skin, which should hold a <see cref="TextButtonStyle"/> </param>
+    /// <param name="fontName"> The name of the font, i.e. "default" or "toggle". </param>
+    /// <param name="color"> The color of the label. </param>
     public Label( string text, Skin skin, string fontName, Color color )
         : this( text, new LabelStyle( skin.GetFont( fontName ), color ) )
     {
@@ -91,9 +96,12 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
 
     /// <summary>
     /// Creates a label, using a <see cref="LabelStyle"/> that has a BitmapFont
-    /// with the specified name and the specified color from the
-    /// skin.
+    /// with the specified name and the specified color from the skin.
     /// </summary>
+    /// <param name="text"> The label text. </param>
+    /// <param name="skin"> The Skin, which should hold a <see cref="TextButtonStyle"/> </param>
+    /// <param name="fontName"> The name of the font, i.e. "default" or "toggle". </param>
+    /// <param name="colorName"> The name of the color of the label. </param>
     public Label( string text, Skin skin, string fontName, string colorName )
         : this( text, new LabelStyle( skin.GetFont( fontName ), skin.GetColor( colorName ) ) )
     {
@@ -102,8 +110,8 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// <summary>
     /// Creates a label with the specified text and style.
     /// </summary>
-    /// <param name="text"></param>
-    /// <param name="style"></param>
+    /// <param name="text"> The label text. </param>
+    /// <param name="style"> The label style. </param>
     public Label( string? text, LabelStyle? style )
     {
         Guard.Against.Null( style );
@@ -189,9 +197,10 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// The <see cref="LabelStyle"/> used with this label. It is used to
+    /// Sets the <see cref="LabelStyle"/> used with this label. It is used to
     /// specify the Font, FontColor, and Background
     /// </summary>
+    /// <param name="style"> The label style. </param>
     public void SetStyle( LabelStyle style )
     {
         if ( style == null ) throw new ArgumentException( "style cannot be null." );
@@ -212,6 +221,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// Sets the text to the specified integer value. If the text is already equivalent
     /// to the specified value, a string is not allocated.
     /// </summary>
+    /// <param name="value"> The integer value to set the text to. </param>
     /// <returns> true if the text was changed. </returns>
     public bool SetText( int value )
     {
@@ -234,9 +244,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// equivalent to the specified value, a string is not allocated. If <c>null</c>
     /// is passed, the label's text will be cleared.'
     /// </summary>
-    /// <param name="newText">
-    /// A string holding the text to set, or null to clear the label.
-    /// </param>
+    /// <param name="newText"> A string holding the text to set, or null to clear the label. </param>
     public void SetText( string? newText )
     {
         if ( newText == null )
@@ -298,8 +306,13 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Adjusts the font scaling if necessary, computes the preferred size of the text,
+    /// and restores the original font scaling after the computation. This method is
+    /// used internally to update the preferred size when font scaling changes occur.
     /// </summary>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown if the internal font cache is null during execution.
+    /// </exception>
     private void ScaleAndComputePrefSize()
     {
         Guard.Against.Null( _fontCache );
@@ -323,8 +336,10 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Computes the preferred size of the label using the provided <see cref="GlyphLayout"/>.
+    /// Updates the width and height of the label based on font rendering and wrapping conditions.
     /// </summary>
+    /// <param name="layout">The <see cref="GlyphLayout"/> instance used to compute text dimensions.</param>
     private void ComputePrefSize( GlyphLayout layout )
     {
         Guard.Against.Null( _fontCache );
@@ -353,7 +368,11 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Computes and caches any information needed for drawing and, if this actor
+    /// has children, positions and sizes each child, calls <see cref="ILayout.InvalidateLayout"/>
+    /// on any each child whose width or height has changed, and calls <see cref="ILayout.Validate"/>
+    /// on each child. This method should almost never be called directly, instead
+    /// <see cref="ILayout.Validate"/> should be used.
     /// </summary>
     public override void Layout()
     {
@@ -410,16 +429,16 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
                             _text.Length,
                             Color.White,
                             width,
-                            LineAlign,
+                            LineAlignment,
                             wrap,
                             _ellipsis );
 
             textWidth  = layout.Width;
             textHeight = layout.Height;
 
-            if ( ( LabelAlign & Align.Left ) == 0 )
+            if ( ( LabelAlignment & Align.Left ) == 0 )
             {
-                if ( ( LabelAlign & Align.Right ) != 0 )
+                if ( ( LabelAlignment & Align.Right ) != 0 )
                 {
                     x += width - textWidth;
                 }
@@ -437,12 +456,12 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
 
         Guard.Against.Null( _style.Font );
 
-        if ( ( LabelAlign & Align.Top ) != 0 )
+        if ( ( LabelAlignment & Align.Top ) != 0 )
         {
             y += _fontCache.Font.Flipped ? 0 : height - textHeight;
             y += _style.Font.GetDescent();
         }
-        else if ( ( LabelAlign & Align.Bottom ) != 0 )
+        else if ( ( LabelAlignment & Align.Bottom ) != 0 )
         {
             y += _fontCache.Font.Flipped ? height - textHeight : 0;
             y -= _style.Font.GetDescent();
@@ -463,7 +482,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
                         _text.Length,
                         Color.White,
                         textWidth,
-                        LineAlign,
+                        LineAlignment,
                         wrap,
                         _ellipsis );
 
@@ -476,10 +495,14 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Renders the label with its current properties, including text, background, and colors,
+    /// using the specified <see cref="IBatch"/> for drawing.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="parentAlpha"></param>
+    /// <param name="batch">The batch used for rendering the label's visual elements.</param>
+    /// <param name="parentAlpha">
+    /// The parent alpha value, factoring the transparency of the label's parent into the
+    /// rendering process.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -507,18 +530,21 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Returns the preferred width of the label, which is determined
+    /// based on its content and style. Typically used for layout calculations.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The preferred width of the label. </returns>
     public override float GetPrefWidth()
     {
         return GetPrefWidthUnchecked();
     }
 
     /// <summary>
-    /// 
+    /// Calculates and retrieves the preferred width of the label without wrapping constraints.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The preferred width, considering label content and optional background size.
+    /// </returns>
     public float GetPrefWidthUnchecked()
     {
         if ( Wrap )
@@ -543,18 +569,24 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     }
 
     /// <summary>
-    /// 
+    /// Returns the preferred height of the label based on its current state, including
+    /// text and style.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The preferred height of the label, which determines its layout and rendering bounds.
+    /// </returns>
     public override float GetPrefHeight()
     {
         return GetPrefHeightUnchecked();
     }
 
     /// <summary>
-    /// 
+    /// Computes the preferred height of the label without validating or refreshing the cached size.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The preferred height of the label, which includes text height, optional background
+    /// padding, and any scale adjustments.
+    /// </returns>
     public float GetPrefHeightUnchecked()
     {
         if ( _prefSizeInvalid )
@@ -601,19 +633,19 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// See also <see cref="Align "/>
     public void SetAlignment( Align labelAlign, Align lineAlign )
     {
-        LabelAlign = labelAlign;
+        LabelAlignment = labelAlign;
 
         if ( ( lineAlign & Align.Left ) != 0 )
         {
-            LineAlign = Align.Left;
+            LineAlignment = Align.Left;
         }
         else if ( ( lineAlign & Align.Right ) != 0 )
         {
-            LineAlign = Align.Right;
+            LineAlignment = Align.Right;
         }
         else
         {
-            LineAlign = Align.Center;
+            LineAlignment = Align.Center;
         }
 
         InvalidateLayout();
@@ -622,7 +654,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// <summary>
     /// Sets the scale of the label's font. The scale is applied to both the X and Y.
     /// </summary>
-    /// <param name="fontScale"> The SCale. </param>
+    /// <param name="fontScale"> The Scale. </param>
     public void SetFontScale( float fontScale )
     {
         SetFontScale( fontScale, fontScale );
@@ -649,6 +681,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// the width of the label. Wrapping will not occur when ellipsis is enabled.
     /// Default is false.
     /// </summary>
+    /// <param name="ellipsis"> The ellipsis string to use when truncating text. </param>
     public void SetEllipsis( string? ellipsis )
     {
         _ellipsis = ellipsis;
@@ -659,6 +692,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     /// width of the label. Wrapping will not occur when ellipsis is true. Default
     /// is false.
     /// </summary>
+    /// <param name="ellipsis"> Whether to enable ellipsis truncation. </param>
     public void SetEllipsis( bool ellipsis )
     {
         _ellipsis = ellipsis ? "..." : null;

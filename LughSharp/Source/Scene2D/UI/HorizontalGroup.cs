@@ -97,18 +97,32 @@ public class HorizontalGroup : WidgetGroup
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new HorizontalGroup, with Touchable set to ChildrenOnly.
+    /// </summary>
     public HorizontalGroup()
     {
         Touchable = Touchable.ChildrenOnly;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Invalidates this actor's layout, causing <see cref="ILayout.Layout"/> to happen the
+    /// next time <see cref="ILayout.Validate"/> is called. This method should be called when
+    /// state changes in the actor that requires a layout but does not change the minimum,
+    /// preferred, maximum, or actual size of the actor (meaning it does not affect the
+    /// parent actor's layout).
+    /// </summary>
     public override void InvalidateLayout()
     {
         base.InvalidateLayout();
         _sizeInvalid = true;
     }
 
+    /// <summary>
+    /// Calculates and updates the preferred size of the HorizontalGroup based on its children
+    /// and layout constraints such as spacing, padding, wrapping, and rounding. This method
+    /// is internally invoked to ensure the size is accurate whenever required.
+    /// </summary>
     private void ComputeSize()
     {
         _sizeInvalid = false;
@@ -240,7 +254,10 @@ public class HorizontalGroup : WidgetGroup
         }
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Positions and sizes children of the table using the cell associated with each child.
+    /// The values given are the position within the parent and size of the table.
+    /// </summary>
     public override void Layout()
     {
         if ( _sizeInvalid )
@@ -372,6 +389,14 @@ public class HorizontalGroup : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Adjusts the positioning and layout of child widgets within the horizontal group,
+    /// taking into account alignment, padding, spacing, wrapping, row sizes, and other
+    /// configuration settings such as reverse and wrapping behavior. The method ensures
+    /// that widgets are laid out correctly within the available space, and that the group's
+    /// hierarchy is invalidated if necessary.
+    /// </summary>
+    /// <exception cref="RuntimeException">Thrown if internal row size data is null.</exception>
     private void LayoutWrapped()
     {
         float prefHeight = PrefHeight;
@@ -542,6 +567,12 @@ public class HorizontalGroup : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Calculates and returns the preferred width of the horizontal group.
+    /// If wrapping is enabled, the method returns 0. Otherwise, it computes
+    /// the size if it is marked as invalid and returns the cached preferred width value.
+    /// </summary>
+    /// <returns>The preferred width of the horizontal group in units.</returns>
     public override float GetPrefWidth()
     {
         if ( Wrap )
@@ -557,6 +588,11 @@ public class HorizontalGroup : WidgetGroup
         return PrefWidth;
     }
 
+    /// <summary>
+    /// Returns the preferred height of the HorizontalGroup.
+    /// If the size is invalid, it recalculates the size before returning the result.
+    /// </summary>
+    /// <returns>The preferred height of the HorizontalGroup.</returns>
     public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
@@ -567,6 +603,11 @@ public class HorizontalGroup : WidgetGroup
         return PrefHeight;
     }
 
+    /// <summary>
+    /// Represents the preferred width of the horizontal group. The value may be
+    /// automatically calculated based on the current layout unless explicitly set.
+    /// If wrapping is enabled, it returns 0.
+    /// </summary>
     public float PrefWidth
     {
         get
@@ -586,6 +627,11 @@ public class HorizontalGroup : WidgetGroup
         set => _prefWidth = value;
     }
 
+    /// <summary>
+    /// Represents the preferred height of the horizontal group layout.
+    /// This value determines the height the layout will aim to take,
+    /// accounting for the size of its children and other layout constraints.
+    /// </summary>
     public float PrefHeight
     {
         get
@@ -628,9 +674,14 @@ public class HorizontalGroup : WidgetGroup
     }
 
     /// <summary>
+    /// Sets the fill ratio for the children of the HorizontalGroup.
     /// </summary>
-    /// <param name="fill"> 0f will use preferred width </param>
-    /// .
+    /// <param name="fill">
+    /// The fill ratio for the children. A value of 0f will use the preferred width, while
+    /// positive values will scale the children proportionally to the available space.
+    /// Default is 1.0f.
+    /// </param>
+    /// <returns>The current HorizontalGroup instance for method chaining.</returns>
     public HorizontalGroup SetFill( float fill = 1f )
     {
         Fill = fill;
@@ -649,6 +700,11 @@ public class HorizontalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Configures the HorizontalGroup to expand its child widgets and allocate space proportionally based
+    /// on the group's total available space, with full utilization of the allocated area.
+    /// </summary>
+    /// <returns>The current HorizontalGroup instance, allowing for method chaining.</returns>
     public HorizontalGroup Grow()
     {
         Expand = true;
@@ -691,6 +747,8 @@ public class HorizontalGroup : WidgetGroup
     /// <summary>
     /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
     /// </summary>
+    /// <param name="pad">The padding value.</param>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetPadding( float pad )
     {
         PadTop    = pad;
@@ -701,6 +759,14 @@ public class HorizontalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padTop, padLeft, padBottom, and padRight to the specified value.
+    /// </summary>
+    /// <param name="top"> The padding value for the top edge. </param>
+    /// <param name="left"> The padding value for the left edge. </param>
+    /// <param name="bottom"> The padding value for the bottom edge. </param>
+    /// <param name="right"> The padding value for the right edge. </param>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetPadding( float top, float left, float bottom, float right )
     {
         PadTop    = top;
@@ -711,6 +777,11 @@ public class HorizontalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding for the top edge.
+    /// </summary>
+    /// <param name="padTop"> The padding value for the top edge. </param>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetPadTop( float padTop )
     {
         PadTop = padTop;
@@ -718,6 +789,11 @@ public class HorizontalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding for the left edge.
+    /// </summary>
+    /// <param name="padLeft"> The padding value for the left edge. </param>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetPadLeft( float padLeft )
     {
         PadLeft = padLeft;
@@ -725,6 +801,11 @@ public class HorizontalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding for the bottom edge.
+    /// </summary>
+    /// <param name="padBottom"> The padding value for the bottom edge. </param>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetPadBottom( float padBottom )
     {
         PadBottom = padBottom;
@@ -732,6 +813,11 @@ public class HorizontalGroup : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding for the right edge.
+    /// </summary>
+    /// <param name="padRight"> The padding value for the right edge. </param>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetPadRight( float padRight )
     {
         PadRight = padRight;
@@ -753,6 +839,7 @@ public class HorizontalGroup : WidgetGroup
     /// <see cref="Align.Bottom"/>, or any combination of those.
     /// </para>
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup SetAlign( Align align )
     {
         Alignment = align;
@@ -764,6 +851,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets the alignment of all widgets within the horizontal group to
     /// <see cref="Align.Center"/>. This clears any other alignment.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup AlignCenter()
     {
         Alignment = Align.Center;
@@ -775,6 +863,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup AlignTop()
     {
         Alignment |= Align.Top;
@@ -787,6 +876,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup AlignBottom()
     {
         Alignment |= Align.Bottom;
@@ -799,6 +889,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup AlignLeft()
     {
         Alignment |= Align.Left;
@@ -811,6 +902,7 @@ public class HorizontalGroup : WidgetGroup
     /// Adds <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for
     /// the alignment of all widgets within the horizontal group.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup AlignRight()
     {
         Alignment |= Align.Right;
@@ -828,7 +920,7 @@ public class HorizontalGroup : WidgetGroup
     /// <see cref="Align.Right"/>,
     /// <see cref="Align.Top"/>, <see cref="Align.Bottom"/> or any combination of those.
     /// </param>
-    /// <returns></returns>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup RowAlign( Align rowAlign )
     {
         _rowAlign = rowAlign;
@@ -840,6 +932,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets the alignment of widgets within each row to <see cref="Align.Center"/>.
     /// This clears any other alignment.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup RowCenter()
     {
         _rowAlign = Align.Center;
@@ -851,6 +944,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of widgets within each row.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup RowTop()
     {
         _rowAlign |= Align.Top;
@@ -863,6 +957,7 @@ public class HorizontalGroup : WidgetGroup
     /// Adds <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup RowLeft()
     {
         _rowAlign |= Align.Left;
@@ -875,6 +970,7 @@ public class HorizontalGroup : WidgetGroup
     /// Sets <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for
     /// the alignment of widgets within each row.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup RowBottom()
     {
         _rowAlign |= Align.Bottom;
@@ -887,6 +983,7 @@ public class HorizontalGroup : WidgetGroup
     /// Adds <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for
     /// the alignment of each row of widgets when <see cref="Wrap"/> is enabled.
     /// </summary>
+    /// <returns>This group for chaining.</returns>
     public HorizontalGroup RowRight()
     {
         _rowAlign |= Align.Right;

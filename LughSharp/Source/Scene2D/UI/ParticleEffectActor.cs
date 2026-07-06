@@ -51,12 +51,22 @@ public class ParticleEffectActor : Actor, IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new ParticleEffectActor.
+    /// </summary>
+    /// <param name="particleEffect"> The particle effect to use. </param>
+    /// <param name="resetOnStart"> Whether to reset the particle effect on start. </param>
     public ParticleEffectActor( ParticleEffect particleEffect, bool resetOnStart )
     {
         ParticleEffect = particleEffect;
         _resetOnStart  = resetOnStart;
     }
 
+    /// <summary>
+    /// Creates a new ParticleEffectActor.
+    /// </summary>
+    /// <param name="particleFile"> The file containing the particle effect data. </param>
+    /// <param name="atlas"> The texture atlas used to load the particle effect. </param>
     public ParticleEffectActor( FileInfo particleFile, TextureAtlas atlas )
     {
         ParticleEffect = new ParticleEffect();
@@ -64,6 +74,11 @@ public class ParticleEffectActor : Actor, IDisposable
         OwnsEffect = true;
     }
 
+    /// <summary>
+    /// Creates a new ParticleEffectActor.
+    /// </summary>
+    /// <param name="particleFile"> The file containing the particle effect data. </param>
+    /// <param name="imagesDir"> The directory containing the particle effect images. </param>
     public ParticleEffectActor( FileInfo particleFile, DirectoryInfo imagesDir )
     {
         ParticleEffect = new ParticleEffect();
@@ -71,6 +86,23 @@ public class ParticleEffectActor : Actor, IDisposable
         OwnsEffect = true;
     }
 
+    /// <summary>
+    /// Draws the actor. The batch is configured to draw in the parent's coordinate system. This
+    /// draw method is convenient to draw a rotated and scaled TextureRegion.
+    /// <para>
+    /// <see cref="IBatch.Begin"/> has already been called on the batch. If <see cref="IBatch.End()"/>
+    /// is called to draw without the batch then <see cref="IBatch.Begin"/> must be called before
+    /// the method returns.
+    /// </para>
+    /// <para>
+    /// <b><c>The default implementation does nothing. Child classes should override and implement.</c></b>
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha">
+    /// The parent alpha, to be multiplied with this actor's alpha, allowing the parent's alpha to
+    /// affect all children.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         ParticleEffect.SetPosition( GetX(), GetY() );
@@ -88,6 +120,10 @@ public class ParticleEffectActor : Actor, IDisposable
         }
     }
 
+    /// <summary>
+    /// Handles all actions attached to this actor.
+    /// </summary>
+    /// <param name="delta"> Time in seconds since the last update. </param>
     public override void Act( float delta )
     {
         base.Act( delta );
@@ -103,6 +139,11 @@ public class ParticleEffectActor : Actor, IDisposable
         }
     }
 
+    /// <summary>
+    /// Starts the particle effect actor, enabling it to run and update its associated
+    /// particle effect. If the particle effect is configured to reset on start, it
+    /// resets all particles before starting.
+    /// </summary>
     public void Start()
     {
         IsRunning = true;
@@ -115,18 +156,42 @@ public class ParticleEffectActor : Actor, IDisposable
         ParticleEffect.Start();
     }
 
-    public bool isResetOnStart()
+    /// <summary>
+    /// Determines whether the particle effect should reset when the actor starts.
+    /// </summary>
+    /// <returns>A boolean value indicating if the particle effect resets on start.</returns>
+    public bool IsResetOnStart()
     {
         return _resetOnStart;
     }
 
-    public ParticleEffectActor setResetOnStart( bool resetOnStart )
+    /// <summary>
+    /// Sets whether the particle effect should reset on start.
+    /// </summary>
+    /// <param name="resetOnStart">
+    /// Indicates whether the particle effect should reset when starting.
+    /// </param>
+    /// <return>
+    /// Returns the current instance of <see cref="ParticleEffectActor"/> for method chaining.
+    /// </return>
+    public ParticleEffectActor SetResetOnStart( bool resetOnStart )
     {
         _resetOnStart = resetOnStart;
 
         return this;
     }
 
+    /// <summary>
+    /// Sets whether the particle effect should be automatically removed when it finishes.
+    /// </summary>
+    /// <param name="autoRemove">
+    /// A boolean value indicating whether the particle effect should be automatically
+    /// removed.
+    /// </param>
+    /// <returns>
+    /// Returns the current instance of <see cref="ParticleEffectActor"/> for method
+    /// chaining.
+    /// </returns>
     public ParticleEffectActor SetAutoRemove( bool autoRemove )
     {
         AutoRemove = autoRemove;
@@ -134,6 +199,10 @@ public class ParticleEffectActor : Actor, IDisposable
         return this;
     }
 
+    /// <summary>
+    /// Invoked when the scale of the actor changes.
+    /// Updates the particle effect's scale to match the actor's scale dimensions.
+    /// </summary>
     public override void OnScaleChanged()
     {
         base.OnScaleChanged();
@@ -141,11 +210,19 @@ public class ParticleEffectActor : Actor, IDisposable
         ParticleEffect.ScaleEffect( ScaleX, ScaleY, ScaleY );
     }
 
+    /// <summary>
+    /// Stops the particle effect associated with this ParticleEffectActor.
+    /// </summary>
     public void Cancel()
     {
-        IsRunning = true;
+        IsRunning = false;
     }
 
+    /// <summary>
+    /// Allows the particle effect to complete its active cycle without restarting.
+    /// Once called, the particle effect will not emit new particles, and it will
+    /// continue rendering until all currently active particles have finished.
+    /// </summary>
     public void AllowCompletion()
     {
         ParticleEffect.AllowCompletion();

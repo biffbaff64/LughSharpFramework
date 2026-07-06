@@ -76,7 +76,7 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new Image instance with the specified <see cref="NinePatch"/>.
     /// </summary>
-    /// <param name="patch"></param>
+    /// <param name="patch"> The nine-patch to use for the image. </param>
     public Scene2DImage( NinePatch patch )
         : this( new NinePatchDrawable( patch ), Scaling.None )
     {
@@ -85,7 +85,7 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new Image instance with the specified <see cref="TextureRegion"/>.
     /// </summary>
-    /// <param name="region"></param>
+    /// <param name="region"> The texture region to use for the image. </param>
     public Scene2DImage( TextureRegion region )
         : this( new TextureRegionDrawable( region ), Scaling.None )
     {
@@ -94,7 +94,7 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new Image instance with the specified <see cref="Texture2D"/>.
     /// </summary>
-    /// <param name="texture"></param>
+    /// <param name="texture"> The texture to use for the image. </param>
     public Scene2DImage( Texture2D texture )
         : this( new TextureRegionDrawable( new TextureRegion( texture ) ) )
     {
@@ -104,8 +104,8 @@ public class Scene2DImage : Widget
     /// Creates a new Image instance with the specified <see cref="Skin"/>,
     /// and using the drawable with the specified name.
     /// </summary>
-    /// <param name="skin"></param>
-    /// <param name="drawableName"></param>
+    /// <param name="skin"> The skin to use for the image. </param>
+    /// <param name="drawableName"> The name of the drawable to use for the image. </param>
     public Scene2DImage( Skin skin, string drawableName )
         : this( skin.GetDrawable( drawableName ), Scaling.None )
     {
@@ -114,7 +114,7 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>.
     /// </summary>
-    /// <param name="drawable"></param>
+    /// <param name="drawable"> The drawable to use for the image. </param>
     public Scene2DImage( ISceneDrawable? drawable )
         : this( drawable, Scaling.None )
     {
@@ -124,9 +124,9 @@ public class Scene2DImage : Widget
     /// Creates a new Image instance with the specified <see cref="ISceneDrawable"/>,
     /// <see cref="Scaling"/>Mode, and alignment. Alignment defaults to <see cref="Align.Center"/>.
     /// </summary>
-    /// <param name="drawable"></param>
-    /// <param name="scaling"></param>
-    /// <param name="align"></param>
+    /// <param name="drawable"> The drawable to use for the image. </param>
+    /// <param name="scaling"> The scaling mode to use for the image. </param>
+    /// <param name="align"> The alignment to use for the image. Defaults to <see cref="Align.Center"/>. </param>
     public Scene2DImage( ISceneDrawable? drawable, Scaling scaling, Align align = Align.Center )
     {
         SetDrawable( drawable );
@@ -147,6 +147,12 @@ public class Scene2DImage : Widget
         return GetPrefWidthUnchecked();
     }
 
+    /// <summary>
+    /// Retrieves the unchecked preferred width of the widget.
+    /// </summary>
+    /// <returns>
+    /// The drawable's preferred width if a drawable is set; otherwise, returns 0.
+    /// </returns>
     protected float GetPrefWidthUnchecked()
     {
         return Drawable?.MinWidth ?? 0;
@@ -161,6 +167,12 @@ public class Scene2DImage : Widget
         return GetPrefHeightUnchecked();
     }
 
+    /// <summary>
+    /// Retrieves the unchecked preferred height of the widget.
+    /// </summary>
+    /// <returns>
+    /// The drawable's preferred height if a drawable is set; otherwise, returns 0.
+    /// </returns>
     protected float GetPrefHeightUnchecked()
     {
         return Drawable?.MinHeight ?? 0;
@@ -291,8 +303,8 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Sets the drawable for the image using the specified skin and drawable name.
     /// </summary>
-    /// <param name="skin"></param>
-    /// <param name="drawableName"></param>
+    /// <param name="skin"> The skin to use. </param>
+    /// <param name="drawableName"> The name of the drawable to use. </param>
     public void SetDrawable( Skin skin, string drawableName )
     {
         SetDrawable( skin.GetDrawable( drawableName ) );
@@ -329,6 +341,7 @@ public class Scene2DImage : Widget
     /// <summary>
     /// Sets the <see cref="Scaling"/>Mode for this Image.
     /// </summary>
+    /// <param name="scale"> The scaling mode to use. </param>
     public void SetScaling( Scaling scale )
     {
         Guard.Against.Null( scale );

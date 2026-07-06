@@ -52,7 +52,7 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// Creates a new ImageButton using the supplied <see cref="Skin"/>. The skin
     /// should contain an <see cref="ImageButtonStyle"/>.
     /// </summary>
-    /// <param name="skin"></param>
+    /// <param name="skin"> The skin holding the <see cref="ImageButtonStyle"/>. </param>
     public ImageButton( Skin skin ) : this( skin.Get< ImageButtonStyle >() )
     {
         Skin = skin;
@@ -62,8 +62,8 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// Creates a new ImageButton using the supplied <see cref="Skin"/>. The skin
     /// should contain an <see cref="ImageButtonStyle"/> with the specified name.
     /// </summary>
-    /// <param name="skin"></param>
-    /// <param name="styleName"></param>
+    /// <param name="skin"> The skin holding the <see cref="ImageButtonStyle"/>. </param>
+    /// <param name="styleName"> The name of the style to use. </param>
     public ImageButton( Skin skin, string styleName )
         : this( skin.Get< ImageButtonStyle >( styleName ) )
     {
@@ -76,7 +76,7 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// adding that to this button. This drawable will be updated, according to
     /// the button's state, with the correct image in the call to <see cref="SetStyle"/>.
     /// </summary>
-    /// <param name="style"></param>
+    /// <param name="style"> The style to use. </param>
     public ImageButton( ImageButtonStyle style ) : base( style )
     {
         Scene2DImage = new Scene2DImage();
@@ -94,6 +94,9 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// for the image up, down, and checked states. These images will be used to create a new
     /// <see cref="ImageButtonStyle"/> instance, and the button will be created from that.
     /// </summary>
+    /// <param name="imageUp"> The drawable to use for the up state. </param>
+    /// <param name="imageDown"> The drawable to use for the down state. </param>
+    /// <param name="imageChecked"> The drawable to use for the checked state. </param>
     public ImageButton( ISceneDrawable? imageUp,
                         ISceneDrawable? imageDown,
                         ISceneDrawable? imageChecked )
@@ -104,23 +107,26 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// <summary>
     /// Returns the buttons style.
     /// </summary>
+    /// <returns> The buttons style. </returns>
     public override ImageButtonStyle GetStyle() => _style;
-    
+
     /// <summary>
+    /// Sets the style for the <see cref="ImageButton"/> by updating its appearance
+    /// and the associated drawable based on the supplied <see cref="ImageButtonStyle"/>.
     /// </summary>
-    /// <param name="style"></param>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="style">The style to apply to the image button.</param>
+    /// <exception cref="ArgumentException">Thrown if the provided style is invalid or null.</exception>
     public void SetStyle( ImageButtonStyle style )
     {
         _style = style;
-        
+
         base.SetStyle< ButtonStyle >( style );
 
         UpdateImage();
     }
 
     /// <summary>
-    /// Sets the image drawable based on the current button state. The default implementation
+    /// Updates the image drawable based on the current button state. The default implementation
     /// sets the image drawable using <see cref="GetImageDrawable()"/>.
     /// </summary>
     protected void UpdateImage()
@@ -194,8 +200,8 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// Creates a new, empty, <see cref="Scene2DImage"/> drawable instance, with
     /// scaling set to <see cref="Scaling.Fit"/>.
     /// </summary>
-    /// <returns></returns>
-    protected Scene2DImage? NewImage()
+    /// <returns> A new <see cref="Scene2DImage"/> drawable instance. </returns>
+    protected Scene2DImage NewImage()
     {
         return new Scene2DImage( null, Scaling.Fit );
     }
@@ -207,7 +213,7 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
     /// <see cref="Button.ResetTransform(IBatch)"/> if needed.
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch"/> </param>
-    /// <param name="parentAlpha"></param>
+    /// <param name="parentAlpha"> The alpha value of the parent. </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         UpdateImage();

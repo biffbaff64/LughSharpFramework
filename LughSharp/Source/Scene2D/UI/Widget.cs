@@ -45,6 +45,10 @@ namespace LughSharp.Source.Scene2D.UI;
 public class Widget : Actor, ILayout
 {
     /// <summary>
+    /// Indicates whether this widget's layout needs to be recalculated. If set to true,
+    /// the <see cref="Layout"/> method will be invoked during the next validation cycle
+    /// in <see cref="Validate"/> to relayout the widget. This property is automatically
+    /// set to true when <see cref="InvalidateLayout"/> is called.
     /// </summary>
     public bool NeedsLayout { get; set; } = true;
 
@@ -213,32 +217,67 @@ public class Widget : Actor, ILayout
         InvalidateLayout();
     }
 
+    /// <summary>
+    /// Returns the minimum width required for this widget.
+    /// Override this method to define the minimum width for custom widgets.
+    /// </summary>
+    /// <returns>The minimum width of the widget.</returns>
     public virtual float GetMinWidth()
     {
         return GetPrefWidth();
     }
 
+    /// <summary>
+    /// Returns the minimum height required for this widget.
+    /// Override this method to define the minimum height for custom widgets.
+    /// </summary>
+    /// <returns>The minimum height of the widget.</returns>
     public virtual float GetMinHeight()
     {
         return GetPrefHeight();
     }
 
-    public virtual float GetPrefWidth()
-    {
-        return 0;
-    }
-
-    public virtual float GetPrefHeight()
-    {
-        return 0;
-    }
-
+    /// <summary>
+    /// Returns the maximum width required for this widget.
+    /// Override this method to define the maximum width for custom widgets.
+    /// </summary>
+    /// <returns>The maximum width of the widget.</returns>
     public virtual float GetMaxWidth()
     {
         return 0;
     }
 
+    /// <summary>
+    /// Returns the maximum height required for this widget.
+    /// Override this method to define the maximum height for custom widgets.
+    /// </summary>
+    /// <returns>The maximum height of the widget.</returns>
     public virtual float GetMaxHeight()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    /// Calculates and returns the preferred width of the widget. This value is used
+    /// during layout to determine the optimal size for the widget while adhering to
+    /// its layout constraints and content requirements. Subclasses may override this
+    /// method to provide a specific calculation based on their individual behavior and content.
+    /// </summary>
+    /// <returns>
+    /// The preferred width of the widget, expressed as a floating-point value.
+    /// </returns>
+    public virtual float GetPrefWidth()
+    {
+        return 0;
+    }
+
+    /// <summary>
+    /// Returns the preferred height of the widget. This value is typically used to determine
+    /// the desired height of the widget for layout purposes. The value may vary depending
+    /// on the widget's contents, styling, or other attributes.
+    /// </summary>
+    /// <returns>The preferred height of the widget in pixels.</returns>
+    public virtual float GetPrefHeight()
     {
         return 0;
     }

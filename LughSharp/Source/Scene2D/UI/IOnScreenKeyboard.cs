@@ -31,5 +31,15 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public interface IOnScreenKeyboard
 {
+    /// <summary>
+    /// Controls the visibility of the on-screen keyboard.
+    /// </summary>
+    /// <param name="visible">
+    /// A boolean value where true shows the keyboard and false hides it.
+    /// </param>
     void Show( bool visible );
 }
+
+// ============================================================================
+// ============================================================================
+
