@@ -84,16 +84,7 @@ public class Group : Actor, ICullable
         Children.End();
     }
 
-    /// <summary>
-    /// Draws the group and its children.
-    /// <para>
-    /// The default implementation calls <see cref="ApplyTransform(IBatch, Matrix4)"/> if needed,
-    /// then <see cref="DrawChildren(IBatch, float)"/>, then <see cref="ResetTransform(IBatch)"/>
-    /// if needed.
-    /// </para>
-    /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="parentAlpha"></param>
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( Transform )

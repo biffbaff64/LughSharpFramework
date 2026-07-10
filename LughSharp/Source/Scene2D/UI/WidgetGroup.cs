@@ -308,7 +308,7 @@ public class WidgetGroup : Group, ILayout
     /// </para>
     /// </summary>
     /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
-    /// <param name="parentAlpha"> </param>
+    /// <param name="parentAlpha">  </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();

@@ -192,7 +192,7 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
         return _style.FontColor ?? Color.White;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc cref="Button.Draw(IBatch,float)" />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( Label != null )

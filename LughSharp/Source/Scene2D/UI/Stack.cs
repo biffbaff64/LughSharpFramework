@@ -76,7 +76,7 @@ public class Stack : WidgetGroup
     /// <summary>
     /// Returns the preferred width of this Stack.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The preferred width of this Stack. </returns>
     public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
@@ -90,7 +90,7 @@ public class Stack : WidgetGroup
     /// <summary>
     /// Returns the preferred height of this Stack.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The preferred height of this Stack. </returns>
     public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
@@ -104,7 +104,7 @@ public class Stack : WidgetGroup
     /// <summary>
     /// Returns the minimum width of this Stack.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The minimum width of this Stack. </returns>
     public override float GetMinWidth()
     {
         if ( _sizeInvalid )
@@ -118,7 +118,7 @@ public class Stack : WidgetGroup
     /// <summary>
     /// Returns the minimum height of this Stack.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The minimum height of this Stack. </returns>
     public override float GetMinHeight()
     {
         if ( _sizeInvalid )
@@ -132,6 +132,7 @@ public class Stack : WidgetGroup
     /// <summary>
     /// Returns the maximum width of this Stack.
     /// </summary>
+    /// <returns> The maximum width of this Stack. </returns>
     public override float GetMaxWidth()
     {
         if ( _sizeInvalid )
@@ -145,6 +146,7 @@ public class Stack : WidgetGroup
     /// <summary>
     /// Returns the maximum height of this Stack.
     /// </summary>
+    /// <returns> The maximum height of this Stack. </returns>
     public override float GetMaxHeight()
     {
         if ( _sizeInvalid )
@@ -168,6 +170,17 @@ public class Stack : WidgetGroup
         _sizeInvalid = true;
     }
 
+    /// <summary>
+    /// Recalculates and updates the size properties of the stack based on its children's dimensions.
+    /// This includes the preferred, minimum, and maximum widths and heights.
+    /// </summary>
+    /// <remarks>
+    /// This method iterates over all children in the stack, determining their dimensions and
+    /// recalculating the stack's size properties based on the largest values among its children.
+    /// For children implementing the <c>ILayout</c> interface, their layout-specific dimensions
+    /// are considered. For others, the basic width and height are used. Additionally, limits for
+    /// maximum dimensions are adjusted when applicable.
+    /// </remarks>
     private void ComputeSize()
     {
         _sizeInvalid = false;

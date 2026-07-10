@@ -292,16 +292,7 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
         return _style.FontColor ?? Color.White;
     }
 
-    /// <summary>
-    /// Renders the ImageTextButton using the specified drawing batch and alpha transparency.
-    /// </summary>
-    /// <param name="batch">
-    /// The <see cref="IBatch"/> used to draw the button and associated child elements.
-    /// </param>
-    /// <param name="parentAlpha">
-    /// The alpha value inherited from the parent, affecting the overall transparency of
-    /// the button during rendering.
-    /// </param>
+    /// <inheritdoc cref="Button.Draw(IBatch,float)" />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         UpdateImage();

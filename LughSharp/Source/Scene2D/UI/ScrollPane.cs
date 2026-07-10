@@ -725,15 +725,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
         }
     }
 
-    /// <summary>
-    /// Draws the group and its children.
-    /// <para>
-    /// This method overrides the default implementation to call <see cref="WidgetGroup.Validate"/>
-    /// before drawing.
-    /// </para>
-    /// </summary>
-    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
-    /// <param name="parentAlpha"> The parent alpha value. </param>
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( Widget == null )

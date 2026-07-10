@@ -193,10 +193,10 @@ public class ClickListener : InputListener
     /// On the desktop, this event occurs even when no mouse buttons are pressed
     /// (pointer will be -1).
     /// </summary>
-    /// <param name="ev"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="pointer"></param>
+    /// <param name="ev"> The input event containing information about the cursor movement. May be null if not provided. </param>
+    /// <param name="x"> The x-coordinate of the cursor or touch point relative to the actor's origin. </param>
+    /// <param name="y"> The y-coordinate of the cursor or touch point relative to the actor's origin. </param>
+    /// <param name="pointer"> The pointer index of the touch event. </param>
     /// <param name="fromActor"> May be null. </param>
     public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
     {
@@ -211,10 +211,10 @@ public class ClickListener : InputListener
     /// On the desktop, this event occurs even when no mouse buttons are pressed
     /// (pointer will be -1).
     /// </summary>
-    /// <param name="ev"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="pointer"></param>
+    /// <param name="ev"> The input event containing information about the cursor movement. May be null if not provided. </param>
+    /// <param name="x"> The x-coordinate of the cursor or touch point relative to the actor's origin. </param>
+    /// <param name="y"> The y-coordinate of the cursor or touch point relative to the actor's origin. </param>
+    /// <param name="pointer"> The pointer index of the touch event. </param>
     /// <param name="toActor"> May be null. </param>
     /// <see cref="InputEvent "/>
     public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
@@ -241,10 +241,12 @@ public class ClickListener : InputListener
     }
 
     /// <summary>
+    /// Handles click events triggered within the context of a listener.
+    /// Invoked when a click is registered, providing event details and coordinates.
     /// </summary>
-    /// <param name="ev"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="ev">The input event containing information about the click.</param>
+    /// <param name="x">The x-coordinate of the click relative to the target component.</param>
+    /// <param name="y">The y-coordinate of the click relative to the target component.</param>
     public virtual void OnClicked( InputEvent ev, float x, float y )
     {
         _action?.Invoke( ev, x, y );
@@ -254,6 +256,9 @@ public class ClickListener : InputListener
     /// Returns true if the specified position is over the specified
     /// actor or within the tap square.
     /// </summary>
+    /// <param name="actor">The actor to check for position.</param>
+    /// <param name="x"> The x-coordinate of the position relative to the target component. </param>
+    /// <param name="y"> The y-coordinate of the position relative to the target component. </param>
     public bool IsOver( Actor? actor, float x, float y )
     {
         Actor? hit = actor?.Hit( x, y, true );

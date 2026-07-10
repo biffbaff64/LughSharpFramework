@@ -31,6 +31,9 @@ using Rectangle = LughSharp.Source.Maths.Rectangle;
 
 namespace LughSharp.Source.Scene2D.UI;
 
+/// <summary>
+/// Represents a pane that splits the available space into two resizable sections.
+/// </summary>
 [PublicAPI]
 public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
 {
@@ -50,7 +53,6 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     private float           _maxAmount = 1;
     private float           _minAmount;
     private float           _splitAmount = 0.5f;
-    private bool            _vertical;
     private SplitPaneStyle? _style;
 
     // ========================================================================
@@ -58,32 +60,51 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// <summary>
     /// Creates a new SplitPane with the given first and second widgets.
     /// </summary>
-    /// <param name="firstWidget"></param>
-    /// <param name="secondWidget"></param>
-    /// <param name="vertical"></param>
-    /// <param name="skin"></param>
-    public SplitPane( Actor? firstWidget, Actor? secondWidget, bool vertical, Skin skin )
+    /// <param name="firstWidget"> The first widget to be placed in the split pane. </param>
+    /// <param name="secondWidget"> The second widget to be placed in the split pane. </param>
+    /// <param name="isVertical"> Whether the split pane should be split vertically or horizontally. </param>
+    /// <param name="skin"> The skin to use for styling the split pane. </param>
+    public SplitPane( Actor? firstWidget, Actor? secondWidget, bool isVertical, Skin skin )
         : this( firstWidget,
                 secondWidget,
-                vertical,
+                isVertical,
                 skin,
-                $"default-{( vertical ? "vertical" : "horizontal" )}" )
+                $"default-{( isVertical ? "vertical" : "horizontal" )}" )
     {
     }
 
-    public SplitPane( Actor? firstWidget, Actor? secondWidget, bool vertical, Skin skin, string styleName )
+    /// <summary>
+    /// Creates a new SplitPane with the given first and second widgets, a flag to
+    /// indicate whether the split pane should be split vertically or horizontally,
+    /// and a skin to use for styling the split pane.
+    /// </summary>
+    /// <param name="firstWidget"> The first widget to be placed in the split pane. </param>
+    /// <param name="secondWidget"> The second widget to be placed in the split pane. </param>
+    /// <param name="isVertical"> Whether the split pane should be split vertically or horizontally. </param>
+    /// <param name="skin"> The skin to use for styling the split pane. </param>
+    /// <param name="styleName"> The name of the style to use for styling the split pane. </param>
+    public SplitPane( Actor? firstWidget, Actor? secondWidget, bool isVertical, Skin skin, string styleName )
         : this( firstWidget,
                 secondWidget,
-                vertical,
+                isVertical,
                 skin.Get< SplitPaneStyle >( styleName ) )
     {
     }
 
-    public SplitPane( Actor? firstWidget, Actor? secondWidget, bool vertical, SplitPaneStyle style )
+    /// <summary>
+    /// Creates a new SplitPane with the given first and second widgets, a flag to
+    /// indicate whether the split pane should be split vertically or horizontally,
+    /// and a <see cref="SplitPaneStyle"/> to use for styling the split pane.
+    /// </summary>
+    /// <param name="firstWidget"> The first widget to be placed in the split pane. </param>
+    /// <param name="secondWidget"> The second widget to be placed in the split pane. </param>
+    /// <param name="isVertical"> Whether the split pane should be split vertically or horizontally. </param>
+    /// <param name="style"> The <see cref="SplitPaneStyle"/> to use for styling the split pane. </param>
+    public SplitPane( Actor? firstWidget, Actor? secondWidget, bool isVertical, SplitPaneStyle style )
     {
         Guard.Against.Null( style );
 
-        _vertical = vertical;
+        Orientation = isVertical;
 
         SetStyle( style );
 
@@ -100,6 +121,11 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// </summary>
     public override float GetPrefWidth() => GetPrefWidthUnchecked();
 
+    /// <summary>
+    /// Returns the preferred width of this actor. This method is non-virtual and is
+    /// intended for calling from constructors.
+    /// </summary>
+    /// <returns>The preferred width of this actor.</returns>
     private float GetPrefWidthUnchecked()
     {
         float first = _firstWidget switch
@@ -116,7 +142,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
                            var _          => _secondWidget.GetWidth()
                        };
 
-        if ( _vertical )
+        if ( Orientation )
         {
             return Math.Max( first, second );
         }
@@ -129,9 +155,14 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// <summary>
     /// Returns the preferred height of this actor.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The preferred height of this actor.</returns>
     public override float GetPrefHeight() => GetPrefHeightUnchecked();
 
+    /// <summary>
+    /// Returns the preferred height of this actor. This method is non-virtual and is
+    /// intended for calling from constructors.
+    /// </summary>
+    /// <returns>The preferred height of this actor.</returns>
     private float GetPrefHeightUnchecked()
     {
         float first = _firstWidget switch
@@ -148,7 +179,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
                            var _          => _secondWidget.GetHeight()
                        };
 
-        if ( !_vertical )
+        if ( !Orientation )
         {
             return Math.Max( first, second );
         }
@@ -161,13 +192,13 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// <summary>
     /// Returns the minimum width of this actor.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The minimum width. </returns>
     public override float GetMinWidth()
     {
         float first  = _firstWidget is ILayout layout ? layout.GetMinWidth() : 0;
         float second = _secondWidget is ILayout widget ? widget.GetMinWidth() : 0;
 
-        if ( _vertical )
+        if ( Orientation )
         {
             return Math.Max( first, second );
         }
@@ -180,13 +211,13 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// <summary>
     /// Returns the minimum height of this actor.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The minimum height. </returns>
     public override float GetMinHeight()
     {
         float first  = _firstWidget is ILayout layout ? layout.GetMinHeight() : 0;
         float second = _secondWidget is ILayout widget ? widget.GetMinHeight() : 0;
 
-        if ( !_vertical )
+        if ( !Orientation )
         {
             return Math.Max( first, second );
         }
@@ -196,26 +227,32 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         return first + handleMinHeight + second;
     }
 
+    /// <summary>
+    /// Gets the <see cref="SplitPaneStyle"/> used for styling the split pane.
+    /// </summary>
+    /// <returns> The <see cref="SplitPaneStyle"/> used for styling the split pane. </returns>
+    /// <exception cref="NullReferenceException"> Thrown if the style is null. </exception>
     public SplitPaneStyle GetStyle()
     {
         return _style ?? throw new NullReferenceException( "Style cannot be null." );
     }
 
+    /// <summary>
+    /// Sets the <see cref="SplitPaneStyle"/> used for styling the split pane.
+    /// </summary>
+    /// <param name="value"> The <see cref="SplitPaneStyle"/> used for styling the split pane. </param>
     public void SetStyle( SplitPaneStyle value )
     {
         _style = value;
         InvalidateHierarchy();
     }
 
-    /// <summary>
-    /// Positions and sizes children of the table using the cell associated with each child.
-    /// The values given are the position within the parent and size of the table.
-    /// </summary>
+    /// <inheritdoc />
     public override void Layout()
     {
         ClampSplitAmount();
 
-        if ( !_vertical )
+        if ( !Orientation )
         {
             CalculateHorizBoundsAndPositions();
         }
@@ -255,22 +292,33 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         }
     }
 
-    public void SetVertical( bool vertical )
+    /// <summary>
+    /// The orientation of the split pane.
+    /// If TRUE, orientation is vertical; otherwise, orientation is horizontal.
+    /// </summary>
+    public bool Orientation
     {
-        if ( _vertical == vertical )
+        // Returns the orientation of the split pane.
+        get;
+        // Sets the vertical orientation of the split pane. If the current orientation
+        // matches the new orientation, this method does nothing.
+        private set
         {
-            return;
+            if ( field == value )
+            {
+                return;
+            }
+
+            field = value;
+            InvalidateHierarchy();
         }
-
-        _vertical = vertical;
-        InvalidateHierarchy();
     }
 
-    public bool IsVertical()
-    {
-        return _vertical;
-    }
-
+    /// <summary>
+    /// Calculates the horizontal bounds and positions of the handle, first widget,
+    /// and second widget within the split pane based on the current split amount
+    /// and styling properties.
+    /// </summary>
     private void CalculateHorizBoundsAndPositions()
     {
         Guard.Against.Null( _style );
@@ -289,6 +337,12 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         HandleBounds.Set( leftAreaWidth, 0, handleWidth, height );
     }
 
+    /// <summary>
+    /// Calculates the vertical bounds and positions of the widgets and handle within the SplitPane.
+    /// </summary>
+    /// This method determines the layout dimensions for the first and second widgets, as well as the handle,
+    /// based on the current split amount and dimensions of the SplitPane. It ensures that all components are
+    /// correctly positioned and sized within the pane.
     private void CalculateVertBoundsAndPositions()
     {
         Guard.Against.Null( _style );
@@ -308,6 +362,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         HandleBounds.Set( 0, bottomAreaHeight, width, handleHeight );
     }
 
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Stage? stage = GetStage();
@@ -359,9 +414,13 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     }
 
     /// <summary>
+    /// Sets the split amount for the split pane, determining the relative size of
+    /// the first and second widgets.
     /// </summary>
     /// <param name="splitAmount">
-    /// The split amount between the min and max amount. This parameter is clamped during layout.
+    /// The split amount as a floating-point value. This determines the division of
+    /// space between the widgets and is clamped during layout to ensure it remains
+    /// within the allowable range.
     /// </param>
     public void SetSplitAmount( float splitAmount )
     {
@@ -369,6 +428,10 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         InvalidateLayout();
     }
 
+    /// <summary>
+    /// Gets the split amount for the split pane.
+    /// </summary>
+    /// <returns> The split amount as a floating-point value. </returns>
     public float GetSplitAmount()
     {
         return _splitAmount;
@@ -385,7 +448,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     {
         float effectiveMinAmount = _minAmount, effectiveMaxAmount = _maxAmount;
 
-        if ( _vertical )
+        if ( Orientation )
         {
             float styleHandleMinWidth = _style?.Handle?.MinHeight ?? 0;
             float availableHeight     = GetHeight() - styleHandleMinWidth;
@@ -430,11 +493,20 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         }
     }
 
+    /// <summary>
+    /// Gets the minimum split amount for the split pane.
+    /// </summary>
+    /// <returns> The minimum split amount as a floating-point value. </returns>
     public float GetMinSplitAmount()
     {
         return _minAmount;
     }
 
+    /// <summary>
+    /// Sets the minimum split amount for the split pane.
+    /// </summary>
+    /// <param name="minAmount"> The minimum split amount as a floating-point value. </param>
+    /// <exception cref="RuntimeException"> Thrown if the minimum split amount is outside the valid range. </exception>
     public void SetMinSplitAmount( float minAmount )
     {
         if ( minAmount is < 0 or > 1 )
@@ -445,11 +517,20 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         _minAmount = minAmount;
     }
 
+    /// <summary>
+    /// Gets the maximum split amount for the split pane.
+    /// </summary>
+    /// <returns> The maximum split amount as a floating-point value. </returns>
     public float GetMaxSplitAmount()
     {
         return _maxAmount;
     }
 
+    /// <summary>
+    /// Sets the maximum split amount for the split pane.
+    /// </summary>
+    /// <param name="maxAmount"> The maximum split amount as a floating-point value. </param>
+    /// <exception cref="RuntimeException"> Thrown if the maximum split amount is outside the valid range. </exception>
     public void SetMaxSplitAmount( float maxAmount )
     {
         if ( maxAmount is < 0 or > 1 )
@@ -460,6 +541,14 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         _maxAmount = maxAmount;
     }
 
+    /// <summary>
+    /// Sets the first widget in the SplitPane. If a widget is already set, it will be
+    /// removed before the new widget is added.
+    /// </summary>
+    /// <param name="widget">
+    /// The widget to be set as the first widget in the SplitPane. Can be null to clear
+    /// the current widget.
+    /// </param>
     public void SetFirstWidget( Actor? widget )
     {
         if ( _firstWidget != null )
@@ -477,6 +566,13 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         InvalidateLayout();
     }
 
+    /// <summary>
+    /// Sets the second widget of the split pane, replacing any existing second widget.
+    /// </summary>
+    /// <param name="widget">
+    /// The widget to set as the second widget. If null, any existing second widget
+    /// will be removed.
+    /// </param>
     public void SetSecondWidget( Actor? widget )
     {
         if ( _secondWidget != null )
@@ -494,6 +590,12 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         InvalidateLayout();
     }
 
+    /// <summary>
+    /// Removes the specified actor from the split pane.
+    /// </summary>
+    /// <param name="actor">The actor to be removed from the split pane.</param>
+    /// <returns>Returns true if the removal is successful; otherwise, returns false.</returns>
+    /// <exception cref="ArgumentException">Thrown when the provided actor is null.</exception>
     public bool RemoveActor( Actor actor )
     {
         if ( actor == null )
@@ -513,6 +615,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         return true;
     }
 
+    /// <inheritdoc />
     public override bool RemoveActor( Actor actor, bool unfocus )
     {
         if ( actor == null )
@@ -541,6 +644,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         return false;
     }
 
+    /// <inheritdoc />
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         Actor? actor = base.RemoveActorAt( index, unfocus );
@@ -564,6 +668,10 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         return actor;
     }
 
+    /// <summary>
+    /// Determines whether the cursor is currently positioned over the handle of the split pane.
+    /// </summary>
+    /// <returns>True if the cursor is over the handle; otherwise, false.</returns>
     public bool IsCursorOverHandle()
     {
         return CursorOverHandle;
@@ -572,17 +680,29 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Processes and handles user input events for a <see cref="SplitPane"/> widget.
+    /// Enables interaction with the split bar, allowing users to resize the sections
+    /// of the pane by dragging the handle.
+    /// </summary>
     [PublicAPI]
     public class SplitPaneInputListener : InputListener
     {
         private readonly SplitPane _parent;
         private          int       _draggingPointer = -1;
 
+        /// <summary>
+        /// Processes and handles user input events for a <see cref="SplitPane"/> widget.
+        /// Enables interaction with the split bar, allowing users to adjust the size
+        /// of the sections by dragging the handle.
+        /// </summary>
+        /// <param name="parent">The parent <see cref="SplitPane"/> widget.</param>
         public SplitPaneInputListener( SplitPane parent )
         {
             _parent = parent;
         }
 
+        /// <inheritdoc />
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _draggingPointer != -1 )
@@ -608,6 +728,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             return false;
         }
 
+        /// <inheritdoc />
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( pointer == _draggingPointer )
@@ -616,6 +737,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             }
         }
 
+        /// <inheritdoc />
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             if ( pointer != _draggingPointer )
@@ -626,7 +748,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             ISceneDrawable handle = _parent.GetStyle().Handle
                                  ?? throw new NullReferenceException( "Handle cannot be null." );
 
-            if ( !_parent._vertical )
+            if ( !_parent.Orientation )
             {
                 float delta      = x - _parent.LastPoint.X;
                 float availWidth = _parent.GetWidth() - handle.MinWidth;
@@ -664,9 +786,6 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             return false;
         }
     }
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ============================================================================

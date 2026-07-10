@@ -462,7 +462,17 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
         return _style.Up;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Renders the button using the provided batch with the specified parent alpha
+    /// transparency. This method handles the visual representation of the button, its
+    /// state (e.g., pressed, checked, or disabled), and any background or offset
+    /// configurations.
+    /// </summary>
+    /// <param name="batch">The batch used for drawing the button and its components.</param>
+    /// <param name="parentAlpha">
+    /// The alpha transparency value inherited from the parent, used to apply overall
+    /// transparency to the button.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();

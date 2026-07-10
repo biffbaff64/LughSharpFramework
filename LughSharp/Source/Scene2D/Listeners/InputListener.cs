@@ -52,6 +52,7 @@ public class InputListener : IEventListener
     /// so it will receive all touch dragged events until the next touch up event.
     /// </para>
     /// </summary>
+    /// <param name="e"> The input event containing information about the mouse movement.</param>
     public virtual bool Handle( Event e )
     {
         if ( e is not InputEvent inputEvent )
@@ -138,6 +139,11 @@ public class InputListener : IEventListener
     /// over this actor, until touchUp is received. Also when true is returned,
     /// the event is handled by <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <param name="ev">The input event containing information about the mouse movement.</param>
+    /// <param name="x"> The x-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="y"> The y-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="ptr"> The pointer index of the touch event.</param>
+    /// <param name="button"> The button index of the touch event.</param>
     public virtual bool OnTouchDown( InputEvent? ev, float x, float y, int ptr, int button )
     {
         return false;
@@ -148,6 +154,11 @@ public class InputListener : IEventListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <param name="ev">The input event containing information about the mouse movement.</param>
+    /// <param name="x"> The x-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="y"> The y-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="ptr"> The pointer index of the touch event.</param>
+    /// <param name="button"> The button index of the touch event.</param>
     public virtual void OnTouchUp( InputEvent? ev, float x, float y, int ptr, int button )
     {
     }
@@ -157,6 +168,10 @@ public class InputListener : IEventListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <param name="inputEvent">The input event containing information about the mouse movement.</param>
+    /// <param name="x"> The x-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="y"> The y-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="pointer"> The pointer index of the touch event.</param>
     public virtual void OnTouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
     {
     }
@@ -166,6 +181,9 @@ public class InputListener : IEventListener
     /// only occurs on the desktop. When true is returned, the event is handled
     /// by <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <param name="inputEvent">The input event containing information about the mouse movement.</param>
+    /// <param name="x"> The x-coordinate of the mouse movement relative to the target component.</param>
+    /// <param name="y"> The y-coordinate of the mouse movement relative to the target component.</param>
     public virtual bool OnMouseMoved( InputEvent? inputEvent, float x, float y )
     {
         return false;
@@ -200,10 +218,21 @@ public class InputListener : IEventListener
     }
 
     /// <summary>
-    /// Called when the mouse wheel has been scrolled. When true is returned,
-    /// the event is handled in <see cref="Event.SetHandled"/>.
+    /// Handles scrolling events triggered within the actor's bounds.
+    /// <para>
+    /// This method is invoked when a scroll wheel or similar input device is used. It provides details about
+    /// the scroll amount along both the X and Y axes, as well as the x and y coordinates where the scroll event occurred.
+    /// </para>
     /// </summary>
-    public virtual bool OnScrolled( InputEvent? ev , float x, float y, float amountX, float amountY )
+    /// <param name="ev">The input event containing information about the scroll action. May be null if not provided.</param>
+    /// <param name="x">The x-coordinate of the pointer when the scroll occurred, relative to the actor's origin.</param>
+    /// <param name="y">The y-coordinate of the pointer when the scroll occurred, relative to the actor's origin.</param>
+    /// <param name="amountX">The amount scrolled along the X-axis.</param>
+    /// <param name="amountY">The amount scrolled along the Y-axis.</param>
+    /// <returns>
+    /// True if the scroll event was handled successfully, otherwise false.
+    /// </returns>
+    public virtual bool OnScrolled( InputEvent? ev, float x, float y, float amountX, float amountY )
     {
         return false;
     }
@@ -212,6 +241,8 @@ public class InputListener : IEventListener
     /// Called when a key goes down. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <param name="ev">The input event containing information about the key press. May be null if not provided.</param>
+    /// <param name="keycode">The keycode of the key that was pressed.</param>
     public virtual bool OnKeyDown( InputEvent? ev, int keycode )
     {
         return false;
@@ -221,6 +252,8 @@ public class InputListener : IEventListener
     /// Called when a key goes up. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
+    /// <param name="ev">The input event containing information about the key press. May be null if not provided.</param>
+    /// <param name="keycode">The keycode of the key that was pressed.</param>
     public virtual bool OnKeyUp( InputEvent? ev, int keycode )
     {
         return false;

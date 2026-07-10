@@ -74,8 +74,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// Creates a select box with a <see cref="SelectBoxStyle"/> from the provided skin
     /// and style name, which defaults to "default".
     /// </summary>
-    /// <param name="skin"></param>
-    /// <param name="styleName"></param>
+    /// <param name="skin"> The skin to use for the select box. </param>
+    /// <param name="styleName"> The name of the style to use for the select box. </param>
     public SelectBox( Skin skin, string styleName = "default" )
         : this( skin.Get< SelectBoxStyle >( styleName ) )
     {
@@ -85,7 +85,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// Creates a select box with the provided style. Also initialises the <see cref="SelectBoxScrollPane"/>
     /// and <see cref="SelectBoxClickListener"/>.
     /// </summary>
-    /// <param name="style"></param>
+    /// <param name="style"> The <see cref="SelectBoxStyle"/> to use for the select box. </param>
     public SelectBox( SelectBoxStyle style )
     {
         SetStyle( style );
@@ -107,7 +107,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// Sets the stage this select box should be added to. If null, the selectbox
     /// will be hidden.
     /// </summary>
-    /// <param name="stage"></param>
+    /// <param name="stage"> The <see cref="Stage"/> to add the select box to. </param>
     public override void SetStage( Stage? stage )
     {
         if ( stage == null )
@@ -130,7 +130,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Sets the <see cref="SelectBoxStyle"/> to use for this select box.
     /// </summary>
-    /// <param name="style"></param>
+    /// <param name="style"> The <see cref="SelectBoxStyle"/> to use for the select box. </param>
     public void SetStyle( SelectBoxStyle style )
     {
         _style = new SelectBoxStyle
@@ -176,6 +176,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Set the backing List that makes up the choices available in the SelectBox
     /// </summary>
+    /// <param name="newItems"> The new backing List that makes up the choices available in the SelectBox. </param>
     public void SetItems( T[] newItems )
     {
         Guard.Against.Null( ScrollPane );
@@ -199,6 +200,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Sets the items visible in the select box.
     /// </summary>
+    /// <param name="newItems"> The new items visible in the select box. </param>
     public void SetItems( List< T > newItems )
     {
         SetItems( newItems.ToArray() );
@@ -292,10 +294,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// 
+    /// Renders the select box, including its background and contents, using the provided
+    /// batch and applying the parent's alpha transparency.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="parentAlpha"></param>
+    /// <param name="batch">The batch used to draw the select box.</param>
+    /// <param name="parentAlpha">The alpha value of the parent, applied to the select box for transparency.</param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -330,6 +333,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         }
     }
 
+    /// <summary>
+    /// Renders a single item of the select box using the specified batch, font, and positional parameters.
+    /// </summary>
+    /// <param name="batch">The batch used for drawing the item.</param>
+    /// <param name="font">The font used to render the item's text.</param>
+    /// <param name="item">The item to be drawn.</param>
+    /// <param name="x">The x-coordinate where the item will be drawn.</param>
+    /// <param name="y">The y-coordinate where the item will be drawn.</param>
+    /// <param name="width">The width available for rendering the item's text.</param>
     protected void DrawItem( IBatch batch, BitmapFont font, T item, float x, float y, float width )
     {
         string str = ToString( item );
@@ -380,7 +392,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// and <see cref="SetAlignment(Align)"/> to set the alignment in the list shown when the
     /// select box is open.
     /// </summary>
-    /// <param name="alignment"> See <see cref="Align"/>. </param>
+    /// <param name="alignment"> The <see cref="Align"/>ment of the selected item in the select box. </param>
     public void SetAlignment( Align alignment )
     {
         //TODO: Property?
@@ -410,6 +422,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// Sets the selection to only the passed item, if it is a possible
     /// choice, else selects the first item.
     /// </summary>
+    /// <param name="item"> The item to be selected. </param>
     public void SetSelected( T item )
     {
         if ( Items.Contains( item ) )
@@ -440,6 +453,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Sets the selection to only the selected index.
     /// </summary>
+    /// <param name="index"> The index of the item to be selected. </param>
     public void SetSelectedIndex( int index )
     {
         if ( index < 0 || index >= Items.Count )
@@ -453,6 +467,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Disables the select box if the provided boolean is true, otherwise enables it.
     /// </summary>
+    /// <param name="disabled"> Whether to disable the select box. </param>
     public void SetDisabled( bool disabled )
     {
         if ( disabled && !IsDisabled )
@@ -487,8 +502,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Scene2D Actions to perform when the specified select box is first shown.
     /// </summary>
-    /// <param name="selectBox"></param>
-    /// <param name="below"></param>
+    /// <param name="selectBox"> The select box being shown. </param>
+    /// <param name="below"> Whether the select box is shown below the actor. </param>
     protected void OnShow( Actor selectBox, bool below )
     {
         // Sets the fade in starting point to the current alpha value.
@@ -500,7 +515,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Scene2D Actions to perform when the specified select box is hidden.
     /// </summary>
-    /// <param name="selectBox"></param>
+    /// <param name="selectBox"> The select box being hidden. </param>
     protected void OnHide( Actor selectBox )
     {
         // Sets the fade out starting point to the current alpha value.
@@ -561,6 +576,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// method is a wrapper for <see cref="GetPrefWidth()"/>, and is provided to
     /// allow calling safely from constructors.
     /// </summary>
+    /// <returns> The preferred width of the select box. </returns>
     public float GetPrefWidthUnchecked()
     {
         return GetPrefWidth();
@@ -571,6 +587,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// method is a wrapper for <see cref="GetPrefHeight()"/>, and is provided to
     /// allow calling safely from constructors.
     /// </summary>
+    /// <returns> The preferred height of the select box. </returns>
     private float GetPrefHeightUnchecked()
     {
         return GetPrefHeight();
@@ -581,7 +598,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// a wrapper for <see cref="Actor.GetWidth()"/>, and is provided to allow calling
     /// safely from constructors.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The width of the select box. </returns>
     private float GetWidthUnchecked()
     {
         return GetWidth();
@@ -592,7 +609,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// a wrapper for <see cref="Actor.GetHeight()"/>, and is provided to allow calling
     /// safely from constructors.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The height of the select box. </returns>
     public float GetHeightUnchecked()
     {
         return GetHeight();
@@ -601,6 +618,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// When true the pref width is based on the selected item.
     /// </summary>
+    /// <param name="selectedPrefWidth"> Whether the pref width is based on the selected item. </param>
     public void SetSelectedPrefWidth( bool selectedPrefWidth )
     {
         _selectedPrefWidth = selectedPrefWidth;
@@ -652,6 +670,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         return ScrollPane?.ListBox ?? throw new RuntimeException( "No ListBox available!" );
     }
 
+    /// <summary>
+    /// Returns the string representation of the given item.
+    /// </summary>
+    /// <param name="item"> The item to convert to a string. </param>
+    /// <returns> The string representation of the item. </returns>
     protected string ToString( T item )
     {
         if ( item is string str )
@@ -684,6 +707,12 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         // ====================================================================
 
+        /// <summary>
+        /// Represents a scroll pane specifically designed to display and manage the dropdown
+        /// list of items for a <see cref="SelectBox{T}"/>. This scroll pane prevents overscrolling
+        /// and disables fading and horizontal scrolling to align with the behavior expected in a dropdown.
+        /// </summary>
+        /// <typeparam name="T">The type of the items contained in the parent <see cref="SelectBox{T}"/>.</typeparam>
         public SelectBoxScrollPane( SelectBox< T > parent ) : base( null, parent._style.ScrollPaneStyle )
         {
             ParentSelectBox = parent;
@@ -706,6 +735,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             AddListener( new SelectBoxScrollPaneInputListener( this ) );
         }
 
+        /// <summary>
+        /// Displays the dropdown list in the select box, positioning it above or below
+        /// the select box based on available space and configuration.
+        /// </summary>
+        /// <param name="stage">The stage to which the select box and its elements are added.</param>
         public void Show( Stage stage )
         {
             if ( ListBox.IsTouchable() )
@@ -821,6 +855,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             ParentSelectBox.OnShow( this, below );
         }
 
+        /// <summary>
+        /// Hides the <see cref="ScrollPane"/> associated with the <see cref="SelectBox{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// This method disables user interaction with the list box by setting its touchable state to
+        /// <see cref="Touchable.Disabled"/> and ensures the scroll pane is hidden from its parent
+        /// context. Any actions associated with the scroll pane are cleared, and the parent
+        /// <see cref="SelectBox{T}"/> is notified of the hide operation.
+        /// </remarks>
         public void Hide()
         {
             if ( !ListBox.IsTouchable() || !HasParent() )
@@ -858,6 +901,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         private readonly Vector2 _drawTemp = new();
 
+        /// <summary>
+        /// Renders the contents of the select box scroll pane using the provided batch
+        /// and adjusts its transparency based on the parent alpha. If the scroll pane's
+        /// position on the stage has significantly changed, the scroll pane will be hidden.
+        /// </summary>
+        /// <param name="batch">The batch used for rendering.</param>
+        /// <param name="parentAlpha">
+        /// The transparency value inherited from the parent, affecting the rendering opacity.
+        /// </param>
         public override void Draw( IBatch batch, float parentAlpha )
         {
             ParentSelectBox.LocalToStageCoordinates( _drawTemp.Set( 0, 0 ) );
@@ -873,12 +925,19 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             base.Draw( batch, parentAlpha );
         }
 
+        /// <summary>
+        /// Handles all actions attached to this actor.
+        /// </summary>
+        /// <param name="delta"> Time in seconds since the last update. </param>
         public override void Act( float delta )
         {
             base.Act( delta );
             BringToFront();
         }
 
+        /// <summary>
+        /// Sets the stage for this groups actors to act upon.
+        /// </summary>
         public override void SetStage( Stage? stage )
         {
             Stage? oldStage = GetStage();
@@ -909,6 +968,12 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         // ====================================================================
 
+        /// <summary>
+        /// Represents a specialized extension of the <see cref="ArraySelection{T}"/> class that is tailored
+        /// for use within the <see cref="SelectBox{T}"/> widget. This selection functionality provides
+        /// behavior specifically integrated with the SelectBox, leveraging the widget's list of items for
+        /// selection operations.
+        /// </summary>
         public SelectBoxArraySelection( SelectBox< T > parent, List< T > array )
             : base( array )
         {
@@ -1015,11 +1080,23 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         private readonly SelectBoxScrollPane _parent;
 
+        /// <summary>
+        /// Handles click interactions for the <see cref="SelectBoxScrollPane"/>.
+        /// </summary>
+        /// <param name="parent">
+        /// The parent <see cref="SelectBoxScrollPane"/> to which this click listener is associated.
+        /// </param>
         public SelectBoxScrollPaneClickListener( SelectBoxScrollPane parent )
         {
             _parent = parent;
         }
 
+        /// <summary>
+        /// Handles the click event triggered by a user interaction within the select box scroll pane.
+        /// </summary>
+        /// <param name="ev">The input event associated with the click action, or null if not applicable.</param>
+        /// <param name="x">The x-coordinate of the click event relative to the scroll pane.</param>
+        /// <param name="y">The y-coordinate of the click event relative to the scroll pane.</param>
         public override void OnClicked( InputEvent? ev, float x, float y )
         {
             T? selected = _parent.ListBox.GetSelected();
@@ -1033,6 +1110,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             }
         }
 
+        /// <summary>
+        /// Called any time the mouse is moved when a button is not down. This event
+        /// only occurs on the desktop. When true is returned, the event is handled
+        /// by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             int index = _parent.ListBox.GetItemIndexAt( y );
@@ -1068,11 +1150,27 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         private readonly SelectBoxScrollPane _parent;
 
+        /// <summary>
+        /// Handles input events for a <see cref="SelectBoxScrollPane"/> to enable interactive behaviors.
+        /// </summary>
+        /// <param name="parent">
+        /// The parent <see cref="SelectBoxScrollPane"/> to which this listener is attached.
+        /// </param>
         public SelectBoxScrollPaneInputListener( SelectBoxScrollPane parent )
         {
             _parent = parent;
         }
 
+        /// <summary>
+        /// Called any time the mouse cursor or a finger touch is moved out of an actor.
+        /// On the desktop, this event occurs even when no mouse buttons are pressed
+        /// (pointer will be -1).
+        /// </summary>
+        /// <param name="ev"> The input event. </param>
+        /// <param name="x"> The x coordinate of the mouse cursor or touch. </param>
+        /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
+        /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
+        /// <param name="toActor"> The actor that the mouse cursor or touch is exiting. </param>
         public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
             if ( ( toActor == null ) || !_parent.IsAscendantOf( toActor ) )
@@ -1102,11 +1200,26 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         private readonly SelectBoxScrollPane _parent;
 
+        /// <summary>
+        /// Listener to handle hiding behavior for the <see cref="SelectBoxScrollPane"/>.
+        /// This class provides custom input handling to determine when to hide the scroll pane.
+        /// </summary>
+        /// <param name="parent">
+        /// The parent <see cref="SelectBoxScrollPane"/> instance to which this listener is attached.
+        /// </param>
         public SelectBoxScrollPaneHideListener( SelectBoxScrollPane parent )
         {
             _parent = parent;
         }
 
+        /// <summary>
+        /// Called when a mouse button or a finger touch goes down on the actor.
+        /// If true is returned, this listener will have
+        /// <see cref="Stage.AddTouchFocus(IEventListener, Actor, Actor, int, int)"/>,
+        /// so it will receive all touchDragged and touchUp events, even those not
+        /// over this actor, until touchUp is received. Also when true is returned,
+        /// the event is handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             Actor? target = ev?.TargetActor;
@@ -1122,6 +1235,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             return false;
         }
 
+        /// <summary>
+        /// Called when a key goes down. When true is returned, the event is
+        /// handled by <see cref="Event.SetHandled"/>.
+        /// </summary>
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             switch ( keycode )
@@ -1148,7 +1265,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             return false;
         }
     }
-
-    // ========================================================================
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================
+

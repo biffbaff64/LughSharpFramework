@@ -206,14 +206,7 @@ public class ImageButton : Button, IStyleable< ImageButtonStyle >
         return new Scene2DImage( null, Scaling.Fit );
     }
 
-    /// <summary>
-    /// Draws the group and its children. The default implementation calls
-    /// <see cref="Group.ApplyTransform(LughSharp.Source.Graphics.G2D.IBatch,Matrix4)"/> if
-    ///  needed, then <see cref="Button.DrawChildren(IBatch, float)"/>, followed by
-    /// <see cref="Button.ResetTransform(IBatch)"/> if needed.
-    /// </summary>
-    /// <param name="batch"> The <see cref="IBatch"/> </param>
-    /// <param name="parentAlpha"> The alpha value of the parent. </param>
+    /// <inheritdoc cref="Button.Draw(IBatch,float)" />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         UpdateImage();

@@ -114,7 +114,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Sets the style to use for this tree.
     /// </summary>
-    /// <param name="style"></param>
+    /// <param name="style"> The style to use for this tree. </param>
     public void SetStyle( TreeStyle style )
     {
         Style = style;
@@ -129,7 +129,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Adds a node to the tree.
     /// </summary>
-    /// <param name="node"></param>
+    /// <param name="node"> The node to add to the tree. </param>
     public void AddNode( TNode node )
     {
         Insert( RootNodes.Count, node );
@@ -138,8 +138,8 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Inserts a node at the specified index.
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="node"></param>
+    /// <param name="index"> The index at which to insert the node. </param>
+    /// <param name="node"> The node to insert into the tree. </param>
     public void Insert( int index, TNode node )
     {
         int actorIndex;
@@ -199,7 +199,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Removes the specified node from the tree.
     /// </summary>
-    /// <param name="node"></param>
+    /// <param name="node"> The node to remove from the tree. </param>
     public void Remove( TNode node )
     {
         if ( node.Parent != null )
@@ -225,6 +225,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// <summary>
     /// Removes all nodes from the tree.
     /// </summary>
+    /// <param name="unfocus"> Whether to unfocus the tree after clearing its children. </param>
     public override void ClearChildren( bool unfocus = true )
     {
         base.ClearChildren( unfocus );
@@ -276,8 +277,15 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Calculates the preferred size of the tree by determining the required width and height
+    /// based on its content and configuration, such as indentation, spacing, and padding.
     /// </summary>
+    /// <remarks>
+    /// This method sets the internal `_prefWidth` and `_prefHeight`, which are used to define
+    /// the size of the tree. It processes the tree's root nodes and any child nodes recursively
+    /// to compute the total dimensions. Additionally, it ensures any cached dimensions are
+    /// re-evaluated when invalidated.
+    /// </remarks>
     private void ComputeSize()
     {
         _sizeInvalid = false;
@@ -290,11 +298,15 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Calculates the preferred size of the tree, including width and height,
+    /// based on its root nodes, spacing, and padding values.
+    /// This method ensures that the tree's layout dimensions are correctly
+    /// updated and takes into account the presence of child nodes and their
+    /// expansion states.
     /// </summary>
-    /// <param name="nodes"></param>
-    /// <param name="indent"></param>
-    /// <param name="plusMinusWidth"></param>
+    /// <param name="nodes"> The list of root nodes to compute the size for. </param>
+    /// <param name="indent"> The current indentation level for the nodes. </param>
+    /// <param name="plusMinusWidth"> The width of the plus/minus icons. </param>
     private void ComputeSize( List< TNode > nodes, float indent, float plusMinusWidth )
     {
         float ySpacing = YSpacing;
@@ -338,8 +350,13 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Positions and sizes children of the table using the cell associated with each child.
+    /// The values given are the position within the parent and size of the table.
     /// </summary>
+    /// <remarks>
+    /// This method overrides the base method to call <see cref="ComputeSize()"/> if
+    /// <see cref="_sizeInvalid"/> is true.
+    /// </remarks>
     public override void Layout()
     {
         if ( _sizeInvalid )
@@ -351,13 +368,14 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Arranges and positions the nodes in the tree layout recursively, taking into account
+    /// spacing, indentation, and node states (expanded or collapsed).
     /// </summary>
-    /// <param name="nodes"></param>
-    /// <param name="indent"></param>
-    /// <param name="y"></param>
-    /// <param name="plusMinusWidth"></param>
-    /// <returns></returns>
+    /// <param name="nodes">The list of nodes to be laid out.</param>
+    /// <param name="indent">The current horizontal indentation level for child nodes.</param>
+    /// <param name="y">The starting vertical coordinate for layout calculation.</param>
+    /// <param name="plusMinusWidth">The width allocated for the expand/collapse icon.</param>
+    /// <returns>The updated vertical position after laying out all nodes.</returns>
     private float Layout( List< TNode > nodes, float indent, float y, float plusMinusWidth )
     {
         float ySpacing        = YSpacing;
@@ -399,7 +417,15 @@ public class Tree< TNode, TValue > : WidgetGroup
         return y;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Draws the group and its children.
+    /// <para>
+    /// This method overrides the default implementation to call <see cref="WidgetGroup.Validate"/>
+    /// before drawing.
+    /// </para>
+    /// </summary>
+    /// <param name="batch"> The <see cref="IBatch"/> to use. </param>
+    /// <param name="parentAlpha"> The alpha value of the parent widget. </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         DrawBackground( batch, parentAlpha );
@@ -427,13 +453,14 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Renders the visual representation of the tree, including its background,
+    /// root nodes, and node actors. This method is overridden to handle custom
+    /// drawing logic for the tree structure.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="nodes"></param>
-    /// <param name="indent"></param>
-    /// <param name="plusMinusWidth"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <param name="batch">The batch used to render the tree's visual elements.</param>
+    /// <param name="nodes">The list of nodes to be drawn.</param>
+    /// <param name="indent">The current horizontal indentation level for child nodes.</param>
+    /// <param name="plusMinusWidth">The width allocated for the expand/collapse icon.</param>
     private void Draw( IBatch batch, List< TNode > nodes, float indent, float plusMinusWidth )
     {
         Rectangle? cullingArea = CullingArea;
@@ -491,7 +518,7 @@ public class Tree< TNode, TValue > : WidgetGroup
                     ISceneDrawable expandIcon = GetExpandIcon( node, iconX );
                     double         iconY      = y + actorY + Math.Round( ( height - expandIcon.MinHeight ) / 2 );
 
-                    DrawExpandIcon( node, expandIcon, batch, expandX, ( float )iconY );
+                    DrawIcon( node, expandIcon, batch, expandX, ( float )iconY );
                 }
             }
             else if ( actorY < cullBottom )
@@ -508,32 +535,45 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Draws the selection visual for a node within the tree.
     /// </summary>
-    /// <param name="node"></param>
-    /// <param name="selection"></param>
-    /// <param name="batch"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="node">The node for which the selection is being drawn.</param>
+    /// <param name="selection">The drawable resource used to represent the selection.</param>
+    /// <param name="batch">The rendering batch used to draw the selection.</param>
+    /// <param name="x">The X coordinate of the selection area.</param>
+    /// <param name="y">The Y coordinate of the selection area.</param>
+    /// <param name="width">The width of the selection area.</param>
+    /// <param name="height">The height of the selection area.</param>
     protected void DrawSelection( TNode node, ISceneDrawable selection, IBatch batch, float x, float y, float width,
                                   float height )
     {
         selection.Draw( batch, x, y, width, height );
     }
 
+    /// <summary>
+    /// Draws the "over" visual representation for a tree node.
+    /// </summary>
+    /// <param name="node">The tree node to render the "over" visual representation for.</param>
+    /// <param name="over">The drawable resource that represents the "over" visual style for the node.</param>
+    /// <param name="batch">The batch used to render the drawable.</param>
+    /// <param name="x">The x-coordinate of the position where the drawable should be drawn.</param>
+    /// <param name="y">The y-coordinate of the position where the drawable should be drawn.</param>
+    /// <param name="width">The width of the drawable to be rendered.</param>
+    /// <param name="height">The height of the drawable to be rendered.</param>
     protected void DrawOver( TNode node, ISceneDrawable over, IBatch batch, float x, float y, float width,
                              float height )
     {
         over.Draw( batch, x, y, width, height );
     }
 
-    protected void DrawExpandIcon( TNode node, ISceneDrawable expandIcon, IBatch batch, float x, float y )
-    {
-        expandIcon.Draw( batch, x, y, expandIcon.MinWidth, expandIcon.MinHeight );
-    }
-
+    /// <summary>
+    /// Draws the icon for the specified node.
+    /// </summary>
+    /// <param name="node">The node to draw the icon for.</param>
+    /// <param name="icon">The drawable resource that represents the icon.</param>
+    /// <param name="batch">The batch used to render the drawable.</param>
+    /// <param name="x">The x-coordinate of the position where the drawable should be drawn.</param>
+    /// <param name="y">The y-coordinate of the position where the drawable should be drawn.</param>
     protected void DrawIcon( TNode node, ISceneDrawable icon, IBatch batch, float x, float y )
     {
         icon.Draw( batch, x, y, icon.MinWidth, icon.MinHeight );
@@ -545,6 +585,8 @@ public class Tree< TNode, TValue > : WidgetGroup
     /// on the desktop if the node is the over node, the mouse is left of iconX, and
     /// clicking would expand the node.
     /// </summary>
+    /// <param name="node"> The node to get the expand icon for. </param>
+    /// <param name="iconX"> The X coordinate of the expand icon. </param>
     protected ISceneDrawable GetExpandIcon( TNode node, float iconX )
     {
         var over = false;
@@ -589,10 +631,12 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the tree node located at the specified vertical position.
     /// </summary>
-    /// <param name="y"></param>
-    /// <returns></returns>
+    /// <param name="y">The vertical position to search for a node.</param>
+    /// <returns>
+    /// The tree node found at the specified position, or <c>null</c> if no node exists at that position.
+    /// </returns>
     public TNode? GetNodeAt( float y )
     {
         _foundNode = null;
@@ -602,12 +646,12 @@ public class Tree< TNode, TValue > : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Retrieves the first node at the specified vertical position within the tree.
     /// </summary>
-    /// <param name="nodes"></param>
-    /// <param name="y"></param>
-    /// <param name="rowY"></param>
-    /// <returns></returns>
+    /// <param name="nodes">The list of nodes to search within.</param>
+    /// <param name="y">The vertical position relative to the tree's coordinate space.</param>
+    /// <param name="rowY">The current vertical position within the tree.</param>
+    /// <returns>The node at the specified vertical position, or null if no node is found.</returns>
     private float GetNodeAt( List< TNode > nodes, float y, float rowY )
     {
         for ( int i = 0, n = nodes.Count; i < n; i++ )
@@ -641,6 +685,12 @@ public class Tree< TNode, TValue > : WidgetGroup
         return rowY;
     }
 
+    /// <summary>
+    /// Selects nodes within the specified vertical range and adds them to the selection.
+    /// </summary>
+    /// <param name="nodes">The list of nodes to traverse and evaluate against the range.</param>
+    /// <param name="low">The lower bound of the vertical range.</param>
+    /// <param name="high">The upper bound of the vertical range.</param>
     private void SelectNodes( List< TNode > nodes, float low, float high )
     {
         for ( int i = 0, n = nodes.Count; i < n; i++ )
@@ -670,6 +720,10 @@ public class Tree< TNode, TValue > : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Gets the currently selected node.
+    /// </summary>
+    /// <returns> The node. </returns>
     public Selection< TNode > GetSelection()
     {
         return _selection;
@@ -715,11 +769,20 @@ public class Tree< TNode, TValue > : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Populates the provided list with values of nodes in the tree that are currently expanded.
+    /// </summary>
+    /// <param name="values">A list to be populated with the values of the expanded nodes in the tree.</param>
     public void FindExpandedValues( List< TValue > values )
     {
         FindExpandedValues( RootNodes, values );
     }
 
+    /// <summary>
+    /// Finds the expanded values from the current tree structure and adds them to the provided list of values.
+    /// </summary>
+    /// <param name="nodes">The list of nodes to traverse and evaluate for expanded values.</param>
+    /// <param name="values">The list where the values of expanded nodes will be collected.</param>
     private static bool FindExpandedValues( List< TNode > nodes, List< TValue > values )
     {
         var expanded = false;
@@ -900,9 +963,6 @@ public class Tree< TNode, TValue > : WidgetGroup
     // ========================================================================
     // ========================================================================
 
-    // ========================================================================
-    // ========================================================================
-
     /// <summary>
     /// A <see cref="Tree{TNode,TValue}"/> node which has an actor and value.
     /// <para>
@@ -930,8 +990,6 @@ public class Tree< TNode, TValue > : WidgetGroup
 
         // ====================================================================
 
-        private Actor? _actor;
-
         /// <summary>
         /// Creates a node without an actor. An actor must be
         /// set before this node can be used.
@@ -940,33 +998,48 @@ public class Tree< TNode, TValue > : WidgetGroup
         {
         }
 
+        /// <summary>
+        /// Creates a node with the specified actor.
+        /// </summary>
+        /// <param name="actor">The actor to be associated with the node.</param>
         public Node( Actor actor )
         {
-            _actor = actor;
+            Actor = actor;
         }
 
+        /// <summary>
+        /// Gets or sets the actor associated with this node.
+        /// </summary>
         public Actor? Actor
         {
-            get => _actor;
+            get;
             set
             {
-                if ( _actor != null )
+                if ( field != null )
                 {
                     Tree< TNode, TValue >? tree = GetTree();
 
                     if ( tree != null )
                     {
-                        int index = _actor.GetZIndex();
+                        int index = field.GetZIndex();
 
                         tree.RemoveActorAt( index, true );
                         tree.AddActorAt( index, value! );
                     }
                 }
 
-                _actor = value;
+                field = value;
             }
         }
 
+        /// <summary>
+        /// Sets the expansion state of the node. When expanded, the node's child nodes
+        /// become visible, and when collapsed, the child nodes are hidden.
+        /// </summary>
+        /// <param name="expanded">
+        /// A boolean flag indicating whether the node should be expanded (true) or
+        /// collapsed (false).
+        /// </param>
         public void SetExpanded( bool expanded )
         {
             if ( expanded == IsExpanded )
@@ -978,7 +1051,7 @@ public class Tree< TNode, TValue > : WidgetGroup
 
             Tree< TNode, TValue >? tree = GetTree();
 
-            if ( ( tree == null ) || ( NodeChildren == null ) || ( _actor == null ) )
+            if ( ( tree == null ) || ( NodeChildren == null ) || ( Actor == null ) )
             {
                 return;
             }
@@ -989,7 +1062,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
 
             TNode[]? children   = NodeChildren.ToArray();
-            int      actorIndex = _actor.GetZIndex() + 1;
+            int      actorIndex = Actor.GetZIndex() + 1;
 
             if ( expanded )
             {
@@ -1010,10 +1083,17 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// <summary>
         /// Called to add the actor to the tree when the node's parent is expanded.
         /// </summary>
+        /// <param name="tree">The tree to which the actor should be added.</param>
+        /// <param name="actorIndex">The index at which the actor should be added in the tree.</param>
         /// <returns> The number of node actors added to the tree. </returns>
         public int AddToTree( Tree< TNode, TValue > tree, int actorIndex )
         {
-            tree.AddActorAt( actorIndex, _actor! );
+            if ( Actor == null )
+            {
+                return 0;
+            }
+            
+            tree.AddActorAt( actorIndex, Actor );
 
             if ( !IsExpanded )
             {
@@ -1035,6 +1115,8 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// Called to remove the actor from the tree, eg when the node is
         /// removed or the node's parent is collapsed.
         /// </summary>
+        /// <param name="tree">The tree from which the actor should be removed.</param>
+        /// <param name="actorIndex">The index at which the actor should be removed from the tree.</param>
         public void RemoveFromTree( Tree< TNode, TValue > tree, int actorIndex )
         {
             if ( !IsExpanded )
@@ -1055,6 +1137,10 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
+        /// <summary>
+        /// Adds the specified node to the <see cref="NodeChildren"/> list.
+        /// </summary>
+        /// <param name="node">The node to be added.</param>
         public void Add( TNode node )
         {
             Guard.Against.Null( NodeChildren );
@@ -1062,6 +1148,10 @@ public class Tree< TNode, TValue > : WidgetGroup
             Insert( NodeChildren.Count, node );
         }
 
+        /// <summary>
+        /// Adds all the specified nodes to the <see cref="NodeChildren"/> list.
+        /// </summary>
+        /// <param name="nodes">The nodes to be added.</param>
         public void AddAll( List< TNode > nodes )
         {
             Guard.Against.Null( NodeChildren );
@@ -1075,11 +1165,11 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// <summary>
         /// Inserts the supplied node into the <see cref="NodeChildren"/> list.
         /// </summary>
-        /// <param name="childIndex"></param>
-        /// <param name="node"></param>
+        /// <param name="childIndex">The index at which the node should be inserted.</param>
+        /// <param name="node">The node to be inserted.</param>
         public void Insert( int childIndex, TNode node )
         {
-            if ( ( NodeChildren == null ) || ( _actor == null ) )
+            if ( ( NodeChildren == null ) || ( Actor == null ) )
             {
                 return;
             }
@@ -1101,16 +1191,29 @@ public class Tree< TNode, TValue > : WidgetGroup
 
                 if ( childIndex == 0 )
                 {
-                    actorIndex = _actor.GetZIndex() + 1;
+                    actorIndex = Actor.GetZIndex() + 1;
                 }
                 else if ( childIndex < ( NodeChildren.Count - 1 ) )
                 {
-                    actorIndex = NodeChildren[ childIndex + 1 ]._actor!.GetZIndex();
+                    TNode nchild = NodeChildren[ childIndex + 1 ];
+                    
+                    if ( nchild.Actor == null )
+                    {
+                        return;
+                    }
+                    
+                    actorIndex = nchild.Actor.GetZIndex();
                 }
                 else
                 {
                     TNode before = NodeChildren[ childIndex - 1 ];
-                    actorIndex = before.Actor!.GetZIndex() + before.CountActors();
+                    
+                    if ( before.Actor == null )
+                    {
+                        return;
+                    }
+
+                    actorIndex = before.Actor.GetZIndex() + before.CountActors();
                 }
 
                 node.AddToTree( tree, actorIndex );
@@ -1121,6 +1224,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// Return the current count of actors held in <see cref="NodeChildren"/>.
         /// If this node is not expanded, a count of 1 is returned by default.
         /// </summary>
+        /// <returns>The count of actors held in <see cref="NodeChildren"/>.</returns>
         public int CountActors()
         {
             Guard.Against.Null( NodeChildren );
@@ -1161,6 +1265,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// Remove the specified child node from this node.
         /// Does nothing if the node is not a child of this node.
         /// </summary>
+        /// <param name="node">The node to be removed.</param>
         public void Remove( TNode? node )
         {
             if ( ( node == null )
@@ -1186,13 +1291,13 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// </summary>
         public void ClearChildren()
         {
-            if ( IsExpanded && ( _actor != null ) )
+            if ( IsExpanded && ( Actor != null ) )
             {
                 Tree< TNode, TValue >? tree = GetTree();
 
                 if ( ( tree != null ) && ( NodeChildren != null ) )
                 {
-                    int actorIndex = _actor.GetZIndex() + 1;
+                    int actorIndex = Actor.GetZIndex() + 1;
 
                     for ( int i = 0, n = NodeChildren.Count; i < n; i++ )
                     {
@@ -1209,11 +1314,12 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// The actor is only in the tree when all of its parent nodes
         /// are expanded.
         /// </summary>
+        /// <returns>The tree this node's actor is currently in, or null.</returns>
         public Tree< TNode, TValue >? GetTree()
         {
-            Guard.Against.Null( _actor );
+            Guard.Against.Null( Actor );
 
-            if ( _actor.Parent is Tree< TNode, TValue > tree )
+            if ( Actor.Parent is Tree< TNode, TValue > tree )
             {
                 return tree;
             }
@@ -1221,6 +1327,10 @@ public class Tree< TNode, TValue > : WidgetGroup
             return null;
         }
 
+        /// <summary>
+        /// Returns whether <see cref="NodeChildren"/> has any children.
+        /// </summary>
+        /// <returns>True if <see cref="NodeChildren"/> has children, false otherwise.</returns>
         public bool HasChildren()
         {
             return NodeChildren?.Count > 0;
@@ -1246,7 +1356,7 @@ public class Tree< TNode, TValue > : WidgetGroup
 
             TNode[]? children   = NodeChildren?.ToArray();
             int?     n          = NodeChildren?.Count;
-            int      actorIndex = _actor!.GetZIndex() + 1;
+            int      actorIndex = Actor.GetZIndex() + 1;
 
             for ( var i = 0; i < n; i++ )
             {
@@ -1259,6 +1369,10 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
+        /// <summary>
+        /// Returns the level of this node in the tree.
+        /// </summary>
+        /// <returns>The level of this node in the tree.</returns>
         public int GetLevel()
         {
             var   level   = 0;
@@ -1277,6 +1391,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// <summary>
         /// Returns this node or the child node with the specified value, or null.
         /// </summary>
+        /// <param name="value">The value to search for.</param>
         public TNode? FindNode( TValue? value )
         {
             Guard.Against.Null( value );
@@ -1325,6 +1440,11 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
+        /// <summary>
+        /// Populates the specified list with the values of all expanded nodes under
+        /// and including this node.
+        /// </summary>
+        /// <param name="values"> The list to populate with expanded values. </param>
         public void FindExpandedValues( List< TValue > values )
         {
             if ( IsExpanded
@@ -1334,6 +1454,14 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
+        /// <summary>
+        /// Restores the expanded state of tree nodes specified by a list of values.
+        /// For each value in the list, if a corresponding node is found, it is expanded,
+        /// and its ancestors are expanded to ensure visibility.
+        /// </summary>
+        /// <param name="values">
+        /// A list of values corresponding to nodes whose expanded state should be restored.
+        /// </param>
         public void RestoreExpandedValues( List< TValue > values )
         {
             for ( int i = 0, n = values.Count; i < n; i++ )
@@ -1361,6 +1489,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// <summary>
         /// Returns true if the specified node is this node or an ascendant of this node.
         /// </summary>
+        /// <param name="node">The node to check for ascendency.</param>
         public bool IsAscendantOf( TNode node )
         {
             Guard.Against.Null( node );
@@ -1384,6 +1513,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// <summary>
         /// Returns true if the specified node is this node or an descendant of this node.
         /// </summary>
+        /// <param name="node">The node to check for descendency.</param>
         public bool IsDescendantOf( TNode? node )
         {
             if ( node == null )
@@ -1411,11 +1541,20 @@ public class Tree< TNode, TValue > : WidgetGroup
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// A listener for handling click and mouse events on a tree widget.
+    /// It extends the functionality of the ClickListener class to allow
+    /// interaction with tree nodes, such as node selection, hover effects,
+    /// and handling multi-selection or specific key-modifier interactions.
+    /// </summary>
     [PublicAPI]
     public class TreeClickListener : ClickListener
     {
         private readonly Tree< TNode, TValue > _tree = null!;
 
+        // ====================================================================
+
+        /// <inheritdoc />
         public override void OnClicked( InputEvent ev, float x, float y )
         {
             TNode? node = _tree.GetNodeAt( y );
@@ -1497,6 +1636,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
+        /// <inheritdoc />
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             _tree.OverNode = _tree.GetNodeAt( y );
@@ -1504,12 +1644,14 @@ public class Tree< TNode, TValue > : WidgetGroup
             return false;
         }
 
+        /// <inheritdoc />
         public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
         {
             base.Enter( ev, x, y, pointer, fromActor );
             _tree.OverNode = _tree.GetNodeAt( y );
         }
 
+        /// <inheritdoc />
         public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
             base.Exit( ev, x, y, pointer, toActor );

@@ -144,6 +144,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Creates a table with a skin, which is required to use <see cref="AssetDescriptor"/>
     /// </summary>
+    /// <param name="skin">The skin to use for the table.</param>
     public Table( Skin? skin )
     {
         Skin         = skin;
@@ -156,6 +157,7 @@ public class Table : WidgetGroup
     /// Obtains a <see cref="Cell"/> from the <see cref="CellPool"/>. Also sets the table
     /// for that cell to this table.
     /// </summary>
+    /// <returns>A <see cref="Cell"/> instance from the <see cref="CellPool"/>.</returns>
     public Cell ObtainCell()
     {
         Cell cell = CellPool.Obtain();
@@ -167,8 +169,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Draws the table and all its children.
     /// </summary>
-    /// <param name="batch"></param>
-    /// <param name="parentAlpha"></param>
+    /// <param name="batch"> The batch used to draw the table and its children. </param>
+    /// <param name="parentAlpha"> The alpha value of the parent actor. </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -213,6 +215,10 @@ public class Table : WidgetGroup
     /// Called to draw the background, before clipping is applied (if enabled).
     /// Default implementation draws the background drawable.
     /// </summary>
+    /// <param name="batch"> The batch used to draw the background. </param>
+    /// <param name="parentAlpha"> The alpha value of the parent actor. </param>
+    /// <param name="x"> The x-coordinate of the drawing position. </param>
+    /// <param name="y"> The y-coordinate of the drawing position. </param>
     protected virtual void DrawBackground( IBatch batch, float parentAlpha, float x, float y )
     {
         if ( _background == null )
@@ -230,6 +236,7 @@ public class Table : WidgetGroup
     /// to match the background. This may only be called if a skin has been set
     /// with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
+    /// <param name="drawableName"> The name of the drawable to set as the background. </param>
     public void SetBackground( string drawableName )
     {
         if ( Skin == null )
@@ -243,6 +250,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// <param name="background"> May be null to clear the background. </param>
     /// </summary>
+    /// <param name="background"> The background drawable. </param>
     public void SetBackground( ISceneDrawable? background )
     {
         if ( _background == background )
@@ -276,11 +284,16 @@ public class Table : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Gets the background drawable.
+    /// </summary>
+    /// <returns>The background drawable.</returns>
     public ISceneDrawable? GetBackground()
     {
         return _background;
     }
 
+    /// <inheritdoc />
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( _clip )
@@ -299,6 +312,11 @@ public class Table : WidgetGroup
         return base.Hit( x, y, touchable );
     }
 
+    /// <summary>
+    /// Sets whether clipping is enabled for the table.
+    /// </summary>
+    /// <param name="enabled">Indicates whether clipping should be enabled. Defaults to true.</param>
+    /// <returns>The current table instance for method chaining.</returns>
     public Table SetClip( bool enabled = true )
     {
         Clip      = enabled;
@@ -325,6 +343,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Adds a new cell to the table with the specified actor.
     /// </summary>
+    /// <param name="actor">The actor to add to the table.</param>
     public Cell AddCell< T >( T? actor ) where T : Actor
     {
         Cell cell = ObtainCell();
@@ -402,8 +421,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Adds new cells to the table with the specified actors.
     /// </summary>
-    /// <param name="actors"></param>
-    /// <returns></returns>
+    /// <param name="actors"> The actors to add to the table. </param>
+    /// <returns>The current table instance for method chaining.</returns>
     public Table AddCell( params Actor[] actors )
     {
         for ( int i = 0, n = actors.Length; i < n; i++ )
@@ -418,6 +437,7 @@ public class Table : WidgetGroup
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>
     /// </summary>
+    /// <param name="text">The text to display in the label.</param>
     public Cell AddCell( string? text )
     {
         Guard.Against.Null( text );
@@ -429,8 +449,10 @@ public class Table : WidgetGroup
 
     /// <summary>
     /// Adds a new cell with a label. This may only be called if a skin
-    /// has been set with <see cref="Table"/> or <see cref="Skin"/>
+    /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
+    /// <param name="text">The text to display in the label.</param>
+    /// <param name="labelStyleName">The name of the label style to use.</param>
     public Cell AddCell( string text, string labelStyleName )
     {
         return Skin == null
