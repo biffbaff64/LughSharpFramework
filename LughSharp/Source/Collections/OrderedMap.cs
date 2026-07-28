@@ -628,8 +628,11 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         /// <returns>The list containing the remaining keys.</returns>
         public override List< TK > ToArray( List< TK > array )
         {
-            array.AddRange<>( _keys, NextIndex, _keys.Count - NextIndex );
-
+            for ( int i = NextIndex; i < _keys.Count; i++ )
+            {
+                array.Add( _keys[ i ] );
+            }
+            
             NextIndex = _keys.Count;
             HasNext   = false;
 

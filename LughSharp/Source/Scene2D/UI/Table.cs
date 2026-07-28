@@ -248,7 +248,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// <param name="background"> May be null to clear the background. </param>
+    /// Sets the background drawable. If the provided drawable is the same as the current
+    /// background, this method does nothing.
     /// </summary>
     /// <param name="background"> The background drawable. </param>
     public void SetBackground( ISceneDrawable? background )
@@ -341,7 +342,7 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Adds a new cell to the table with the specified actor.
+    /// Adds a new cell, containing the specified actor, to the table.
     /// </summary>
     /// <param name="actor">The actor to add to the table.</param>
     public Cell AddCell< T >( T? actor ) where T : Actor
@@ -438,6 +439,7 @@ public class Table : WidgetGroup
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>
     /// </summary>
     /// <param name="text">The text to display in the label.</param>
+    /// <returns>The cell containing the label.</returns>
     public Cell AddCell( string? text )
     {
         Guard.Against.Null( text );
@@ -453,6 +455,7 @@ public class Table : WidgetGroup
     /// </summary>
     /// <param name="text">The text to display in the label.</param>
     /// <param name="labelStyleName">The name of the label style to use.</param>
+    /// <returns> The cell containing the label. </returns>
     public Cell AddCell( string text, string labelStyleName )
     {
         return Skin == null
@@ -464,6 +467,10 @@ public class Table : WidgetGroup
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
+    /// <param name="text">The text to display in the label.</param>
+    /// <param name="fontName">The name of the font to use.</param>
+    /// <param name="color">The color to use for the label.</param>
+    /// <returns> The cell containing the label. </returns>
     public Cell AddCell( string? text, string fontName, Color color )
     {
         return Skin == null
@@ -475,6 +482,10 @@ public class Table : WidgetGroup
     /// Adds a new cell with a label. This may only be called if a skin
     /// has been set with <see cref="Table"/> or <see cref="Skin"/>.
     /// </summary>
+    /// <param name="text">The text to display in the label.</param>
+    /// <param name="fontName">The name of the font to use.</param>
+    /// <param name="colorName">The name of the color to use for the label.</param>
+    /// <returns> The cell containing the label. </returns>
     public Cell AddCell( string? text, string fontName, string colorName )
     {
         return Skin == null
@@ -487,6 +498,7 @@ public class Table : WidgetGroup
     /// Adds a new cell to the table with the specified actors in a <see cref="Stack"/>.
     /// </summary>
     /// <param name="actors"> May be null or empty to add a stack without any actors. </param>
+    /// <returns> The cell containing the label. </returns>
     public Cell Stack( params Actor[]? actors )
     {
         var stack = new Stack();
@@ -503,11 +515,11 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Removes the specified actor from the table.
     /// </summary>
-    /// <param name="actor"></param>
-    /// <param name="unfocus"></param>
-    /// <returns></returns>
+    /// <param name="actor"> The actor to remove. </param>
+    /// <param name="unfocus"> Whether to unfocus the actor. </param>
+    /// <returns> Whether the actor was removed. </returns>
     public override bool RemoveActor( Actor actor, bool unfocus )
     {
         if ( !base.RemoveActor( actor, unfocus ) )
@@ -524,11 +536,11 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Removes the actor at the specified index.
     /// </summary>
-    /// <param name="index"></param>
-    /// <param name="unfocus"></param>
-    /// <returns></returns>
+    /// <param name="index"> The index of the actor to remove. </param>
+    /// <param name="unfocus"> Whether to unfocus the actor. </param>
+    /// <returns> The removed actor, or null if the index is out of range. </returns>
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         Actor? actor = base.RemoveActorAt( index, unfocus );
@@ -541,6 +553,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Removes all actors and cells from the table.
     /// </summary>
+    /// <param name="unfocus"> Whether to unfocus the actors. Default is true. </param>
     public override void ClearChildren( bool unfocus = true )
     {
         Cell[] cells = Cells.ToArray();
@@ -550,10 +563,7 @@ public class Table : WidgetGroup
             Cell   cell  = cells[ i ];
             Actor? actor = cell.Actor;
 
-            if ( actor != null )
-            {
-                actor.Remove();
-            }
+            actor?.Remove();
         }
 
         CellPool.FreeAll( Cells );
@@ -637,6 +647,10 @@ public class Table : WidgetGroup
         return _rowDefaults;
     }
 
+    /// <summary>
+    /// Marks the end of a row in the table. Updates the total number of rows and adjusts
+    /// the column count based on the cells in the completed row.
+    /// </summary>
     private void EndRow()
     {
         Cell[] cells      = Cells.ToArray();
@@ -665,7 +679,7 @@ public class Table : WidgetGroup
     /// Gets the cell values that will be used as the defaults for all cells in the
     /// specified column. Columns are indexed starting at 0.
     /// </summary>
-    /// <param name="column"></param>
+    /// <param name="column"> The index of the column to get the defaults for. </param>
     public Cell ColumnDefaults( int column )
     {
         Cell? cell = _columnDefaults.Count > column ? _columnDefaults[ column ] : null;
@@ -696,6 +710,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Returns the cell for the specified actor in this table, or null.
     /// </summary>
+    /// <param name="actor"> The actor to get the cell for. </param>
+    /// <exception cref="ArgumentException"> Thrown if the actor is null. </exception>
     public Cell? GetCell< T >( T? actor ) where T : Actor
     {
         if ( actor == null )
@@ -718,6 +734,7 @@ public class Table : WidgetGroup
         return null;
     }
 
+    /// <inheritdoc />
     public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
@@ -730,6 +747,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( width, _background.MinWidth ) : width;
     }
 
+    /// <inheritdoc />
     public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
@@ -742,6 +760,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( height, _background.MinHeight ) : height;
     }
 
+    /// <inheritdoc />
     public override float GetMinWidth()
     {
         if ( _sizeInvalid )
@@ -752,6 +771,7 @@ public class Table : WidgetGroup
         return _tableMinWidth;
     }
 
+    /// <inheritdoc />
     public override float GetMinHeight()
     {
         if ( _sizeInvalid )
@@ -766,8 +786,8 @@ public class Table : WidgetGroup
     /// Sets the padTop, padLeft, padBottom, and padRight around the
     /// table to the specified value.
     /// </summary>
-    /// <param name="pad"></param>
-    /// <returns></returns>
+    /// <param name="pad"> The value to set the padding to. </param>
+    /// <exception cref="ArgumentException"> Thrown if pad is null. </exception>
     public Table SetPad( Value pad )
     {
         Guard.Against.Null( pad );
@@ -781,6 +801,15 @@ public class Table : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding values for the table edges (top, left, bottom, and right).
+    /// </summary>
+    /// <param name="top">The padding value for the top edge. Cannot be null.</param>
+    /// <param name="left">The padding value for the left edge. Cannot be null.</param>
+    /// <param name="bottom">The padding value for the bottom edge. Cannot be null.</param>
+    /// <param name="right">The padding value for the right edge. Cannot be null.</param>
+    /// <returns>The current instance of the table with updated padding values.</returns>
+    /// <exception cref="ArgumentException">Thrown if any of the provided padding values are null.</exception>
     public Table SetPad( Value top, Value left, Value bottom, Value right )
     {
         _padTop      = top ?? throw new ArgumentException( "top cannot be null." );
@@ -795,8 +824,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Sets the padTop, padLeft, padBottom, and padRight around the table to the specified value.
     /// </summary>
-    /// <param name="pad"></param>
-    /// <returns></returns>
+    /// <param name="pad"> The value to set the padding to. Cannot be null. </param>
+    /// <exception cref="ArgumentException"> Thrown if pad is null. </exception>
     public Table SetPad( float pad )
     {
         SetPad( Value.Fixed.ValueOf( pad ) );
@@ -804,6 +833,14 @@ public class Table : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Sets the padding values for the top, left, bottom, and right edges of the table.
+    /// </summary>
+    /// <param name="top">The padding value for the top edge.</param>
+    /// <param name="left">The padding value for the left edge.</param>
+    /// <param name="bottom">The padding value for the bottom edge.</param>
+    /// <param name="right">The padding value for the right edge.</param>
+    /// <returns>The current instance of the table, allowing for method chaining.</returns>
     public Table SetPad( float top, float left, float bottom, float right )
     {
         _padTop      = Value.Fixed.ValueOf( top );
@@ -818,9 +855,9 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the top edge of the table.
     /// </summary>
-    /// <param name="padTop"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="padTop"> The top edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
+    /// <exception cref="ArgumentException"> Thrown if the supplied padding value is null. </exception>
     public Table SetPadTop( Value padTop )
     {
         _padTop = padTop ?? throw new ArgumentException( "padTop cannot be null." );
@@ -833,9 +870,9 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the left edge of the table.
     /// </summary>
-    /// <param name="padLeft"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="padLeft"> The left edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
+    /// <exception cref="ArgumentException"> Thrown if the supplied padding value is null. </exception>
     public Table SetPadLeft( Value padLeft )
     {
         _padLeft = padLeft ?? throw new ArgumentException( "padLeft cannot be null." );
@@ -848,9 +885,9 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the bottom edge of the table.
     /// </summary>
-    /// <param name="padBottom"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="padBottom"> The bottom edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
+    /// <exception cref="ArgumentException"> Thrown if the supplied padding value is null. </exception>
     public Table SetPadBottom( Value padBottom )
     {
         _padBottom = padBottom ?? throw new ArgumentException( "padBottom cannot be null." );
@@ -863,9 +900,9 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the right edge of the table.
     /// </summary>
-    /// <param name="padRight"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="padRight"> The right edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
+    /// <exception cref="ArgumentException"> Thrown if the supplied padding value is null. </exception>
     public Table SetPadRight( Value padRight )
     {
         _padRight = padRight ?? throw new ArgumentException( "padRight cannot be null." );
@@ -878,8 +915,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the top edge of the table.
     /// </summary>
-    /// <param name="padTop"></param>
-    /// <returns></returns>
+    /// <param name="padTop"> The right edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table SetPadTop( float padTop )
     {
         _padTop = Value.Fixed.ValueOf( padTop );
@@ -892,8 +929,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the left edge of the table.
     /// </summary>
-    /// <param name="padLeft"></param>
-    /// <returns></returns>
+    /// <param name="padLeft"> The left edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table SetPadLeft( float padLeft )
     {
         _padLeft = Value.Fixed.ValueOf( padLeft );
@@ -906,8 +943,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the bottom edge of the table.
     /// </summary>
-    /// <param name="padBottom"></param>
-    /// <returns></returns>
+    /// <param name="padBottom"> The bottom edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table SetPadBottom( float padBottom )
     {
         _padBottom = Value.Fixed.ValueOf( padBottom );
@@ -920,8 +957,8 @@ public class Table : WidgetGroup
     /// <summary>
     /// Padding at the right edge of the table.
     /// </summary>
-    /// <param name="padRight"></param>
-    /// <returns></returns>
+    /// <param name="padRight"> The right edge padding value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table SetPadRight( float padRight )
     {
         _padRight = Value.Fixed.ValueOf( padRight );
@@ -936,8 +973,8 @@ public class Table : WidgetGroup
     /// Set to <see cref="Align.Center"/>, <see cref="Align.Top"/>, <see cref="Align.Bottom"/>,
     /// <see cref="Align.Left"/>, <see cref="Align.Right"/>, or any combination of those.
     /// </summary>
-    /// <param name="align"></param>
-    /// <returns></returns>
+    /// <param name="align"> The alignment value. </param>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table SetAlignment( Align align )
     {
         Alignment = align;
@@ -949,7 +986,7 @@ public class Table : WidgetGroup
     /// Sets the alignment of the logical table within the table actor to
     /// <see cref="Align.Center"/>. This clears any other alignment.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table Center()
     {
         Alignment = Align.Center;
@@ -961,7 +998,7 @@ public class Table : WidgetGroup
     /// Adds <see cref="Align.Top"/> and clears <see cref="Align.Bottom"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table AddTopAlignment()
     {
         Alignment |= Align.Top;
@@ -974,7 +1011,7 @@ public class Table : WidgetGroup
     /// Adds <see cref="Align.Left"/> and clears <see cref="Align.Right"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
-    /// <returns></returns>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table AddLeftAlignment()
     {
         Alignment |= Align.Left;
@@ -987,6 +1024,7 @@ public class Table : WidgetGroup
     /// Adds <see cref="Align.Bottom"/> and clears <see cref="Align.Top"/> for the
     /// alignment of the logical table within the table actor.
     /// </summary>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table AddBottomAlignment()
     {
         Alignment |= Align.Bottom;
@@ -999,6 +1037,7 @@ public class Table : WidgetGroup
     /// Adds <see cref="Align.Right"/> and clears <see cref="Align.Left"/> for
     /// the alignment of the logical table within the table actor.
     /// </summary>
+    /// <returns> The current instance of the table, allowing for method chaining. </returns>
     public Table AddRightAlignment()
     {
         Alignment |= Align.Right;
@@ -1007,59 +1046,57 @@ public class Table : WidgetGroup
         return this;
     }
 
-    public Value GetPadTopValue()
-    {
-        return _padTop;
-    }
-
+    /// <summary>
+    /// Gets the amount of padding applied to the ltop edge of the table.
+    /// </summary>
     public float GetPadTop()
     {
         return _padTop.Get( this );
     }
 
-    public Value GetPadLeftValue()
-    {
-        return _padLeft;
-    }
-
+    /// <summary>
+    /// Gets the amount of padding applied to the left edge of the table.
+    /// </summary>
     public float GetPadLeft()
     {
         return _padLeft.Get( this );
     }
 
-    public Value GetPadBottomValue()
-    {
-        return _padBottom;
-    }
-
+    /// <summary>
+    /// Gets the amount of padding applied to the bottom edge of the table.
+    /// </summary>
     public float GetPadBottom()
     {
         return _padBottom.Get( this );
     }
 
-    public Value GetPadRightValue()
-    {
-        return _padRight;
-    }
-
+    /// <summary>
+    /// Gets the amount of padding applied to the right edge of the table.
+    /// </summary>
     public float GetPadRight()
     {
         return _padRight.Get( this );
     }
 
     /// <summary>
-    /// Returns <see cref="_padLeft"/> plus <see cref="_padRight"/>.
+    /// Calculates the combined horizontal padding of the table by adding the left and
+    /// right padding values together.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The total horizontal padding, which is the sum of the left and right padding values.
+    /// </returns>
     public float GetPadX()
     {
         return _padLeft.Get( this ) + _padRight.Get( this );
     }
 
     /// <summary>
-    /// Returns <see cref="_padTop"/> plus <see cref="_padBottom"/>.
+    /// Calculates the total vertical padding of the table by combining the top and bottom
+    /// padding values.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>
+    /// The sum of the top and bottom padding as a float.
+    /// </returns>
     public float GetPadY()
     {
         return _padTop.Get( this ) + _padBottom.Get( this );
@@ -1149,8 +1186,8 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// Returns the width of the specified column, or 0 if the
-    /// table layout has not been validated.
+    /// Returns the width of the specified column, or 0 if the table layout has
+    /// not been validated.
     /// </summary>
     /// <param name="columnIndex">The column number</param>
     public float GetColumnWidth( int columnIndex )
@@ -1199,11 +1236,14 @@ public class Table : WidgetGroup
     }
 
     /// <summary>
-    /// 
+    /// Ensures that the given array has the specified size. If the array is null or
+    /// its length is less than the specified size, a new array of the specified size
+    /// is created and returned. Otherwise, the existing array is filled with default
+    /// values up to the specified size and returned.
     /// </summary>
-    /// <param name="array"></param>
-    /// <param name="size"></param>
-    /// <returns></returns>
+    /// <param name="array">The array to verify or resize. Can be null.</param>
+    /// <param name="size">The desired size of the array.</param>
+    /// <returns>A float array with the specified size.</returns>
     private float[] EnsureSize( float[]? array, int size )
     {
         if ( ( array == null ) || ( array.Length < size ) )
@@ -1463,7 +1503,6 @@ public class Table : WidgetGroup
             float spannedPrefWidth = spannedMinWidth;
             float totalExpandWidth = 0;
 
-
             for ( int ii = column, nn = ii + colspan; ii < nn; ii++ )
             {
                 spannedMinWidth  += columnMinWidth[ ii ];
@@ -1603,7 +1642,7 @@ public class Table : WidgetGroup
         }
 
         // --------------------------------------------------------------------
-        // 1. Determine actor and cell sizes (before expand or fill).
+        // Determine actor and cell sizes (before expand or fill).
         Cell[] cells     = Cells.ToArray();
         int    cellCount = cells.Length;
 
@@ -1670,7 +1709,7 @@ public class Table : WidgetGroup
         }
 
         // --------------------------------------------------------------------
-        // 2. Distribute remaining space to any expanding columns/rows.
+        // Distribute remaining space to any expanding columns/rows.
         float[] expandWidth  = _expandWidth.ToArray();
         float[] expandHeight = _expandHeight.ToArray();
         float   totalExpand  = 0;
@@ -1758,7 +1797,7 @@ public class Table : WidgetGroup
         }
 
         // --------------------------------------------------------------------
-        // 3. Distribute any additional width added by colspanned cells to the columns spanned.
+        // Distribute any additional width added by colspanned cells to the columns spanned.
         for ( var i = 0; i < cellCount; i++ )
         {
             Cell c       = cells[ i ];
@@ -1790,7 +1829,7 @@ public class Table : WidgetGroup
         }
 
         // --------------------------------------------------------------------
-        // 4. Determine table size.
+        // Determine table size.
         float tableWidth  = hpadding;
         float tableHeight = vpadding;
 
@@ -1956,23 +1995,30 @@ public class Table : WidgetGroup
 
     // ========================================================================
 
+    /// <summary>
+    /// Represents a debug rectangle used for visualizing UI components within the scene.
+    /// This class extends <see cref="Rectangle"/> and is designed to store dimensional
+    /// and color information for debugging purposes.
+    /// Instances of <see cref="DebugRect"/> are typically managed through a pooling system
+    /// to reduce memory allocation overhead and improve performance during rendering.
+    /// </summary>
     [PublicAPI]
     public class DebugRect : Rectangle
     {
-        public Pool< DebugRect > Pool  { get; }
-        public Color             Color { get; set; }
-
-        public DebugRect()
+        public static Pool< DebugRect > Pool { get; } = new Pool< DebugRect >
         {
-            Color = Color.Red;
+            NewObjectFactory = GetNewDebugRect
+        };
 
-            Pool = new Pool< DebugRect >
-            {
-                NewObjectFactory = GetNewDebugRect
-            };
-        }
+        public Color Color { get; set; } = Color.Red;
 
-        public DebugRect GetNewDebugRect()
+        /// <summary>
+        /// Creates and returns a new instance of <see cref="DebugRect"/>.
+        /// This method is used as a factory for producing reusable objects
+        /// within the pooling system associated with the <see cref="DebugRect"/> class.
+        /// </summary>
+        /// <returns>A new instance of <see cref="DebugRect"/>.</returns>
+        public static DebugRect GetNewDebugRect()
         {
             return new DebugRect();
         }
@@ -1982,11 +2028,16 @@ public class Table : WidgetGroup
 
     #region Debugging
 
+    /// <summary>
+    /// Enables or disables debugging for the table.
+    /// </summary>
+    /// <param name="enabled">Whether debugging should be enabled or disabled.</param>
     public void SetDebug( bool enabled )
     {
         DebugLines( enabled ? DebugType.All : DebugType.None );
     }
 
+    /// <inheritdoc />
     public override Table EnableDebug()
     {
         base.EnableDebug();
@@ -1994,6 +2045,7 @@ public class Table : WidgetGroup
         return this;
     }
 
+    /// <inheritdoc />
     public override Table DebugAll()
     {
         base.DebugAll();
@@ -2073,15 +2125,26 @@ public class Table : WidgetGroup
         return this;
     }
 
+    /// <summary>
+    /// Clears the debug rects list.
+    /// </summary>
     private void ClearDebugRects()
     {
-//        _debugRects ??= [ ];
+        _debugRects ??= [ ];
 
-//TODO:        DebugRect.Pool.FreeAll( _debugRects );
+        DebugRect.Pool.FreeAll( _debugRects );
 
         _debugRects?.Clear();
     }
 
+    /// <summary>
+    /// Adds a new debug rect, of the specified position and size, to the debug rects list.
+    /// </summary>
+    /// <param name="x"> The x-coordinate. </param>
+    /// <param name="y"> The y-coordinate. </param>
+    /// <param name="w"> The width. </param>
+    /// <param name="h"> The height. </param>
+    /// <param name="color"> The color. </param>
     private void AddDebugRect( float x, float y, float w, float h, Color color )
     {
         var rect = new DebugRect
@@ -2094,6 +2157,14 @@ public class Table : WidgetGroup
         _debugRects?.Add( rect );
     }
 
+    /// <summary>
+    /// Adds debug rectangles to visualize the table or specific elements of the table such as cells and actors,
+    /// based on the current debug settings.
+    /// </summary>
+    /// <param name="currentX">The x coordinate for the starting position of the debug rectangles.</param>
+    /// <param name="currentY">The y coordinate for the starting position of the debug rectangles.</param>
+    /// <param name="width">The width of the area for which debug rectangles are added.</param>
+    /// <param name="height">The height of the area for which debug rectangles are added.</param>
     private void AddDebugRects( float currentX, float currentY, float width, float height )
     {
         Guard.Against.Null( _columnWidth );
@@ -2151,6 +2222,11 @@ public class Table : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Draws all debug rects for this table and its children, using the supplied
+    /// ShapeRenderer.
+    /// </summary>
+    /// <param name="shapes">The ShapeRenderer used to draw the debug rectangles.</param>
     public override void DrawDebug( ShapeRenderer shapes )
     {
         if ( Transform )
@@ -2195,6 +2271,11 @@ public class Table : WidgetGroup
         }
     }
 
+    /// <summary>
+    /// Draws debug rectangles for the current table, using the specified shape renderer.
+    /// Called from the main DrawDebug method.
+    /// </summary>
+    /// <param name="shapes">The shape renderer to use for drawing the debug rectangles.</param>
     private void DrawDebugRects( ShapeRenderer shapes )
     {
         if ( ( _debugRects == null ) || !DebugActive )
@@ -2253,6 +2334,8 @@ public class Table : WidgetGroup
     /// </summary>
     public static readonly Value BackgroundRight = new BackgroundRightDelegate();
 
+    //TODO: Re-work this to get rid of these delegates
+    
     private class BackgroundTopDelegate : Value
     {
         public override float Get( Actor? context = null )

@@ -194,21 +194,35 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
+    /// <inheritdoc />
     public override float GetPrefWidth()
     {
         return GetPrefWidthUnchecked();
     }
 
+    /// <summary>
+    /// The preferred width of the textfield based on the items it contains. This
+    /// method is a wrapper for <see cref="GetPrefWidth()"/>, and is provided to
+    /// allow calling safely from constructors.
+    /// </summary>
+    /// <returns> The preferred width of the textfield. </returns>
     protected float GetPrefWidthUnchecked()
     {
         return 150;
     }
 
+    /// <inheritdoc />
     public override float GetPrefHeight()
     {
         return GetPrefHeightUnchecked();
     }
 
+    /// <summary>
+    /// The preferred height of the textfield based on the items it contains. This
+    /// method is a wrapper for <see cref="GetPrefHeight()"/>, and is provided to
+    /// allow calling safely from constructors.
+    /// </summary>
+    /// <returns> The preferred height of the textfield. </returns>
     protected float GetPrefHeightUnchecked()
     {
         float topAndBottom = 0;
@@ -251,6 +265,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         SetStyleSafe( style );
     }
 
+    /// <summary>
+    /// Sets the current style of the actor.
+    /// This method is a wrapper for <see cref="SetStyleSafe(TextFieldStyle)"/>, and is
+    /// provided to allow calling safely from constructors.
+    /// </summary>
+    /// <param name="style"> The new style to set. </param>
     protected void SetStyleSafe( TextFieldStyle style )
     {
         Guard.Against.Null( style.Font );
@@ -268,6 +288,10 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     }
 
     /// <summary>
+    /// Calculates the render offsets and visible character range for the text in the TextField.
+    /// This method ensures that the text cursor and selected text remain visible within the
+    /// current viewable area of the TextField, and adjusts the rendering as needed based on the
+    /// glyph positions, background, and alignment.
     /// </summary>
     public virtual void CalculateOffsets()
     {
@@ -382,6 +406,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
+    /// <summary>
+    /// Determines the index of the letter located under the specified x-coordinate
+    /// relative to the current cursor line's glyph positions.
+    /// </summary>
+    /// <param name="x">The x-coordinate to check for a corresponding letter.</param>
+    /// <returns>The index of the letter under the specified x-coordinate.</returns>
     protected virtual int LetterUnderCursor( float x )
     {
         x -= TextOffset + FontOffset - _style.Font.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
@@ -412,11 +442,21 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return n - 1;
     }
 
+    /// <summary>
+    /// Returns <c>true</c> if the specified character is considered a word character.
+    /// </summary>
+    /// <param name="c">The character to check.</param>
+    /// <returns><c>true</c> if the character is a word character; otherwise, <c>false</c>.</returns>
     protected virtual bool IsWordCharacter( char c )
     {
         return char.IsLetterOrDigit( c );
     }
 
+    /// <summary>
+    /// Returns the indices of the word under the cursor at the specified position.
+    /// </summary>
+    /// <param name="at">The position of the cursor.</param>
+    /// <returns>An array containing the indices of the word under the cursor.</returns>
     protected virtual int[] WordUnderCursor( int at )
     {
         string text  = Text;
@@ -455,16 +495,41 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return [ left, right ];
     }
 
+    /// <summary>
+    /// Retrieves the start and end indices of the word under the cursor based on
+    /// the specified x-coordinate.
+    /// </summary>
+    /// <param name="x">
+    /// The x-coordinate relative to the text field, used to determine the word under the cursor.
+    /// </param>
+    /// <returns>
+    /// An array of two integers, where the first element represents the start index and
+    /// the second element represents the end index of the word under the cursor.
+    /// </returns>
     protected virtual int[] WordUnderCursor( float x )
     {
         return WordUnderCursor( LetterUnderCursor( x ) );
     }
 
+    /// <summary>
+    /// Determines whether the specified size is within the maximum allowable length.
+    /// </summary>
+    /// <param name="size">The size to evaluate against the maximum length.</param>
+    /// <returns>
+    /// <c>true</c> if the size is less than the maximum length or if no maximum length is set;
+    /// otherwise, <c>false</c>.
+    /// </returns>
     protected virtual bool WithinMaxLength( int size )
     {
         return ( MaxLength <= 0 ) || ( size < MaxLength );
     }
 
+    /// <summary>
+    /// Retrieves the appropriate background drawable for the TextField based on its current state.
+    /// </summary>
+    /// <returns>The <see cref="ISceneDrawable"/> representing the background.
+    /// This could be the disabled background if the TextField is disabled,
+    /// the focused background if the TextField has focus, or the default background otherwise.</returns>
     protected virtual ISceneDrawable? GetBackgroundDrawable()
     {
         if ( Disabled && ( _style.DisabledBackground != null ) )
@@ -480,6 +545,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return _style.Background;
     }
 
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         bool focused = HasKeyboardFocus();
@@ -590,6 +656,13 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
+    /// <summary>
+    /// Calculates the Y-coordinate for text rendering within the TextField,
+    /// considering the font metrics and optional background drawable.
+    /// </summary>
+    /// <param name="font">The font used for rendering the text.</param>
+    /// <param name="background">The optional background drawable that affects the placement of the text.</param>
+    /// <return>The calculated Y-coordinate for rendering the text.</return>
     protected virtual float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
         float height = GetHeight();
@@ -614,6 +687,18 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return textY;
     }
 
+    /// <summary>
+    /// Draws the selection background of the text field in the specified area.
+    /// </summary>
+    /// <param name="selection">The drawable object representing the selection background.</param>
+    /// <param name="batch">The rendering batch used for drawing the selection.</param>
+    /// <param name="font">The font used to retrieve text metrics such as descent.</param>
+    /// <param name="x">
+    /// The X-coordinate where the selection should be drawn, adjusted by text and font offsets.
+    /// </param>
+    /// <param name="y">
+    /// The Y-coordinate where the selection should be drawn, adjusted by text height and font descent.
+    /// </param>
     protected virtual void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
         selection.Draw( batch,
@@ -623,6 +708,13 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                         TextHeight );
     }
 
+    /// <summary>
+    /// Renders the text of the TextField using the specified font and drawing batch at the given coordinates.
+    /// </summary>
+    /// <param name="batch">The drawing batch used for rendering the text.</param>
+    /// <param name="font">The font used to render the text.</param>
+    /// <param name="x">The x-coordinate for the text's position.</param>
+    /// <param name="y">The y-coordinate for the text's position.</param>
     protected virtual void DrawText( IBatch batch, BitmapFont font, float x, float y )
     {
         font.Draw( batch,
@@ -636,11 +728,28 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                    false );
     }
 
+    /// <summary>
+    /// Renders the message text using the specified font and batch at the given position
+    /// and within the specified maximum width.
+    /// </summary>
+    /// <param name="batch">The batch used to render the text.</param>
+    /// <param name="font">The font used to draw the message text.</param>
+    /// <param name="x">The x-coordinate at which to start drawing the text.</param>
+    /// <param name="y">The y-coordinate at which to start drawing the text.</param>
+    /// <param name="maxWidth">The maximum width within which the text should be drawn.</param>
     protected virtual void DrawMessageText( IBatch batch, BitmapFont font, float x, float y, float maxWidth )
     {
         font.Draw( batch, MessageText, x, y, 0, MessageText.Length, maxWidth, _textAlign, false, "..." );
     }
 
+    /// <summary>
+    /// Renders the text cursor at the specified position using the given parameters.
+    /// </summary>
+    /// <param name="cursorPatch">The drawable cursor representation to be rendered.</param>
+    /// <param name="batch">The batch used to render the cursor.</param>
+    /// <param name="font">The font associated with the text rendering in the field.</param>
+    /// <param name="x">The x-coordinate where the cursor should be drawn.</param>
+    /// <param name="y">The y-coordinate where the cursor should be drawn.</param>
     protected virtual void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch,
@@ -653,6 +762,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                           TextHeight );
     }
 
+    /// <summary>
+    /// Updates the display text of the TextField to reflect its current content.
+    /// Handles password mode, glyph validation, and layout recalculations.
+    /// This method ensures that the visible text, glyph positions, and cursor/selection indexes
+    /// are consistent with the TextField's internal state.
+    /// </summary>
     public virtual void UpdateDisplayText()
     {
         BitmapFont     font       = _style.Font;
@@ -726,6 +841,10 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
+    /// <summary>
+    /// Sets the text for this textfield.
+    /// </summary>
+    /// <param name="str"> The new text to be set for the TextField. </param>
     public void SetText( string? str )
     {
         str ??= string.Empty;
@@ -769,6 +888,13 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         Cut( ProgrammaticChangeEvents );
     }
 
+    /// <summary>
+    /// Removes the currently selected text from the field and copies it to the clipboard.
+    /// If no text is selected, the method does nothing.
+    /// </summary>
+    /// <param name="fireChangeEvent">
+    /// Indicates whether to trigger change events after the text modification.
+    /// </param>
     public void Cut( bool fireChangeEvent )
     {
         if ( HasSelection && !PasswordMode )
@@ -781,6 +907,17 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
+    /// <summary>
+    /// Inserts the specified content into the text field at the current cursor position or
+    /// replaces the currently selected text, optionally firing a change event to notify of
+    /// the content modification.
+    /// </summary>
+    /// <param name="content">
+    /// The text to paste into the text field. If null, no action is performed.
+    /// </param>
+    /// <param name="fireChangeEvent">
+    /// Determines whether a change event should be triggered as a result of this operation.
+    /// </param>
     public void Paste( string? content, bool fireChangeEvent )
     {
         if ( content == null )
@@ -850,6 +987,14 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         Cursor += content.Length;
     }
 
+    /// <summary>
+    /// Inserts the specified text into the given string at the specified position
+    /// and returns the resulting string.
+    /// </summary>
+    /// <param name="position">The position in the destination string where the text should be inserted.</param>
+    /// <param name="text">The text to insert into the destination string.</param>
+    /// <param name="to">The destination string where the text will be inserted.</param>
+    /// <returns>The resulting string after the text has been inserted.</returns>
     public string Insert( int position, string text, string to )
     {
         if ( to.Length == 0 )
@@ -860,6 +1005,14 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return to.Substring( 0, position ) + text + to.Substring( position, to.Length );
     }
 
+    /// <summary>
+    /// Deletes the currently selected text in the TextField or the character near the
+    /// cursor if no text is selected.
+    /// </summary>
+    /// <param name="fireChangeEvent">
+    /// Indicates whether a change event should be fired after the text is modified.
+    /// </param>
+    /// <returns>The new cursor position after the deletion.</returns>
     public int Delete( bool fireChangeEvent )
     {
         int from     = SelectionStart;
@@ -941,6 +1094,15 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
+    /// <summary>
+    /// Finds the next best suited <see cref="TextField"/> to focus on based on the provided parameters.
+    /// </summary>
+    /// <param name="actors">The list of actors to search through.</param>
+    /// <param name="best">The currently identified best candidate for the next <see cref="TextField"/>.</param>
+    /// <param name="bestCoords">The coordinates of the best candidate so far.</param>
+    /// <param name="currentCoords">The current coordinates used for comparison.</param>
+    /// <param name="up">A flag indicating the search direction. If true, searches upward; otherwise, searches downward.</param>
+    /// <returns>The next best <see cref="TextField"/> to focus on, or null if no suitable candidate is found.</returns>
     private TextField? FindNextTextField( SnapshotArrayList< Actor > actors,
                                           TextField? best,
                                           Vector2 bestCoords,
@@ -1004,8 +1166,10 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     }
 
     /// <summary>
-    /// returns True if the text was changed.
+    /// Returns True if the text was changed.
     /// </summary>
+    /// <param name="oldText"> The old text value before modification. </param>
+    /// <param name="newText"> The new text value after modification. </param>
     private bool ChangeText( string? oldText, string? newText )
     {
         if ( ( oldText == null ) || ( newText == null ) )
@@ -1034,11 +1198,27 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return !cancelled;
     }
 
+    /// <summary>
+    /// Determines whether the cursor should continue moving based on the given index and offset.
+    /// </summary>
+    /// <param name="index">The current position of the cursor in the text.</param>
+    /// <param name="offset">The offset to apply to the current cursor position.</param>
+    /// <returns>True if the cursor should continue moving; otherwise, false.</returns>
     protected virtual bool ContinueCursor( int index, int offset )
     {
         return IsWordCharacter( Text[ index + offset ] );
     }
 
+    /// <summary>
+    /// Adjusts the position of the cursor within the text field.
+    /// </summary>
+    /// <param name="forward">
+    /// Specifies the direction of cursor movement. If true, moves the cursor forward;
+    /// otherwise, moves it backward.
+    /// </param>
+    /// <param name="jump">
+    /// Indicates whether to skip over groups of characters (e.g., words) when moving the cursor.
+    /// </param>
     protected virtual void MoveCursor( bool forward, bool jump )
     {
         int limit      = forward ? Text.Length : 0;
@@ -1054,8 +1234,18 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     }
 
     /// <summary>
-    /// Sets the selected text.
+    /// Sets the selection range in the text field based on the provided start and end indices.
     /// </summary>
+    /// <param name="selectionStart">
+    /// The starting index of the selection range. Must be greater than or equal to 0.
+    /// </param>
+    /// <param name="selectionEnd">
+    /// The ending index of the selection range. Must be greater than or equal to 0.
+    /// </param>
+    /// <exception cref="ArgumentException">
+    /// Thrown if either <paramref name="selectionStart"/> or <paramref name="selectionEnd"/>
+    /// is less than 0.
+    /// </exception>
     public virtual void SetSelection( int selectionStart, int selectionEnd )
     {
         if ( selectionStart < 0 )
@@ -1088,11 +1278,20 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         Cursor         = selectionEnd;
     }
 
+    /// <summary>
+    /// Selects all text within the TextField, extending the selection from the beginning
+    /// of the text to the end. This method is used to highlight all characters
+    /// for actions like copying, cutting, or replacing text.
+    /// </summary>
     public void SelectAll()
     {
         SetSelection( 0, Text.Length );
     }
 
+    /// <summary>
+    /// Clears the current text selection in the TextField, if any.
+    /// Sets the <see cref="HasSelection"/> property to false.
+    /// </summary>
     public void ClearSelection()
     {
         HasSelection = false;
@@ -1116,6 +1315,24 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     // ========================================================================
     // ========================================================================
 
+    /// Manages the blinking behavior of the text cursor within a <see cref="TextField"/>.
+    /// <para>
+    /// This class encapsulates the logic for creating, starting, and canceling a task
+    /// that controls the periodic blinking of the cursor. The task is executed asynchronously
+    /// and can be managed through this class.
+    /// </para>
+    /// <para>
+    /// Provides integration with <see cref="TextField"/> by managing the lifecycle of the
+    /// blinking task. The blinking behavior is initiated by calling the <see cref="Create"/>
+    /// method and starts with the <see cref="Start"/> method. The <see cref="Cancel"/> method
+    /// halts the blinking process.
+    /// </para>
+    /// <para>
+    /// Instances of this class are tied to a specific <see cref="TextField"/>, ensuring that
+    /// the blinking behavior is scoped to a single text field. Improper usage or accessing
+    /// methods on a disposed or canceled <see cref="BlinkTaskManager"/> instance may lead to
+    /// undefined behavior.
+    /// </para>
     private class BlinkTaskManager
     {
         private readonly TextField _tf;
@@ -1125,6 +1342,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf = tf;
         }
 
+        /// <summary>
+        /// Creates the blinking task and initializes the cancellation token source.
+        /// </summary>
         public void Create()
         {
             _tf._blinkTokenSource       = new CancellationTokenSource();
@@ -1133,6 +1353,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             CreateBlinkTask();
         }
 
+        /// <summary>
+        /// Handles the blinking task creation.
+        /// </summary>
         private void CreateBlinkTask()
         {
             //@formatter:off
@@ -1145,6 +1368,10 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             //@formatter:on
         }
 
+        /// <summary>
+        /// Starts the blinking task.
+        /// </summary>
+        /// <exception cref="RuntimeException"> Thrown if the task is not created.</exception>
         public void Start()
         {
             if ( _tf is not { _blinkTask: not null } )
@@ -1155,6 +1382,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf._blinkTask.Start();
         }
 
+        /// <summary>
+        /// Cancels the blinking task.
+        /// </summary>
         public void Cancel()
         {
             if ( _tf._blinkTask is { Status: TaskStatus.Running } )
@@ -1167,9 +1397,22 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     // ========================================================================
     // ========================================================================
 
+    /// Manages tasks related to key repetition for a given <see cref="TextField"/>.
+    /// <para>
+    /// This class handles the creation, starting, and cancellation of tasks that repeat
+    /// key input actions at a regular interval. It is used to implement behavior such as
+    /// holding a key down and having the corresponding character input repeat continuously.
+    /// </para>
+    /// <para>
+    /// A <see cref="KeyRepeatTaskManager"/> is associated with a single <see cref="TextField"/>
+    /// and supports operations that manage the lifecycle of the key repeat task, including
+    /// initialization, execution, and termination.
+    /// </para>
     [PublicAPI]
     public class KeyRepeatTaskManager
     {
+        public int KeyCode { get; set; }
+
         private readonly TextField _tf;
 
         public KeyRepeatTaskManager( TextField tf )
@@ -1177,8 +1420,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf = tf;
         }
 
-        public int KeyCode { get; set; }
-
+        /// <summary>
+        /// Handles the creation of the key repeat task.
+        /// </summary>
         public void Create()
         {
             _tf._keyRepeatTokenSource       = new CancellationTokenSource();
@@ -1198,6 +1442,10 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             //@formatter:on
         }
 
+        /// <summary>
+        /// Starts the key repeat task.
+        /// </summary>
+        /// <exception cref="RuntimeException">Thrown if the key repeat task is not initialized.</exception>
         public void Start()
         {
             if ( _tf is not { _keyRepeatTask: not null } )
@@ -1208,6 +1456,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf._keyRepeatTask.Start();
         }
 
+        /// <summary>
+        /// Cancels the key repeat task.
+        /// </summary>
         public void Cancel()
         {
             if ( _tf._keyRepeatTask is { Status: TaskStatus.Running } )
@@ -1220,9 +1471,21 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     // ========================================================================
     // ========================================================================
 
-    // ========================================================================
-    // ========================================================================
-
+    /// A listener class responsible for handling input events specifically for <see cref="TextField"/> widgets.
+    /// <para>
+    /// This class extends <see cref="ClickListener"/> and processes user interactions such as clicks, touches,
+    /// and key events. It provides methods to manage the behavior of the text field when input events occur,
+    /// including cursor movement, text selection, and keyboard event handling.
+    /// </para>
+    /// <para>
+    /// It includes functionality to navigate to the start or end of a text field, position the cursor based
+    /// on touch input, and handle key repeat tasks for continuous key presses. Additionally, it manages
+    /// focus traversal based on typed characters.
+    /// </para>
+    /// <para>
+    /// Designed to be used internally by <see cref="TextField"/> and its subclasses, the listener enhances
+    /// interactive user experiences and ensures compatibility with the event-driven architecture of the UI framework.
+    /// </para>
     [PublicAPI]
     public class TextFieldClickListener : ClickListener
     {
@@ -1310,11 +1573,22 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             base.OnTouchUp( ev, x, y, pointer, button );
         }
 
+        /// <summary>
+        /// Moves the cursor to the beginning of the text field.
+        /// </summary>
+        /// <param name="jump">
+        /// Indicates whether the operation should be treated as a jump, typically for
+        /// selection purposes.
+        /// </param>
         protected virtual void GoHome( bool jump )
         {
             _tf.Cursor = 0;
         }
 
+        /// <summary>
+        /// Positions the cursor at the end of the text within the TextField or TextArea.
+        /// </summary>
+        /// <param name="jump">If true, may include additional logic for navigation behavior.</param>
         protected virtual void GoEnd( bool jump )
         {
             _tf.Cursor = _tf.Text.Length;
@@ -1487,6 +1761,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             return handled;
         }
 
+        /// <inheritdoc />
         public override bool OnKeyUp( InputEvent? ev, int keycode )
         {
             if ( _tf.Disabled )
@@ -1515,6 +1790,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                   || ( character is CarriageReturn or Newline && ( Platform.IsAndroid || Platform.IsIos ) ) );
         }
 
+        /// <inheritdoc />
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             if ( _tf.Disabled )

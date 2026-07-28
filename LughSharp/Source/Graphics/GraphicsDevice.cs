@@ -24,6 +24,7 @@
 
 using LughSharp.Source.Graphics.FrameBuffers;
 using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.Utils;
 
 namespace LughSharp.Source.Graphics;
@@ -102,8 +103,8 @@ public abstract class GraphicsDevice : IGraphicsDevice
             Type = MapApplicationTypeToBackend( appType )
         };
 
-        Graphics.OpenGL.LughGL.Initialisation.LoadVersion();
-        OpenGL.LughGL.Capabilities.OpenGLProfile = profile;
+        LughGL.Initialisation.LoadVersion();
+        LughGL.Capabilities.OpenGLProfile = profile;
     }
 
     /// <summary>

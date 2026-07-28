@@ -27,6 +27,17 @@ using LughSharp.Source.Scene2D.UI.Styles;
 
 namespace LughSharp.Source.Scene2D.UI;
 
+/// <summary>
+/// A UI component that represents a clickable button with text.
+/// This class extends <see cref="Button"/> and uses <see cref="TextButtonStyle"/>
+/// to define its appearance and behaviors.
+/// </summary>
+/// <remarks>
+/// The <c>TextButton</c> class is designed for use in UI scenes. It allows setting and retrieving
+/// text content, customizing appearance via styles, and managing interactions.
+/// </remarks>
+/// <seealso cref="Button"/>
+/// <seealso cref="TextButtonStyle"/>
 [PublicAPI]
 [ActorDefinition( Role = "UI" )]
 public class TextButton : Button, IStyleable< TextButtonStyle >

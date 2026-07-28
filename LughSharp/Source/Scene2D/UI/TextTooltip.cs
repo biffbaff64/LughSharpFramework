@@ -36,31 +36,110 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltipStyle >
     
     // ========================================================================
 
+    /// <summary>
+    /// Represents a tooltip that displays text in the form of a label.
+    /// This class extends the functionality of the base <see cref="Tooltip{T}"/> class,
+    /// providing specific support for displaying styled labels as tooltips.
+    /// </summary>
+    /// <param name="text">The text to display in the tooltip.</param>
+    /// <param name="skin">The skin to use for the tooltip.</param>
+    /// <param name="style">The style to use for the tooltip.</param>
+    public TextTooltip( string text, Skin skin, TextTooltipStyle style )
+        : this( text, new TooltipManager< Label >(), style )
+    {
+    }
+
+    /// <summary>
+    /// Represents a tooltip that displays a text label.
+    /// This class extends the functionality of the <see cref="Tooltip{T}"/> class, allowing
+    /// the integration of styled labels as part of tooltip functionality in a UI context.
+    /// </summary>
+    /// <param name="text">The text to display in the tooltip.</param>
+    /// <param name="skin">The skin to use for the tooltip.</param>
     public TextTooltip( string text, Skin skin )
         : this( text, new TooltipManager< Label >(), skin.Get< TextTooltipStyle >() )
     {
     }
 
+    /// <summary>
+    /// Represents a tooltip that displays text within a styled label.
+    /// Extends the generic <see cref="Tooltip{T}"/> class, utilizing <see cref="Label"/> as
+    /// the tooltip content. This class provides various constructors for creating text tooltips
+    /// using different combinations of text, styles, and tooltip management options.
+    /// </summary>
+    /// <param name="text">The text to display in the tooltip.</param>
+    /// <param name="skin">The skin to use for retrieving the tooltip style.</param>
+    /// <param name="styleName">The name of the style to retrieve from the skin.</param>
     public TextTooltip( string text, Skin skin, string styleName )
         : this( text, new TooltipManager< Label >(), skin.Get< TextTooltipStyle >( styleName ) )
     {
     }
 
+    /// <summary>
+    /// Represents a tooltip that displays text within a label.
+    /// This class extends the <see cref="Tooltip{T}"/> class, offering specific configurations
+    /// for creating and managing tooltips styled with <see cref="TextTooltipStyle"/>.
+    /// </summary>
+    /// <param name="text">The text content to display in the tooltip, rendered as a styled label.</param>
+    /// <param name="style">The <see cref="TextTooltipStyle"/> used to define the tooltip's appearance and behavior.</param>
     public TextTooltip( string text, TextTooltipStyle style )
         : this( text, new TooltipManager< Label >(), style )
     {
     }
-
+    
+    /// <summary>
+    /// Represents a tooltip that displays text within a label.
+    /// This class extends the <see cref="Tooltip{T}"/> class, offering specific configurations
+    /// for creating and managing tooltips styled with <see cref="TextTooltipStyle"/>.
+    /// </summary>
+    /// <param name="text">The text content to display in the tooltip, rendered as a styled label.</param>
+    /// <param name="manager">
+    /// The <see cref="TooltipManager{T}"/> responsible for managing the tooltip's lifecycle and display.
+    /// </param>
+    /// <param name="skin">The skin to use for retrieving the tooltip style.</param>
     public TextTooltip( string text, TooltipManager< Label > manager, Skin skin )
         : this( text, manager, skin.Get< TextTooltipStyle >() )
     {
     }
 
+    /// <summary>
+    /// Represents a tooltip that displays text using a <see cref="Label"/> component.
+    /// This class extends the functionality of the <see cref="Tooltip{T}"/> class,
+    /// providing specialized support for creating and managing tooltips styled with
+    /// <see cref="TextTooltipStyle"/>.
+    /// </summary>
+    /// <param name="text">The text content to display within the tooltip.</param>
+    /// <param name="skin">
+    /// The <see cref="Skin"/> used to configure the tooltip styling and resources.
+    /// </param>
+    /// <param name="manager">
+    /// The <see cref="TooltipManager{T}"/> responsible for managing tooltip behavior
+    /// and positioning.
+    /// </param>
+    /// <param name="styleName">The name of the style specified in the <see cref="Skin"/>.</param>
     public TextTooltip( string text, TooltipManager< Label > manager, Skin skin, string styleName )
         : this( text, manager, skin.Get< TextTooltipStyle >( styleName ) )
     {
     }
 
+    /// <summary>
+    /// Represents a tooltip that displays textual content with configurable styles and behavior.
+    /// This class extends the <see cref="Tooltip{T}"/> functionality, using a <see cref="Label"/>
+    /// to present styled, wrapped text within the tooltip.
+    /// </summary>
+    /// <remarks>
+    /// This tooltip supports customization through the use of a <see cref="TextTooltipStyle"/>,
+    /// providing a flexible mechanism to define visual appearance (e.g., font styles) and layout.
+    /// It works in conjunction with a <see cref="TooltipManager{T}"/> to manage tooltip behavior
+    /// such as maximum width or other contextual settings.
+    /// </remarks>
+    /// <param name="text">The textual content to be displayed in the tooltip.</param>
+    /// <param name="style">
+    /// The <see cref="TextTooltipStyle"/> that defines appearance and layout properties for the tooltip.
+    /// </param>
+    /// <param name="manager">
+    /// The <see cref="TooltipManager{T}"/> responsible for handling tooltip behavior and constraints.
+    /// </param>
     public TextTooltip( string text, TooltipManager< Label > manager, TextTooltipStyle style )
         : base( null, manager )
     {
@@ -78,6 +157,7 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltipStyle >
     /// <summary>
     /// Get the current style of the actor
     /// </summary>
+    /// <returns>The current <see cref="TextTooltipStyle"/> applied to the tooltip.</returns>
     public TextTooltipStyle GetStyle()
     {
         return _style ?? throw new NullReferenceException( "Style cannot be null" );
@@ -86,6 +166,7 @@ public class TextTooltip : Tooltip< Label >, IStyleable< TextTooltipStyle >
     /// <summary>
     /// Set the current style of the actor
     /// </summary>
+    /// <param name="value">The <see cref="TextTooltipStyle"/> to apply to the tooltip.</param>
     public void SetStyle( TextTooltipStyle value )
     {
         _style = value;

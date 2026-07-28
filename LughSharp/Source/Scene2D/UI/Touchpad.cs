@@ -44,6 +44,9 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Touchpad : Widget, IStyleable< TouchpadStyle >
 {
+    /// <summary>
+    /// Indicates whether the touchpad is currently being touched.
+    /// </summary>
     public bool IsTouched { get; set; }
 
     /// <summary>
@@ -65,25 +68,25 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     // ========================================================================
 
     /// <summary>
-    /// Constructor
+    /// Creates a new Touchpad.
     /// </summary>
     /// <param name="deadzoneRadius">
     /// The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </param>
-    /// <param name="skin"></param>
+    /// <param name="skin"> The skin to use for this Touchpad. </param>
     public Touchpad( float deadzoneRadius, Skin skin )
         : this( deadzoneRadius, skin.Get< TouchpadStyle >() )
     {
     }
 
     /// <summary>
-    /// Constructor
+    /// Creates a new Touchpad.
     /// </summary>
     /// <param name="deadzoneRadius">
     /// The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </param>
-    /// <param name="skin"></param>
-    /// <param name="styleName"></param>
+    /// <param name="skin"> The skin to use for this Touchpad. </param>
+    /// <param name="styleName"> The name of the style to use for this Touchpad. </param>
     public Touchpad( float deadzoneRadius, Skin skin, string styleName )
         : this( deadzoneRadius, skin.Get< TouchpadStyle >( styleName ) )
     {
@@ -96,7 +99,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     /// <param name="deadzoneRadius">
     /// The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </param>
-    /// <param name="style"></param>
+    /// <param name="style"> The style to use for this Touchpad. </param>
     public Touchpad( float deadzoneRadius, TouchpadStyle style )
     {
         if ( deadzoneRadius <= 0 )
@@ -119,8 +122,10 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
 
     private float GetHeightUnchecked() => GetHeight();
 
+    /// <inheritdoc />
     public override float GetPrefWidth() => _style.Background?.MinWidth ?? 0;
 
+    /// <inheritdoc />
     public override float GetPrefHeight() => _style.Background?.MinHeight ?? 0;
 
     /// <summary>
@@ -131,6 +136,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     /// <summary>
     /// Set the current style of the actor
     /// </summary>
+    /// <param name="value"> The <see cref="TouchpadStyle"/> to set. </param>
     public void SetStyle( TouchpadStyle value )
     {
         _style = value;
@@ -164,6 +170,19 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
 
     // ========================================================================
 
+    /// <summary>
+    /// Calculates the knob's current position and relative percentage value based on
+    /// touch input coordinates. Updates the knob's state and triggers change events if necessary.
+    /// </summary>
+    /// <param name="x">
+    /// The x-coordinate of the touch input.
+    /// </param>
+    /// <param name="y">
+    /// The y-coordinate of the touch input.
+    /// </param>
+    /// <param name="isTouchUp">
+    /// Indicates whether the current touch action represents the release of the touch input.
+    /// </param>
     private void CalculatePositionAndValue( float x, float y, bool isTouchUp )
     {
         float oldPositionX = _knobPosition.X;
@@ -215,6 +234,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
         }
     }
 
+    /// <inheritdoc />
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( touchable && ( Touchable != Touchable.Enabled ) )
@@ -230,6 +250,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
         return _touchBounds.Contains( x, y ) ? this : null;
     }
 
+    /// <inheritdoc />
     public override void Layout()
     {
         // Recalc pad and deadzone bounds
@@ -252,6 +273,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
         _knobPercent.Set( 0, 0 );
     }
 
+    /// <inheritdoc />
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -280,6 +302,9 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     /// <summary>
     /// The distance in pixels from the center of the touchpad required for the knob to be moved.
     /// </summary>
+    /// <param name="deadzoneRadius">
+    /// The distance in pixels from the center of the touchpad required for the knob to be moved.
+    /// </param>
     public void SetDeadzone( float deadzoneRadius )
     {
         if ( deadzoneRadius < 0 )
@@ -295,6 +320,19 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     // ========================================================================
     // ========================================================================
 
+    /// <summary>
+    /// Handles touch input events for the <see cref="Touchpad"/> widget. This listener is responsible
+    /// for managing the state of touch interactions and updating the touchpad's knob position
+    /// and values accordingly.
+    /// </summary>
+    /// <remarks>
+    /// The listener processes three main types of touch input events:
+    /// - Touch down: Initiates interaction when the touchpad is touched, calculates the knob position,
+    /// and marks the touchpad as touched.
+    /// - Touch drag: Updates the knob position and values as the touch is dragged across the touchpad.
+    /// - Touch up: Ends the interaction, optionally resets the knob to its default position, and marks
+    /// the touchpad as not touched.
+    /// </remarks>
     internal class TouchpadInputListener : InputListener
     {
         private readonly Touchpad _pad;
@@ -304,6 +342,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
             _pad = pad;
         }
 
+        /// <inheritdoc />
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _pad.IsTouched )
@@ -317,20 +356,19 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
             return true;
         }
 
+        /// <inheritdoc />
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             _pad.CalculatePositionAndValue( x, y, false );
         }
 
+        /// <inheritdoc />
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             _pad.IsTouched = false;
             _pad.CalculatePositionAndValue( x, y, _pad.ResetOnTouchUp );
         }
     }
-
-    // ========================================================================
-    // ========================================================================
 }
 
 // ============================================================================

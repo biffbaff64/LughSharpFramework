@@ -114,12 +114,8 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         WriteEnters = true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="x"></param>
-    /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <inheritdoc />
+    /// <exception cref="RuntimeException">Thrown if invalid runtime conditions occur during processing.</exception>
     protected override int LetterUnderCursor( float x )
     {
         if ( LinesBreak.Count <= 0 )
@@ -156,10 +152,14 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         return Math.Max( 0, i - 1 );
     }
 
+    /// <summary>
+    /// Gets the <see cref="TextAreaStyle"/> for this text area.
+    /// </summary>
+    /// <returns>The <see cref="TextAreaStyle"/> used by this text area.</returns>
     public override TextAreaStyle GetStyle() => ( TextAreaStyle )base.GetStyle();
 
     /// <summary>
-    /// Sets the <see cref="TextFieldStyle"/> for this text field.
+    /// Sets the <see cref="TextAreaStyle"/> for this text field.
     /// </summary>
     /// <param name="style"> The style to use. </param>
     public void SetStyle( TextAreaStyle style )
@@ -178,7 +178,6 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
     /// <summary>
     /// Gets the preferred height of this text area.
     /// </summary>
-    /// <returns></returns>
     public override float GetPrefHeight()
     {
         if ( PrefRows <= 0 )
@@ -202,7 +201,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
     }
 
     /// <summary>
-    /// Returns total number of lines that the text occupies
+    /// Returns the total number of lines that the text occupies
     /// </summary>
     public int GetLines()
     {
@@ -246,15 +245,15 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             if ( _moveOffset < 0 )
             {
                 _moveOffset = LinesBreak.Count <= ( CursorLine * 2 )
-                    ? 0
-                    : GlyphPositions[ Cursor ] - GlyphPositions[ LinesBreak[ CursorLine * 2 ] ];
+                                  ? 0
+                                  : GlyphPositions[ Cursor ] - GlyphPositions[ LinesBreak[ CursorLine * 2 ] ];
             }
 
             CursorLine = line;
 
             Cursor = ( CursorLine * 2 ) >= LinesBreak.Count
-                ? Text.Length
-                : LinesBreak[ CursorLine * 2 ];
+                         ? Text.Length
+                         : LinesBreak[ CursorLine * 2 ];
 
             while ( ( Cursor < Text.Length )
                  && ( Cursor <= ( LinesBreak[ ( CursorLine * 2 ) + 1 ] - 1 ) )
@@ -304,6 +303,9 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         UpdateFirstLineShowing();
     }
 
+    /// <summary>
+    /// Updates the first line showing in the text area.
+    /// </summary>
     private void UpdateFirstLineShowing()
     {
         if ( CursorLine != FirstLineShowing )
@@ -333,6 +335,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         return index;
     }
 
+    /// <inheritdoc />
     public override void OnSizeChanged()
     {
         // Cause calculateOffsets to recalculate the line breaks.
@@ -344,12 +347,13 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
 
         float availableHeight = GetHeight()
                               - ( background == null
-                                    ? 0
-                                    : background.BottomHeight + background.TopHeight );
+                                      ? 0
+                                      : background.BottomHeight + background.TopHeight );
 
         LinesShowing = ( int )Math.Floor( availableHeight / font.GetLineHeight() );
     }
 
+    /// <inheritdoc />
     protected override float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
         float textY = GetHeight();
@@ -367,6 +371,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         return textY;
     }
 
+    /// <inheritdoc />
     protected override void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
         int   i          = FirstLineShowing * 2;
@@ -406,14 +411,14 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
                     if ( start == lineStart )
                     {
                         fontLineOffsetWidth = lineFirst.FixedWidth
-                            ? 0
-                            : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
+                                                  ? 0
+                                                  : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
                     }
                     else
                     {
                         fontLineOffsetX = lineFirst.FixedWidth
-                            ? 0
-                            : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
+                                              ? 0
+                                              : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
                     }
                 }
 
@@ -432,6 +437,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         }
     }
 
+    /// <inheritdoc />
     protected override void DrawText( IBatch batch, BitmapFont font, float x, float y )
     {
         float? offsetY = -( GetStyle().Font.GetLineHeight() - TextHeight ) / 2;
@@ -454,11 +460,13 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         }
     }
 
+    /// <inheritdoc />
     protected override void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch, x + GetCursorX(), y + GetCursorY(), cursorPatch.MinWidth, font.GetLineHeight() );
     }
 
+    /// <inheritdoc />
     public override void CalculateOffsets()
     {
         Guard.Against.Null( Text );
@@ -541,12 +549,14 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         }
     }
 
+    /// <inheritdoc />
     public override void SetSelection( int selectionStart, int selectionEnd )
     {
         base.SetSelection( selectionStart, selectionEnd );
         UpdateCurrentLine();
     }
 
+    /// <inheritdoc />
     protected override void MoveCursor( bool forward, bool jump )
     {
         int count = forward ? 1 : -1;
@@ -574,6 +584,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         UpdateCurrentLine();
     }
 
+    /// <inheritdoc />
     protected override bool ContinueCursor( int index, int offset )
     {
         int pos = CalculateCurrentLineIndex( index + offset );
@@ -585,6 +596,12 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
               || ( LinesBreak[ pos + 1 ] == LinesBreak[ pos + 2 ] ) );
     }
 
+    /// <summary>
+    /// Retrieves the horizontal position of the cursor relative to the starting
+    /// position of the current line of text. The position accounts for glyph offsets,
+    /// font scaling, and padding to ensure accurate cursor placement.
+    /// </summary>
+    /// <returns>The horizontal position of the cursor as a float value.</returns>
     public float GetCursorX()
     {
         float          textOffset = 0;
@@ -599,8 +616,8 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             if ( lineFirst != null )
             {
                 glyphOffset = lineFirst.FixedWidth
-                    ? 0
-                    : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
+                                  ? 0
+                                  : ( -lineFirst.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
             }
 
             textOffset = GlyphPositions[ Cursor ] - GlyphPositions[ lineStart ] + glyphOffset;
@@ -609,6 +626,14 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
         return textOffset + fontData.CursorX;
     }
 
+    /// <summary>
+    /// Calculates the Y-coordinate for the cursor's position within the text area,
+    /// relative to the text layout and the visible lines.
+    /// </summary>
+    /// <returns>
+    /// The Y-coordinate for the cursor, adjusted based on the current cursor line,
+    /// the first visible line, and the font's line height.
+    /// </returns>
     public float GetCursorY()
     {
         return -( CursorLine - FirstLineShowing + 1 ) * GetStyle().Font.GetLineHeight();
@@ -630,6 +655,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             _parent = ta;
         }
 
+        /// <inheritdoc />
         protected override void SetCursorPosition( float x, float y )
         {
             _parent._moveOffset = -1;
@@ -659,6 +685,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             _parent.UpdateCurrentLine();
         }
 
+        /// <inheritdoc />
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             bool result = base.OnKeyDown( ev, keycode );
@@ -725,11 +752,13 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             return result;
         }
 
+        /// <inheritdoc />
         protected override bool CheckFocusTraversal( char character )
         {
             return _parent.FocusTraversal && ( character == Tab );
         }
 
+        /// <inheritdoc />
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             bool result = base.OnKeyTyped( ev, character );
@@ -739,6 +768,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             return result;
         }
 
+        /// <inheritdoc />
         protected override void GoHome( bool jump )
         {
             if ( jump )
@@ -751,6 +781,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
             }
         }
 
+        /// <inheritdoc />
         protected override void GoEnd( bool jump )
         {
             if ( jump || ( _parent.CursorLine >= _parent.GetLines() ) )

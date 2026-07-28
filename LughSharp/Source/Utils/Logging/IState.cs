@@ -24,52 +24,15 @@
 
 namespace LughSharp.Source.Utils.Logging;
 
-/// <summary>
-/// Enum holding State Identifiers for use in combination with
-/// <see cref="EnumStateManager"/>.
-/// </summary>
 [PublicAPI]
-public enum StateID
+public interface IState
 {
-    StateSetup,
-    StatePaused,
+    StateID ID { get; }
 
-    // ------------------------------------------
-    Inactive,
-    Limbo,
-    Init,
-    Update,
-    Close,
-
-    // ------------------------------------------
-    StateOpen,
-    StateOpening,
-    StateClosing,
-    StateClosed,
-
-    // ------------------------------------------
-    StateFlashing,
-    StateSteady,
-
-    // ------------------------------------------
-    StateZoomIn,
-    StateZoomOut,
-
-    // ------------------------------------------
-    StatePowerUp,
-    StatePowerDown,
-
-    // ------------------------------------------
-    StateDebugHang,
-
-    // ------------------------------------------
-
-    /// <summary>
-    /// The next available StateID for extension.
-    /// </summary>
-    NextStateID,
+    void OnEnter( object? transitionData = null );
+    void OnUpdate();
+    void OnExit();
 }
 
 // ============================================================================
 // ============================================================================
-
