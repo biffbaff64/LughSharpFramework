@@ -29,6 +29,7 @@ public enum PhysicsBodyType
 {
     // --------------------
     None,
+    
     // --------------------
     Dynamic,
     DynamicSensor,
@@ -37,14 +38,15 @@ public enum PhysicsBodyType
     DynamicCircleSensor,
     DynamicPushable,
     DynamicHeavy,
+    
     // --------------------
     Kinematic,
     KinematicSensor,
     KinematicHeavy,
+    
     // --------------------
     Static,
     StaticSensor,
-    // --------------------
 }
 
 // ============================================================================

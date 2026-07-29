@@ -18,8 +18,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DesktopGLBackend\DesktopGLBackend.csproj"/>
-        <ProjectReference Include="..\LughSharp.Extensions\LughSharp.Extensions.csproj"/>
-        <ProjectReference Include="..\LughSharp.Tests\LughSharp.Tests.csproj"/>
         <ProjectReference Include="..\LughSharp\LughSharp.csproj"/>
     </ItemGroup>
 

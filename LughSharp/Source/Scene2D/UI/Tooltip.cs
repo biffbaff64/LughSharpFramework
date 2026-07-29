@@ -39,7 +39,7 @@ public class Tooltip< T > : InputListener where T : Actor
     public bool                Always      { get; set; }
 
     // ========================================================================
-    
+
     private readonly Vector2 _tmp = new();
 
     // ========================================================================
@@ -77,19 +77,19 @@ public class Tooltip< T > : InputListener where T : Actor
 
     public override bool OnMouseMoved( InputEvent? ev, float x, float y )
     {
-        if ( Container.HasParent() )
+        if ( ( ev?.ListenerActor == null ) || Container.HasParent() )
         {
             return false;
         }
 
-        SetContainerPosition( ev?.ListenerActor, x, y );
+        SetContainerPosition( ev.ListenerActor, x, y );
 
         return true;
     }
 
-    private void SetContainerPosition( Actor? actor, float x, float y )
+    private void SetContainerPosition( Actor actor, float x, float y )
     {
-        if ( actor?.GetStage() == null )
+        if ( actor.GetStage() == null )
         {
             return;
         }
@@ -114,14 +114,23 @@ public class Tooltip< T > : InputListener where T : Actor
             point.X = dist;
         }
 
-        if ( ( point.X + Container.GetWidth() ) > ( actor.GetStage().Width - dist ) )
-        {
-            point.X = actor.GetStage().Width - dist - Container.GetWidth();
-        }
+        var actorStage = actor.GetStage();
 
-        if ( ( point.Y + Container.GetHeight() ) > ( actor.GetStage().Height - dist ) )
+        if ( actorStage == null )
         {
-            point.Y = actor.GetStage().Height - dist - Container.GetHeight();
+            Logger.Error( "Tooltip actor stage is null" );
+        }
+        else
+        {
+            if ( ( point.X + Container.GetWidth() ) > ( actorStage.Width - dist ) )
+            {
+                point.X = actorStage.Width - dist - Container.GetWidth();
+            }
+
+            if ( ( point.Y + Container.GetHeight() ) > ( actorStage.Height - dist ) )
+            {
+                point.Y = actorStage.Height - dist - Container.GetHeight();
+            }
         }
 
         Container.SetPosition( point.X, point.Y );
@@ -141,7 +150,7 @@ public class Tooltip< T > : InputListener where T : Actor
 
         Actor? actor = ev?.ListenerActor;
 
-        if ( ( fromActor != null ) && fromActor.IsDescendantOf( actor ) )
+        if ( ( actor == null ) || ( fromActor != null ) && fromActor.IsDescendantOf( actor ) )
         {
             return;
         }

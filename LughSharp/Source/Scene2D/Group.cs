@@ -647,11 +647,13 @@ public class Group : Actor, ICullable
     {
         Actor actor = Children.RemoveAt( index );
 
-        if ( GetStage() != null )
+        var stage = GetStage();
+        
+        if ( stage != null )
         {
             if ( unfocus )
             {
-                GetStage().Unfocus( actor );
+                stage.Unfocus( actor );
             }
 
             actor.Parent = null;

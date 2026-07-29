@@ -1342,6 +1342,8 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// </summary>
         public void UpdateChildren()
         {
+            Guard.Against.Null( Actor );
+            
             if ( !IsExpanded )
             {
                 return;

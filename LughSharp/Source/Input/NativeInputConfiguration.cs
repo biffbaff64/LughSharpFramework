@@ -91,7 +91,7 @@ public class NativeInputConfiguration
 
     public void Validate()
     {
-        string message = null;
+        string? message = null;
 
         if ( KeyboardType == null ) message           = "OnscreenKeyboardType needs to be non null";
         if ( TextInputWrapper == null ) message       = "TextInputWrapper needs to be non null";

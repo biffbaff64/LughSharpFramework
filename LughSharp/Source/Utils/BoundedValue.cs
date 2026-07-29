@@ -58,10 +58,25 @@ public class BoundedValue
         }
     }
 
-    public int Minimum      { get; set; }
-    public int Maximum      { get; set; }
+    /// <summary>
+    /// The minimum allowed value for this BoundedValue object.
+    /// </summary>
+    public int Minimum { get; set; }
+
+    /// <summary>
+    /// The maximum allowed value for this BoundedValue object.
+    /// </summary>
+    public int Maximum { get; set; }
+
+    /// <summary>
+    /// The amount to increase the CurrentTotal by when Refill() is called.
+    /// </summary>
     public int RefillAmount { get; set; }
-    public int ResetAmount  { get; set; }
+
+    /// <summary>
+    /// The amount to decrease the CurrentTotal to when Reset() is called.
+    /// </summary>
+    public int ResetAmount { get; set; }
 
     // ========================================================================
 
@@ -71,7 +86,7 @@ public class BoundedValue
     public BoundedValue() : this( 0, 100, 0 )
     {
     }
-    
+
     /// <summary>
     /// Creates a new BoundedValue object, setting properties to the provided values.
     /// </summary>
@@ -164,7 +179,7 @@ public class BoundedValue
     {
         CurrentTotal = Minimum;
     }
-    
+
     /// <summary>
     /// Returns <c>true</c> if the CurrentTotal is greater than, or equal to,
     /// the allowed maximum.

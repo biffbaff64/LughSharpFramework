@@ -230,22 +230,31 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
         if ( _style.Background != null )
         {
-            topAndBottom = Math.Max( topAndBottom,
-                                     _style.Background.BottomHeight + _style.Background.TopHeight );
+            topAndBottom = Math.Max
+                (
+                 topAndBottom,
+                 _style.Background.BottomHeight + _style.Background.TopHeight
+                );
             minHeight = Math.Max( minHeight, _style.Background.MinHeight );
         }
 
         if ( _style.FocusedBackground != null )
         {
-            topAndBottom = Math.Max( topAndBottom,
-                                     _style.FocusedBackground.BottomHeight + _style.FocusedBackground.TopHeight );
+            topAndBottom = Math.Max
+                (
+                 topAndBottom,
+                 _style.FocusedBackground.BottomHeight + _style.FocusedBackground.TopHeight
+                );
             minHeight = Math.Max( minHeight, _style.FocusedBackground.MinHeight );
         }
 
         if ( _style.DisabledBackground != null )
         {
-            topAndBottom = Math.Max( topAndBottom,
-                                     _style.DisabledBackground.BottomHeight + _style.DisabledBackground.TopHeight );
+            topAndBottom = Math.Max
+                (
+                 topAndBottom,
+                 _style.DisabledBackground.BottomHeight + _style.DisabledBackground.TopHeight
+                );
             minHeight = Math.Max( minHeight, _style.DisabledBackground.MinHeight );
         }
 
@@ -398,8 +407,11 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             int   minIndex = Math.Min( Cursor, SelectionStart );
             int   maxIndex = Math.Max( Cursor, SelectionStart );
             float minX     = Math.Max( glyphPositions[ minIndex ] - glyphPositions[ _visibleTextStart ], -TextOffset );
-            float maxX = Math.Min( glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ],
-                                   visibleWidth - TextOffset );
+            float maxX = Math.Min
+                (
+                 glyphPositions[ maxIndex ] - glyphPositions[ _visibleTextStart ],
+                 visibleWidth - TextOffset
+                );
 
             _selectionX     = minX;
             _selectionWidth = maxX - minX - _style.Font.FontData.CursorX;
@@ -614,30 +626,36 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
                 if ( _style.MessageFontColor != null )
                 {
-                    messageFont.SetColor( _style.MessageFontColor.R,
-                                          _style.MessageFontColor.G,
-                                          _style.MessageFontColor.B,
-                                          _style.MessageFontColor.A * ActorColor.A * parentAlpha );
+                    messageFont.SetColor
+                        (
+                         _style.MessageFontColor.R,
+                         _style.MessageFontColor.G,
+                         _style.MessageFontColor.B,
+                         _style.MessageFontColor.A * ActorColor.A * parentAlpha
+                        );
                 }
                 else
                 {
                     messageFont.SetColor( Color.Gray, ActorColor.A * parentAlpha );
                 }
 
-                DrawMessageText( batch,
-                                 messageFont,
-                                 x + bgLeftWidth,
-                                 y + textY + yOffset,
-                                 width - bgLeftWidth - bgRightWidth );
+                DrawMessageText
+                    (
+                     batch,
+                     messageFont,
+                     x + bgLeftWidth,
+                     y + textY + yOffset,
+                     width - bgLeftWidth - bgRightWidth
+                    );
             }
         }
         else
         {
             Color? fontColor = Disabled
-                ? _style.DisabledFontColor
-                : focused
-                    ? _style.FocusedFontColor
-                    : _style.FontColor;
+                                   ? _style.DisabledFontColor
+                                   : focused
+                                       ? _style.FocusedFontColor
+                                       : _style.FontColor;
 
             Guard.Against.Null( fontColor ); // Or force fontColor to Color.White?
 
@@ -701,11 +719,14 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     /// </param>
     protected virtual void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
-        selection.Draw( batch,
-                        x + TextOffset + _selectionX + FontOffset,
-                        y - TextHeight - font.GetDescent(),
-                        _selectionWidth,
-                        TextHeight );
+        selection.Draw
+            (
+             batch,
+             x + TextOffset + _selectionX + FontOffset,
+             y - TextHeight - font.GetDescent(),
+             _selectionWidth,
+             TextHeight
+            );
     }
 
     /// <summary>
@@ -717,15 +738,18 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     /// <param name="y">The y-coordinate for the text's position.</param>
     protected virtual void DrawText( IBatch batch, BitmapFont font, float x, float y )
     {
-        font.Draw( batch,
-                   DisplayText,
-                   x + TextOffset,
-                   y,
-                   _visibleTextStart,
-                   _visibleTextEnd,
-                   0,
-                   Align.Left,
-                   false );
+        font.Draw
+            (
+             batch,
+             DisplayText,
+             x + TextOffset,
+             y,
+             _visibleTextStart,
+             _visibleTextEnd,
+             0,
+             Align.Left,
+             false
+            );
     }
 
     /// <summary>
@@ -752,14 +776,17 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     /// <param name="y">The y-coordinate where the cursor should be drawn.</param>
     protected virtual void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
-        cursorPatch.Draw( batch,
-                          x + TextOffset + GlyphPositions[ Cursor ]
-                        - GlyphPositions[ _visibleTextStart ]
-                        + FontOffset
-                        + font.FontData.CursorX,
-                          y - TextHeight - font.GetDescent(),
-                          cursorPatch.MinWidth,
-                          TextHeight );
+        cursorPatch.Draw
+            (
+             batch,
+             x + TextOffset + GlyphPositions[ Cursor ]
+           - GlyphPositions[ _visibleTextStart ]
+           + FontOffset
+           + font.FontData.CursorX,
+             y - TextHeight - font.GetDescent(),
+             cursorPatch.MinWidth,
+             TextHeight
+            );
     }
 
     /// <summary>
@@ -874,8 +901,11 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     {
         if ( HasSelection && !PasswordMode )
         {
-            _clipboard?.Contents = Text.Substring( Math.Min( Cursor, SelectionStart ),
-                                                   Math.Max( Cursor, SelectionStart ) );
+            _clipboard?.Contents = Text.Substring
+                (
+                 Math.Min( Cursor, SelectionStart ),
+                 Math.Max( Cursor, SelectionStart )
+                );
         }
     }
 
@@ -1056,9 +1086,13 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         TextField current       = this;
         Vector2   currentCoords = current.Parent.LocalToStageCoordinates( _tmp2.Set( current.GetX(), current.GetY() ) );
 
+        var stage = GetStage();
+
+        if ( stage == null ) return;
+
         while ( true )
         {
-            TextField? textField = current.FindNextTextField( GetStage().Actors, null, _tmp1, currentCoords, up );
+            TextField? textField = current.FindNextTextField( stage.Actors, null, _tmp1, currentCoords, up );
 
             if ( textField == null )
             {
@@ -1072,7 +1106,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                     currentCoords.Set( float.MaxValue, float.MaxValue );
                 }
 
-                textField = current.FindNextTextField( GetStage().Actors, null, _tmp1, currentCoords, up );
+                textField = current.FindNextTextField( stage.Actors, null, _tmp1, currentCoords, up );
             }
 
             if ( textField == null )
@@ -1082,7 +1116,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                 break;
             }
 
-            if ( GetStage().GetKeyboardFocus() == textField )
+            if ( stage.GetKeyboardFocus() == textField )
             {
                 textField.SelectAll();
 
@@ -1544,9 +1578,11 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             SetCursorPosition( x, y );
             _tf.SelectionStart = _tf.Cursor;
 
-            if ( _tf.GetStage() != null )
+            var tfStage = _tf.GetStage();
+        
+            if ( tfStage != null )
             {
-                _tf.GetStage().SetKeyboardFocus( _tf );
+                tfStage.SetKeyboardFocus( _tf );
             }
 
             _tf._keyboard.Show( true );
@@ -1838,8 +1874,8 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                 bool backspace = character == Backspace;
 
                 bool add = enter
-                    ? _tf.WriteEnters
-                    : !_tf._onlyFontChars || _tf._style.Font.FontData.HasGlyph( character );
+                               ? _tf.WriteEnters
+                               : !_tf._onlyFontChars || _tf._style.Font.FontData.HasGlyph( character );
 
                 bool remove = backspace || delete;
 
@@ -1879,10 +1915,13 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                             return true;
                         }
 
-                        if ( !_tf.WithinMaxLength( _tf.Text.Length
-                                                 - ( _tf.HasSelection
-                                                       ? Math.Abs( _tf.Cursor - _tf.SelectionStart )
-                                                       : 0 ) ) )
+                        if ( !_tf.WithinMaxLength
+                                 (
+                                  _tf.Text.Length
+                                - ( _tf.HasSelection
+                                        ? Math.Abs( _tf.Cursor - _tf.SelectionStart )
+                                        : 0 )
+                                 ) )
                         {
                             return true;
                         }

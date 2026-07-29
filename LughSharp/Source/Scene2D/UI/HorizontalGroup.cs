@@ -724,9 +724,11 @@ public class HorizontalGroup : WidgetGroup
 
         shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
-        if ( GetStage() != null )
+        var stage = GetStage();
+        
+        if ( stage != null )
         {
-            shapes.Color = GetStage().DebugColor;
+            shapes.Color = stage.DebugColor;
         }
 
         shapes.Rect( GetX() + PadLeft,

@@ -131,10 +131,12 @@ public class WidgetGroup : Group, ILayout
             float  parentWidth;
             float  parentHeight;
 
-            if ( ( GetStage() != null ) && ( parent == GetStage().RootGroup ) )
+            var stage = GetStage();
+            
+            if ( stage != null && ( parent == stage.RootGroup ) )
             {
-                parentWidth  = GetStage().Width;
-                parentHeight = GetStage().Height;
+                parentWidth  = stage.Width;
+                parentHeight = stage.Height;
             }
             else
             {

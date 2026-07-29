@@ -2285,9 +2285,11 @@ public class Table : WidgetGroup
 
         shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
-        if ( GetStage() != null )
+        var stage = GetStage();
+        
+        if ( stage != null )
         {
-            shapes.Color = GetStage().DebugColor;
+            shapes.Color = stage.DebugColor;
         }
 
         float x = 0;
