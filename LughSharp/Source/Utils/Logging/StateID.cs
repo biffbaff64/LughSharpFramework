@@ -33,7 +33,9 @@ public enum StateID
 {
     StateSetup,
     StatePaused,
-
+    StateStartupBegin,
+    StateStartupEnd,
+    
     // ------------------------------------------
     Inactive,
     Limbo,
@@ -52,16 +54,60 @@ public enum StateID
     StateSteady,
 
     // ------------------------------------------
+    StateMenuBegin,
+    StateMenuUpdate,
+    StateMenuEnd,
+    
+    // ------------------------------------------
     StateZoomIn,
     StateZoomOut,
-
+    StateFadeIn,
+    StateFadeOut,
+    StateFadeInTrigger,
+    StateFadeOutTrigger,
+    
     // ------------------------------------------
     StatePowerUp,
     StatePowerDown,
 
     // ------------------------------------------
+    StateGame,
+    StateGameOver,
+    StateGameFinished,
+    StateGameEnd,
+    StateGameWin,
+    StateGameLose,
+
+    StateGameOverMessagePrepare,
+    StateGameOverMessage,
+    
+    // ------------------------------------------
+    StateLevelPrepare,
+    StateLevelPrepareRetry,
+    StateLevelRetry,
+    StateLevelPrepareFinished,
+    StateLevelFinished,
+    
+    // ------------------------------------------
     StateDebugHang,
 
+    // ------------------------------------------
+    StateEnabled,
+    StateDisabled,
+    
+    // ------------------------------------------
+    StateMessagePanel,
+    StateSettingsPanel,
+    StateDeveloperPanel,
+    StateWelcomePanel,
+
+    // ------------------------------------------
+    
+    StatePanelStart,
+    StatePanelIntro,
+    StatePanelUpdate,
+    StatePanelClose,
+    
     // ------------------------------------------
 
     /// <summary>

@@ -42,6 +42,40 @@ public interface IPreferences
     // ------------------------------------------------------------------------
 
     /// <summary>
+    /// Returns true if the specified preference is enabled, i.e. its value is true.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    /// <returns> True if the preference is enabled. </returns>
+    bool IsEnabled( string preference );
+
+    /// <summary>
+    /// Returns true if the specified preference is disabled, i.e. its value is false.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    /// <returns> False if the preference is disabled. </returns>
+    bool IsDisabled( string preference );
+
+    /// <summary>
+    /// Sets the specified preference to enabled, i.e. its value is set to true.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    void Enable( string preference );
+
+    /// <summary>
+    /// Sets the specified preference to disabled, i.e. its value is set to false.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    void Disable( string preference );
+
+    /// <summary>
+    /// Toggles the state of the specified preference.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    void ToggleState( string preference );
+
+    // ------------------------------------------------------------------------
+    
+    /// <summary>
     /// Maps the specified key to the specified value in this preferences liost. Neither the
     /// key nor the value can be null. The value can be retrieved by calling the get method
     /// with a key that is equal to the original key.
@@ -49,7 +83,7 @@ public interface IPreferences
     /// <param name="key"> A string holding the ID or Key of this preference. </param>
     /// <param name="val"> The state or value of this preference. </param>
     /// <returns> The current <see cref="IPreferences" /> instance. </returns>
-    IPreferences PutBool( string key, bool val );
+    IPreferences PutBoolean( string key, bool val );
 
     /// <summary>
     /// Maps the specified key to the specified value in this preferences liost. Neither the
@@ -92,7 +126,7 @@ public interface IPreferences
     IPreferences PutString( string key, string val );
 
     /// <summary>
-    /// Calls <see cref="PutBool" />, <see cref="PutInteger" />, <see cref="PutLong" />,
+    /// Calls <see cref="PutBoolean" />, <see cref="PutInteger" />, <see cref="PutLong" />,
     /// <see cref="PutFloat" /> or <see cref="PutString" /> for each preference listed in
     /// <paramref name="vals" />.
     /// </summary>
@@ -106,7 +140,7 @@ public interface IPreferences
     /// If the preference is not found, the default value of false will
     /// be returned.
     /// </summary>
-    bool GetBool( string key );
+    bool GetBoolean( string key );
 
     /// <summary>
     /// Gets the preference specified by <paramref name="key" /> as an INT.
@@ -134,7 +168,7 @@ public interface IPreferences
     /// If the preference is not found, the <paramref name="defValue" /> will
     /// be returned.
     /// </summary>
-    bool GetBool( string key, bool defValue );
+    bool GetBoolean( string key, bool defValue );
 
     /// <summary>
     /// Gets the preference specified by <paramref name="key" /> as an INT.

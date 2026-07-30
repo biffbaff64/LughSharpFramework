@@ -93,6 +93,41 @@ public class Preferences : IPreferences
     }
 
     // ========================================================================
+    
+    /// <inheritdoc />
+    public bool IsEnabled( string preference )
+    {
+        return GetBoolean( preference );
+    }
+
+    /// <inheritdoc />
+    public bool IsDisabled( string preference )
+    {
+        return GetBoolean( preference );
+    }
+
+    /// <inheritdoc />
+    public void Enable( string preference )
+    {
+        PutBoolean( preference, true );
+        Flush();
+    }
+
+    /// <inheritdoc />
+    public void Disable( string preference )
+    {
+        PutBoolean( preference, false );
+        Flush();
+    }
+
+    /// <inheritdoc />
+    public void ToggleState( string preference )
+    {
+        PutBoolean( preference, !GetBoolean( preference ) );
+        Flush();
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Adds or updates multiple entries in the preferences.
@@ -106,7 +141,7 @@ public class Preferences : IPreferences
             switch ( entry.Value )
             {
                 case bool b:
-                    PutBool( entry.Key, b );
+                    PutBoolean( entry.Key, b );
 
                     break;
 
@@ -136,7 +171,7 @@ public class Preferences : IPreferences
     }
 
     /// <inheritdoc />
-    public IPreferences PutBool( string key, bool val )
+    public IPreferences PutBoolean( string key, bool val )
     {
         return Put( key, val.ToString() );
     }
@@ -179,13 +214,13 @@ public class Preferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a boolean value from the preferences.
+    /// Gets a bool value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
-    /// <returns> The boolean value. </returns>
-    public bool GetBool( string key )
+    /// <returns> The bool value. </returns>
+    public bool GetBoolean( string key )
     {
-        return GetBool( key, false );
+        return GetBoolean( key, false );
     }
 
     /// <summary>
@@ -219,12 +254,12 @@ public class Preferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a boolean value from the preferences with a default value.
+    /// Gets a bool value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
-    /// <returns> The boolean value. </returns>
-    public bool GetBool( string key, bool defValue )
+    /// <returns> The bool value. </returns>
+    public bool GetBoolean( string key, bool defValue )
     {
         if ( !_properties.TryGetValue( key, out object? value )
           || ( ( value.ToString() != "true" ) && ( value.ToString() != "false" ) ) )

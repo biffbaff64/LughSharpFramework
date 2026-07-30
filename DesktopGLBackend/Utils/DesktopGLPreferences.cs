@@ -104,7 +104,7 @@ public class DesktopGLPreferences : IPreferences
     // ------------------------------------------------------------------------
 
     /// <inheritdoc />
-    public IPreferences PutBool( string key, bool val )
+    public IPreferences PutBoolean( string key, bool val )
     {
         return _put( key, val.ToString() );
     }
@@ -145,7 +145,7 @@ public class DesktopGLPreferences : IPreferences
             switch ( entry.Value )
             {
                 case bool b:
-                    PutBool( entry.Key, b );
+                    PutBoolean( entry.Key, b );
 
                     break;
 
@@ -179,9 +179,9 @@ public class DesktopGLPreferences : IPreferences
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <returns> The boolean value. </returns>
-    public bool GetBool( string key )
+    public bool GetBoolean( string key )
     {
-        return GetBool( key, false );
+        return GetBoolean( key, false );
     }
 
     /// <summary>
@@ -220,7 +220,7 @@ public class DesktopGLPreferences : IPreferences
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
     /// <returns> The boolean value. </returns>
-    public bool GetBool( string key, bool defValue )
+    public bool GetBoolean( string key, bool defValue )
     {
         if ( !_properties.TryGetValue( key, out object? value )
           || ( ( value.ToString() != "true" ) && ( value.ToString() != "false" ) ) )
@@ -372,6 +372,53 @@ public class DesktopGLPreferences : IPreferences
     /// Returns the number of entries in the preferences.
     /// </summary>
     public int Count => _properties.Count;
+
+    /// <summary>
+    /// Returns true if the specified preference is enabled, i.e. its value is true.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    /// <returns> True if the preference is enabled. </returns>
+    public bool IsEnabled( string preference )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Returns true if the specified preference is disabled, i.e. its value is false.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    /// <returns> False if the preference is disabled. </returns>
+    public bool IsDisabled( string preference )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Sets the specified preference to enabled, i.e. its value is set to true.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    public void Enable( string preference )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Sets the specified preference to disabled, i.e. its value is set to false.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    public void Disable( string preference )
+    {
+        throw new NotImplementedException();
+    }
+
+    /// <summary>
+    /// Toggles the state of the specified preference.
+    /// </summary>
+    /// <param name="preference"> The name of the preference. </param>
+    public void ToggleState( string preference )
+    {
+        throw new NotImplementedException();
+    }
 
     // ========================================================================
 

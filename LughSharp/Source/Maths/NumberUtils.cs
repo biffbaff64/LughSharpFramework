@@ -277,6 +277,35 @@ public abstract class NumberUtils
                ( i >>> 24 );
     }
 
+    /// <summary>
+    /// Determines the appropriate count based on the specified total value.
+    /// </summary>
+    /// <param name="currentTotal">The current total value used to calculate the count.</param>
+    /// <returns>The computed count based on the range of the provided total value.</returns>
+    public static int GetCount( int currentTotal )
+    {
+        int count;
+
+        if ( currentTotal >= 1000 )
+        {
+            count = 100;
+        }
+        else if ( currentTotal >= 100 )
+        {
+            count = 10;
+        }
+        else if ( currentTotal >= 50 )
+        {
+            count = 5;
+        }
+        else
+        {
+            count = 1;
+        }
+
+        return count;
+    }
+
     // ========================================================================
 
     /// <summary>

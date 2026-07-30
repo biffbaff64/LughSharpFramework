@@ -115,7 +115,7 @@ public class DesktopGLApplication : IApplication
 
         // Enable GLProfiling in preferences
         _prefs = GetPreferences( "desktopgl.lugh.engine.preferences" );
-        _prefs.PutBool( "GL Profiling", config.GLProfilingEnabled );
+        _prefs.PutBoolean( "GL Profiling", config.GLProfilingEnabled );
         _prefs.Flush();
 
         // Config.Title becomes the name of the ApplicationListener

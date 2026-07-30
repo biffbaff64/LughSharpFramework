@@ -1029,19 +1029,10 @@ LUGHSHARP/SOURCE/SCENE2D/LISTENERS
     - IP   - IP   - DONE - DialogInputListener
     - IP   - IP   - DONE - DragListener
     - IP   - IP   - DONE - DragScrollListener
-    - IP   - IP   - DONE - FocusListener
+    - DONE - DONE - DONE - FocusListener
     - DONE - DONE - DONE - IEventListener
     - DONE - DONE - DONE - InputListener
-    - IP   - IP   - DONE - ScrollPaneListeners
-
-```
-TODO: Use Lambdas for these, i.e.
-
-Button.AddListener( new ChangeListener( ( ev, actor ) =>
-{
-    // Handle event
-} ) );
-```
+    - DONE - DONE - DONE - ScrollPaneListeners
 
 LUGHSHARP/SOURCE/SCENE2D/UI - DONE
 ---------------------------

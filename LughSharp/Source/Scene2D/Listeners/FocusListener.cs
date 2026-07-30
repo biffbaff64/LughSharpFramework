@@ -84,6 +84,9 @@ public class FocusListener : IEventListener
     // ====================================================================
 
     /// <summary>
+    /// Represents an event triggered when an actor gains or loses focus, either through
+    /// keyboard input or scroll interaction. The event can be configured to provide additional
+    /// details about the type of focus and the related actor involved.
     /// </summary>
     [PublicAPI]
     public class FocusEvent : Event

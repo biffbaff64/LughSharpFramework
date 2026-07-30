@@ -1525,11 +1525,30 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     {
         private readonly TextField _tf;
 
+        // ====================================================================
+        
+        /// <summary>
+        /// Creates a new TextFieldClickListener. Sets the TextField instance to
+        /// a new instance of <see cref="TextField"/> with an empty string and a default skin.
+        /// </summary>
+        /// <remarks>
+        /// This listener is associated with a single <see cref="TextField"/> instance to
+        /// capture and process user interactions.
+        /// </remarks>
         protected TextFieldClickListener()
         {
             _tf = new TextField( string.Empty, new Skin() );
         }
 
+        /// <summary>
+        /// Handles input events and manages text field interactions such as clicks, touch
+        /// gestures, and keyboard input.
+        /// </summary>
+        /// <param name="tf"> The TextField instance to associate with this listener. </param>
+        /// <remarks>
+        /// This listener is associated with a single <see cref="TextField"/> instance to
+        /// capture and process user interactions.
+        /// </remarks>
         protected internal TextFieldClickListener( TextField tf )
         {
             _tf = tf;

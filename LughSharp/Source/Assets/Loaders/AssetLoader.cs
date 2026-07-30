@@ -44,7 +44,7 @@ public enum AssetLoaderType
 /// Abstract base class for asset loaders.
 /// </summary>
 [PublicAPI]
-public abstract class AssetLoader
+public class AssetLoader
 {
     /// <summary>
     /// <see cref="IFileHandleResolver"/> used to map from plain
@@ -60,10 +60,17 @@ public abstract class AssetLoader
     // ========================================================================
 
     /// <summary>
+    /// Default constructor which uses the internal file handle resolver.
+    /// </summary>
+    public AssetLoader() : this( new InternalFileHandleResolver() )
+    {
+    }
+    
+    /// <summary>
     /// Constructor, sets the FileHandleResolver to use to resolve the file
     /// associated with the asset name.
     /// </summary>
-    protected AssetLoader( IFileHandleResolver resolver )
+    public AssetLoader( IFileHandleResolver resolver )
     {
         Resolver = resolver;
     }
@@ -88,9 +95,12 @@ public abstract class AssetLoader
     /// <param name="filename">name of the asset to load</param>
     /// <param name="file">the resolved file to load</param>
     /// <param name="p">parameters for loading the asset</param>
-    public abstract List< AssetDescriptor > GetDependencies< TP >( string filename,
-                                                                   FileInfo file,
-                                                                   TP? p ) where TP : AssetLoaderParameters;
+    public virtual List< AssetDescriptor > GetDependencies< TP >( string filename,
+                                                                  FileInfo file,
+                                                                  TP? p ) where TP : AssetLoaderParameters
+    {
+        throw new NotImplementedException( $"This method must be implemented in all inherting classes." );
+    }
 
     /// <summary>
     /// Loads the asset and returns it as an untyped object. Synchronous loaders

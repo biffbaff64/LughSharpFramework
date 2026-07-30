@@ -42,7 +42,7 @@ public static class DesktopLauncher
         Engine.CheckEnableDevMode();
         Engine.CheckEnableGodMode();
 
-//        BuildTextureAtlases();
+        BuildTextureAtlases();
 
         var game = new DesktopGLApplication( new MainGame(), config );
 

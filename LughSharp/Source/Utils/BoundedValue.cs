@@ -44,7 +44,7 @@ public class BoundedValue
     public int CurrentTotal
     {
         get => _currentTotal;
-        private set
+        set
         {
             // Ensure the value never goes outside the allowed bounds
             int clampedValue = Math.Clamp( value, Minimum, Maximum );

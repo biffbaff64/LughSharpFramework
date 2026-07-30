@@ -340,11 +340,12 @@ public class MathUtils
     }
 
     /// <summary>
+    /// Clamps a given value to be within the specified minimum and maximum bounds.
     /// </summary>
-    /// <param name="value"></param>
-    /// <param name="min"></param>
-    /// <param name="max"></param>
-    /// <returns></returns>
+    /// <param name="value">The value to be clamped.</param>
+    /// <param name="min">The minimum boundary to clamp the value to.</param>
+    /// <param name="max">The maximum boundary to clamp the value to.</param>
+    /// <returns>The clamped value, constrained within the range defined by the minimum and maximum boundaries.</returns>
     public static int Clamp( int value, int min, int max )
     {
         if ( value < min )

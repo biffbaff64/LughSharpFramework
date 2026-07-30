@@ -27,9 +27,10 @@ using LughSharp.Source.Scene2D.UI;
 namespace LughSharp.Source.Scene2D.Listeners;
 
 /// <summary>
-/// 
+/// A listener for handling scrolling events within a <see cref="ScrollPane"/>.
+/// This listener responds to mouse wheel scroll inputs and adjusts the
+/// scroll position of the associated <see cref="ScrollPane"/>.
 /// </summary>
-/// <param name="parent"></param>
 public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
@@ -78,7 +79,13 @@ public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListene
 // ============================================================================
 // ============================================================================
 
-public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
+/// <summary>
+/// A listener that captures touch and mouse events for a <see cref="ScrollPane"/>
+/// and processes them to enable scrolling behaviors, including dragging and scrollbar interactions.
+/// Handles user interactions such as touch down, touch up, dragging, and mouse movement.
+/// </summary>
+[PublicAPI]
+public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
     private          float       _handlePosition;
@@ -107,7 +114,7 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
 
         _parent.GetStage()?.ScrollFocus = _parent;
 
-//        if ( !_parent.FlickScroll )
+        if ( !_parent.FlickScroll )
         {
             _parent.SetScrollbarsVisible( true );
         }
@@ -260,7 +267,14 @@ public sealed class ScrollPaneCaptureListener( ScrollPane parent ) : InputListen
 // ============================================================================
 // ============================================================================
 
-public sealed class ScrollPaneGestureListener : ActorGestureListener
+/// <summary>
+/// A listener for handling gesture-based interactions with a <see cref="ScrollPane"/>.
+/// This listener provides support for user gestures such as panning and flinging,
+/// enabling intuitive navigation and interaction with the content of the associated
+/// <see cref="ScrollPane"/>.
+/// </summary>
+[PublicAPI]
+public class ScrollPaneGestureListener : ActorGestureListener
 {
     private readonly ScrollPane? _parent;
 
@@ -270,13 +284,15 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
     }
 
     /// <summary>
-    /// 
+    /// Called when a pan gesture is detected by the user on the scroll pane.
+    /// Handles scrolling of the content within the scroll pane, updates scroll values,
+    /// enforces bounds, and optionally cancels touch focus if applicable.
     /// </summary>
-    /// <param name="inputEvent"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="deltaX"></param>
-    /// <param name="deltaY"></param>
+    /// <param name="inputEvent">The input event associated with the pan gesture.</param>
+    /// <param name="x">The current x-coordinate of the gesture's drag.</param>
+    /// <param name="y">The current y-coordinate of the gesture's drag.</param>
+    /// <param name="deltaX">The change in the x-coordinate since the last update.</param>
+    /// <param name="deltaY">The change in the y-coordinate since the last update.</param>
     public override void OnPan( InputEvent inputEvent, float x, float y, float deltaX, float deltaY )
     {
         Guard.Against.Null( _parent );
@@ -296,12 +312,13 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
     }
 
     /// <summary>
-    /// 
+    /// Invoked when a fling gesture is detected. Manages the fling behavior of the scroll pane,
+    /// applying velocity to the scroll position based on the fling gesture parameters.
     /// </summary>
-    /// <param name="inputEvent"></param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
-    /// <param name="button"></param>
+    /// <param name="inputEvent">The event associated with the fling gesture.</param>
+    /// <param name="x">The horizontal velocity of the fling. A positive value represents rightward motion.</param>
+    /// <param name="y">The vertical velocity of the fling. A positive value represents downward motion.</param>
+    /// <param name="button">The button involved in the fling gesture, if applicable.</param>
     public override void OnFling( InputEvent inputEvent, float x, float y, int button )
     {
         Guard.Against.Null( _parent );
@@ -330,10 +347,16 @@ public sealed class ScrollPaneGestureListener : ActorGestureListener
     }
 
     /// <summary>
-    /// 
+    /// Handles the event passed into the method. If the event is a touch down input event,
+    /// it resets the fling timer. If a touch focus cancel event is detected, it triggers a
+    /// cancellation of the scroll pane. Returns true if the event is processed, otherwise false.
     /// </summary>
-    /// <param name="inputEvent"></param>
-    /// <returns></returns>
+    /// <param name="inputEvent">
+    /// The event to be processed, provided as an instance of <see cref="Event"/>.
+    /// </param>
+    /// <returns>
+    /// True if the event has been handled; otherwise, false.
+    /// </returns>
     public override bool Handle( Event inputEvent )
     {
         Guard.Against.Null( _parent );

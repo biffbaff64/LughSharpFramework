@@ -63,6 +63,22 @@ public class AtlasLoader
     }
 
     /// <summary>
+    /// Gets a loader of the specified type for the given atlas name.
+    /// </summary>
+    /// <param name="atlasName"> The name of the atlas for which to get a loader. </param>
+    /// <typeparam name="T"> The type of atlas the requested loader is for. </typeparam>
+    /// <returns> The requested loader, or null if not found. </returns>
+    /// <example>
+    /// <code>
+    /// var loader = atlasLoader.GetLoader&lt;TextureAtlas&gt;( "my-atlas" );
+    /// </code>
+    /// </example>
+    public T? GetLoader< T >( string atlasName ) where T : class
+    {
+        return _assetManager.Get<T>( atlasName );
+    }
+
+    /// <summary>
     /// Loads all registered atlases into the AssetManager.
     /// </summary>
     public void Load()
