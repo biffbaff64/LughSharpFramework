@@ -31,6 +31,11 @@ namespace LughSharp.Source.Graphics.G2D;
 public enum AnimationMode
 {
     /// <summary>
+    /// No animation mode set.
+    /// </summary>
+    None,
+    
+    /// <summary>
     /// Runs through the animation from frame 0 to the last frame, then stops.
     /// </summary>
     Normal,

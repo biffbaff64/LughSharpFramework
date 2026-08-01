@@ -380,7 +380,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> True if the preference is enabled. </returns>
     public bool IsEnabled( string preference )
     {
-        throw new NotImplementedException();
+        return GetBoolean( preference );
     }
 
     /// <summary>
@@ -390,7 +390,7 @@ public class DesktopGLPreferences : IPreferences
     /// <returns> False if the preference is disabled. </returns>
     public bool IsDisabled( string preference )
     {
-        throw new NotImplementedException();
+        return !GetBoolean( preference );
     }
 
     /// <summary>
@@ -399,7 +399,7 @@ public class DesktopGLPreferences : IPreferences
     /// <param name="preference"> The name of the preference. </param>
     public void Enable( string preference )
     {
-        throw new NotImplementedException();
+        PutBoolean( preference, true );
     }
 
     /// <summary>
@@ -408,7 +408,7 @@ public class DesktopGLPreferences : IPreferences
     /// <param name="preference"> The name of the preference. </param>
     public void Disable( string preference )
     {
-        throw new NotImplementedException();
+        PutBoolean( preference, false );
     }
 
     /// <summary>
@@ -417,7 +417,7 @@ public class DesktopGLPreferences : IPreferences
     /// <param name="preference"> The name of the preference. </param>
     public void ToggleState( string preference )
     {
-        throw new NotImplementedException();
+        PutBoolean( preference, !GetBoolean( preference ) );
     }
 
     // ========================================================================

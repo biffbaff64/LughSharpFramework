@@ -54,6 +54,9 @@ public enum StateID
     StateSteady,
 
     // ------------------------------------------
+    StateGetReady,
+
+    // ------------------------------------------
     StateMenuBegin,
     StateMenuUpdate,
     StateMenuEnd,
@@ -102,7 +105,6 @@ public enum StateID
     StateWelcomePanel,
 
     // ------------------------------------------
-    
     StatePanelStart,
     StatePanelIntro,
     StatePanelUpdate,

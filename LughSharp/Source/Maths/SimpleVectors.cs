@@ -29,11 +29,10 @@ namespace LughSharp.Source.Maths;
 /// for use when that is all that is needed.
 /// </summary>
 [PublicAPI]
-[StructLayout( LayoutKind.Sequential )]
-public struct Vec2< T >
+public record Vec2< T >
 {
-    public T X;
-    public T Y;
+    public T X { get; set; } = default!;
+    public T Y { get; set; } = default!;
 }
 
 /// <summary>
@@ -41,12 +40,11 @@ public struct Vec2< T >
 /// for use when that is all that is needed.
 /// </summary>
 [PublicAPI]
-[StructLayout( LayoutKind.Sequential )]
-public struct Vec3< T >
+public record Vec3< T >
 {
-    public T X;
-    public T Y;
-    public T Z;
+    public T X { get; set; } = default!;
+    public T Y { get; set; } = default!;
+    public T Z { get; set; } = default!;
 }
 
 // ========================================================================

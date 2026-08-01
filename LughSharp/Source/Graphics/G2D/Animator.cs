@@ -31,9 +31,9 @@ namespace LughSharp.Source.Graphics.G2D;
 public class Animator
 {
     private readonly AssetManager _assetManager;
-    
+
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new instance of the <see cref="Animator"/> class.
     /// </summary>
@@ -42,7 +42,7 @@ public class Animator
     {
         _assetManager = assetManager;
     }
-    
+
     /// <summary>
     /// Creates an animation from a TextureAtlas.
     /// </summary>
@@ -88,29 +88,64 @@ public class Animator
     }
 
     /// <summary>
-    /// 
+    /// Creates a new animation using the specified texture region and parameters.
     /// </summary>
-    /// <param name="animation"></param>
-    /// <param name="elapsedAnimTime"></param>
-    /// <param name="looping"></param>
-    /// <returns></returns>
+    /// <param name="asset">The texture region to use for generating animation frames.</param>
+    /// <param name="frameWidth">The width of each frame in the animation.</param>
+    /// <param name="frameHeight">The height of each frame in the animation.</param>
+    /// <param name="frameDuration">The duration of each frame in seconds. Default is 1.0f.</param>
+    /// <param name="playMode">
+    /// The playback mode of the animation (e.g., loop, reversed). Default is <see cref="AnimationMode.Loop"/>.
+    /// </param>
+    /// <returns>
+    /// A new instance of <see cref="Animation{T}"/> with the specified parameters, or
+    /// null if the operation fails.
+    /// </returns>
+    public Animation< TextureRegion > CreateAnimation( TextureRegion asset,
+                                                        int frameWidth,
+                                                        int frameHeight,
+                                                        float frameDuration = 1.0f,
+                                                        AnimationMode playMode = AnimationMode.Loop )
+    {
+        Guard.Against.Null( asset );
+
+        TextureRegion[] splits     = asset.SplitInto( frameWidth, frameHeight );
+        var             animFrames = new TextureRegion[ splits.Length ];
+
+        Array.Copy( splits, animFrames, splits.Length );
+
+        var animation = new Animation< TextureRegion >( frameDuration / 6f, animFrames )
+        {
+            PlayMode = playMode
+        };
+
+        return animation;
+    }
+
+    /// <summary>
+    /// Retrieves the appropriate animation frame based on the elapsed animation time
+    /// and whether the animation is looping.
+    /// </summary>
+    /// <param name="animation">The animation object containing the frames.</param>
+    /// <param name="elapsedAnimTime">The elapsed time of the animation in seconds.</param>
+    /// <param name="looping">Indicates whether the animation should loop.</param>
+    /// <returns>Returns the texture region representing the current frame of the animation.</returns>
     public TextureRegion NextFrame( Animation< TextureRegion > animation,
                                     float elapsedAnimTime,
                                     bool looping )
     {
         return animation.GetKeyFrame( elapsedAnimTime, looping );
     }
-    
+
     /// <summary>
-    /// 
+    /// Randomizes the animation time based on a given delta value and a multiplier.
     /// </summary>
-    /// <param name="animTime"></param>
-    /// <param name="delta"></param>
-    /// <returns></returns>
+    /// <param name="animTime">The current animation time to be randomized.</param>
+    /// <param name="delta">The delta value used as a multiplier for randomness.</param>
+    /// <returns>A new randomized animation time.</returns>
     public float RandomiseAnimTime( float animTime, float delta )
     {
         return delta * MathUtils.Random( 10 );
-
     }
 }
 

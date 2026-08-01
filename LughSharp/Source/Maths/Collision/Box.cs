@@ -50,6 +50,18 @@ public class Box
     }
 
     /// <summary>
+    /// Creates a copy of the specified Box.
+    /// </summary>
+    /// <param name="box">The Box to copy.</param>
+    public Box( Box box )
+    {
+        X      = box.X;
+        Y      = box.Y;
+        Width  = box.Width;
+        Height = box.Height;
+    }
+
+    /// <summary>
     /// Constructs a new Box with the specified position and size.
     /// </summary>
     /// <param name="x">The x-coordinate of the top-left corner of the box.</param>
