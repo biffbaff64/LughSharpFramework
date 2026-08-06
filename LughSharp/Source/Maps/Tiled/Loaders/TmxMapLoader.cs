@@ -123,10 +123,10 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// Loads the OpenGL part of the asset.
     /// </summary>
     /// <param name="manager">The asset manager responsible for loading the asset.</param>
-    /// <param name="tmxFile"> the resolved file to load </param>
+    /// <param name="file"> the resolved file to load </param>
     /// <param name="parameter">The parameters for loading the asset.</param>
     public override TiledMap LoadSync< TP >( AssetManager manager,
-                                             FileInfo tmxFile,
+                                             FileInfo file,
                                              TP? parameter ) where TP : class
     {
         return Map;

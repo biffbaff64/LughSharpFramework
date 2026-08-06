@@ -36,10 +36,9 @@ public class WindowedMean
 {
     private readonly float[] _values;
 
-    private int   _addedValues;
-    private bool  _dirty = true;
-    private int   _lastValue;
-    private float _mean;
+    private int  _addedValues;
+    private bool _dirty = true;
+    private int  _lastValue;
 
     /// <summary>
     /// constructor, window_size specifies the number of samples we will
@@ -74,11 +73,11 @@ public class WindowedMean
                         mean += t;
                     }
 
-                    _mean  = mean / _values.Length;
+                    field  = mean / _values.Length;
                     _dirty = false;
                 }
 
-                return _mean;
+                return field;
             }
 
             return 0;

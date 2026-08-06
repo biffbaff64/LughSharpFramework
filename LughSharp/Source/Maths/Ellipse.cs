@@ -270,19 +270,19 @@ public class Ellipse : IShape2D
     }
 
     /// <inheritdoc />
-    public override bool Equals( object? o )
+    public override bool Equals( object? obj )
     {
-        if ( o == this )
+        if ( obj == this )
         {
             return true;
         }
 
-        if ( ( o == null ) || ( o.GetType() != GetType() ) )
+        if ( ( obj == null ) || ( obj.GetType() != GetType() ) )
         {
             return false;
         }
 
-        var e = ( Ellipse )o;
+        var e = ( Ellipse )obj;
 
         return X.Equals( e.X )
             && Y.Equals( e.Y )

@@ -128,7 +128,7 @@ public interface IImageResolver
                 throw new ArgumentNullException( nameof( name ), "Image name cannot be null or whitespace" );
             }
 
-            if ( !_assetManager.IsLoaded( name, typeof( Texture2D ) ) )
+            if ( !_assetManager.IsLoaded< Texture2D >( name ) )
             {
                 throw new AssetNotLoadedException( $"The asset '{name}' is not loaded." );
             }

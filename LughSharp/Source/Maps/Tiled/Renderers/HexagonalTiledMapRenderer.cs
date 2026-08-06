@@ -80,21 +80,21 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
 
     private void Init( TiledMap map )
     {
-        var axis = map.Properties.Get< string >( "staggeraxis" );
+        var axis = map.Properties.GetProperty< string >( "staggeraxis" );
 
         if ( axis != null )
         {
-            _staggerAxisX = axis.Equals( "x" );
+            _staggerAxisX = axis.Equals( "x", StringComparison.Ordinal );
         }
 
-        var index = map.Properties.Get< string >( "staggerindex" );
+        var index = map.Properties.GetProperty< string >( "staggerindex" );
 
         if ( index != null )
         {
-            _staggerIndexEven = index.Equals( "even" );
+            _staggerIndexEven = index.Equals( "even", StringComparison.Ordinal );
         }
 
-        int? length = map.Properties.Get< int >( "hexsidelength" );
+        int? length = map.Properties.GetProperty< int >( "hexsidelength" );
 
         if ( length != null )
         {
@@ -104,7 +104,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
         {
             if ( _staggerAxisX )
             {
-                length = map.Properties.Get< int >( "tilewidth" );
+                length = map.Properties.GetProperty< int >( "tilewidth" );
 
                 if ( length != null )
                 {
@@ -118,7 +118,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
             }
             else
             {
-                length = map.Properties.Get< int >( "tileheight" );
+                length = map.Properties.GetProperty< int >( "tileheight" );
 
                 if ( length != null )
                 {

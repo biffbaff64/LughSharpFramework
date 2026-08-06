@@ -148,14 +148,14 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// <summary>
     /// Sets the view for the renderer using the specified projection matrix and viewport dimensions.
     /// </summary>
-    /// <param name="projection">The projection matrix to be used for rendering.</param>
+    /// <param name="projectionMatrix">The projection matrix to be used for rendering.</param>
     /// <param name="x">The x-coordinate of the viewport's bottom-left corner in world units.</param>
     /// <param name="y">The y-coordinate of the viewport's bottom-left corner in world units.</param>
     /// <param name="width">The width of the viewport in world units.</param>
     /// <param name="height">The height of the viewport in world units.</param>
-    public void SetView( Matrix4 projection, float x, float y, float width, float height )
+    public void SetView( Matrix4 projectionMatrix, float x, float y, float width, float height )
     {
-        Batch.SetProjectionMatrix( projection );
+        Batch.SetProjectionMatrix( projectionMatrix );
         ViewBounds.Set( x, y, width, height );
     }
 
@@ -216,8 +216,8 @@ public class BatchTileMapRenderer : ITiledMapRenderer
     /// Render the specified <see cref="MapObject"/>. This base method
     /// does nothing, and should be overridden by any extending classes.
     /// </summary>
-    /// <param name="obj"></param>
-    public virtual void RenderObject( MapObject obj )
+    /// <param name="mapObject"></param>
+    public virtual void RenderObject( MapObject mapObject )
     {
     }
 

@@ -34,12 +34,12 @@ namespace LughSharp.Source.Maths;
 [PublicAPI]
 public class Affine2
 {
-    public float M00 = 1;
-    public float M01;
-    public float M02;
-    public float M10;
-    public float M11 = 1;
-    public float M12;
+    public float M00 { get; set; } = 1;
+    public float M01 { get; set; }
+    public float M02 { get; set; }
+    public float M10 { get; set; }
+    public float M11 { get; set; } = 1;
+    public float M12 { get; set; }
 
     // constant: m21 = 0, m21 = 1, m22 = 1
 

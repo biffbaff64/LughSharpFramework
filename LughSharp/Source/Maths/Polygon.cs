@@ -40,10 +40,8 @@ public class Polygon : IShape2D
 
     // ========================================================================
 
-    private Rectangle? _bounds;
-    private bool       _dirty = true;
-    private float[]?   _localVertices;
-    private float[]?   _worldVertices;
+    private bool     _dirty = true;
+    private float[]? _localVertices;
 
     // ========================================================================
 
@@ -87,14 +85,14 @@ public class Polygon : IShape2D
         {
             if ( !_dirty )
             {
-                return _worldVertices;
+                return field;
             }
 
             _dirty = false;
 
-            if ( ( _worldVertices == null ) || ( _worldVertices.Length != _localVertices?.Length ) )
+            if ( ( field == null ) || ( field.Length != _localVertices?.Length ) )
             {
-                _worldVertices = new float[ _localVertices!.Length ];
+                field = new float[ _localVertices!.Length ];
             }
 
             bool  scale = ScaleX is not 1 || ScaleY is not 1;
@@ -122,11 +120,11 @@ public class Polygon : IShape2D
                     y = ( sin * oldX ) + ( cos * y );
                 }
 
-                _worldVertices[ i ]     = X + x + OriginX;
-                _worldVertices[ i + 1 ] = Y + y + OriginY;
+                field[ i ]     = X + x + OriginX;
+                field[ i + 1 ] = Y + y + OriginY;
             }
 
-            return _worldVertices;
+            return field;
         }
     }
 
@@ -211,14 +209,14 @@ public class Polygon : IShape2D
                 maxY = maxY < vertices[ i + 1 ] ? vertices[ i + 1 ] : maxY;
             }
 
-            _bounds ??= new Rectangle();
+            field ??= new Rectangle();
 
-            _bounds.X      = minX;
-            _bounds.Y      = minY;
-            _bounds.Width  = maxX - minX;
-            _bounds.Height = maxY - minY;
+            field.X      = minX;
+            field.Y      = minY;
+            field.Width  = maxX - minX;
+            field.Height = maxY - minY;
 
-            return _bounds;
+            return field;
         }
     }
 
@@ -326,4 +324,3 @@ public class Polygon : IShape2D
 
 // ========================================================================
 // ========================================================================
-

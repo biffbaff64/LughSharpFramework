@@ -58,14 +58,14 @@ public class TileSetLayout
     /// <param name="baseDir"> the directory in which the tile set image is stored </param>
     protected TileSetLayout( int firstgid, TiledMapTileSet tileset, FileInfo baseDir )
     {
-        var tileWidth  = tileset.Properties.Get< int >( "tilewidth" );
-        var tileHeight = tileset.Properties.Get< int >( "tileheight" );
-        var margin     = tileset.Properties.Get< int >( "margin" );
-        var spacing    = tileset.Properties.Get< int >( "spacing" );
+        var tileWidth  = tileset.Properties.GetProperty< int >( "tilewidth" );
+        var tileHeight = tileset.Properties.GetProperty< int >( "tileheight" );
+        var margin     = tileset.Properties.GetProperty< int >( "margin" );
+        var spacing    = tileset.Properties.GetProperty< int >( "spacing" );
 
         Firstgid = firstgid;
 
-        var imagePath = tileset.Properties.Get< string >( "imagesource" );
+        var imagePath = tileset.Properties.GetProperty< string >( "imagesource" );
 
         Guard.Against.NullOrEmpty( imagePath );
 

@@ -253,19 +253,19 @@ public class Circle : IShape2D
     }
 
     /// <inheritdoc />
-    public override bool Equals( object? o )
+    public override bool Equals( object? obj )
     {
-        if ( o == this )
+        if ( obj == this )
         {
             return true;
         }
 
-        if ( ( o == null ) || ( o.GetType() != GetType() ) )
+        if ( ( obj == null ) || ( obj.GetType() != GetType() ) )
         {
             return false;
         }
 
-        var c = ( Circle )o;
+        var c = ( Circle )obj;
 
         return ( Math.Abs( X - c.X ) < NumberUtils.FloatTolerance )
             || ( Math.Abs( Y - c.Y ) < NumberUtils.FloatTolerance )

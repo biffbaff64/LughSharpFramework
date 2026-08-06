@@ -143,9 +143,9 @@ public class Vector3 : IVector< Vector3 >
     }
 
     /// <inheritdoc />
-    public Vector3 Scale( Vector3 other )
+    public Vector3 Scale( Vector3 scalar )
     {
-        return Set( X * other.X, Y * other.Y, Z * other.Z );
+        return Set( X * scalar.X, Y * scalar.Y, Z * scalar.Z );
     }
 
     /// <inheritdoc />
@@ -834,9 +834,9 @@ public class Vector3 : IVector< Vector3 >
         {
             try
             {
-                float x = float.Parse( v.Substring( 1, s0 ) );
-                float y = float.Parse( v.Substring( s0 + 1, s1 ) );
-                float z = float.Parse( v.Substring( s1 + 1, v.Length - 1 ) );
+                float x = NumberParsing.ParseFloat( v.Substring( 1, s0 ) );
+                float y = NumberParsing.ParseFloat( v.Substring( s0 + 1, s1 ) );
+                float z = NumberParsing.ParseFloat( v.Substring( s1 + 1, v.Length - 1 ) );
 
                 return Set( x, y, z );
             }
@@ -892,7 +892,9 @@ public class Vector3 : IVector< Vector3 >
     [MethodImpl( MethodImplOptions.AggressiveInlining )]
     public static bool operator ==( Vector3 left, Vector3 right )
     {
-        return ( left.X == right.X ) && ( left.Y == right.Y ) && ( left.Z == right.Z );
+        return left.HasSameDirection( right );
+
+//        return ( left.X == right.X ) && ( left.Y == right.Y ) && ( left.Z == right.Z );
     }
 
     /// <summary>Returns a value that indicates whether two specified vectors are not equal.</summary>

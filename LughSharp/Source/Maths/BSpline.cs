@@ -116,7 +116,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T Cubic( T output, float t, T[] points, bool continuous, T tmp )
+    public T Cubic( T output, float t, T[] points, bool continuous, T tmp )
     {
         int   n = continuous ? points.Length : points.Length - 3;
         float u = t * n;
@@ -136,7 +136,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T CubicDerivative( T output, float t, T[] points, bool continuous, T tmp )
+    public T CubicDerivative( T output, float t, T[] points, bool continuous, T tmp )
     {
         int   n = continuous ? points.Length : points.Length - 3;
         float u = t * n;
@@ -159,7 +159,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T Cubic( T output, int i, float u, T[] points, bool continuous, T tmp )
+    public T Cubic( T output, int i, float u, T[] points, bool continuous, T tmp )
     {
         int   n  = points.Length;
         float dt = 1f - u;
@@ -170,14 +170,20 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
         if ( continuous || ( i > 0 ) )
         {
-            output.Add( tmp.Set( points[ ( n + i - 1 ) % n ] )
-                           .Scale( dt * dt * dt * D6 ) );
+            output.Add
+                (
+                 tmp.Set( points[ ( n + i - 1 ) % n ] )
+                    .Scale( dt * dt * dt * D6 )
+                );
         }
 
         if ( continuous || ( i < ( n - 1 ) ) )
         {
-            output.Add( tmp.Set( points[ ( i + 1 ) % n ] )
-                           .Scale( ( ( -3f * t3 ) + ( 3f * t2 ) + ( 3f * u ) + 1f ) * D6 ) );
+            output.Add
+                (
+                 tmp.Set( points[ ( i + 1 ) % n ] )
+                    .Scale( ( ( -3f * t3 ) + ( 3f * t2 ) + ( 3f * u ) + 1f ) * D6 )
+                );
         }
 
         if ( continuous || ( i < ( n - 2 ) ) )
@@ -200,7 +206,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T CubicDerivative( T output, int i, float u, T[] points, bool continuous, T tmp )
+    public T CubicDerivative( T output, int i, float u, T[] points, bool continuous, T tmp )
     {
         int   n  = points.Length;
         float dt = 1f - u;
@@ -210,14 +216,20 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
         if ( continuous || ( i > 0 ) )
         {
-            output.Add( tmp.Set( points[ ( n + i - 1 ) % n ] )
-                           .Scale( -0.5f * dt * dt ) );
+            output.Add
+                (
+                 tmp.Set( points[ ( n + i - 1 ) % n ] )
+                    .Scale( -0.5f * dt * dt )
+                );
         }
 
         if ( continuous || ( i < ( n - 1 ) ) )
         {
-            output.Add( tmp.Set( points[ ( i + 1 ) % n ] )
-                           .Scale( ( -1.5f * t2 ) + u + 0.5f ) );
+            output.Add
+                (
+                 tmp.Set( points[ ( i + 1 ) % n ] )
+                    .Scale( ( -1.5f * t2 ) + u + 0.5f )
+                );
         }
 
         if ( continuous || ( i < ( n - 2 ) ) )
@@ -238,7 +250,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T Calculate( T output, float t, T[] points, int degree, bool continuous, T tmp )
+    public T Calculate( T output, float t, T[] points, int degree, bool continuous, T tmp )
     {
         int   n = continuous ? points.Length : points.Length - degree;
         float u = t * n;
@@ -259,7 +271,7 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T Derivative( T output, float t, T[] points, int degree, bool continuous, T tmp )
+    public T Derivative( T output, float t, T[] points, int degree, bool continuous, T tmp )
     {
         int   n = continuous ? points.Length : points.Length - degree;
         float u = t * n;
@@ -283,14 +295,11 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T Calculate( T output, int i, float u, T[] points, int degree, bool continuous, T tmp )
+    public T Calculate( T output, int i, float u, T[] points, int degree, bool continuous, T tmp )
     {
-        if ( degree == 3 )
-        {
-            return Cubic( output, i, u, points, continuous, tmp );
-        }
-
-        throw new ArgumentException();
+        return degree == 3
+                   ? Cubic( output, i, u, points, continuous, tmp )
+                   : throw new ArgumentException( $"Invalid b-spline degree: {degree}" );
     }
 
     /// <summary>
@@ -306,14 +315,11 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of out  </returns>
-    public static T Derivative( T output, int i, float u, T[] points, int degree, bool continuous, T tmp )
+    public T Derivative( T output, int i, float u, T[] points, int degree, bool continuous, T tmp )
     {
-        if ( degree == 3 )
-        {
-            return CubicDerivative( output, i, u, points, continuous, tmp );
-        }
-
-        throw new ArgumentException();
+        return degree == 3
+                   ? CubicDerivative( output, i, u, points, continuous, tmp )
+                   : throw new ArgumentException( $"Invalid b-spline degree: {degree}" );
     }
 
     public BSpline< T > Set( T[] controlPoints, int degree, bool continuous )
@@ -339,13 +345,19 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
         for ( var i = 0; i < SpanCount; i++ )
         {
-            Knots.Add( Calculate( controlPoints[ 0 ].Cpy(),
-                                  continuous ? i : ( int )( i + ( 0.5f * degree ) ),
-                                  0f,
-                                  controlPoints,
-                                  degree,
-                                  continuous,
-                                  _tmp ) );
+            Knots.Add
+                (
+                 Calculate
+                     (
+                      controlPoints[ 0 ].Cpy(),
+                      continuous ? i : ( int )( i + ( 0.5f * degree ) ),
+                      0f,
+                      controlPoints,
+                      degree,
+                      continuous,
+                      _tmp
+                     )
+                );
         }
 
         return this;
@@ -354,25 +366,31 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of the spline at position u of the specified span </returns>
     protected virtual T ValueAt( T output, int span, float u )
     {
-        return Calculate( output,
-                          Continuous ? span : span + ( int )( Degree * 0.5f ),
-                          u,
-                          ControlPoints!,
-                          Degree,
-                          Continuous,
-                          _tmp! );
+        return Calculate
+            (
+             output,
+             Continuous ? span : span + ( int )( Degree * 0.5f ),
+             u,
+             ControlPoints!,
+             Degree,
+             Continuous,
+             _tmp!
+            );
     }
 
     /// <returns> The derivative of the spline at position u of the specified span </returns>
     protected virtual T DerivativeAt( T output, int span, float u )
     {
-        return Derivative( output,
-                           Continuous ? span : span + ( int )( Degree * 0.5f ),
-                           u,
-                           ControlPoints!,
-                           Degree,
-                           Continuous,
-                           _tmp! );
+        return Derivative
+            (
+             output,
+             Continuous ? span : span + ( int )( Degree * 0.5f ),
+             u,
+             ControlPoints!,
+             Degree,
+             Continuous,
+             _tmp!
+            );
     }
 
     /// <returns> The span closest to the specified value </returns>
@@ -453,4 +471,3 @@ public class BSpline< T > : IPath< T > where T : IVector< T >
 
 // ========================================================================
 // ========================================================================
-

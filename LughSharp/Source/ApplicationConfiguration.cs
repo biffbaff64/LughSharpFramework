@@ -28,7 +28,9 @@ using LughSharp.Source.IO;
 namespace LughSharp.Source;
 
 /// <summary>
-/// 
+/// Provides configuration for an application, including settings for graphics, audio,
+/// window properties, and more.
+/// This class supports extensive customization of the application runtime environment.
 /// </summary>
 [PublicAPI]
 public class ApplicationConfiguration
@@ -61,10 +63,10 @@ public class ApplicationConfiguration
     public int  Depth                  { get; set; } = 16;
     public int  Stencil                { get; set; }
     public int  Samples                { get; set; }
-    public int  Red                    { get; set; } = 8;
-    public int  Green                  { get; set; } = 8;
-    public int  Blue                   { get; set; } = 8;
-    public int  Alpha                  { get; set; } = 8;
+    public int  Red                    { get; set; } = 0b1000;
+    public int  Green                  { get; set; } = 0b1000;
+    public int  Blue                   { get; set; } = 0b1000;
+    public int  Alpha                  { get; set; } = 0b1000;
     public bool TransparentFramebuffer { get; set; }
 
     // ------------------------------------------
@@ -179,6 +181,12 @@ public class ApplicationConfiguration
     protected const int DefaultWindowMinHeight = 240;
     protected const int DefaultWindowMaxWidth  = 1280;
     protected const int DefaultWindowMaxHeight = 960;
+
+    // ========================================================================
+    // Default display mode settings.
+
+    protected const int DefaultRefreshRate     = 60;
+    protected const int DefaultBitsPerPixel    = 32;
 
     // ========================================================================
 
@@ -300,10 +308,10 @@ public class ApplicationConfiguration
     /// <param name="depth"> depth bits (default 16) </param>
     /// <param name="stencil"> stencil bits (default 0) </param>
     /// <param name="samples"> MSAA samples (default 0) </param>
-    public void SetBackBufferConfig( int r = 8,
-                                     int g = 8,
-                                     int b = 8,
-                                     int a = 8,
+    public void SetBackBufferConfig( int r = 0b1000,
+                                     int g = 0b1000,
+                                     int b = 0b1000,
+                                     int a = 0b1000,
                                      int depth = 16,
                                      int stencil = 0,
                                      int samples = 0 )
@@ -352,34 +360,46 @@ public class ApplicationConfiguration
     }
 
     /// <summary>
-    /// Gets the currterntly active display mode for the given monitor.
+    /// Gets the currently active display mode for the given monitor.
     /// </summary>
     /// <param name="monitor">The monitor to get the display mode for.</param>
     /// <returns>The display mode of the given monitor.</returns>
-    /// <exception cref="NotImplementedException">
-    /// Thrown if this particular implementation of the method is called. Only methods that
-    /// override this method should be called.
-    /// </exception>
+    /// <returns>
+    /// The default implementation returns a default DisplayMode. This method should be
+    /// overridden by implementations that provide a properly suitable display mode.
+    /// </returns>
     public virtual IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
-        throw new NotImplementedException();
+        return new IGraphicsDevice.DisplayMode( DefaultWindowWidth,
+                                               DefaultWindowHeight,
+                                               DefaultRefreshRate,
+                                               DefaultBitsPerPixel );
     }
 
     /// <summary>
     /// Return the available <see cref="IGraphicsDevice.DisplayMode"/>s of the primary monitor
     /// </summary>
     /// <returns>A list of the available display modes of the primary monitor.</returns>
+    /// <returns>
+    /// The default implementation returns an empty DisplayMode array. This method should be
+    /// overridden by implementations that provide a list of available display modes.
+    /// </returns>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        throw new NotImplementedException();
+        return Array.Empty<IGraphicsDevice.DisplayMode>();
     }
 
     /// <summary>
     /// Returns a list of the available <see cref="IGraphicsDevice.DisplayMode"/>s of the given monitor.
     /// </summary>
+    /// <param name="monitor">The monitor to get the display modes list for.</param>
+    /// <returns>
+    /// The default implementation returns an empty DisplayMode array. This method should be
+    /// overridden by implementations that provide a list of available display modes.
+    /// </returns>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
-        throw new NotImplementedException();
+        return Array.Empty<IGraphicsDevice.DisplayMode>();
     }
 
     // ========================================================================

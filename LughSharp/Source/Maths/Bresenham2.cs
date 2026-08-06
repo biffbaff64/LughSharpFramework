@@ -50,12 +50,12 @@ public class Bresenham2
     /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
     /// at integer coordinates.
     /// </summary>
-    /// <param name="start"> the start of the line </param>
-    /// <param name="end"> the end of the line </param>
+    /// <param name="startPoint"> the start of the line </param>
+    /// <param name="endPoint"> the end of the line </param>
     /// <returns> the list of points on the line at integer coordinates  </returns>
-    public virtual List< GridPoint2 > Line( GridPoint2 start, GridPoint2 end )
+    public virtual List< GridPoint2 > Line( GridPoint2 startPoint, GridPoint2 endPoint )
     {
-        return Line( start.X, start.Y, end.X, end.Y );
+        return Line( startPoint.X, startPoint.Y, endPoint.X, endPoint.Y );
     }
 
     /// <summary>
@@ -146,10 +146,10 @@ public class Bresenham2
 
         for ( var i = 0; i <= longest; i++ )
         {
-            GridPoint2? point = pool.Obtain();
+            GridPoint2 point = pool.Obtain();
 
-            point?.Set( startX, startY );
-            output.Add( point! );
+            point.Set( startX, startY );
+            output.Add( point );
 
             numerator += shortest2;
 

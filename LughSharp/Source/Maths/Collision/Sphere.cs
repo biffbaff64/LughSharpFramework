@@ -30,9 +30,10 @@ namespace LughSharp.Source.Maths.Collision;
 [PublicAPI]
 public class Sphere
 {
-    private const   float   Pi43 = MathUtils.Pi * 4f / 3f;
-    public readonly Vector3 Center; // the center of the sphere
-    public readonly float   Radius; // the radius of the sphere
+    private const float Pi43 = MathUtils.Pi * 4f / 3f;
+
+    public Vector3 Center { get; set; } // the center of the sphere
+    public float   Radius { get; set; } // the radius of the sphere
 
     // ========================================================================
 
@@ -63,29 +64,29 @@ public class Sphere
     {
         const int Prime = 71;
 
-        int result = Prime + Center.GetHashCode();
-        result = ( Prime * result ) + NumberUtils.FloatToRawIntBits( Radius );
+        int result = Prime + 147;
+        result = ( Prime * result ) + 741;
 
         return result;
     }
 
     /// <summary>
     /// </summary>
-    /// <param name="o"></param>
+    /// <param name="obj"></param>
     /// <returns></returns>
-    public override bool Equals( object? o )
+    public override bool Equals( object? obj )
     {
-        if ( this == o )
+        if ( this == obj )
         {
             return true;
         }
 
-        if ( ( o == null ) || ( o.GetType() != GetType() ) )
+        if ( ( obj == null ) || ( obj.GetType() != GetType() ) )
         {
             return false;
         }
 
-        var s = ( Sphere )o;
+        var s = ( Sphere )obj;
 
         return ( Math.Abs( this.Radius - s.Radius ) < NumberUtils.FloatTolerance )
             && Center.Equals( s.Center );
@@ -110,5 +111,3 @@ public class Sphere
 
 // ============================================================================
 // ============================================================================
-
-

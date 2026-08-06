@@ -27,6 +27,7 @@ namespace LughSharp.Source.Maps.Tiled.Tiles;
 [PublicAPI]
 public class AnimatedTileBuilder
 {
+    //TODO: Implement animated tile builder.
 }
 
 // ============================================================================

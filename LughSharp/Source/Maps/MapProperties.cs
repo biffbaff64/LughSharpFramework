@@ -41,7 +41,7 @@ public class MapProperties
     /// <param name="key"> The Key. </param>
     /// <typeparam name="T"> The Type of the required property. </typeparam>
     /// <returns> The property, if found, or null. </returns>
-    public virtual T? Get< T >( string key )
+    public virtual T? GetProperty< T >( string key )
     {
         return ( T? )_properties[ key ];
     }
@@ -54,7 +54,7 @@ public class MapProperties
     /// <param name="defaultValue"> The default value. </param>
     /// <typeparam name="T"> The Type of the required property. </typeparam>
     /// <returns> The property, if found, or the default value. </returns>
-    public virtual T Get< T >( string key, T defaultValue )
+    public virtual T GetProperty< T >( string key, T defaultValue )
     {
         object? obj = _properties[ key ];
 

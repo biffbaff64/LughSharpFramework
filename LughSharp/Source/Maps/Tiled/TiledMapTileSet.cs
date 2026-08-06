@@ -74,7 +74,7 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
     /// <returns> tile matching ID, null if it doesn't exist  </returns>
     public ITiledMapTile? GetTile( uint id )
     {
-        ITiledMapTile? tile = _tiles.TryGetValue( id, out ITiledMapTile? tileValue ) ? tileValue : null;
+        ITiledMapTile? tile = _tiles.GetValueOrDefault( id );
 
         return tile;
     }

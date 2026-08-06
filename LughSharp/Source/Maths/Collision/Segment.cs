@@ -82,21 +82,21 @@ public class Segment
 
     /// <summary>
     /// </summary>
-    /// <param name="o"></param>
+    /// <param name="obj"></param>
     /// <returns></returns>
-    public override bool Equals( object? o )
+    public override bool Equals( object? obj )
     {
-        if ( o == this )
+        if ( obj == this )
         {
             return true;
         }
 
-        if ( ( o == null ) || ( o.GetType() != GetType() ) )
+        if ( ( obj == null ) || ( obj.GetType() != GetType() ) )
         {
             return false;
         }
 
-        var s = ( Segment )o;
+        var s = ( Segment )obj;
 
         return VectorA.Equals( s.VectorA ) && VectorB.Equals( s.VectorB );
     }

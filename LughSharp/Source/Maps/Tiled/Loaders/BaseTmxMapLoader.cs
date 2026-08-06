@@ -102,12 +102,12 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
     // ========================================================================
 
-    protected bool ConvertObjectToTileSpace;
-    protected bool FlipY = true;
+    protected bool ConvertObjectToTileSpace { get; set; }
+    protected bool FlipY                    { get; set; } = true;
 
-    protected XmlDocument        XmlDocument = new();
-    protected XmlReader          XmlReader   = new();
-    protected XmlReader.Element? XmlRoot;
+    protected XmlDocument        XmlDocument { get; set; } = new();
+    protected XmlReader          XmlReader   { get; set; } = new();
+    protected XmlReader.Element? XmlRoot     { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -165,7 +165,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
         if ( !string.IsNullOrEmpty( mapOrientation ) )
         {
-            if ( "staggered".Equals( mapOrientation ) )
+            if ( "staggered".Equals( mapOrientation, StringComparison.Ordinal ) )
             {
                 if ( MapHeightInPixels > 1 )
                 {
@@ -206,7 +206,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             throw new LughRuntimeException( "No layers found in map!" );
         }
 
-        for ( int i = 0, j = childCount; i < j; i++ )
+        for ( var i = 0; i < childCount; i++ )
         {
             LoadLayer( Map, Map.Layers, XmlRoot?.GetChild( i ), tmxFile, imageResolver );
         }
@@ -238,7 +238,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
         // --------------------------------------
         // Process any post-load actions.
 
-        foreach ( var (id, propName, targetProps) in RunOnEndOfLoadTiled )
+        foreach ( ( uint id, string propName, MapProperties? targetProps ) in RunOnEndOfLoadTiled )
         {
             ExecutePropertyAssignment( id, propName, targetProps );
         }
@@ -427,7 +427,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     {
         Guard.Against.Null( element );
 
-        if ( element.Name.Equals( "group" ) )
+        if ( element.Name.Equals( "group", StringComparison.Ordinal ) )
         {
             var groupLayer = new MapGroupLayer();
 
@@ -470,13 +470,13 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             throw new ArgumentException( "node.Name cannot by null!" );
         }
 
-        if ( element.Name.Equals( "layer" ) )
+        if ( element.Name.Equals( "layer", StringComparison.Ordinal ) )
         {
             int width  = element.GetIntAttribute( "width" );
             int height = element.GetIntAttribute( "height" );
 
-            var tileWidth  = map.Properties.Get< int >( "tilewidth" );
-            var tileHeight = map.Properties.Get< int >( "tileheight" );
+            var tileWidth  = map.Properties.GetProperty< int >( "tilewidth" );
+            var tileHeight = map.Properties.GetProperty< int >( "tileheight" );
 
             var layer = new TiledMapTileLayer( width, height, tileWidth, tileHeight );
 
@@ -538,7 +538,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             throw new ArgumentException( "element cannot by null!" );
         }
 
-        if ( element.Name.Equals( "objectgroup" ) )
+        if ( element.Name.Equals( "objectgroup", StringComparison.Ordinal ) )
         {
             var layer = new MapLayer();
 
@@ -591,15 +591,21 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             throw new ArgumentException( "element cannot by null!" );
         }
 
-        if ( element.Name.Equals( "imagelayer" ) )
+        if ( element.Name.Equals( "imagelayer", StringComparison.Ordinal ) )
         {
-            float x = float.Parse( element.GetAttribute( "offsetx" )
-                                ?? element.GetAttribute( "x" )
-                                ?? "0" );
+            float x = NumberParsing.ParseFloat
+                (
+                 element.GetAttribute( "offsetx" )
+              ?? element.GetAttribute( "x" )
+              ?? "0"
+                );
 
-            float y = float.Parse( element.GetAttribute( "offsety" )
-                                ?? element.GetAttribute( "y" )
-                                ?? "0" );
+            float y = NumberParsing.ParseFloat
+                (
+                 element.GetAttribute( "offsety" )
+              ?? element.GetAttribute( "y" )
+              ?? "0"
+                );
 
             if ( FlipY )
             {
@@ -648,7 +654,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     protected void LoadBasicLayerInfo( MapLayer layer, XmlReader.Element element )
     {
         layer.Name      = element.GetAttribute( "name", null );
-        layer.Opacity   = float.Parse( element.GetAttribute( "opacity ", "1.0" ) ?? "1.0" );
+        layer.Opacity   = NumberParsing.ParseFloat( element.GetAttribute( "opacity ", "1.0" ) ?? "1.0" );
         layer.Visible   = element.GetIntAttribute( "visible", 1 ) == 1;
         layer.OffsetX   = element.GetFloatAttribute( "offsetx" );
         layer.OffsetY   = element.GetFloatAttribute( "offsety" );
@@ -697,7 +703,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
         Guard.Against.Null( objects );
         Guard.Against.Null( node );
 
-        if ( node.Name.Equals( "object" ) )
+        if ( node.Name.Equals( "object", StringComparison.Ordinal ) )
         {
             MapObject? mapObject = null;
 
@@ -723,8 +729,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     for ( var i = 0; i < points.Length; i++ )
                     {
                         string[] point = points[ i ].Split( "," );
-                        vertices[ i * 2 ]         = float.Parse( point[ 0 ] ) * scaleX;
-                        vertices[ ( i * 2 ) + 1 ] = float.Parse( point[ 1 ] ) * scaleY * ( FlipY ? -1 : 1 );
+                        vertices[ i * 2 ] = NumberParsing.ParseFloat( point[ 0 ] ) * scaleX;
+                        vertices[ ( i * 2 ) + 1 ] = NumberParsing.ParseFloat
+                                                        ( point[ 1 ] ) * scaleY * ( FlipY ? -1 : 1 );
                     }
 
                     var polygon = new Polygon( vertices );
@@ -739,8 +746,9 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     for ( var i = 0; i < points.Length; i++ )
                     {
                         string[] point = points[ i ].Split( "," );
-                        vertices[ i * 2 ]         = float.Parse( point[ 0 ] ) * scaleX;
-                        vertices[ ( i * 2 ) + 1 ] = float.Parse( point[ 1 ] ) * scaleY * ( FlipY ? -1 : 1 );
+                        vertices[ i * 2 ] = NumberParsing.ParseFloat( point[ 0 ] ) * scaleX;
+                        vertices[ ( i * 2 ) + 1 ] = NumberParsing.ParseFloat
+                                                        ( point[ 1 ] ) * scaleY * ( FlipY ? -1 : 1 );
                     }
 
                     var polyline = new Polyline( vertices );
@@ -761,7 +769,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
                 if ( ( gid = node.GetAttribute( "gid", null ) ) != null )
                 {
-                    id = ( uint )long.Parse( gid );
+                    id = ( uint )NumberParsing.ParseLong( gid );
 
                     bool flipHorizontally = ( id & FlipHorizontally ) != 0;
                     bool flipVertically = ( id & FlipVertically ) != 0;
@@ -794,7 +802,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
             if ( ( rotation = node.GetAttribute( "rotation", null ) ) != null )
             {
-                mapObject.Properties.Put( "rotation", float.Parse( rotation ) );
+                mapObject.Properties.Put( "rotation", NumberParsing.ParseFloat( rotation ) );
             }
 
             string? type;
@@ -855,7 +863,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             return;
         }
 
-        if ( element.Name.Equals( "properties" ) )
+        if ( element.Name.Equals( "properties", StringComparison.Ordinal ) )
         {
             List< XmlReader.Element? > props = element.GetChildrenByName( "property" );
 
@@ -872,7 +880,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     // Wait until the end of [LoadTiledMap] to fetch the object
                     try
                     {
-                        uint          id          = uint.Parse( value! );
+                        uint          id          = NumberParsing.ParseUint( value! );
                         string        propName    = name!;
                         MapProperties targetProps = properties;
 
@@ -880,8 +888,11 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     }
                     catch ( Exception )
                     {
-                        throw new LughRuntimeException( $"Error parsing property {name} "
-                                                  + $"of type object with value: [{value}]" );
+                        throw new LughRuntimeException
+                            (
+                             $"Error parsing property {name} "
+                           + $"of type object with value: [{value}]"
+                            );
                     }
                 }
                 else
@@ -938,10 +949,10 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 return value;
 
             case "int":
-                return int.Parse( value );
+                return NumberParsing.ParseInt( value );
 
             case "float":
-                return float.Parse( value );
+                return NumberParsing.ParseFloat( value );
 
             case "bool":
                 return bool.Parse( value );
@@ -950,16 +961,19 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             case "colour":
             {
                 // Tiled uses the format #AARRGGBB
-                string? opaqueColor = value?.Substring( 3 );
-                string? alpha       = value?.Substring( 1, 3 );
+                string opaqueColor = value.Substring( 3 );
+                string alpha       = value.Substring( 1, 3 );
 
                 return Color.FromHexString( opaqueColor + alpha );
             }
 
             default:
-                throw new LughRuntimeException( $"Wrong type given for property {name}, "
-                                          + $"given : {type}, supported : string, bool, "
-                                          + $"int, float, color ( or colour )" );
+                throw new LughRuntimeException
+                    (
+                     $"Wrong type given for property {name}, "
+                   + $"given : {type}, supported : string, bool, "
+                   + $"int, float, color ( or colour )"
+                    );
         }
     }
 
@@ -1048,18 +1062,18 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
         var ids = new uint[ width * height ];
 
-        if ( encoding.Equals( "csv" ) )
+        if ( encoding.Equals( "csv", StringComparison.Ordinal ) )
         {
             string[]? array = data.Text?.Split( "," );
 
             for ( var i = 0; i < array?.Length; i++ )
             {
-                ids[ i ] = ( uint )long.Parse( array[ i ].Trim() );
+                ids[ i ] = ( uint )NumberParsing.ParseLong( array[ i ].Trim() );
             }
         }
         else
         {
-            if ( encoding.Equals( "base64" ) )
+            if ( encoding.Equals( "base64", StringComparison.Ordinal ) )
             {
                 Stream? inputStream = null;
 
@@ -1068,28 +1082,19 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     string? compression = data.GetAttribute( "compression", null );
                     byte[]  bytes       = Convert.FromBase64String( data.Text ?? data.ToString() );
 
-                    switch ( compression )
-                    {
-                        case null:
-                            inputStream = new MemoryStream( bytes );
+                    inputStream = compression switch
+                                  {
+                                      null => new MemoryStream( bytes ),
 
-                            break;
+                                      "gzip" => new BufferedStream
+                                          ( new GZipStream( new MemoryStream( bytes ), CompressionMode.Decompress ) ),
 
-                        case "gzip":
-                            inputStream = new BufferedStream( new GZipStream( new MemoryStream( bytes ),
-                                                                              CompressionMode.Decompress ) );
+                                      "zlib" => new BufferedStream
+                                          ( new InflaterInputStream( new MemoryStream( bytes ) ) ),
 
-                            break;
-
-                        case "zlib":
-                            inputStream = new BufferedStream( new InflaterInputStream( new MemoryStream( bytes ) ) );
-
-                            break;
-
-                        default:
-                            throw
-                                new LughRuntimeException( $"Unrecognised compression ({compression}) for TMX Layer Data" );
-                    }
+                                      _ => throw new LughRuntimeException
+                                               ( $"Unrecognised compression ({compression}) " + $"for TMX Layer Data" )
+                                  };
 
                     var temp = new byte[ 4 ];
 
@@ -1113,8 +1118,8 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
                             if ( read != temp.Length )
                             {
-                                throw
-                                    new LughRuntimeException( "Error Reading TMX Layer Data: Premature end of tile data" );
+                                throw new LughRuntimeException( "Error Reading TMX Layer Data: "
+                                                              + "Premature end of tile data" );
                             }
 
                             ids[ ( y * width ) + x ] = ( uint )( MathUtils.UnsignedByteToInt( temp[ 0 ] )
@@ -1191,8 +1196,11 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             // StringComparison.OrdinalIgnoreCase is used because Windows paths are case-insensitive
             if ( !resolvedPath.StartsWith( fullRoot, StringComparison.OrdinalIgnoreCase ) )
             {
-                throw new UnauthorizedAccessException( "Attempted to access a path "
-                                                     + "outside of the allowed directory." );
+                throw new UnauthorizedAccessException
+                    (
+                     "Attempted to access a path "
+                   + "outside of the allowed directory."
+                    );
             }
         }
 
@@ -1330,14 +1338,17 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 Margin     = margin
             };
 
-            AddStaticTiles( element,
-                            tileContext,
-                            tileElements,
-                            tileMetrics,
-                            source,
-                            offsetX,
-                            offsetY,
-                            imageDetails );
+            AddStaticTiles
+                (
+                 element,
+                 tileContext,
+                 tileElements,
+                 tileMetrics,
+                 source,
+                 offsetX,
+                 offsetY,
+                 imageDetails
+                );
 
             var animatedTiles = new List< AnimatedTiledMapTile >();
 

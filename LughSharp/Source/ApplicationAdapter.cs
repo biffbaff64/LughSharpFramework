@@ -91,9 +91,12 @@ public class ApplicationAdapter : IApplicationListener
     }
 
     /// <summary>
-    /// Disposes of unmanaged resources.
+    /// Disposes of unmanaged resources. Default method does nothing, but can be
+    /// overridden to perform cleanup.
     /// </summary>
-    /// <param name="disposing"></param>
+    /// <param name="disposing">
+    /// Whether the method is being called from <see cref="Dispose"/> or another source.
+    /// </param>
     protected virtual void Dispose( bool disposing )
     {
         if ( disposing )

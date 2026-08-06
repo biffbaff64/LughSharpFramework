@@ -44,7 +44,7 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
         Set( controlPoints, continuous );
     }
 
-    public T[]  ControlPoints { get; set; } = default!;
+    public T[]  ControlPoints { get; set; } = null!;
     public bool Continuous    { get; set; }
     public int  SpanCount     { get; set; }
 
@@ -117,12 +117,15 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The value of the spline at position u of the specified span. </returns>
     public T ValueAt( T outp, int span, float u )
     {
-        return Calculate( outp,
-                          Continuous ? span : span + 1,
-                          u,
-                          ControlPoints,
-                          Continuous,
-                          _tmp );
+        return Calculate
+            (
+             outp,
+             Continuous ? span : span + 1,
+             u,
+             ControlPoints,
+             Continuous,
+             _tmp
+            );
     }
 
     /// <summary>
@@ -130,12 +133,15 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <returns> The derivative of the spline at position u of the specified span </returns>
     public T DerivativeAt( T outp, int span, float u )
     {
-        return Derivative( outp,
-                           Continuous ? span : span + 1,
-                           u,
-                           ControlPoints,
-                           Continuous,
-                           _tmp );
+        return Derivative
+            (
+             outp,
+             Continuous ? span : span + 1,
+             u,
+             ControlPoints,
+             Continuous,
+             _tmp
+            );
     }
 
     /// <summary>
@@ -225,7 +231,7 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns></returns>
-    public static T Calculate( T outvec, float t, T[] points, bool continuous, T tmp )
+    public T Calculate( T outvec, float t, T[] points, bool continuous, T tmp )
     {
         int   n = continuous ? points.Length : points.Length - 3;
         float u = t * n;
@@ -248,12 +254,12 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of outp </returns>
-    public static T Calculate( T outp,
-                               int i,
-                               float u,
-                               T[] points,
-                               bool continuous,
-                               T? tmp )
+    public T Calculate( T outp,
+                        int i,
+                        float u,
+                        T[] points,
+                        bool continuous,
+                        T? tmp )
     {
         int   n  = points.Length;
         float u2 = u * u;
@@ -288,11 +294,11 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of outp </returns>
-    public static T Derivative( T outp,
-                                float t,
-                                T[] points,
-                                bool continuous,
-                                T tmp )
+    public T Derivative( T outp,
+                         float t,
+                         T[] points,
+                         bool continuous,
+                         T tmp )
     {
         int   n = continuous ? points.Length : points.Length - 3;
         float u = t * n;
@@ -315,12 +321,12 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
     /// <param name="continuous"> If true the b-spline restarts at 0 when reaching 1 </param>
     /// <param name="tmp"> A temporary vector used for the calculation </param>
     /// <returns> The value of outp </returns>
-    public static T Derivative( T outp,
-                                int i,
-                                float u,
-                                T[] points,
-                                bool continuous,
-                                T? tmp )
+    public T Derivative( T outp,
+                         int i,
+                         float u,
+                         T[] points,
+                         bool continuous,
+                         T? tmp )
     {
         /*
          * catmull'(u) = 0.5 *((-p0 + p2) + 2 * (2*p0 - 5*p1 + 4*p2 - p3) * u + 3 * (-p0 + 3*p1 - 3*p2 + p3) * u * u)
@@ -334,20 +340,29 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
 
         if ( ( tmp != null ) && ( continuous || ( i > 0 ) ) )
         {
-            outp.Add( tmp.Set( points[ ( n + i - 1 ) % n ] )
-                         .Scale( -0.5f + ( u * 2 ) - ( u2 * 1.5f ) ) );
+            outp.Add
+                (
+                 tmp.Set( points[ ( n + i - 1 ) % n ] )
+                    .Scale( -0.5f + ( u * 2 ) - ( u2 * 1.5f ) )
+                );
         }
 
         if ( ( tmp != null ) && ( continuous || ( i < ( n - 1 ) ) ) )
         {
-            outp.Add( tmp.Set( points[ ( i + 1 ) % n ] )
-                         .Scale( 0.5f + ( u * 4 ) - ( u2 * 4.5f ) ) );
+            outp.Add
+                (
+                 tmp.Set( points[ ( i + 1 ) % n ] )
+                    .Scale( 0.5f + ( u * 4 ) - ( u2 * 4.5f ) )
+                );
         }
 
         if ( ( tmp != null ) && ( continuous || ( i < ( n - 2 ) ) ) )
         {
-            outp.Add( tmp.Set( points[ ( i + 2 ) % n ] )
-                         .Scale( -u + ( u2 * 1.5f ) ) );
+            outp.Add
+                (
+                 tmp.Set( points[ ( i + 2 ) % n ] )
+                    .Scale( -u + ( u2 * 1.5f ) )
+                );
         }
 
         return outp;
@@ -356,4 +371,3 @@ public class CatmullRomSpline< T > : IPath< T > where T : IVector< T >
 
 // ========================================================================
 // ========================================================================
-

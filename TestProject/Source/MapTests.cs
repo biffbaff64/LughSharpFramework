@@ -58,10 +58,10 @@ public class MapTests
         TiledMap     = TmxMapLoader.Load( Assets.Room1Map );
         MapRenderer  = new OrthogonalTiledMapRenderer( TiledMap );
 
-        var width      = TiledMap.Properties.Get< int >( "width" );
-        var height     = TiledMap.Properties.Get< int >( "height" );
-        var tileWidth  = TiledMap.Properties.Get< int >( "tilewidth" );
-        var tileHeight = TiledMap.Properties.Get< int >( "tileheight" );
+        var width      = TiledMap.Properties.GetProperty< int >( "width" );
+        var height     = TiledMap.Properties.GetProperty< int >( "height" );
+        var tileWidth  = TiledMap.Properties.GetProperty< int >( "tilewidth" );
+        var tileHeight = TiledMap.Properties.GetProperty< int >( "tileheight" );
 
         Logger.Divider( lineCount: 2 );
         Logger.Debug( $"Map Width  : {width}" );

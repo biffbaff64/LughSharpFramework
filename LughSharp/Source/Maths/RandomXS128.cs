@@ -118,12 +118,11 @@ public class RandomXs128 : Random
     }
 
     /// <summary>
-    /// This protected method is final because, contrary to the superclass,
-    /// it's not used anymore by the other methods.
+    /// 
     /// </summary>
-    public override int Next( int bits )
+    public override int Next( int maxValue )
     {
-        return ( int )( NextLong() & ( ( 1L << bits ) - 1 ) );
+        return ( int )( NextLong() & ( ( 1L << maxValue ) - 1 ) );
     }
 
     /// <summary>

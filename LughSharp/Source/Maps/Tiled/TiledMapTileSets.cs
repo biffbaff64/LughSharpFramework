@@ -62,7 +62,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     {
         foreach ( TiledMapTileSet tileset in _tilesets )
         {
-            if ( name.Equals( tileset.Name ) )
+            if ( name.Equals( tileset.Name, StringComparison.Ordinal ) )
             {
                 return tileset;
             }
@@ -137,7 +137,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
     /// Returns an enumerator that iterates through a collection.
     /// </summary>
     /// <returns>
-    /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used
+    /// An <see cref="IEnumerator"/> object that can be used
     /// to iterate through the collection.
     /// </returns>
     IEnumerator IEnumerable.GetEnumerator()

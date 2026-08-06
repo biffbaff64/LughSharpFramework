@@ -213,7 +213,7 @@ public class CumulativeDistribution< T >
     [PublicAPI]
     public class CumulativeValue
     {
-        public readonly T Value;
+        public T Value { get; }
 
         public CumulativeValue( T value, float frequency, float interval )
         {

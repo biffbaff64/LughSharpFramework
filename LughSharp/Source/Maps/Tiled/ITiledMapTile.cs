@@ -36,7 +36,7 @@ public interface ITiledMapTile
     /// Blendmode to use when rendering a tile.
     /// </summary>
     [PublicAPI]
-    enum Blendmode
+    enum TileBlendMode
     {
         None,
         Alpha
@@ -48,9 +48,9 @@ public interface ITiledMapTile
     uint ID { get; set; }
 
     /// <summary>
-    /// The <see cref="Blendmode"/> to use when rendering a tile.
+    /// The <see cref="TileBlendMode"/> to use when rendering a tile.
     /// </summary>
-    Blendmode BlendMode { get; set; }
+    TileBlendMode BlendMode { get; set; }
 
     /// <summary>
     /// The <see cref="TextureRegion"/> to display.

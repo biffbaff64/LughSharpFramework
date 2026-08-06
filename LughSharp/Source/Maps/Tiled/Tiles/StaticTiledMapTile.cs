@@ -36,7 +36,7 @@ public class StaticTiledMapTile : ITiledMapTile
     public float                   OffsetX       { get; set; }
     public float                   OffsetY       { get; set; }
     public TextureRegion           TextureRegion { get; set; }
-    public ITiledMapTile.Blendmode BlendMode     { get; set; } = ITiledMapTile.Blendmode.Alpha;
+    public ITiledMapTile.TileBlendMode BlendMode     { get; set; } = ITiledMapTile.TileBlendMode.Alpha;
 
     // ========================================================================
 

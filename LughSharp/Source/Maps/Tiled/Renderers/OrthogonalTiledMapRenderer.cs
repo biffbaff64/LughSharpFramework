@@ -78,8 +78,8 @@ public class OrthogonalTiledMapRenderer : BatchTileMapRenderer
 
     /// <summary>
     /// </summary>
-    /// <param name="obj"></param>
-    public override void RenderObject( MapObject obj )
+    /// <param name="mapObject"></param>
+    public override void RenderObject( MapObject mapObject )
     {
         //TODO: Implement object rendering.
     }

@@ -28,14 +28,16 @@ namespace LughSharp.Source.Maths.Collision;
 /// Encapsulates a ray having a starting position and a unit length direction.
 /// </summary>
 [Serializable]
+[PublicAPI]
 public class Ray
 {
-    private static  Vector3 _tmp      = new();
-    public readonly Vector3 Direction = new();
-    public readonly Vector3 Origin    = new();
+    private static Vector3 _tmp = new();
+
+    public Vector3 Direction { get; set; } = new();
+    public Vector3 Origin    { get; set; } = new();
 
     // ========================================================================
-    
+
     /// <summary>
     /// Constructor, sets the starting position of the ray and the direction.
     /// </summary>
@@ -90,7 +92,7 @@ public class Ray
     /// <param name="orig"> The starting position </param>
     /// <param name="dir"> The direction </param>
     /// <returns> this ray for chaining  </returns>
-    public virtual Ray Set( Vector3 orig, Vector3 dir )
+    public virtual Ray SetOriginAndDirection( Vector3 orig, Vector3 dir )
     {
         Origin.Set( orig );
         Direction.Set( dir ).Nor();
@@ -108,7 +110,7 @@ public class Ray
     /// <param name="dy"> The y-component of the direction </param>
     /// <param name="dz"> The z-component of the direction </param>
     /// <returns> this ray for chaining  </returns>
-    public virtual Ray Set( float x, float y, float z, float dx, float dy, float dz )
+    public virtual Ray SetOriginAndDirection( float x, float y, float z, float dx, float dy, float dz )
     {
         Origin.Set( x, y, z );
         Direction.Set( dx, dy, dz ).Nor();
@@ -121,7 +123,7 @@ public class Ray
     /// </summary>
     /// <param name="ray"> The ray </param>
     /// <returns> This ray for chaining  </returns>
-    public virtual Ray Set( Ray ray )
+    public virtual Ray SetOriginAndDirection( Ray ray )
     {
         Origin.Set( ray.Origin );
         Direction.Set( ray.Direction ).Nor();
@@ -130,19 +132,19 @@ public class Ray
     }
 
     /// <inheritdoc />
-    public override bool Equals( object? o )
+    public override bool Equals( object? obj )
     {
-        if ( o == this )
+        if ( obj == this )
         {
             return true;
         }
 
-        if ( ( o == null ) || ( o.GetType() != GetType() ) )
+        if ( ( obj == null ) || ( obj.GetType() != GetType() ) )
         {
             return false;
         }
 
-        var r = ( Ray )o;
+        var r = ( Ray )obj;
 
         return Direction.Equals( r.Direction ) && Origin.Equals( r.Origin );
     }
@@ -152,8 +154,8 @@ public class Ray
     {
         const int Prime = 73;
 
-        int result = Prime + Direction.GetHashCode();
-        result = ( Prime * result ) + Origin.GetHashCode();
+        int result = Prime + 64;
+        result = ( Prime * result ) + 46;
 
         return result;
     }
@@ -167,5 +169,3 @@ public class Ray
 
 // ============================================================================
 // ============================================================================
-
-

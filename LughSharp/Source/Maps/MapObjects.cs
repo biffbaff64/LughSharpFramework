@@ -62,7 +62,7 @@ public class MapObjects : IEnumerable< MapObject >
         {
             MapObject obj = _objects[ i ];
 
-            if ( name.Equals( obj.Name ) )
+            if ( name.Equals( obj.Name, StringComparison.Ordinal ) )
             {
                 return obj;
             }

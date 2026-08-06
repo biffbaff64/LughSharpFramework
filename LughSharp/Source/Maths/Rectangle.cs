@@ -623,10 +623,10 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
         {
             try
             {
-                float x      = float.Parse( v.Substring( 1, s0 - 1 ) );
-                float y      = float.Parse( v.Substring( s0 + 1, s1 - ( s0 + 1 ) ) );
-                float width  = float.Parse( v.Substring( s1 + 1, s2 - ( s1 + 1 ) ) );
-                float height = float.Parse( v.Substring( s2 + 1, v.Length - 1 - ( s2 + 1 ) ) );
+                float x      = NumberParsing.ParseFloat( v.Substring( 1, s0 - 1 ) );
+                float y      = NumberParsing.ParseFloat( v.Substring( s0 + 1, s1 - ( s0 + 1 ) ) );
+                float width  = NumberParsing.ParseFloat( v.Substring( s1 + 1, s2 - ( s1 + 1 ) ) );
+                float height = NumberParsing.ParseFloat( v.Substring( s2 + 1, v.Length - 1 - ( s2 + 1 ) ) );
 
                 return Set( x, y, width, height );
             }

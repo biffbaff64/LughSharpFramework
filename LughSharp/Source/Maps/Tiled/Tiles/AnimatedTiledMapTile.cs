@@ -24,8 +24,6 @@
 
 using LughSharp.Source.Graphics.Images;
 
-using Blendmode = LughSharp.Source.Maps.Tiled.ITiledMapTile.Blendmode;
-
 namespace LughSharp.Source.Maps.Tiled.Tiles;
 
 /// <summary>
@@ -34,8 +32,8 @@ namespace LughSharp.Source.Maps.Tiled.Tiles;
 [PublicAPI]
 public class AnimatedTiledMapTile : ITiledMapTile
 {
-    public uint      ID        { get; set; }
-    public Blendmode BlendMode { get; set; } = Blendmode.Alpha;
+    public uint                        ID        { get; set; }
+    public ITiledMapTile.TileBlendMode BlendMode { get; set; } = ITiledMapTile.TileBlendMode.Alpha;
 
     // ========================================================================
 

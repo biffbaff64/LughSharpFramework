@@ -47,8 +47,8 @@ namespace LughSharp.Source.Maps.Tiled.Loaders;
 public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     : BaseTmxMapLoader< AtlasTmxMapLoader.AtlasTiledMapLoaderParameters >( resolver )
 {
-    protected readonly List< Texture2D > TrackedTextures = [ ];
-    protected          IAtlasResolver?   AtlasResolver;
+    protected List< Texture2D > TrackedTextures { get; set; } = [ ];
+    protected IAtlasResolver?   AtlasResolver   { get; set; }
 
     // ========================================================================
     // ========================================================================
@@ -111,14 +111,14 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     /// <param name="parameter">An optional set of parameters used for loading the asset.</param>
     public override void LoadAsync< TP >( AssetManager? manager,
                                           string filename,
-                                          FileInfo? tmxFile,
+                                          FileInfo? file,
                                           TP? parameter ) where TP : class
     {
-        FileInfo atlasHandle = GetAtlasFileHandle( tmxFile );
+        FileInfo atlasHandle = GetAtlasFileHandle( file );
 
         AtlasResolver = new IAtlasResolver.AssetManagerAtlasResolver( manager, atlasHandle.Name );
 
-        Map = LoadTiledMap( tmxFile, parameter as AtlasTiledMapLoaderParameters, AtlasResolver );
+        Map = LoadTiledMap( file, parameter as AtlasTiledMapLoaderParameters, AtlasResolver );
     }
 
     /// <summary>
@@ -297,7 +297,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
             {
                 string? name = property.GetAttribute( "name" );
 
-                if ( name!.StartsWith( "atlas" ) )
+                if ( name!.StartsWith( "atlas", StringComparison.Ordinal ) )
                 {
                     atlasFilePath = property.GetAttribute( "value" );
 
@@ -313,12 +313,8 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
         FileInfo? fileHandle = GetRelativeFileHandle( tmxFile, atlasFilePath );
 
-        if ( fileHandle!.Exists )
-        {
-            return fileHandle;
-        }
-
-        throw new LughRuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
+        return fileHandle!.Exists ? fileHandle : throw new LughRuntimeException
+                                                     ( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
     }
 
     /// <summary>

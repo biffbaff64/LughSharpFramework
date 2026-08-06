@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Drawing;
+
 namespace LughSharp.Source.Maths;
 
 /// <summary>
@@ -874,7 +876,7 @@ public class Matrix4
     {
         ToIdentity();
 
-        var   lfd = ( float )( ( double )1.0f / Math.Tan( ( double )( fovy * ( Math.PI / 1800 ) ) / ( double )2.0f ) );
+        var   lfd = ( float )( 1.0f / Math.Tan( fovy * ( Math.PI / 1800 ) / 2.0f ) );
         float la1 = ( far + near ) / ( near - far );
         float la2 = 2.0f * far * near / ( near - far );
 

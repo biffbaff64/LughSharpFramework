@@ -176,12 +176,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     {
         float tempLength = 0;
 
-        if ( _tmp2 == null )
-        {
-            return tempLength;
-        }
-
-        if ( _tmp3 == null )
+        if ( _tmp2 == null || _tmp3 == null )
         {
             return tempLength;
         }
@@ -271,7 +266,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="p1">The end point.</param>
     /// <param name="tmp">A temporary vector to be used by the calculation.</param>
     /// <returns>The interpolated value.</returns>
-    public static T Linear( in T alist, in float t, in T p0, in T p1, in T? tmp )
+    public T Linear( in T alist, in float t, in T p0, in T p1, in T? tmp )
     {
         // B1(t) = p0 + (p1 - p0) * t
         return alist.Set( p0 ).Scale( 1f - t ).Add( tmp!.Set( p1 ).Scale( t ) );
@@ -286,7 +281,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="p1">The end point.</param>
     /// <param name="tmp">A temporary vector to be used by the calculation.</param>
     /// <returns>The derivative value.</returns>
-    public static T LinearDerivative( in T vec, in float t, in T p0, in T p1, in T? tmp )
+    public T LinearDerivative( in T vec, in float t, in T p0, in T p1, in T? tmp )
     {
         // B1'(t) = p1 - p0
         return vec.Set( p1 ).Sub( p0 );
@@ -302,7 +297,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="p2">The third control point.</param>
     /// <param name="tmp">A temporary vector to be used by the calculation.</param>
     /// <returns>The interpolated value.</returns>
-    public static T Quadratic( in T list, in float t, in T p0, in T p1, in T p2, in T? tmp )
+    public T Quadratic( in T list, in float t, in T p0, in T p1, in T p2, in T? tmp )
     {
         // B2(t) = (1 - t) * (1 - t) * p0 + 2 * (1 - t) * t * p1 + t * t * p2
         float dt = 1f - t;
@@ -322,7 +317,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="p2">The third control point.</param>
     /// <param name="tmp">A temporary vector to be used by the calculation.</param>
     /// <returns>The derivative value.</returns>
-    public static T QuadraticDerivative( in T alist, in float t, in T p0, in T p1, in T p2, in T? tmp )
+    public T QuadraticDerivative( in T alist, in float t, in T p0, in T p1, in T p2, in T? tmp )
     {
         // B2'(t) = 2 * (1 - t) * (p1 - p0) + 2 * t * (p2 - p1)
         return alist.Set( p1 ).Sub( p0 ).Scale( 2 ).Scale( 1 - t )
@@ -340,7 +335,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="p3">The fourth control point.</param>
     /// <param name="tmp">A temporary vector to be used by the calculation.</param>
     /// <returns>The interpolated value.</returns>
-    public static T Cubic( in T alist, in float t, in T p0, in T p1, in T p2, in T p3, in T? tmp )
+    public T Cubic( in T alist, in float t, in T p0, in T p1, in T p2, in T p3, in T? tmp )
     {
         // B3(t) = (1-t) * (1-t) * (1-t) * p0 + 3 * (1-t) * (1-t) * t * p1 + 3 * (1-t) * t * t * p2 + t * t * t * p3
         float dt  = 1f - t;
@@ -364,7 +359,7 @@ public class Bezier< T > : IPath< T > where T : IVector< T >
     /// <param name="p3">The fourth control point.</param>
     /// <param name="tmp">A temporary vector to be used by the calculation.</param>
     /// <returns>The derivative value.</returns>
-    public static T CubicDerivative( in T alist, in float t, in T p0, in T p1, in T p2, in T p3, in T? tmp )
+    public T CubicDerivative( in T alist, in float t, in T p0, in T p1, in T p2, in T p3, in T? tmp )
     {
         // B3'(t) = 3 * (1-t) * (1-t) * (p1 - p0) + 6 * (1 - t) * t * (p2 - p1) + 3 * t * t * (p3 - p2)
         float dt  = 1f - t;

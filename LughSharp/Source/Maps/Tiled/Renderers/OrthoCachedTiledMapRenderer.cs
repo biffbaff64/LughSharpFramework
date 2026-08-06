@@ -41,25 +41,27 @@ namespace LughSharp.Source.Maps.Tiled.Renderers;
 [PublicAPI]
 public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 {
-    private const    int       DefaultCacheSize = 2000;
-    private static   float     _tolerance         = 0.00001f;
-    protected static int       NumVertices        = 20;
-    protected        bool      Blending;
-    protected        Rectangle CacheBounds = new();
-    protected        bool      Cached;
-    protected        bool      CanCacheMoreE;
-    protected        bool      CanCacheMoreN;
-    protected        bool      CanCacheMoreS;
-    protected        bool      CanCacheMoreW;
-    protected        int       Count;
+    private const int   DefaultCacheSize = 2000;
+    private const float Tolerance        = 0.00001f;
 
-    protected TiledMap?    Map;
-    protected float        MaxTileHeight;
-    protected float        MaxTileWidth;
-    protected SpriteCache? SpriteCache;
-    protected float        UnitScale;
-    protected float[]      Vertices   = new float[ 20 ];
-    protected Rectangle    ViewBounds = new();
+    protected const int NumVertices = 20;
+
+    protected bool      Blending      { get; set; }
+    protected Rectangle CacheBounds   { get; set; } = new();
+    protected bool      Cached        { get; set; }
+    protected bool      CanCacheMoreE { get; set; }
+    protected bool      CanCacheMoreN { get; set; }
+    protected bool      CanCacheMoreS { get; set; }
+    protected bool      CanCacheMoreW { get; set; }
+    protected int       Count         { get; set; }
+
+    protected TiledMap?    Map           { get; set; }
+    protected float        MaxTileHeight { get; set; }
+    protected float        MaxTileWidth  { get; set; }
+    protected SpriteCache? SpriteCache   { get; set; }
+    protected float        UnitScale     { get; set; }
+    protected float[]      Vertices      { get; set; } = new float[ 20 ];
+    protected Rectangle    ViewBounds    { get; set; } = new();
 
     // ========================================================================
 
@@ -90,6 +92,8 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     public void Dispose()
     {
         SpriteCache?.Dispose();
+
+        GC.SuppressFinalize( this );
     }
 
     public void SetView( OrthographicCamera camera )
@@ -103,22 +107,22 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         ViewBounds.Set( camera.Position.X - ( width / 2 ), camera.Position.Y - ( height / 2 ), width, height );
 
-        if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - _tolerance ) ) )
-          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
+        if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - Tolerance ) ) )
+          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - Tolerance ) ) )
           || ( CanCacheMoreE
-            && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
+            && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + Tolerance ) ) )
           || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height )
-                                > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
+                                > ( CacheBounds.Y + CacheBounds.Height + Tolerance ) ) ) )
         {
             Cached = false;
         }
     }
 
-    public void SetView( Matrix4 projection, float x, float y, float width, float height )
+    public void SetView( Matrix4 projectionMatrix, float x, float y, float width, float height )
     {
         Guard.Against.Null( SpriteCache );
 
-        SpriteCache.ProjectionMatrix = projection;
+        SpriteCache.ProjectionMatrix = projectionMatrix;
 
         x      -= MaxTileWidth * UnitScale;
         y      -= MaxTileHeight * UnitScale;
@@ -127,12 +131,12 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
 
         ViewBounds.Set( x, y, width, height );
 
-        if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - _tolerance ) ) )
-          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - _tolerance ) ) )
+        if ( ( CanCacheMoreW && ( ViewBounds.X < ( CacheBounds.X - Tolerance ) ) )
+          || ( CanCacheMoreS && ( ViewBounds.Y < ( CacheBounds.Y - Tolerance ) ) )
           || ( CanCacheMoreE
-            && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + _tolerance ) ) )
+            && ( ( ViewBounds.X + ViewBounds.Width ) > ( CacheBounds.X + CacheBounds.Width + Tolerance ) ) )
           || ( CanCacheMoreN && ( ( ViewBounds.Y + ViewBounds.Height )
-                                > ( CacheBounds.Y + CacheBounds.Height + _tolerance ) ) ) )
+                                > ( CacheBounds.Y + CacheBounds.Height + Tolerance ) ) ) )
         {
             Cached = false;
         }
@@ -289,14 +293,20 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
         float layerOffsetY = -layer.RenderOffsetY * UnitScale;
 
         int col1 = Math.Max( 0, ( int )( ( CacheBounds.X - layerOffsetX ) / layerTileWidth ) );
-        int col2 = Math.Min( layerWidth,
-                             ( int )( ( CacheBounds.X + CacheBounds.Width + layerTileWidth - layerOffsetX )
-                                    / layerTileWidth ) );
+        int col2 = Math.Min
+            (
+             layerWidth,
+             ( int )( ( CacheBounds.X + CacheBounds.Width + layerTileWidth - layerOffsetX )
+                    / layerTileWidth )
+            );
 
         int row1 = Math.Max( 0, ( int )( ( CacheBounds.Y - layerOffsetY ) / layerTileHeight ) );
-        int row2 = Math.Min( layerHeight,
-                             ( int )( ( CacheBounds.Y + CacheBounds.Height + layerTileHeight - layerOffsetY )
-                                    / layerTileHeight ) );
+        int row2 = Math.Min
+            (
+             layerHeight,
+             ( int )( ( CacheBounds.Y + CacheBounds.Height + layerTileHeight - layerOffsetY )
+                    / layerTileHeight )
+            );
 
         CanCacheMoreN = row2 < layerHeight;
         CanCacheMoreE = col2 < layerWidth;
@@ -309,148 +319,146 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
             {
                 TiledMapTileLayer.Cell? cell = layer.GetCell( col, row );
 
-                if ( cell == null )
+                if ( cell != null )
                 {
-                    continue;
-                }
+                    ITiledMapTile? tile = cell.GetTile();
 
-                ITiledMapTile? tile = cell.GetTile();
-
-                if ( tile == null )
-                {
-                    continue;
-                }
-
-                Count++;
-
-                bool flipX     = cell.GetFlipHorizontally();
-                bool flipY     = cell.GetFlipVertically();
-                int  rotations = cell.GetRotation();
-
-                TextureRegion region  = tile.TextureRegion;
-                Texture2D?      texture = region.Texture;
-
-                if ( texture == null )
-                {
-                    return;
-                }
-
-                float x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
-                float y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
-                float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
-                float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
-
-                float adjustX = 0.5f / texture.Width;
-                float adjustY = 0.5f / texture.Height;
-                float u1      = region.U + adjustX;
-                float v1      = region.V2 - adjustY;
-                float u2      = region.U2 - adjustX;
-                float v2      = region.V + adjustY;
-
-                Vertices[ IBatch.X1 ] = x1;
-                Vertices[ IBatch.Y1 ] = y1;
-                Vertices[ IBatch.C1 ] = color;
-                Vertices[ IBatch.U1 ] = u1;
-                Vertices[ IBatch.V1 ] = v1;
-
-                Vertices[ IBatch.X2 ] = x1;
-                Vertices[ IBatch.Y2 ] = y2;
-                Vertices[ IBatch.C2 ] = color;
-                Vertices[ IBatch.U2 ] = u1;
-                Vertices[ IBatch.V2 ] = v2;
-
-                Vertices[ IBatch.X3 ] = x2;
-                Vertices[ IBatch.Y3 ] = y2;
-                Vertices[ IBatch.C3 ] = color;
-                Vertices[ IBatch.U3 ] = u2;
-                Vertices[ IBatch.V3 ] = v2;
-
-                Vertices[ IBatch.X4 ] = x2;
-                Vertices[ IBatch.Y4 ] = y1;
-                Vertices[ IBatch.C4 ] = color;
-                Vertices[ IBatch.U4 ] = u2;
-                Vertices[ IBatch.V4 ] = v1;
-
-                if ( flipX )
-                {
-                    float temp = Vertices[ IBatch.U1 ];
-                    Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
-                    Vertices[ IBatch.U3 ] = temp;
-                    temp                  = Vertices[ IBatch.U2 ];
-                    Vertices[ IBatch.U2 ] = Vertices[ IBatch.U4 ];
-                    Vertices[ IBatch.U4 ] = temp;
-                }
-
-                if ( flipY )
-                {
-                    float temp = Vertices[ IBatch.V1 ];
-                    Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
-                    Vertices[ IBatch.V3 ] = temp;
-                    temp                  = Vertices[ IBatch.V2 ];
-                    Vertices[ IBatch.V2 ] = Vertices[ IBatch.V4 ];
-                    Vertices[ IBatch.V4 ] = temp;
-                }
-
-                if ( rotations != 0 )
-                {
-                    switch ( rotations )
+                    if ( tile == null )
                     {
-                        case TiledMapTileLayer.Cell.Rotate90:
+                        continue;
+                    }
+
+                    Count++;
+
+                    bool flipX     = cell.GetFlipHorizontally();
+                    bool flipY     = cell.GetFlipVertically();
+                    int  rotations = cell.GetRotation();
+
+                    TextureRegion region  = tile.TextureRegion;
+                    Texture2D?    texture = region.Texture;
+
+                    if ( texture == null )
+                    {
+                        return;
+                    }
+
+                    float x1 = ( col * layerTileWidth ) + ( tile.OffsetX * UnitScale ) + layerOffsetX;
+                    float y1 = ( row * layerTileHeight ) + ( tile.OffsetY * UnitScale ) + layerOffsetY;
+                    float x2 = x1 + ( region.GetRegionWidth() * UnitScale );
+                    float y2 = y1 + ( region.GetRegionHeight() * UnitScale );
+
+                    float adjustX = 0.5f / texture.Width;
+                    float adjustY = 0.5f / texture.Height;
+                    float u1      = region.U + adjustX;
+                    float v1      = region.V2 - adjustY;
+                    float u2      = region.U2 - adjustX;
+                    float v2      = region.V + adjustY;
+
+                    Vertices[ IBatch.X1 ] = x1;
+                    Vertices[ IBatch.Y1 ] = y1;
+                    Vertices[ IBatch.C1 ] = color;
+                    Vertices[ IBatch.U1 ] = u1;
+                    Vertices[ IBatch.V1 ] = v1;
+
+                    Vertices[ IBatch.X2 ] = x1;
+                    Vertices[ IBatch.Y2 ] = y2;
+                    Vertices[ IBatch.C2 ] = color;
+                    Vertices[ IBatch.U2 ] = u1;
+                    Vertices[ IBatch.V2 ] = v2;
+
+                    Vertices[ IBatch.X3 ] = x2;
+                    Vertices[ IBatch.Y3 ] = y2;
+                    Vertices[ IBatch.C3 ] = color;
+                    Vertices[ IBatch.U3 ] = u2;
+                    Vertices[ IBatch.V3 ] = v2;
+
+                    Vertices[ IBatch.X4 ] = x2;
+                    Vertices[ IBatch.Y4 ] = y1;
+                    Vertices[ IBatch.C4 ] = color;
+                    Vertices[ IBatch.U4 ] = u2;
+                    Vertices[ IBatch.V4 ] = v1;
+
+                    if ( flipX )
+                    {
+                        float temp = Vertices[ IBatch.U1 ];
+                        Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
+                        Vertices[ IBatch.U3 ] = temp;
+                        temp                  = Vertices[ IBatch.U2 ];
+                        Vertices[ IBatch.U2 ] = Vertices[ IBatch.U4 ];
+                        Vertices[ IBatch.U4 ] = temp;
+                    }
+
+                    if ( flipY )
+                    {
+                        float temp = Vertices[ IBatch.V1 ];
+                        Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
+                        Vertices[ IBatch.V3 ] = temp;
+                        temp                  = Vertices[ IBatch.V2 ];
+                        Vertices[ IBatch.V2 ] = Vertices[ IBatch.V4 ];
+                        Vertices[ IBatch.V4 ] = temp;
+                    }
+
+                    if ( rotations != 0 )
+                    {
+                        switch ( rotations )
                         {
-                            float tempV = Vertices[ IBatch.V1 ];
-                            Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
-                            Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
-                            Vertices[ IBatch.V3 ] = Vertices[ IBatch.V4 ];
-                            Vertices[ IBatch.V4 ] = tempV;
+                            case TiledMapTileLayer.Cell.Rotate90:
+                            {
+                                float tempV = Vertices[ IBatch.V1 ];
+                                Vertices[ IBatch.V1 ] = Vertices[ IBatch.V2 ];
+                                Vertices[ IBatch.V2 ] = Vertices[ IBatch.V3 ];
+                                Vertices[ IBatch.V3 ] = Vertices[ IBatch.V4 ];
+                                Vertices[ IBatch.V4 ] = tempV;
 
-                            float tempU = Vertices[ IBatch.U1 ];
-                            Vertices[ IBatch.U1 ] = Vertices[ IBatch.U2 ];
-                            Vertices[ IBatch.U2 ] = Vertices[ IBatch.U3 ];
-                            Vertices[ IBatch.U3 ] = Vertices[ IBatch.U4 ];
-                            Vertices[ IBatch.U4 ] = tempU;
+                                float tempU = Vertices[ IBatch.U1 ];
+                                Vertices[ IBatch.U1 ] = Vertices[ IBatch.U2 ];
+                                Vertices[ IBatch.U2 ] = Vertices[ IBatch.U3 ];
+                                Vertices[ IBatch.U3 ] = Vertices[ IBatch.U4 ];
+                                Vertices[ IBatch.U4 ] = tempU;
 
-                            break;
-                        }
+                                break;
+                            }
 
-                        case TiledMapTileLayer.Cell.Rotate180:
-                        {
-                            float tempU = Vertices[ IBatch.U1 ];
-                            Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
-                            Vertices[ IBatch.U3 ] = tempU;
-                            tempU                 = Vertices[ IBatch.U2 ];
-                            Vertices[ IBatch.U2 ] = Vertices[ IBatch.U4 ];
-                            Vertices[ IBatch.U4 ] = tempU;
+                            case TiledMapTileLayer.Cell.Rotate180:
+                            {
+                                float tempU = Vertices[ IBatch.U1 ];
+                                Vertices[ IBatch.U1 ] = Vertices[ IBatch.U3 ];
+                                Vertices[ IBatch.U3 ] = tempU;
+                                tempU                 = Vertices[ IBatch.U2 ];
+                                Vertices[ IBatch.U2 ] = Vertices[ IBatch.U4 ];
+                                Vertices[ IBatch.U4 ] = tempU;
 
-                            float tempV = Vertices[ IBatch.V1 ];
-                            Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
-                            Vertices[ IBatch.V3 ] = tempV;
-                            tempV                 = Vertices[ IBatch.V2 ];
-                            Vertices[ IBatch.V2 ] = Vertices[ IBatch.V4 ];
-                            Vertices[ IBatch.V4 ] = tempV;
+                                float tempV = Vertices[ IBatch.V1 ];
+                                Vertices[ IBatch.V1 ] = Vertices[ IBatch.V3 ];
+                                Vertices[ IBatch.V3 ] = tempV;
+                                tempV                 = Vertices[ IBatch.V2 ];
+                                Vertices[ IBatch.V2 ] = Vertices[ IBatch.V4 ];
+                                Vertices[ IBatch.V4 ] = tempV;
 
-                            break;
-                        }
+                                break;
+                            }
 
-                        case TiledMapTileLayer.Cell.Rotate270:
-                        {
-                            float tempV = Vertices[ IBatch.V1 ];
-                            Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
-                            Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
-                            Vertices[ IBatch.V3 ] = Vertices[ IBatch.V2 ];
-                            Vertices[ IBatch.V2 ] = tempV;
+                            case TiledMapTileLayer.Cell.Rotate270:
+                            {
+                                float tempV = Vertices[ IBatch.V1 ];
+                                Vertices[ IBatch.V1 ] = Vertices[ IBatch.V4 ];
+                                Vertices[ IBatch.V4 ] = Vertices[ IBatch.V3 ];
+                                Vertices[ IBatch.V3 ] = Vertices[ IBatch.V2 ];
+                                Vertices[ IBatch.V2 ] = tempV;
 
-                            float tempU = Vertices[ IBatch.U1 ];
-                            Vertices[ IBatch.U1 ] = Vertices[ IBatch.U4 ];
-                            Vertices[ IBatch.U4 ] = Vertices[ IBatch.U3 ];
-                            Vertices[ IBatch.U3 ] = Vertices[ IBatch.U2 ];
-                            Vertices[ IBatch.U2 ] = tempU;
+                                float tempU = Vertices[ IBatch.U1 ];
+                                Vertices[ IBatch.U1 ] = Vertices[ IBatch.U4 ];
+                                Vertices[ IBatch.U4 ] = Vertices[ IBatch.U3 ];
+                                Vertices[ IBatch.U3 ] = Vertices[ IBatch.U2 ];
+                                Vertices[ IBatch.U2 ] = tempU;
 
-                            break;
+                                break;
+                            }
                         }
                     }
-                }
 
-                SpriteCache?.Add( texture, Vertices, 0, NumVertices );
+                    SpriteCache?.Add( texture, Vertices, 0, NumVertices );
+                }
             }
         }
     }

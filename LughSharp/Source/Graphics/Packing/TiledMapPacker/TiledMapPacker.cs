@@ -226,8 +226,8 @@ public class TiledMapPacker
     {
         Guard.Against.Null( _map );
 
-        var mapWidth   = _map.Properties.Get< int >( "width" );
-        var mapHeight  = _map.Properties.Get< int >( "height" );
+        var mapWidth   = _map.Properties.GetProperty< int >( "width" );
+        var mapHeight  = _map.Properties.GetProperty< int >( "height" );
         int numlayers  = _map.Layers.LayersCount;
         int bucketSize = mapWidth * mapHeight * numlayers;
 
@@ -314,7 +314,7 @@ public class TiledMapPacker
         {
             foreach ( TiledMapTileSet tileset in map.Tilesets )
             {
-                var firstgid = tileset.Properties.Get< int >( "firstgid", -1 );
+                var firstgid = tileset.Properties.GetProperty< int >( "firstgid", -1 );
 
                 if ( firstgid == -1 )
                 {

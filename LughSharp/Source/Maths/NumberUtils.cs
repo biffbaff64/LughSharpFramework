@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Globalization;
+
 namespace LughSharp.Source.Maths;
 
 [PublicAPI]
@@ -112,7 +114,7 @@ public abstract class NumberUtils
         unsafe
         {
             int intBits = *( int* )&value;
-            var result  = intBits.ToString( "X8" );
+            var result  = intBits.ToString( "X8", CultureInfo.InvariantCulture );
 
             return result;
         }
@@ -220,7 +222,7 @@ public abstract class NumberUtils
     public static string IntToBinaryString( int value )
     {
         //TODO:
-        return value.ToString( "B8" );
+        return value.ToString( "B8", CultureInfo.InvariantCulture );
     }
 
     /// <summary>

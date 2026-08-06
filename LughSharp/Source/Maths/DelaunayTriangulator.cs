@@ -90,15 +90,14 @@ public class DelaunayTriangulator
             throw new ArgumentException( "count must be <= " + 32767 );
         }
 
-        List< int > triangles = _triangles;
-        triangles.Clear();
+        _triangles.Clear();
 
         if ( count < 6 )
         {
-            return triangles;
+            return _triangles;
         }
 
-        triangles.EnsureCapacity( count );
+        _triangles.EnsureCapacity( count );
 
         if ( !sorted )
         {
@@ -169,9 +168,9 @@ public class DelaunayTriangulator
         _complete.EnsureCapacity( count );
 
         // Add super triangle.
-        triangles.Add( end );
-        triangles.Add( end + 2 );
-        triangles.Add( end + 4 );
+        _triangles.Add( end );
+        _triangles.Add( end + 2 );
+        _triangles.Add( end + 4 );
         _complete.Add( false );
 
         int[] trianglesArray;
@@ -183,10 +182,10 @@ public class DelaunayTriangulator
 
             // If x,y lies inside the circumcircle of a triangle, the edges
             // are stored and the triangle removed.
-            trianglesArray = triangles.ToArray();
+            trianglesArray = _triangles.ToArray();
             bool[] completeArray = _complete.ToArray();
 
-            for ( int triangleIndex = triangles.Count - 1; triangleIndex >= 0; triangleIndex -= 3 )
+            for ( int triangleIndex = _triangles.Count - 1; triangleIndex >= 0; triangleIndex -= 3 )
             {
                 int completeIndex = triangleIndex / 3;
 
@@ -257,7 +256,7 @@ public class DelaunayTriangulator
                         _edges.Add( p3 );
                         _edges.Add( p1 );
 
-                        triangles.RemoveRange( triangleIndex - 2, triangleIndex );
+                        _triangles.RemoveRange( triangleIndex - 2, triangleIndex );
                         _complete.RemoveAt( completeIndex );
 
                         break;
@@ -296,9 +295,9 @@ public class DelaunayTriangulator
 
                 // Form new triangles for the current point. Edges are
                 // arranged in clockwise order.
-                triangles.Add( p1 );
-                triangles.Add( edgesArray[ i + 1 ] );
-                triangles.Add( pointIndex );
+                _triangles.Add( p1 );
+                _triangles.Add( edgesArray[ i + 1 ] );
+                _triangles.Add( pointIndex );
                 _complete.Add( false );
             }
 
@@ -306,17 +305,17 @@ public class DelaunayTriangulator
         }
 
         // Remove triangles with super triangle vertices.
-        trianglesArray = triangles.ToArray();
+        trianglesArray = _triangles.ToArray();
 
-        for ( int i = triangles.Count - 1; i >= 0; i -= 3 )
+        for ( int i = _triangles.Count - 1; i >= 0; i -= 3 )
         {
             if ( ( trianglesArray[ i ] >= end )
               || ( trianglesArray[ i - 1 ] >= end )
               || ( trianglesArray[ i - 2 ] >= end ) )
             {
-                triangles.RemoveAt( i );
-                triangles.RemoveAt( i - 1 );
-                triangles.RemoveAt( i - 2 );
+                _triangles.RemoveAt( i );
+                _triangles.RemoveAt( i - 1 );
+                _triangles.RemoveAt( i - 2 );
             }
         }
 
@@ -325,7 +324,7 @@ public class DelaunayTriangulator
         {
             int[] originalIndicesArray = _originalIndices.ToArray();
 
-            for ( int i = 0, n = triangles.Count; i < n; i++ )
+            for ( int i = 0, n = _triangles.Count; i < n; i++ )
             {
                 trianglesArray[ i ] = ( short )( originalIndicesArray[ trianglesArray[ i ] / 2 ] * 2 );
             }
@@ -335,20 +334,20 @@ public class DelaunayTriangulator
         // not by vertex x,y coordinate pairs.
         if ( offset == 0 )
         {
-            for ( int i = 0, n = triangles.Count; i < n; i++ )
+            for ( int i = 0, n = _triangles.Count; i < n; i++ )
             {
                 trianglesArray[ i ] = ( short )( trianglesArray[ i ] / 2 );
             }
         }
         else
         {
-            for ( int i = 0, n = triangles.Count; i < n; i++ )
+            for ( int i = 0, n = _triangles.Count; i < n; i++ )
             {
                 trianglesArray[ i ] = ( short )( ( trianglesArray[ i ] - offset ) / 2 );
             }
         }
 
-        return triangles;
+        return _triangles;
     }
 
     /// <summary>
@@ -359,14 +358,14 @@ public class DelaunayTriangulator
     /// Note: a point on the circumcircle edge is considered inside.
     /// </para>
     /// </summary>
-    private int CircumCircle( float xp,
-                              float yp,
-                              float x1,
-                              float y1,
-                              float x2,
-                              float y2,
-                              float x3,
-                              float y3 )
+    private static int CircumCircle( float xp,
+                                     float yp,
+                                     float x1,
+                                     float y1,
+                                     float x2,
+                                     float y2,
+                                     float x3,
+                                     float y3 )
     {
         float xc;
         float yc;
@@ -480,7 +479,7 @@ public class DelaunayTriangulator
         }
     }
 
-    private int QuicksortPartition( float[] values, int lower, int upper, int[] originalIndices )
+    private static int QuicksortPartition( float[] values, int lower, int upper, int[] originalIndices )
     {
         float value = values[ lower ];
         int   up    = upper;
@@ -537,13 +536,16 @@ public class DelaunayTriangulator
             int p2 = trianglesArray[ i - 1 ] * 2;
             int p3 = trianglesArray[ i ] * 2;
 
-            GeometryUtils.TriangleCentroid( points[ p1 ],
-                                            points[ p1 + 1 ],
-                                            points[ p2 ],
-                                            points[ p2 + 1 ],
-                                            points[ p3 ],
-                                            points[ p3 + 1 ],
-                                            _centroid );
+            GeometryUtils.TriangleCentroid
+                (
+                 points[ p1 ],
+                 points[ p1 + 1 ],
+                 points[ p2 ],
+                 points[ p2 + 1 ],
+                 points[ p3 ],
+                 points[ p3 + 1 ],
+                 _centroid
+                );
 
             if ( !Intersector.IsPointInPolygon( hull, offset, count, _centroid.X, _centroid.Y ) )
             {
@@ -557,4 +559,3 @@ public class DelaunayTriangulator
 
 // ========================================================================
 // ========================================================================
-
