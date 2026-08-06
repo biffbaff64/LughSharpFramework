@@ -55,7 +55,7 @@ public class RunnableAction : SceneAction
     {
         if ( RunnableTask == null )
         {
-            throw new RuntimeException( "RunnableTask is not initialised!" );
+            throw new LughRuntimeException( "RunnableTask is not initialised!" );
         }
 
         IScenePool? pool = Pool;

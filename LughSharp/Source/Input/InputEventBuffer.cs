@@ -28,7 +28,7 @@ namespace LughSharp.Source.Input;
 /// Queues events that are later passed to an <see cref="IInputProcessor"/>.
 /// </summary>
 [PublicAPI]
-public class InputEventQueue
+public class InputEventBuffer
 {
     public long CurrentEventTime { get; set; }
 
@@ -143,7 +143,7 @@ public class InputEventQueue
                     break;
 
                 default:
-                    throw new SystemException( $"Unknown event type: {eventType}" );
+                    throw new LughRuntimeException( $"Unknown event type: {eventType}" );
             }
         }
 
@@ -219,7 +219,7 @@ public class InputEventQueue
 
                     default:
                     {
-                        throw new SystemException();
+                        throw new LughRuntimeException();
                     }
                 }
             }
@@ -297,11 +297,11 @@ public class InputEventQueue
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the touch. </param>
     /// <param name="screenY"> The y-coordinate of the touch. </param>
-    /// <param name="pointer"> The pointer index. </param>
+    /// <param name="ptrIndex"> The pointer index. </param>
     /// <param name="button"> The button pressed. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool OnTouchDown( int screenX, int screenY, int pointer, int button, long time )
+    public bool OnTouchDown( int screenX, int screenY, int ptrIndex, int button, long time )
     {
         lock ( this )
         {
@@ -309,7 +309,7 @@ public class InputEventQueue
             QueueTime( time );
             _queue.Add( screenX );
             _queue.Add( screenY );
-            _queue.Add( pointer );
+            _queue.Add( ptrIndex );
             _queue.Add( button );
         }
 
@@ -321,11 +321,11 @@ public class InputEventQueue
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the touch. </param>
     /// <param name="screenY"> The y-coordinate of the touch. </param>
-    /// <param name="pointer"> The pointer index. </param>
+    /// <param name="ptrIndex"> The pointer index. </param>
     /// <param name="button"> The button released. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool OnTouchUp( int screenX, int screenY, int pointer, int button, long time )
+    public bool OnTouchUp( int screenX, int screenY, int ptrIndex, int button, long time )
     {
         lock ( this )
         {
@@ -335,7 +335,7 @@ public class InputEventQueue
 
             _queue.Add( screenX );
             _queue.Add( screenY );
-            _queue.Add( pointer );
+            _queue.Add( ptrIndex );
             _queue.Add( button );
         }
 
@@ -348,17 +348,17 @@ public class InputEventQueue
     /// </summary>
     /// <param name="screenX"> The x-coordinate of the drag. </param>
     /// <param name="screenY"> The y-coordinate of the drag. </param>
-    /// <param name="pointer"> The pointer index. </param>
+    /// <param name="ptrIndex"> The pointer index. </param>
     /// <param name="time"> The time the event occurred. </param>
     /// <returns> Always returns false. </returns>
-    public bool OnTouchDragged( int screenX, int screenY, int pointer, long time )
+    public bool OnTouchDragged( int screenX, int screenY, int ptrIndex, long time )
     {
         lock ( this )
         {
             // Skip any queued touch dragged events for the same pointer.
             for ( int i = NextIndex( TouchDragged, 0 ); i >= 0; i = NextIndex( TouchDragged, i + 6 ) )
             {
-                if ( _queue[ i + 5 ] == pointer )
+                if ( _queue[ i + 5 ] == ptrIndex )
                 {
                     _queue[ i ]     = Skip;
                     _queue[ i + 3 ] = 3;
@@ -371,7 +371,7 @@ public class InputEventQueue
 
             _queue.Add( screenX );
             _queue.Add( screenY );
-            _queue.Add( pointer );
+            _queue.Add( ptrIndex );
         }
 
         return false;

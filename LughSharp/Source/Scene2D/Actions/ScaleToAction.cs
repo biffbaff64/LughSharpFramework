@@ -32,7 +32,7 @@ public class ScaleToAction : TemporalAction
     public  float EndX { get; set; }
     public  float EndY { get; set; }
 
-    protected override void Begin()
+    protected override void BeginAction()
     {
         _startX = Target!.ScaleX;
         _startY = Target.ScaleY;

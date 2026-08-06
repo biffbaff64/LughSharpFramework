@@ -219,17 +219,17 @@ public abstract class AbstractInput : IInput
     public virtual float GetAzimuth() => 0;
     public virtual float GetPitch() => 0;
     public virtual float GetRoll() => 0;
-    public virtual bool IsTouched( int pointer = 0 ) => false;
+    public virtual bool IsTouched( int ptrIndex = 0 ) => false;
     public virtual bool JustTouched() => false;
-    public virtual float GetPressure( int pointer = 0 ) => 0;
+    public virtual float GetPressure( int ptrIndex = 0 ) => 0;
     public virtual int GetRotation() => 0;
     public virtual IInput.Orientation GetNativeOrientation() => 0;
 
     public virtual int GetMaxPointers() => 0;
-    public virtual int GetX( int pointer = 0 ) => 0;
-    public virtual int GetY( int pointer = 0 ) => 0;
-    public virtual int GetDeltaX( int pointer = 0 ) => 0;
-    public virtual int GetDeltaY( int pointer = 0 ) => 0;
+    public virtual int GetX( int pointerId = 0 ) => 0;
+    public virtual int GetY( int pointerId = 0 ) => 0;
+    public virtual int GetDeltaX( int pointerId = 0 ) => 0;
+    public virtual int GetDeltaY( int pointerId = 0 ) => 0;
     public virtual bool IsButtonPressed( int button ) => false;
     public virtual bool IsButtonJustPressed( int button ) => false;
     public virtual bool IsPeripheralAvailable( IInput.Peripheral peripheral ) => false;

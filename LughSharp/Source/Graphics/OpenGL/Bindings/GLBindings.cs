@@ -168,7 +168,7 @@ public unsafe partial class GLBindings : IGLBindings
         GLubyte* version = GetString( IGL.GLVersion );
 
         return version == null
-            ? throw new RuntimeException( "NULL GL Version returned!" )
+            ? throw new LughRuntimeException( "NULL GL Version returned!" )
             : ( version[ 0 ], version[ 2 ] );
     }
 
@@ -1955,7 +1955,7 @@ public unsafe partial class GLBindings : IGLBindings
     {
         if ( !IsProgram( program ) )
         {
-            throw new RuntimeException( $"Invalid program ID: {program}" );
+            throw new LughRuntimeException( $"Invalid program ID: {program}" );
         }
 
         GetDelegateForFunction< PFNGLSHADERSTORAGEBLOCKBINDINGPROC >( "glShaderStorageBlockBinding",

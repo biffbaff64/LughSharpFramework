@@ -241,7 +241,7 @@ public class Table : WidgetGroup
     {
         if ( Skin == null )
         {
-            throw new RuntimeException( "Table must have a skin set to use this method." );
+            throw new LughRuntimeException( "Table must have a skin set to use this method." );
         }
 
         SetBackground( Skin.GetDrawable( drawableName ) );
@@ -445,7 +445,7 @@ public class Table : WidgetGroup
         Guard.Against.Null( text );
 
         return Skin == null
-                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   ? throw new LughRuntimeException( "Table must have a skin set to use this method." )
                    : AddCell( new Label( text, Skin ) );
     }
 
@@ -459,7 +459,7 @@ public class Table : WidgetGroup
     public Cell AddCell( string text, string labelStyleName )
     {
         return Skin == null
-                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   ? throw new LughRuntimeException( "Table must have a skin set to use this method." )
                    : AddCell( new Label( text, Skin.Get< LabelStyle >( labelStyleName ) ) );
     }
 
@@ -474,7 +474,7 @@ public class Table : WidgetGroup
     public Cell AddCell( string? text, string fontName, Color color )
     {
         return Skin == null
-                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   ? throw new LughRuntimeException( "Table must have a skin set to use this method." )
                    : AddCell( new Label( text, new LabelStyle( Skin.GetFont( fontName ), color ) ) );
     }
 
@@ -489,7 +489,7 @@ public class Table : WidgetGroup
     public Cell AddCell( string? text, string fontName, string colorName )
     {
         return Skin == null
-                   ? throw new RuntimeException( "Table must have a skin set to use this method." )
+                   ? throw new LughRuntimeException( "Table must have a skin set to use this method." )
                    : AddCell( new Label( text,
                                          new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
     }

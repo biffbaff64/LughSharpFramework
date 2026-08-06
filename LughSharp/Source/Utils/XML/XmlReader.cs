@@ -654,12 +654,12 @@ public class XmlReader
     /// </summary>
     /// <param name="name">The name of the attribute to set. Cannot be null.</param>
     /// <param name="value">The value to assign to the attribute. Cannot be null.</param>
-    /// <exception cref="RuntimeException">Thrown if either the attribute name or value is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if either the attribute name or value is null.</exception>
     protected virtual void Attribute( string? name, string? value )
     {
         if ( name == null || value == null )
         {
-            throw new RuntimeException( $"Invalid attribute name or value: {name}, {value}" );
+            throw new LughRuntimeException( $"Invalid attribute name or value: {name}, {value}" );
         }
 
         _current?.SetAttribute( name, value );

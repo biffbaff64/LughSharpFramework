@@ -74,12 +74,12 @@ public static class ListExtensions
         /// Removes and returns the last item in the list.
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="RuntimeException"></exception>
+        /// <exception cref="LughRuntimeException"></exception>
         public T Pop()
         {
             if ( target.Count == 0 )
             {
-                throw new RuntimeException( "List is empty." );
+                throw new LughRuntimeException( "List is empty." );
             }
 
             T item = target[ target.Count - 1 ];

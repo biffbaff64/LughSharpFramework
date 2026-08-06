@@ -632,11 +632,11 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
             }
             catch ( FormatException )
             {
-                throw new RuntimeException( "Malformed Rectangle: " + v );
+                throw new LughRuntimeException( "Malformed Rectangle: " + v );
             }
         }
 
-        throw new RuntimeException( "Malformed Rectangle: " + v );
+        throw new LughRuntimeException( "Malformed Rectangle: " + v );
     }
 
     /// <summary>

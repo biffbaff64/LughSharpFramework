@@ -656,7 +656,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="run">The glyph run to be truncated.</param>
     /// <param name="targetWidth">The maximum width that the text should occupy.</param>
     /// <param name="truncate">The string to append at the end if truncation is required.</param>
-    /// <exception cref="RuntimeException">Thrown when a GlyphRun cannot be obtained from the pool.</exception>
+    /// <exception cref="LughRuntimeException">Thrown when a GlyphRun cannot be obtained from the pool.</exception>
     private void Truncate( BitmapFontData fontData,
                            GlyphRun run,
                            float targetWidth,
@@ -669,7 +669,7 @@ public class GlyphLayout : IResetable, IPoolable
 
         if ( truncateRun == null )
         {
-            throw new RuntimeException( "Unable to obtain a GlyphRun!" );
+            throw new LughRuntimeException( "Unable to obtain a GlyphRun!" );
         }
 
         // Populate the truncate run with glyphs from the truncate string.

@@ -1405,12 +1405,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         /// <summary>
         /// Starts the blinking task.
         /// </summary>
-        /// <exception cref="RuntimeException"> Thrown if the task is not created.</exception>
+        /// <exception cref="LughRuntimeException"> Thrown if the task is not created.</exception>
         public void Start()
         {
             if ( _tf is not { _blinkTask: not null } )
             {
-                throw new RuntimeException( "Unable to start BlinkTask" );
+                throw new LughRuntimeException( "Unable to start BlinkTask" );
             }
 
             _tf._blinkTask.Start();
@@ -1479,12 +1479,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         /// <summary>
         /// Starts the key repeat task.
         /// </summary>
-        /// <exception cref="RuntimeException">Thrown if the key repeat task is not initialized.</exception>
+        /// <exception cref="LughRuntimeException">Thrown if the key repeat task is not initialized.</exception>
         public void Start()
         {
             if ( _tf is not { _keyRepeatTask: not null } )
             {
-                throw new RuntimeException( "Unable to start KeyRepeatTask" );
+                throw new LughRuntimeException( "Unable to start KeyRepeatTask" );
             }
 
             _tf._keyRepeatTask.Start();

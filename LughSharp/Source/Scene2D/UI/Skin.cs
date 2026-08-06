@@ -366,7 +366,7 @@ public class Skin : IDisposable
     /// <summary>
     /// Returns a resource named "default" for the specified type.
     /// </summary>
-    /// <exception cref="RuntimeException">if the resource was not found.</exception>
+    /// <exception cref="LughRuntimeException">if the resource was not found.</exception>
     public T Get< T >()
     {
         return ( T )Get( "default", typeof( T ) );
@@ -376,7 +376,7 @@ public class Skin : IDisposable
     /// Returns a named resource of the specified type.
     /// </summary>
     /// <param name="name">The name of the resource to retrieve.</param>
-    /// <exception cref="RuntimeException">if the resource was not found.</exception>
+    /// <exception cref="LughRuntimeException">if the resource was not found.</exception>
     public T Get< T >( string? name )
     {
         return ( T )Get( name, typeof( T ) );
@@ -387,7 +387,7 @@ public class Skin : IDisposable
     /// </summary>
     /// <param name="name">The name of the resource to retrieve.</param>
     /// <param name="type">The type of the resource to retrieve.</param>
-    /// <exception cref="RuntimeException">if the resource was not found.</exception>
+    /// <exception cref="LughRuntimeException">if the resource was not found.</exception>
     public object Get( string? name, Type? type )
     {
         Guard.Against.Null( name );
@@ -403,11 +403,11 @@ public class Skin : IDisposable
         // Use TryGetValue to avoid KeyNotFoundException
         if ( !Resources.TryGetValue( type, out Dictionary< string, object >? typeResources ) )
         {
-            throw new RuntimeException( $"No {type.FullName} registered with name: {name}" );
+            throw new LughRuntimeException( $"No {type.FullName} registered with name: {name}" );
         }
 
         return !typeResources.TryGetValue( name, out object? resource )
-                   ? throw new RuntimeException( $"No {type.FullName} registered with name: {name}" )
+                   ? throw new LughRuntimeException( $"No {type.FullName} registered with name: {name}" )
                    : resource;
     }
 
@@ -489,7 +489,7 @@ public class Skin : IDisposable
 
         if ( texture == null )
         {
-            throw new RuntimeException( $"No TextureRegion or Texture registered with name: {name}" );
+            throw new LughRuntimeException( $"No TextureRegion or Texture registered with name: {name}" );
         }
 
         region = new TextureRegion( texture );
@@ -613,9 +613,9 @@ public class Skin : IDisposable
 
             return patch;
         }
-        catch ( RuntimeException )
+        catch ( LughRuntimeException )
         {
-            throw new RuntimeException( $"No NinePatch, TextureRegion, or Texture registered with name: {name}" );
+            throw new LughRuntimeException( $"No NinePatch, TextureRegion, or Texture registered with name: {name}" );
         }
     }
 
@@ -661,9 +661,9 @@ public class Skin : IDisposable
 
             return sprite;
         }
-        catch ( RuntimeException )
+        catch ( LughRuntimeException )
         {
-            throw new RuntimeException( $"No NinePatch, TextureRegion, or Texture registered with name: {name}" );
+            throw new LughRuntimeException( $"No NinePatch, TextureRegion, or Texture registered with name: {name}" );
         }
     }
 
@@ -713,7 +713,7 @@ public class Skin : IDisposable
                 }
             }
         }
-        catch ( RuntimeException )
+        catch ( LughRuntimeException )
         {
             // Ignored
         }
@@ -737,7 +737,7 @@ public class Skin : IDisposable
                 }
                 else
                 {
-                    throw new RuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion,"
+                    throw new LughRuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion,"
                                               + $" Texture, or Sprite registered with name: {name}" );
                 }
             }
@@ -827,7 +827,7 @@ public class Skin : IDisposable
 
                    // ---------------------------
 
-                   var _ => throw new RuntimeException( $"Unable to copy, unknown "
+                   var _ => throw new LughRuntimeException( $"Unable to copy, unknown "
                                                       + $"drawable type: {drawable.GetType()}" )
                };
     }
@@ -863,7 +863,7 @@ public class Skin : IDisposable
 
              // ----------------
 
-             _ => throw new RuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
+             _ => throw new LughRuntimeException( $"Unable to copy, unknown drawable type: {drawable.GetType()}" )
          };
         //@formatter:on
 

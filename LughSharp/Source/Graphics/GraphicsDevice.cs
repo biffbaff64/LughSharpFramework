@@ -95,7 +95,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// </summary>
     /// <param name="appType"></param>
     /// <param name="profile"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public void SetBackend( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile )
     {
         BackendInfo = new BackendData
@@ -112,7 +112,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// </summary>
     /// <param name="appType">The application type to map.</param>
     /// <returns>The corresponding backend type.</returns>
-    /// <exception cref="RuntimeException">Thrown when an unknown application type is provided.</exception>
+    /// <exception cref="LughRuntimeException">Thrown when an unknown application type is provided.</exception>
     private static BackendType MapApplicationTypeToBackend( Platform.ApplicationType appType )
     {
         return appType switch
@@ -125,7 +125,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
                    // ---------------------------
 
-                   _ => throw new RuntimeException( $"Unknown Platform ApplicationType: {appType}" )
+                   _ => throw new LughRuntimeException( $"Unknown Platform ApplicationType: {appType}" )
                };
     }
 

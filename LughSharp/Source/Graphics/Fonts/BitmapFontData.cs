@@ -224,7 +224,7 @@ public class BitmapFontData
     /// <param name="file"></param>
     /// <param name="flip"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public void Load( FileInfo file, bool flip )
     {
         if ( ImagePaths != null )
@@ -244,7 +244,7 @@ public class BitmapFontData
 
             if ( line == null )
             {
-                throw new RuntimeException( "File is empty." );
+                throw new LughRuntimeException( "File is empty." );
             }
 
             line = line.Substring( line.IndexOf( "padding=", StringComparison.Ordinal ) + 8 );
@@ -253,7 +253,7 @@ public class BitmapFontData
 
             if ( padding.Length != 4 )
             {
-                throw new RuntimeException( "Invalid padding." );
+                throw new LughRuntimeException( "Invalid padding." );
             }
 
             PadTop    = int.Parse( padding[ 0 ] );
@@ -267,7 +267,7 @@ public class BitmapFontData
 
             if ( line == null )
             {
-                throw new RuntimeException( "Missing common header." );
+                throw new LughRuntimeException( "Missing common header." );
             }
 
             string[] common = line.Split( " ", 9 ); // At most we want the 6th element; i.e. "page=N"
@@ -275,19 +275,19 @@ public class BitmapFontData
             // At least lineHeight and base are required.
             if ( common.Length < 3 )
             {
-                throw new RuntimeException( "Invalid common header." );
+                throw new LughRuntimeException( "Invalid common header." );
             }
 
             if ( !common[ 1 ].StartsWith( "lineHeight=" ) )
             {
-                throw new RuntimeException( "Missing: lineHeight" );
+                throw new LughRuntimeException( "Missing: lineHeight" );
             }
 
             LineHeight = int.Parse( common[ 1 ].Substring( 11 ) );
 
             if ( !common[ 2 ].StartsWith( "base=" ) )
             {
-                throw new RuntimeException( "Missing: base" );
+                throw new LughRuntimeException( "Missing: base" );
             }
 
             float baseLine = int.Parse( common[ 2 ].Substring( 5 ) );
@@ -316,7 +316,7 @@ public class BitmapFontData
 
                 if ( line == null )
                 {
-                    throw new RuntimeException( "Missing additional page definitions." );
+                    throw new LughRuntimeException( "Missing additional page definitions." );
                 }
 
                 // Expect ID to mean "index".
@@ -334,12 +334,12 @@ public class BitmapFontData
 
                         if ( pageID != p )
                         {
-                            throw new RuntimeException( $"Page IDs must be indices starting at 0: {id}" );
+                            throw new LughRuntimeException( $"Page IDs must be indices starting at 0: {id}" );
                         }
                     }
                     catch ( Exception ex )
                     {
-                        throw new RuntimeException( $"Invalid page id: {id}", ex );
+                        throw new LughRuntimeException( $"Invalid page id: {id}", ex );
                     }
                 }
 
@@ -349,7 +349,7 @@ public class BitmapFontData
 
                 if ( matches.Count <= 0 )
                 {
-                    throw new RuntimeException( "Missing: file" );
+                    throw new LughRuntimeException( "Missing: file" );
                 }
 
                 string fileName = matches[ 0 ].Groups[ 1 ].Value;
@@ -500,7 +500,7 @@ public class BitmapFontData
                 {
                     if ( ( currentPartIndex + 1 ) >= parts.Length )
                     {
-                        throw new RuntimeException( $"Missing expected value on char line: {line}" );
+                        throw new LughRuntimeException( $"Missing expected value on char line: {line}" );
                     }
 
                     // Skip the key (e.g., "x", "y")
@@ -508,7 +508,7 @@ public class BitmapFontData
 
                     if ( !int.TryParse( parts[ currentPartIndex ], out int val ) )
                     {
-                        throw new RuntimeException( $"Invalid number format on char " +
+                        throw new LughRuntimeException( $"Invalid number format on char " +
                                                     $"line for {parts[ currentPartIndex - 1 ]}: " +
                                                     $"{parts[ currentPartIndex ]} in {line}" );
                     }
@@ -677,7 +677,7 @@ public class BitmapFontData
         }
         catch ( Exception ex )
         {
-            throw new RuntimeException( "Error loading font file: " + file, ex );
+            throw new LughRuntimeException( "Error loading font file: " + file, ex );
         }
         finally
         {
@@ -703,7 +703,7 @@ public class BitmapFontData
     {
         if ( region.Texture == null )
         {
-            throw new RuntimeException( "Texture is null." );
+            throw new LughRuntimeException( "Texture is null." );
         }
 
         float invTexWidth  = 1.0f / region.Texture.Width;
@@ -833,7 +833,7 @@ public class BitmapFontData
     /// A valid glyph is one that is non-null and has both non-zero width and height.
     /// </summary>
     /// <returns>The first valid <see cref="Glyph"/> found in the glyph collection.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when no valid glyphs are found in the glyph collection.
     /// </exception>
     public Glyph GetFirstGlyph()
@@ -854,7 +854,7 @@ public class BitmapFontData
             }
         }
 
-        throw new RuntimeException( "No glyphs found." );
+        throw new LughRuntimeException( "No glyphs found." );
     }
 
     /// <summary>

@@ -123,14 +123,14 @@ public class PNGDecoder
     {
         if ( texture == null )
         {
-            throw new RuntimeException( "Unable to perform analysis, texture is null" );
+            throw new LughRuntimeException( "Unable to perform analysis, texture is null" );
         }
 
         byte[]? data = CreatePNGFromTexture( texture );
 
         if ( data == null )
         {
-            throw new RuntimeException( "WARNING: Unable to analyse Texture. No image data found." );
+            throw new LughRuntimeException( "WARNING: Unable to analyse Texture. No image data found." );
         }
 
         AnalysePNG( data, verbose );
@@ -364,7 +364,7 @@ public class PNGDecoder
     /// </summary>
     /// <param name="data">The byte array containing the raw PNG data to be analyzed.</param>
     /// <returns>The offset (in bytes) of the first IDAT chunk within the PNG data.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when no IDAT chunk is found, indicating an invalid PNG file structure.
     /// </exception>
     private static int FindFirstIDATDataOffset( byte[] data )
@@ -405,7 +405,7 @@ public class PNGDecoder
                 // Reached the end marker before finding IDAT. Something is wrong
                 // with the file structure.
 
-                throw new RuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
+                throw new LughRuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
             }
 
             // Skip the current chunk and move to the next one.
@@ -418,7 +418,7 @@ public class PNGDecoder
         }
 
         // End of file reached without finding IDAT
-        throw new RuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
+        throw new LughRuntimeException( "Invalid PNG file structure. Could not find IDAT chunk." );
     }
 
     /// <summary>
@@ -696,7 +696,7 @@ public class PNGDecoder
     {
         if ( !file.Extension.Equals( ".png", StringComparison.CurrentCultureIgnoreCase ) )
         {
-            throw new RuntimeException( $"PNG files ONLY!: ({file.Name})" );
+            throw new LughRuntimeException( $"PNG files ONLY!: ({file.Name})" );
         }
 
         var widthbytes  = new byte[ sizeof( int ) ];
@@ -756,7 +756,7 @@ public class PNGDecoder
     {
         if ( rawRgba == null )
         {
-            throw new RuntimeException( "Cannot perform PNG conversion as Input data is null." );
+            throw new LughRuntimeException( "Cannot perform PNG conversion as Input data is null." );
         }
 
         int bytesPerPixel = PixFormat.BytesPerPixel( format );

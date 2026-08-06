@@ -57,7 +57,7 @@ public class FreetypeFontLoader : AsynchronousAssetLoader
     {
         if ( parameter == null )
         {
-            throw new RuntimeException( "FreetypeFontParameter must be set in " +
+            throw new LughRuntimeException( "FreetypeFontParameter must be set in " +
                                         "AssetManager#load to point at a TTF file!" );
         }
     }
@@ -72,7 +72,7 @@ public class FreetypeFontLoader : AsynchronousAssetLoader
     {
         if ( p == null )
         {
-            throw new RuntimeException( "FreetypeFontParameter must be set in AssetManager.load" +
+            throw new LughRuntimeException( "FreetypeFontParameter must be set in AssetManager.load" +
                                         " to point at a TTF file!" );
         }
 

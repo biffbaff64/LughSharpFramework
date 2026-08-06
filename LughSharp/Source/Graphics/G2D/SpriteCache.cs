@@ -262,12 +262,12 @@ public class SpriteCache
     {
         if ( IsDrawing )
         {
-            throw new RuntimeException( "end must be called before beginCache" );
+            throw new LughRuntimeException( "end must be called before beginCache" );
         }
 
         if ( _currentCache != null )
         {
-            throw new RuntimeException( "endCache must be called before begin." );
+            throw new LughRuntimeException( "endCache must be called before begin." );
         }
 
         _currentCache = new Cache( _caches.Count, _mesh.GetVerticesBuffer().Limit );
@@ -285,12 +285,12 @@ public class SpriteCache
     {
         if ( IsDrawing )
         {
-            throw new RuntimeException( "end must be called before beginCache" );
+            throw new LughRuntimeException( "end must be called before beginCache" );
         }
 
         if ( _currentCache != null )
         {
-            throw new RuntimeException( "endCache must be called before begin." );
+            throw new LughRuntimeException( "endCache must be called before begin." );
         }
 
         if ( cacheID == ( _caches.Count - 1 ) )
@@ -313,7 +313,7 @@ public class SpriteCache
     {
         if ( _currentCache == null )
         {
-            throw new RuntimeException( "beginCache must be called before endCache." );
+            throw new LughRuntimeException( "beginCache must be called before endCache." );
         }
 
         Cache? cache      = _currentCache;
@@ -339,7 +339,7 @@ public class SpriteCache
             // Redefine existing cache.
             if ( cacheCount > cache.MaxCount )
             {
-                throw new RuntimeException( $"If a cache is not the last created, it cannot be redefined"
+                throw new LughRuntimeException( $"If a cache is not the last created, it cannot be redefined"
                                           + $"with more entries than when it was first created: "
                                           + $"{cacheCount} ({cache.MaxCount} max)" );
             }
@@ -401,7 +401,7 @@ public class SpriteCache
     {
         if ( _currentCache == null )
         {
-            throw new RuntimeException( "beginCache must be called before add." );
+            throw new LughRuntimeException( "beginCache must be called before add." );
         }
 
         int verticesPerImage = _mesh.NumIndices > 0 ? 4 : 6;
@@ -1150,12 +1150,12 @@ public class SpriteCache
     {
         if ( IsDrawing )
         {
-            throw new RuntimeException( "end must be called before begin." );
+            throw new LughRuntimeException( "end must be called before begin." );
         }
 
         if ( _currentCache != null )
         {
-            throw new RuntimeException( "endCache must be called before begin" );
+            throw new LughRuntimeException( "endCache must be called before begin" );
         }
 
         RenderCallsSinceBegin = 0;
@@ -1194,7 +1194,7 @@ public class SpriteCache
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "begin must be called before end." );
+            throw new LughRuntimeException( "begin must be called before end." );
         }
 
         IsDrawing = false;
@@ -1211,7 +1211,7 @@ public class SpriteCache
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "SpriteCache.begin must be called before draw." );
+            throw new LughRuntimeException( "SpriteCache.begin must be called before draw." );
         }
 
         Cache cache = _caches[ cacheID ];
@@ -1246,7 +1246,7 @@ public class SpriteCache
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "SpriteCache.begin must be called before draw." );
+            throw new LughRuntimeException( "SpriteCache.begin must be called before draw." );
         }
 
         Cache cache = _caches[ cacheID ];

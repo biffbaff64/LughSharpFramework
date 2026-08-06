@@ -103,7 +103,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
     /// </summary>
     /// <param name="imageProcessor"></param>
     /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public Bitmap GetImage( ImageProcessor imageProcessor )
     {
         if ( _image != null )
@@ -119,19 +119,19 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
         }
         catch ( IOException ex )
         {
-            throw new RuntimeException( $"Error reading image: {_file.FullName}", ex );
+            throw new LughRuntimeException( $"Error reading image: {_file.FullName}", ex );
         }
 
         if ( bitmap == null )
         {
-            throw new RuntimeException( $"Unable to read image: {_file.FullName}" );
+            throw new LughRuntimeException( $"Unable to read image: {_file.FullName}" );
         }
 
         string?            name = _isPatch ? $"{Name}.9" : Name;
         TexturePackerRect? rect = imageProcessor.ProcessImage( bitmap, name );
 
         return rect == null
-            ? throw new RuntimeException( "ProcessImage returned null" )
+            ? throw new LughRuntimeException( "ProcessImage returned null" )
             : rect.GetImage( imageProcessor );
     }
 

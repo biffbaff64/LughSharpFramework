@@ -173,7 +173,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <returns>The asset of the specified type.</returns>
-    /// <exception cref="RuntimeException">Thrown if the asset is not loaded.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the asset is not loaded.</exception>
     public object? Get( string name )
     {
         lock ( this )
@@ -185,7 +185,7 @@ public class AssetManager : IDisposable
 
             return assetContainer != null
                 ? assetContainer.Asset
-                : throw new RuntimeException( $"Asset not loaded: {name}" );
+                : throw new LughRuntimeException( $"Asset not loaded: {name}" );
         }
     }
 
@@ -281,7 +281,7 @@ public class AssetManager : IDisposable
             // Confirm availability of the loader for the supplied asset.
             if ( GetLoader( type, filename ) == null )
             {
-                throw new RuntimeException( $"No loader for type: {type.Name}" );
+                throw new LughRuntimeException( $"No loader for type: {type.Name}" );
             }
 
             if ( _loadQueue.Count == 0 )
@@ -308,7 +308,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="filename">The name of the asset to be unloaded.</param>
     /// <returns>A task representing the asynchronous unload operation.</returns>
-    /// <exception cref="RuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the asset is not loaded or cannot be found.</exception>
     public void Unload( string filename )
     {
         // Check if it's currently processed (and the first element in the queue,
@@ -321,7 +321,7 @@ public class AssetManager : IDisposable
         // Get the type of the asset
         if ( !_assetTypes.TryGetValue( filename, out Type? type ) )
         {
-            throw new RuntimeException( $"Asset not loaded: {filename}" );
+            throw new LughRuntimeException( $"Asset not loaded: {filename}" );
         }
 
         // Check if the asset is in the load queue
@@ -406,7 +406,7 @@ public class AssetManager : IDisposable
                 // the exception). Avoid spinning forever.
                 if ( done && ( _assetTypes.Get( filename ) == null ) )
                 {
-                    throw new RuntimeException( $"Asset '{filename}' failed to load or was cancelled." );
+                    throw new LughRuntimeException( $"Asset '{filename}' failed to load or was cancelled." );
                 }
             }
 
@@ -419,7 +419,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="name">The name of the asset to retrieve.</param>
     /// <returns>The asset of the specified type.</returns>
-    /// <exception cref="RuntimeException">Thrown if the asset is not loaded.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the asset is not loaded.</exception>
     public T? Get< T >( string name ) where T : class
     {
         lock ( this )
@@ -451,7 +451,7 @@ public class AssetManager : IDisposable
             }
 
             return required
-                ? throw new RuntimeException( $"Asset not loaded: {name}" )
+                ? throw new LughRuntimeException( $"Asset not loaded: {name}" )
                 : null;
         }
     }
@@ -461,7 +461,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="assetDescriptor">The descriptor containing the filepath and type of the asset.</param>
     /// <returns>The asset of the specified type.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the asset descriptor is null or if the filepath is null.
     /// </exception>
     public T? Get< T >( AssetDescriptor assetDescriptor ) where T : class
@@ -480,7 +480,7 @@ public class AssetManager : IDisposable
     /// <param name="required">Indicates whether to throw an exception if the asset is not found.</param>
     /// <returns>The requested asset if found; otherwise, null if not required.</returns>
     /// <exception cref="ArgumentNullException">Thrown when the name or type is null.</exception>
-    /// <exception cref="RuntimeException">Thrown if the asset is not found and it is required.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the asset is not found and it is required.</exception>
     public T? Get< T >( string name, Type? type, bool required ) where T : class
     {
         Guard.Against.Null( type );
@@ -497,7 +497,7 @@ public class AssetManager : IDisposable
                 }
             }
 
-            return required ? throw new RuntimeException( $"Asset not loaded: {name}" ) : null;
+            return required ? throw new LughRuntimeException( $"Asset not loaded: {name}" ) : null;
         }
     }
 
@@ -506,7 +506,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <typeparam name="T">The type of assets to retrieve.</typeparam>
     /// <returns>The list containing all assets of the specified type.</returns>
-    /// <exception cref="RuntimeException">Thrown if no assets of the specified type are found.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if no assets of the specified type are found.</exception>
     public List< T > GetAssetsOfType< T >()
     {
         lock ( this )
@@ -516,7 +516,7 @@ public class AssetManager : IDisposable
             if ( !_assets.TryGetValue( typeof( T ), out Dictionary< string, IRefCountedContainer >? assetsByType )
               || ( assetsByType == null ) )
             {
-                throw new RuntimeException( $"No assets loaded for type {typeof( T ).FullName}" );
+                throw new LughRuntimeException( $"No assets loaded for type {typeof( T ).FullName}" );
             }
 
             foreach ( IRefCountedContainer assetContainer in assetsByType.Values )
@@ -628,7 +628,7 @@ public class AssetManager : IDisposable
 
                 if ( assetsByType == null )
                 {
-                    throw new RuntimeException( $"Failed to get assets by type: {assetType}" );
+                    throw new LughRuntimeException( $"Failed to get assets by type: {assetType}" );
                 }
 
                 foreach ( KeyValuePair< string, IRefCountedContainer > entry in assetsByType )
@@ -755,7 +755,7 @@ public class AssetManager : IDisposable
     /// Adds a new asset loading task to the queue using the given asset descriptor.
     /// </summary>
     /// <param name="assetDesc">Descriptor containing information about the asset to be loaded.</param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if no loader is available for the asset type specified in the asset
     /// descriptor.
     /// </exception>
@@ -765,7 +765,7 @@ public class AssetManager : IDisposable
 
         if ( loader == null )
         {
-            throw new RuntimeException( $"No loader for type: {assetDesc.AssetType}" );
+            throw new LughRuntimeException( $"No loader for type: {assetDesc.AssetType}" );
         }
 
         _tasks.Push( new AssetLoadingTask( this, assetDesc, loader, _executor ) );
@@ -856,7 +856,7 @@ public class AssetManager : IDisposable
     {
         if ( _tasks.Count == 0 )
         {
-            throw new RuntimeException( t );
+            throw new LughRuntimeException( t );
         }
 
         // pop the faulty task from the stack
@@ -883,7 +883,7 @@ public class AssetManager : IDisposable
         }
         else
         {
-            throw new RuntimeException( t );
+            throw new LughRuntimeException( t );
         }
     }
 
@@ -932,7 +932,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="millis">The number of milliseconds to perform updates.</param>
     /// <returns>A task that represents whether the asset manager finished processing all tasks.</returns>
-    /// <exception cref="RuntimeException">Thrown when an error occurs during asset loading.</exception>
+    /// <exception cref="LughRuntimeException">Thrown when an error occurs during asset loading.</exception>
     public bool Update( int millis )
     {
         try
@@ -997,7 +997,7 @@ public class AssetManager : IDisposable
     /// </summary>
     /// <param name="parentAssetFilename">The file name of the parent asset.</param>
     /// <param name="dependendAssetDesc">The descriptor of the dependent asset to inject.</param>
-    /// <exception cref="RuntimeException">Thrown if the type of the dependent asset is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the type of the dependent asset is null.</exception>
     public void InjectDependency( string parentAssetFilename, AssetDescriptor dependendAssetDesc )
     {
         lock ( this )
@@ -1043,7 +1043,7 @@ public class AssetManager : IDisposable
     /// <param name="parent">
     /// The file name of the parent asset whose dependencies' reference counts are to be incremented.
     /// </param>
-    /// <exception cref="RuntimeException">Thrown if the type of a dependency is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the type of a dependency is null.</exception>
     public void IncrementRefCountedDependencies( string parent )
     {
         var stack = new Stack< string >();
@@ -1061,14 +1061,14 @@ public class AssetManager : IDisposable
 
                     if ( type == null )
                     {
-                        throw new RuntimeException( "type cannot be null!" );
+                        throw new LughRuntimeException( "type cannot be null!" );
                     }
 
                     _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? asset );
 
                     if ( asset == null )
                     {
-                        throw new RuntimeException( "asset cannot be null!" );
+                        throw new LughRuntimeException( "asset cannot be null!" );
                     }
 
                     asset[ dependency ].RefCount++;
@@ -1089,7 +1089,7 @@ public class AssetManager : IDisposable
     /// <returns>
     /// The loader capable of loading the type and filename, or null if none exists.
     /// </returns>
-    /// <exception cref="RuntimeException"> If no loader was found. </exception>
+    /// <exception cref="LughRuntimeException"> If no loader was found. </exception>
     public AssetLoader? GetLoader( Type type, string? filename = null )
     {
         // Check if the type exists in _loaders before accessing it.
@@ -1269,7 +1269,7 @@ public class AssetManager : IDisposable
 
             if ( !result || ( assetType == null ) )
             {
-                throw new RuntimeException( $"Assets Container does not hold {name}" );
+                throw new LughRuntimeException( $"Assets Container does not hold {name}" );
             }
 
             return assetType;
@@ -1351,7 +1351,7 @@ public class AssetManager : IDisposable
 
             if ( type == null )
             {
-                throw new RuntimeException( $"Asset not loaded: {filename}" );
+                throw new LughRuntimeException( $"Asset not loaded: {filename}" );
             }
 
             _assets[ type ]?[ filename ].RefCount = refCount;
@@ -1370,18 +1370,18 @@ public class AssetManager : IDisposable
 
             if ( type == null )
             {
-                throw new RuntimeException( $"Asset not loaded: {filename}" );
+                throw new LughRuntimeException( $"Asset not loaded: {filename}" );
             }
 
             if ( _assets == null )
             {
-                throw new RuntimeException( "_assets list is null!" );
+                throw new LughRuntimeException( "_assets list is null!" );
             }
 
             _assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? asset );
 
             return asset == null
-                ? throw new RuntimeException( $"Asset not loaded: {filename}" )
+                ? throw new LughRuntimeException( $"Asset not loaded: {filename}" )
                 : asset[ filename ].RefCount;
         }
     }
@@ -1393,7 +1393,7 @@ public class AssetManager : IDisposable
     /// <param name="filename">The file name associated with the asset.</param>
     /// <param name="type">The type of the asset.</param>
     /// <param name="asset">The asset to add.</param>
-    /// <exception cref="RuntimeException">Thrown if the asset is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the asset is null.</exception>
     public void AddAsset( string filename, Type type, object? asset )
     {
         lock ( this )
@@ -1423,14 +1423,14 @@ public class AssetManager : IDisposable
         {
             if ( !File.Exists( filename ) )
             {
-                throw new RuntimeException( $"File '{filename}' not found!" );
+                throw new LughRuntimeException( $"File '{filename}' not found!" );
             }
 
             foreach ( AssetDescriptor desc in _loadQueue )
             {
                 if ( ( desc.AssetName == filename ) && ( desc.AssetType != type ) )
                 {
-                    throw new RuntimeException
+                    throw new LughRuntimeException
                         ( $"Asset with name '{filename}' already in preload queue, but has different " +
                           $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
                 }
@@ -1444,7 +1444,7 @@ public class AssetManager : IDisposable
 
                 if ( ( desc.AssetName == filename ) && ( desc.AssetType != type ) )
                 {
-                    throw new RuntimeException
+                    throw new LughRuntimeException
                         ( $"Asset with name '{filename}' already in preload queue, but has different " +
                           $"type (expected: {type?.Name}, found: {desc.AssetType.Name})" );
                 }
@@ -1458,7 +1458,7 @@ public class AssetManager : IDisposable
 
                 if ( ( otherType != null ) && ( otherType != type ) )
                 {
-                    throw new RuntimeException
+                    throw new LughRuntimeException
                         ( $"Asset with name '{filename}' already loaded, but has different " +
                           $"type (expected: {type?.Name}, found: {otherType.Name})" );
                 }
@@ -1505,7 +1505,7 @@ public class AssetManager : IDisposable
     {
         if ( type == null )
         {
-            throw new RuntimeException( $"Asset not loaded: {filename}: Type not specified." );
+            throw new LughRuntimeException( $"Asset not loaded: {filename}: Type not specified." );
         }
 
         Guard.Against.Null( _assets );
@@ -1515,7 +1515,7 @@ public class AssetManager : IDisposable
         if ( !_assets.TryGetValue( type, out Dictionary< string, IRefCountedContainer >? assetRef )
           && ( assetRef != null ) && !assetRef.TryGetValue( filename, out container ) )
         {
-            throw new RuntimeException( $"Asset not loaded: {filename}" );
+            throw new LughRuntimeException( $"Asset not loaded: {filename}" );
         }
 
         if ( container != null )

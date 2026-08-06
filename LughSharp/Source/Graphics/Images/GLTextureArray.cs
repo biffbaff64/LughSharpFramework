@@ -176,12 +176,12 @@ public class GLTextureArray : GLTexture, IManaged
     /// Uploads texture array storage and optionally consumes pixel data from the provided data provider.
     /// </summary>
     /// <param name="data">The <see cref="ITextureArrayData"/> that provides format, dimensions and pixel content.</param>
-    /// <exception cref="RuntimeException">Thrown when attempting to replace data with differing managed status.</exception>
+    /// <exception cref="LughRuntimeException">Thrown when attempting to replace data with differing managed status.</exception>
     private void Load( ITextureArrayData data )
     {
         if ( ( _data != null ) && ( data.Managed != _data.Managed ) )
         {
-            throw new RuntimeException
+            throw new LughRuntimeException
                 ( "New data must have the same managed status as the old data" );
         }
 
@@ -216,12 +216,12 @@ public class GLTextureArray : GLTexture, IManaged
     /// <summary>
     /// Reload the texture from its data provider. Only valid for managed textures.
     /// </summary>
-    /// <exception cref="RuntimeException">Thrown when called on an unmanaged texture.</exception>
+    /// <exception cref="LughRuntimeException">Thrown when called on an unmanaged texture.</exception>
     public override void Reload()
     {
         if ( !IsManaged )
         {
-            throw new RuntimeException( "Tried to reload an unmanaged TextureArray" );
+            throw new LughRuntimeException( "Tried to reload an unmanaged TextureArray" );
         }
 
         GLTextureHandle = Engine.GL.GenTexture();

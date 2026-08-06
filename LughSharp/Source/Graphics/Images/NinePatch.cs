@@ -291,7 +291,7 @@ public class NinePatch
           || ( ( patches[ PosBottomLeft ] != null )
             && ( Math.Abs( patches[ PosBottomLeft ]!.GetRegionWidth() - LeftWidth ) > NumberUtils.FloatTolerance ) ) )
         {
-            throw new RuntimeException( "Left side patches must have the same width" );
+            throw new LughRuntimeException( "Left side patches must have the same width" );
         }
 
         if ( ( ( patches[ PosTopRight ] != null )
@@ -301,7 +301,7 @@ public class NinePatch
           || ( ( patches[ PosBottomRight ] != null )
             && ( Math.Abs( patches[ PosBottomRight ]!.GetRegionWidth() - RightWidth ) > NumberUtils.FloatTolerance ) ) )
         {
-            throw new RuntimeException( "Right side patches must have the same width" );
+            throw new LughRuntimeException( "Right side patches must have the same width" );
         }
 
         if ( ( ( patches[ PosBottomLeft ] != null )
@@ -311,7 +311,7 @@ public class NinePatch
           || ( ( patches[ PosBottomRight ] != null )
             && ( Math.Abs( patches[ PosBottomRight ]!.GetRegionHeight() - BottomHeight ) > NumberUtils.FloatTolerance ) ) )
         {
-            throw new RuntimeException( "Bottom side patches must have the same height" );
+            throw new LughRuntimeException( "Bottom side patches must have the same height" );
         }
 
         if ( ( ( patches[ PosTopLeft ] != null )
@@ -321,7 +321,7 @@ public class NinePatch
           || ( ( patches[ PosTopRight ] != null )
             && ( Math.Abs( patches[ PosTopRight ]!.GetRegionHeight() - TopHeight ) > NumberUtils.FloatTolerance ) ) )
         {
-            throw new RuntimeException( "Top side patches must have the same height" );
+            throw new LughRuntimeException( "Top side patches must have the same height" );
         }
     }
 

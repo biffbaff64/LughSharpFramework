@@ -62,7 +62,7 @@ public class AsyncExecutor : IDisposable
     {
         if ( _isDisposed )
         {
-            throw new RuntimeException( "Cannot run tasks on an executor that has been shut down (disposed)" );
+            throw new LughRuntimeException( "Cannot run tasks on an executor that has been shut down (disposed)" );
         }
 
         // Wait for a concurrency slot. Use WaitAsync() to avoid blocking the calling thread.
@@ -83,7 +83,7 @@ public class AsyncExecutor : IDisposable
                    catch ( Exception e )
                    {
                        // Wrap and rethrow as RuntimeException if needed, or just let it bubble up
-                       throw new RuntimeException( "Asynchronous task failed.", e );
+                       throw new LughRuntimeException( "Asynchronous task failed.", e );
                    }
                    finally
                    {

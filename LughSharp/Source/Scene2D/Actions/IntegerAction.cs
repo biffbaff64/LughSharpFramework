@@ -74,7 +74,7 @@ public class IntegerAction : TemporalAction
     public int Value    { get; set; }
 
     /// <inheritdoc />
-    protected override void Begin()
+    protected override void BeginAction()
     {
         Value = Start;
     }

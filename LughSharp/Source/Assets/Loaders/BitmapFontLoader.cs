@@ -144,7 +144,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
             TextureRegion? region = atlas?.FindRegion( name );
 
             return region == null
-                ? throw new RuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" )
+                ? throw new LughRuntimeException( $"Could not find font region {name} in atlas {p.AtlasName}" )
                 : new BitmapFont( file, region );
         }
 

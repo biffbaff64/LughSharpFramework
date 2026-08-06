@@ -80,36 +80,11 @@ public class Cell : IPoolable, IResetable
 
     // ========================================================================
 
-    private const float Zerof = 0.0f;
-    private const float Onef  = 1.0f;
-    private const int   Zeroi = 0;
-    private const int   Onei  = 1;
-
-    private static readonly Cell _default = new()
-    {
-        MinWidth    = Value.MinWidth,
-        MinHeight   = Value.MinHeight,
-        PrefWidth   = Value.PrefWidth,
-        PrefHeight  = Value.PrefHeight,
-        MaxWidth    = Value.MaxWidth,
-        MaxHeight   = Value.MaxHeight,
-        SpaceTop    = Value.Zero,
-        SpaceLeft   = Value.Zero,
-        SpaceBottom = Value.Zero,
-        SpaceRight  = Value.Zero,
-        PadTop      = Value.Zero,
-        PadLeft     = Value.Zero,
-        PadBottom   = Value.Zero,
-        PadRight    = Value.Zero,
-        FillX       = Zerof,
-        FillY       = Zerof,
-        Alignment   = Align.Center,
-        ExpandX     = Zeroi,
-        ExpandY     = Zeroi,
-        Colspan     = Onei,
-        UniformX    = false,
-        UniformY    = false
-    };
+    private const float DefaultFill    = 0.0f;
+    private const float DefaultFill1F  = 1.0f;
+    private const int   NoCellAbove    = -1;
+    private const int   DefaultExpand  = 0;
+    private const int   DefaultColspan = 1;
 
     // ========================================================================
     // ========================================================================
@@ -120,30 +95,8 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public Cell()
     {
-        CellAboveIndex = -1;
-
-        MinWidth    = _default.MinWidth;
-        MinHeight   = _default.MinHeight;
-        PrefWidth   = _default.PrefWidth;
-        PrefHeight  = _default.PrefHeight;
-        MaxWidth    = _default.MaxWidth;
-        MaxHeight   = _default.MaxHeight;
-        SpaceTop    = _default.SpaceTop;
-        SpaceLeft   = _default.SpaceLeft;
-        SpaceBottom = _default.SpaceBottom;
-        SpaceRight  = _default.SpaceRight;
-        PadTop      = _default.PadTop;
-        PadLeft     = _default.PadLeft;
-        PadBottom   = _default.PadBottom;
-        PadRight    = _default.PadRight;
-        FillX       = _default.FillX;
-        FillY       = _default.FillY;
-        Alignment   = _default.Alignment;
-        ExpandX     = _default.ExpandX;
-        ExpandY     = _default.ExpandY;
-        Colspan     = _default.Colspan;
-        UniformX    = _default.UniformX;
-        UniformY    = _default.UniformY;
+        CellAboveIndex = NoCellAbove;
+        ApplyDefaults();
     }
 
     // ========================================================================
@@ -153,33 +106,48 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public void Reset()
     {
+        ClearRuntimeState();
+        ApplyDefaults();
+    }
+
+    /// <summary>
+    /// Clears state that is specific to this cell instance while it is attached to a table.
+    /// </summary>
+    private void ClearRuntimeState()
+    {
         Actor          = null;
         Table          = null;
         EndRow         = false;
-        CellAboveIndex = -1;
+        CellAboveIndex = NoCellAbove;
+    }
 
-        MinWidth    = _default.MinWidth;
-        MinHeight   = _default.MinHeight;
-        PrefWidth   = _default.PrefWidth;
-        PrefHeight  = _default.PrefHeight;
-        MaxWidth    = _default.MaxWidth;
-        MaxHeight   = _default.MaxHeight;
-        SpaceTop    = _default.SpaceTop;
-        SpaceLeft   = _default.SpaceLeft;
-        SpaceBottom = _default.SpaceBottom;
-        SpaceRight  = _default.SpaceRight;
-        PadTop      = _default.PadTop;
-        PadLeft     = _default.PadLeft;
-        PadBottom   = _default.PadBottom;
-        PadRight    = _default.PadRight;
-        FillX       = _default.FillX;
-        FillY       = _default.FillY;
-        Alignment   = _default.Alignment;
-        ExpandX     = _default.ExpandX;
-        ExpandY     = _default.ExpandY;
-        Colspan     = _default.Colspan;
-        UniformX    = _default.UniformX;
-        UniformY    = _default.UniformY;
+    /// <summary>
+    /// Applies the shared default cell constraints to this instance.
+    /// </summary>
+    private void ApplyDefaults()
+    {
+        MinWidth    = Value.MinWidth;
+        MinHeight   = Value.MinHeight;
+        PrefWidth   = Value.PrefWidth;
+        PrefHeight  = Value.PrefHeight;
+        MaxWidth    = Value.MaxWidth;
+        MaxHeight   = Value.MaxHeight;
+        SpaceTop    = Value.Zero;
+        SpaceLeft   = Value.Zero;
+        SpaceBottom = Value.Zero;
+        SpaceRight  = Value.Zero;
+        PadTop      = Value.Zero;
+        PadLeft     = Value.Zero;
+        PadBottom   = Value.Zero;
+        PadRight    = Value.Zero;
+        FillX       = DefaultFill;
+        FillY       = DefaultFill;
+        Alignment   = Align.Center;
+        ExpandX     = DefaultExpand;
+        ExpandY     = DefaultExpand;
+        Colspan     = DefaultColspan;
+        UniformX    = false;
+        UniformY    = false;
     }
 
     /// <summary>
@@ -221,10 +189,7 @@ public class Cell : IPoolable, IResetable
     /// <summary>
     /// Returns <b>true</b> if this Cells <see cref="Actor"/> is not null.
     /// </summary>
-    public bool HasActor()
-    {
-        return Actor != null;
-    }
+    public bool HasActor() => Actor != null;
 
     // ------------------------------------------------------------------------
 
@@ -1070,10 +1035,10 @@ public class Cell : IPoolable, IResetable
 
     /// <summary>
     /// Sets <see cref="FillX"/> and <see cref="FillY"/> to the supplied float value. The
-    /// values for fx and fy default to <see cref="Onef"/>.
+    /// values for fx and fy default to <see cref="DefaultFill1F"/>.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
-    public Cell Fill( float fx = Onef, float fy = Onef )
+    public Cell Fill( float fx = DefaultFill1F, float fy = DefaultFill1F )
     {
         FillX = fx;
         FillY = fy;
@@ -1082,25 +1047,25 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillX"/> and <see cref="FillY"/> to either <see cref="Onef"/> or <see cref="Zerof"/>
+    /// Sets <see cref="FillX"/> and <see cref="FillY"/> to either <see cref="DefaultFill1F"/> or <see cref="DefaultFill"/>
     /// depending upon the values of the supplied boolean parameters.
     /// </summary>
-    /// <param name="x"> If true, FillX is set to Onef, otherwise Zerof. </param>
-    /// <param name="y"> If true, FillY is set to Onef, otherwise Zerof.  </param>
+    /// <param name="x"> If true, FillX is set to DefaultFill1F, otherwise DefaultFill. </param>
+    /// <param name="y"> If true, FillY is set to DefaultFill1F, otherwise DefaultFill.  </param>
     /// <returns> This Cell for chaining </returns>
     public Cell Fill( bool x, bool y )
     {
-        FillX = x ? Onef : Zerof;
-        FillY = y ? Onef : Zerof;
+        FillX = x ? DefaultFill1F : DefaultFill;
+        FillY = y ? DefaultFill1F : DefaultFill;
 
         return this;
     }
 
     /// <summary>
-    /// Sets <see cref="FillX"/> to <see cref="Onef"/>. Leaves <see cref="FillY"/> unchanged.
+    /// Sets <see cref="FillX"/> to <see cref="DefaultFill1F"/>. Leaves <see cref="FillY"/> unchanged.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
-    public Cell SetFillX( float fx = Onef )
+    public Cell SetFillX( float fx = DefaultFill1F )
     {
         FillX = fx;
 
@@ -1108,10 +1073,10 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillY"/> to <see cref="Onef"/>. Leaves <see cref="FillX"/> unchanged.
+    /// Sets <see cref="FillY"/> to <see cref="DefaultFill1F"/>. Leaves <see cref="FillX"/> unchanged.
     /// </summary>
     /// <returns> This Cell for chaining </returns>
-    public Cell SetFillY( float fy = Onef )
+    public Cell SetFillY( float fy = DefaultFill1F )
     {
         FillY = fy;
 
@@ -1225,10 +1190,10 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Grow()
     {
-        ExpandX = Onei;
-        ExpandY = Onei;
-        FillX   = Onef;
-        FillY   = Onef;
+        ExpandX = DefaultColspan;
+        ExpandY = DefaultColspan;
+        FillX   = DefaultFill1F;
+        FillY   = DefaultFill1F;
 
         return this;
     }
@@ -1239,8 +1204,8 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell GrowX()
     {
-        ExpandX = Onei;
-        FillX   = Onef;
+        ExpandX = DefaultColspan;
+        FillX   = DefaultFill1F;
 
         return this;
     }
@@ -1251,8 +1216,8 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell GrowY()
     {
-        ExpandY = Onei;
-        FillY   = Onef;
+        ExpandY = DefaultColspan;
+        FillY   = DefaultFill1F;
 
         return this;
     }
@@ -1265,7 +1230,7 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetExpandX()
     {
-        ExpandX = Onei;
+        ExpandX = DefaultColspan;
 
         return this;
     }
@@ -1276,7 +1241,7 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetExpandY()
     {
-        ExpandY = Onei;
+        ExpandY = DefaultColspan;
 
         return this;
     }
@@ -1284,10 +1249,10 @@ public class Cell : IPoolable, IResetable
     /// <summary>
     /// Expand this Cell in X and Y by the provided values.
     /// </summary>
-    /// <param name="x"> The value to expand in X. Default is <see cref="Onei"/>. </param>
-    /// <param name="y"> The value to expand in Y. Default is <see cref="Onei"/>. </param>
+    /// <param name="x"> The value to expand in X. Default is <see cref="DefaultColspan"/>. </param>
+    /// <param name="y"> The value to expand in Y. Default is <see cref="DefaultColspan"/>. </param>
     /// <returns> This Cell for chaining. </returns>
-    public Cell Expand( int x = Onei, int y = Onei )
+    public Cell Expand( int x = DefaultColspan, int y = DefaultColspan )
     {
         ExpandX = x;
         ExpandY = y;
@@ -1304,8 +1269,8 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Expand( bool expandX, bool expandY )
     {
-        ExpandX = expandX ? Onei : Zeroi;
-        ExpandY = expandY ? Onei : Zeroi;
+        ExpandX = expandX ? DefaultColspan : DefaultExpand;
+        ExpandY = expandY ? DefaultColspan : DefaultExpand;
 
         return this;
     }
@@ -1526,28 +1491,7 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public void Clear()
     {
-        MinWidth    = _default.MinWidth;
-        MinHeight   = _default.MinHeight;
-        PrefWidth   = _default.PrefWidth;
-        PrefHeight  = _default.PrefHeight;
-        MaxWidth    = _default.MaxWidth;
-        MaxHeight   = _default.MaxHeight;
-        SpaceTop    = _default.SpaceTop;
-        SpaceLeft   = _default.SpaceLeft;
-        SpaceBottom = _default.SpaceBottom;
-        SpaceRight  = _default.SpaceRight;
-        PadTop      = _default.PadTop;
-        PadLeft     = _default.PadLeft;
-        PadBottom   = _default.PadBottom;
-        PadRight    = _default.PadRight;
-        FillX       = _default.FillX;
-        FillY       = _default.FillY;
-        Alignment   = _default.Alignment;
-        ExpandX     = _default.ExpandX;
-        ExpandY     = _default.ExpandY;
-        Colspan     = _default.Colspan;
-        UniformX    = _default.UniformX;
-        UniformY    = _default.UniformY;
+        ApplyDefaults();
     }
 
     /// <summary>
@@ -1559,7 +1503,7 @@ public class Cell : IPoolable, IResetable
     {
         if ( cell == null )
         {
-            throw new RuntimeException( "Cannot set constraints from null Cell" );
+            throw new LughRuntimeException( "Cannot set constraints from null Cell" );
         }
 
         CopyConstraintsFrom( cell );
@@ -1605,7 +1549,7 @@ public class Cell : IPoolable, IResetable
     {
         if ( cell == null )
         {
-            throw new RuntimeException( "Cannot copy constraints from null Cell" );
+            throw new LughRuntimeException( "Cannot copy constraints from null Cell" );
         }
 
         MinWidth    = cell.MinWidth;

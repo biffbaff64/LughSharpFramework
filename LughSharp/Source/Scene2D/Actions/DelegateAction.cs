@@ -31,7 +31,7 @@ public abstract class DelegateAction : SceneAction
 {
     public SceneAction? Action { get; set; }
 
-    protected abstract bool Delegate( float delta );
+    protected abstract bool ActionDelegate( float delta );
 
     // ========================================================================
     
@@ -43,10 +43,7 @@ public abstract class DelegateAction : SceneAction
         get => base.Actor;
         set
         {
-            if ( Action != null )
-            {
-                Action.Actor = value;
-            }
+            Action?.Actor = value;
 
             base.Actor = value;
         }
@@ -60,10 +57,7 @@ public abstract class DelegateAction : SceneAction
         get => base.Target;
         set
         {
-            if ( Action != null )
-            {
-                Action.Target = value;
-            }
+            Action?.Target = value;
 
             base.Target = value;
         }
@@ -87,7 +81,7 @@ public abstract class DelegateAction : SceneAction
 
         try
         {
-            return Delegate( delta );
+            return ActionDelegate( delta );
         }
         finally
         {

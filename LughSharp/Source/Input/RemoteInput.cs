@@ -27,6 +27,7 @@ namespace LughSharp.Source.Input;
 [PublicAPI]
 public class RemoteInput
 {
+    //TODO:
 }
 
 // ============================================================================

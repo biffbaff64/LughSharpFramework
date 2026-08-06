@@ -77,7 +77,7 @@ public static class DictionaryExtension
         {
             if ( key == null )
             {
-                throw new RuntimeException( "key is null" );
+                throw new LughRuntimeException( "key is null" );
             }
 
             return self.GetValueOrDefault( key, defaultValue );
@@ -92,7 +92,7 @@ public static class DictionaryExtension
         {
             if ( key == null )
             {
-                throw new RuntimeException( "key is null" );
+                throw new LughRuntimeException( "key is null" );
             }
 
             return self.TryGetValue( key, out TV? value ) ? value : default( TV );

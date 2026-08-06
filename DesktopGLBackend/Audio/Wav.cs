@@ -63,7 +63,7 @@ public class Wav
             }
             catch ( IOException ex )
             {
-                throw new RuntimeException( "Error reading WAV file: " + File, ex );
+                throw new LughRuntimeException( "Error reading WAV file: " + File, ex );
             }
         }
 

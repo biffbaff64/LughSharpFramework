@@ -141,7 +141,7 @@ public interface IApplication : IDisposable
     /// On iOS this should be avoided in production as it breaks Apples guidelines
     /// </para>
     /// </summary>
-    void Exit();
+    void ApplicationExit();
 
     /// <summary>
     /// Cleanup everything before shutdown.

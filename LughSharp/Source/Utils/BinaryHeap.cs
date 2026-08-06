@@ -176,7 +176,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
     /// Removes the specified node from the heap.
     /// </summary>
     /// <returns> The specified node. </returns>
-    /// <exception cref="RuntimeException"> If the heap is null. </exception>
+    /// <exception cref="LughRuntimeException"> If the heap is null. </exception>
     public virtual T Remove( T node )
     {
         Guard.Against.Null( _nodes );

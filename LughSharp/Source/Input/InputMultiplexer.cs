@@ -112,9 +112,9 @@ public class InputMultiplexer : IInputProcessor
     /// <summary>
     /// Called when a key was typed
     /// </summary>
-    /// <param name="character"> The Unicode code point of the key that was typed. </param>
+    /// <param name="ch"> The Unicode code point of the key that was typed. </param>
     /// <returns>TRUE if the input was processed.</returns>
-    public bool OnKeyTyped( char character )
+    public bool OnKeyTyped( char ch )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -122,7 +122,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].OnKeyTyped( character ) )
+                if ( items[ i ].OnKeyTyped( ch ) )
                 {
                     return true;
                 }
@@ -141,12 +141,12 @@ public class InputMultiplexer : IInputProcessor
     /// </summary>
     /// <param name="screenX"> Screen touch X coordinate. </param>
     /// <param name="screenY"> Screen touch Y coordinate. </param>
-    /// <param name="pointer">
+    /// <param name="ptrIndex">
     /// The <b>touch pointer index</b>, essentially which finger triggered the touch event.
     /// </param>
     /// <param name="button"> The mouse or touch button. </param>
     /// <returns>TRUE if the input was processed.</returns>
-    public bool OnTouchDown( int screenX, int screenY, int pointer, int button )
+    public bool OnTouchDown( int screenX, int screenY, int ptrIndex, int button )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -154,7 +154,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].OnTouchDown( screenX, screenY, pointer, button ) )
+                if ( items[ i ].OnTouchDown( screenX, screenY, ptrIndex, button ) )
                 {
                     return true;
                 }
@@ -173,12 +173,12 @@ public class InputMultiplexer : IInputProcessor
     /// </summary>
     /// <param name="screenX"> Screen touch X coordinate. </param>
     /// <param name="screenY"> Screen touch Y coordinate. </param>
-    /// <param name="pointer">
+    /// <param name="ptrIndex">
     /// The <b>touch pointer index</b>, essentially which finger triggered the touch event.
     /// </param>
     /// <param name="button"> The mouse or touch button. </param>
     /// <returns>TRUE if the input was processed.</returns>
-    public bool OnTouchUp( int screenX, int screenY, int pointer, int button )
+    public bool OnTouchUp( int screenX, int screenY, int ptrIndex, int button )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -186,7 +186,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].OnTouchUp( screenX, screenY, pointer, button ) )
+                if ( items[ i ].OnTouchUp( screenX, screenY, ptrIndex, button ) )
                 {
                     return true;
                 }
@@ -205,9 +205,9 @@ public class InputMultiplexer : IInputProcessor
     /// </summary>
     /// <param name="screenX">The current x-coordinate of the touch input on the screen.</param>
     /// <param name="screenY">The current y-coordinate of the touch input on the screen.</param>
-    /// <param name="pointer">The index of the touch pointer associated with this event.</param>
+    /// <param name="ptrIndex">The index of the touch pointer associated with this event.</param>
     /// <returns>TRUE if the input was processed.</returns>
-    public bool OnTouchDragged( int screenX, int screenY, int pointer )
+    public bool OnTouchDragged( int screenX, int screenY, int ptrIndex )
     {
         IInputProcessor[] items = Processors.Begin();
 
@@ -215,7 +215,7 @@ public class InputMultiplexer : IInputProcessor
         {
             for ( int i = 0, n = Processors.Size; i < n; i++ )
             {
-                if ( items[ i ].OnTouchDragged( screenX, screenY, pointer ) )
+                if ( items[ i ].OnTouchDragged( screenX, screenY, ptrIndex ) )
                 {
                     return true;
                 }
@@ -293,7 +293,7 @@ public class InputMultiplexer : IInputProcessor
     {
         if ( processor == null )
         {
-            throw new NullReferenceException( "processor cannot be null" );
+            throw new LughRuntimeException( "processor cannot be null" );
         }
 
         Processors.Insert( index, processor );
@@ -306,7 +306,7 @@ public class InputMultiplexer : IInputProcessor
     {
         if ( processor == null )
         {
-            throw new NullReferenceException( "processor cannot be null" );
+            throw new LughRuntimeException( "processor cannot be null" );
         }
 
         Processors.Add( processor );

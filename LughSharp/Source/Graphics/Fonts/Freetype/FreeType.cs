@@ -136,7 +136,7 @@ public class FreeType
 
         if ( address == IntPtr.Zero )
         {
-            throw new RuntimeException( "Couldn't initialize FreeType library, FreeType error code: "
+            throw new LughRuntimeException( "Couldn't initialize FreeType library, FreeType error code: "
                                       + GetLastErrorCode() );
         }
 
@@ -214,7 +214,7 @@ public class FreeType
                 }
                 catch ( IOException ex )
                 {
-                    throw new RuntimeException( ex );
+                    throw new LughRuntimeException( ex );
                 }
             }
 
@@ -232,7 +232,7 @@ public class FreeType
             {
                 Marshal.FreeHGlobal( unmanagedBuffer );
 
-                throw new RuntimeException( "Couldn't load font, FreeType error code: " + GetLastErrorCode() );
+                throw new LughRuntimeException( "Couldn't load font, FreeType error code: " + GetLastErrorCode() );
             }
 
             FontData[ faceAddress ] = unmanagedBuffer;
@@ -251,7 +251,7 @@ public class FreeType
 
             if ( strokerAddress == IntPtr.Zero )
             {
-                throw new RuntimeException( "Couldn't create FreeType stroker, FreeType error code: "
+                throw new LughRuntimeException( "Couldn't create FreeType stroker, FreeType error code: "
                                           + GetLastErrorCode() );
             }
 
@@ -717,7 +717,7 @@ public class FreeType
 
             if ( glyphAddress == IntPtr.Zero )
             {
-                throw new RuntimeException( "Couldn't get glyph, FreeType error code: " + GetLastErrorCode() );
+                throw new LughRuntimeException( "Couldn't get glyph, FreeType error code: " + GetLastErrorCode() );
             }
 
             return new Glyph( glyphAddress );
@@ -782,7 +782,7 @@ public class FreeType
 
             if ( bitmapAddress == IntPtr.Zero )
             {
-                throw new RuntimeException( "Couldn't render glyph, FreeType error code: " + GetLastErrorCode() );
+                throw new LughRuntimeException( "Couldn't render glyph, FreeType error code: " + GetLastErrorCode() );
             }
 
             Address   = bitmapAddress;
@@ -791,21 +791,21 @@ public class FreeType
 
         public Bitmap GetBitmap()
         {
-            if ( !_rendered ) throw new RuntimeException( "Glyph is not yet rendered" );
+            if ( !_rendered ) throw new LughRuntimeException( "Glyph is not yet rendered" );
 
             return new Bitmap( GetBitmapFromGlyphNative( Address ) );
         }
 
         public int GetLeft()
         {
-            if ( !_rendered ) throw new RuntimeException( "Glyph is not yet rendered" );
+            if ( !_rendered ) throw new LughRuntimeException( "Glyph is not yet rendered" );
 
             return GetLeftNative( Address );
         }
 
         public int GetTop()
         {
-            if ( !_rendered ) throw new RuntimeException( "Glyph is not yet rendered" );
+            if ( !_rendered ) throw new LughRuntimeException( "Glyph is not yet rendered" );
 
             return GetTopNative( Address );
         }

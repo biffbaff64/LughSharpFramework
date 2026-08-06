@@ -60,7 +60,7 @@ public class AsyncResult< T >
     /// Waits if necessary for the computation to complete and then returns the result.
     /// </summary>
     /// <returns>The result of the asynchronous computation.</returns>
-    /// <exception cref="RuntimeException">If there was an error during the task execution.</exception>
+    /// <exception cref="LughRuntimeException">If there was an error during the task execution.</exception>
     public T? Get()
     {
         try
@@ -82,12 +82,12 @@ public class AsyncResult< T >
 
             if ( innerException != null )
             {
-                throw new RuntimeException( innerException );
+                throw new LughRuntimeException( innerException );
             }
 
             // If there's no inner exception (unlikely for a faulted task), throw
             // the AggregateException itself wrapped.
-            throw new RuntimeException( ex );
+            throw new LughRuntimeException( ex );
         }
 
         // In C#, if a thread is interrupted/canceled while blocking on .Result, a TaskCanceledException

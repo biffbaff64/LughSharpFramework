@@ -101,7 +101,7 @@ public class FileHandle
     /// <param name="type"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentOutOfRangeException"></exception>
-    private string ResolvePath( string path, PathType type )
+    private static string ResolvePath( string path, PathType type )
     {
         switch ( type )
         {
@@ -111,8 +111,8 @@ public class FileHandle
 
             case PathType.Local:
                 // Private app storage (Data/Data or AppData) - Persistence
-                return Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ),
-                                     path );
+                return Path.Combine
+                    ( Environment.GetFolderPath( Environment.SpecialFolder.LocalApplicationData ), path );
 
             case PathType.External:
                 // User's documents or shared storage
@@ -121,6 +121,14 @@ public class FileHandle
             case PathType.Absolute:
                 return path;
 
+            case PathType.Classpath:
+            case PathType.Assembly:
+            case PathType.Unknown:
+            case PathType.File:
+            case PathType.Assets:
+            case PathType.Directory:
+            case PathType.DoesNotExist:
+            case PathType.Invalid:
             default:
                 throw new ArgumentOutOfRangeException( nameof( type ), type, null );
         }
@@ -187,7 +195,7 @@ public class FileHandle
     /// A string containing the file name without its extension, or an empty string if
     /// the path does not contain file information.
     /// </returns>
-    public string NameWithoutExtension( string path )
+    public static string NameWithoutExtension( string path )
     {
         return Path.GetFileNameWithoutExtension( path );
     }

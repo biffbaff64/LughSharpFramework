@@ -83,7 +83,7 @@ public class MipMapTextureData : ITextureData
     /// <returns> the pixmap.</returns>
     public Pixmap ConsumePixmap()
     {
-        throw new RuntimeException( "This Texture is compressed, use the compress method." );
+        throw new LughRuntimeException( "This Texture is compressed, use the compress method." );
     }
 
     /// <summary>

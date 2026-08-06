@@ -559,7 +559,7 @@ public class ByteArray
     {
         if ( Size == 0 )
         {
-            throw new RuntimeException( "Array is empty." );
+            throw new LughRuntimeException( "Array is empty." );
         }
 
         return Items[ 0 ];

@@ -24,6 +24,7 @@
 
 namespace LughSharp.Source.Scene2D.Actions;
 
+[PublicAPI]
 public class MoveByAction : RelativeTemporalAction
 {
     public float AmountX { get; set; }

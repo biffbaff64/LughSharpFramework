@@ -228,7 +228,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.end must be called before begin." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.end must be called before begin." );
         }
 
         RenderCalls = 0;
@@ -258,7 +258,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before end." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before end." );
         }
 
         if ( _vertexIndex > 0 )
@@ -319,14 +319,14 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// <param name="region"> The Polygon Region to draw </param>
     /// <param name="x"> X coordinate </param>
     /// <param name="y"> Y coordinate </param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if this method was called before a call to Begin().
     /// </exception>
     public void Draw( PolygonRegion region, float x, float y )
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Region.Texture == null )
@@ -370,14 +370,14 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// <param name="y"> Y coordinate </param>
     /// <param name="width"> Width of the region. </param>
     /// <param name="height"> Height of the region. </param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if this method was called before a call to Begin().
     /// </exception>
     public void Draw( PolygonRegion region, float x, float y, float width, float height )
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Region.Texture == null )
@@ -447,7 +447,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Region.Texture == null )
@@ -522,7 +522,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -585,7 +585,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -748,7 +748,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -827,7 +827,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -899,7 +899,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -974,7 +974,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( texture != _lastTexture )
@@ -1039,7 +1039,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         int triangleCount = count / Sprite2D.SpriteSize * 6;
@@ -1129,7 +1129,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Texture == null )
@@ -1210,7 +1210,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( textureRegion.Texture == null )
@@ -1375,7 +1375,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( textureRegion.Texture == null )
@@ -1543,7 +1543,7 @@ public class PolygonSpriteBatch : IPolygonBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
         }
 
         if ( region.Texture == null )

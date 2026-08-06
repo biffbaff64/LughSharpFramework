@@ -146,7 +146,7 @@ public class Gdx2DPixmap : IDisposable
     /// Creates a new Gdx2DPixmap instance using data from the supplied buffer.
     /// </summary>
     /// <param name="buffer"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public Gdx2DPixmap( byte[] buffer )
     {
         PixmapBuffer = InitializeFromBuffer( buffer, 0, buffer.Length );
@@ -160,7 +160,7 @@ public class Gdx2DPixmap : IDisposable
     /// <param name="width"> Width in pixels. </param>
     /// <param name="height"> Height in pixels. </param>
     /// <param name="format"> The requested Pixmap.Format color format. </param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     /// <remarks> After buffer creation, the Pixmap BitDepth is undefined. </remarks>
     public Gdx2DPixmap( int width, int height, int format )
     {
@@ -367,7 +367,7 @@ public class Gdx2DPixmap : IDisposable
             case LughFormat.IndexedColor:
             case LughFormat.Invalid:
             default:
-                throw new RuntimeException( "Unknown / Unsupported color type" );
+                throw new LughRuntimeException( "Unknown / Unsupported color type" );
         }
 
         Array.Copy( Pixels, PixmapBuffer.BackingArray(), Pixels.Length );
@@ -415,7 +415,7 @@ public class Gdx2DPixmap : IDisposable
     {
         if ( ( size % 4 ) != 0 )
         {
-            throw new RuntimeException( "Invalid size for RGBA8888 format" );
+            throw new LughRuntimeException( "Invalid size for RGBA8888 format" );
         }
 
         uint col = Color.ToRgba8888( color );

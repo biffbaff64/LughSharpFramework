@@ -74,7 +74,7 @@ public class FloatAction : TemporalAction
     public float Value    { get; set; }
 
     /// <inheritdoc />
-    protected override void Begin()
+    protected override void BeginAction()
     {
         Value = Start;
     }

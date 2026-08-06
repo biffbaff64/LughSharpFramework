@@ -88,13 +88,13 @@ public static class GLUtils
     /// <summary>
     /// Checks if there is a current OpenGL context bound to the calling thread.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when no OpenGL context is currently bound to the thread.
     /// </exception>
     public static bool CheckOpenGLContext()
     {
         return DotGLFW.Glfw.GetCurrentContext() == null
-            ? throw new RuntimeException( "No OpenGL context is current on this thread!" )
+            ? throw new LughRuntimeException( "No OpenGL context is current on this thread!" )
             : true;
     }
 

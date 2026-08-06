@@ -105,7 +105,7 @@ public static class Colors
             }
         }
 
-        throw new RuntimeException( $"Color not found in ColorMap: {color}" );
+        throw new LughRuntimeException( $"Color not found in ColorMap: {color}" );
     }
 }
 

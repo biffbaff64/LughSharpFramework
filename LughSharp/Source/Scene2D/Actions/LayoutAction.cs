@@ -35,7 +35,7 @@ public class LayoutAction : SceneAction
     {
         if ( ( actor != null ) && actor is not ILayout )
         {
-            throw new RuntimeException( "Actor must implement layout: " + actor );
+            throw new LughRuntimeException( "Actor must implement layout: " + actor );
         }
 
         base.Target = actor;

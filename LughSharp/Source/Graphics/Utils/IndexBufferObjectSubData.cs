@@ -181,7 +181,7 @@ public class IndexBufferObjectSubData : IIndexData
     {
         if ( _bufferHandle == 0 )
         {
-            throw new RuntimeException( "IndexBufferObject cannot be used after it has been disposed." );
+            throw new LughRuntimeException( "IndexBufferObject cannot be used after it has been disposed." );
         }
 
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )_bufferHandle );

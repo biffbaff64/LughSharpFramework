@@ -151,7 +151,7 @@ public class DesktopGLGraphics : GraphicsDevice
     {
         if ( ( GLWindow == null ) || ( GLWindow.GlfwWindow == null ) )
         {
-            throw new RuntimeException( "GLWindow ( or GlfwWindow ) is null!" );
+            throw new LughRuntimeException( "GLWindow ( or GlfwWindow ) is null!" );
         }
 
         DotGLFW.Glfw.GetFramebufferSize( GLWindow.GlfwWindow, out int tmpWidth, out int tmpHeight );
@@ -472,7 +472,7 @@ public class DesktopGLGraphics : GraphicsDevice
     {
         if ( ( width == 0 ) || ( height == 0 ) )
         {
-            throw new RuntimeException( "Viewport dimensions must be greater than zero!" );
+            throw new LughRuntimeException( "Viewport dimensions must be greater than zero!" );
         }
 
         // Set the viewport

@@ -324,7 +324,7 @@ public class ParticleEffect : IDisposable
     /// before adding the newly loaded ones.
     /// </para>
     /// </remarks>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if an error occurs while loading the effect from the <paramref name="effectFile"/>.
     /// </exception>
     public void LoadEmitters( FileInfo effectFile )
@@ -350,7 +350,7 @@ public class ParticleEffect : IDisposable
         }
         catch ( IOException ex )
         {
-            throw new RuntimeException( "Error loading effect: " + effectFile, ex );
+            throw new LughRuntimeException( "Error loading effect: " + effectFile, ex );
         }
     }
 

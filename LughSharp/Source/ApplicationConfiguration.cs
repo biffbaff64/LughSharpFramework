@@ -37,10 +37,10 @@ public class ApplicationConfiguration
     // General Application Configuration
     // ========================================================================
 
-    public HdpiMode HdpiMode             { get; set; } = HdpiMode.Logical;
-    
+    public HdpiMode HdpiMode { get; set; } = HdpiMode.Logical;
+
     // ------------------------------------------
-    
+
     public string   PreferencesDirectory { get; set; } = ".prefs/";
     public PathType PreferencesFileType  { get; set; } = PathType.External;
 
@@ -74,7 +74,7 @@ public class ApplicationConfiguration
     public int GLContextRevision     { get; set; }
 
     // ------------------------------------------
-    
+
     public GLEmulationType GLEmulation { get; set; } = GLEmulationType.GL20;
     public bool            Debug       { get; set; }
 
@@ -82,7 +82,7 @@ public class ApplicationConfiguration
     /// Determines whether the application should pause when it loses focus.
     /// Default is <c>true</c>.
     /// </summary>
-    public bool PauseWhenLostFocus { get; set; } = true;
+    public bool PauseWhenFocusLost { get; set; } = true;
 
     /// <summary>
     /// Determines whether the application should pause when it is minimized.
@@ -322,16 +322,20 @@ public class ApplicationConfiguration
     /// the file type to be used to store them. Defaults to "$USER_HOME/.prefs/"
     /// and <see cref="PathType"/>.
     /// </summary>
-    public void SetPreferencesConfig( string preferencesDirectory, PathType preferencesFileType )
+    /// <param name="preferencesDirectory"> The directory where <see cref="IPreferences"/> will be stored. </param>
+    /// <param name="preferencesPathType"> See <see cref="PathType"/>. </param>
+    public void SetPreferencesConfig( string preferencesDirectory, PathType preferencesPathType )
     {
         PreferencesDirectory = preferencesDirectory;
-        PreferencesFileType  = preferencesFileType;
+        PreferencesFileType  = preferencesPathType;
     }
 
     /// <summary>
     /// Sets the correct values for <see cref="GLContextMajorVersion"/> and
     /// <see cref="GLContextMinorVersion"/>.
     /// </summary>
+    /// <param name="major"> The major version of the OpenGL context to use. </param>
+    /// <param name="minor"> The minor version of the OpenGL context to use. </param>
     public void SetGLContextVersion( int major, int minor )
     {
         GLContextMajorVersion = major;
@@ -341,6 +345,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// Gets the currently active display mode for the primary monitor.
     /// </summary>
+    /// <returns>The display mode of the primary monitor.</returns>
     public virtual IGraphicsDevice.DisplayMode GetDisplayMode()
     {
         return GetDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor() );
@@ -349,6 +354,12 @@ public class ApplicationConfiguration
     /// <summary>
     /// Gets the currterntly active display mode for the given monitor.
     /// </summary>
+    /// <param name="monitor">The monitor to get the display mode for.</param>
+    /// <returns>The display mode of the given monitor.</returns>
+    /// <exception cref="NotImplementedException">
+    /// Thrown if this particular implementation of the method is called. Only methods that
+    /// override this method should be called.
+    /// </exception>
     public virtual IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
         throw new NotImplementedException();
@@ -357,6 +368,7 @@ public class ApplicationConfiguration
     /// <summary>
     /// Return the available <see cref="IGraphicsDevice.DisplayMode"/>s of the primary monitor
     /// </summary>
+    /// <returns>A list of the available display modes of the primary monitor.</returns>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
         throw new NotImplementedException();
@@ -420,6 +432,8 @@ public class ApplicationConfiguration
     /// Sets the position of the window in windowed mode.
     /// Default -1 for both coordinates for centered on primary monitor.
     /// </summary>
+    /// <param name="x"> The x coordinate of the window. </param>
+    /// <param name="y"> The y coordinate of the window. </param>
     public void SetWindowPosition( int x, int y )
     {
         WindowX = x;
@@ -431,6 +445,10 @@ public class ApplicationConfiguration
     /// screen or not resizable, these limits are ignored. The default for all four
     /// parameters is -1, which means unrestricted.
     /// </summary>
+    /// <param name="minWidth"> The minimum width of the window. </param>
+    /// <param name="minHeight"> The minimum height of the window. </param>
+    /// <param name="maxWidth"> The maximum width of the window. </param>
+    /// <param name="maxHeight"> The maximum height of the window. </param>
     public void SetWindowSizeLimits( int minWidth, int minHeight, int maxWidth, int maxHeight )
     {
         WindowMinWidth  = minWidth;

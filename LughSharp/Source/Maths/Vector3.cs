@@ -842,11 +842,11 @@ public class Vector3 : IVector< Vector3 >
             }
             catch ( Exception ex )
             {
-                throw new RuntimeException( ex.Message );
+                throw new LughRuntimeException( ex.Message );
             }
         }
 
-        throw new RuntimeException( "Malformed Vector3: " + v );
+        throw new LughRuntimeException( "Malformed Vector3: " + v );
     }
 
     // ========================================================================

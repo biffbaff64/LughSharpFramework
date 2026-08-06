@@ -180,7 +180,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
     /// A list of file handles corresponding to dependency files, such as tileset sources
     /// and associated images.
     /// </returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the TiledMap file does not contain any tileset nodes, which are required
     /// to determine dependencies.
     /// </exception>
@@ -193,7 +193,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
         if ( ( children = XmlRoot?.GetChildrenByName( "tileset" ) ) == null )
         {
-            throw new RuntimeException( "Error: Map does not contain tileset nodes." );
+            throw new LughRuntimeException( "Error: Map does not contain tileset nodes." );
         }
 
         foreach ( XmlReader.Element? tileset in children )
@@ -321,7 +321,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
 
             if ( texture == null )
             {
-                throw new RuntimeException( $"Tileset image not found: {image.Name}" );
+                throw new LughRuntimeException( $"Tileset image not found: {image.Name}" );
             }
 
             props.Put( "imagesource", imageSource );
@@ -352,7 +352,7 @@ public class TmxMapLoader : BaseTmxMapLoader< TmxMapLoader.LoaderParameters >
         {
             if ( tileElements == null )
             {
-                throw new RuntimeException( "Error: Tile Elements List is null!" );
+                throw new LughRuntimeException( "Error: Tile Elements List is null!" );
             }
 
             // Every tile has its own image source

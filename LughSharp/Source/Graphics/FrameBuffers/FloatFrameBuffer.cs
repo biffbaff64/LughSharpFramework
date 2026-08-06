@@ -59,7 +59,7 @@ public class FloatFrameBuffer : FrameBuffer
     /// <param name="width"> the width of the framebuffer in pixels </param>
     /// <param name="height"> the height of the framebuffer in pixels </param>
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
-    /// <exception cref="RuntimeException"> in case the FrameBuffer could not be created  </exception>
+    /// <exception cref="LughRuntimeException"> in case the FrameBuffer could not be created  </exception>
     public FloatFrameBuffer( int width, int height, bool hasDepth )
     {
         var bufferBuilder = new FrameBufferBuilder( width, height );

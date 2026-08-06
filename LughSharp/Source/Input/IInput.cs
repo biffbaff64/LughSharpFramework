@@ -63,13 +63,13 @@ public interface IInput : IDisposable
     /// fingers are touched down and the first one is lifted the second one keeps its index.
     /// If another finger is placed on the touch screen the first free index will be used.
     /// </summary>
-    int GetX( int pointer = 0 );
+    int GetX( int pointerId = 0 );
 
     /// <summary>
     /// |Returns the different between the current pointer location and the last pointer
     /// location on the x-axis.
     /// </summary>
-    int GetDeltaX( int pointer = 0 );
+    int GetDeltaX( int pointerId = 0 );
 
     /// <summary>
     /// Returns the y coordinate in screen coordinates of the given pointer. Pointers are
@@ -78,13 +78,13 @@ public interface IInput : IDisposable
     /// fingers are touched down and the first one is lifted the second one keeps its index.
     /// If another finger is placed on the touch screen the first free index will be used.
     /// </summary>
-    int GetY( int pointer = 0 );
+    int GetY( int pointerId = 0 );
 
     /// <summary>
     /// |Returns the different between the current pointer location and the last pointer
     /// location on the y-axis.
     /// </summary>
-    int GetDeltaY( int pointer = 0 );
+    int GetDeltaY( int pointerId = 0 );
 
     bool IsButtonPressed( int button );
     bool IsButtonJustPressed( int button );
@@ -129,6 +129,7 @@ public interface IInput : IDisposable
     /// </summary>
     bool IsTextInputFieldOpened();
 
+    [PublicAPI]
     public interface IKeyboardHeightObserver
     {
         /// <summary>
@@ -185,7 +186,7 @@ public interface IInput : IDisposable
     float GetGyroscopeX();
     float GetGyroscopeY();
     float GetGyroscopeZ();
-    float GetPressure( int pointer = 0 );
+    float GetPressure( int ptrIndex = 0 );
     float GetAzimuth();
     float GetPitch();
     float GetRoll();
@@ -195,7 +196,7 @@ public interface IInput : IDisposable
     void Vibrate( long[] pattern, int repeat );
     void CancelVibrate();
     void GetRotationMatrix( float[] matrix );
-    bool IsTouched( int pointer = 0 );
+    bool IsTouched( int ptrIndex = 0 );
     bool JustTouched();
 
     #endregion Mobile Devices
@@ -244,7 +245,7 @@ public interface IInput : IDisposable
     /// and hide the mouse cursor. X and y coordinates are still reported as if the mouse
     /// was not overridden.
     /// </summary>
-    void SetCursorOverridden( bool caught );
+    void SetCursorOverridden( bool overridden );
 
     /// <summary>
     /// Only viable on the desktop. Will set the mouse cursor location to the given window
@@ -256,11 +257,11 @@ public interface IInput : IDisposable
 
     // Mobile device Back Key
     bool IsOverrideBackKey();
-    void SetOverrideBackKey( bool catchBack );
+    void SetOverrideBackKey( bool addKey );
 
     // Mobile device Menu Key
     bool IsOverrideMenuKey();
-    void SetOverrideMenuKey( bool catchMenu );
+    void SetOverrideMenuKey( bool addKey );
 
     #endregion override keys
 

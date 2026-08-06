@@ -184,7 +184,7 @@ public class AssetLoadingTask : IAssetTask
                         // Get the first inner exception, which is usually the original exception.
                         Exception inner = e.InnerException ?? e;
 
-                        throw new RuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", inner );
+                        throw new LughRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", inner );
                     }
 
                     DependenciesLoaded = true;
@@ -213,7 +213,7 @@ public class AssetLoadingTask : IAssetTask
                 }
                 catch ( Exception e )
                 {
-                    throw new RuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
+                    throw new LughRuntimeException( $"Couldn't load asset: {AssetDesc.AssetName}", e );
                 }
 
                 Asset = asyncLoader.LoadSync( Manager, Resolve( Loader, AssetDesc )!, AssetDesc.Parameters );

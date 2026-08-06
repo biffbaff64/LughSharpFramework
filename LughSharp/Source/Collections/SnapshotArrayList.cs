@@ -326,7 +326,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
 
         if ( _items == null )
         {
-            throw new RuntimeException( "_items cannot be null!" );
+            throw new LughRuntimeException( "_items cannot be null!" );
         }
 
         Modified();

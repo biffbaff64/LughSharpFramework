@@ -102,7 +102,7 @@ public abstract class OpenALMusic : IMusic
 
                 if ( err != AL.NoError )
                 {
-                    throw new RuntimeException( $"Unable to allocate audio buffers. AL Error: {err}" );
+                    throw new LughRuntimeException( $"Unable to allocate audio buffers. AL Error: {err}" );
                 }
             }
 

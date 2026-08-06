@@ -118,7 +118,7 @@ public class ImagePacker : IDisposable
     /// </summary>
     /// <param name="name">The name to associate with the inserted image.</param>
     /// <param name="image">The image to be inserted.</param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when the image does not fit or when an image with the same name already exists.
     /// </exception>
     public void InsertImage( string name, Bitmap image )

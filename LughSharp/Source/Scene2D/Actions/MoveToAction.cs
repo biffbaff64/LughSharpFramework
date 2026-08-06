@@ -38,7 +38,7 @@ public sealed class MoveToAction : TemporalAction
 
     // ========================================================================
     
-    protected override void Begin()
+    protected override void BeginAction()
     {
         StartX = Target!.GetX( Alignment );
         StartY = Target.GetY( Alignment );

@@ -24,6 +24,7 @@
 
 namespace LughSharp.Source.Scene2D.Actions;
 
+[PublicAPI]
 public class RotateByAction : RelativeTemporalAction
 {
     public float Amount { get; set; }

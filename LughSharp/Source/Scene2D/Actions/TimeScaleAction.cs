@@ -39,7 +39,7 @@ public class TimeScaleAction : DelegateAction
     /// </summary>
     /// <param name="delta"></param>
     /// <returns></returns>
-    protected override bool Delegate( float delta )
+    protected override bool ActionDelegate( float delta )
     {
         return ( Action == null ) || Action.Act( delta * Scale );
     }

@@ -160,7 +160,7 @@ public class AnimatedTiledMapTile : ITiledMapTile
             currentTime -= animationInterval;
         }
 
-        throw new RuntimeException( "Could not determine current animation frame in " +
+        throw new LughRuntimeException( "Could not determine current animation frame in " +
                                     "AnimatedTiledMapTile. This should never happen." );
     }
 

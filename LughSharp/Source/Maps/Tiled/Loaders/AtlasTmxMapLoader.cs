@@ -258,7 +258,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
                         if ( region == null )
                         {
-                            throw new RuntimeException( $"Tileset atlasRegion not found: {regionName}" );
+                            throw new LughRuntimeException( $"Tileset atlasRegion not found: {regionName}" );
                         }
 
                         AddStaticTiledMapTile( tileContext.Tileset, region, tileId, offsetX, offsetY );
@@ -274,7 +274,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
     /// </summary>
     /// <param name="tmxFile">The TMX file from which the atlas file path is determined.</param>
     /// <returns>The file handle of the resolved texture atlas.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when the map is missing a properties node, the 'atlas' property is not
     /// specified, or the atlas file cannot be found.
     /// </exception>
@@ -284,7 +284,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
         if ( properties == null )
         {
-            throw new RuntimeException( "The map is missing a properties node." );
+            throw new LughRuntimeException( "The map is missing a properties node." );
         }
 
         string? atlasFilePath = null;
@@ -308,7 +308,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
 
         if ( atlasFilePath == null )
         {
-            throw new RuntimeException( "The map is missing the 'atlas' property" );
+            throw new LughRuntimeException( "The map is missing the 'atlas' property" );
         }
 
         FileInfo? fileHandle = GetRelativeFileHandle( tmxFile, atlasFilePath );
@@ -318,7 +318,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
             return fileHandle;
         }
 
-        throw new RuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
+        throw new LughRuntimeException( $"The 'atlas' file could not be found: '{atlasFilePath}'" );
     }
 
     /// <summary>

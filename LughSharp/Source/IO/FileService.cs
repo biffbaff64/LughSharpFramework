@@ -79,14 +79,14 @@ public class FileService : IFileService
     /// <param name="fullPath">The fully resolved absolute path to check.</param>
     /// <param name="rootPath">The absolute path of the allowed root directory.</param>
     /// <returns><c>true</c> if the path is within the root; otherwise, <c>false</c>.</returns>
-    public bool IsPathSafe( string fullPath, string rootPath )
+    public static bool IsPathSafe( string fullPath, string rootPath )
     {
         // Normalize the root path to ensure it is absolute
         string normalizedRoot = Path.GetFullPath( rootPath );
 
         // Ensure the root ends with a separator to prevent 'partial name' bypasses
         // e.g., prevents "C:\Data" from incorrectly allowing "C:\DataArchive"
-        if ( !normalizedRoot.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
+        if ( !normalizedRoot.EndsWith( Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase ) )
         {
             normalizedRoot += Path.DirectorySeparatorChar;
         }

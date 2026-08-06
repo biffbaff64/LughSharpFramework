@@ -38,7 +38,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 {
     private const int DefaultMaxPointers = 1;
 
-    private readonly InputEventQueue _eventQueue         = new();
+    private readonly InputEventBuffer _eventBuffer         = new();
     private readonly bool[]          _justPressedButtons = new bool[ 5 ];
     private readonly DesktopGLWindow _window;
     private          int             _deltaX;
@@ -83,7 +83,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     /// <inheritdoc />
     public void Update()
     {
-        _eventQueue.ProcessInputEvents( InputProcessor );
+        _eventBuffer.ProcessInputEvents( InputProcessor );
     }
 
     /// <inheritdoc />
@@ -116,7 +116,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         Array.Fill( JustPressedKeys, false );
         Array.Fill( _justPressedButtons, false );
 
-        _eventQueue.ProcessInputEvents( null );
+        _eventBuffer.ProcessInputEvents( null );
     }
 
     // ========================================================================
@@ -182,9 +182,9 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     }
 
     /// <inheritdoc />
-    public override float GetPressure( int pointer = 0 )
+    public override float GetPressure( int ptrIndex = 0 )
     {
-        return IsTouched( pointer ) ? 1 : 0;
+        return IsTouched( ptrIndex ) ? 1 : 0;
     }
 
     /// <inheritdoc />
@@ -220,7 +220,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     public override long GetCurrentEventTime()
     {
         // queue sets its event time for each event dequeued/processed
-        return _eventQueue.CurrentEventTime;
+        return _eventBuffer.CurrentEventTime;
     }
 
     /// <inheritdoc />
@@ -277,7 +277,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Unknown MouseButton: {button}" )
+                   var _ => throw new LughRuntimeException( $"Unknown MouseButton: {button}" )
                };
     }
 
@@ -451,7 +451,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
             {
                 gdxKey = TranslateKeyCode( key );
 
-                _eventQueue.OnKeyDown( gdxKey, TimeUtils.NanoTime() );
+                _eventBuffer.OnKeyDown( gdxKey, TimeUtils.NanoTime() );
 
                 PressedKeyCount++;
                 KeyJustPressed            = true;
@@ -480,7 +480,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
                 _window.Graphics.RequestRendering();
 
-                _eventQueue.OnKeyUp( gdxKey, TimeUtils.NanoTime() );
+                _eventBuffer.OnKeyUp( gdxKey, TimeUtils.NanoTime() );
 
                 break;
             }
@@ -491,7 +491,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
                 {
                     _window.Graphics.RequestRendering();
 
-                    _eventQueue.OnKeyTyped( _lastCharacter, TimeUtils.NanoTime() );
+                    _eventBuffer.OnKeyTyped( _lastCharacter, TimeUtils.NanoTime() );
                 }
 
                 break;
@@ -518,7 +518,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
         _lastCharacter = ( char )codepoint;
         _window.Graphics.RequestRendering();
-        _eventQueue.OnKeyTyped( ( char )codepoint, TimeUtils.NanoTime() );
+        _eventBuffer.OnKeyTyped( ( char )codepoint, TimeUtils.NanoTime() );
     }
 
     /// <summary>
@@ -558,14 +558,14 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
             _justPressedButtons[ mouseButton ] = true;
 
             _window.Graphics.RequestRendering();
-            _eventQueue.OnTouchDown( _mouseX, _mouseY, 0, mouseButton, time );
+            _eventBuffer.OnTouchDown( _mouseX, _mouseY, 0, mouseButton, time );
         }
         else
         {
             _mousePressed = Math.Max( 0, _mousePressed - 1 );
 
             _window.Graphics.RequestRendering();
-            _eventQueue.OnTouchUp( _mouseX, _mouseY, 0, mouseButton, time );
+            _eventBuffer.OnTouchUp( _mouseX, _mouseY, 0, mouseButton, time );
         }
     }
 
@@ -578,7 +578,7 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
     public void ScrollCallback( DotGLFW.Window window, double x, double y )
     {
         _window.Graphics.RequestRendering();
-        _eventQueue.OnScrolled( -( float )x, -( float )y, TimeUtils.NanoTime() );
+        _eventBuffer.OnScrolled( -( float )x, -( float )y, TimeUtils.NanoTime() );
     }
 
     /// <summary>
@@ -610,11 +610,11 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
 
         if ( _mousePressed > 0 )
         {
-            _eventQueue.OnTouchDragged( _mouseX, _mouseY, 0, TimeUtils.NanoTime() );
+            _eventBuffer.OnTouchDragged( _mouseX, _mouseY, 0, TimeUtils.NanoTime() );
         }
         else
         {
-            _eventQueue.OnMouseMoved( _mouseX, _mouseY, TimeUtils.NanoTime() );
+            _eventBuffer.OnMouseMoved( _mouseX, _mouseY, TimeUtils.NanoTime() );
         }
     }
 }

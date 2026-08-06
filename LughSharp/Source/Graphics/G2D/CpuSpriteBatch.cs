@@ -72,7 +72,7 @@ public class CpuSpriteBatch : SpriteBatch
     /// </para>
     /// <para>
     /// Note: The real transform matrix <em>must</em> be invertible. If a singular matrix
-    /// is detected, a <see cref="RuntimeException"/> will be thrown.
+    /// is detected, a <see cref="LughRuntimeException"/> will be thrown.
     /// </para>
     /// </summary>
     public virtual void FlushAndSyncTransformMatrix()
@@ -86,7 +86,7 @@ public class CpuSpriteBatch : SpriteBatch
 
             if ( !_haveIdentityRealMatrix && ( _virtualMatrix.Determinant() == 0 ) )
             {
-                throw new RuntimeException( "Transform matrix is singular, can't sync" );
+                throw new LughRuntimeException( "Transform matrix is singular, can't sync" );
             }
 
             _adjustNeeded = false;
@@ -600,7 +600,7 @@ public class CpuSpriteBatch : SpriteBatch
 
         if ( ( count % Sprite2D.SpriteSize ) != 0 )
         {
-            throw new RuntimeException( "invalid vertex count" );
+            throw new LughRuntimeException( "invalid vertex count" );
         }
 
         if ( !_adjustNeeded )
@@ -957,7 +957,7 @@ public class CpuSpriteBatch : SpriteBatch
     {
         if ( !IsDrawing )
         {
-            throw new RuntimeException( "CpuSpriteBatch.begin must be called before draw." );
+            throw new LughRuntimeException( "CpuSpriteBatch.begin must be called before draw." );
         }
 
         Guard.Against.Null( region );

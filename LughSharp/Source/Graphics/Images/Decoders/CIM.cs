@@ -44,7 +44,7 @@ public static class CIM
     /// </summary>
     /// <param name="file">The file to which the Pixmap will be written.</param>
     /// <param name="pixmap">The Pixmap instance containing image data to write.</param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the Pixmap cannot be written to the specified file.
     /// </exception>
     public static void Write( FileInfo file, Pixmap pixmap )
@@ -85,7 +85,7 @@ public static class CIM
         }
         catch ( Exception e )
         {
-            throw new RuntimeException( "Couldn't write Pixmap to file '" + file + "'", e );
+            throw new LughRuntimeException( "Couldn't write Pixmap to file '" + file + "'", e );
         }
     }
 
@@ -94,7 +94,7 @@ public static class CIM
     /// </summary>
     /// <param name="file"> The file to read from. </param>
     /// <returns> The Pixmap instance read from the file. </returns>
-    /// <exception cref="RuntimeException">Thrown if the Pixmap cannot be read from the specified file.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the Pixmap cannot be read from the specified file.</exception>
     public static Pixmap Read( FileInfo file )
     {
         try
@@ -126,7 +126,7 @@ public static class CIM
         }
         catch ( Exception e )
         {
-            throw new RuntimeException( "Couldn't read Pixmap from file '" + file + "'", e );
+            throw new LughRuntimeException( "Couldn't read Pixmap from file '" + file + "'", e );
         }
     }
 }

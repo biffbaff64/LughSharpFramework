@@ -139,7 +139,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     {
         if ( Skin == null )
         {
-            throw new RuntimeException( "This method may only be used if the dialog was constructed." );
+            throw new LughRuntimeException( "This method may only be used if the dialog was constructed." );
         }
 
         return Text( text, Skin.Get< LabelStyle >() );
@@ -183,7 +183,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     {
         if ( Skin == null )
         {
-            throw new RuntimeException( "This method may only be used if the "
+            throw new LughRuntimeException( "This method may only be used if the "
                                       + "dialog was constructed with a Skin." );
         }
 

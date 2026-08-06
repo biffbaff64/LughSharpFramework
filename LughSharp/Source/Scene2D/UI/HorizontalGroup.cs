@@ -396,7 +396,7 @@ public class HorizontalGroup : WidgetGroup
     /// that widgets are laid out correctly within the available space, and that the group's
     /// hierarchy is invalidated if necessary.
     /// </summary>
-    /// <exception cref="RuntimeException">Thrown if internal row size data is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if internal row size data is null.</exception>
     private void LayoutWrapped()
     {
         float prefHeight = PrefHeight;
@@ -422,7 +422,7 @@ public class HorizontalGroup : WidgetGroup
 
         if ( _rowSizes is null )
         {
-            throw new RuntimeException( "_rowSizes cannot be null!" );
+            throw new LughRuntimeException( "_rowSizes cannot be null!" );
         }
 
         if ( ( align & Align.Top ) != 0 )

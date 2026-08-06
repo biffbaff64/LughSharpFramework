@@ -339,7 +339,7 @@ public class DesktopGLPreferences : IPreferences
     /// <summary>
     /// Saves the preferences to the file.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when there is an error writing preferences.
     /// </exception>
     public void Flush()
@@ -364,7 +364,7 @@ public class DesktopGLPreferences : IPreferences
         }
         catch ( Exception )
         {
-            throw new RuntimeException( "Error writing preferences!" );
+            throw new LughRuntimeException( "Error writing preferences!" );
         }
     }
 

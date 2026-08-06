@@ -115,7 +115,7 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
     }
 
     /// <inheritdoc />
-    /// <exception cref="RuntimeException">Thrown if invalid runtime conditions occur during processing.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if invalid runtime conditions occur during processing.</exception>
     protected override int LetterUnderCursor( float x )
     {
         if ( LinesBreak.Count <= 0 )

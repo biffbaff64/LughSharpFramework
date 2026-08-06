@@ -49,18 +49,21 @@ public abstract class EventAction< T > : SceneAction, IEventListener where T : E
     /// true if the event should be considered handled by <see cref="Event.SetHandled"/>
     /// and this EventAction considered complete.
     /// </returns>
-    public bool Handle( Event ev )
+    public bool Handle( Event e )
     {
-        if ( !Active || ( ev.GetType() != EventClass.GetType() ) )
+        if ( !Active || ( e.GetType() != EventClass.GetType() ) )
         {
             return false;
         }
 
-        Result = HandleDelegate( ev );
+        Result = HandleDelegate( e );
 
         return Result;
     }
 
+    /// <summary>
+    /// Restarts the action.
+    /// </summary>
     public override void Restart()
     {
         Result = false;
@@ -75,7 +78,7 @@ public abstract class EventAction< T > : SceneAction, IEventListener where T : E
     }
 
     // ReSharper disable once MemberCanBeProtected.Global
-    public abstract bool HandleDelegate( Event ev );
+    public abstract bool HandleDelegate( Event e );
 
     /// <summary>
     /// Updates the action based on time.

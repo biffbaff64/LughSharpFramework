@@ -126,7 +126,7 @@ public class FileTextureArrayData : ITextureArrayData
 
             if ( ( width != data.Width ) || ( height != data.Height ) )
             {
-                throw new RuntimeException( "Error whilst preparing TextureArray:"
+                throw new LughRuntimeException( "Error whilst preparing TextureArray:"
                                           + "TextureArray Textures must have equal dimensions." );
             }
         }

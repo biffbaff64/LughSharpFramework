@@ -120,7 +120,7 @@ public class MapLayer
         {
             if ( value == this )
             {
-                throw new RuntimeException( "Can't set self as the parent" );
+                throw new LughRuntimeException( "Can't set self as the parent" );
             }
 
             _parent = value;

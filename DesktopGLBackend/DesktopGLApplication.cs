@@ -89,8 +89,17 @@ public class DesktopGLApplication : IApplication
     private          bool                       _running = true;
     private          bool                       _disposed;
 
-    private readonly object _runnablesLock          = new(); // A lock object for synchronized blocks
-    private readonly object _lifecycleListenersLock = new();
+    /// <summary>
+    /// Synchronization lock used to manage thread-safe access to the runnable actions
+    /// queue, ensuring the proper execution order and avoiding concurrency issues.
+    /// </summary>
+    private readonly System.Threading.Lock _runnablesLock = new();
+
+    /// <summary>
+    /// A thread synchronization lock used to ensure safe access to the lifecycle
+    /// listeners collection in a multithreaded environment.
+    /// </summary>
+    private readonly System.Threading.Lock _lifecycleListenersLock = new();
 
     // ========================================================================
     // ========================================================================
@@ -141,8 +150,10 @@ public class DesktopGLApplication : IApplication
 
         InitialiseGlfw();
 
-        Windows.Add( CreateWindow( AppConfig, listener, 0 ) );
-        
+        // The primary window has no context to share with, so it is created
+        // immediately (see CreateWindow) and tracked here.
+        Windows.Add( CreateWindow( AppConfig, listener, null ) );
+
         Engine.Graphics.SetBackend( Platform.ApplicationType.WindowsGL, OglProfile );
     }
 
@@ -302,7 +313,7 @@ public class DesktopGLApplication : IApplication
 
     /// <summary>
     /// </summary>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public void InitialiseGlfw()
     {
         try
@@ -310,14 +321,14 @@ public class DesktopGLApplication : IApplication
             if ( !_glfwInitialised )
             {
                 _errorCallback = ( error, description ) =>
-                {
-                    Logger.Error( $"ErrorCode: {error}, {description}" );
+                                 {
+                                     Logger.Error( $"ErrorCode: {error}, {description}" );
 
-                    if ( error == DotGLFW.ErrorCode.InvalidEnum )
-                    {
-                        Logger.Error( "Invalid Error!!" );
-                    }
-                };
+                                     if ( error == DotGLFW.ErrorCode.InvalidEnum )
+                                     {
+                                         Logger.Error( "Invalid Error!!" );
+                                     }
+                                 };
 
                 DotGLFW.Glfw.SetErrorCallback( _errorCallback );
                 DotGLFW.Glfw.InitHint( DotGLFW.InitHint.JoystickHatButtons, false );
@@ -338,7 +349,7 @@ public class DesktopGLApplication : IApplication
         }
         catch ( Exception e )
         {
-            throw new ApplicationException( $"Failure in InitialiseGLFW() : {e}" );
+            throw new LughRuntimeException( $"Failure in InitialiseGLFW() : {e}" );
         }
     }
 
@@ -368,15 +379,21 @@ public class DesktopGLApplication : IApplication
 
         OglProfile = LughGL.DefaultOpenglProfile;
 
-        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMajor,
-                                 config.GLContextMajorVersion > 0
-                                     ? config.GLContextMajorVersion
-                                     : LughGL.DefaultGLMajor );
+        DotGLFW.Glfw.WindowHint
+            (
+             DotGLFW.WindowHint.ContextVersionMajor,
+             config.GLContextMajorVersion > 0
+                 ? config.GLContextMajorVersion
+                 : LughGL.DefaultGLMajor
+            );
 
-        DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.ContextVersionMinor,
-                                 config.GLContextMinorVersion > 0
-                                     ? config.GLContextMinorVersion
-                                     : LughGL.DefaultGLMinor );
+        DotGLFW.Glfw.WindowHint
+            (
+             DotGLFW.WindowHint.ContextVersionMinor,
+             config.GLContextMinorVersion > 0
+                 ? config.GLContextMinorVersion
+                 : LughGL.DefaultGLMinor
+            );
 
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLForwardCompat, LughGL.DefaultOpenglForwardcompat );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLProfile, OglProfile );
@@ -443,7 +460,7 @@ public class DesktopGLApplication : IApplication
     /// your application. On iOS this should be avoided in production as it breaks
     /// Apples guidelines
     /// </summary>
-    public virtual void Exit()
+    public virtual void ApplicationExit()
     {
         _running = false;
     }
@@ -570,9 +587,17 @@ public class DesktopGLApplication : IApplication
     {
         Guard.Against.Null( AppConfig );
 
+        if ( Windows.Count == 0 )
+        {
+            throw new LughRuntimeException( "Cannot create a new window before the primary window exists." );
+        }
+
         AppConfig.SetWindowConfiguration( windowConfig );
 
-        return CreateWindow( AppConfig, listener, 0 );
+        // Additional windows share the primary window's OpenGL context and are created
+        // via the deferred path (a non-null shared context routes CreateWindow to defer
+        // creation to the main loop and register the window in Windows itself).
+        return CreateWindow( AppConfig, listener, Windows[ 0 ].GlfwWindow );
     }
 
     /// <summary>
@@ -580,28 +605,36 @@ public class DesktopGLApplication : IApplication
     /// </summary>
     /// <param name="config"></param>
     /// <param name="listener"></param>
-    /// <param name="sharedContext"></param>
+    /// <param name="sharedContext">
+    /// The window whose OpenGL context this window should share, or <c>null</c>
+    /// (or <see cref="DotGLFW.Window.NULL"/>) for the primary window, which shares
+    /// no context and is created immediately.
+    /// </param>
     /// <returns></returns>
     public DesktopGLWindow CreateWindow( DesktopGLApplicationConfiguration config,
                                          IApplicationListener listener,
-                                         long sharedContext )
+                                         DotGLFW.Window? sharedContext )
     {
         // Create the manager for the main window
         var dglWindow = new DesktopGLWindow( listener, config, this );
 
-        if ( sharedContext == 0 )
+        if ( ( sharedContext is null ) || ( sharedContext == DotGLFW.Window.NULL ) )
         {
             // the main window is created immediately
-            dglWindow = CreateWindow( dglWindow, config, 0 );
+            dglWindow = CreateWindow( dglWindow, config, sharedContext );
         }
         else
         {
             // creation of additional windows is deferred to avoid GL context trouble
-            PostRunnable( () =>
-            {
-                dglWindow = CreateWindow( dglWindow, config, sharedContext );
-                Windows.Add( dglWindow );
-            } );
+            // ReSharper disable once HeapView.ClosureAllocation
+            // ReSharper disable once HeapView.DelegateAllocation
+            PostRunnable
+                ( () =>
+                  {
+                      dglWindow = CreateWindow( dglWindow, config, sharedContext );
+                      Windows.Add( dglWindow );
+                  }
+                );
         }
 
         return dglWindow;
@@ -625,7 +658,7 @@ public class DesktopGLApplication : IApplication
     /// <param name="sharedContext"></param>
     public DesktopGLWindow CreateWindow( DesktopGLWindow? dglWindow,
                                          DesktopGLApplicationConfiguration config,
-                                         long sharedContext )
+                                         DotGLFW.Window? sharedContext )
     {
         Guard.Against.Null( dglWindow );
 
@@ -638,10 +671,13 @@ public class DesktopGLApplication : IApplication
         for ( var i = 0; i < 2; i++ )
         {
             Engine.GL.BindFramebuffer( IGL.GLFramebuffer, 0 );
-            Engine.GL.ClearColor( config.InitialBackgroundColor.R,
-                                  config.InitialBackgroundColor.G,
-                                  config.InitialBackgroundColor.B,
-                                  config.InitialBackgroundColor.A );
+            Engine.GL.ClearColor
+                (
+                 config.InitialBackgroundColor.R,
+                 config.InitialBackgroundColor.G,
+                 config.InitialBackgroundColor.B,
+                 config.InitialBackgroundColor.A
+                );
 
             Engine.GL.Clear( IGL.GLColorBufferBit );
             DotGLFW.Glfw.SwapBuffers( windowHandle );
@@ -658,46 +694,61 @@ public class DesktopGLApplication : IApplication
     /// <summary>
     /// </summary>
     /// <param name="config"></param>
-    /// <param name="sharedContextWindow"></param>
+    /// <param name="sharedContextWindow">
+    /// The window whose OpenGL context the new window should share, or <c>null</c>
+    /// to share no context.
+    /// </param>
     /// <returns></returns>
-    /// <exception cref="RuntimeException"></exception>
-    private DotGLFW.Window CreateGlfwWindow( DesktopGLApplicationConfiguration config, long sharedContextWindow )
+    /// <exception cref="LughRuntimeException"></exception>
+    private DotGLFW.Window CreateGlfwWindow( DesktopGLApplicationConfiguration config, DotGLFW.Window? sharedContextWindow )
     {
         SetWindowHints( config );
 
         DotGLFW.Window? windowHandle;
+
+        // A null shared context means "share nothing" (the primary window).
+        DotGLFW.Window shareWindow = sharedContextWindow ?? DotGLFW.Window.NULL;
 
         if ( config.FullscreenMode != null )
         {
             // Create a fullscreen window
             DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.RefreshRate, config.FullscreenMode.RefreshRate );
 
-            windowHandle = DotGLFW.Glfw.CreateWindow( config.FullscreenMode.Width,
-                                                      config.FullscreenMode.Height,
-                                                      config.Title ?? string.Empty,
-                                                      config.FullscreenMode.MonitorHandle,
-                                                      DotGLFW.Window.NULL );
+            windowHandle = DotGLFW.Glfw.CreateWindow
+                (
+                 config.FullscreenMode.Width,
+                 config.FullscreenMode.Height,
+                 config.Title ?? string.Empty,
+                 config.FullscreenMode.MonitorHandle,
+                 shareWindow
+                );
         }
         else
         {
             // Create a 'windowed' window
-            windowHandle = DotGLFW.Glfw.CreateWindow( config.WindowWidth,
-                                                      config.WindowHeight,
-                                                      config.Title ?? string.Empty,
-                                                      Monitor.NULL,
-                                                      DotGLFW.Window.NULL );
+            windowHandle = DotGLFW.Glfw.CreateWindow
+                (
+                 config.WindowWidth,
+                 config.WindowHeight,
+                 config.Title ?? string.Empty,
+                 Monitor.NULL,
+                 shareWindow
+                );
         }
 
         if ( windowHandle.Equals( null ) )
         {
-            throw new NullReferenceException( "Failed to create window!" );
+            throw new LughRuntimeException( "Failed to create window!" );
         }
 
-        DesktopGLWindow.SetSizeLimits( windowHandle,
-                                       config.WindowMinWidth,
-                                       config.WindowMinHeight,
-                                       config.WindowMaxWidth,
-                                       config.WindowMaxHeight );
+        DesktopGLWindow.SetSizeLimits
+            (
+             windowHandle,
+             config.WindowMinWidth,
+             config.WindowMinHeight,
+             config.WindowMaxWidth,
+             config.WindowMaxHeight
+            );
 
         if ( config.FullscreenMode == null )
         {
@@ -723,15 +774,21 @@ public class DesktopGLApplication : IApplication
                     monitorHandle = config.MaximizedMonitor.MonitorHandle;
                 }
 
-                DotGLFW.Glfw.GetMonitorWorkarea( monitorHandle,
-                                                 out int areaX,
-                                                 out int areaY,
-                                                 out int areaW,
-                                                 out int areaH );
+                DotGLFW.Glfw.GetMonitorWorkarea
+                    (
+                     monitorHandle,
+                     out int areaX,
+                     out int areaY,
+                     out int areaW,
+                     out int areaH
+                    );
 
-                DotGLFW.Glfw.SetWindowPos( windowHandle,
-                                           areaX + ( areaW / 2 ) - ( windowWidth / 2 ),
-                                           areaY + ( areaH / 2 ) - ( windowHeight / 2 ) );
+                DotGLFW.Glfw.SetWindowPos
+                    (
+                     windowHandle,
+                     areaX + ( areaW / 2 ) - ( windowWidth / 2 ),
+                     areaY + ( areaH / 2 ) - ( windowHeight / 2 )
+                    );
             }
             else
             {

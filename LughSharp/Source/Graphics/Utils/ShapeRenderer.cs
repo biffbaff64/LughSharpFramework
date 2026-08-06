@@ -156,7 +156,7 @@ public class ShapeRenderer : IDisposable
 
         if ( type == null )
         {
-            throw new RuntimeException( "Cannot BEGIN with NULL shape!" );
+            throw new LughRuntimeException( "Cannot BEGIN with NULL shape!" );
         }
 
         ShapeType = type;
@@ -1247,7 +1247,7 @@ public class ShapeRenderer : IDisposable
     {
         if ( ShapeType == null )
         {
-            throw new RuntimeException( "Begin() must be called first." );
+            throw new LughRuntimeException( "Begin() must be called first." );
         }
 
         if ( ( ShapeType != preferred ) && ( ShapeType != other ) )
@@ -1256,10 +1256,10 @@ public class ShapeRenderer : IDisposable
             {
                 if ( other == null )
                 {
-                    throw new RuntimeException( $"Must call Begin(ShapeType.{preferred})." );
+                    throw new LughRuntimeException( $"Must call Begin(ShapeType.{preferred})." );
                 }
 
-                throw new RuntimeException( $"Must call Begin(ShapeType.{preferred}) or Begin(ShapeType.{other})." );
+                throw new LughRuntimeException( $"Must call Begin(ShapeType.{preferred}) or Begin(ShapeType.{other})." );
             }
 
             Flush( preferred );

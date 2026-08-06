@@ -32,13 +32,13 @@ namespace LughSharp.Source.Utils.Exceptions;
 /// Typed runtime exception used throughout this framework.
 /// </summary>
 [PublicAPI]
-public class RuntimeException : ApplicationException
+public class LughRuntimeException : ApplicationException
 {
     /// <summary>
     /// Initializes a new RuntimeException with a specified error message.
     /// </summary>
     /// <param name="message"> The message that describes the error. </param>
-    public RuntimeException( string? message = "" )
+    public LughRuntimeException( string? message = "" )
         : base( message )
     {
     }
@@ -51,7 +51,7 @@ public class RuntimeException : ApplicationException
     /// The exception that is the cause of the current exception, or a null
     /// reference if no inner exception is specified.
     /// </param>
-    public RuntimeException( Exception? e )
+    public LughRuntimeException( Exception? e )
         : this( string.Empty, e )
     {
     }
@@ -65,7 +65,7 @@ public class RuntimeException : ApplicationException
     /// The exception that is the cause of the current exception, or a null
     /// reference if no inner exception is specified.
     /// </param>
-    public RuntimeException( string message, Exception? exception )
+    public LughRuntimeException( string message, Exception? exception )
         : base( message, exception )
     {
     }
@@ -88,7 +88,7 @@ public class RuntimeException : ApplicationException
     [DoesNotReturn]
     internal static void Throw( string? message )
     {
-        throw new RuntimeException( message );
+        throw new LughRuntimeException( message );
     }
 }
 

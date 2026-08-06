@@ -498,19 +498,19 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         /// Returns the next entry in the iteration.
         /// </summary>
         /// <returns>The next entry in the map.</returns>
-        /// <exception cref="RuntimeException">
+        /// <exception cref="LughRuntimeException">
         /// Thrown if there are no more entries to iterate over, or if the iterator is nested.
         /// </exception>
         public override Entry Next()
         {
             if ( !HasNext )
             {
-                throw new RuntimeException( "No Such Element" );
+                throw new LughRuntimeException( "No Such Element" );
             }
 
             if ( !Valid )
             {
-                throw new RuntimeException( "#iterator() cannot be used nested." );
+                throw new LughRuntimeException( "#iterator() cannot be used nested." );
             }
 
             CurrentIndex = NextIndex;
@@ -581,19 +581,19 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         /// Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
-        /// <exception cref="RuntimeException">
+        /// <exception cref="LughRuntimeException">
         /// Thrown if there are no more keys to iterate over, or if the iterator is nested.
         /// </exception>
         public override TK Next()
         {
             if ( !HasNext )
             {
-                throw new RuntimeException( "No Such Element." );
+                throw new LughRuntimeException( "No Such Element." );
             }
 
             if ( !Valid )
             {
-                throw new RuntimeException( "#iterator() cannot be used nested." );
+                throw new LughRuntimeException( "#iterator() cannot be used nested." );
             }
 
             TK key = _keys[ NextIndex ];
@@ -687,19 +687,19 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
         /// Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
-        /// <exception cref="RuntimeException">
+        /// <exception cref="LughRuntimeException">
         /// Thrown if there are no more values to iterate over, or if the iterator is nested.
         /// </exception>
         public override TV? Next()
         {
             if ( !HasNext )
             {
-                throw new RuntimeException( "No Such Element" );
+                throw new LughRuntimeException( "No Such Element" );
             }
 
             if ( !Valid )
             {
-                throw new RuntimeException( "#iterator() cannot be used nested." );
+                throw new LughRuntimeException( "#iterator() cannot be used nested." );
             }
 
             TV? value = Map.Get( _keys[ NextIndex ] );

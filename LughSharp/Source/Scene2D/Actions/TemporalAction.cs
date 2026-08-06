@@ -88,7 +88,7 @@ public abstract class TemporalAction : SceneAction
         {
             if ( !_began )
             {
-                Begin();
+                BeginAction();
                 _began = true;
             }
 
@@ -106,7 +106,7 @@ public abstract class TemporalAction : SceneAction
 
             if ( IsComplete )
             {
-                End();
+                EndAction();
             }
 
             return IsComplete;
@@ -121,14 +121,14 @@ public abstract class TemporalAction : SceneAction
     /// Called the first time <see cref="Act(float)"/> is called. This is a good place
     /// to query the <see cref="Actor"/>'s starting state.
     /// </summary>
-    protected virtual void Begin()
+    protected virtual void BeginAction()
     {
     }
 
     /// <summary>
     /// Called the last time <see cref="Act(float)"/> is called.
     /// </summary>
-    protected virtual void End()
+    protected virtual void EndAction()
     {
     }
 

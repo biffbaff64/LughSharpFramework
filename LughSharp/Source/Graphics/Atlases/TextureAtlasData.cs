@@ -55,7 +55,7 @@ public class TextureAtlasData
         }
         catch ( Exception ex )
         {
-            throw new RuntimeException( $"Error reading texture atlas file: {packFile}", ex );
+            throw new LughRuntimeException( $"Error reading texture atlas file: {packFile}", ex );
         }
     }
 
@@ -73,7 +73,7 @@ public class TextureAtlasData
     /// <param name="flip">
     /// Indicates whether the textures should be flipped during the loading process.
     /// </param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if there is an error during the loading or parsing process.
     /// </exception>
     public void Load( FileInfo packFile, DirectoryInfo imagesDir, bool flip )
@@ -313,7 +313,7 @@ public class TextureAtlasData
         }
         catch ( Exception ex )
         {
-            throw new RuntimeException( $"Error reading texture atlas file: {packFile}", ex );
+            throw new LughRuntimeException( $"Error reading texture atlas file: {packFile}", ex );
         }
 
         // Sort regions by index if needed
@@ -398,7 +398,7 @@ public class TextureAtlasData
     /// </summary>
     /// <param name="format"> The LughFormat name in string format. </param>
     /// <returns> The requested LughFormat value. </returns>
-    /// <exception cref="RuntimeException"> Thrown if an unknown format was passed. </exception>
+    /// <exception cref="LughRuntimeException"> Thrown if an unknown format was passed. </exception>
     private static int ParseFormat( string format )
     {
         return format switch
@@ -413,7 +413,7 @@ public class TextureAtlasData
 
                    // ---------------------------
 
-                   _ => throw new RuntimeException( $"Unknown format: {format}" )
+                   _ => throw new LughRuntimeException( $"Unknown format: {format}" )
                };
     }
 

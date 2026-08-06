@@ -134,7 +134,7 @@ public class VertexBufferObject : IVertexData
         {
             if ( _isBound )
             {
-                throw new RuntimeException( "Cannot change usage while VBO is bound" );
+                throw new LughRuntimeException( "Cannot change usage while VBO is bound" );
             }
 
             field = value;
@@ -152,7 +152,7 @@ public class VertexBufferObject : IVertexData
     {
         _isDirty |= forWriting;
 
-        return _floatBuffer ?? throw new RuntimeException( "_buffer is null" );
+        return _floatBuffer ?? throw new LughRuntimeException( "_buffer is null" );
     }
 
     /// <summary>
@@ -357,7 +357,7 @@ public class VertexBufferObject : IVertexData
     {
         if ( _isBound )
         {
-            throw new RuntimeException( "Cannot change attributes while VBO is bound" );
+            throw new LughRuntimeException( "Cannot change attributes while VBO is bound" );
         }
 
         if ( _ownsBuffer && ( _byteBuffer != null ) )
@@ -373,7 +373,7 @@ public class VertexBufferObject : IVertexData
         }
         else
         {
-            throw new RuntimeException( "Only Buffer< byte > is currently supported" );
+            throw new LughRuntimeException( "Only Buffer< byte > is currently supported" );
         }
 
         int lim = _byteBuffer.Limit;

@@ -142,7 +142,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public virtual bool OnKeyTyped( char character )
+    public virtual bool OnKeyTyped( char ch )
     {
         lock ( this )
         {
@@ -155,7 +155,7 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out?.Write( KeyTyped );
-            _out?.Write( character );
+            _out?.Write( ch );
         }
         catch ( Exception )
         {
@@ -168,7 +168,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool OnTouchDown( int x, int y, int pointer, int button )
+    public bool OnTouchDown( int screenX, int screenY, int ptrIndex, int button )
     {
         lock ( this )
         {
@@ -183,9 +183,9 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out.Write( TouchDown );
-            _out.Write( x );
-            _out.Write( y );
-            _out.Write( pointer );
+            _out.Write( screenX );
+            _out.Write( screenY );
+            _out.Write( ptrIndex );
         }
         catch ( Exception )
         {
@@ -198,7 +198,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool OnTouchUp( int x, int y, int pointer, int button )
+    public bool OnTouchUp( int screenX, int screenY, int ptrIndex, int button )
     {
         lock ( this )
         {
@@ -213,9 +213,9 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out.Write( TouchUp );
-            _out.Write( x );
-            _out.Write( y );
-            _out.Write( pointer );
+            _out.Write( screenX );
+            _out.Write( screenY );
+            _out.Write( ptrIndex );
         }
         catch ( Exception )
         {
@@ -228,7 +228,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool OnTouchDragged( int x, int y, int pointer )
+    public bool OnTouchDragged( int screenX, int screenY, int ptrIndex )
     {
         lock ( this )
         {
@@ -243,9 +243,9 @@ public class RemoteSender : IInputProcessor
         try
         {
             _out.Write( TouchDragged );
-            _out.Write( x );
-            _out.Write( y );
-            _out.Write( pointer );
+            _out.Write( screenX );
+            _out.Write( screenY );
+            _out.Write( ptrIndex );
         }
         catch ( Exception )
         {
@@ -258,7 +258,7 @@ public class RemoteSender : IInputProcessor
         return false;
     }
 
-    public bool OnMouseMoved( int x, int y )
+    public bool OnMouseMoved( int screenX, int screenY )
     {
         return false;
     }

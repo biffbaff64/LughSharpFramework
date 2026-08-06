@@ -52,7 +52,7 @@ public static class Platform
     /// The target platform for the app.
     /// Must be one of the enum <see cref="ApplicationType"/>
     /// </summary>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public static ApplicationType TargetPlatform
     {
         get;
@@ -78,7 +78,7 @@ public static class Platform
 
                            // ----------------------------------------
 
-                           var _ => throw new RuntimeException( $"Unsupported Target Platform: {value.ToString()}" )
+                           var _ => throw new LughRuntimeException( $"Unsupported Target Platform: {value.ToString()}" )
                        };
     }
 
@@ -86,7 +86,7 @@ public static class Platform
     /// The target family group (mobile, console, desktop etc).
     /// Must be one of the enum <see cref="PlatformFamily"/>.
     /// </summary>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public static PlatformFamily PlatformFamilyGroup
     {
         get;
@@ -101,7 +101,7 @@ public static class Platform
 
                            // ----------------------------------------
 
-                           var _ => throw new RuntimeException( $"Unsupported Family Group: {value.ToString()}" )
+                           var _ => throw new LughRuntimeException( $"Unsupported Family Group: {value.ToString()}" )
                        };
     }
 

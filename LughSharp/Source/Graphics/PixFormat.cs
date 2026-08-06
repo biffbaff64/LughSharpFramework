@@ -66,7 +66,7 @@ public class PixFormat
 
                    // ---------------------------
 
-                   var _ => throw new RuntimeException( $"Unsupported internal format: {format}" )
+                   var _ => throw new LughRuntimeException( $"Unsupported internal format: {format}" )
                };
     }
 
@@ -86,7 +86,7 @@ public class PixFormat
 
                    // ---------------------------
 
-                   var _ => throw new RuntimeException( $"Unsupported data format: {format}" )
+                   var _ => throw new LughRuntimeException( $"Unsupported data format: {format}" )
                };
     }
 
@@ -124,7 +124,7 @@ public class PixFormat
 
                    // ---------------------------
 
-                   var _ => throw new RuntimeException( $"Invalid format: {format}" )
+                   var _ => throw new LughRuntimeException( $"Invalid format: {format}" )
                };
     }
 
@@ -232,7 +232,7 @@ public class PixFormat
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Unknown Format: {format}" )
+                   var _ => throw new LughRuntimeException( $"Unknown Format: {format}" )
                };
     }
 
@@ -318,7 +318,7 @@ public class PixFormat
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Unknown PNG Color Type: {colorType}" )
+                   var _ => throw new LughRuntimeException( $"Unknown PNG Color Type: {colorType}" )
                };
     }
 
@@ -328,7 +328,7 @@ public class PixFormat
     /// </summary>
     /// <param name="format">The pixel format of type <c>LughFormat</c>.</param>
     /// <returns>The corresponding <see cref="System.Drawing.Imaging.PixelFormat"/>.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the provided format is invalid or unsupported.
     /// </exception>
     [SupportedOSPlatform( "windows" )]
@@ -345,7 +345,7 @@ public class PixFormat
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Invalid format: {format}" )
+                   var _ => throw new LughRuntimeException( $"Invalid format: {format}" )
                };
     }
 

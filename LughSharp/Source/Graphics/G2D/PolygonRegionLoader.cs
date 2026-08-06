@@ -91,7 +91,7 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
         }
         catch ( IOException e )
         {
-            throw new RuntimeException( "Error reading " + filename, e );
+            throw new LughRuntimeException( "Error reading " + filename, e );
         }
 
         var siblingFilePath = string.Empty;
@@ -171,14 +171,14 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
         }
         catch ( IOException ex )
         {
-            throw new RuntimeException( $"Error reading polygon shape file: {file}", ex );
+            throw new LughRuntimeException( $"Error reading polygon shape file: {file}", ex );
         }
         finally
         {
             reader.Close();
         }
 
-        throw new RuntimeException( "Polygon shape not found: " + file );
+        throw new LughRuntimeException( "Polygon shape not found: " + file );
     }
 
     // ========================================================================

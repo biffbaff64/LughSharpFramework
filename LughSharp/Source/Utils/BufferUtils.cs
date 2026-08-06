@@ -91,14 +91,14 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( destinationOffset < 0 ) || ( length < 0 ) )
         {
-            throw new RuntimeException( "Offsets and length must be non-negative." );
+            throw new LughRuntimeException( "Offsets and length must be non-negative." );
         }
 
         destination.EnsureCapacity( destinationOffset + length );
 
         if ( ( sourceOffset + length ) > source.Capacity )
         {
-            throw new RuntimeException( "Cannot copy more than source contents." );
+            throw new LughRuntimeException( "Cannot copy more than source contents." );
         }
 
         for ( var i = 0; i < length; i++ )
@@ -142,7 +142,7 @@ public class BufferUtils
     /// <exception cref="ArgumentException">
     /// Thrown if <paramref name="sourceOffset"/> or <paramref name="length"/> is negative.
     /// </exception>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the destination buffer cannot accommodate the required capacity.
     /// </exception>
     public static void Copy( short[] source, int sourceOffset, int length, Buffer< byte > destination )
@@ -215,7 +215,7 @@ public class BufferUtils
     /// <exception cref="ArgumentNullException">
     /// Thrown if <paramref name="source"/> or <paramref name="destination"/> is null.
     /// </exception>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if <paramref name="sourceOffset"/> or <paramref name="length"/> is negative.
     /// </exception>
     private static void ValidateArrayCopyArgs( Array source, Buffer< byte > destination, int sourceOffset, int length,
@@ -226,7 +226,7 @@ public class BufferUtils
 
         if ( ( sourceOffset < 0 ) || ( length < 0 ) )
         {
-            throw new RuntimeException( "Offset and length must be non-negative." );
+            throw new LughRuntimeException( "Offset and length must be non-negative." );
         }
 
         destination.EnsureCapacity( length * elementSize );

@@ -122,7 +122,7 @@ public class ETC1
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( "Can only handle RGB565 or RGB888 images" )
+                   var _ => throw new LughRuntimeException( "Can only handle RGB565 or RGB888 images" )
                };
     }
 

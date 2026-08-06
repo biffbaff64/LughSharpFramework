@@ -640,7 +640,7 @@ public class Matrix4
     /// Inverts the matrix. Stores the result in this matrix.
     /// </summary>
     /// <returns> This matrix for the purpose of chaining methods together. </returns>
-    /// <exception cref="RuntimeException"> if the matrix is singular (not invertible)  </exception>
+    /// <exception cref="LughRuntimeException"> if the matrix is singular (not invertible)  </exception>
     public Matrix4 Invert()
     {
         //@formatter:off
@@ -672,7 +672,7 @@ public class Matrix4
 
         if ( lDet == 0f )
         {
-            throw new RuntimeException( "non-invertible matrix" );
+            throw new LughRuntimeException( "non-invertible matrix" );
         }
 
         //@formatter:off

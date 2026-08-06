@@ -35,9 +35,9 @@ public class GestureDetector : InputAdapter
     private readonly Vector2          _initialPointer1 = new();
     private readonly Vector2          _initialPointer2 = new();
     private readonly IGestureListener _listener;
-    private readonly Vector2          _pointer1 = new();
-    private readonly Vector2          _pointer2 = new();
-    private readonly VelocityTracker  _tracker  = new();
+    private readonly Vector2          _pointer1        = new();
+    private readonly Vector2          _pointer2        = new();
+    private readonly VelocityTracker  _velocityTracker = new();
 
     private bool                     _inTapRectangle;
     private int                      _lastTapButton;
@@ -97,12 +97,15 @@ public class GestureDetector : InputAdapter
                             float longPressDuration,
                             float maxFlingDelay,
                             IGestureListener listener )
-        : this( halfTapSquareSize,
-                halfTapSquareSize,
-                tapCountInterval,
-                longPressDuration,
-                maxFlingDelay,
-                listener )
+        : this
+            (
+             halfTapSquareSize,
+             halfTapSquareSize,
+             tapCountInterval,
+             longPressDuration,
+             maxFlingDelay,
+             listener
+            )
     {
     }
 
@@ -153,19 +156,22 @@ public class GestureDetector : InputAdapter
         _longPressTokenSource       ??= new CancellationTokenSource();
         _longPressCancellationToken =   _longPressTokenSource.Token;
 
-        _longPressTask = Task.Run( () =>
-                                   {
-                                       if ( !_longPressFired )
-                                       {
-                                           _longPressFired = _listener.LongPress( _pointer1.X, _pointer1.Y );
-                                       }
+        _longPressTask = Task.Run
+            (
+             () =>
+             {
+                 if ( !_longPressFired )
+                 {
+                     _longPressFired = _listener.LongPress( _pointer1.X, _pointer1.Y );
+                 }
 
-                                       if ( _longPressCancellationToken.IsCancellationRequested )
-                                       {
-                                           _longPressCancellationToken.ThrowIfCancellationRequested();
-                                       }
-                                   },
-                                   _longPressCancellationToken );
+                 if ( _longPressCancellationToken.IsCancellationRequested )
+                 {
+                     _longPressCancellationToken.ThrowIfCancellationRequested();
+                 }
+             },
+             _longPressCancellationToken
+            );
 
         try
         {
@@ -193,23 +199,23 @@ public class GestureDetector : InputAdapter
         }
     }
 
-    public override bool OnTouchDown( int x, int y, int pointer, int button )
+    public override bool OnTouchDown( int screenX, int screenY, int ptrIndex, int button )
     {
-        return OnTouchDown( x, y, pointer, button );
+        return OnTouchDown( screenX, screenY, ptrIndex, button );
     }
 
-    public bool OnTouchDown( float x, float y, int pointer, int button )
+    public bool OnTouchDown( float x, float y, int ptrIndex, int button )
     {
-        if ( pointer > 1 )
+        if ( ptrIndex > 1 )
         {
             return false;
         }
 
-        if ( pointer == 0 )
+        if ( ptrIndex == 0 )
         {
             _pointer1.Set( x, y );
             _touchDownTime = Engine.Input.GetCurrentEventTime();
-            _tracker.Start( x, y, _touchDownTime );
+            _velocityTracker.Start( x, y, _touchDownTime );
 
             if ( Engine.Input.IsTouched( 1 ) )
             {
@@ -249,17 +255,17 @@ public class GestureDetector : InputAdapter
             CancelLongPressTask();
         }
 
-        return _listener.TouchDown( x, y, pointer, button );
+        return _listener.TouchDown( x, y, ptrIndex, button );
     }
 
-    public override bool OnTouchDragged( int x, int y, int pointer )
+    public override bool OnTouchDragged( int screenX, int screenY, int ptrIndex )
     {
-        return OnTouchDragged( x, y, pointer );
+        return OnTouchDragged( screenX, screenY, ptrIndex );
     }
 
-    public bool OnTouchDragged( float x, float y, int pointer )
+    public bool OnTouchDragged( float x, float y, int ptrIndex )
     {
-        if ( pointer > 1 )
+        if ( ptrIndex > 1 )
         {
             return false;
         }
@@ -269,7 +275,7 @@ public class GestureDetector : InputAdapter
             return false;
         }
 
-        if ( pointer == 0 )
+        if ( ptrIndex == 0 )
         {
             _pointer1.Set( x, y );
         }
@@ -283,13 +289,16 @@ public class GestureDetector : InputAdapter
         {
             bool result = _listener.Pinch( _initialPointer1, _initialPointer2, _pointer1, _pointer2 );
 
-            return _listener.Zoom( _initialPointer1.Distance( _initialPointer2 ),
-                                   _pointer1.Distance( _pointer2 ) )
+            return _listener.Zoom
+                       (
+                        _initialPointer1.Distance( _initialPointer2 ),
+                        _pointer1.Distance( _pointer2 )
+                       )
                 || result;
         }
 
         // update tracker
-        _tracker.Update( x, y, Engine.Input.GetCurrentEventTime() );
+        _velocityTracker.Update( x, y, Engine.Input.GetCurrentEventTime() );
 
         // check if we are still tapping.
         if ( _inTapRectangle && !IsWithinTapRectangle( x, y, _tapRectangleCenterX, _tapRectangleCenterY ) )
@@ -303,20 +312,20 @@ public class GestureDetector : InputAdapter
         {
             _panning = true;
 
-            return _listener.Pan( x, y, _tracker.DeltaX, _tracker.DeltaY );
+            return _listener.Pan( x, y, _velocityTracker.DeltaX, _velocityTracker.DeltaY );
         }
 
         return false;
     }
 
-    public override bool OnTouchUp( int x, int y, int pointer, int button )
+    public override bool OnTouchUp( int screenX, int screenY, int ptrIndex, int button )
     {
-        return OnTouchUp( x, y, pointer, button );
+        return OnTouchUp( screenX, screenY, ptrIndex, button );
     }
 
-    public bool OnTouchUp( float x, float y, int pointer, int button )
+    public bool OnTouchUp( float x, float y, int ptrIndex, int button )
     {
-        if ( pointer > 1 )
+        if ( ptrIndex > 1 )
         {
             return false;
         }
@@ -341,7 +350,7 @@ public class GestureDetector : InputAdapter
         {
             // handle taps
             if ( ( _lastTapButton != button )
-              || ( _lastTapPointer != pointer )
+              || ( _lastTapPointer != ptrIndex )
               || ( ( TimeUtils.NanoTime() - _lastTapTime ) > _tapCountInterval )
               || !IsWithinTapRectangle( x, y, _lastTapX, _lastTapY ) )
             {
@@ -353,7 +362,7 @@ public class GestureDetector : InputAdapter
             _lastTapX       = x;
             _lastTapY       = y;
             _lastTapButton  = button;
-            _lastTapPointer = pointer;
+            _lastTapPointer = ptrIndex;
             _touchDownTime  = 0;
 
             return _listener.Tap( x, y, _tapCount, button );
@@ -367,15 +376,15 @@ public class GestureDetector : InputAdapter
             _panning = true;
 
             // we are in pan mode again, reset velocity tracker
-            if ( pointer == 0 )
+            if ( ptrIndex == 0 )
             {
                 // first pointer has lifted off, set up panning to use the second pointer...
-                _tracker.Start( _pointer2.X, _pointer2.Y, Engine.Input.GetCurrentEventTime() );
+                _velocityTracker.Start( _pointer2.X, _pointer2.Y, Engine.Input.GetCurrentEventTime() );
             }
             else
             {
                 // second pointer has lifted off, set up panning to use the first pointer...
-                _tracker.Start( _pointer1.X, _pointer1.Y, Engine.Input.GetCurrentEventTime() );
+                _velocityTracker.Start( _pointer1.X, _pointer1.Y, Engine.Input.GetCurrentEventTime() );
             }
 
             return false;
@@ -386,7 +395,7 @@ public class GestureDetector : InputAdapter
 
         if ( wasPanning && !_panning )
         {
-            handled = _listener.PanStop( x, y, pointer, button );
+            handled = _listener.PanStop( x, y, ptrIndex, button );
         }
 
         // handle fling
@@ -394,9 +403,9 @@ public class GestureDetector : InputAdapter
 
         if ( ( time - _touchDownTime ) <= _maxFlingDelay )
         {
-            _tracker.Update( x, y, time );
+            _velocityTracker.Update( x, y, time );
 
-            handled = _listener.Fling( _tracker.GetVelocityX(), _tracker.GetVelocityY(), button )
+            handled = _listener.Fling( _velocityTracker.GetVelocityX(), _velocityTracker.GetVelocityY(), button )
                    || handled;
         }
 
@@ -446,10 +455,10 @@ public class GestureDetector : InputAdapter
 
     public void Reset()
     {
-        _touchDownTime    = 0;
-        _panning          = false;
-        _inTapRectangle   = false;
-        _tracker.LastTime = 0;
+        _touchDownTime            = 0;
+        _panning                  = false;
+        _inTapRectangle           = false;
+        _velocityTracker.LastTime = 0;
     }
 
     private bool IsWithinTapRectangle( float x, float y, float centerX, float centerY )
@@ -501,7 +510,7 @@ public class GestureDetector : InputAdapter
     [PublicAPI]
     public interface IGestureListener
     {
-        bool TouchDown( float x, float y, int pointer, int button );
+        bool TouchDown( float x, float y, int pointerId, int button );
 
         /// <summary>
         /// Called when a tap occured. A tap happens if a touch went down on the
@@ -538,7 +547,7 @@ public class GestureDetector : InputAdapter
         /// <summary>
         /// Called when no longer panning.
         /// </summary>
-        bool PanStop( float x, float y, int pointer, int button );
+        bool PanStop( float x, float y, int pointerId, int button );
 
         /// <summary>
         /// Called when the user performs a pinch zoom gesture. The original
@@ -572,7 +581,7 @@ public class GestureDetector : InputAdapter
     [PublicAPI]
     public class GestureAdapter : IGestureListener
     {
-        public bool TouchDown( float x, float y, int pointer, int button )
+        public bool TouchDown( float x, float y, int pointerId, int button )
         {
             return false;
         }
@@ -597,7 +606,7 @@ public class GestureDetector : InputAdapter
             return false;
         }
 
-        public bool PanStop( float x, float y, int pointer, int button )
+        public bool PanStop( float x, float y, int pointerId, int button )
         {
             return false;
         }
@@ -630,6 +639,8 @@ public class GestureDetector : InputAdapter
         public float DeltaY   { get; set; }
         public long  LastTime { get; set; }
 
+        // ====================================================================
+
         private readonly long[]  _meanTime;
         private readonly float[] _meanX;
         private readonly float[] _meanY;
@@ -637,6 +648,8 @@ public class GestureDetector : InputAdapter
         private          float   _lastX;
         private          float   _lastY;
         private          int     _numSamples;
+
+        // ====================================================================
 
         public VelocityTracker()
         {

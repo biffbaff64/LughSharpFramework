@@ -61,7 +61,7 @@ public class TextureRegion
     /// </summary>
     public TextureRegion( Texture2D? texture )
     {
-        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
 
         SetRegion( 0, 0, texture.Width, texture.Height );
     }
@@ -79,7 +79,7 @@ public class TextureRegion
     /// </param>
     public TextureRegion( Texture2D? texture, int width, int height )
     {
-        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegion( 0, 0, width, height );
     }
 
@@ -98,7 +98,7 @@ public class TextureRegion
     /// </param>
     public TextureRegion( Texture2D? texture, int x, int y, int width, int height )
     {
-        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegion( x, y, width, height );
     }
 
@@ -111,10 +111,10 @@ public class TextureRegion
     /// <param name="v"></param>
     /// <param name="u2"></param>
     /// <param name="v2"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public TextureRegion( Texture2D? texture, float u, float v, float u2, float v2 )
     {
-        Texture = texture ?? throw new RuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
         SetRegionSafe( u, v, u2, v2 );
     }
 
@@ -152,7 +152,7 @@ public class TextureRegion
     /// <param name="v">The v-coordinate of the region's bottom-left corner in texture space.</param>
     /// <param name="u2">The u-coordinate of the region's top-right corner in texture space.</param>
     /// <param name="v2">The v-coordinate of the region's top-right corner in texture space.</param>
-    /// <exception cref="RuntimeException">Thrown if the texture is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the texture is null.</exception>
     protected void SetRegionSafe( float u, float v, float u2, float v2 )
     {
         SetRegion( u, v, u2, v2 );
@@ -189,12 +189,12 @@ public class TextureRegion
     /// <param name="y">The y-coordinate in pixels from the top edge of the texture.</param>
     /// <param name="width">The width of the region in pixels.</param>
     /// <param name="height">The height of the region in pixels.</param>
-    /// <exception cref="RuntimeException">Thrown when Texture is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown when Texture is null.</exception>
     public void SetRegion( int x, int y, int width, int height )
     {
         if ( Texture == null )
         {
-            throw new RuntimeException( "Texture cannot be null" );
+            throw new LughRuntimeException( "Texture cannot be null" );
         }
 
         if ( height < 0 )
@@ -232,7 +232,7 @@ public class TextureRegion
     {
         if ( Texture == null )
         {
-            throw new RuntimeException( "Texture cannot be null" );
+            throw new LughRuntimeException( "Texture cannot be null" );
         }
 
         int texWidth  = Texture.Width;

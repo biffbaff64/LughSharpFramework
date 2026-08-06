@@ -50,11 +50,11 @@ public class ColorAction : TemporalAction
     /// Called the first time <see cref="TemporalAction.Act"/> is called. This is a good place
     /// to query the <see cref="Actor"/>'s starting state.
     /// </summary>
-    protected override void Begin()
+    protected override void BeginAction()
     {
         if ( Target == null )
         {
-            throw new RuntimeException( "Cannot begin with a null Target!" );
+            throw new LughRuntimeException( "Cannot begin with a null Target!" );
         }
 
         _startR = Target.ActorColor.R;

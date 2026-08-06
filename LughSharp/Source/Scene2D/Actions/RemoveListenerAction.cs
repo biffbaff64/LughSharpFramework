@@ -28,6 +28,7 @@ using LughSharp.Source.Scene2D.Listeners;
 
 namespace LughSharp.Source.Scene2D.Actions;
 
+[PublicAPI]
 public class RemoveListenerAction : SceneAction
 {
     public IEventListener? Listener { get; set; }

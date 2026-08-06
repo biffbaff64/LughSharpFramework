@@ -99,7 +99,7 @@ public class PixmapTextureData : ITextureData
 
     public void ConsumeCustomData( int target )
     {
-        throw new RuntimeException( "This TextureData implementation does not upload data itself" );
+        throw new LughRuntimeException( "This TextureData implementation does not upload data itself" );
     }
 
     public void Prepare()

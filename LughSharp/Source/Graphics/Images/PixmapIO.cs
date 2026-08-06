@@ -97,7 +97,7 @@ public static class PixmapIO
         }
         catch ( IOException ex )
         {
-            throw new RuntimeException( "Error writing PNG: " + file, ex );
+            throw new LughRuntimeException( "Error writing PNG: " + file, ex );
         }
     }
 }

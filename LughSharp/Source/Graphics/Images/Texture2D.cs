@@ -178,7 +178,7 @@ public class Texture2D : GLTexture, IManaged
     {
         if ( ( TextureData != null ) && ( data.IsManaged != TextureData.IsManaged ) )
         {
-            throw new RuntimeException( "New data must have the same managed status as the old data" );
+            throw new LughRuntimeException( "New data must have the same managed status as the old data" );
         }
 
         TextureData = data;
@@ -224,7 +224,7 @@ public class Texture2D : GLTexture, IManaged
     {
         if ( !IsManaged )
         {
-            throw new RuntimeException( "Tried to reload unmanaged Texture" );
+            throw new LughRuntimeException( "Tried to reload unmanaged Texture" );
         }
 
         GLTextureHandle = Engine.GL.GenTexture();
@@ -244,7 +244,7 @@ public class Texture2D : GLTexture, IManaged
     {
         if ( TextureData is { IsManaged: true } )
         {
-            throw new RuntimeException( "can't draw to a managed texture" );
+            throw new LughRuntimeException( "can't draw to a managed texture" );
         }
 
         Bind();

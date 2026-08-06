@@ -149,7 +149,7 @@ public class FreeTypeFontGenerator : IDisposable
     /// Creates a new generator from the given font file. If the file length could not be
     /// determined (it was 0), an extra copy of the font bytes is performed.
     /// </summary>
-    /// <exception cref="RuntimeException"> Thrown if loading failed. </exception>
+    /// <exception cref="LughRuntimeException"> Thrown if loading failed. </exception>
     public FreeTypeFontGenerator( FileInfo fontFile, int faceIndex = 0 )
     {
         Logger.Checkpoint();
@@ -209,7 +209,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( data.Regions?.Count == 0 )
         {
-            throw new RuntimeException( "Unable to create a font with no texture regions." );
+            throw new LughRuntimeException( "Unable to create a font with no texture regions." );
         }
 
         BitmapFont font = NewBitmapFont( data, data.Regions!, true );
@@ -296,7 +296,7 @@ public class FreeTypeFontGenerator : IDisposable
         // Try to load character
         if ( !LoadChar( c ) )
         {
-            throw new RuntimeException( "Unable to load character!" );
+            throw new LughRuntimeException( "Unable to load character!" );
         }
 
         FreeType.GlyphSlot slot = _face.GetGlyph();
@@ -349,7 +349,7 @@ public class FreeTypeFontGenerator : IDisposable
 
     /// <summary>
     /// Generates a new <see cref="BitmapFontData"/> instance, expert usage only.
-    /// Throws a <see cref="RuntimeException"/> if something went wrong.
+    /// Throws a <see cref="LughRuntimeException"/> if something went wrong.
     /// </summary>
     /// <param name="size"> the size in pixels. </param>
     public FreeTypeBitmapFontData GenerateData( int size )
@@ -432,7 +432,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( data.XHeight == 0 )
         {
-            throw new RuntimeException( "No x-height character found in font" );
+            throw new LughRuntimeException( "No x-height character found in font" );
         }
 
         // determine cap height
@@ -451,7 +451,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( !_bitmapped && ( Math.Abs( data.CapHeight - 1.0f ) < NumberUtils.FloatTolerance ) )
         {
-            throw new RuntimeException( "No cap character found in font" );
+            throw new LughRuntimeException( "No cap character found in font" );
         }
 
         data.Ascent -= data.CapHeight;
@@ -945,7 +945,7 @@ public class FreeTypeFontGenerator : IDisposable
 
         if ( !_bitmapped && !_face.SetPixelSizes( _pixelWidth, _pixelHeight ) )
         {
-            throw new RuntimeException( "Couldn't set size for font" );
+            throw new LughRuntimeException( "Couldn't set size for font" );
         }
     }
 

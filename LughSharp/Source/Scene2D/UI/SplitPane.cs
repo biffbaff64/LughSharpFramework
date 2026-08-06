@@ -506,12 +506,12 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// Sets the minimum split amount for the split pane.
     /// </summary>
     /// <param name="minAmount"> The minimum split amount as a floating-point value. </param>
-    /// <exception cref="RuntimeException"> Thrown if the minimum split amount is outside the valid range. </exception>
+    /// <exception cref="LughRuntimeException"> Thrown if the minimum split amount is outside the valid range. </exception>
     public void SetMinSplitAmount( float minAmount )
     {
         if ( minAmount is < 0 or > 1 )
         {
-            throw new RuntimeException( "minAmount has to be >= 0 and <= 1" );
+            throw new LughRuntimeException( "minAmount has to be >= 0 and <= 1" );
         }
 
         _minAmount = minAmount;
@@ -530,12 +530,12 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
     /// Sets the maximum split amount for the split pane.
     /// </summary>
     /// <param name="maxAmount"> The maximum split amount as a floating-point value. </param>
-    /// <exception cref="RuntimeException"> Thrown if the maximum split amount is outside the valid range. </exception>
+    /// <exception cref="LughRuntimeException"> Thrown if the maximum split amount is outside the valid range. </exception>
     public void SetMaxSplitAmount( float maxAmount )
     {
         if ( maxAmount is < 0 or > 1 )
         {
-            throw new RuntimeException( "maxAmount has to be >= 0 and <= 1" );
+            throw new LughRuntimeException( "maxAmount has to be >= 0 and <= 1" );
         }
 
         _maxAmount = maxAmount;

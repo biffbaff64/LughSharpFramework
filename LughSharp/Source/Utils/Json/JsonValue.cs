@@ -495,7 +495,7 @@ public class JsonValue : IDisposable
     /// Returns this value as a string.
     /// </summary>
     /// <returns> May be null if this value is null. </returns>
-    /// <exception cref="RuntimeException"> if this is an array or object. </exception>
+    /// <exception cref="LughRuntimeException"> if this is an array or object. </exception>
     public string? AsString()
     {
         switch ( Type )
@@ -516,13 +516,13 @@ public class JsonValue : IDisposable
                 return null;
         }
 
-        throw new RuntimeException( $"Value cannot be converted to string: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to string: {Type}" );
     }
 
     /// <summary>
     /// Returns this value as a float.
     /// </summary>
-    /// <exception cref="RuntimeException"> if this is an array or object. </exception>
+    /// <exception cref="LughRuntimeException"> if this is an array or object. </exception>
     public float AsFloat()
     {
         switch ( Type )
@@ -540,13 +540,13 @@ public class JsonValue : IDisposable
                 return LongValue != 0 ? 1 : 0;
         }
 
-        throw new RuntimeException( $"Value cannot be converted to float: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to float: {Type}" );
     }
 
     /// <summary>
     /// Returns this value as a double.
     /// </summary>
-    /// <exception cref="RuntimeException"> if this is an array or object. </exception>
+    /// <exception cref="LughRuntimeException"> if this is an array or object. </exception>
     public double AsDouble()
     {
         switch ( Type )
@@ -564,13 +564,13 @@ public class JsonValue : IDisposable
                 return LongValue != 0 ? 1 : 0;
         }
 
-        throw new RuntimeException( $"Value cannot be converted to double: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to double: {Type}" );
     }
 
     /// <summary>
     /// Returns this value as a long.
     /// </summary>
-    /// <exception cref="RuntimeException"> if this is an array or object. </exception>
+    /// <exception cref="LughRuntimeException"> if this is an array or object. </exception>
     public long AsLong()
     {
         switch ( Type )
@@ -588,13 +588,13 @@ public class JsonValue : IDisposable
                 return LongValue != 0 ? 1 : 0;
         }
 
-        throw new RuntimeException( $"Value cannot be converted to long: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to long: {Type}" );
     }
 
     /// <summary>
     /// Returns this value as an int.
     /// </summary>
-    /// <exception cref="RuntimeException"> if this is an array or object. </exception>
+    /// <exception cref="LughRuntimeException"> if this is an array or object. </exception>
     public int AsInt()
     {
         switch ( Type )
@@ -612,13 +612,13 @@ public class JsonValue : IDisposable
                 return LongValue != 0 ? 1 : 0;
         }
 
-        throw new RuntimeException( $"Value cannot be converted to int: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to int: {Type}" );
     }
 
     /// <summary>
     /// Returns this value as a bool.
     /// </summary>
-    /// <exception cref="RuntimeException"> if this is an array or object. </exception>
+    /// <exception cref="LughRuntimeException"> if this is an array or object. </exception>
     public bool AsBoolean()
     {
         switch ( Type )
@@ -635,7 +635,7 @@ public class JsonValue : IDisposable
                 return LongValue != 0;
         }
 
-        throw new RuntimeException( $"Value cannot be converted to bool: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to bool: {Type}" );
     }
 
     public byte AsByte()
@@ -655,7 +655,7 @@ public class JsonValue : IDisposable
                 return ( byte )( LongValue != 0 ? 1 : 0 );
         }
 
-        throw new RuntimeException( $"Value cannot be converted to byte: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to byte: {Type}" );
     }
 
     public short AsShort()
@@ -675,7 +675,7 @@ public class JsonValue : IDisposable
                 return ( short )( LongValue != 0 ? 1 : 0 );
         }
 
-        throw new RuntimeException( $"Value cannot be converted to short: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to short: {Type}" );
     }
 
     public char AsChar()
@@ -695,18 +695,18 @@ public class JsonValue : IDisposable
                 return ( char )( LongValue != 0 ? 1 : 0 );
         }
 
-        throw new RuntimeException( $"Value cannot be converted to char: {Type}" );
+        throw new LughRuntimeException( $"Value cannot be converted to char: {Type}" );
     }
 
     /// <summary>
     /// Returns the children of this value as a newly allocated string array.
     /// </summary>
-    /// <exception cref="RuntimeException"> if this is not an array. </exception>
+    /// <exception cref="LughRuntimeException"> if this is not an array. </exception>
     public string?[] AsStringArray()
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         string?[] array = new string[ Size ];
@@ -744,7 +744,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to string: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to string: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -757,7 +757,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new float[ Size ];
@@ -790,7 +790,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to float: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to float: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -803,7 +803,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new double[ Size ];
@@ -836,7 +836,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to double: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to double: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -849,7 +849,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new long[ Size ];
@@ -882,7 +882,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to long: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to long: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -895,7 +895,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new int[ Size ];
@@ -928,7 +928,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to int: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to int: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -943,7 +943,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new bool[ Size ];
@@ -976,7 +976,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to bool: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to bool: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -989,7 +989,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new byte[ Size ];
@@ -1022,7 +1022,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to byte: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to byte: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -1035,7 +1035,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new short[ Size ];
@@ -1068,7 +1068,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to short: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to short: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -1081,7 +1081,7 @@ public class JsonValue : IDisposable
     {
         if ( Type != ValueType.ArrayType )
         {
-            throw new RuntimeException( $"Value is not an array: {Type}" );
+            throw new LughRuntimeException( $"Value is not an array: {Type}" );
         }
 
         var array = new char[ Size ];
@@ -1114,7 +1114,7 @@ public class JsonValue : IDisposable
                     break;
 
                 default:
-                    throw new RuntimeException( $"Value cannot be converted to char: {value.Type}" );
+                    throw new LughRuntimeException( $"Value cannot be converted to char: {value.Type}" );
             }
 
             array[ i ] = v;
@@ -1271,7 +1271,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsString();
@@ -1287,7 +1287,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsFloat();
@@ -1303,7 +1303,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsDouble();
@@ -1319,7 +1319,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsLong();
@@ -1335,7 +1335,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsInt();
@@ -1351,7 +1351,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsBoolean();
@@ -1367,7 +1367,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsByte();
@@ -1383,7 +1383,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsShort();
@@ -1399,7 +1399,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Named value not found: {name}" );
+            throw new LughRuntimeException( $"Named value not found: {name}" );
         }
 
         return child.AsChar();
@@ -1415,7 +1415,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsString();
@@ -1431,7 +1431,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsFloat();
@@ -1447,7 +1447,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsDouble();
@@ -1463,7 +1463,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsLong();
@@ -1479,7 +1479,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsInt();
@@ -1495,7 +1495,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsBoolean();
@@ -1511,7 +1511,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsByte();
@@ -1527,7 +1527,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsShort();
@@ -1543,7 +1543,7 @@ public class JsonValue : IDisposable
 
         if ( child == null )
         {
-            throw new RuntimeException( $"Indexed value not found: {Name}" );
+            throw new LughRuntimeException( $"Indexed value not found: {Name}" );
         }
 
         return child.AsChar();
@@ -1575,7 +1575,7 @@ public class JsonValue : IDisposable
 
         if ( name == null )
         {
-            throw new RuntimeException( $"An object child requires a name: {value}" );
+            throw new LughRuntimeException( $"An object child requires a name: {value}" );
         }
 
         JsonValue? current = Child;
@@ -1645,14 +1645,14 @@ public class JsonValue : IDisposable
     /// <summary>
     /// Adds the specified value after the last child.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// if this is an object and the specified child's name is null.
     /// </exception>
     public void AddChild( JsonValue value )
     {
         if ( Type == ValueType.ObjectType && value.Name == null )
         {
-            throw new RuntimeException( $"An object child requires a name: {value}" );
+            throw new LughRuntimeException( $"An object child requires a name: {value}" );
         }
 
         value.Parent = this;
@@ -1676,14 +1676,14 @@ public class JsonValue : IDisposable
     /// <summary>
     /// Adds the specified value as the first child.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// if this is an object and the specified child's name is null.
     /// </exception>
     public void AddChildFirst( JsonValue value )
     {
         if ( Type == ValueType.ObjectType && value.Name == null )
         {
-            throw new RuntimeException( $"An object child requires a name: {value}" );
+            throw new LughRuntimeException( $"An object child requires a name: {value}" );
         }
 
         value.Parent = this;
@@ -1786,7 +1786,7 @@ public class JsonValue : IDisposable
         }
         catch ( IOException ex )
         {
-            throw new RuntimeException( ex );
+            throw new LughRuntimeException( ex );
         }
 
         return writer.ToString();

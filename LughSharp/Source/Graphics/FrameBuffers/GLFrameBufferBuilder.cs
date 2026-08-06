@@ -263,10 +263,10 @@ public class GLFrameBufferBuilder< TU >( int width, int height )
     /// Must be overridden by every concrete subclass.
     /// </summary>
     /// <returns>The newly created frame-buffer instance.</returns>
-    /// <exception cref="RuntimeException">Always thrown from this base implementation.</exception>
+    /// <exception cref="LughRuntimeException">Always thrown from this base implementation.</exception>
     public virtual object Build()
     {
-        throw new RuntimeException( "This method must be overriden by derived class(es)" );
+        throw new LughRuntimeException( "This method must be overriden by derived class(es)" );
     }
 }
 

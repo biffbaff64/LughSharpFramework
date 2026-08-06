@@ -56,7 +56,7 @@ public class Selector< T >
     /// <param name="kthLowest">The rank of the element to select (1-based index).</param>
     /// <param name="size">The number of elements in the array to consider. Must be greater than 0.</param>
     /// <returns>The element in the array corresponding to the k-th lowest value.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the size is less than 1 or if the k-th rank exceeds the number of elements considered.
     /// </exception>
     public T Select( T[] items, IComparer< T > comp, int kthLowest, int size )
@@ -75,19 +75,19 @@ public class Selector< T >
     /// <param name="kthLowest">The rank of the element to select (1-based index).</param>
     /// <param name="size">The number of elements in the array to consider. Must be greater than 0.</param>
     /// <returns>The index of the element in the array corresponding to the k-th lowest value.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the size is less than 1 or if the k-th rank exceeds the number of elements considered.
     /// </exception>
     public int SelectIndex( T[] items, IComparer< T > comp, int kthLowest, int size )
     {
         if ( size < 1 )
         {
-            throw new RuntimeException( "cannot select from empty array (size < 1)" );
+            throw new LughRuntimeException( "cannot select from empty array (size < 1)" );
         }
 
         if ( kthLowest > size )
         {
-            throw new RuntimeException
+            throw new LughRuntimeException
                 ( $"Kth rank is larger than size. k: {kthLowest}, size: {size}" );
         }
 
@@ -128,7 +128,7 @@ public class Selector< T >
     {
         if ( size < 1 )
         {
-            throw new RuntimeException( "cannot select from empty array (size < 1)" );
+            throw new LughRuntimeException( "cannot select from empty array (size < 1)" );
         }
 
         var lowestIdx = 0;
@@ -157,7 +157,7 @@ public class Selector< T >
     {
         if ( size < 1 )
         {
-            throw new RuntimeException( "cannot select from empty array (size < 1)" );
+            throw new LughRuntimeException( "cannot select from empty array (size < 1)" );
         }
         
         var highestIdx = 0;

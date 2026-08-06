@@ -61,7 +61,7 @@ public class AfterAction : DelegateAction
     /// </summary>
     /// <param name="delta"></param>
     /// <returns></returns>
-    protected override bool Delegate( float delta )
+    protected override bool ActionDelegate( float delta )
     {
         List< SceneAction >? currentActions = Target?.Actions;
 

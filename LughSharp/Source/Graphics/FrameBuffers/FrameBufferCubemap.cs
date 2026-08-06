@@ -74,7 +74,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     /// <param name="height"> the height of the cubemap in pixels </param>
     /// <param name="hasDepth"> whether to attach a depth buffer </param>
     /// <param name="hasStencil"> whether to attach a stencil buffer </param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the FrameBuffer could not be created
     /// </exception>
     public FrameBufferCubemap( int format, int width, int height, bool hasDepth, bool hasStencil = false )
@@ -165,7 +165,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
     {
         if ( _currentSide > 5 )
         {
-            throw new RuntimeException( "No remaining sides." );
+            throw new LughRuntimeException( "No remaining sides." );
         }
 
         if ( _currentSide == 5 )

@@ -44,38 +44,38 @@ public interface IInputProcessor
     /// <summary>
     /// Called when a key was typed
     /// </summary>
-    /// <param name="character"></param>
+    /// <param name="ch"></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool OnKeyTyped( char character );
+    bool OnKeyTyped( char ch );
 
     /// <summary>
     /// Called when the screen was touched or a mouse button was pressed.
     /// </summary>
     /// <param name="screenX"> Screen touch X coordinate. </param>
     /// <param name="screenY"> Screen touch Y coordinate. </param>
-    /// <param name="pointer"></param>
+    /// <param name="ptrIndex"></param>
     /// <param name="button"></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool OnTouchDown( int screenX, int screenY, int pointer, int button );
+    bool OnTouchDown( int screenX, int screenY, int ptrIndex, int button );
 
     /// <summary>
     /// Called when a screen touch is lifted or mouse button is released.
     /// </summary>
     /// <param name="screenX"></param>
     /// <param name="screenY"></param>
-    /// <param name="pointer"></param>
+    /// <param name="ptrIndex"></param>
     /// <param name="button"></param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool OnTouchUp( int screenX, int screenY, int pointer, int button );
+    bool OnTouchUp( int screenX, int screenY, int ptrIndex, int button );
 
     /// <summary>
     /// Called when a touch input is dragged across the screen.
     /// </summary>
     /// <param name="screenX">The current x-coordinate of the touch input on the screen.</param>
     /// <param name="screenY">The current y-coordinate of the touch input on the screen.</param>
-    /// <param name="pointer">The index of the touch pointer associated with this event.</param>
+    /// <param name="ptrIndex">The index of the touch pointer associated with this event.</param>
     /// <returns>TRUE if the input was processed.</returns>
-    bool OnTouchDragged( int screenX, int screenY, int pointer );
+    bool OnTouchDragged( int screenX, int screenY, int ptrIndex );
 
     /// <summary>
     /// Called when the mouse pointer is moved.

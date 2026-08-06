@@ -75,7 +75,7 @@ public class ETC1Data : IDisposable
         }
         catch ( Exception e )
         {
-            throw new RuntimeException( "Couldn't load pkm file '" + pkmFile + "'", e );
+            throw new LughRuntimeException( "Couldn't load pkm file '" + pkmFile + "'", e );
         }
         finally
         {

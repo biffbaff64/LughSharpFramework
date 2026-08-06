@@ -212,7 +212,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// that the required resources like style and font are initialized. Throws an exception if
     /// the style is not set.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when the style of the select box is null, indicating that no <see cref="SelectBoxStyle"/>
     /// is defined for the widget.
     /// </exception>
@@ -667,7 +667,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public ListBox< T > GetList()
     {
-        return ScrollPane?.ListBox ?? throw new RuntimeException( "No ListBox available!" );
+        return ScrollPane?.ListBox ?? throw new LughRuntimeException( "No ListBox available!" );
     }
 
     /// <summary>

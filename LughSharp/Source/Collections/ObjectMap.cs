@@ -1305,7 +1305,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
 
             if ( i < 0 )
             {
-                throw new RuntimeException( "CurrentIndex must not be < 0!" );
+                throw new LughRuntimeException( "CurrentIndex must not be < 0!" );
             }
 
             int mask = Map.Mask;
@@ -1362,19 +1362,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         /// Returns the next entry in the iteration.
         /// </summary>
         /// <returns>The next entry in the map.</returns>
-        /// <exception cref="RuntimeException">
+        /// <exception cref="LughRuntimeException">
         /// Thrown if there are no more entries to iterate over, or if the iterator is nested.
         /// </exception>
         public virtual Entry Next()
         {
             if ( !HasNext )
             {
-                throw new RuntimeException( "No more entries to iterate over!" );
+                throw new LughRuntimeException( "No more entries to iterate over!" );
             }
 
             if ( !Valid )
             {
-                throw new RuntimeException( "#iterator() cannot be used nested." );
+                throw new LughRuntimeException( "#iterator() cannot be used nested." );
             }
 
             Entry.Key    = Map.KeyTable[ NextIndex ];
@@ -1417,19 +1417,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         /// Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
-        /// <exception cref="RuntimeException">
+        /// <exception cref="LughRuntimeException">
         /// Thrown if there are no more values to iterate over, or if the iterator is nested.
         /// </exception>
         public virtual TV? Next()
         {
             if ( !HasNext )
             {
-                throw new RuntimeException( "HasNext : false!" );
+                throw new LughRuntimeException( "HasNext : false!" );
             }
 
             if ( !Valid )
             {
-                throw new RuntimeException( "#iterator() cannot be used nested." );
+                throw new LughRuntimeException( "#iterator() cannot be used nested." );
             }
 
             TV? value = Map.ValueTable[ NextIndex ];
@@ -1493,19 +1493,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         /// Returns the next key in the iteration.
         /// </summary>
         /// <returns>The next key in the map.</returns>
-        /// <exception cref="RuntimeException">
+        /// <exception cref="LughRuntimeException">
         /// Thrown if there are no more keys to iterate over, or if the iterator is nested.
         /// </exception>
         public virtual TK Next()
         {
             if ( !HasNext )
             {
-                throw new RuntimeException( "HasNext : false!" );
+                throw new LughRuntimeException( "HasNext : false!" );
             }
 
             if ( !Valid )
             {
-                throw new RuntimeException( "#iterator() cannot be used nested." );
+                throw new LughRuntimeException( "#iterator() cannot be used nested." );
             }
 
             TK key = Map.KeyTable[ NextIndex ];

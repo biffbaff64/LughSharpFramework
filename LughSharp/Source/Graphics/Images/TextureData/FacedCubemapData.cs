@@ -282,7 +282,7 @@ public class FacedCubemapData : ICubemapData
     {
         if ( !IsComplete() )
         {
-            throw new RuntimeException( "Cubemap data must be complete before use!" );
+            throw new LughRuntimeException( "Cubemap data must be complete before use!" );
         }
 
         foreach ( ITextureData? data in _data )
@@ -306,11 +306,11 @@ public class FacedCubemapData : ICubemapData
     {
         if ( _data == null )
         {
-            throw new RuntimeException( $"Cannot load {file.Name}, _data is null!" );
+            throw new LughRuntimeException( $"Cannot load {file.Name}, _data is null!" );
         }
 
         _data[ side.Index ] = TextureDataFactory.LoadFromFile( file, false )
-                           ?? throw new RuntimeException( $"Error loading {file.Name}" );
+                           ?? throw new LughRuntimeException( $"Error loading {file.Name}" );
     }
 
     /// <summary>
@@ -325,11 +325,11 @@ public class FacedCubemapData : ICubemapData
     {
         if ( _data == null )
         {
-            throw new RuntimeException( "Cannot load pixmap, _data is null!" );
+            throw new LughRuntimeException( "Cannot load pixmap, _data is null!" );
         }
 
         _data[ side.Index ] = ( pixmap == null ? null : new PixmapTextureData( pixmap, 0, false, false ) )
-                           ?? throw new RuntimeException( "Error loadin pixmap" );
+                           ?? throw new LughRuntimeException( "Error loadin pixmap" );
     }
 
     /// <summary>

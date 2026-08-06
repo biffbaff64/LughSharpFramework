@@ -39,7 +39,7 @@ public interface IFiles : IDisposable
     /// </summary>
     /// <param name="path"></param>
     /// <param name="type">Determines how the path is resolved.</param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// if the type is classpath or internal and the file does not exist.
     /// </exception>
     FileInfo GetFileHandle( string path, PathType type );

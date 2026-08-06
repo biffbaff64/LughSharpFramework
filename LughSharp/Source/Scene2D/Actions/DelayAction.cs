@@ -40,7 +40,7 @@ public class DelayAction : DelegateAction
     public float Duration { get; set; }
     public float Time     { get; set; }
 
-    protected override bool Delegate( float delta )
+    protected override bool ActionDelegate( float delta )
     {
         if ( Time < Duration )
         {

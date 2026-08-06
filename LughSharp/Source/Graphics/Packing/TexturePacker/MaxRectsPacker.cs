@@ -58,12 +58,12 @@ public class MaxRectsPacker : IPacker
 
         if ( settings.MinWidth >= settings.MaxWidth )
         {
-            throw new RuntimeException( "Page min width MUST be less than max width." );
+            throw new LughRuntimeException( "Page min width MUST be less than max width." );
         }
 
         if ( settings.MinHeight >= settings.MaxHeight )
         {
-            throw new RuntimeException( "Page min height MUST be less than max height." );
+            throw new LughRuntimeException( "Page min height MUST be less than max height." );
         }
     }
 
@@ -161,7 +161,7 @@ public class MaxRectsPacker : IPacker
     /// Returns a TexturePackerPage instance containing the packed rectangles.
     /// If the packing fails, a fallback empty page may be created and returned.
     /// </returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when an error occurs during the packing process, such as invalid settings
     /// or input data.
     /// </exception>
@@ -217,7 +217,7 @@ public class MaxRectsPacker : IPacker
                         ? $" and edge padding {paddingX} *2, {paddingY} *2"
                         : string.Empty;
 
-                    throw new RuntimeException( $"Image does not fit within max page size " +
+                    throw new LughRuntimeException( $"Image does not fit within max page size " +
                                                 $"{_settings.MaxWidth}x{_settings.MaxHeight}" +
                                                 $"{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
@@ -228,7 +228,7 @@ public class MaxRectsPacker : IPacker
                 {
                     string paddingMessage = edgePadX ? $" and X edge padding {_settings.PaddingX} *2" : string.Empty;
 
-                    throw new RuntimeException( $"Image does not fit within max page width " +
+                    throw new LughRuntimeException( $"Image does not fit within max page width " +
                                                 $"{_settings.MaxWidth}{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
 
@@ -236,7 +236,7 @@ public class MaxRectsPacker : IPacker
                 {
                     string paddingMessage = edgePadY ? $" and Y edge padding {_settings.PaddingY} *2" : string.Empty;
 
-                    throw new RuntimeException( $"Image does not fit within max page height " +
+                    throw new LughRuntimeException( $"Image does not fit within max page height " +
                                                 $"{_settings.MaxHeight}{paddingMessage}: {rect.Name} {width}x{height}" );
                 }
             }

@@ -127,7 +127,7 @@ public class SpriteBatchTests
             Assert.That( _spriteBatch, Is.Not.Null );
             Assert.That( _testTexture, Is.Not.Null );
 
-            Assert.Throws< RuntimeException >( () => _spriteBatch?.Draw( _testTexture!, 0, 0 ) );
+            Assert.Throws< LughRuntimeException >( () => _spriteBatch?.Draw( _testTexture!, 0, 0 ) );
         } );
 
         Logger.Debug( "Done." );

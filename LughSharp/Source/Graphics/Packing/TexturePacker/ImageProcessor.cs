@@ -99,7 +99,7 @@ public class ImageProcessor
         }
         catch ( Exception ex )
         {
-            throw new RuntimeException( $"Error reading image: {file}", ex );
+            throw new LughRuntimeException( $"Error reading image: {file}", ex );
         }
 
         string name = file.FullName;
@@ -173,7 +173,7 @@ public class ImageProcessor
     {
         if ( image == null )
         {
-            throw new RuntimeException( $"Unable to read image: {name}" );
+            throw new LughRuntimeException( $"Unable to read image: {name}" );
         }
 
         name ??= string.Empty;
@@ -725,7 +725,7 @@ public class ImageProcessor
                                        || ( rgba[ 3 ] != 255 ) ) )
                     {
                         throw new
-                            RuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
+                            LughRuntimeException( $"Invalid {name} ninepatch split pixel at {x}, {y}, rgba: {rgba[ 0 ]}, {rgba[ 1 ]}, {rgba[ 2 ]}, {rgba[ 3 ]}" );
                     }
 
                     next++;

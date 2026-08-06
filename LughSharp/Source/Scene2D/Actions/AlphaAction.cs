@@ -45,7 +45,7 @@ public class AlphaAction : TemporalAction
     /// Called the first time <see cref="TemporalAction.Act"/> is called. This is a good place
     /// to query the <see cref="Actor"/>'s starting state.
     /// </summary>
-    protected override void Begin()
+    protected override void BeginAction()
     {
         if ( Target == null )
         {

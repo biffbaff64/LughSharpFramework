@@ -35,7 +35,7 @@ public class RepeatAction : DelegateAction
 
     // ========================================================================
 
-    protected override bool Delegate( float delta )
+    protected override bool ActionDelegate( float delta )
     {
         if ( ExecutedCount == RepeatCount )
         {

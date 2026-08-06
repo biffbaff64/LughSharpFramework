@@ -94,7 +94,7 @@ public class MockApplication : IApplication
     /// On iOS this should be avoided in production as it breaks Apples guidelines
     /// </para>
     /// </summary>
-    public void Exit()
+    public void ApplicationExit()
     {
         throw new NotImplementedException();
     }

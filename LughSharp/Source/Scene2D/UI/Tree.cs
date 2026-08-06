@@ -483,7 +483,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         for ( int i = 0, n = nodes.Count; i < n; i++ )
         {
             TNode node   = nodes[ i ];
-            Actor actor  = node.Actor ?? throw new RuntimeException( "node.Actor cannot be null!" );
+            Actor actor  = node.Actor ?? throw new LughRuntimeException( "node.Actor cannot be null!" );
             float actorY = actor.GetY();
             float height = node.Height;
 
@@ -605,7 +605,7 @@ public class Tree< TNode, TValue > : WidgetGroup
 
         if ( Style == null )
         {
-            throw new RuntimeException( "Style is NULL!" );
+            throw new LughRuntimeException( "Style is NULL!" );
         }
 
         ISceneDrawable? icon;
@@ -627,7 +627,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             return icon;
         }
         
-        throw new RuntimeException( "Style.Plus or Style.Minus is NULL!" );
+        throw new LughRuntimeException( "Style.Plus or Style.Minus is NULL!" );
     }
 
     /// <summary>

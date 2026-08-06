@@ -285,7 +285,7 @@ public class Mesh : IDisposable
         }
         else
         {
-            throw new RuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
+            throw new LughRuntimeException( "Trying to enable InstancedRendering on same Mesh instance twice."
                                       + " Use disableInstancedRendering to clean up old InstanceData first" );
         }
 
@@ -325,7 +325,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new LughRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -342,7 +342,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new LughRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -360,7 +360,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new LughRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -377,7 +377,7 @@ public class Mesh : IDisposable
             return this;
         }
 
-        throw new RuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
+        throw new LughRuntimeException( "An InstanceBufferObject must be set before setting instance data!" );
     }
 
     /// <summary>
@@ -824,7 +824,7 @@ public class Mesh : IDisposable
 
                 if ( ( count + offset ) > IndexData.NumMaxIndices )
                 {
-                    throw new RuntimeException( $"Mesh attempting to access memory outside " +
+                    throw new LughRuntimeException( $"Mesh attempting to access memory outside " +
                                                 $"of the index buffer (count: {count}, offset: " +
                                                 $"{offset}, max: {IndexData.NumMaxIndices})" );
                 }
@@ -898,7 +898,7 @@ public class Mesh : IDisposable
 
     /// <summary>
     /// Calculates the <see cref="BoundingBox"/> of the vertices contained in this mesh.
-    /// In case no vertices are defined yet a <see cref="RuntimeException"/> is thrown.
+    /// In case no vertices are defined yet a <see cref="LughRuntimeException"/> is thrown.
     /// This method creates a new BoundingBox instance.
     /// </summary>
     /// <returns> the bounding box.  </returns>
@@ -913,7 +913,7 @@ public class Mesh : IDisposable
 
     /// <summary>
     /// Calculates the <see cref="BoundingBox"/> of the vertices contained in this mesh.
-    /// In case no vertices are defined yet a <see cref="RuntimeException"/> is thrown.
+    /// In case no vertices are defined yet a <see cref="LughRuntimeException"/> is thrown.
     /// </summary>
     /// <param name="bbox"> the bounding box to store the result in.  </param>
     public void CalculateBoundingBox( BoundingBox bbox )
@@ -922,7 +922,7 @@ public class Mesh : IDisposable
 
         if ( numVertices == 0 )
         {
-            throw new RuntimeException( "No vertices defined" );
+            throw new LughRuntimeException( "No vertices defined" );
         }
 
         Buffer< float > verts = _vertices.GetBuffer( false );
@@ -1024,7 +1024,7 @@ public class Mesh : IDisposable
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > max ) )
         {
-            throw new RuntimeException( $"Invalid part specified ( offset={offset}, count={count}, max={max} )" );
+            throw new LughRuntimeException( $"Invalid part specified ( offset={offset}, count={count}, max={max} )" );
         }
 
         Buffer< float >  verts      = _vertices.GetBuffer( false );
@@ -1172,7 +1172,7 @@ public class Mesh : IDisposable
 
         if ( ( offset < 0 ) || ( count < 1 ) || ( ( offset + count ) > numIndices ) )
         {
-            throw new RuntimeException( "Not enough indices" );
+            throw new LughRuntimeException( "Not enough indices" );
         }
 
         Buffer< float >  verts      = _vertices.GetBuffer( false );

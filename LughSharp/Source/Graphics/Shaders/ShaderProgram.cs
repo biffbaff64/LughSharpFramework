@@ -437,7 +437,7 @@ public class ShaderProgram : IDisposable
 
         if ( size == 0 )
         {
-            throw new RuntimeException( "Size cannot be 0." );
+            throw new LughRuntimeException( "Size cannot be 0." );
         }
 
         Engine.GL.VertexAttribPointer( ( GLuint )location, size, type, normalize, stride, offset );
@@ -655,7 +655,7 @@ public class ShaderProgram : IDisposable
                 }
             }
 
-            throw new RuntimeException( "LogInvalidMatrix found Invalid Matrix." );
+            throw new LughRuntimeException( "LogInvalidMatrix found Invalid Matrix." );
         }
     }
 

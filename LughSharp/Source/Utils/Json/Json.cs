@@ -1102,7 +1102,7 @@ public class Json
 
                 throw;
             }
-            catch ( RuntimeException runtimeEx )
+            catch ( LughRuntimeException runtimeEx )
             {
                 var ex = new SerializationException( runtimeEx );
                 ex.AddTrace( $"{field} ({type.Name})" );
@@ -1757,7 +1757,7 @@ public class Json
 
             throw;
         }
-        catch ( RuntimeException runtimeEx )
+        catch ( LughRuntimeException runtimeEx )
         {
             var ex = new SerializationException( runtimeEx );
             ex.AddTrace( jsonValue.Trace() );

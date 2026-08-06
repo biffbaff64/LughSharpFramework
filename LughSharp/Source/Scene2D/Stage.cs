@@ -300,7 +300,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( inputEvent == null )
             {
-                throw new RuntimeException( "Null InputEvent for FireEnterAndExit [Exit Overlast]!" );
+                throw new LughRuntimeException( "Null InputEvent for FireEnterAndExit [Exit Overlast]!" );
             }
 
             inputEvent.Type         = InputEvent.EventType.Exit;
@@ -321,7 +321,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( inputEvent == null )
             {
-                throw new RuntimeException( "Null InputEvent for FireEnterAndExit [Exit Over]!" );
+                throw new LughRuntimeException( "Null InputEvent for FireEnterAndExit [Exit Over]!" );
             }
 
             inputEvent.Stage        = this;
@@ -346,7 +346,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for FireExit!" );
+            throw new LughRuntimeException( "Null InputEvent for FireExit!" );
         }
 
         inputEvent.Type         = InputEvent.EventType.Exit;
@@ -364,16 +364,16 @@ public class Stage : InputAdapter, IDisposable
     /// Applies a touch down event to the stage and returns true if an actor in
     /// the scene <see cref="Handle"/> the event.
     /// </summary>
-    public override bool OnTouchDown( int screenX, int screenY, int pointer, int button )
+    public override bool OnTouchDown( int screenX, int screenY, int ptr, int button )
     {
         if ( !IsInsideViewport( screenX, screenY ) )
         {
             return false;
         }
 
-        _pointerTouched[ pointer ] = true;
-        _pointerScreenX[ pointer ] = screenX;
-        _pointerScreenY[ pointer ] = screenY;
+        _pointerTouched[ ptr ] = true;
+        _pointerScreenX[ ptr ] = screenX;
+        _pointerScreenY[ ptr ] = screenY;
 
         ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
 
@@ -381,14 +381,14 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for TouchDown!" );
+            throw new LughRuntimeException( "Null InputEvent for TouchDown!" );
         }
 
         inputEvent.Type    = InputEvent.EventType.TouchDown;
         inputEvent.Stage   = this;
         inputEvent.StageX  = _tempCoords.X;
         inputEvent.StageY  = _tempCoords.Y;
-        inputEvent.Pointer = pointer;
+        inputEvent.Pointer = ptr;
         inputEvent.Button  = button;
 
         Actor? target = Hit( _tempCoords.X, _tempCoords.Y, true );
@@ -435,7 +435,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for TouchDragged!" );
+            throw new LughRuntimeException( "Null InputEvent for TouchDragged!" );
         }
 
         inputEvent.Type    = InputEvent.EventType.TouchDragged;
@@ -502,7 +502,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for TouchUp!" );
+            throw new LughRuntimeException( "Null InputEvent for TouchUp!" );
         }
 
         inputEvent.Type    = InputEvent.EventType.TouchUp;
@@ -569,7 +569,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for MouseMoved!" );
+            throw new LughRuntimeException( "Null InputEvent for MouseMoved!" );
         }
 
         inputEvent.Stage  = this;
@@ -607,7 +607,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for Scrolled!" );
+            throw new LughRuntimeException( "Null InputEvent for Scrolled!" );
         }
 
         inputEvent.Stage         = this;
@@ -636,7 +636,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for KeyDown!" );
+            throw new LughRuntimeException( "Null InputEvent for KeyDown!" );
         }
 
         inputEvent.Stage   = this;
@@ -662,7 +662,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for KeyUp!" );
+            throw new LughRuntimeException( "Null InputEvent for KeyUp!" );
         }
 
         inputEvent.Stage   = this;
@@ -681,19 +681,19 @@ public class Stage : InputAdapter, IDisposable
     /// true if the event was <see cref="Event.SetHandled"/>.
     /// </summary>
     /// <seealso cref="GetKeyboardFocus()"/>
-    public override bool OnKeyTyped( char character )
+    public override bool OnKeyTyped( char ch )
     {
         Actor target     = GetKeyboardFocus() ?? RootGroup;
         var   inputEvent = PoolsMap.Obtain< InputEvent >();
 
         if ( inputEvent == null )
         {
-            throw new RuntimeException( "Null InputEvent for KeyTyped!" );
+            throw new LughRuntimeException( "Null InputEvent for KeyTyped!" );
         }
 
         inputEvent.Stage     = this;
         inputEvent.Type      = InputEvent.EventType.KeyTyped;
-        inputEvent.Character = character;
+        inputEvent.Character = ch;
 
         target.Fire( inputEvent );
         bool handled = inputEvent.IsHandled;
@@ -719,7 +719,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( focus == null )
         {
-            throw new RuntimeException( "Null TouchFocus for AddTouchFocus!" );
+            throw new LughRuntimeException( "Null TouchFocus for AddTouchFocus!" );
         }
 
         focus.ListenerActor = listenerActor;

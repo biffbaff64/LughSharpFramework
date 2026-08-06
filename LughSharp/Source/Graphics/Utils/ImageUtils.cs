@@ -96,7 +96,7 @@ public class ImageUtils
             sb.Append( "Unknown reason" );
         }
 
-        throw new RuntimeException( sb.ToString() );
+        throw new LughRuntimeException( sb.ToString() );
     }
 }
 

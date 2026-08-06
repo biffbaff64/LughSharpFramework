@@ -186,7 +186,7 @@ public class Cubemap : GLTexture, IManaged
     {
         if ( !IsManaged )
         {
-            throw new RuntimeException( "Tried to reload an unmanaged Cubemap" );
+            throw new LughRuntimeException( "Tried to reload an unmanaged Cubemap" );
         }
 
         GLTextureHandle = Engine.GL.GenTexture();

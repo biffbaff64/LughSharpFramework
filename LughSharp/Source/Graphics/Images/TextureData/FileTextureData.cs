@@ -158,14 +158,14 @@ public class FileTextureData : ITextureData
     {
         if ( !IsPrepared )
         {
-            throw new RuntimeException( "Call prepare() before calling FetchPixmap()" );
+            throw new LughRuntimeException( "Call prepare() before calling FetchPixmap()" );
         }
 
         Pixmap? pixmap = _pixmap;
 
         if ( pixmap == null )
         {
-            throw new RuntimeException( "FetchPixmap() resulted in a null Pixmap!" );
+            throw new LughRuntimeException( "FetchPixmap() resulted in a null Pixmap!" );
         }
 
         // Transfer ownership to caller and clear internal reference
@@ -195,7 +195,7 @@ public class FileTextureData : ITextureData
     /// </summary>
     public virtual void ConsumeCustomData( int target )
     {
-        throw new RuntimeException( "This TextureData implementation does not upload data itself" );
+        throw new LughRuntimeException( "This TextureData implementation does not upload data itself" );
     }
 
     /// <summary>

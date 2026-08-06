@@ -51,12 +51,12 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
     /// <param name="file">The file information of the texture atlas.</param>
     /// <param name="parameter">The parameters for loading the texture atlas.</param>
     /// <returns>The loaded texture atlas.</returns>
-    /// <exception cref="RuntimeException">Thrown if the texture atlas data is null.</exception>
+    /// <exception cref="LughRuntimeException">Thrown if the texture atlas data is null.</exception>
     public override TextureAtlas Load( AssetManager assetManager, FileInfo? file, AssetLoaderParameters? parameter )
     {
         if ( _data == null )
         {
-            throw new RuntimeException( "TextureAtlasData cannot be null!" );
+            throw new LughRuntimeException( "TextureAtlasData cannot be null!" );
         }
 
         foreach ( TextureAtlasData.Page page in _data.Pages )

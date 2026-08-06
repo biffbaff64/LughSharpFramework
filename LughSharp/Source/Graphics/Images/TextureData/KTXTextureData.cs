@@ -135,12 +135,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     {
         if ( _compressedData != null )
         {
-            throw new RuntimeException( "Already prepared!" );
+            throw new LughRuntimeException( "Already prepared!" );
         }
 
         if ( file == null )
         {
-            throw new RuntimeException( "Source file not specified!" );
+            throw new LughRuntimeException( "Source file not specified!" );
         }
 
         // We support normal ktx files as well as 'zktx' which are gzip ktx
@@ -172,7 +172,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             }
             catch ( Exception e )
             {
-                throw new RuntimeException( $"Couldn't load zktx file '{file}'", e );
+                throw new LughRuntimeException( $"Couldn't load zktx file '{file}'", e );
             }
             finally
             {
@@ -197,14 +197,14 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
           || ( _compressedData.GetByte() != 0x01A )
           || ( _compressedData.GetByte() != 0x00A ) )
         {
-            throw new RuntimeException( "Invalid KTX Header" );
+            throw new LughRuntimeException( "Invalid KTX Header" );
         }
 
         int endianTag = _compressedData.GetInt();
 
         if ( ( endianTag != 0x04030201 ) && ( endianTag != 0x01020304 ) )
         {
-            throw new RuntimeException( "Invalid KTX Header" );
+            throw new LughRuntimeException( "Invalid KTX Header" );
         }
 
         if ( endianTag != 0x04030201 )
@@ -269,13 +269,13 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// <returns> the pixmap.</returns>
     public Pixmap ConsumePixmap()
     {
-        throw new RuntimeException( "This TextureData implementation does not return a Pixmap" );
+        throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
     /// <inheritdoc />
     public int GetPixelFormat()
     {
-        throw new RuntimeException( "This TextureData implementation directly handles texture formats." );
+        throw new LughRuntimeException( "This TextureData implementation directly handles texture formats." );
     }
 
     /// <returns>
@@ -300,7 +300,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     {
         if ( _compressedData == null )
         {
-            throw new RuntimeException( "Call prepare() before calling consumeCompressedData()" );
+            throw new LughRuntimeException( "Call prepare() before calling consumeCompressedData()" );
         }
 
         var buffer = new Buffer< int >( 16 );
@@ -312,7 +312,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         {
             if ( ( _glType + _glFormat ) != 0 )
             {
-                throw new RuntimeException( "either both or none of glType, glFormat must be zero" );
+                throw new LughRuntimeException( "either both or none of glType, glFormat must be zero" );
             }
 
             compressed = true;
@@ -342,12 +342,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             }
             else
             {
-                throw new RuntimeException( "cube map needs 2D faces" );
+                throw new LughRuntimeException( "cube map needs 2D faces" );
             }
         }
         else if ( _numberOfFaces != 1 )
         {
-            throw new RuntimeException( "numberOfFaces must be either 1 or 6" );
+            throw new LughRuntimeException( "numberOfFaces must be either 1 or 6" );
         }
 
         if ( _numberOfArrayElements > 0 )
@@ -362,7 +362,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             }
             else
             {
-                throw new RuntimeException( "No API for 3D and cube arrays yet" );
+                throw new LughRuntimeException( "No API for 3D and cube arrays yet" );
             }
 
             textureDimensions++;
@@ -370,7 +370,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
         if ( glTarget == 0x1234 )
         {
-            throw new RuntimeException( "Unsupported texture format (only 2D textures " +
+            throw new LughRuntimeException( "Unsupported texture format (only 2D textures " +
                                         "are supported for the time being)" );
         }
 
@@ -382,7 +382,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             if ( !( target is >= IGL.GLTextureCubeMapPositiveX
                     and <= IGL.GLTextureCubeMapNegativeZ ) )
             {
-                throw new RuntimeException( "You must specify either GL_TEXTURE_CUBE_MAP to bind all 6 faces of the"
+                throw new LughRuntimeException( "You must specify either GL_TEXTURE_CUBE_MAP to bind all 6 faces of the"
                                           + "cube or the requested face GL_TEXTURE_CUBE_MAP_POSITIVE_X and followings." );
             }
 
@@ -400,7 +400,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             if ( ( target != glTarget )
               && !( target is >= IGL.GLTextureCubeMapPositiveX and <= IGL.GLTextureCubeMapNegativeZ ) )
             {
-                throw new RuntimeException( $"Invalid target requested : 0x{target:X}, expecting : 0x{glTarget:X}" );
+                throw new LughRuntimeException( $"Invalid target requested : 0x{target:X}, expecting : 0x{glTarget:X}" );
             }
         }
 

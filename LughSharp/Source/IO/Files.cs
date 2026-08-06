@@ -1,4 +1,4 @@
-﻿﻿// /////////////////////////////////////////////////////////////////////////////
+﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
 //  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
@@ -21,6 +21,8 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
+
+using System.Globalization;
 
 using LughSharp.Source.Scene2D.UI;
 
@@ -53,7 +55,7 @@ public class Files : IFiles
         get;
         set
         {
-            if ( value.EndsWith( Path.DirectorySeparatorChar.ToString() ) )
+            if ( value.EndsWith( Path.DirectorySeparatorChar.ToString(), StringComparison.OrdinalIgnoreCase ) )
             {
                 value = value.TrimEnd( Path.DirectorySeparatorChar );
             }
@@ -122,6 +124,7 @@ public class Files : IFiles
 
     // ========================================================================
     // ========================================================================
+
     #region Class path
 
     /// <summary>
@@ -131,18 +134,24 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Classpath path cannot be null or empty.\n" +
-                                             "Example: 'Resources/Textures/sprite.png'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Classpath path cannot be null or empty.\n" +
+                 "Example: 'Resources/Textures/sprite.png'"
+                );
         }
 
         // Prevent path traversal attacks
         if ( path.Contains( ".." ) )
         {
-            throw new RuntimeException( $"Path traversal is not allowed in classpath resources: {path}\n" +
-                                        "Example valid path: 'Resources/Textures/sprite.png'\n" +
-                                        "Note: '../' is not allowed for security reasons. Use absolute " +
-                                        "paths or paths relative to the classpath root." );
+            throw new LughRuntimeException
+                (
+                 $"Path traversal is not allowed in classpath resources: {path}\n" +
+                 "Example valid path: 'Resources/Textures/sprite.png'\n" +
+                 "Note: '../' is not allowed for security reasons. Use absolute " +
+                 "paths or paths relative to the classpath root."
+                );
         }
 
         try
@@ -155,7 +164,7 @@ public class Files : IFiles
 
             // Try to find the resource in the assembly's manifest
             string[] manifestResourceNames = assembly.GetManifestResourceNames();
-            
+
             string? matchingResource = manifestResourceNames
                 .FirstOrDefault( r => r.EndsWith( resourcePath, StringComparison.OrdinalIgnoreCase ) );
 
@@ -163,7 +172,7 @@ public class Files : IFiles
             {
                 // If found in assembly resources, create a FileInfo pointing to the assembly location
                 string assemblyLocation = Path.GetDirectoryName( assembly.Location )
-                                       ?? throw new RuntimeException( "Unable to determine assembly location" );
+                                       ?? throw new LughRuntimeException( "Unable to determine assembly location" );
 
                 return new FileInfo( Path.Combine( assemblyLocation, path ) );
             }
@@ -176,16 +185,22 @@ public class Files : IFiles
                 return classpathFile;
             }
 
-            throw new RuntimeException( $"Classpath resource not found: {path}\n" +
-                                        "Example valid path: 'Resources/Textures/sprite.png'\n" +
-                                        "Note: Make sure the file exists and is included " +
-                                        "as an embedded resource." );
+            throw new LughRuntimeException
+                (
+                 $"Classpath resource not found: {path}\n" +
+                 "Example valid path: 'Resources/Textures/sprite.png'\n" +
+                 "Note: Make sure the file exists and is included " +
+                 "as an embedded resource."
+                );
         }
-        catch ( Exception ex ) when ( ex is not RuntimeException )
+        catch ( Exception ex ) when ( ex is not LughRuntimeException )
         {
-            throw new RuntimeException( $"Error accessing classpath resource: {path}\n" +
-                                        "Example valid path: 'Resources/Textures/sprite.png'",
-                                        ex );
+            throw new LughRuntimeException
+                (
+                 $"Error accessing classpath resource: {path}\n" +
+                 "Example valid path: 'Resources/Textures/sprite.png'",
+                 ex
+                );
         }
     }
 
@@ -207,13 +222,18 @@ public class Files : IFiles
 
         // Use typeof(Files).Assembly so we always search the framework assembly,
         // regardless of which assembly is currently executing.
-        var assembly = typeof( Files ).Assembly;
+        Assembly assembly = typeof( Files ).Assembly;
 
         string resourcePath = path.TrimStart( '/' ).Replace( '/', '.' ).Replace( '\\', '.' );
 
         string? match = assembly.GetManifestResourceNames()
-                                .FirstOrDefault( r => r.EndsWith( resourcePath,
-                                                                   StringComparison.OrdinalIgnoreCase ) );
+                                .FirstOrDefault
+                                    ( r => r.EndsWith
+                                          (
+                                           resourcePath,
+                                           StringComparison.OrdinalIgnoreCase
+                                          )
+                                    );
 
         return match != null ? assembly.GetManifestResourceStream( match ) : null;
     }
@@ -222,6 +242,7 @@ public class Files : IFiles
 
     // ========================================================================
     // ========================================================================
+
     #region Internal storage
 
     /// <summary>
@@ -231,25 +252,34 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Internal path cannot be null or empty.\n" +
-                                             "Example: 'Assets/Config/settings.json'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Internal path cannot be null or empty.\n" +
+                 "Example: 'Assets/Config/settings.json'"
+                );
         }
 
         if ( !IsInternalStorageAvailable() )
         {
-            throw new RuntimeException( $"Internal storage is not available for path: {path}\n" +
-                                        "Example valid path: 'Assets/Config/settings.json'\n" +
-                                        "Note: Check if the application has proper permissions " +
-                                        "and storage is mounted." );
+            throw new LughRuntimeException
+                (
+                 $"Internal storage is not available for path: {path}\n" +
+                 "Example valid path: 'Assets/Config/settings.json'\n" +
+                 "Note: Check if the application has proper permissions " +
+                 "and storage is mounted."
+                );
         }
 
         if ( path.Contains( ".." ) )
         {
-            throw new RuntimeException( $"Path traversal is not allowed in internal storage: {path}\n" +
-                                        "Example valid path: 'Assets/Config/settings.json'\n" +
-                                        "Note: '../' is not allowed for security reasons. " +
-                                        "Use paths relative to internal storage root." );
+            throw new LughRuntimeException
+                (
+                 $"Path traversal is not allowed in internal storage: {path}\n" +
+                 "Example valid path: 'Assets/Config/settings.json'\n" +
+                 "Note: '../' is not allowed for security reasons. " +
+                 "Use paths relative to internal storage root."
+                );
         }
 
         string internalPath = GetInternalStoragePath();
@@ -266,8 +296,8 @@ public class Files : IFiles
         string path = InternalPath;
 
         return string.IsNullOrEmpty( path )
-            ? throw new RuntimeException( "Could not determine internal storage path" )
-            : path;
+                   ? throw new LughRuntimeException( "Could not determine internal storage path" )
+                   : path;
     }
 
     /// <summary>
@@ -288,11 +318,12 @@ public class Files : IFiles
             return false;
         }
     }
-    
+
     #endregion Internal storage
 
     // ========================================================================
     // ========================================================================
+
     #region Absolute path
 
     /// <summary>
@@ -302,27 +333,34 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Absolute path cannot be null or empty.\n" +
-                                             "Example Windows: 'C:/Games/MyGame/config.json'\n" +
-                                             "Example Unix: '/usr/local/share/game/config.json'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Absolute path cannot be null or empty.\n" +
+                 "Example Windows: 'C:/Games/MyGame/config.json'\n" +
+                 "Example Unix: '/usr/local/share/game/config.json'"
+                );
         }
 
         if ( !Path.IsPathRooted( path ) )
         {
-            throw new RuntimeException( $"Invalid absolute path: {path}\n" +
-                                        "Example Windows: 'C:/Games/MyGame/config.json'\n" +
-                                        "Example Unix: '/usr/local/share/game/config.json'\n" +
-                                        "Note: Absolute paths must be fully qualified from the root directory." );
+            throw new LughRuntimeException
+                (
+                 $"Invalid absolute path: {path}\n" +
+                 "Example Windows: 'C:/Games/MyGame/config.json'\n" +
+                 "Example Unix: '/usr/local/share/game/config.json'\n" +
+                 "Note: Absolute paths must be fully qualified from the root directory."
+                );
         }
 
         return new FileInfo( path );
     }
 
     #endregion Absolute path
-    
+
     // ========================================================================
     // ========================================================================
+
     #region External storage
 
     /// <summary>
@@ -332,24 +370,33 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "External path cannot be null or empty.\n" +
-                                             "Example: 'Documents/GameData/saves/save1.dat'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "External path cannot be null or empty.\n" +
+                 "Example: 'Documents/GameData/saves/save1.dat'"
+                );
         }
 
         if ( !IsExternalStorageAvailable() )
         {
-            throw new RuntimeException( $"External storage is not available for path: {path}\n" +
-                                        "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
-                                        "Note: Check if external storage is mounted and accessible." );
+            throw new LughRuntimeException
+                (
+                 $"External storage is not available for path: {path}\n" +
+                 "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
+                 "Note: Check if external storage is mounted and accessible."
+                );
         }
 
         if ( path.Contains( ".." ) )
         {
-            throw new RuntimeException( $"Path traversal is not allowed in external storage: {path}\n" +
-                                        "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
-                                        "Note: '../' is not allowed for security reasons. " +
-                                        "Use paths relative to external storage root." );
+            throw new LughRuntimeException
+                (
+                 $"Path traversal is not allowed in external storage: {path}\n" +
+                 "Example valid path: 'Documents/GameData/saves/save1.dat'\n" +
+                 "Note: '../' is not allowed for security reasons. " +
+                 "Use paths relative to external storage root."
+                );
         }
 
         string externalPath = GetExternalStoragePath();
@@ -366,8 +413,8 @@ public class Files : IFiles
         string path = ExternalPath;
 
         return string.IsNullOrEmpty( path )
-            ? throw new RuntimeException( "Could not determine external storage path" )
-            : path;
+                   ? throw new LughRuntimeException( "Could not determine external storage path" )
+                   : path;
     }
 
     /// <summary>
@@ -414,17 +461,23 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Assets path cannot be null or empty.\n" +
-                                             "Example: 'Textures/sprite.png'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Assets path cannot be null or empty.\n" +
+                 "Example: 'Textures/sprite.png'"
+                );
         }
 
         if ( path.Contains( ".." ) )
         {
-            throw new RuntimeException( $"Path traversal is not allowed in assets storage: {path}\n" +
-                                        "Example valid path: 'Textures/sprite.png'\n" +
-                                        "Note: '../' is not allowed for security reasons. " +
-                                        "Use paths relative to internal storage root." );
+            throw new LughRuntimeException
+                (
+                 $"Path traversal is not allowed in assets storage: {path}\n" +
+                 "Example valid path: 'Textures/sprite.png'\n" +
+                 "Note: '../' is not allowed for security reasons. " +
+                 "Use paths relative to internal storage root."
+                );
         }
 
         string assetsPath = GetAssetsStoragePath();
@@ -440,14 +493,15 @@ public class Files : IFiles
         string path = AssetsRoot;
 
         return string.IsNullOrEmpty( path )
-            ? throw new RuntimeException( "Could not determine default assets storage path" )
-            : path;
+                   ? throw new LughRuntimeException( "Could not determine default assets storage path" )
+                   : path;
     }
 
     #endregion External storage
-    
+
     // ========================================================================
     // ========================================================================
+
     #region Assembly path
 
     /// <summary>
@@ -457,17 +511,23 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Assembly path cannot be null or empty.\n" +
-                                             "Example: 'Resources/Shaders/default.glsl'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Assembly path cannot be null or empty.\n" +
+                 "Example: 'Resources/Shaders/default.glsl'"
+                );
         }
 
         if ( path.Contains( ".." ) )
         {
-            throw new RuntimeException( $"Path traversal is not allowed in assembly resources: {path}\n" +
-                                        "Example valid path: 'Resources/Shaders/default.glsl'\n" +
-                                        "Note: '../' is not allowed for security reasons. " +
-                                        "Use paths relative to assembly location." );
+            throw new LughRuntimeException
+                (
+                 $"Path traversal is not allowed in assembly resources: {path}\n" +
+                 "Example valid path: 'Resources/Shaders/default.glsl'\n" +
+                 "Note: '../' is not allowed for security reasons. " +
+                 "Use paths relative to assembly location."
+                );
         }
 
         string assemblyPath = GetAssemblyStoragePath();
@@ -484,8 +544,8 @@ public class Files : IFiles
         string path = AssemblyDirectory;
 
         return string.IsNullOrEmpty( path )
-            ? throw new RuntimeException( "Could not determine assembly storage path" )
-            : path;
+                   ? throw new LughRuntimeException( "Could not determine assembly storage path" )
+                   : path;
     }
 
     /// <summary>
@@ -508,9 +568,10 @@ public class Files : IFiles
     }
 
     #endregion Assembly path
-    
+
     // ========================================================================
     // ========================================================================
+
     #region Local storage
 
     /// <summary>
@@ -520,24 +581,33 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Local path cannot be null or empty.\n" +
-                                             "Example: 'UserData/preferences.xml'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Local path cannot be null or empty.\n" +
+                 "Example: 'UserData/preferences.xml'"
+                );
         }
 
         if ( !IsLocalStorageAvailable() )
         {
-            throw new RuntimeException( $"Local storage is not available for path: {path}\n" +
-                                        "Example valid path: 'UserData/preferences.xml'\n" +
-                                        "Note: Check if local storage directory exists and is accessible." );
+            throw new LughRuntimeException
+                (
+                 $"Local storage is not available for path: {path}\n" +
+                 "Example valid path: 'UserData/preferences.xml'\n" +
+                 "Note: Check if local storage directory exists and is accessible."
+                );
         }
 
         if ( path.Contains( ".." ) )
         {
-            throw new RuntimeException( $"Path traversal is not allowed in local storage: {path}\n" +
-                                        "Example valid path: 'UserData/preferences.xml'\n" +
-                                        "Note: '../' is not allowed for security reasons. " +
-                                        "Use paths relative to local storage root." );
+            throw new LughRuntimeException
+                (
+                 $"Path traversal is not allowed in local storage: {path}\n" +
+                 "Example valid path: 'UserData/preferences.xml'\n" +
+                 "Note: '../' is not allowed for security reasons. " +
+                 "Use paths relative to local storage root."
+                );
         }
 
         string localPath = GetLocalStoragePath();
@@ -554,8 +624,8 @@ public class Files : IFiles
         string path = LocalPath;
 
         return string.IsNullOrEmpty( path )
-            ? throw new RuntimeException( "Could not determine local storage path" )
-            : path;
+                   ? throw new LughRuntimeException( "Could not determine local storage path" )
+                   : path;
     }
 
     /// <summary>
@@ -578,7 +648,7 @@ public class Files : IFiles
     }
 
     #endregion Local storage
-    
+
     // ========================================================================
     // ========================================================================
     // General Utility Methods
@@ -599,9 +669,12 @@ public class Files : IFiles
     {
         if ( string.IsNullOrEmpty( path ) )
         {
-            throw new ArgumentNullException( nameof( path ),
-                                             "Path cannot be null or empty.\n" +
-                                             "Example: 'Assets/Textures/sprite.png'" );
+            throw new ArgumentNullException
+                (
+                 nameof( path ),
+                 "Path cannot be null or empty.\n" +
+                 "Example: 'Assets/Textures/sprite.png'"
+                );
         }
 
         return type switch
@@ -616,9 +689,12 @@ public class Files : IFiles
 
                    // ----------------------------------
 
-                   var _ => throw new RuntimeException( $"Invalid path type: {type}\nValid types are: " +
-                                                        $"Classpath, Internal, Absolute, " +
-                                                        $"Assembly, External, Local" )
+                   var _ => throw new LughRuntimeException
+                                (
+                                 $"Invalid path type: {type}\nValid types are: " +
+                                 $"Classpath, Internal, Absolute, " +
+                                 $"Assembly, External, Local"
+                                )
                };
     }
 
@@ -660,9 +736,13 @@ public class Files : IFiles
     /// </returns>
     public static string StripExtension( string filename, string extension )
     {
-        if ( filename.ToLower().EndsWith( extension.ToLower() ) )
+        var cultureInfo = new CultureInfo( CultureInfo.InvariantCulture.Name );
+        
+        if ( filename.ToLower(cultureInfo).EndsWith( extension.ToLower( cultureInfo ),
+                                                     StringComparison.OrdinalIgnoreCase ) )
         {
-            filename = filename.Substring( 0, filename.Length - extension.Length );
+//            filename = filename.Substring( 0, filename.Length - extension.Length );
+            filename = filename[ ..^extension.Length ];
         }
 
         return filename;
@@ -683,8 +763,9 @@ public class Files : IFiles
     public static string StripAssetsPath( string path )
     {
         int position = path.IndexOf( ContentRoot, StringComparison.Ordinal );
-
-        return path.Substring( position, path.Length - position );
+        int length   = path.Length - position;
+        
+        return path.Substring( position, length );
     }
 
     /// <summary>
@@ -791,14 +872,13 @@ public class Files : IFiles
     /// </summary>
     public Skin GetDefaultLughSkin()
     {
-        using var stream = GetClassPathStream( "Assets/Skins/uiskin.json" )
-                        ?? throw new RuntimeException( "Embedded resource 'Assets/Skins/uiskin.json' not found." );
+        using Stream stream = GetClassPathStream( "Assets/Skins/uiskin.json" )
+                           ?? throw new LughRuntimeException
+                                  ( "Embedded resource 'Assets/Skins/uiskin.json' not found." );
 
         using var reader = new StreamReader( stream );
-        
-        
-        
-        
+
+
         string text = reader.ReadToEnd();
 
         Logger.Debug( text );
@@ -814,7 +894,7 @@ public class Files : IFiles
     {
         GC.SuppressFinalize( this );
     }
-    
+
     // ========================================================================
     // ========================================================================
 

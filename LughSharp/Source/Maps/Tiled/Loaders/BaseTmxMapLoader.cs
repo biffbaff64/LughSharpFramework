@@ -133,7 +133,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     {
         if ( XmlRoot == null )
         {
-            throw new RuntimeException( "XmlRoot must be set before loading the map!" );
+            throw new LughRuntimeException( "XmlRoot must be set before loading the map!" );
         }
 
         Map                 = new TiledMap();
@@ -203,7 +203,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
         if ( childCount == 0 )
         {
-            throw new RuntimeException( "No layers found in map!" );
+            throw new LughRuntimeException( "No layers found in map!" );
         }
 
         for ( int i = 0, j = childCount; i < j; i++ )
@@ -254,19 +254,19 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// such as version, dimensions, tile configurations, render settings, and additional
     /// properties, storing them into the map's property collection.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the map object is null during the loading process.
     /// </exception>
     private void FetchMapAttributes()
     {
         if ( Map == null )
         {
-            throw new RuntimeException( "Map cannot be null!" );
+            throw new LughRuntimeException( "Map cannot be null!" );
         }
 
         if ( XmlRoot == null )
         {
-            throw new RuntimeException( "XmlRoot must be set before loading the map!" );
+            throw new LughRuntimeException( "XmlRoot must be set before loading the map!" );
         }
 
         Map.Properties.Put( "version", XmlRoot.GetAttribute( "version" ) );
@@ -352,7 +352,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// <param name="imageResolver">
     /// The resolver used to handle image references within the layer group.
     /// </param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the specified XML element is not recognized as a valid layer type.
     /// </exception>
     protected void LoadLayer( TiledMap map, MapLayers parentLayers,
@@ -402,7 +402,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             //@formatter:on
 
             default:
-                throw new RuntimeException( $"Unknown layer type: {element?.Name}" );
+                throw new LughRuntimeException( $"Unknown layer type: {element?.Name}" );
         }
     }
 
@@ -619,7 +619,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
                 if ( texture == null )
                 {
-                    throw new RuntimeException( "Image Texture cannot be null!" );
+                    throw new LughRuntimeException( "Image Texture cannot be null!" );
                 }
 
                 y -= texture.GetRegionHeight();
@@ -845,7 +845,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// The target <see cref="MapProperties"/> object in which to store the loaded properties.
     /// </param>
     /// <param name="element">The XML element containing the properties data.</param>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when an error occurs during the property loading process.
     /// </exception>
     protected void LoadProperties( MapProperties? properties, XmlReader.Element? element )
@@ -880,7 +880,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                     }
                     catch ( Exception )
                     {
-                        throw new RuntimeException( $"Error parsing property {name} "
+                        throw new LughRuntimeException( $"Error parsing property {name} "
                                                   + $"of type object with value: [{value}]" );
                     }
                 }
@@ -919,7 +919,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// <returns>
     /// The converted property value as an object of the specified type, or null if the value is null.
     /// </returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown when the specified type is neither null nor one of the supported types
     /// (string, int, float, bool, color, or colour).
     /// </exception>
@@ -957,7 +957,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             }
 
             default:
-                throw new RuntimeException( $"Wrong type given for property {name}, "
+                throw new LughRuntimeException( $"Wrong type given for property {name}, "
                                           + $"given : {type}, supported : string, bool, "
                                           + $"int, float, color ( or colour )" );
         }
@@ -1025,7 +1025,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// <param name="width">The width of the tile layer, used to determine the number of tile IDs.</param>
     /// <param name="height">The height of the tile layer, used to determine the number of tile IDs.</param>
     /// <returns>An array of uint values representing the tile IDs in the layer.</returns>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if the required "data" element is missing or if the tile encoding type
     /// is unsupported (e.g., "XML") within the provided TMX map layer.
     /// </exception>
@@ -1035,7 +1035,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
         if ( data == null )
         {
-            throw new RuntimeException( "data is missing" );
+            throw new LughRuntimeException( "data is missing" );
         }
 
         string? encoding = data.GetAttribute( "encoding", null );
@@ -1043,7 +1043,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
         if ( encoding == null )
         {
             // no 'encoding' attribute means that the encoding is XML
-            throw new RuntimeException( "Unsupported encoding (XML) for TMX Layer Data" );
+            throw new LughRuntimeException( "Unsupported encoding (XML) for TMX Layer Data" );
         }
 
         var ids = new uint[ width * height ];
@@ -1088,7 +1088,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
                         default:
                             throw
-                                new RuntimeException( $"Unrecognised compression ({compression}) for TMX Layer Data" );
+                                new LughRuntimeException( $"Unrecognised compression ({compression}) for TMX Layer Data" );
                     }
 
                     var temp = new byte[ 4 ];
@@ -1114,7 +1114,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                             if ( read != temp.Length )
                             {
                                 throw
-                                    new RuntimeException( "Error Reading TMX Layer Data: Premature end of tile data" );
+                                    new LughRuntimeException( "Error Reading TMX Layer Data: Premature end of tile data" );
                             }
 
                             ids[ ( y * width ) + x ] = ( uint )( MathUtils.UnsignedByteToInt( temp[ 0 ] )
@@ -1126,7 +1126,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 }
                 catch ( IOException e )
                 {
-                    throw new RuntimeException( $"Error Reading TMX Layer Data - IOException: {e.Message}" );
+                    throw new LughRuntimeException( $"Error Reading TMX Layer Data - IOException: {e.Message}" );
                 }
                 finally
                 {
@@ -1137,7 +1137,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
             {
                 // any other value of 'encoding' is one we're not aware of, probably
                 // a feature of a future version of Tiled or another editor
-                throw new RuntimeException( $"Unrecognised encoding ({encoding}) for TMX Layer Data" );
+                throw new LughRuntimeException( $"Unrecognised encoding ({encoding}) for TMX Layer Data" );
             }
         }
 
@@ -1212,7 +1212,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
     /// <param name="element"> The node referencing the TSX tileset file. </param>
     /// <param name="tmxFile"> The current TMX file being processed. </param>
     /// <param name="imageResolver"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     protected void LoadTileSet( XmlReader.Element? element, FileInfo tmxFile, IImageResolver imageResolver )
     {
         if ( element is { Name: "tileset" } )
@@ -1233,7 +1233,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
                 if ( tsx == null )
                 {
-                    throw new RuntimeException( $"Unable to find tileset source file: {source}" );
+                    throw new LughRuntimeException( $"Unable to find tileset source file: {source}" );
                 }
 
                 try
@@ -1252,7 +1252,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
                 }
                 catch ( SerializationException )
                 {
-                    throw new RuntimeException( "Error parsing external tileset." );
+                    throw new LughRuntimeException( "Error parsing external tileset." );
                 }
             }
             else
@@ -1302,7 +1302,7 @@ public abstract class BaseTmxMapLoader< TP > : AsynchronousAssetLoader
 
             if ( ( tileElements = element?.GetChildrenByName( "tile" ) ) == null )
             {
-                throw new RuntimeException( "Error: No tile elements found!" );
+                throw new LughRuntimeException( "Error: No tile elements found!" );
             }
 
             var tileContext = new TileContext

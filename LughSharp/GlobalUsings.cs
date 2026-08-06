@@ -53,7 +53,6 @@ global using LughSharp.Source.Graphics;
 global using LughSharp.Source.Input;
 global using LughSharp.Source.Maps;
 global using LughSharp.Source.Maths;
-global using LughSharp.Source.Mock;
 global using LughSharp.Source.Network;
 global using LughSharp.Source.Utils;
 global using LughSharp.Source.Utils.Exceptions;

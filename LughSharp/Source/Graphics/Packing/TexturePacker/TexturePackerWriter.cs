@@ -59,7 +59,7 @@ public class TexturePackerWriter
     /// <param name="outputDir"></param>
     /// <param name="scaledPackFileName"></param>
     /// <param name="pages"></param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     /// <exception cref="NullReferenceException"></exception>
     /// <exception cref="Exception"></exception>
     public void WriteImages( string outputDir, string scaledPackFileName, List< TexturePackerPage > pages )
@@ -70,7 +70,7 @@ public class TexturePackerWriter
 
         if ( packDir == null )
         {
-            throw new RuntimeException( "Error creating pack directory." );
+            throw new LughRuntimeException( "Error creating pack directory." );
         }
 
         var fileIndex = 1;
@@ -155,7 +155,7 @@ public class TexturePackerWriter
 
             // Create output directories if needed
             Directory.CreateDirectory( Path.GetDirectoryName( outputFile )
-                                    ?? throw new RuntimeException( "Error creating output directory" ) );
+                                    ?? throw new LughRuntimeException( "Error creating output directory" ) );
 
             page.ImageName = Path.GetFileName( outputFile );
 
@@ -501,7 +501,7 @@ public class TexturePackerWriter
 
                         if ( region.Name.Equals( rectName ) )
                         {
-                            throw new RuntimeException( $"A region with the name \"{rectName}\" " +
+                            throw new LughRuntimeException( $"A region with the name \"{rectName}\" " +
                                                         $"has already been packed: {rect.Name}" );
                         }
                     }
@@ -545,7 +545,7 @@ public class TexturePackerWriter
                 {
                     if ( ( rect.Name == null ) || ( rect.Name.Length == 0 ) )
                     {
-                        throw new RuntimeException( "rect.Name must not be null or empty" );
+                        throw new LughRuntimeException( "rect.Name must not be null or empty" );
                     }
 
                     if ( _settings.LegacyOutput )
@@ -566,7 +566,7 @@ public class TexturePackerWriter
                     {
                         if ( ( alias.Name == null ) || ( alias.Name.Length == 0 ) )
                         {
-                            throw new RuntimeException( "alias.Name must not be null or empty" );
+                            throw new LughRuntimeException( "alias.Name must not be null or empty" );
                         }
 
                         var aliasRect = new TexturePackerRect();
@@ -749,7 +749,7 @@ public class TexturePackerWriter
             }
         }
 
-        throw new RuntimeException( $"Decode for ImageFormat {format} not found" );
+        throw new LughRuntimeException( $"Decode for ImageFormat {format} not found" );
     }
 
     /// <summary>

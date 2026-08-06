@@ -103,41 +103,41 @@ public class InputTest : InputAdapter, ILughTest
     }
 
     /// <inheritdoc />
-    public override bool OnKeyTyped( char character )
+    public override bool OnKeyTyped( char ch )
     {
-        Logger.Debug( $"key typed: '{character}'" );
+        Logger.Debug( $"key typed: '{ch}'" );
 
         return false;
     }
 
     /// <inheritdoc />
-    public override bool OnTouchDown( int x, int y, int pointer, int button )
+    public override bool OnTouchDown( int screenX, int screenY, int ptr, int button )
     {
-        Logger.Debug( $"touch down: {x}, {y}, button: {IInput.Keys.NameOf( button, true )}" );
+        Logger.Debug( $"touch down: {screenX}, {screenY}, button: {IInput.Keys.NameOf( button, true )}" );
 
         return false;
     }
 
     /// <inheritdoc />
-    public override bool OnTouchUp( int x, int y, int pointer, int button )
+    public override bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
-        Logger.Debug( $"touch up: {x}, {y}, button: {IInput.Keys.NameOf( button, true )}" );
+        Logger.Debug( $"touch up: {screenX}, {screenY}, button: {IInput.Keys.NameOf( button, true )}" );
 
         return false;
     }
 
     /// <inheritdoc />
-    public override bool OnTouchDragged( int x, int y, int pointer )
+    public override bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
-        Logger.Debug( $"touch dragged: {x}, {y}, pointer: {pointer}" );
+        Logger.Debug( $"touch dragged: {screenX}, {screenY}, pointer: {pointer}" );
 
         return false;
     }
 
     /// <inheritdoc />
-    public override bool OnMouseMoved( int x, int y )
+    public override bool OnMouseMoved( int screenX, int screenY )
     {
-        Logger.Debug( $"touch moved: {x}, {y}" );
+        Logger.Debug( $"touch moved: {screenX}, {screenY}" );
 
         return false;
     }

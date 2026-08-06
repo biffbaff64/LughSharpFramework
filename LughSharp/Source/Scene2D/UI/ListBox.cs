@@ -146,12 +146,12 @@ public class ListBox< T > : Widget, IStyleable< ListBoxStyle > where T : notnull
 
         if ( font == null )
         {
-            throw new RuntimeException( "Layout: supplied style has a null font!" );
+            throw new LughRuntimeException( "Layout: supplied style has a null font!" );
         }
 
         if ( selectedDrawable == null )
         {
-            throw new RuntimeException( "Layout: supplied style has a null selected drawable!" );
+            throw new LughRuntimeException( "Layout: supplied style has a null selected drawable!" );
         }
 
         ItemHeight =  font.GetCapHeight() - ( font.GetDescent() * 2 );

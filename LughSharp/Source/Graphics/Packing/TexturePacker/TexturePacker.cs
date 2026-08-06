@@ -165,7 +165,7 @@ public class TexturePacker
     /// </summary>
     /// <param name="rootDir"> The root folder of the source textures. </param>
     /// <param name="settings"> The <see cref="TexturePackerSettings"/> to use when packing. </param>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public TexturePacker( DirectoryInfo? rootDir, TexturePackerSettings settings )
     {
         _inputImages = [ ];
@@ -175,13 +175,13 @@ public class TexturePacker
         {
             if ( settings.MaxWidth != MathUtils.NextPowerOfTwo( settings.MaxWidth ) )
             {
-                throw new RuntimeException( $"If pot is true, maxWidth must be a power "
+                throw new LughRuntimeException( $"If pot is true, maxWidth must be a power "
                                           + $"of two: {settings.MaxWidth}" );
             }
 
             if ( settings.MaxHeight != MathUtils.NextPowerOfTwo( settings.MaxHeight ) )
             {
-                throw new RuntimeException( $"If pot is true, maxHeight must be a power "
+                throw new LughRuntimeException( $"If pot is true, maxHeight must be a power "
                                           + $"of two: {settings.MaxHeight}" );
             }
         }
@@ -190,13 +190,13 @@ public class TexturePacker
         {
             if ( ( settings.MaxWidth % 4 ) != 0 )
             {
-                throw new RuntimeException( $"If MultipleOfFour is true, maxWidth must be evenly "
+                throw new LughRuntimeException( $"If MultipleOfFour is true, maxWidth must be evenly "
                                           + $"divisible by 4: {settings.MaxWidth}" );
             }
 
             if ( ( settings.MaxHeight % 4 ) != 0 )
             {
-                throw new RuntimeException( $"If MultipleOfFour is true, maxHeight must be evenly "
+                throw new LughRuntimeException( $"If MultipleOfFour is true, maxHeight must be evenly "
                                           + $"divisible by 4: {settings.MaxHeight}" );
             }
         }
@@ -278,7 +278,7 @@ public class TexturePacker
         }
         catch ( Exception ex )
         {
-            throw new RuntimeException( "Error packing images.", ex );
+            throw new LughRuntimeException( "Error packing images.", ex );
         }
     }
 
@@ -375,7 +375,7 @@ public class TexturePacker
             }
             catch ( IOException ex )
             {
-                throw new RuntimeException( "Error writing pack file.", ex );
+                throw new LughRuntimeException( "Error writing pack file.", ex );
             }
 
             _imageProcessor.Clear();

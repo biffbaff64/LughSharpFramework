@@ -168,7 +168,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         }
         else
         {
-            throw new RuntimeException( "Buffer must be allocated direct." ); // Should never happen
+            throw new LughRuntimeException( "Buffer must be allocated direct." ); // Should never happen
         }
 
         BufferChanged();
@@ -191,7 +191,7 @@ public class InstanceBufferObjectSubData : IInstanceData
         }
         else
         {
-            throw new RuntimeException( "Buffer must be allocated direct." ); // Should never happen
+            throw new LughRuntimeException( "Buffer must be allocated direct." ); // Should never happen
         }
 
         BufferChanged();

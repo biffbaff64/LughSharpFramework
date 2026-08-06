@@ -577,7 +577,7 @@ public class SceneActions
 
         Logger.Debug( $"Created SequenceAction with {actions.Length} actions." );
 
-        foreach ( var act in actions )
+        foreach ( SceneAction act in actions )
         {
             Logger.Debug( $" - {act}" );
         }

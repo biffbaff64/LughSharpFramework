@@ -77,7 +77,7 @@ public class G3DEnvironment : AttributesGroup
         }
         else
         {
-            throw new RuntimeException( "Unknown light type" );
+            throw new LughRuntimeException( "Unknown light type" );
         }
 
         return this;
@@ -161,7 +161,7 @@ public class G3DEnvironment : AttributesGroup
         }
         else
         {
-            throw new RuntimeException( "Unknown light type" );
+            throw new LughRuntimeException( "Unknown light type" );
         }
 
         return this;

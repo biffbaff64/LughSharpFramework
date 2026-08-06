@@ -225,7 +225,7 @@ public class IndexBufferObject : IIndexData
     {
         if ( BufferID == 0 )
         {
-            throw new RuntimeException( "No buffer allocated!" );
+            throw new LughRuntimeException( "No buffer allocated!" );
         }
 
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, ( uint )BufferID );

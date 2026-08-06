@@ -463,7 +463,7 @@ public class SpriteBatch : IBatch
     /// This method handles binding the appropriate Vertex Buffer Object (VBO), Vertex Array Object (VAO),
     /// textures, shaders, and performs the actual rendering of the accumulated sprites.
     /// </summary>
-    /// <exception cref="RuntimeException">
+    /// <exception cref="LughRuntimeException">
     /// Thrown if there is no OpenGL context available on the current thread, if
     /// the index buffer (`Idx`) is less than zero, or if certain rendering conditions are not met.
     /// </exception>
@@ -837,7 +837,7 @@ public class SpriteBatch : IBatch
         {
             Logger.Debug( $"Invalid Texture: {texture.GetType().Name}" );
 
-            throw new RuntimeException( "Invalid image type" );
+            throw new LughRuntimeException( "Invalid image type" );
         }
     }
 

@@ -48,14 +48,14 @@ public class LibraryVersion
     /// <summary>
     /// Gets the Library Version from the Assembly.
     /// </summary>
-    /// <exception cref="RuntimeException"></exception>
+    /// <exception cref="LughRuntimeException"></exception>
     public LibraryVersion()
     {
         _version = Assembly.GetEntryAssembly()?.GetName().Version;
 
         if ( _version == null )
         {
-            throw new RuntimeException( "NULL Assembly Version!" );
+            throw new LughRuntimeException( "NULL Assembly Version!" );
         }
 
         try
@@ -76,7 +76,7 @@ public class LibraryVersion
         }
         catch ( Exception e )
         {
-            throw new RuntimeException( $"Invalid version {_version.ToString().Split( "\\." )}", e );
+            throw new LughRuntimeException( $"Invalid version {_version.ToString().Split( "\\." )}", e );
         }
     }
 

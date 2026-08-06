@@ -72,11 +72,11 @@ public partial class GLBindings
             }
             catch ( Exception ex )
             {
-                throw new RuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
+                throw new LughRuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
             }
         }
 
-        throw new RuntimeException( $"Failed to load {functionName}" );
+        throw new LughRuntimeException( $"Failed to load {functionName}" );
     }
 
     // ========================================================================
@@ -103,11 +103,11 @@ public partial class GLBindings
             }
             catch ( Exception ex )
             {
-                throw new RuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
+                throw new LughRuntimeException( $"Error creating delegate for {functionName}: {ex.Message}" );
             }
         }
 
-        throw new RuntimeException( $"Failed to load {functionName}" );
+        throw new LughRuntimeException( $"Failed to load {functionName}" );
     }
 
     // ========================================================================

@@ -60,11 +60,11 @@ public class RotateToAction : TemporalAction
     public float Rotation             { get; set; }
     public bool  UseShortestDirection { get; set; }
 
-    protected override void Begin()
+    protected override void BeginAction()
     {
         if ( Target == null )
         {
-            throw new RuntimeException( "Cannot Begin with null Target Actor!" );
+            throw new LughRuntimeException( "Cannot Begin with null Target Actor!" );
         }
 
         Start = Target.Rotation;
