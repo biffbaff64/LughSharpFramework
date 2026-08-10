@@ -538,7 +538,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
         /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
         /// <param name="from"> The actor that the mouse cursor or touch is entering. </param>
-        public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? from )
+        public override void EnterActor( InputEvent? ev, float x, float y, int pointer, Actor? from )
         {
             if ( pointer == -1 )
             {
@@ -556,7 +556,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
         /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
         /// <param name="to"> The actor that the mouse cursor or touch is exiting. </param>
-        public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? to )
+        public override void ExitActor( InputEvent? ev, float x, float y, int pointer, Actor? to )
         {
             if ( pointer == -1 )
             {

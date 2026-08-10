@@ -821,7 +821,6 @@ LUGHSHARP/SOURCE/MATHS
     -      -      - DONE - BSpline
     -      -      - DONE - CatmullRomSpline
     -      -      - DONE - Circle
-    - DONE - DONE - DONE - Compare
     -      -      - DONE - ConvexHull
     -      -      - DONE - CumulativeDistribution
     -      -      - DONE - DelaunayTriangulator        Unsure about method ComputeTriangles()
@@ -957,6 +956,8 @@ LUGHSHARP/SOURCE/PHYSICS - DONE
       ----   ----   ------
     - DONE - DONE - DONE - CollisionFilter
     - DONE - DONE - DONE - Dir
+    - DONE - DONE - DONE - Direction
+    - DONE - DONE - DONE - Movement
     - DONE - DONE - DONE - PhysicsBodyType
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -29,7 +29,7 @@ namespace LughSharp.Source.Maths;
 /// for use when that is all that is needed.
 /// </summary>
 [PublicAPI]
-public record Vec2< T >
+public class Vec2< T >
 {
     public T X { get; set; } = default!;
     public T Y { get; set; } = default!;
@@ -40,7 +40,7 @@ public record Vec2< T >
 /// for use when that is all that is needed.
 /// </summary>
 [PublicAPI]
-public record Vec3< T >
+public class Vec3< T >
 {
     public T X { get; set; } = default!;
     public T Y { get; set; } = default!;

@@ -44,10 +44,10 @@ public class DialogInputListener : InputListener
     /// Called when a key goes down. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    /// <param name="inputEvent"> The input event. </param>
+    /// <param name="ev"> The input event. </param>
     /// <param name="keycode"> The keycode. </param>
     /// <returns>True if the event was handled.</returns>
-    public override bool OnKeyDown( InputEvent? inputEvent, int keycode )
+    public override bool OnKeyDown( InputEvent? ev, int keycode )
     {
         if ( keycode == _thisKey )
         {

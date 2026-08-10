@@ -46,6 +46,8 @@ public class Bresenham2
         NewObjectFactory = GetNewObject
     };
 
+    // ========================================================================
+    
     /// <summary>
     /// Returns a list of <see cref="GridPoint2"/> instances along the given line,
     /// at integer coordinates.

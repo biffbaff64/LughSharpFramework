@@ -1171,7 +1171,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         /// <param name="y"> The y coordinate of the mouse cursor or touch. </param>
         /// <param name="pointer"> The pointer index of the mouse cursor or touch. </param>
         /// <param name="toActor"> The actor that the mouse cursor or touch is exiting. </param>
-        public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
+        public override void ExitActor( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
             if ( ( toActor == null ) || !_parent.IsAscendantOf( toActor ) )
             {

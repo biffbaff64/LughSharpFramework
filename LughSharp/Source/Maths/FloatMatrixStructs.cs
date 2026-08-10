@@ -24,6 +24,9 @@
 
 namespace LughSharp.Source.Maths;
 
+/// <summary>
+/// Represents a 2x2 matrix with single-precision floating-point elements.
+/// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
 public struct Matrix2F( float m11, float m12, float m21, float m22 )
@@ -34,6 +37,9 @@ public struct Matrix2F( float m11, float m12, float m21, float m22 )
     public float M22 = m22;
 }
 
+/// <summary>
+/// Represents a 3x3 matrix with single-precision floating-point elements.
+/// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
 public struct Matrix3F(
@@ -58,6 +64,9 @@ public struct Matrix3F(
     public float M33 = m33;
 }
 
+/// <summary>
+/// Represents a 4x4 matrix with single-precision floating-point elements.
+/// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
 public struct Matrix4F(
@@ -98,4 +107,3 @@ public struct Matrix4F(
 
 // ========================================================================
 // ========================================================================
-

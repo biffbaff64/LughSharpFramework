@@ -62,7 +62,7 @@ public class DragListener : InputListener
     // ========================================================================
 
     /// <inheritdoc />
-    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int ptr, int button )
     {
         if ( ev == null )
         {
@@ -74,12 +74,12 @@ public class DragListener : InputListener
             return false;
         }
 
-        if ( ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
+        if ( ( ptr == 0 ) && ( Button != -1 ) && ( button != Button ) )
         {
             return false;
         }
 
-        _pressedPointer = pointer;
+        _pressedPointer = ptr;
         TouchDownX      = x;
         TouchDownY      = y;
         StageTouchDownX = ev.StageX;
@@ -89,14 +89,14 @@ public class DragListener : InputListener
     }
 
     /// <inheritdoc />
-    public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
+    public override void OnTouchDragged( InputEvent? ev, float x, float y, int ptr )
     {
         if ( ev == null )
         {
             return;
         }
 
-        if ( pointer != _pressedPointer )
+        if ( ptr != _pressedPointer )
         {
             return;
         }
@@ -109,7 +109,7 @@ public class DragListener : InputListener
             DragStartX = x;
             DragStartY = y;
 
-            DragStart( ev, x, y, pointer );
+            DragStart( ev, x, y, ptr );
 
             DragX = x;
             DragY = y;
@@ -122,23 +122,23 @@ public class DragListener : InputListener
             DragX      = x;
             DragY      = y;
 
-            Drag( ev, x, y, pointer );
+            Drag( ev, x, y, ptr );
         }
     }
 
     /// <inheritdoc />
-    public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+    public override void OnTouchUp( InputEvent? ev, float x, float y, int ptr, int button )
     {
         if ( ev == null )
         {
             return;
         }
 
-        if ( pointer == _pressedPointer )
+        if ( ptr == _pressedPointer )
         {
             if ( IsDragging )
             {
-                DragStop( ev, x, y, pointer );
+                DragStop( ev, x, y, ptr );
             }
 
             Cancel();
@@ -150,8 +150,8 @@ public class DragListener : InputListener
     /// <param name="ev"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    /// <param name="pointer"></param>
-    public virtual void DragStart( InputEvent ev, float x, float y, int pointer )
+    /// <param name="pointerId"></param>
+    public virtual void DragStart( InputEvent ev, float x, float y, int pointerId )
     {
     }
 
@@ -160,8 +160,8 @@ public class DragListener : InputListener
     /// <param name="ev"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    /// <param name="pointer"></param>
-    public virtual void Drag( InputEvent ev, float x, float y, int pointer )
+    /// <param name="pointerId"></param>
+    public virtual void Drag( InputEvent ev, float x, float y, int pointerId )
     {
     }
 
@@ -170,8 +170,8 @@ public class DragListener : InputListener
     /// <param name="ev"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    /// <param name="pointer"></param>
-    public virtual void DragStop( InputEvent ev, float x, float y, int pointer )
+    /// <param name="pointerId"></param>
+    public virtual void DragStop( InputEvent ev, float x, float y, int pointerId )
     {
     }
 

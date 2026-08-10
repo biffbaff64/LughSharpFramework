@@ -39,7 +39,7 @@ public class CountdownEventAction< T > : EventAction< T > where T : Event
         _count = count;
     }
 
-    public override bool HandleDelegate( Event ev )
+    public override bool HandleDelegate( Event e )
     {
         _current++;
 

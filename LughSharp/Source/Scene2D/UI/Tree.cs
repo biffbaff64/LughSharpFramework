@@ -1647,16 +1647,16 @@ public class Tree< TNode, TValue > : WidgetGroup
         }
 
         /// <inheritdoc />
-        public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
+        public override void EnterActor( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
         {
-            base.Enter( ev, x, y, pointer, fromActor );
+            base.EnterActor( ev, x, y, pointer, fromActor );
             _tree.OverNode = _tree.GetNodeAt( y );
         }
 
         /// <inheritdoc />
-        public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
+        public override void ExitActor( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
-            base.Exit( ev, x, y, pointer, toActor );
+            base.ExitActor( ev, x, y, pointer, toActor );
 
             if ( ( toActor == null ) || !toActor.IsDescendantOf( _tree ) )
             {

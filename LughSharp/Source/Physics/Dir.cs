@@ -25,28 +25,32 @@
 namespace LughSharp.Source.Physics;
 
 [PublicAPI]
-public class Dir
+public enum Dir
 {
-    // ------------------------------------------
-    public const int Still = 0;
-    public const int Up    = 1;
-    public const int Down  = -1;
-    public const int Left  = -1;
-    public const int Right = 1;
-    
-    // ------------------------------------------
-    public const int Forwards  = 1;
-    public const int Backwards = -1;
-    
-    // ------------------------------------------
-    public const int Horizontal = 1;
-    public const int Vertical   = -1;
-    
-    // ------------------------------------------
-    public const int In  = 1;
-    public const int Out = -1;
-    
-    // ------------------------------------------
+    // ----------------------------
+    Still,
+    Up,
+    Down,
+    Left,
+    Right,
+
+    // ----------------------------
+    Forwards,
+    Backwards,
+
+    // ----------------------------
+    Horizontal,
+    Vertical,
+
+    // ----------------------------
+    In,
+    Out,
+
+    // ----------------------------
+    UpLeft,
+    UpRight,
+    DownLeft,
+    DownRight,
 }
 
 // ============================================================================

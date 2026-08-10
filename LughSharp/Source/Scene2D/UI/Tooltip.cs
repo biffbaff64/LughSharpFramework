@@ -141,7 +141,7 @@ public class Tooltip< T > : InputListener where T : Actor
         Container.SetOrigin( point.X, point.Y );
     }
 
-    public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
+    public override void EnterActor( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
     {
         if ( ( pointer != -1 ) || Engine.Input.IsTouched() )
         {
@@ -160,7 +160,7 @@ public class Tooltip< T > : InputListener where T : Actor
         Manager.Enter( this );
     }
 
-    public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
+    public override void ExitActor( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
     {
         if ( ( toActor != null ) && toActor.IsDescendantOf( ev?.ListenerActor ) )
         {

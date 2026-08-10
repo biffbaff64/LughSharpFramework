@@ -53,11 +53,11 @@ public class ChangeListener : IEventListener
     /// <summary>
     /// Handles any <see cref="ChangeEvent"/>s generated.
     /// </summary>
-    /// <param name="ev"></param>
+    /// <param name="e"></param>
     /// <returns></returns>
-    public virtual bool Handle( Event ev )
+    public virtual bool Handle( Event e )
     {
-        if ( ev is ChangeEvent changeEvent )
+        if ( e is ChangeEvent changeEvent )
         {
             Changed( changeEvent, changeEvent.TargetActor );
         }

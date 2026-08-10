@@ -142,6 +142,19 @@ public class ActorGestureListener : IEventListener
 
                 return true;
             }
+
+            case InputEvent.EventType.MouseMoved:
+            case InputEvent.EventType.Enter:
+            case InputEvent.EventType.Exit:
+            case InputEvent.EventType.Scrolled:
+            case InputEvent.EventType.KeyDown:
+            case InputEvent.EventType.KeyUp:
+            case InputEvent.EventType.KeyTyped:
+            case null:
+                break;
+
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
         return false;
@@ -153,9 +166,9 @@ public class ActorGestureListener : IEventListener
     /// <param name="ev"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    /// <param name="pointer"></param>
+    /// <param name="pointerId"></param>
     /// <param name="button"></param>
-    public virtual void OnTouchDown( InputEvent ev, float x, float y, int pointer, int button )
+    public virtual void OnTouchDown( InputEvent ev, float x, float y, int pointerId, int button )
     {
     }
 
@@ -165,9 +178,9 @@ public class ActorGestureListener : IEventListener
     /// <param name="ev"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    /// <param name="pointer"></param>
+    /// <param name="pointerId"></param>
     /// <param name="button"></param>
-    public virtual void OnTouchUp( InputEvent ev, float x, float y, int pointer, int button )
+    public virtual void OnTouchUp( InputEvent ev, float x, float y, int pointerId, int button )
     {
     }
 
@@ -215,9 +228,9 @@ public class ActorGestureListener : IEventListener
     /// <param name="ev"></param>
     /// <param name="x"></param>
     /// <param name="y"></param>
-    /// <param name="pointer"></param>
+    /// <param name="pointerId"></param>
     /// <param name="button"></param>
-    public virtual void OnPanStop( InputEvent ev, float x, float y, int pointer, int button )
+    public virtual void OnPanStop( InputEvent ev, float x, float y, int pointerId, int button )
     {
     }
 
@@ -309,10 +322,10 @@ public class ActorGestureListener : IEventListener
             return true;
         }
 
-        public bool PanStop( float stageX, float stageY, int pointer, int button )
+        public bool PanStop( float stageX, float stageY, int pointerId, int button )
         {
             _parent._actor!.StageToLocalCoordinates( _tmpCoords.Set( stageX, stageY ) );
-            _parent.OnPanStop( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, pointer, button );
+            _parent.OnPanStop( _parent._inputEvent!, _tmpCoords.X, _tmpCoords.Y, pointerId, button );
 
             return true;
         }

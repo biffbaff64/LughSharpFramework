@@ -100,20 +100,20 @@ public class ClickListener : InputListener
     /// over this actor, until touchUp is received. Also when true is returned,
     /// the event is handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int ptr, int button )
     {
         if ( Pressed )
         {
             return false;
         }
 
-        if ( ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
+        if ( ( ptr == 0 ) && ( Button != -1 ) && ( button != Button ) )
         {
             return false;
         }
 
         Pressed        = true;
-        PressedPointer = pointer;
+        PressedPointer = ptr;
         PressedButton  = button;
         TouchDownX     = x;
         TouchDownY     = y;
@@ -127,14 +127,14 @@ public class ClickListener : InputListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchDragged event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
+    public override void OnTouchDragged( InputEvent? inputEvent, float x, float y, int pointer )
     {
         if ( ( pointer != PressedPointer ) || _cancelled )
         {
             return;
         }
 
-        Pressed = IsOver( ev?.ListenerActor, x, y );
+        Pressed = IsOver( inputEvent?.ListenerActor, x, y );
 
         if ( !Pressed )
         {
@@ -148,9 +148,9 @@ public class ClickListener : InputListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
+    public override void OnTouchUp( InputEvent? ev, float x, float y, int ptr, int button )
     {
-        if ( pointer == PressedPointer )
+        if ( ptr == PressedPointer )
         {
             // If the stage cancels the touch focus (e.g. scrolling started), flag it!
             if ( ev is { TouchFocusCancel: true } ) _cancelled = true;
@@ -160,7 +160,7 @@ public class ClickListener : InputListener
                 bool touchUpOver = IsOver( ev?.ListenerActor, x, y );
 
                 // Ignore touch up if the wrong mouse button.
-                if ( touchUpOver && ( pointer == 0 ) && ( Button != -1 ) && ( button != Button ) )
+                if ( touchUpOver && ( ptr == 0 ) && ( Button != -1 ) && ( button != Button ) )
                 {
                     touchUpOver = false;
                 }
@@ -196,11 +196,11 @@ public class ClickListener : InputListener
     /// <param name="ev"> The input event containing information about the cursor movement. May be null if not provided. </param>
     /// <param name="x"> The x-coordinate of the cursor or touch point relative to the actor's origin. </param>
     /// <param name="y"> The y-coordinate of the cursor or touch point relative to the actor's origin. </param>
-    /// <param name="pointer"> The pointer index of the touch event. </param>
+    /// <param name="ptr"> The pointer index of the touch event. </param>
     /// <param name="fromActor"> May be null. </param>
-    public override void Enter( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
+    public override void EnterActor( InputEvent? ev, float x, float y, int ptr, Actor? fromActor )
     {
-        if ( ( pointer == -1 ) && !_cancelled )
+        if ( ( ptr == -1 ) && !_cancelled )
         {
             _over = true;
         }
@@ -217,7 +217,7 @@ public class ClickListener : InputListener
     /// <param name="pointer"> The pointer index of the touch event. </param>
     /// <param name="toActor"> May be null. </param>
     /// <see cref="InputEvent "/>
-    public override void Exit( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
+    public override void ExitActor( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
     {
         if ( ( pointer == -1 ) && !_cancelled )
         {

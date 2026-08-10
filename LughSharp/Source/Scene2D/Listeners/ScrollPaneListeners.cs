@@ -41,7 +41,7 @@ public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListene
     /// Called when the mouse wheel has been scrolled. When true is returned,
     /// the event is handled in <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override bool OnScrolled( InputEvent? inputEvent, float x, float y, float scrollAmountX, float scrollAmountY )
+    public override bool OnScrolled( InputEvent? ev, float x, float y, float amountX, float amountY )
     {
         Guard.Against.Null( _parent );
 
@@ -51,21 +51,21 @@ public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListene
         {
             if ( _parent!.IsScrollY )
             {
-                if ( !_parent!.IsScrollX && ( scrollAmountY == 0 ) )
+                if ( !_parent!.IsScrollX && ( amountY == 0 ) )
                 {
-                    scrollAmountY = scrollAmountX;
+                    amountY = amountX;
                 }
             }
             else
             {
-                if ( _parent!.IsScrollX && ( scrollAmountX == 0 ) )
+                if ( _parent!.IsScrollX && ( amountX == 0 ) )
                 {
-                    scrollAmountX = scrollAmountY;
+                    amountX = amountY;
                 }
             }
 
-            _parent!.ScrollAmountY += _parent!.GetMouseWheelY() * scrollAmountY;
-            _parent!.ScrollAmountX += _parent!.GetMouseWheelX() * scrollAmountX;
+            _parent!.ScrollAmountY += _parent!.GetMouseWheelY() * amountY;
+            _parent!.ScrollAmountX += _parent!.GetMouseWheelX() * amountX;
         }
         else
         {
@@ -100,14 +100,14 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     /// over this actor, until touchUp is received. Also when true is returned,
     /// the event is handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override bool OnTouchDown( InputEvent? inputEvent, float x, float y, int pointer, int button )
+    public override bool OnTouchDown( InputEvent? ev, float x, float y, int ptr, int button )
     {
         Guard.Against.Null( _parent );
 
         Logger.Checkpoint();
         
         if ( ( _parent.DraggingPointer != -1 )
-            || ( ( pointer == 0 ) && ( button != 0 ) ) )
+            || ( ( ptr == 0 ) && ( button != 0 ) ) )
         {
             return false;
         }
@@ -128,7 +128,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
           && _parent.IsScrollX
           && _parent.HScrollBounds.Contains( x, y ) )
         {
-            inputEvent?.Stop();
+            ev?.Stop();
             _parent.SetScrollbarsVisible( true );
 
             if ( _parent.HKnobBounds.Contains( x, y ) )
@@ -136,7 +136,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
                 _parent.LastPoint.Set( x, y );
                 _handlePosition          = _parent.HKnobBounds.X;
                 _parent.TouchScrollH    = true;
-                _parent.DraggingPointer = pointer;
+                _parent.DraggingPointer = ptr;
 
                 return true;
             }
@@ -150,7 +150,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
           && _parent.IsScrollY
           && _parent.VScrollBounds.Contains( x, y ) )
         {
-            inputEvent?.Stop();
+            ev?.Stop();
             _parent.SetScrollbarsVisible( true );
 
             if ( _parent.VKnobBounds.Contains( x, y ) )
@@ -158,7 +158,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
                 _parent.LastPoint.Set( x, y );
                 _handlePosition          = _parent.VKnobBounds.Y;
                 _parent.TouchScrollV    = true;
-                _parent.DraggingPointer = pointer;
+                _parent.DraggingPointer = ptr;
 
                 return true;
             }
@@ -176,11 +176,11 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     /// if touchDown previously returned true for the mouse button or touch.
     /// The touchUp event is always handled by <see cref="Event.SetHandled"/>.
     /// </summary>
-    public override void OnTouchUp( InputEvent? inputEvent, float x, float y, int pointer, int button )
+    public override void OnTouchUp( InputEvent? ev, float x, float y, int ptr, int button )
     {
         Guard.Against.Null( _parent );
 
-        if ( pointer != _parent!.DraggingPointer )
+        if ( ptr != _parent!.DraggingPointer )
         {
             return;
         }
@@ -288,12 +288,12 @@ public class ScrollPaneGestureListener : ActorGestureListener
     /// Handles scrolling of the content within the scroll pane, updates scroll values,
     /// enforces bounds, and optionally cancels touch focus if applicable.
     /// </summary>
-    /// <param name="inputEvent">The input event associated with the pan gesture.</param>
+    /// <param name="ev">The input event associated with the pan gesture.</param>
     /// <param name="x">The current x-coordinate of the gesture's drag.</param>
     /// <param name="y">The current y-coordinate of the gesture's drag.</param>
     /// <param name="deltaX">The change in the x-coordinate since the last update.</param>
     /// <param name="deltaY">The change in the y-coordinate since the last update.</param>
-    public override void OnPan( InputEvent inputEvent, float x, float y, float deltaX, float deltaY )
+    public override void OnPan( InputEvent ev, float x, float y, float deltaX, float deltaY )
     {
         Guard.Against.Null( _parent );
 
@@ -315,18 +315,18 @@ public class ScrollPaneGestureListener : ActorGestureListener
     /// Invoked when a fling gesture is detected. Manages the fling behavior of the scroll pane,
     /// applying velocity to the scroll position based on the fling gesture parameters.
     /// </summary>
-    /// <param name="inputEvent">The event associated with the fling gesture.</param>
-    /// <param name="x">The horizontal velocity of the fling. A positive value represents rightward motion.</param>
-    /// <param name="y">The vertical velocity of the fling. A positive value represents downward motion.</param>
+    /// <param name="ev">The event associated with the fling gesture.</param>
+    /// <param name="velocityX">The horizontal velocity of the fling. A positive value represents rightward motion.</param>
+    /// <param name="velocityY">The vertical velocity of the fling. A positive value represents downward motion.</param>
     /// <param name="button">The button involved in the fling gesture, if applicable.</param>
-    public override void OnFling( InputEvent inputEvent, float x, float y, int button )
+    public override void OnFling( InputEvent ev, float velocityX, float velocityY, int button )
     {
         Guard.Against.Null( _parent );
 
-        if ( ( Math.Abs( x ) > 150 ) && _parent!.IsScrollX )
+        if ( ( Math.Abs( velocityX ) > 150 ) && _parent!.IsScrollX )
         {
             _parent!.FlingTimer = _parent!.FlingTime;
-            _parent!.VelocityX  = x;
+            _parent!.VelocityX  = velocityX;
 
             if ( _parent!.CancelTouchFocus )
             {
@@ -334,10 +334,10 @@ public class ScrollPaneGestureListener : ActorGestureListener
             }
         }
 
-        if ( ( Math.Abs( y ) > 150 ) && _parent!.IsScrollY )
+        if ( ( Math.Abs( velocityY ) > 150 ) && _parent!.IsScrollY )
         {
             _parent!.FlingTimer = _parent!.FlingTime;
-            _parent!.VelocityY  = -y;
+            _parent!.VelocityY  = -velocityY;
 
             if ( _parent!.CancelTouchFocus )
             {
@@ -351,19 +351,19 @@ public class ScrollPaneGestureListener : ActorGestureListener
     /// it resets the fling timer. If a touch focus cancel event is detected, it triggers a
     /// cancellation of the scroll pane. Returns true if the event is processed, otherwise false.
     /// </summary>
-    /// <param name="inputEvent">
+    /// <param name="e">
     /// The event to be processed, provided as an instance of <see cref="Event"/>.
     /// </param>
     /// <returns>
     /// True if the event has been handled; otherwise, false.
     /// </returns>
-    public override bool Handle( Event inputEvent )
+    public override bool Handle( Event e )
     {
         Guard.Against.Null( _parent );
 
-        if ( base.Handle( inputEvent ) )
+        if ( base.Handle( e ) )
         {
-            if ( ( ( InputEvent )inputEvent ).Type == InputEvent.EventType.TouchDown )
+            if ( ( ( InputEvent )e ).Type == InputEvent.EventType.TouchDown )
             {
                 _parent!.FlingTimer = 0;
             }
@@ -371,7 +371,7 @@ public class ScrollPaneGestureListener : ActorGestureListener
             return true;
         }
 
-        if ( inputEvent is InputEvent { TouchFocusCancel: true } )
+        if ( e is InputEvent { TouchFocusCancel: true } )
         {
             _parent!.Cancel();
         }
