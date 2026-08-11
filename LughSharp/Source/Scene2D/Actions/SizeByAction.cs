@@ -37,9 +37,9 @@ public class SizeByAction : RelativeTemporalAction
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Updates the target's size relative to the specified percentage of change.
     /// </summary>
-    /// <param name="percentDelta"></param>
+    /// <param name="percentDelta">The percentage of progress used to calculate the size adjustment.</param>
     protected override void UpdateRelative( float percentDelta )
     {
         Target?.SizeBy( AmountWidth * percentDelta, AmountHeight * percentDelta );
@@ -48,8 +48,8 @@ public class SizeByAction : RelativeTemporalAction
     /// <summary>
     /// Sets the amounts by which to scale the width and height.
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
+    /// <param name="width"> The amount by which to scale the width.</param>
+    /// <param name="height">The amount by which to scale the height.</param>
     public void SetAmount( float width, float height )
     {
         AmountWidth  = width;

@@ -61,7 +61,7 @@ public class AlphaAction : TemporalAction
     }
 
     /// <summary>
-    /// Called each frame.
+    /// Called each frame to update the action's progress.
     /// </summary>
     /// <param name="percent">
     /// The percentage of completion for this action, growing from 0 to 1 over the duration.

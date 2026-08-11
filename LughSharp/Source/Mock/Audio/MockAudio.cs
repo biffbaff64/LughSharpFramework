@@ -55,6 +55,7 @@ public class MockAudio : IAudio
         return new MockMusic();
     }
 
+    /// <inheritdoc />
     public void Update()
     {
     }
@@ -62,6 +63,7 @@ public class MockAudio : IAudio
     /// <inheritdoc />
     public void Dispose()
     {
+        GC.SuppressFinalize( this );
     }
 }
 

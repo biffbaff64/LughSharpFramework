@@ -26,6 +26,11 @@ using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.Actions;
 
+/// <summary>
+/// An abstract action that delegates its behavior to another action. This allows
+/// for the construction of higher-level or composite actions by combining and
+/// controlling other actions.
+/// </summary>
 [PublicAPI]
 public abstract class DelegateAction : SceneAction
 {

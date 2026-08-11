@@ -30,15 +30,27 @@ namespace LughSharp.Source.Scene2D.Actions;
 [PublicAPI]
 public class TimeScaleAction : DelegateAction
 {
+    /// <summary>
+    /// Gets or sets the scaling factor used to modify the time delta for an action.
+    /// </summary>
+    /// <remarks>
+    /// The <c>Scale</c> property determines how the time progression of an action is adjusted.
+    /// A value greater than 1 accelerates the action, while a value between 0 and 1 slows it down.
+    /// </remarks>
     public float Scale { get; set; }
     
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Executes a delegated action with a modified time scale.
     /// </summary>
-    /// <param name="delta"></param>
-    /// <returns></returns>
+    /// <param name="delta">
+    /// The time delta used to determine the progression of the action, scaled by the
+    /// current value of <c>Scale</c>.
+    /// </param>
+    /// <returns>
+    /// Returns <c>true</c> if the action is complete, or <c>false</c> if it is still running.
+    /// </returns>
     protected override bool ActionDelegate( float delta )
     {
         return ( Action == null ) || Action.Act( delta * Scale );

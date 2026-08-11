@@ -26,7 +26,7 @@ namespace LughSharp.Source.Maths;
 
 /// <summary>
 /// A simple vector class representing an X and Y,
-/// for use when that is all that is needed.
+/// for use when they are all that is needed.
 /// </summary>
 [PublicAPI]
 public class Vec2< T >
@@ -37,7 +37,7 @@ public class Vec2< T >
 
 /// <summary>
 /// A simple vector class representing an X, Y and Z,
-/// for use when that is all that is needed.
+/// for use when they are all that is needed.
 /// </summary>
 [PublicAPI]
 public class Vec3< T >

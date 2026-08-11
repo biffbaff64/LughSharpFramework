@@ -24,6 +24,15 @@
 
 namespace LughSharp.Source.Scene2D.Actions;
 
+/// <summary>
+/// The AfterAction class is used to ensure that a specific action executes
+/// only after all previously running actions on the actor have completed.
+/// <para>
+/// This action is designed to work with actors and their associated actions in
+/// a scene. It waits for existing actions on a specified target actor to either
+/// complete or be removed before delegating execution to a specific inner action.
+/// </para>
+/// </summary>
 [PublicAPI]
 public class AfterAction : DelegateAction
 {
@@ -32,9 +41,13 @@ public class AfterAction : DelegateAction
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Sets the target actor for this action and ensures that
+    /// all current actions of the target are queued to be waited on.
     /// </summary>
-    /// <param name="target"></param>
+    /// <param name="target">
+    /// The actor for which this action will execute. If the target is not null,
+    /// its existing actions are added to the waiting list.
+    /// </param>
     public void SetTarget( Actor? target )
     {
         if ( target != null )
@@ -57,10 +70,18 @@ public class AfterAction : DelegateAction
     }
 
     /// <summary>
-    /// 
+    /// Executes the delegate action and evaluates whether all waiting actions
+    /// in the target actor have completed.
     /// </summary>
-    /// <param name="delta"></param>
-    /// <returns></returns>
+    /// <param name="delta">
+    /// The time in seconds since the last frame. This is used to update the
+    /// action's progress.
+    /// </param>
+    /// <returns>
+    /// A boolean indicating whether the delegate action has finished executing.
+    /// Returns true if all waiting actions have been completed and the delegate
+    /// action has successfully executed, otherwise returns false.
+    /// </returns>
     protected override bool ActionDelegate( float delta )
     {
         List< SceneAction >? currentActions = Target?.Actions;

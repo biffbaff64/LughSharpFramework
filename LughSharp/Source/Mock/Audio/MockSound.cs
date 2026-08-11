@@ -107,17 +107,18 @@ public class MockSound : ISound
     /// <inheritdoc />
     public void Dispose()
     {
+        GC.SuppressFinalize( this );
     }
 
-    public long Play()
-    {
-        return 0;
-    }
+//    public long Play()
+//    {
+//        return 0;
+//    }
 
-    public long Loop()
-    {
-        return 0;
-    }
+//    public long Loop()
+//    {
+//        return 0;
+//    }
 }
 
 // ============================================================================

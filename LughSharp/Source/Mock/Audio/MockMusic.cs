@@ -31,6 +31,17 @@ namespace LughSharp.Source.Mock.Audio;
 public class MockMusic : IMusic
 {
     /// <inheritdoc />
+    public bool IsPlaying { get; set; }
+
+    /// <inheritdoc />
+    public bool IsLooping { get; set; }
+
+    /// <inheritdoc />
+    public IMusic.IOnCompletionListener? OnCompletionListener { get; set; }
+
+    // ========================================================================
+    
+    /// <inheritdoc />
     public void Play()
     {
     }
@@ -44,12 +55,6 @@ public class MockMusic : IMusic
     public void Stop()
     {
     }
-
-    /// <inheritdoc />
-    public bool IsPlaying { get; set; }
-
-    /// <inheritdoc />
-    public bool IsLooping { get; set; }
 
     /// <inheritdoc />
     public void SetVolume( float volume )
@@ -79,11 +84,9 @@ public class MockMusic : IMusic
     }
 
     /// <inheritdoc />
-    public IMusic.IOnCompletionListener? OnCompletionListener { get; set; }
-
-    /// <inheritdoc />
     public void Dispose()
     {
+        GC.SuppressFinalize( this );
     }
 }
 

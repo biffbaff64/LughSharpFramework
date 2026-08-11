@@ -1318,8 +1318,7 @@ public class Table : WidgetGroup
                                 + ( c.Column == 0
                                         ? 0
                                         : Math.Max( 0f,
-                                                    ( float )( c.SpaceLeft.Get( c.Actor )
-                                                             - spaceRightLast ) ) ) )!;
+                                                    ( float )( c.SpaceLeft.Get( c.Actor ) - spaceRightLast ) ) ) );
 
             c.ComputedPadTop = c.PadTop.Get( c.Actor );
 

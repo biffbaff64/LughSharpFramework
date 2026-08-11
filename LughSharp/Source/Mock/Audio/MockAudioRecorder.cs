@@ -35,8 +35,10 @@ public class MockAudioRecorder : IAudioRecorder
     {
     }
 
+    /// <inheritdoc />
     public void Dispose()
     {
+        GC.SuppressFinalize( this );
     }
 }
 

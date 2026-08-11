@@ -183,8 +183,6 @@ public class OpenALAudio : IAudio
         }
     }
 
-    /// <summary>
-    /// </summary>
     public void Update()
     {
         if ( NoDevice )

@@ -38,14 +38,14 @@ public class ColorAction : TemporalAction
     private          float _startG;
     private          float _startR;
 
+    // ========================================================================
+
     public virtual Color EndColor
     {
         get => _endColor;
         set => _endColor.Set( value );
     }
     
-    // ========================================================================
-
     /// <summary>
     /// Called the first time <see cref="TemporalAction.Act"/> is called. This is a good place
     /// to query the <see cref="Actor"/>'s starting state.
@@ -64,7 +64,7 @@ public class ColorAction : TemporalAction
     }
 
     /// <summary>
-    /// Called each frame.
+    /// Called each frame to update the <see cref="Actor"/>'s color.
     /// </summary>
     /// <param name="percent">
     /// The percentage of completion for this action, growing from 0 to 1 over the

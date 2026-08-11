@@ -30,12 +30,34 @@ namespace LughSharp.Source.Scene2D.Actions;
 /// Base class for actions that transition over time using percent complete.
 /// </summary>
 [PublicAPI]
-public abstract class TemporalAction : SceneAction
+public abstract class TemporalAction( float duration, IInterpolation? interpolation )
+    : SceneAction
 {
-    public bool            Reverse       { get; set; }
-    public float           Duration      { get; set; }
-    public float           Time          { get; set; }
-    public IInterpolation? Interpolation { get; set; }
+    /// <summary>
+    /// Indicates whether the action's progression is reversed, causing it to complete by
+    /// going from 1 to 0 instead of 0 to 1 over its duration.
+    /// </summary>
+    public bool Reverse { get; set; }
+
+    /// <summary>
+    /// Specifies the total duration for the action to complete, measured in seconds.
+    /// Determines the amount of time the action takes to transition from start to finish.
+    /// </summary>
+    public float Duration { get; set; } = duration;
+
+    /// <summary>
+    /// Represents the elapsed time in seconds since the start of the action.
+    /// Used to calculate the progression of the action based on the total duration.
+    /// </summary>
+    public float Time { get; set; }
+
+    /// <summary>
+    /// Controls how the progression of the action is interpolated over time, enabling
+    /// non-linear transitions. This property modifies the percentage completion value,
+    /// allowing for easing effects such as acceleration and deceleration. If set to null,
+    /// the action progresses linearly.
+    /// </summary>
+    public IInterpolation? Interpolation { get; set; } = interpolation;
 
     /// <summary>
     /// Returns true after <see cref="Act(float)"/> has been called where time >= duration.
@@ -48,19 +70,19 @@ public abstract class TemporalAction : SceneAction
 
     // ========================================================================
 
-    protected TemporalAction()
+    /// <summary>
+    /// Default constructor for <see cref="TemporalAction"/>. Initializes the action
+    /// with a duration of 0.
+    /// </summary>
+    protected TemporalAction() : this( 0 )
     {
     }
-
-    protected TemporalAction( float duration )
+    
+    /// <summary>
+    /// Base class for actions that transition over time using percent completion.
+    /// </summary>
+    protected TemporalAction( float duration ) : this( duration, null )
     {
-        Duration = duration;
-    }
-
-    protected TemporalAction( float duration, IInterpolation? interpolation )
-    {
-        Duration      = duration;
-        Interpolation = interpolation;
     }
 
     /// <summary>
@@ -121,6 +143,9 @@ public abstract class TemporalAction : SceneAction
     /// Called the first time <see cref="Act(float)"/> is called. This is a good place
     /// to query the <see cref="Actor"/>'s starting state.
     /// </summary>
+    /// <remarks>
+    /// This default implementation does nothing. To add functionality, override this method.
+    /// </remarks>
     protected virtual void BeginAction()
     {
     }
@@ -128,6 +153,9 @@ public abstract class TemporalAction : SceneAction
     /// <summary>
     /// Called the last time <see cref="Act(float)"/> is called.
     /// </summary>
+    /// <remarks>
+    /// This default implementation does nothing. To add functionality, override this method.
+    /// </remarks>
     protected virtual void EndAction()
     {
     }

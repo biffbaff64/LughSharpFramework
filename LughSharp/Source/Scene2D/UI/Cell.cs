@@ -32,20 +32,20 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Cell : IPoolable, IResetable
 {
-    public Value MinWidth    { get; set; }
-    public Value MinHeight   { get; set; }
-    public Value PrefWidth   { get; set; }
-    public Value PrefHeight  { get; set; }
-    public Value MaxWidth    { get; set; }
-    public Value MaxHeight   { get; set; }
-    public Value SpaceTop    { get; set; }
-    public Value SpaceLeft   { get; set; }
-    public Value SpaceBottom { get; set; }
-    public Value SpaceRight  { get; set; }
-    public Value PadTop      { get; set; }
-    public Value PadLeft     { get; set; }
-    public Value PadBottom   { get; set; }
-    public Value PadRight    { get; set; }
+    public Value MinWidth    { get; set; } = Value.Zero;
+    public Value MinHeight   { get; set; } = Value.Zero;
+    public Value PrefWidth   { get; set; } = Value.Zero;
+    public Value PrefHeight  { get; set; } = Value.Zero;
+    public Value MaxWidth    { get; set; } = Value.Zero;
+    public Value MaxHeight   { get; set; } = Value.Zero;
+    public Value SpaceTop    { get; set; } = Value.Zero;
+    public Value SpaceLeft   { get; set; } = Value.Zero;
+    public Value SpaceBottom { get; set; } = Value.Zero;
+    public Value SpaceRight  { get; set; } = Value.Zero;
+    public Value PadTop      { get; set; } = Value.Zero;
+    public Value PadLeft     { get; set; } = Value.Zero;
+    public Value PadBottom   { get; set; } = Value.Zero;
+    public Value PadRight    { get; set; } = Value.Zero;
 
     // ========================================================================
 
@@ -744,10 +744,13 @@ public class Cell : IPoolable, IResetable
             throw new ArgumentException( $"right cannot be < 0: {right}" );
         }
 
-        Space( Value.Fixed.ValueOf( top ),
-               Value.Fixed.ValueOf( left ),
-               Value.Fixed.ValueOf( bottom ),
-               Value.Fixed.ValueOf( right ) );
+        Space
+            (
+             Value.Fixed.ValueOf( top ),
+             Value.Fixed.ValueOf( left ),
+             Value.Fixed.ValueOf( bottom ),
+             Value.Fixed.ValueOf( right )
+            );
 
         return this;
     }
@@ -935,10 +938,13 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell Pad( float top, float left, float bottom, float right )
     {
-        Pad( Value.Fixed.ValueOf( top ),
+        Pad
+            (
+             Value.Fixed.ValueOf( top ),
              Value.Fixed.ValueOf( left ),
              Value.Fixed.ValueOf( bottom ),
-             Value.Fixed.ValueOf( right ) );
+             Value.Fixed.ValueOf( right )
+            );
 
         return this;
     }
@@ -1397,7 +1403,7 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetMaxHeight()
     {
-        return MaxHeight.Get( Actor );
+        return MaxHeight.Get( Actor ); 
     }
 
     /// <summary>

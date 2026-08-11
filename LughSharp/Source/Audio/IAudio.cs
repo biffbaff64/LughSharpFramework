@@ -73,7 +73,10 @@ public interface IAudio : IDisposable
     IMusic NewMusic( FileInfo? file );
 
     /// <summary>
-    /// 
+    /// Updates the state of all currently active audio tracks. This method is called
+    /// periodically to ensure that music playback states are correctly maintained and
+    /// any necessary updates on individual audio tracks are applied. If no audio device
+    /// is available, the method exits without performing any operations.
     /// </summary>
     void Update();
 }

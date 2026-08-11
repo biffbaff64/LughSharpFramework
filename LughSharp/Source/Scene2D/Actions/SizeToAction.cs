@@ -53,7 +53,7 @@ public class SizeToAction : TemporalAction
     }
 
     /// <summary>
-    /// Called each frame.
+    /// Called each frame to update the actor's size based on the action's progress.
     /// </summary>
     /// <param name="percent">
     /// The percentage of completion for this action, growing from 0 to 1 over the

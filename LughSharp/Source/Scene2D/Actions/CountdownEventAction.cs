@@ -28,25 +28,29 @@ namespace LughSharp.Source.Scene2D.Actions;
 /// An EventAction that is complete once it receives X number of events.
 /// </summary>
 [PublicAPI]
-public class CountdownEventAction< T > : EventAction< T > where T : Event
+public class CountdownEventAction< T >( T eventClass, int count )
+    : EventAction< T >( eventClass )
+    where T : Event
 {
-    private readonly int _count;
-    private          int _current;
+    private int _current;
 
-    public CountdownEventAction( T eventClass, int count )
-        : base( eventClass )
-    {
-        _count = count;
-    }
-
+    /// <summary>
+    /// Handles the delegated event and evaluates whether the conditions for completion
+    /// are met. Increments the internal event count upon handling the provided event.
+    /// </summary>
+    /// <param name="e">The event instance to handle.</param>
+    /// <returns>
+    /// A boolean value indicating whether the required count of events has been reached.
+    /// Returns <c>true</c> if the number of handled events is equal to or greater than
+    /// the specified count; otherwise, <c>false</c>.
+    /// </returns>
     public override bool HandleDelegate( Event e )
     {
         _current++;
 
-        return _current >= _count;
+        return _current >= count;
     }
 }
 
 // ============================================================================
 // ============================================================================
-
