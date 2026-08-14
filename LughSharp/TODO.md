@@ -1119,6 +1119,7 @@ LUGHSHARP/SOURCE/UTILS - DONE
     - DONE - DONE - DONE - IReadable
     - DONE - DONE - DONE - IResetable
     - DONE - DONE - DONE - MinimalCrc32
+    - DONE - DONE - DONE - Multiplexer
     - DONE - DONE - DONE - NumberParsing
     - DONE - DONE - DONE - PerformanceCounter
     - DONE - DONE - DONE - PerformanceCounters

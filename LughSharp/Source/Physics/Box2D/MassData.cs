@@ -1,4 +1,4 @@
-﻿// ///////////////////////////////////////////////////////////////////////////////
+// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
@@ -22,33 +22,24 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Physics;
+using LughSharp.Source.Maths;
 
-[PublicAPI]
-public enum PhysicsBodyType
+namespace LughSharp.Physics2D.Source.Box2D;
+
+/// <summary>
+/// This holds the mass data computed for a shape. Faithful port of libgdx <c>MassData</c>.
+/// </summary>
+public class MassData
 {
-    // --------------------
-    None,
-    
-    // --------------------
-    Dynamic,
-    DynamicSensor,
-    DynamicBouncy,
-    DynamicCircle,
-    DynamicCircleSensor,
-    DynamicPushable,
-    DynamicHeavy,
-    
-    // --------------------
-    Kinematic,
-    KinematicSensor,
-    KinematicHeavy,
-    
-    // --------------------
-    Static,
-    StaticSensor,
+    /// <summary>The mass of the shape, usually in kilograms.</summary>
+    public float Mass { get; set; }
+
+    /// <summary>The position of the shape's centroid relative to the shape's origin.</summary>
+    public Vector2 Center { get; set; } = new();
+
+    /// <summary>The rotational inertia of the shape about the local origin.</summary>
+    public float I { get; set; }
 }
 
 // ============================================================================
 // ============================================================================
-
