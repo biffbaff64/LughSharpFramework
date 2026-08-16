@@ -22,10 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
+namespace LughSharp.Source.Physics.Box2D.Utils;
 
-namespace LughSharp.Physics2D.Source.Box2D.Utils;
-
+/// <summary>
+/// Specifies types of physics bodies used within the physics simulation.
+/// See <see cref="BodyBuilder"/> for more information.
+/// </summary>
 [PublicAPI]
 public enum PhysicsBodyType
 {
@@ -33,6 +35,12 @@ public enum PhysicsBodyType
     None,
     
     // --------------------
+    
+    /// <summary>
+    /// Represents a dynamic physics body that can move and interact with other bodies.
+    /// Dynamic bodies have positive mass, and velocity determined by forces applied
+    /// to them.
+    /// </summary>
     Dynamic,
     DynamicSensor,
     DynamicBouncy,
@@ -42,11 +50,23 @@ public enum PhysicsBodyType
     DynamicHeavy,
     
     // --------------------
+    
+    /// <summary>
+    /// Represents a kinematic physics body that can move and interact with other bodies.
+    /// Kinematic bodies have zero mass and non-zero velocity, set by the user. They are
+    /// moved by the solver.
+    /// </summary>
     Kinematic,
     KinematicSensor,
     KinematicHeavy,
     
     // --------------------
+    
+    /// <summary>
+    /// Represents a static physics body that does not move and does not interact with
+    /// other bodies. Static bodies have zero mass and zero velocity.
+    /// <see cref="StaticSensor"/> body types are static bodies that generate contact events.
+    /// </summary>
     Static,
     StaticSensor,
 }

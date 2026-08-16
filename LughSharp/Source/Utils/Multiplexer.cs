@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices.JavaScript;
-
 namespace LughSharp.Source.Utils;
 
 /// <summary>

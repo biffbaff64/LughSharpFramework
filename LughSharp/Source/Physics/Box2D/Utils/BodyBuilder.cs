@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Physics2D.Source.Box2D.Utils;
+namespace LughSharp.Source.Physics.Box2D.Utils;
 
 [PublicAPI]
 public class BodyBuilder( float ppm, World world )
@@ -55,17 +55,17 @@ public class BodyBuilder( float ppm, World world )
             case PhysicsBodyType.Kinematic:
             case PhysicsBodyType.KinematicSensor:
                 descriptor.Shape   = CreatePolygonShape( rectangle );
-                descriptor.Density = PhysicsDefaults.DefaultDensity;
+                descriptor.Density = PhysicsConstants.DefaultDensity;
 
                 if ( bodyType == PhysicsBodyType.DynamicBouncy )
                 {
-                    descriptor.Friction    = PhysicsDefaults.LowFriction;
-                    descriptor.Restitution = PhysicsDefaults.HighRestitution;
+                    descriptor.Friction    = PhysicsConstants.LowFriction;
+                    descriptor.Restitution = PhysicsConstants.HighRestitution;
                 }
                 else
                 {
-                    descriptor.Friction    = PhysicsDefaults.DefaultFriction;
-                    descriptor.Restitution = PhysicsDefaults.LowRestitution;
+                    descriptor.Friction    = PhysicsConstants.DefaultFriction;
+                    descriptor.Restitution = PhysicsConstants.LowRestitution;
                 }
 
                 descriptor.Filter = new CollisionFilter
@@ -92,9 +92,9 @@ public class BodyBuilder( float ppm, World world )
             
             case PhysicsBodyType.DynamicHeavy:
                 descriptor.Shape       = CreatePolygonShape( rectangle );
-                descriptor.Density     = PhysicsDefaults.FullDensity;
-                descriptor.Friction    = PhysicsDefaults.FullFriction;
-                descriptor.Restitution = PhysicsDefaults.ZeroRestitution;
+                descriptor.Density     = PhysicsConstants.FullDensity;
+                descriptor.Friction    = PhysicsConstants.FullFriction;
+                descriptor.Restitution = PhysicsConstants.ZeroRestitution;
                 descriptor.Filter = new CollisionFilter
                     (
                      bodyCategory,
@@ -109,9 +109,9 @@ public class BodyBuilder( float ppm, World world )
             
             case PhysicsBodyType.DynamicPushable:
                 descriptor.Shape       = CreatePolygonShape( rectangle );
-                descriptor.Density     = PhysicsDefaults.DefaultDensity;
-                descriptor.Friction    = PhysicsDefaults.MediumLowFriction;
-                descriptor.Restitution = PhysicsDefaults.LowRestitution;
+                descriptor.Density     = PhysicsConstants.DefaultDensity;
+                descriptor.Friction    = PhysicsConstants.MediumLowFriction;
+                descriptor.Restitution = PhysicsConstants.LowRestitution;
                 descriptor.Filter = new CollisionFilter
                     (
                      bodyCategory,
@@ -133,9 +133,9 @@ public class BodyBuilder( float ppm, World world )
                     Radius = ( rectangle.Width / 2 ) / ppm
                 };
                 descriptor.Shape       = CreateCircleShape( circle );
-                descriptor.Density     = PhysicsDefaults.DefaultDensity;
-                descriptor.Friction    = PhysicsDefaults.LowFriction;
-                descriptor.Restitution = PhysicsDefaults.MediumLowRestitution;
+                descriptor.Density     = PhysicsConstants.DefaultDensity;
+                descriptor.Friction    = PhysicsConstants.LowFriction;
+                descriptor.Restitution = PhysicsConstants.MediumLowRestitution;
                 descriptor.Filter = new CollisionFilter
                     (
                      bodyCategory,
@@ -151,9 +151,9 @@ public class BodyBuilder( float ppm, World world )
             case PhysicsBodyType.Static:
             case PhysicsBodyType.StaticSensor:
                 descriptor.Shape       = CreatePolygonShape( rectangle );
-                descriptor.Density     = PhysicsDefaults.FullDensity;
-                descriptor.Friction    = PhysicsDefaults.FullFriction;
-                descriptor.Restitution = PhysicsDefaults.MediumLowRestitution;
+                descriptor.Density     = PhysicsConstants.FullDensity;
+                descriptor.Friction    = PhysicsConstants.FullFriction;
+                descriptor.Restitution = PhysicsConstants.MediumLowRestitution;
                 descriptor.Filter = new CollisionFilter
                     (
                      bodyCategory,
@@ -355,23 +355,23 @@ public class BodyBuilder( float ppm, World world )
         return fixtureDef;
     }
 
-    private PolygonShape CreatePolygonShape( Rectangle _rectangle )
+    private PolygonShape CreatePolygonShape( Rectangle rectangle )
     {
         var shape = new PolygonShape();
 
         shape.SetAsBox
             (
-             ( ( _rectangle.Width / 2f ) / ppm ),
-             ( ( _rectangle.Height / 2f ) / ppm )
+             ( ( rectangle.Width / 2f ) / ppm ),
+             ( ( rectangle.Height / 2f ) / ppm )
             );
 
         return shape;
     }
 
-    private CircleShape CreateCircleShape( Circle _circle )
+    private CircleShape CreateCircleShape( Circle circle )
     {
         var shape = new CircleShape();
-        shape.SetRadius( _circle.Radius );
+        shape.SetRadius( circle.Radius );
 
         return shape;
     }

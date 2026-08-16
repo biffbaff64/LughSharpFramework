@@ -33,15 +33,11 @@ namespace LughSharp.Source;
 /// </code>
 /// </summary>
 [PublicAPI]
-public class LibraryVersion
+public sealed class LibraryVersion
 {
     public int LibMajorVersion    { get; private set; }
     public int LibMinorVersion    { get; private set; }
     public int LibRevisionVersion { get; private set; }
-
-    // ========================================================================
-
-    private readonly Version? _version;
 
     // ========================================================================
 
@@ -51,16 +47,16 @@ public class LibraryVersion
     /// <exception cref="LughRuntimeException"></exception>
     public LibraryVersion()
     {
-        _version = Assembly.GetEntryAssembly()?.GetName().Version;
+        Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
 
-        if ( _version == null )
+        if ( version == null )
         {
             throw new LughRuntimeException( "NULL Assembly Version!" );
         }
 
         try
         {
-            MatchCollection matches = RegexUtils.VersionNumberRegex().Matches( _version.ToString() );
+            MatchCollection matches = RegexUtils.VersionNumberRegex().Matches( version.ToString() );
             var             v       = string.Empty;
 
             foreach ( object? match in matches )
@@ -68,21 +64,27 @@ public class LibraryVersion
                 v += match;
             }
 
+            // NOTE TO SELF:
+            // C# range indexing uses [start..end], where the end index is exclusive.
+            // v[..1] takes the first character,
+            // v[1..] takes from index 1 to the end,
+            // v[2..] takes from index 2 to the end.
+            
             LibMajorVersion    = v.Length < 1 ? 0 : int.Parse( v[ ..1 ] );
             LibMinorVersion    = v.Length < 2 ? 0 : int.Parse( v[ 1.. ] );
             LibRevisionVersion = v.Length < 3 ? 0 : int.Parse( v[ 2.. ] );
-
+            
             Logger.Debug( $"Current Library Version : {LibMajorVersion}.{LibMinorVersion}.{LibRevisionVersion}" );
         }
         catch ( Exception e )
         {
-            throw new LughRuntimeException( $"Invalid version {_version.ToString().Split( "\\." )}", e );
+            throw new LughRuntimeException( $"Invalid version {version.ToString().Split( "\\." )}", e );
         }
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if the CURRENT
-    /// version is GREATER than the provided version.
+    /// Checks the provided version components against the current and reports TRUE
+    /// if the CURRENT version is GREATER than the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -93,8 +95,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if the CURRENT
-    /// version is GREATER than or EQUAL to the provided version.
+    /// Checks the provided version components against the current and reports TRUE
+    /// if the CURRENT version is GREATER than or EQUAL to the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -115,8 +117,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if the CURRENT
-    /// version is LESS than the provided version.
+    /// Checks the provided version components against the current and reports TRUE
+    /// if the CURRENT version is LESS than the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>
@@ -127,8 +129,8 @@ public class LibraryVersion
     }
 
     /// <summary>
-    /// Checks the provided version components against the current and reports TRUE if the CURRENT
-    /// version is LESS than or EQUAL to the provided version.
+    /// Checks the provided version components against the current and reports TRUE
+    /// if the CURRENT version is LESS than or EQUAL to the provided version.
     /// </summary>
     /// <param name="major">The Major version component.</param>
     /// <param name="minor">The Minor version component.</param>

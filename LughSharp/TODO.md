@@ -155,6 +155,7 @@ LUGHSHARP/SOURCE/ASSETS/LOADERS/RESOLVERS - DONE
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - **I'm currently considering ditching Lugh.Audio in favour of NAudio or another library.**
 - **Decision to be made asap.**
@@ -285,6 +286,7 @@ LUGHSHARP/SOURCE/AUDIO/OPENAL
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 LUGHSHARP/SOURCE/COLLECTIONS - DONE
 ----------------------------
@@ -304,6 +306,7 @@ LUGHSHARP/SOURCE/COLLECTIONS - DONE
     - DONE - DONE - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -695,6 +698,7 @@ LUGHSHARP/SOURCE/GRAPHICS/VIEWPORTS - DONE
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 LUGHSHARP/SOURCE/INPUT
 ----------------------
@@ -717,6 +721,7 @@ LUGHSHARP/SOURCE/INPUT
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 LUGHSHARP/SOURCE/IO - DONE
 -------------------
@@ -732,6 +737,7 @@ LUGHSHARP/SOURCE/IO - DONE
     - DONE - DONE - DONE - PathType
     - DONE - DONE - DONE - StreamUtils
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -820,6 +826,7 @@ LUGHSHARP/SOURCE/MAPS/TILED/TILES
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 LUGHSHARP/SOURCE/MATHS
 ----------------------
@@ -879,6 +886,7 @@ LUGHSHARP/SOURCE/MATH/COLLISION
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 LUGHSHARP/SOURCE/NETWORK - TEMPORARILY SHELVED
 ------------------------
@@ -909,6 +917,7 @@ LUGHSHARP/SOURCE/NETWORK - TEMPORARILY SHELVED
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 LUGHSHARP/SOURCE/PHYSICS - DONE
 ------------------------
@@ -921,6 +930,102 @@ LUGHSHARP/SOURCE/PHYSICS - DONE
     - DONE - DONE - DONE - Movement
     - DONE - DONE - DONE - PhysicsBodyType
 
+LUGHSHARP/SOURCE/PHYSICS/BOX2D
+------------------------------
+
+    - It's most likely best to recommend the use of an already available C# port.
+    - ( It really depends on how much of a glutton for punishment I am!!!! )
+
+    eg:
+    - Box2DSharp
+    - Box2DX
+    - Box2D.Net
+    - Box2D.CSharp
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      - DONE - Body
+    - DONE - DONE - DONE - BodyDef
+    -      -      - DONE - Box2D
+    -      -      - DONE - Box2DDebugRenderer
+    -      -      - DONE - Contact
+    -      -      - DONE - ContactImpulse
+    -      -      - DONE - Filter
+    -      -      - DONE - Fixture
+    -      -      - DONE - FixtureDef
+    - DONE - IP   - DONE - IContactFilter
+    - DONE - DONE - DONE - IContactListener
+    - DONE - DONE - DONE - IDestructionListener
+    - DONE - DONE - DONE - IQueryCallback
+    - DONE - DONE - DONE - IRayCastCallback
+    -      -      - DONE - Manifold
+    - DONE - DONE - DONE - MassData
+    - DONE - DONE - DONE - PhysicsConstants
+    - DONE - DONE - DONE - Transform
+    -      -      - DONE - World
+    - DONE - DONE - DONE - WorldManifold
+
+LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/GRAPHICS
+------------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      - DONE - ParticleEmmitterBox2D
+
+LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
+----------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      - DONE - DistanceJoint
+    -      -      - DONE - DistanceJointDef
+    -      -      - DONE - FrictionJoint
+    -      -      - DONE - FrictionJointDef
+    -      -      - DONE - GearJoint
+    -      -      - DONE - GearJointDef
+    -      -      - DONE - Joint
+    -      -      - DONE - JointDef
+    -      -      - DONE - JointEdge
+    -      -      - DONE - MotorJoint
+    -      -      - DONE - MotorJointDef
+    -      -      - DONE - MouseJoint
+    -      -      - DONE - MouseJointDef
+    -      -      - DONE - PrismaticJoint
+    -      -      - DONE - PrismaticJointDef
+    -      -      - DONE - PulleyJoint
+    -      -      - DONE - PulleyJointDef
+    -      -      - DONE - RevoluteJoint
+    -      -      - DONE - RevoluteJointDef
+    -      -      - DONE - RopeJoint
+    -      -      - DONE - RopeJointDef
+    -      -      - DONE - WeldJoint
+    -      -      - DONE - WeldJointDef
+    -      -      - DONE - WheelJoint
+    -      -      - DONE - WheelJointDef
+
+LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/SHAPES
+---------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    -      -      - DONE - ChainShape
+    -      -      - DONE - CircleShape
+    -      -      - DONE - EdgeShape
+    -      -      - DONE - PolygonShape
+    - IP   - IP   - DONE - Shape
+
+LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/UTILS
+--------------------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - B2BodyDescriptor
+    -      -      - DONE - BodyBuilder
+    - DONE - DONE - DONE - Box2DContactListener
+    - DONE - DONE - DONE - PhysicsBody
+    - DONE - DONE - DONE - PhysicsBodyType
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1221,94 +1326,6 @@ LUGHSHARP/EXTENSIONS/SOURCE - TEMPORARILY SHELVED
     -      -      - DONE - IGameSprite
     -      -      - DONE - SpriteDescriptor
     -      -      - DONE - TileID
-
-LUGHSHARP/PHYSICS2D/SOURCE/BOX2D - TO BE MOVED TO A SEPARATE PROJECT
---------------------------------
-
-    - It's most likely best to recommend the use of an already available C# port.
-    - ( It really depends on how much of a glutton for punishment I am!!!! )
-
-    eg:
-    - Box2DSharp
-    - Box2DX
-    - Box2D.Net
-    - Box2D.CSharp
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      - DONE - B2Convert
-    -      -      - DONE - Body
-    - DONE - DONE - DONE - BodyDef
-    -      -      - DONE - BodyType
-    -      -      - DONE - Box2D
-    -      -      - DONE - Box2DDebugRenderer
-    -      -      - DONE - ChainShape
-    -      -      - DONE - CircleShape
-    -      -      - DONE - Contact
-    -      -      - DONE - ContactImpulse
-    -      -      - DONE - EdgeShape
-    -      -      - DONE - Filter
-    -      -      - DONE - Fixture
-    -      -      - DONE - FixtureDef
-    - DONE - IP   - DONE - IContactFilter
-    - DONE - DONE - DONE - IContactListener
-    -      -      - DONE - IDestructionListener
-    - DONE - DONE - DONE - IQueryCallback
-    - DONE - DONE - DONE - IRayCastCallback
-    -      -      - DONE - Joint
-    -      -      - DONE - JointDef
-    -      -      - DONE - JointEdge
-    -      -      - DONE - Manifold
-    -      -      - DONE - MassData
-    -      -      - DONE - PolygonShape
-    -      -      - DONE - Shape
-    -      -      - DONE - Transform
-    -      -      - DONE - World
-    -      -      - DONE - WorldManifold
-
-LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/GRAPHICS
-------------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      - DONE - ParticleEmmitterBox2D
-
-LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
-----------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    -      -      - DONE - DistanceJoint
-    -      -      - DONE - DistanceJointDef
-    -      -      - DONE - FrictionJoint
-    -      -      - DONE - FrictionJointDef
-    -      -      - DONE - GearJoint
-    -      -      - DONE - GearJointDef
-    -      -      - DONE - MotorJoint
-    -      -      - DONE - MotorJointDef
-    -      -      - DONE - MouseJoint
-    -      -      - DONE - MouseJointDef
-    -      -      - DONE - PrismaticJoint
-    -      -      - DONE - PrismaticJointDef
-    -      -      - DONE - PulleyJoint
-    -      -      - DONE - PulleyJointDef
-    -      -      - DONE - RevoluteJoint
-    -      -      - DONE - RevoluteJointDef
-    -      -      - DONE - RopeJoint
-    -      -      - DONE - RopeJointDef
-    -      -      - DONE - WeldJoint
-    -      -      - DONE - WeldJointDef
-    -      -      - DONE - WheelJoint
-    -      -      - DONE - WheelJointDef
-
-LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
-----------------------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - B2BodyDescriptor
-    -      -      -      - 
-    -      -      -      -
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -24,7 +24,7 @@
 
 using Vector2 = LughSharp.Source.Maths.Vector2;
 
-namespace LughSharp.Physics2D.Source.Box2D;
+namespace LughSharp.Source.Physics.Box2D;
 
 /// <summary>
 /// A body definition holds all the data needed to construct a rigid body. You can
@@ -34,7 +34,7 @@ namespace LughSharp.Physics2D.Source.Box2D;
 public class BodyDef
 {
     /// <summary>
-    /// The body type, mirroring libgdx <c>BodyDef.BodyType</c> (and Box2D's <c>b2BodyType</c>).
+    /// The physics body type.
     /// <para>
     /// static   : zero mass, zero velocity, may be manually moved.
     /// kinematic : zero mass, non-zero velocity set by user, moved by the solver.

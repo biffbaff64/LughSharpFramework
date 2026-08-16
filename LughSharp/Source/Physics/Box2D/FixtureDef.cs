@@ -1,4 +1,4 @@
-namespace LughSharp.Physics2D.Source.Box2D;
+namespace LughSharp.Source.Physics.Box2D;
 
 /// <summary>
 /// A fixture definition is used to create a fixture. This class defines an abstract

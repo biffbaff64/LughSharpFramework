@@ -1,4 +1,4 @@
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
@@ -24,26 +24,9 @@
 
 namespace LughSharp.Source.Physics.Box2D;
 
-/// <summary>
-/// This holds the mass data computed for a shape.
-/// </summary>
 [PublicAPI]
-public class MassData
+public class Manifold
 {
-    /// <summary>
-    /// The mass of the shape, usually in kilograms.
-    /// </summary>
-    public float Mass { get; set; }
-
-    /// <summary>
-    /// The position of the shape's centroid relative to the shape's origin.
-    /// </summary>
-    public Vector2 Center { get; set; } = new();
-
-    /// <summary>
-    /// The rotational inertia of the shape about the local origin.
-    /// </summary>
-    public float I { get; set; }
 }
 
 // ============================================================================

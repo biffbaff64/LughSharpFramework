@@ -1,8 +1,8 @@
 ﻿
 
-namespace LughSharp.Physics2D.Source.Box2D.Utils;
+namespace LughSharp.Source.Physics.Box2D;
 
-public class Box2DWorldContactListener
+public class Box2DDebugRenderer
 {
     
 }

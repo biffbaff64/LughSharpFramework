@@ -22,8 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Physics2D.Source.Box2D;
+namespace LughSharp.Source.Physics.Box2D;
 
+[PublicAPI]
 public class Body
 {
     

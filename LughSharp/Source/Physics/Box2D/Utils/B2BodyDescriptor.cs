@@ -22,11 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using JetBrains.Annotations;
+using LughSharp.Source.Physics.Box2D.Shapes;
 
-using LughSharp.Source.Physics;
-
-namespace LughSharp.Physics2D.Source.Box2D.Utils;
+namespace LughSharp.Source.Physics.Box2D.Utils;
 
 /// <summary>
 /// Represents a descriptor for the properties of a 2D physics body, including
@@ -51,9 +49,9 @@ public class B2BodyDescriptor : IDisposable
     /// <li><c>Shape</c> is set to <c>null</c>.</li>
     /// <li><c>Filter</c> is initialised to a new <see cref="CollisionFilter"/> passing
     /// bodyCategory: 0, collidesWith: 0, sensor: false as parameters.</li>
-    /// <li><c>Density</c> is set to <see cref="PhysicsDefaults.DefaultDensity"/>.</li>
-    /// <li><c>Friction</c> is set to <see cref="PhysicsDefaults.DefaultFriction"/>.</li>
-    /// <li><c>Restitution</c> is set to <see cref="PhysicsDefaults.DefaultRestitution"/>.</li>
+    /// <li><c>Density</c> is set to <see cref="PhysicsConstants.DefaultDensity"/>.</li>
+    /// <li><c>Friction</c> is set to <see cref="PhysicsConstants.DefaultFriction"/>.</li>
+    /// <li><c>Restitution</c> is set to <see cref="PhysicsConstants.DefaultRestitution"/>.</li>
     /// </para>
     /// </summary>
     public B2BodyDescriptor()
@@ -61,9 +59,9 @@ public class B2BodyDescriptor : IDisposable
         BodyType    = PhysicsBodyType.Dynamic;
         Shape       = null;
         Filter      = new CollisionFilter( 0, 0, false );
-        Density     = PhysicsDefaults.DefaultDensity;
-        Friction    = PhysicsDefaults.DefaultFriction;
-        Restitution = PhysicsDefaults.DefaultRestitution;
+        Density     = PhysicsConstants.DefaultDensity;
+        Friction    = PhysicsConstants.DefaultFriction;
+        Restitution = PhysicsConstants.DefaultRestitution;
     }
 
     /// <summary>

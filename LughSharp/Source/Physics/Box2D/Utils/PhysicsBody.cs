@@ -24,7 +24,7 @@
 
 using LughSharp.Source.Entities;
 
-namespace LughSharp.Physics2D.Source.Box2D.Utils;
+namespace LughSharp.Source.Physics.Box2D.Utils;
 
 /// <summary>
 /// Represents a physics body that encapsulates properties and behaviors
@@ -42,6 +42,19 @@ public class PhysicsBody( Body? body, bool isAlive ) : IDisposable
 
     // ========================================================================
 
+    /// <summary>
+    /// Represents a physics body that encapsulates properties and behaviors
+    /// related to managing a 2D physics entity in the Box2D physics system.
+    /// </summary>
+    /// <remarks>
+    /// This class provides functionality for managing the state and attributes
+    /// of a 2D physics object, including its type, bounding box, contact handling,
+    /// and its associated physical representation.
+    /// </remarks>
+    /// <example>
+    /// Create an instance of this class to handle a physics body within the Box2D
+    /// physics simulation.
+    /// </example>
     public PhysicsBody() : this( null, false )
     {
     }

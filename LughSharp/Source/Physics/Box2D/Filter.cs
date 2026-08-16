@@ -1,4 +1,4 @@
-namespace LughSharp.Physics2D.Source.Box2D;
+namespace LughSharp.Source.Physics.Box2D;
 
 /// <summary>
 /// This holds contact filtering data. Faithful port of libgdx <c>Filter</c>.

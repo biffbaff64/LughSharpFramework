@@ -128,5 +128,6 @@
 
     <ItemGroup>
       <Folder Include="Source\Graphics\Packing\" />
+      <Folder Include="Source\Physics\Box2D\Graphics\" />
     </ItemGroup>
 </Project>

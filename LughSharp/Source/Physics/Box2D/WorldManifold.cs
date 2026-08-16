@@ -22,45 +22,35 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Maths;
-
-namespace LughSharp.Physics2D.Source.Box2D;
+namespace LughSharp.Source.Physics.Box2D;
 
 /// <summary>
-/// This is used to compute contact points in world coordinates. Faithful port of
-/// libgdx <c>WorldManifold</c>. Instances are populated by <c>Contact.GetWorldManifold()</c>;
-/// the backing arrays are reused, so do not cache the returned references.
+/// This is used to compute contact points in world coordinates. Instances are populated
+/// by <c>Contact.GetWorldManifold()</c>;  the backing arrays are reused, so do not cache
+/// the returned references.
 /// </summary>
+[PublicAPI]
 public class WorldManifold
 {
-    internal readonly Vector2   NormalValue      = new();
-    internal readonly Vector2[] PointsValue      = [ new(), new() ];
-    internal readonly float[]   SeparationsValue = new float[ 2 ];
-    internal          int       NumContactPoints;
+    /// <summary>
+    /// The world normal at the contact points. Same instance returned each call.
+    /// </summary>
+    public Vector2 NormalValue { get; set; } = new();
 
-    /// <summary>The world normal at the contact points. Same instance returned each call.</summary>
-    public Vector2 GetNormal()
-    {
-        return NormalValue;
-    }
+    /// <summary>
+    /// The world contact points (up to <see cref="NumContactPoints"/>).
+    /// </summary>
+    public Vector2[] PointsValue { get; set; } = [ new(), new() ];
 
-    /// <summary>The world contact points (up to <see cref="GetNumberOfContactPoints"/>).</summary>
-    public Vector2[] GetPoints()
-    {
-        return PointsValue;
-    }
+    /// <summary>
+    /// The separation distances at each contact point (negative = penetration).
+    /// </summary>
+    public float[] SeparationsValue { get; set; } = new float[ 2 ];
 
-    /// <summary>The separation distances at each contact point (negative = penetration).</summary>
-    public float[] GetSeparations()
-    {
-        return SeparationsValue;
-    }
-
-    /// <summary>The number of valid contact points in the world manifold.</summary>
-    public int GetNumberOfContactPoints()
-    {
-        return NumContactPoints;
-    }
+    /// <summary>
+    /// The number of valid contact points in the world manifold.
+    /// </summary>
+    public int NumContactPoints { get; set; }
 }
 
 // ============================================================================

@@ -22,51 +22,68 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Maths;
-
-namespace LughSharp.Physics2D.Source.Box2D;
+namespace LughSharp.Source.Physics.Box2D;
 
 /// <summary>
 /// Encodes a rigid body's position and orientation (a rotation plus a translation).
 /// Faithful port of libgdx <c>Transform</c>: the four floats are packed into
 /// <see cref="Vals"/> as [posX, posY, cos, sin].
 /// </summary>
+[PublicAPI]
 public class Transform
 {
-    public const int POS_X = 0;
-    public const int POS_Y = 1;
-    public const int COS   = 2;
-    public const int SIN   = 3;
+    public const int PosX = 0;
+    public const int PosY = 1;
+    public const int Cos  = 2;
+    public const int Sin  = 3;
 
     /// <summary>The packed values: [posX, posY, cos(angle), sin(angle)].</summary>
-    public float[] Vals { get; } = new float[4];
+    public float[] Vals { get; } = new float[ 4 ];
 
+    // ========================================================================
+    
     private readonly Vector2 _position    = new();
     private readonly Vector2 _orientation = new();
+    
+    // ========================================================================
 
+    /// <summary>
+    /// Default constructor. Creates a new <see cref="Transform"/> with no position
+    /// and no rotation.
+    /// </summary>
     public Transform()
     {
     }
 
-    public Transform(Vector2 position, float angle)
+    /// <summary>
+    /// Creates a new <see cref="Transform"/> with the given position and angle.
+    /// </summary>
+    /// <param name="position"> The position of the transform. </param>
+    /// <param name="angle"> The angle of the transform. </param>
+    public Transform( Vector2 position, float angle )
     {
-        SetPosition(position);
-        SetRotation(angle);
+        SetPosition( position );
+        SetRotation( angle );
     }
 
-    public Transform(Vector2 position, Vector2 orientation)
+    /// <summary>
+    /// Creates a new <see cref="Transform"/> with the given position and orientation.
+    /// </summary>
+    /// <param name="position"> The position of the transform. </param>
+    /// <param name="orientation"> The orientation of the transform. </param>
+    public Transform( Vector2 position, Vector2 orientation )
     {
-        SetPosition(position);
-        SetOrientation(orientation);
+        SetPosition( position );
+        SetOrientation( orientation );
     }
 
     /// <summary>
     /// Transforms the given point (rotate then translate) in place and returns it.
     /// </summary>
-    public Vector2 Mul(Vector2 v)
+    public Vector2 Mul( Vector2 v )
     {
-        var x = Vals[ POS_X ] + (Vals[ COS ] * v.X) - (Vals[ SIN ] * v.Y);
-        var y = Vals[ POS_Y ] + (Vals[ SIN ] * v.X) + (Vals[ COS ] * v.Y);
+        var x = Vals[ PosX ] + ( Vals[ Cos ] * v.X ) - ( Vals[ Sin ] * v.Y );
+        var y = Vals[ PosY ] + ( Vals[ Sin ] * v.X ) + ( Vals[ Cos ] * v.Y );
 
         v.X = x;
         v.Y = y;
@@ -74,40 +91,58 @@ public class Transform
         return v;
     }
 
-    /// <summary>The position of the body's origin. Note: the same instance is returned each call.</summary>
+    /// <summary>
+    /// The position of the body's origin. Note: the same instance is returned each call.
+    /// </summary>
     public Vector2 GetPosition()
     {
-        return _position.Set(Vals[ POS_X ], Vals[ POS_Y ]);
+        return _position.Set( Vals[ PosX ], Vals[ PosY ] );
     }
 
-    public void SetPosition(Vector2 position)
+    /// <summary>
+    /// Sets the position of the body's origin.
+    /// </summary>
+    /// <param name="position"> The position of the body's origin. </param>
+    public void SetPosition( Vector2 position )
     {
-        Vals[ POS_X ] = position.X;
-        Vals[ POS_Y ] = position.Y;
+        Vals[ PosX ] = position.X;
+        Vals[ PosY ] = position.Y;
     }
 
-    /// <summary>The rotation in radians.</summary>
+    /// <summary>
+    /// The rotation in radians.
+    /// </summary>
     public float GetRotation()
     {
-        return MathF.Atan2(Vals[ SIN ], Vals[ COS ]);
+        return MathF.Atan2( Vals[ Sin ], Vals[ Cos ] );
     }
 
-    public void SetRotation(float angle)
+    /// <summary>
+    /// Sets the rotation in radians.
+    /// </summary>
+    /// <param name="angle"> The rotation in radians. </param>
+    public void SetRotation( float angle )
     {
-        Vals[ COS ] = MathF.Cos(angle);
-        Vals[ SIN ] = MathF.Sin(angle);
+        Vals[ Cos ] = MathF.Cos( angle );
+        Vals[ Sin ] = MathF.Sin( angle );
     }
 
-    /// <summary>The orientation (cos, sin). Note: the same instance is returned each call.</summary>
+    /// <summary>
+    /// The orientation (cos, sin). Note: the same instance is returned each call.
+    /// </summary>
     public Vector2 GetOrientation()
     {
-        return _orientation.Set(Vals[ COS ], Vals[ SIN ]);
+        return _orientation.Set( Vals[ Cos ], Vals[ Sin ] );
     }
 
-    public void SetOrientation(Vector2 orientation)
+    /// <summary>
+    /// Sets the orientation (cos, sin).
+    /// </summary>
+    /// <param name="orientation"> The orientation (cos, sin). </param>
+    public void SetOrientation( Vector2 orientation )
     {
-        Vals[ COS ] = orientation.X;
-        Vals[ SIN ] = orientation.Y;
+        Vals[ Cos ] = orientation.X;
+        Vals[ Sin ] = orientation.Y;
     }
 }
 

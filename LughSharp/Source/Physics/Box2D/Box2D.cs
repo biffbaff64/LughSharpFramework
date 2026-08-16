@@ -1,4 +1,4 @@
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
@@ -24,26 +24,23 @@
 
 namespace LughSharp.Source.Physics.Box2D;
 
-/// <summary>
-/// This holds the mass data computed for a shape.
-/// </summary>
 [PublicAPI]
-public class MassData
+public class Box2D
 {
-    /// <summary>
-    /// The mass of the shape, usually in kilograms.
-    /// </summary>
-    public float Mass { get; set; }
+    private Box2D()
+    {
+    }
 
     /// <summary>
-    /// The position of the shape's centroid relative to the shape's origin.
+    /// Initialise the Box2D native library. This must be called before any of the box2d
+    /// classes/methods can be used, with the exception of the <see cref="World"/> class,
+    /// which will also cause the Box2D natives to be loaded.
     /// </summary>
-    public Vector2 Center { get; set; } = new();
-
-    /// <summary>
-    /// The rotational inertia of the shape about the local origin.
-    /// </summary>
-    public float I { get; set; }
+    public static void Init()
+    {
+        //TODO:
+//        new SharedLibraryLoader().load( "gdx-box2d" );
+    }
 }
 
 // ============================================================================
