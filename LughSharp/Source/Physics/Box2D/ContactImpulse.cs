@@ -27,7 +27,9 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public class ContactImpulse
 {
-    
+    public ContactImpulse( World world, int i )
+    {
+    }
 }
 
 // ============================================================================

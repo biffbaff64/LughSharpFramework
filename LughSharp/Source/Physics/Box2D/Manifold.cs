@@ -25,7 +25,7 @@
 namespace LughSharp.Source.Physics.Box2D;
 
 [PublicAPI]
-public class Manifold
+public class Manifold( int i )
 {
 }
 

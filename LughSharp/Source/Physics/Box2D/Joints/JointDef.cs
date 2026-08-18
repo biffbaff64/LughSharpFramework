@@ -27,6 +27,58 @@ namespace LughSharp.Source.Physics.Box2D.Joints;
 [PublicAPI]
 public class JointDef
 {
+    [PublicAPI]
+    public enum JointType
+    {
+        Unknown,
+        RevoluteJoint,
+        PrismaticJoint,
+        DistanceJoint,
+        PulleyJoint,
+        MouseJoint,
+        GearJoint,
+        WheelJoint,
+        WeldJoint,
+        FrictionJoint,
+        RopeJoint,
+        MotorJoint
+    }
+
+    public static readonly JointType[] ValueTypes = new[]
+    {
+        JointType.Unknown,
+        JointType.RevoluteJoint,
+        JointType.PrismaticJoint,
+        JointType.DistanceJoint,
+        JointType.PulleyJoint,
+        JointType.MouseJoint,
+        JointType.GearJoint,
+        JointType.WheelJoint,
+        JointType.WeldJoint,
+        JointType.FrictionJoint,
+        JointType.RopeJoint,
+        JointType.MotorJoint
+    };
+
+    /// <summary>
+    /// The joint type is set automatically for concrete joint types.
+    /// </summary>
+    public JointType Type = JointType.Unknown;
+
+    /// <summary>
+    /// The first attached body.
+    /// </summary>
+    public Body? BodyA = null;
+
+    /// <summary>
+    /// The second attached body
+    /// </summary>
+    public Body? BodyB = null;
+
+    /// <summary>
+    /// Set this flag to true if the attached bodies should collide.
+    /// </summary>
+    public bool CollideConnected;
 }
 
 // ============================================================================

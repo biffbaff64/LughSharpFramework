@@ -27,12 +27,33 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public class Body
 {
+    public long Addr;
+    public object? UserData;
+    
+    public Body( World world, int i )
+    {
+    }
+
     public void SetGravityScale( float i )
     {
     }
 
-    public void CreateFixture( Shape? fixtureDefShape )
+    public void CreateFixture( FixtureDef fixtureDef )
     {
+    }
+
+    public void Reset( long bodyAddr )
+    {
+    }
+
+    public List< JointEdge > GetJointList()
+    {
+        return new List< JointEdge >();
+    }
+
+    public List< Fixture > GetFixtureList()
+    {
+        return new List< Fixture >();
     }
 }
 

@@ -27,7 +27,12 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public class Fixture
 {
+    public long Addr;
+    public object? UserData;
     
+    public Fixture( object? o, int i )
+    {
+    }
 }
 
 // ============================================================================

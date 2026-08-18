@@ -945,25 +945,25 @@ LUGHSHARP/SOURCE/PHYSICS/BOX2D
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      - DONE - Body
-    - DONE - DONE - DONE - BodyDef
+    - IP   - IP   - DONE - BodyDef
     -      -      - DONE - Box2D
     -      -      - DONE - Box2DDebugRenderer
-    -      -      - DONE - Contact
+    - IP   - IP   - DONE - Contact
     -      -      - DONE - ContactImpulse
     -      -      - DONE - Filter
     -      -      - DONE - Fixture
     -      -      - DONE - FixtureDef
-    - DONE - IP   - DONE - IContactFilter
-    - DONE - DONE - DONE - IContactListener
-    - DONE - DONE - DONE - IDestructionListener
-    - DONE - DONE - DONE - IQueryCallback
-    - DONE - DONE - DONE - IRayCastCallback
+    - IP   - IP   - DONE - IContactFilter
+    - IP   - IP   - DONE - IContactListener
+    - IP   - IP   - DONE - IDestructionListener
+    - IP   - IP   - DONE - IQueryCallback
+    - IP   - IP   - DONE - IRayCastCallback
     -      -      - DONE - Manifold
-    - DONE - DONE - DONE - MassData
-    - DONE - DONE - DONE - PhysicsConstants
-    - DONE - DONE - DONE - Transform
+    - IP   - IP   - DONE - MassData
+    - IP   - IP   - DONE - PhysicsConstants
+    - IP   - IP   - DONE - Transform
     -      -      - DONE - World
-    - DONE - DONE - DONE - WorldManifold
+    - IP   - IP   - DONE - WorldManifold
 
 LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/GRAPHICS
 ------------------------------------------
@@ -984,8 +984,8 @@ LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
     -      -      - DONE - GearJoint
     -      -      - DONE - GearJointDef
     -      -      - DONE - Joint
-    -      -      - DONE - JointDef
-    -      -      - DONE - JointEdge
+    - IP   - IP   - DONE - JointDef
+    - IP   - IP   - DONE - JointEdge
     -      -      - DONE - MotorJoint
     -      -      - DONE - MotorJointDef
     -      -      - DONE - MouseJoint
@@ -1008,10 +1008,10 @@ LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/SHAPES
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - ChainShape
-    -      -      - DONE - CircleShape
-    -      -      - DONE - EdgeShape
-    -      -      - DONE - PolygonShape
+    - IP   - IP   - DONE - ChainShape
+    - IP   - IP   - DONE - CircleShape
+    - IP   - IP   - DONE - EdgeShape
+    - IP   - IP   - DONE - PolygonShape
     - IP   - IP   - DONE - Shape
 
 LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/UTILS
@@ -1020,7 +1020,7 @@ LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/UTILS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - B2BodyDescriptor
-    -      -      - DONE - BodyBuilder
+    - IP   - IP   - DONE - BodyBuilder
     - DONE - DONE - DONE - Box2DContactListener
     - DONE - DONE - DONE - PhysicsBody
     - DONE - DONE - DONE - PhysicsBodyType

@@ -27,6 +27,22 @@ namespace LughSharp.Source.Physics.Box2D.Shapes;
 [PublicAPI]
 public class CircleShape : Shape
 {
+    // 
+    private float[] _tmp = new float[ 2 ];
+    
+    // Returns the position of the shape
+    private Vector2 _position = new Vector2();
+
+    public CircleShape()
+    {
+        addr = newCircleShape();
+    }
+
+    protected CircleShape( long addr )
+    {
+        this.addr = addr;
+    }
+
     /// <summary>
     /// Get the type of this shape. You can use this to down cast to the concrete shape.
     /// </summary>
@@ -35,6 +51,46 @@ public class CircleShape : Shape
     {
         return ShapeTypes.Circle;
     }
+
+    public Vector2 GetPosition()
+    {
+        jniGetPosition( addr, _tmp );
+        _position.X = _tmp[ 0 ];
+        _position.Y = _tmp[ 1 ];
+
+        return _position;
+    }
+
+    /** Sets the position of the shape */
+    public void SetPosition( Vector2 position )
+    {
+        jniSetPosition( addr, position.X, position.Y );
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern long newCircleShape();
+    /*
+        return (jlong)(new b2CircleShape( ));
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void jniGetPosition( long addr, float[] position );
+    /*
+        b2CircleShape* circle = (b2CircleShape*)addr;
+        position[0] = circle->m_p.x;
+        position[1] = circle->m_p.y;
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void jniSetPosition( long addr, float positionX, float positionY );
+    /*
+        b2CircleShape* circle = (b2CircleShape*)addr;
+        circle->m_p.x = positionX;
+        circle->m_p.y = positionY;
+    */
 }
 
 // ============================================================================

@@ -296,10 +296,8 @@ public class BodyBuilder( float ppm, World world )
 
     private Body BuildBody( BodyDef bodyDef, FixtureDef fixtureDef )
     {
-        Body body = world.CreateBody( bodyDef.Position,
-                                      bodyDef.Angle,
-                                      bodyDef.Type );
-        body.CreateFixture( fixtureDef.Shape );
+        Body body = world.CreateBody( bodyDef );
+        body.CreateFixture( fixtureDef );
 
         return body;
     }
