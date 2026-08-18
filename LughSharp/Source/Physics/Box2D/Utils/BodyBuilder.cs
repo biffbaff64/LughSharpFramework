@@ -198,7 +198,10 @@ public class BodyBuilder( float ppm, World world )
 
         Body body = BuildBody( bodyDef, fixtureDef );
 
-        body.IgnoreGravity = fixtureDef.IsSensor;
+        if ( fixtureDef.IsSensor )
+        {
+            body.SetGravityScale( 0 );
+        }
 
         shape.Dispose();
 
@@ -219,7 +222,10 @@ public class BodyBuilder( float ppm, World world )
 
         Body body = BuildBody( bodyDef, fixtureDef );
 
-        body.IgnoreGravity = fixtureDef.IsSensor;
+        if ( fixtureDef.IsSensor )
+        {
+            body.SetGravityScale( 0 );
+        }
 
         return body;
     }
@@ -251,7 +257,10 @@ public class BodyBuilder( float ppm, World world )
 
         Body body = BuildBody( bodyDef, fixtureDef );
         
-        body.IgnoreGravity = fixtureDef.IsSensor;
+        if ( fixtureDef.IsSensor )
+        {
+            body.SetGravityScale( 0 );
+        }
 
         shape.Dispose();
 
@@ -287,9 +296,9 @@ public class BodyBuilder( float ppm, World world )
 
     private Body BuildBody( BodyDef bodyDef, FixtureDef fixtureDef )
     {
-        Body body = world.CreateBody( B2Convert.ToAether( bodyDef.Position ),
+        Body body = world.CreateBody( bodyDef.Position,
                                       bodyDef.Angle,
-                                      B2Convert.ToAether( bodyDef.Type ) );
+                                      bodyDef.Type );
         body.CreateFixture( fixtureDef.Shape );
 
         return body;

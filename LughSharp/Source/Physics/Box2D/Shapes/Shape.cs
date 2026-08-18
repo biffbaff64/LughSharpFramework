@@ -70,23 +70,19 @@ public abstract class Shape
         return jniGetRadius( addr );
     }
 
-    private extern float jniGetRadius( long addr );
-    /*
-        b2Shape* shape = (b2Shape*)addr;
-        return shape->m_radius;
-    */
-
     /** Sets the radius of this shape */
     public void SetRadius( float radius )
     {
         jniSetRadius( addr, radius );
     }
 
-    private extern void jniSetRadius( long addr, float radius );
-    /*
-        b2Shape* shape = (b2Shape*)addr;
-        shape->m_radius = radius;
-    */
+    /// <summary>
+    /// Get the number of child primitives.
+    /// </summary>
+    public int GetChildCount()
+    {
+        return jniGetChildCount( addr );
+    }
 
     /// <summary>
     /// Needs to be called when the shape is no longer used, e.g. after a fixture
@@ -97,12 +93,31 @@ public abstract class Shape
         jniDispose( addr );
     }
 
-    private extern void jniDispose( long addr );
+    // ========================================================================
+    // ========================================================================
+    
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern float jniGetRadius( long addr );
+    /*
+        b2Shape* shape = (b2Shape*)addr;
+        return shape->m_radius;
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void jniSetRadius( long addr, float radius );
+    /*
+        b2Shape* shape = (b2Shape*)addr;
+        shape->m_radius = radius;
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void jniDispose( long addr );
     /*
         b2Shape* shape = (b2Shape*)addr;
         delete shape;
     */
 
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
     protected static extern int jniGetType( long addr );
     /*
         b2Shape* shape = (b2Shape*)addr;
@@ -115,15 +130,8 @@ public abstract class Shape
         }
     */
 
-    /// <summary>
-    /// Get the number of child primitives.
-    /// </summary>
-    public int GetChildCount()
-    {
-        return jniGetChildCount( addr );
-    }
-
-    private extern int jniGetChildCount( long addr );
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern int jniGetChildCount( long addr );
     /*
         b2Shape* shape = (b2Shape*)addr;
         return shape->GetChildCount();

@@ -27,6 +27,171 @@ namespace LughSharp.Source.Physics.Box2D.Shapes;
 [PublicAPI]
 public class PolygonShape : Shape
 {
+    private static float[] _verts = new float[ 2 ];
+
+    // ========================================================================
+    
+    /// <summary>
+    /// Constructs a new polygon
+    /// </summary>
+    public PolygonShape()
+    {
+        addr = NewPolygonShape();
+    }
+
+    /// <summary>
+    /// Constructs a new polygon
+    /// </summary>
+    protected PolygonShape( long addr )
+    {
+        this.addr = addr;
+    }
+
+    /// <summary>
+    /// Get the type of this shape. You can use this to down cast to the concrete shape.
+    /// </summary>
+    /// <returns> The shape type. </returns>
+    public override ShapeTypes GetShapeType()
+    {
+        return ShapeTypes.Polygon;
+    }
+
+    /// <summary>
+    /// Copy vertices. This assumes the vertices define a convex polygon. It is assumed
+    /// that the exterior is the the right of each edge.
+    /// </summary>
+    /// <param name="vertices"> The vertices to copy. </param>
+    public void Set( Vector2[] vertices )
+    {
+        float[] verts = new float[ vertices.Length * 2 ];
+
+        for ( int i = 0, j = 0; i < vertices.Length * 2; i += 2, j++ )
+        {
+            verts[ i ]     = vertices[ j ].X;
+            verts[ i + 1 ] = vertices[ j ].Y;
+        }
+
+        JniSet( addr, verts, 0, verts.Length );
+    }
+
+    /// <summary>
+    /// Copy vertices from the given float array. It is assumed the vertices are in x,y
+    /// order and define a convex polygon. It is assumed that the exterior is the the
+    /// right of each edge.
+    /// </summary>
+    /// <param name="vertices"> The vertices to copy. </param>
+    public void Set( float[] vertices )
+    {
+        JniSet( addr, vertices, 0, vertices.Length );
+    }
+
+    /// <summary>
+    /// Copy vertices from the given float array, taking into account the offset and
+    /// length. It is assumed the vertices are in x,y order and define a convex polygon.
+    /// It is assumed that the exterior is the the right of each edge.
+    /// </summary>
+    /// <param name="vertices"> The vertices to copy. </param>
+    /// <param name="offset"> The offset into the vertices array. </param>
+    /// <param name="len"> The number of vertices to copy. </param>
+    public void Set( float[] vertices, int offset, int len )
+    {
+        JniSet( addr, vertices, offset, len );
+    }
+
+    /// <summary>
+    /// Build vertices to represent an axis-aligned box.
+    /// </summary>
+    /// <param name="hx"> the half-width. </param>
+    /// <param name="hy"> the half-height. </param>
+    public void SetAsBox( float hx, float hy )
+    {
+        JniSetAsBox( addr, hx, hy );
+    }
+
+    /// <summary>
+    /// Build vertices to represent an oriented box.
+    /// </summary>
+    /// <param name="hx"> the half-width. </param>
+    /// <param name="hy"> the half-height. </param> 
+    /// <param name="center"> the center of the box in local coordinates. </param>
+    /// <param name="angle"> the rotation in radians of the box in local coordinates. </param>
+    public void SetAsBox( float hx, float hy, Vector2 center, float angle )
+    {
+        JniSetAsBox( addr, hx, hy, center.X, center.Y, angle );
+    }
+
+    /// <summary>
+    /// Returns the number of vertices
+    /// </summary>
+    public int GetVertexCount()
+    {
+        return JniGetVertexCount( addr );
+    }
+
+    /// <summary>
+    /// Returns the vertex at the given position.
+    /// </summary>
+    /// <param name="index"> the index of the vertex 0 &lt;= index &lt; getVertexCount( )  </param>
+    /// <param name="vertex"> vertex </param>
+    public void GetVertex( int index, Vector2 vertex )
+    {
+        JniGetVertex( addr, index, _verts );
+        vertex.X = _verts[ 0 ];
+        vertex.Y = _verts[ 1 ];
+    }
+
+    // ========================================================================
+    // ========================================================================
+    
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniSet( long addr, float[] verts, int offset, int len );
+    /*
+        b2PolygonShape* poly = (b2PolygonShape*)addr;
+        int numVertices = len / 2;
+        b2Vec2* verticesOut = new b2Vec2[numVertices];
+        for(int i = 0; i < numVertices; i++) {
+            verticesOut[i] = b2Vec2(verts[(i<<1) + offset], verts[(i<<1) + offset + 1]);
+        }
+        poly->Set(verticesOut, numVertices);
+        delete[] verticesOut;
+     */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniSetAsBox( long addr, float hx, float hy );
+    /*
+        b2PolygonShape* poly = (b2PolygonShape*)addr;
+        poly->SetAsBox(hx, hy);
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniSetAsBox( long addr, float hx, float hy, float centerX, float centerY, float angle );
+    /*
+        b2PolygonShape* poly = (b2PolygonShape*)addr;
+        poly->SetAsBox( hx, hy, b2Vec2( centerX, centerY ), angle );
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern int JniGetVertexCount( long addr );
+    /*
+        b2PolygonShape* poly = (b2PolygonShape*)addr;
+        return poly->GetVertexCount();
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniGetVertex( long addr, int index, float[] verts );
+    /*
+        b2PolygonShape* poly = (b2PolygonShape*)addr;
+        const b2Vec2 v = poly->GetVertex( index );
+        verts[0] = v.x;
+        verts[1] = v.y;
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern long NewPolygonShape();
+    /*
+        b2PolygonShape* poly = new b2PolygonShape();
+        return (jlong)poly;
+    */
 }
 
 // ============================================================================

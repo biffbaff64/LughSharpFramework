@@ -27,6 +27,14 @@ namespace LughSharp.Source.Physics.Box2D.Shapes;
 [PublicAPI]
 public class EdgeShape : Shape
 {
+    /// <summary>
+    /// Get the type of this shape. You can use this to down cast to the concrete shape.
+    /// </summary>
+    /// <returns> The shape type. </returns>
+    public override ShapeTypes GetShapeType()
+    {
+        return ShapeTypes.Edge;
+    }
 }
 
 // ============================================================================

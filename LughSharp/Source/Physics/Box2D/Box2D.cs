@@ -27,6 +27,10 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public class Box2D
 {
+    public const string Box2DDllFile = "box2d.dll";
+
+    // ========================================================================
+    
     private Box2D()
     {
     }

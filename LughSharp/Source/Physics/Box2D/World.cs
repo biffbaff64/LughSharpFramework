@@ -27,6 +27,10 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public sealed class World
 {
+    public Body CreateBody( Vector2 bodyDefPosition, float bodyDefAngle, BodyDef.BodyType bodyDefType )
+    {
+        return new Body();
+    }
 }
 
 // ============================================================================

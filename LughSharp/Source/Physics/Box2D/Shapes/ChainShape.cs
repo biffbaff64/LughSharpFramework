@@ -31,6 +31,10 @@ public class ChainShape : Shape
 
     // ========================================================================
 
+    private static float[] _verts = new float[ 2 ];
+
+    // ========================================================================
+
     public ChainShape()
     {
         addr = NewChainShape();
@@ -49,7 +53,7 @@ public class ChainShape : Shape
     {
         return ShapeTypes.Chain;
     }
-    
+
     /// <summary>
     /// Clear all vertices in the chain and free the memory.
     /// </summary>
@@ -98,36 +102,32 @@ public class ChainShape : Shape
         IsLooped = true;
     }
 
-    private extern void JniCreateLoop( long addr, float[] verts, int offset, int numVertices );
-    /*
-        b2ChainShape* chain = (b2ChainShape*)addr;
-        b2Vec2* verticesOut = new b2Vec2[numVertices];
-        for( int i = 0; i < numVertices; i++ )
-            verticesOut[i] = b2Vec2(verts[offset+(i<<1)], verts[offset+(i<<1)+1]);
-        chain->CreateLoop( verticesOut, numVertices );
-        delete[] verticesOut;
-    */
-
+    /// <summary>
     /// Create a chain with isolated end vertices.
-    /// param vertices an array of floats of alternating x, y coordinates.
+    /// </summary>
+    /// <param name="vertices"> an array of floats of alternating x, y coordinates. </param>
     public void CreateChain( float[] vertices )
     {
         JniCreateChain( addr, vertices, 0, vertices.Length / 2 );
         IsLooped = false;
     }
 
-    /** Create a chain with isolated end vertices.
-     * @param vertices an array of floats of alternating x, y coordinates.
-     * @param offset into the vertices array
-     * @param length after offset (in floats, not float-pairs, so even number) */
+    /// <summary>
+    /// Create a chain with isolated end vertices.
+    /// </summary>
+    /// <param name="vertices"> an array of floats of alternating x, y coordinates. </param>
+    /// <param name="offset"> into the vertices array </param>
+    /// <param name="length"> after offset (in floats, not float-pairs, so even number) </param>
     public void CreateChain( float[] vertices, int offset, int length )
     {
         JniCreateChain( addr, vertices, offset, length / 2 );
         IsLooped = false;
     }
 
-    /** Create a chain with isolated end vertices.
-     * @param vertices an array of vertices, these are copied */
+    /// <summary>
+    /// Create a chain with isolated end vertices.
+    /// </summary>
+    /// <param name="vertices"> an array of vertices, these are copied </param>
     public void CreateChain( Vector2[] vertices )
     {
         var verts = new float[ vertices.Length * 2 ];
@@ -142,7 +142,68 @@ public class ChainShape : Shape
         IsLooped = false;
     }
 
-    private extern void JniCreateChain( long addr, float[] verts, int offset, int numVertices );
+    /// Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops. */
+    public void SetPrevVertex( Vector2 prevVertex )
+    {
+        SetPrevVertex( prevVertex.X, prevVertex.Y );
+    }
+
+    /// Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops. */
+    public void SetPrevVertex( float prevVertexX, float prevVertexY )
+    {
+        JniSetPrevVertex( addr, prevVertexX, prevVertexY );
+    }
+
+    /// Establish connectivity to a vertex that follows the last vertex.
+    /// Don't call this for loops.
+    public void SetNextVertex( Vector2 nextVertex )
+    {
+        SetNextVertex( nextVertex.X, nextVertex.Y );
+    }
+
+    /// Establish connectivity to a vertex that follows the last vertex.
+    /// Don't call this for loops.
+    public void SetNextVertex( float nextVertexX, float nextVertexY )
+    {
+        JniSetNextVertex( addr, nextVertexX, nextVertexY );
+    }
+
+    /// <summary>
+    /// Returns the number of vertices
+    /// </summary>
+    public int GetVertexCount()
+    {
+        return JniGetVertexCount( addr );
+    }
+
+    /// <summary>
+    /// Returns the vertex at the given position.
+    /// </summary>
+    /// <param name="index"> the index of the vertex 0 &lt;= index &lt; GetVertexCount() </param>
+    /// <param name="vertex"> vertex </param>
+    public void GetVertex( int index, Vector2 vertex )
+    {
+        JniGetVertex( addr, index, _verts );
+        vertex.X = _verts[ 0 ];
+        vertex.Y = _verts[ 1 ];
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniCreateLoop( long addr, float[] verts, int offset, int numVertices );
+    /*
+        b2ChainShape* chain = (b2ChainShape*)addr;
+        b2Vec2* verticesOut = new b2Vec2[numVertices];
+        for( int i = 0; i < numVertices; i++ )
+            verticesOut[i] = b2Vec2(verts[offset+(i<<1)], verts[offset+(i<<1)+1]);
+        chain->CreateLoop( verticesOut, numVertices );
+        delete[] verticesOut;
+    */
+
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniCreateChain( long addr, float[] verts, int offset, int numVertices );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         b2Vec2* verticesOut = new b2Vec2[numVertices];
@@ -152,66 +213,29 @@ public class ChainShape : Shape
         delete[] verticesOut;
     */
 
-    /** Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops. */
-    public void SetPrevVertex( Vector2 prevVertex )
-    {
-        SetPrevVertex( prevVertex.X, prevVertex.Y );
-    }
-
-    /** Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops. */
-    public void SetPrevVertex( float prevVertexX, float prevVertexY )
-    {
-        JniSetPrevVertex( addr, prevVertexX, prevVertexY );
-    }
-
-    private extern void JniSetPrevVertex( long addr, float x, float y );
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniSetPrevVertex( long addr, float x, float y );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         chain->SetPrevVertex(b2Vec2(x, y));
     */
 
-    /** Establish connectivity to a vertex that follows the last vertex. Don't call this for loops. */
-    public void SetNextVertex( Vector2 nextVertex )
-    {
-        SetNextVertex( nextVertex.X, nextVertex.Y );
-    }
-
-    /** Establish connectivity to a vertex that follows the last vertex. Don't call this for loops. */
-    public void SetNextVertex( float nextVertexX, float nextVertexY )
-    {
-        JniSetNextVertex( addr, nextVertexX, nextVertexY );
-    }
-
-    private extern void JniSetNextVertex( long addr, float x, float y );
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniSetNextVertex( long addr, float x, float y );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         chain->SetNextVertex(b2Vec2(x, y));
     */
 
-    /** @return the number of vertices */
-    public int GetVertexCount()
-    {
-        return JniGetVertexCount( addr );
-    }
-
-    private extern int JniGetVertexCount( long addr ); /*
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern int JniGetVertexCount( long addr );
+    /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         return chain->GetVertexCount();
     */
 
-    private static float[] _verts = new float[ 2 ];
-
-    /** Returns the vertex at the given position.
-     * @param index the index of the vertex 0 &lt;= index &lt; GetVertexCount()
-     * @param vertex vertex */
-    public void GetVertex( int index, Vector2 vertex )
-    {
-        JniGetVertex( addr, index, _verts );
-        vertex.X = _verts[ 0 ];
-        vertex.Y = _verts[ 1 ];
-    }
-
-    private extern void JniGetVertex( long addr, int index, float[] verts );
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniGetVertex( long addr, int index, float[] verts );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         const b2Vec2 v = chain->GetVertex( index );
@@ -219,13 +243,15 @@ public class ChainShape : Shape
         verts[1] = v.y;
     */
 
-    private extern void JniClear( long addr );
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
+    private static extern void JniClear( long addr );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         chain->Clear();
     */
 
-    private extern long NewChainShape();
+    [DllImport( Box2D.Box2DDllFile, EntryPoint = "b2ChainShape", CallingConvention = CallingConvention.Cdecl )]
+    private static extern long NewChainShape();
     /*
         return (jlong)(new b2ChainShape());
     */

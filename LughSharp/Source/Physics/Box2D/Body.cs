@@ -27,7 +27,13 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public class Body
 {
-    
+    public void SetGravityScale( float i )
+    {
+    }
+
+    public void CreateFixture( Shape? fixtureDefShape )
+    {
+    }
 }
 
 // ============================================================================

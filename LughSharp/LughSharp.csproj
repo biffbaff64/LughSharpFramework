@@ -7,7 +7,7 @@
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Title>LughSharp</Title>
         <Authors>Richard Ikin</Authors>
-        <Version>0.0.1-beta4.1</Version>
+        <Version>0.1.0</Version>
         <Description>C# 2D/3D Game Framework.</Description>
         <RepositoryUrl>https://github.com/biffbaff64/LughSharp</RepositoryUrl>
         <LangVersion>latestmajor</LangVersion>
@@ -20,13 +20,14 @@
         <PackageTags>CSharp;2D;Framework;OpenGL;</PackageTags>
         <Copyright>Copyright 2024 Circa64 Software Projects</Copyright>
         <Company>Circa64 Software Projects</Company>
-        <PackageReleaseNotes>Updated for internal structural testing.</PackageReleaseNotes>
+        <PackageReleaseNotes>Release v0.1.0 for use with my game project. This will most likely still have issues and they will be fixed along the way</PackageReleaseNotes>
         <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
         <AssemblyName>LughSharp</AssemblyName>
         <RootNamespace>LughSharp</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <TargetFramework>net9.0</TargetFramework>
+        <PackageIcon>lughicon.png</PackageIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(IsWindows)'=='true'">
@@ -90,6 +91,22 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <None Remove="AlisonTrout.txt" />
+        <None Remove="Assets\Circa64_Main_Logo.png" />
+        <Content Include="Assets\Circa64_Main_Logo.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Assets\lughicon.png" />
+        <Content Include="Assets\lughicon.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Remove="Assets\lughlogo.png" />
+        <Content Include="Assets\lughlogo.png">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Include="bin\Debug\net9.0\Assets\lughicon.png">
+          <Pack>True</Pack>
+          <PackagePath></PackagePath>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
