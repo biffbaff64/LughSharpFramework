@@ -27,9 +27,11 @@ namespace LughSharp.Source.Physics.Box2D;
 [PublicAPI]
 public class Body
 {
-    public long Addr;
+    public long    Addr;
     public object? UserData;
-    
+
+    public List< JointEdge > Joints = new( 2 );
+
     public Body( World world, int i )
     {
     }
@@ -46,6 +48,11 @@ public class Body
     {
     }
 
+    public Vector2 GetLocalPoint( Vector2 worldPoint )
+    {
+        return new Vector2();
+    }
+
     public List< JointEdge > GetJointList()
     {
         return new List< JointEdge >();
@@ -59,4 +66,3 @@ public class Body
 
 // ============================================================================
 // ============================================================================
-

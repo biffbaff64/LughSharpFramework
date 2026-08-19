@@ -37,8 +37,8 @@ public class JointEdge
     public Joint Joint { get; set; }
 
     // ========================================================================
-    
-    protected JointEdge( Body other, Joint joint )
+
+    public JointEdge( Body? other, Joint joint )
     {
         Other = other;
         Joint = joint;

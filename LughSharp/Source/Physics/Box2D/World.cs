@@ -235,257 +235,262 @@ public sealed class World
         long   jointAddr = CreateProperJoint( def );
         Joint? joint     = null;
 
-        if ( def.Type == JointType.DistanceJoint ) joint = new DistanceJoint( this, jointAddr );
-        if ( def.Type == JointType.FrictionJoint ) joint = new FrictionJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.DistanceJoint ) joint = new DistanceJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.FrictionJoint ) joint = new FrictionJoint( this, jointAddr );
 
-        if ( def.Type == JointType.GearJoint )
+        if ( def.Type == JointDef.JointType.GearJoint )
         {
-            joint = new GearJoint( this, jointAddr, ( ( GearJointDef )def ).joint1, ( ( GearJointDef )def ).joint2 );
+            joint = new GearJoint( this, jointAddr, ( ( GearJointDef )def ).Joint1, ( ( GearJointDef )def ).Joint2 );
         }
         
-        if ( def.Type == JointType.MotorJoint ) joint     = new MotorJoint( this, jointAddr );
-        if ( def.Type == JointType.MouseJoint ) joint     = new MouseJoint( this, jointAddr );
-        if ( def.Type == JointType.PrismaticJoint ) joint = new PrismaticJoint( this, jointAddr );
-        if ( def.Type == JointType.PulleyJoint ) joint    = new PulleyJoint( this, jointAddr );
-        if ( def.Type == JointType.RevoluteJoint ) joint  = new RevoluteJoint( this, jointAddr );
-        if ( def.Type == JointType.RopeJoint ) joint      = new RopeJoint( this, jointAddr );
-        if ( def.Type == JointType.WeldJoint ) joint      = new WeldJoint( this, jointAddr );
-        if ( def.Type == JointType.WheelJoint ) joint     = new WheelJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.MotorJoint ) joint     = new MotorJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.MouseJoint ) joint     = new MouseJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.PrismaticJoint ) joint = new PrismaticJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.PulleyJoint ) joint    = new PulleyJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.RevoluteJoint ) joint  = new RevoluteJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.RopeJoint ) joint      = new RopeJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.WeldJoint ) joint      = new WeldJoint( this, jointAddr );
+        if ( def.Type == JointDef.JointType.WheelJoint ) joint     = new WheelJoint( this, jointAddr );
 
         if ( joint == null ) throw new LughRuntimeException( "Unknown joint type: " + def.Type );
 
-        Joints.put( joint.Addr, joint );
-        JointEdge jointEdgeA = new JointEdge( def.bodyB, joint );
-        JointEdge jointEdgeB = new JointEdge( def.bodyA, joint );
+        Joints[ joint.Addr ] = joint;
+        JointEdge jointEdgeA = new JointEdge( def.BodyB, joint );
+        JointEdge jointEdgeB = new JointEdge( def.BodyA, joint );
 
-        joint.jointEdgeA = jointEdgeA;
-        joint.jointEdgeB = jointEdgeB;
+        joint.JointEdgeA = jointEdgeA;
+        joint.JointEdgeB = jointEdgeB;
         
-        def.bodyA.joints.add( jointEdgeA );
-        def.bodyB.joints.add( jointEdgeB );
+        def.BodyA?.Joints.Add( jointEdgeA );
+        def.BodyB?.Joints.Add( jointEdgeB );
 
         return joint;
     }
 
     private long CreateProperJoint( JointDef def )
     {
-        if ( def.type == JointType.DistanceJoint )
+        if ( def.Type == JointDef.JointType.DistanceJoint )
         {
             DistanceJointDef d = ( DistanceJointDef )def;
 
             return JniCreateDistanceJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.length,
-                 d.frequencyHz,
-                 d.dampingRatio
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.Length,
+                 d.FrequencyHz,
+                 d.DampingRatio
                 );
         }
 
-        if ( def.type == JointType.FrictionJoint )
+        if ( def.Type == JointDef.JointType.FrictionJoint )
         {
             FrictionJointDef d = ( FrictionJointDef )def;
 
             return JniCreateFrictionJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.maxForce,
-                 d.maxTorque
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.MaxForce,
+                 d.MaxTorque
                 );
         }
 
-        if ( def.type == JointType.GearJoint )
+        if ( def.Type == JointDef.JointType.GearJoint )
         {
             GearJointDef d = ( GearJointDef )def;
 
-            return JniCreateGearJoint
-                ( Addr, d.bodyA.Addr, d.bodyB.Addr, d.collideConnected, d.joint1.Addr, d.joint2.Addr, d.ratio );
+            return JniCreateGearJoint( Addr,
+                                       d.BodyA.Addr,
+                                       d.BodyB.Addr,
+                                       d.CollideConnected,
+                                       d.Joint1.Addr,
+                                       d.Joint2.Addr,
+                                       d.Ratio );
         }
 
-        if ( def.type == JointType.MotorJoint )
+        if ( def.Type == JointDef.JointType.MotorJoint )
         {
             MotorJointDef d = ( MotorJointDef )def;
 
             return JniCreateMotorJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.linearOffset.X,
-                 d.linearOffset.Y,
-                 d.angularOffset,
-                 d.maxForce,
-                 d.maxTorque,
-                 d.correctionFactor
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LinearOffset.X,
+                 d.LinearOffset.Y,
+                 d.AngularOffset,
+                 d.MaxForce,
+                 d.MaxTorque,
+                 d.CorrectionFactor
                 );
         }
 
-        if ( def.type == JointType.MouseJoint )
+        if ( def.Type == JointDef.JointType.MouseJoint )
         {
             MouseJointDef d = ( MouseJointDef )def;
 
             return JniCreateMouseJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.target.X,
-                 d.target.Y,
-                 d.maxForce,
-                 d.frequencyHz,
-                 d.dampingRatio
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.Target.X,
+                 d.Target.Y,
+                 d.MaxForce,
+                 d.FrequencyHz,
+                 d.DampingRatio
                 );
         }
 
-        if ( def.type == JointType.PrismaticJoint )
+        if ( def.Type == JointDef.JointType.PrismaticJoint )
         {
             PrismaticJointDef d = ( PrismaticJointDef )def;
 
             return JniCreatePrismaticJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.localAxisA.X,
-                 d.localAxisA.Y,
-                 d.referenceAngle,
-                 d.enableLimit,
-                 d.lowerTranslation,
-                 d.upperTranslation,
-                 d.enableMotor,
-                 d.maxMotorForce,
-                 d.motorSpeed
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.LocalAxisA.X,
+                 d.LocalAxisA.Y,
+                 d.ReferenceAngle,
+                 d.EnableLimit,
+                 d.LowerTranslation,
+                 d.UpperTranslation,
+                 d.EnableMotor,
+                 d.MaxMotorForce,
+                 d.MotorSpeed
                 );
         }
 
-        if ( def.type == JointType.PulleyJoint )
+        if ( def.Type == JointDef.JointType.PulleyJoint )
         {
             PulleyJointDef d = ( PulleyJointDef )def;
 
             return JniCreatePulleyJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.groundAnchorA.X,
-                 d.groundAnchorA.Y,
-                 d.groundAnchorB.X,
-                 d.groundAnchorB.Y,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.lengthA,
-                 d.lengthB,
-                 d.ratio
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.GroundAnchorA.X,
+                 d.GroundAnchorA.Y,
+                 d.GroundAnchorB.X,
+                 d.GroundAnchorB.Y,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.LengthA,
+                 d.LengthB,
+                 d.Ratio
                 );
         }
 
-        if ( def.type == JointType.RevoluteJoint )
+        if ( def.Type == JointDef.JointType.RevoluteJoint )
         {
             RevoluteJointDef d = ( RevoluteJointDef )def;
 
             return JniCreateRevoluteJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.referenceAngle,
-                 d.enableLimit,
-                 d.lowerAngle,
-                 d.upperAngle,
-                 d.enableMotor,
-                 d.motorSpeed,
-                 d.maxMotorTorque
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.ReferenceAngle,
+                 d.EnableLimit,
+                 d.LowerAngle,
+                 d.UpperAngle,
+                 d.EnableMotor,
+                 d.MotorSpeed,
+                 d.MaxMotorTorque
                 );
         }
 
-        if ( def.type == JointType.RopeJoint )
+        if ( def.Type == JointDef.JointType.RopeJoint )
         {
             RopeJointDef d = ( RopeJointDef )def;
 
             return JniCreateRopeJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.maxLength
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.MaxLength
                 );
         }
 
-        if ( def.type == JointType.WeldJoint )
+        if ( def.Type == JointDef.JointType.WeldJoint )
         {
             WeldJointDef d = ( WeldJointDef )def;
 
             return JniCreateWeldJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.referenceAngle,
-                 d.frequencyHz,
-                 d.dampingRatio
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.ReferenceAngle,
+                 d.FrequencyHz,
+                 d.DampingRatio
                 );
         }
 
-        if ( def.type == JointType.WheelJoint )
+        if ( def.Type == JointDef.JointType.WheelJoint )
         {
             WheelJointDef d = ( WheelJointDef )def;
 
             return JniCreateWheelJoint
                 (
                  Addr,
-                 d.bodyA.Addr,
-                 d.bodyB.Addr,
-                 d.collideConnected,
-                 d.localAnchorA.X,
-                 d.localAnchorA.Y,
-                 d.localAnchorB.X,
-                 d.localAnchorB.Y,
-                 d.localAxisA.X,
-                 d.localAxisA.Y,
-                 d.enableMotor,
-                 d.maxMotorTorque,
-                 d.motorSpeed,
-                 d.frequencyHz,
-                 d.dampingRatio
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.LocalAnchorA.X,
+                 d.LocalAnchorA.Y,
+                 d.LocalAnchorB.X,
+                 d.LocalAnchorB.Y,
+                 d.LocalAxisA.X,
+                 d.LocalAxisA.Y,
+                 d.EnableMotor,
+                 d.MaxMotorTorque,
+                 d.MotorSpeed,
+                 d.FrequencyHz,
+                 d.DampingRatio
                 );
         }
 
@@ -496,10 +501,11 @@ public sealed class World
      * @warning This function is locked during callbacks. */
     public void DestroyJoint( Joint joint )
     {
-        joint.setUserData( null );
-        Joints.remove( joint.Addr );
-        joint.jointEdgeA.other.joints.removeValue( joint.jointEdgeB, true );
-        joint.jointEdgeB.other.joints.removeValue( joint.jointEdgeA, true );
+        joint.UserData = null;
+        Joints.Remove( joint.Addr );
+        joint.JointEdgeA.Other.Joints.Remove( joint.JointEdgeB );
+        joint.JointEdgeB.Other.Joints.Remove( joint.JointEdgeA );
+        
         JniDestroyJoint( Addr, joint.Addr );
     }
 
@@ -549,7 +555,7 @@ public sealed class World
     /** Get the number of fixtures. */
     public int GetFixtureCount()
     {
-        return fixtures.size;
+        return Fixtures.Count;
     }
 
     /** Get the number of joints. */
@@ -603,7 +609,7 @@ public sealed class World
      * @param lowerY the y coordinate of the lower left corner
      * @param upperX the x coordinate of the upper right corner
      * @param upperY the y coordinate of the upper right corner */
-    public void QueryAabb( QueryCallback callback, float lowerX, float lowerY, float upperX, float upperY )
+    public void QueryAabb( IQueryCallback callback, float lowerX, float lowerY, float upperX, float upperY )
     {
         _queryCallback = callback;
         JniQueryAABB( Addr, lowerX, lowerY, upperX, upperY );
@@ -628,73 +634,63 @@ public sealed class World
      * returned list will have O(1) access times when using indexing. contacts are created and destroyed in the middle of a time
      * step. Use {@link IContactListener} to avoid missing contacts
      * @return the contact list */
-    public Array< Contact > GetContactList()
+    public List< Contact > GetContactList()
     {
         int numContacts = GetContactCount();
 
-        if ( numContacts > _contactAddrs.length )
+        if ( numContacts > _contactAddrs.Length )
         {
             int newSize = 2 * numContacts;
             _contactAddrs = new long[ newSize ];
-            _contacts.ensureCapacity( newSize );
-            _freeContacts.ensureCapacity( newSize );
+            _contacts.EnsureCapacity( newSize );
+            _freeContacts.EnsureCapacity( newSize );
         }
 
-        if ( numContacts > _freeContacts.size )
+        if ( numContacts > _freeContacts.Count )
         {
-            int freeConts = _freeContacts.size;
+            int freeConts = _freeContacts.Count;
             for ( int i = 0; i < numContacts - freeConts; i++ )
-                _freeContacts.add( new Contact( this, 0 ) );
+            {
+                _freeContacts.Add( new Contact( this, 0 ) );
+            }
         }
 
         JniGetContactList( Addr, _contactAddrs );
 
-        _contacts.clear();
+        _contacts.Clear();
 
         for ( int i = 0; i < numContacts; i++ )
         {
-            Contact contact = _freeContacts.get( i );
+            Contact contact = _freeContacts[ i ];
             contact.Addr = _contactAddrs[ i ];
-            _contacts.add( contact );
+            _contacts.Add( contact );
         }
 
         return _contacts;
     }
 
     /** @param bodies an Array in which to place all bodies currently in the simulation */
-    public void GetBodies( Array< Body > bodies )
+    public void GetBodies( List< Body > bodies )
     {
-        bodies.clear();
-        bodies.ensureCapacity( this.Bodies.size );
-
-        for ( Iterator< Body > iter = this.Bodies.values(); iter.hasNext(); )
-        {
-            bodies.add( iter.next() );
-        }
+        bodies.Clear();
+        bodies.EnsureCapacity( this.Bodies.Count );
+        bodies.AddRange( Bodies.Values );
     }
 
     /** @param fixtures an Array in which to place all fixtures currently in the simulation */
-    public void GetFixtures( Array< Fixture > fixtures )
+    public void GetFixtures( List< Fixture > fixtures )
     {
-        fixtures.clear();
-        fixtures.ensureCapacity( this.fixtures.size );
-
-        for ( Iterator< Fixture > iter = this.fixtures.values(); iter.hasNext(); )
-        {
-            fixtures.add( iter.next() );
-        }
+        fixtures.Clear();
+        fixtures.EnsureCapacity( this.Fixtures.Count );
+        fixtures.AddRange( Fixtures.Values );
     }
 
     /** @param joints an Array in which to place all joints currently in the simulation */
-    public void GetJoints( Array< Joint > joints )
+    public void GetJoints( List< Joint > joints )
     {
-        joints.clear();
-        joints.ensureCapacity( this.Joints.size );
-
-        for ( Iterator< Joint > iter = this.Joints.values(); iter.hasNext(); )
-        {
-            joints.add( iter.next() );
-        }
+        joints.Clear();
+        joints.EnsureCapacity( this.Joints.Count );
+        joints.AddRange( Joints.Values );
     }
 
     public void Dispose()
@@ -708,20 +704,22 @@ public sealed class World
      * @return whether the things collided */
     private bool ContactFilter( long fixtureA, long fixtureB )
     {
-        if ( contactFilter != null )
-            return contactFilter.ShouldCollide( fixtures.get( fixtureA ), fixtures.get( fixtureB ) );
+        if ( _contactFilter != null )
+        {
+            return _contactFilter.ShouldCollide( Fixtures[ fixtureA ], Fixtures[ fixtureB ] );
+        }
         else
         {
-            Filter filterA = fixtures.get( fixtureA ).getFilterData();
-            Filter filterB = fixtures.get( fixtureB ).getFilterData();
+            Filter filterA = Fixtures[ fixtureA ].GetFilterData();
+            Filter filterB = Fixtures[ fixtureB ].GetFilterData();
 
-            if ( filterA.groupIndex == filterB.groupIndex && filterA.groupIndex != 0 )
+            if ( filterA.GroupIndex == filterB.GroupIndex && filterA.GroupIndex != 0 )
             {
-                return filterA.groupIndex > 0;
+                return filterA.GroupIndex > 0;
             }
 
-            bool collide = ( filterA.maskBits & filterB.categoryBits ) != 0
-                        && ( filterA.categoryBits & filterB.maskBits ) != 0;
+            bool collide = ( filterA.MaskBits & filterB.CategoryBits ) != 0
+                        && ( filterA.CategoryBits & filterB.MaskBits ) != 0;
 
             return collide;
         }
@@ -732,7 +730,7 @@ public sealed class World
         if ( ContactListener != null )
         {
             _contact.Addr = contactAddr;
-            ContactListener.beginContact( _contact );
+            ContactListener.BeginContact( _contact );
         }
     }
 
@@ -741,7 +739,7 @@ public sealed class World
         if ( ContactListener != null )
         {
             _contact.Addr = contactAddr;
-            ContactListener.endContact( _contact );
+            ContactListener.EndContact( _contact );
         }
     }
 
@@ -751,7 +749,7 @@ public sealed class World
         {
             _contact.Addr  = contactAddr;
             _manifold.Addr = manifoldAddr;
-            ContactListener.preSolve( _contact, _manifold );
+            ContactListener.PreSolve( _contact, _manifold );
         }
     }
 
@@ -769,9 +767,11 @@ public sealed class World
     private bool ReportFixture( long addr )
     {
         if ( _queryCallback != null )
+        {
             return _queryCallback.ReportFixture( Fixtures[ addr ] );
-        else
-            return false;
+        }
+
+        return false;
     }
 
     /** Ray-cast the world for all fixtures in the path of the ray. The ray-cast ignores shapes that contain the starting point.

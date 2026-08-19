@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class GearJoint
+public class GearJoint : Joint
 {
+    public GearJoint( World world, long jointAddr, Joint joint1, Joint joint2 )
+    {
+    }
 }
 
 // ============================================================================

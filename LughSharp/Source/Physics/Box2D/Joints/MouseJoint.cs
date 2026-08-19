@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class MouseJoint
+public class MouseJoint : Joint
 {
+    public MouseJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

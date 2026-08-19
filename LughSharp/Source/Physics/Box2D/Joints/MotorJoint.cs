@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class MotorJoint
+public class MotorJoint : Joint
 {
+    public MotorJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

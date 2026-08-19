@@ -25,8 +25,39 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class DistanceJointDef
+public class DistanceJointDef : JointDef
 {
+    /** The local anchor point relative to body1's origin. */
+    public readonly Vector2 LocalAnchorA = new Vector2();
+
+    /** The local anchor point relative to body2's origin. */
+    public readonly Vector2 LocalAnchorB = new Vector2();
+
+    /** The natural length between the anchor points. */
+    public float Length = 1;
+
+    /** The mass-spring-damper frequency in Hertz. */
+    public float FrequencyHz = 0;
+
+    /** The damping ratio. 0 = no damping, 1 = critical damping. */
+    public float DampingRatio = 0;
+
+    // ========================================================================
+    
+    public DistanceJointDef()
+    {
+        Type = JointType.DistanceJoint;
+    }
+
+    /** Initialize the bodies, anchors, and length using the world anchors. */
+    public void Initialize( Body bodyA, Body bodyB, Vector2 anchorA, Vector2 anchorB )
+    {
+        this.BodyA = bodyA;
+        this.BodyB = bodyB;
+        this.LocalAnchorA.Set( bodyA.GetLocalPoint( anchorA ) );
+        this.LocalAnchorB.Set( bodyB.GetLocalPoint( anchorB ) );
+        this.Length = anchorA.Dst( anchorB );
+    }
 }
 
 // ============================================================================

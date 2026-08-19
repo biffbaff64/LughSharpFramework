@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class WeldJoint
+public class WeldJoint : Joint
 {
+    public WeldJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

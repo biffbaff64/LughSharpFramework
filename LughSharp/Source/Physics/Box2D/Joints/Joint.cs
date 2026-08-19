@@ -27,6 +27,11 @@ namespace LughSharp.Source.Physics.Box2D.Joints;
 [PublicAPI]
 public abstract class Joint
 {
+    public long Addr { get; }
+    
+    public object?   UserData   { get; set; }
+    public JointEdge JointEdgeA { get; set; }
+    public JointEdge JointEdgeB { get; set; }
 }
 
 // ============================================================================

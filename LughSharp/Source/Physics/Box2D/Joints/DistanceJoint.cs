@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class DistanceJoint
+public class DistanceJoint : Joint
 {
+    public DistanceJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

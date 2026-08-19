@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class FrictionJoint
+public class FrictionJoint : Joint
 {
+    public FrictionJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

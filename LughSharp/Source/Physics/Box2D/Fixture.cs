@@ -33,6 +33,11 @@ public class Fixture
     public Fixture( object? o, int i )
     {
     }
+
+    public Filter GetFilterData()
+    {
+        return new Filter();
+    }
 }
 
 // ============================================================================

@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class PrismaticJoint
+public class PrismaticJoint : Joint
 {
+    public PrismaticJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

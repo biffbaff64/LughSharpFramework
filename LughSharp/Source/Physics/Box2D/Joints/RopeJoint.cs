@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class RopeJoint
+public class RopeJoint : Joint
 {
+    public RopeJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

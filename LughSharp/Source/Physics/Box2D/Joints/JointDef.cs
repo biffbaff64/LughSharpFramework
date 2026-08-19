@@ -68,12 +68,12 @@ public class JointDef
     /// <summary>
     /// The first attached body.
     /// </summary>
-    public Body? BodyA = null;
+    public Body BodyA = null!;
 
     /// <summary>
     /// The second attached body
     /// </summary>
-    public Body? BodyB = null;
+    public Body BodyB = null!;
 
     /// <summary>
     /// Set this flag to true if the attached bodies should collide.

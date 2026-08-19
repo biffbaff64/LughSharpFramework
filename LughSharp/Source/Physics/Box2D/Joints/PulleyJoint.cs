@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class PulleyJoint
+public class PulleyJoint : Joint
 {
+    public PulleyJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================

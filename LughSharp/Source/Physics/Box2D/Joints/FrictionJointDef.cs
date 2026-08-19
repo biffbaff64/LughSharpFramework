@@ -25,7 +25,7 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class FrictionJointDef
+public class FrictionJointDef : JointDef
 {
 }
 

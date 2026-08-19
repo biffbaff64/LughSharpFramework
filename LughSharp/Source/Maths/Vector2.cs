@@ -444,6 +444,14 @@ public class Vector2 : IVector< Vector2 >
         return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
     }
 
+    public float Dst( Vector2 v )
+    {
+        float xD = v.X - X;
+        float yD = v.Y - Y;
+
+        return ( float )Math.Sqrt( ( xD * xD ) + ( yD * yD ) );
+    }
+
     public static float Dst2( float x1, float y1, float x2, float y2 )
     {
         float xD = x2 - x1;
@@ -456,6 +464,14 @@ public class Vector2 : IVector< Vector2 >
     {
         float xD = x - X;
         float yD = y - Y;
+
+        return ( xD * xD ) + ( yD * yD );
+    }
+
+    public float Dst2( Vector2 v )
+    {
+        float xD = v.X - X;
+        float yD = v.Y - Y;
 
         return ( xD * xD ) + ( yD * yD );
     }

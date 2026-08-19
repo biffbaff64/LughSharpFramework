@@ -28,7 +28,7 @@ namespace LughSharp.Source.Physics.Box2D;
 public class Contact
 {
     /// the address 
-    protected long Addr;
+    public long Addr;
 
     /// the world 
     protected World World;

@@ -25,8 +25,11 @@
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 [PublicAPI]
-public class RevoluteJoint
+public class RevoluteJoint : Joint
 {
+    public RevoluteJoint( World world, long jointAddr )
+    {
+    }
 }
 
 // ============================================================================
