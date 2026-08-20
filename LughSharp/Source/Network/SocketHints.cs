@@ -52,15 +52,15 @@ public class SocketHints
 //	 */
 //	public int trafficClass = 0x14; // low delay + reliable
 //	/** True to enable SO_KEEPALIVE. */
-//	public boolean keepAlive = true;
+//	public bool keepAlive = true;
 //	/** True to enable TCP_NODELAY (disable/enable Nagle's algorithm). */
-//	public boolean tcpNoDelay = true;
+//	public bool tcpNoDelay = true;
 //	/** The SO_SNDBUF (send buffer) size in bytes. */
 //	public int sendBufferSize = 4096;
 //	/** The SO_RCVBUF (receive buffer) size in bytes. */
 //	public int receiveBufferSize = 4096;
 //	/** Enable/disable SO_LINGER with the specified linger time in seconds. Only affects socket close. */
-//	public boolean linger = false;
+//	public bool linger = false;
 //	/** The linger duration in seconds (NOT milliseconds!). Only used if linger is true! */
 //	public int lingerDuration = 0;
 //	/** Enable/disable SO_TIMEOUT with the specified timeout, in milliseconds. With this option set to a non-zero timeout, a read()

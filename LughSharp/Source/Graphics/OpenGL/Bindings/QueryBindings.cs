@@ -28,7 +28,7 @@ using GLenum = int;
 using GLint = int;
 using GLsizei = int;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLintptr = int;
 using GLuint64 = ulong;
 using GLint64 = long;
@@ -96,7 +96,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsQuery( GLuint id )
+    public GLbool IsQuery( GLuint id )
     {
         GetDelegateForFunction< PFNGLISQUERYPROC >( "glIsQuery", out _glIsQuery );
 

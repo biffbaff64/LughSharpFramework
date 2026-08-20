@@ -44,7 +44,7 @@ public class ServerSocketHints
 //    /** See performancePrefConnectionTime for details. */
 //    public int performancePrefBandwidth = 0;
 //    /** Enable/disable the SO_REUSEADDR socket option. */
-//    public boolean reuseAddress = true;
+//    public bool reuseAddress = true;
 //    /** The SO_TIMEOUT in milliseconds for how long to wait during server.accept(). Enter 0 for infinite wait. */
 //    public int acceptTimeout = 5000;
 //    /** The SO_RCVBUF (receive buffer) size in bytes for server.accept(). */

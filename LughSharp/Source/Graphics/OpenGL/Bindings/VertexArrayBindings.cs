@@ -28,7 +28,7 @@ using GLenum = int;
 using GLint = int;
 using GLsizei = int;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLintptr = int;
 using GLint64 = long;
 
@@ -104,7 +104,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsVertexArray( GLuint array )
+    public GLbool IsVertexArray( GLuint array )
     {
         GetDelegateForFunction< PFNGLISVERTEXARRAYPROC >( "glIsVertexArray", out _glIsVertexArray );
 
@@ -230,7 +230,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     public void VertexArrayAttribFormat( GLuint vaobj, GLuint attribindex, GLint size, GLenum type,
-                                         GLboolean normalized,
+                                         GLbool normalized,
                                          GLuint relativeoffset )
     {
         GetDelegateForFunction< PFNGLVERTEXARRAYATTRIBFORMATPROC >( "glVertexArrayAttribFormat",

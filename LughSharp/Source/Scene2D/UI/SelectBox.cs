@@ -465,7 +465,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// Disables the select box if the provided boolean is true, otherwise enables it.
+    /// Disables the select box if the provided bool is true, otherwise enables it.
     /// </summary>
     /// <param name="disabled"> Whether to disable the select box. </param>
     public void SetDisabled( bool disabled )

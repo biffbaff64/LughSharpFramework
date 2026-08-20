@@ -56,7 +56,7 @@ public class Contact
     /// </summary>
     public WorldManifold GetWorldManifold()
     {
-        int numContactPoints = JniGetWorldManifold( Addr, _tmp );
+        int numContactPoints = jniGetWorldManifold( Addr, _tmp );
 
         WorldManifold.NumContactPoints = numContactPoints;
         WorldManifold.NormalValue.Set( _tmp[ 0 ], _tmp[ 1 ] );
@@ -80,7 +80,7 @@ public class Contact
     /// <returns></returns>
     public bool IsTouching()
     {
-        return JniIsTouching( Addr );
+        return jniIsTouching( Addr );
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class Contact
     /// </summary>
     public void SetEnabled( bool flag )
     {
-        JniSetEnabled( Addr, flag );
+        jniSetEnabled( Addr, flag );
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ public class Contact
     /// </summary>
     public bool IsEnabled()
     {
-        return JniIsEnabled( Addr );
+        return jniIsEnabled( Addr );
     }
 
     /// <summary>
@@ -106,7 +106,7 @@ public class Contact
     /// </summary>
     public Fixture GetFixtureA()
     {
-        return World.Fixtures[ JniGetFixtureA( Addr ) ];
+        return World.Fixtures[ jniGetFixtureA( Addr ) ];
     }
 
     /// <summary>
@@ -114,7 +114,7 @@ public class Contact
     /// </summary>
     public Fixture GetFixtureB()
     {
-        return World.Fixtures[ JniGetFixtureB( Addr ) ];
+        return World.Fixtures[ jniGetFixtureB( Addr ) ];
     }
 
     /// <summary>
@@ -122,7 +122,7 @@ public class Contact
     /// </summary>
     public int GetChildIndexA()
     {
-        return JniGetChildIndexA( Addr );
+        return jniGetChildIndexA( Addr );
     }
 
     /// <summary>
@@ -130,7 +130,7 @@ public class Contact
     /// </summary>
     public int GetChildIndexB()
     {
-        return JniGetChildIndexB( Addr );
+        return jniGetChildIndexB( Addr );
     }
 
     /// <summary>
@@ -139,7 +139,7 @@ public class Contact
     /// </summary>
     public void SetFriction( float friction )
     {
-        JniSetFriction( Addr, friction );
+        jniSetFriction( Addr, friction );
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public class Contact
     /// </summary>
     public float GetFriction()
     {
-        return JniGetFriction( Addr );
+        return jniGetFriction( Addr );
     }
 
     /// <summary>
@@ -155,7 +155,7 @@ public class Contact
     /// </summary>
     public void ResetFriction()
     {
-        JniResetFriction( Addr );
+        jniResetFriction( Addr );
     }
 
     /// <summary>
@@ -164,7 +164,7 @@ public class Contact
     /// </summary>
     public void SetRestitution( float restitution )
     {
-        JniSetRestitution( Addr, restitution );
+        jniSetRestitution( Addr, restitution );
     }
 
     /// <summary>
@@ -172,7 +172,7 @@ public class Contact
     /// </summary>
     public float GetRestitution()
     {
-        return JniGetRestitution( Addr );
+        return jniGetRestitution( Addr );
     }
 
     /// <summary>
@@ -180,7 +180,7 @@ public class Contact
     /// </summary>
     public void ResetRestitution()
     {
-        JniResetRestitution( Addr );
+        jniResetRestitution( Addr );
     }
 
     /// <summary>
@@ -188,7 +188,7 @@ public class Contact
     /// </summary>
     public float GetTangentSpeed()
     {
-        return JniGetTangentSpeed( Addr );
+        return jniGetTangentSpeed( Addr );
     }
 
     /// <summary>
@@ -196,14 +196,14 @@ public class Contact
     /// </summary>
     public void SetTangentSpeed( float speed )
     {
-        JniSetTangentSpeed( Addr, speed );
+        jniSetTangentSpeed( Addr, speed );
     }
 
     // ========================================================================
     // ========================================================================
     
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetWorldManifold( long addr, float[] tmp );
+    private static extern int jniGetWorldManifold( long addr, float[] tmp );
     /*
         b2Contact* contact = (b2Contact*)addr;
         b2WorldManifold manifold;
@@ -226,105 +226,105 @@ public class Contact
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern bool JniIsTouching( long addr );
+    private static extern bool jniIsTouching( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->IsTouching();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetEnabled( long addr, bool flag );
+    private static extern void jniSetEnabled( long addr, bool flag );
     /*
         b2Contact* contact = (b2Contact*)addr;
         contact->SetEnabled(flag);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern bool JniIsEnabled( long addr );
+    private static extern bool jniIsEnabled( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->IsEnabled();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniGetFixtureA( long addr );
+    private static extern long jniGetFixtureA( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return (jlong)contact->GetFixtureA();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniGetFixtureB( long addr );
+    private static extern long jniGetFixtureB( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return (jlong)contact->GetFixtureB();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetChildIndexA( long addr );
+    private static extern int jniGetChildIndexA( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->GetChildIndexA();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetChildIndexB( long addr );
+    private static extern int jniGetChildIndexB( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->GetChildIndexB();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetFriction( long addr, float friction );
+    private static extern void jniSetFriction( long addr, float friction );
     /*
         b2Contact* contact = (b2Contact*)addr;
         contact->SetFriction(friction);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern float JniGetFriction( long addr );
+    private static extern float jniGetFriction( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->GetFriction();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniResetFriction( long addr );
+    private static extern void jniResetFriction( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         contact->ResetFriction();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetRestitution( long addr, float restitution );
+    private static extern void jniSetRestitution( long addr, float restitution );
     /*
         b2Contact* contact = (b2Contact*)addr;
         contact->SetRestitution(restitution);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern float JniGetRestitution( long addr );
+    private static extern float jniGetRestitution( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->GetRestitution();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniResetRestitution( long addr );
+    private static extern void jniResetRestitution( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         contact->ResetRestitution();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetTangentSpeed( long addr, float speed );
+    private static extern void jniSetTangentSpeed( long addr, float speed );
     /*
         b2Contact* contact = (b2Contact*)addr;
         contact->SetTangentSpeed(speed);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern float JniGetTangentSpeed( long addr );
+    private static extern float jniGetTangentSpeed( long addr );
     /*
         b2Contact* contact = (b2Contact*)addr;
         return contact->GetTangentSpeed();

@@ -35,7 +35,7 @@ public interface IOnScreenKeyboard
     /// Controls the visibility of the on-screen keyboard.
     /// </summary>
     /// <param name="visible">
-    /// A boolean value where true shows the keyboard and false hides it.
+    /// A bool value where true shows the keyboard and false hides it.
     /// </param>
     void Show( bool visible );
 }

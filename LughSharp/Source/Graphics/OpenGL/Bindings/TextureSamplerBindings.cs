@@ -30,7 +30,7 @@ using GLint = int;
 using GLsizei = int;
 using GLbitfield = uint;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 
 // ============================================================================
 
@@ -72,7 +72,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void SampleCoverage( GLfloat value, GLboolean invert )
+    public void SampleCoverage( GLfloat value, GLbool invert )
     {
         GetDelegateForFunction< PFNGLSAMPLECOVERAGEPROC >( "glSampleCoverage", out _glSampleCoverage );
 
@@ -133,7 +133,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsSampler( GLuint sampler )
+    public GLbool IsSampler( GLuint sampler )
     {
         GetDelegateForFunction< PFNGLISSAMPLERPROC >( "glIsSampler", out _glIsSampler );
 

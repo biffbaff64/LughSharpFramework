@@ -29,7 +29,7 @@ using GLint = int;
 using GLsizei = int;
 using GLdouble = double;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLubyte = byte;
 using GLshort = short;
 using GLbyte = sbyte;
@@ -52,7 +52,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP1UI( GLuint index, GLenum type, GLboolean normalized, GLuint value )
+    public void VertexAttribP1UI( GLuint index, GLenum type, GLbool normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP1UIPROC >( "glVertexAttribP1ui", out _glVertexAttribP1ui );
 
@@ -62,7 +62,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP1Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
+    public void VertexAttribP1Uiv( GLuint index, GLenum type, GLbool normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP1UIVPROC >( "glVertexAttribP1uiv", out _glVertexAttribP1uiv );
 
@@ -70,7 +70,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttribP1Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
+    public void VertexAttribP1Uiv( GLuint index, GLenum type, GLbool normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP1UIVPROC >( "glVertexAttribP1uiv", out _glVertexAttribP1uiv );
 
@@ -83,7 +83,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP2UI( GLuint index, GLenum type, GLboolean normalized, GLuint value )
+    public void VertexAttribP2UI( GLuint index, GLenum type, GLbool normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP2UIPROC >( "glVertexAttribP2ui", out _glVertexAttribP2ui );
 
@@ -93,7 +93,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP2Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
+    public void VertexAttribP2Uiv( GLuint index, GLenum type, GLbool normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP2UIVPROC >( "glVertexAttribP2uiv", out _glVertexAttribP2uiv );
 
@@ -101,7 +101,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttribP2Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
+    public void VertexAttribP2Uiv( GLuint index, GLenum type, GLbool normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP2UIVPROC >( "glVertexAttribP2uiv", out _glVertexAttribP2uiv );
 
@@ -114,7 +114,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP3UI( GLuint index, GLenum type, GLboolean normalized, GLuint value )
+    public void VertexAttribP3UI( GLuint index, GLenum type, GLbool normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP3UIPROC >( "glVertexAttribP3ui", out _glVertexAttribP3ui );
 
@@ -124,7 +124,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP3Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
+    public void VertexAttribP3Uiv( GLuint index, GLenum type, GLbool normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP3UIVPROC >( "glVertexAttribP3uiv", out _glVertexAttribP3uiv );
 
@@ -132,7 +132,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttribP3Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
+    public void VertexAttribP3Uiv( GLuint index, GLenum type, GLbool normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP3UIVPROC >( "glVertexAttribP3uiv", out _glVertexAttribP3uiv );
 
@@ -145,7 +145,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP4UI( GLuint index, GLenum type, GLboolean normalized, GLuint value )
+    public void VertexAttribP4UI( GLuint index, GLenum type, GLbool normalized, GLuint value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP4UIPROC >( "glVertexAttribP4ui", out _glVertexAttribP4ui );
 
@@ -155,7 +155,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void VertexAttribP4Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint* value )
+    public void VertexAttribP4Uiv( GLuint index, GLenum type, GLbool normalized, GLuint* value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP4UIVPROC >( "glVertexAttribP4uiv", out _glVertexAttribP4uiv );
 
@@ -163,7 +163,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void VertexAttribP4Uiv( GLuint index, GLenum type, GLboolean normalized, GLuint[] value )
+    public void VertexAttribP4Uiv( GLuint index, GLenum type, GLbool normalized, GLuint[] value )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBP4UIVPROC >( "glVertexAttribP4uiv", out _glVertexAttribP4uiv );
 
@@ -324,7 +324,7 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void VertexAttribFormat( GLuint attribindex, GLint size, GLenum type, GLboolean normalized,
+    public void VertexAttribFormat( GLuint attribindex, GLint size, GLenum type, GLbool normalized,
                                     GLuint relativeoffset )
     {
         GetDelegateForFunction< PFNGLVERTEXATTRIBFORMATPROC >( "glVertexAttribFormat", out _glVertexAttribFormat );

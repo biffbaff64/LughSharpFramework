@@ -891,7 +891,7 @@ public class AssetManager : IDisposable
     /// Updates the asset manager, loading new assets and processing asset loading tasks.
     /// Returns true if all assets are loaded, otherwise false.
     /// </summary>
-    /// <returns> A boolean value indicating whether all assets are loaded.</returns>
+    /// <returns> A bool value indicating whether all assets are loaded.</returns>
     public bool Update()
     {
         lock ( this )

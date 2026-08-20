@@ -24,9 +24,44 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Mouse joint definition. This requires a world target point, tuning
+/// parameters, and the time step.
+/// </summary>
 [PublicAPI]
 public class MouseJointDef : JointDef
 {
+    /// <summary>
+    /// The initial world target point. This is assumed to coincide with
+    /// the body anchor initially. 
+    /// </summary>
+    public readonly Vector2 Target = new();
+
+    /// <summary>
+    /// The maximum constraint force that can be exerted to move the candidate
+    /// body. Usually you will express as some multiple of the weight;
+    /// <code>
+    /// (multiplier * mass * gravity).
+    /// </code>
+    /// </summary>
+    public float MaxForce { get; set; }
+
+    /// <summary>
+    /// The response speed. 
+    /// </summary>
+    public float FrequencyHz { get; set; } = 5.0f;
+
+    /// <summary>
+    /// The damping ratio. 0 = no damping, 1 = critical damping. 
+    /// </summary>
+    public float DampingRatio { get; set; } = 0.7f;
+
+    // ========================================================================
+
+    public MouseJointDef()
+    {
+        Type = JointType.MouseJoint;
+    }
 }
 
 // ============================================================================

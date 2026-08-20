@@ -24,9 +24,85 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Revolute joint definition. This requires defining an anchor point where the
+/// bodies are joined. The definition uses local anchor points so that the initial
+/// configuration can violate the constraint slightly. You also need to specify the
+/// initial relative angle for joint limits. This helps when saving and loading a
+/// game. The local anchor points are measured from the body's origin rather than
+/// the center of mass because:
+/// <br/>
+/// 1. You might not know where the center of mass will be.
+/// <br/>
+/// 2. If you add/remove shapes from a body and recompute the mass, the joints will be broken.
+/// <br/>
+/// </summary>
 [PublicAPI]
 public class RevoluteJointDef : JointDef
 {
+    /// <summary>
+    /// The local anchor point relative to body1's origin. 
+    /// </summary>
+    public readonly Vector2 LocalAnchorA = new();
+
+    /// <summary>
+    /// The local anchor point relative to body2's origin. 
+    /// </summary>
+    public readonly Vector2 LocalAnchorB = new();
+
+    /// <summary>
+    /// The body2 angle minus body1 angle in the reference state (radians). 
+    /// </summary>
+    public float ReferenceAngle { get; set; }
+
+    /// <summary>
+    /// A flag to enable joint limits. 
+    /// </summary>
+    public bool EnableLimit { get; set; }
+
+    /// <summary>
+    /// The lower angle for the joint limit (radians). 
+    /// </summary>
+    public float LowerAngle { get; set; }
+
+    /// <summary>
+    /// The upper angle for the joint limit (radians). 
+    /// </summary>
+    public float UpperAngle { get; set; }
+
+    /// <summary>
+    /// A flag to enable the joint motor. 
+    /// </summary>
+    public bool EnableMotor { get; set; }
+
+    /// <summary>
+    /// The desired motor speed. Usually in radians per second. 
+    /// </summary>
+    public float MotorSpeed { get; set; }
+
+    /// <summary>
+    /// The maximum motor torque used to achieve the desired motor speed. Usually in N-m. 
+    /// </summary>
+    public float MaxMotorTorque { get; set; }
+
+    // ========================================================================
+
+    public RevoluteJointDef()
+    {
+        Type = JointType.RevoluteJoint;
+    }
+
+    /// <summary>
+    /// Initialize the bodies, anchors, and reference angle using a world anchor point. 
+    /// </summary>
+    public void Initialize( Body bodyA, Body bodyB, Vector2 anchor )
+    {
+        this.BodyA = bodyA;
+        this.BodyB = bodyB;
+        LocalAnchorA.Set( bodyA.GetLocalPoint( anchor ) );
+        LocalAnchorB.Set( bodyB.GetLocalPoint( anchor ) );
+        ReferenceAngle = bodyB.GetAngle() - bodyA.GetAngle();
+    }
 }
 
 // ============================================================================

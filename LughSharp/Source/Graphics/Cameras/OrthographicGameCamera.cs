@@ -234,7 +234,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// The zoom level to apply to the camera. A positive value increases zoom.
     /// </param>
     /// <param name="shake">
-    /// A boolean indicating whether to apply a shake effect to the camera.
+    /// A bool indicating whether to apply a shake effect to the camera.
     /// </param>
     public void SetPosition( Vector3 position, float? zoom, bool shake )
     {
@@ -358,7 +358,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// <param name="width">The new width of the viewport.</param>
     /// <param name="height">The new height of the viewport.</param>
     /// <param name="centerCamera">
-    /// A boolean value indicating whether the camera should be centered within
+    /// A bool value indicating whether the camera should be centered within
     /// the viewport after resizing.
     /// </param>
     public void ResizeViewport( int width, int height, bool centerCamera = false )

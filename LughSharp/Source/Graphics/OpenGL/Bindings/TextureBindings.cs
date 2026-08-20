@@ -32,7 +32,7 @@ using GLfloat = float;
 using GLint = int;
 using GLsizei = int;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 
 // ============================================================================
 
@@ -102,7 +102,7 @@ public partial class GLBindings
                             GLenum format,
                             GLenum type,
                             IntPtr pixels = 0,
-                            GLboolean enabled = true )
+                            GLbool enabled = true )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DPROC >( "glTexImage2D", out _glTexImage2D );
 
@@ -122,7 +122,7 @@ public partial class GLBindings
                                  GLenum pixelFormat,
                                  GLenum dataType,
                                  T[]? pixels,
-                                 GLboolean enabled = true ) where T : unmanaged
+                                 GLbool enabled = true ) where T : unmanaged
     {
         if ( pixels == null )
         {
@@ -152,7 +152,7 @@ public partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap, GLboolean enabled = true )
+    public void TexImage2D( GLenum target, GLint level, GLint border, Pixmap pixmap, GLbool enabled = true )
     {
         Logger.Checkpoint();
 
@@ -372,7 +372,7 @@ public partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsGLTexture( GLuint texture )
+    public GLbool IsGLTexture( GLuint texture )
     {
         GetDelegateForFunction< PFNGLISTEXTUREPROC >( "glIsTexture", out _glIsTexture );
 
@@ -1024,7 +1024,7 @@ public partial class GLBindings
                                        GLenum internalFormat,
                                        GLsizei width,
                                        GLsizei height,
-                                       GLboolean fixedsamplelocations )
+                                       GLbool fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE2DMULTISAMPLEPROC >( "glTexImage2DMultisample",
                                                                   out _glTexImage2DMultisample );
@@ -1041,7 +1041,7 @@ public partial class GLBindings
                                        GLsizei width,
                                        GLsizei height,
                                        GLsizei depth,
-                                       GLboolean fixedsamplelocations )
+                                       GLbool fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXIMAGE3DMULTISAMPLEPROC >( "glTexImage3DMultisample",
                                                                   out _glTexImage3DMultisample );

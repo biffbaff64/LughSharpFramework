@@ -152,7 +152,7 @@ public class NetSocketImpl
 //
 //    public NetJavaImpl( int maxThreads )
 //    {
-//        final boolean isCachedPool = maxThreads == Integer.MAX_VALUE;
+//        final bool isCachedPool = maxThreads == Integer.MAX_VALUE;
 //        executorService = new ThreadPoolExecutor( isCachedPool ? 0 : maxThreads, maxThreads, 60L, TimeUnit.SECONDS,
 //                                                  isCachedPool ? new SynchronousQueue< Runnable >() :
 //                                                      new LinkedBlockingQueue< Runnable >(), new ThreadFactory()
@@ -185,9 +185,9 @@ public class NetSocketImpl
 //            final String method = httpRequest.getMethod();
 //            URL          url;
 //
-//            final boolean doInput = !method.equalsIgnoreCase( HttpMethods.HEAD );
+//            final bool doInput = !method.equalsIgnoreCase( HttpMethods.HEAD );
 //            // should be enabled to upload data.
-//            final boolean doingOutPut = method.equalsIgnoreCase( HttpMethods.POST )
+//            final bool doingOutPut = method.equalsIgnoreCase( HttpMethods.POST )
 //                                     || method.equalsIgnoreCase( HttpMethods.PUT )
 //                                     || method.equalsIgnoreCase( HttpMethods.PATCH );
 //
@@ -315,7 +315,7 @@ public class NetSocketImpl
 //        }
 //    }
 //
-//    public boolean isHttpRequestPending( INet.HttpRequest httpRequest )
+//    public bool isHttpRequestPending( INet.HttpRequest httpRequest )
 //    {
 //        return getFromListeners( httpRequest ) != null;
 //    }

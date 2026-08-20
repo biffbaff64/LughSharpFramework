@@ -101,7 +101,7 @@ public class B2BodyDescriptor : IDisposable
     /// Releases all resources used by the <see cref="B2BodyDescriptor"/> instance.
     /// </summary>
     /// <param name="disposing">
-    /// A boolean value indicating whether the method is being called directly
+    /// A bool value indicating whether the method is being called directly
     /// or by the runtime during finalization. <c>true</c> if called directly;
     /// <c>false</c> if called during finalization.
     /// </param>

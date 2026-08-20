@@ -150,7 +150,7 @@ public sealed class World
      * @warning This function is locked during callbacks. */
     public Body CreateBody( BodyDef def )
     {
-        long bodyAddr = JniCreateBody
+        long bodyAddr = jniCreateBody
             (
              Addr,
              ( int )def.Type,
@@ -190,7 +190,7 @@ public sealed class World
             DestroyJoint( body.GetJointList()[ 0 ].Joint );
         }
 
-        JniDestroyBody( Addr, body.Addr );
+        jniDestroyBody( Addr, body.Addr );
 
         body.UserData = null;
         this.Bodies.Remove( body.Addr );
@@ -216,7 +216,7 @@ public sealed class World
      * @param fixture */
     void DestroyFixture( Body body, Fixture fixture )
     {
-        JniDestroyFixture( Addr, body.Addr, fixture.Addr );
+        jniDestroyFixture( Addr, body.Addr, fixture.Addr );
     }
 
     /** Internal method for body deactivation with notifying custom
@@ -224,7 +224,7 @@ public sealed class World
      * @param body */
     void DeactivateBody( Body body )
     {
-        JniDeactivateBody( Addr, body.Addr );
+        jniDeactivateBody( Addr, body.Addr );
     }
 
     /** Create a joint to constrain bodies together. No reference to the definition is retained. This may cause the connected bodies
@@ -273,7 +273,7 @@ public sealed class World
         {
             DistanceJointDef d = ( DistanceJointDef )def;
 
-            return JniCreateDistanceJoint
+            return jniCreateDistanceJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -293,7 +293,7 @@ public sealed class World
         {
             FrictionJointDef d = ( FrictionJointDef )def;
 
-            return JniCreateFrictionJoint
+            return jniCreateFrictionJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -312,7 +312,7 @@ public sealed class World
         {
             GearJointDef d = ( GearJointDef )def;
 
-            return JniCreateGearJoint( Addr,
+            return jniCreateGearJoint( Addr,
                                        d.BodyA.Addr,
                                        d.BodyB.Addr,
                                        d.CollideConnected,
@@ -325,7 +325,7 @@ public sealed class World
         {
             MotorJointDef d = ( MotorJointDef )def;
 
-            return JniCreateMotorJoint
+            return jniCreateMotorJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -344,7 +344,7 @@ public sealed class World
         {
             MouseJointDef d = ( MouseJointDef )def;
 
-            return JniCreateMouseJoint
+            return jniCreateMouseJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -362,7 +362,7 @@ public sealed class World
         {
             PrismaticJointDef d = ( PrismaticJointDef )def;
 
-            return JniCreatePrismaticJoint
+            return jniCreatePrismaticJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -388,7 +388,7 @@ public sealed class World
         {
             PulleyJointDef d = ( PulleyJointDef )def;
 
-            return JniCreatePulleyJoint
+            return jniCreatePulleyJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -412,7 +412,7 @@ public sealed class World
         {
             RevoluteJointDef d = ( RevoluteJointDef )def;
 
-            return JniCreateRevoluteJoint
+            return jniCreateRevoluteJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -436,7 +436,7 @@ public sealed class World
         {
             RopeJointDef d = ( RopeJointDef )def;
 
-            return JniCreateRopeJoint
+            return jniCreateRopeJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -454,7 +454,7 @@ public sealed class World
         {
             WeldJointDef d = ( WeldJointDef )def;
 
-            return JniCreateWeldJoint
+            return jniCreateWeldJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -474,7 +474,7 @@ public sealed class World
         {
             WheelJointDef d = ( WheelJointDef )def;
 
-            return JniCreateWheelJoint
+            return jniCreateWheelJoint
                 (
                  Addr,
                  d.BodyA.Addr,
@@ -506,7 +506,7 @@ public sealed class World
         joint.JointEdgeA.Other.Joints.Remove( joint.JointEdgeB );
         joint.JointEdgeB.Other.Joints.Remove( joint.JointEdgeA );
         
-        JniDestroyJoint( Addr, joint.Addr );
+        jniDestroyJoint( Addr, joint.Addr );
     }
 
     /** Take a time step. This performs collision detection, integration, and constraint solution.
@@ -515,7 +515,7 @@ public sealed class World
      * @param positionIterations for the position constraint solver. */
     public void Step( float timeStep, int velocityIterations, int positionIterations )
     {
-        JniStep( Addr, timeStep, velocityIterations, positionIterations );
+        jniStep( Addr, timeStep, velocityIterations, positionIterations );
     }
 
     /** Manually clear the force buffer on all bodies. By default, forces are cleared automatically after each call to Step. The
@@ -525,31 +525,31 @@ public sealed class World
      * game loop. {@link #setAutoClearForces(bool)} */
     public void ClearForces()
     {
-        JniClearForces( Addr );
+        jniClearForces( Addr );
     }
 
     /** Enable/disable warm starting. For testing. */
     public void SetWarmStarting( bool flag )
     {
-        JniSetWarmStarting( Addr, flag );
+        jniSetWarmStarting( Addr, flag );
     }
 
     /** Enable/disable continuous physics. For testing. */
     public void SetContinuousPhysics( bool flag )
     {
-        JniSetContiousPhysics( Addr, flag );
+        jniSetContiousPhysics( Addr, flag );
     }
 
     /** Get the number of broad-phase proxies. */
     public int GetProxyCount()
     {
-        return JniGetProxyCount( Addr );
+        return jniGetProxyCount( Addr );
     }
 
     /** Get the number of bodies. */
     public int GetBodyCount()
     {
-        return JniGetBodyCount( Addr );
+        return jniGetBodyCount( Addr );
     }
 
     /** Get the number of fixtures. */
@@ -561,24 +561,24 @@ public sealed class World
     /** Get the number of joints. */
     public int GetJointCount()
     {
-        return JniGetJointcount( Addr );
+        return jniGetJointcount( Addr );
     }
 
     /** Get the number of contacts (each may have 0 or more contact points). */
     public int GetContactCount()
     {
-        return JniGetContactCount( Addr );
+        return jniGetContactCount( Addr );
     }
 
     /** Change the global gravity vector. */
     public void SetGravity( Vector2 gravity )
     {
-        JniSetGravity( Addr, gravity.X, gravity.Y );
+        jniSetGravity( Addr, gravity.X, gravity.Y );
     }
 
     public Vector2 GetGravity()
     {
-        JniGetGravity( Addr, _tmpGravity );
+        jniGetGravity( Addr, _tmpGravity );
         _gravity.X = _tmpGravity[ 0 ];
         _gravity.Y = _tmpGravity[ 1 ];
 
@@ -588,19 +588,19 @@ public sealed class World
     /** Is the world locked (in the middle of a time step). */
     public bool IsLocked()
     {
-        return JniIsLocked( Addr );
+        return jniIsLocked( Addr );
     }
 
     /** Set flag to control automatic clearing of forces after each time step. */
     public void SetAutoClearForces( bool flag )
     {
-        JniSetAutoClearForces( Addr, flag );
+        jniSetAutoClearForces( Addr, flag );
     }
 
     /** Get the flag that controls automatic clearing of forces after each time step. */
     public bool GetAutoClearForces()
     {
-        return JniGetAutoClearForces( Addr );
+        return jniGetAutoClearForces( Addr );
     }
 
     /** Query the world for all fixtures that potentially overlap the provided AABB.
@@ -612,7 +612,7 @@ public sealed class World
     public void QueryAabb( IQueryCallback callback, float lowerX, float lowerY, float upperX, float upperY )
     {
         _queryCallback = callback;
-        JniQueryAABB( Addr, lowerX, lowerY, upperX, upperY );
+        jniQueryAABB( Addr, lowerX, lowerY, upperX, upperY );
     }
 
 //
@@ -655,7 +655,7 @@ public sealed class World
             }
         }
 
-        JniGetContactList( Addr, _contactAddrs );
+        jniGetContactList( Addr, _contactAddrs );
 
         _contacts.Clear();
 
@@ -695,7 +695,7 @@ public sealed class World
 
     public void Dispose()
     {
-        JniDispose( Addr );
+        jniDispose( Addr );
     }
 
     /** Internal method called from JNI in case a contact happens
@@ -792,7 +792,7 @@ public sealed class World
     public void RayCast( IRayCastCallback callback, float point1X, float point1Y, float point2X, float point2Y )
     {
         _rayCastCallback = callback;
-        JniRayCast( Addr, point1X, point1Y, point2X, point2Y );
+        jniRayCast( Addr, point1X, point1Y, point2X, point2Y );
     }
 
     private float ReportRayFixture( long addr, float pX, float pY, float nX, float nY, float fraction )
@@ -837,7 +837,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateBody( long addr, int type, float positionX, float positionY, float angle,
+    private static extern long jniCreateBody( long addr, int type, float positionX, float positionY, float angle,
                                               float linearVelocityX,
                                               float linearVelocityY, float angularVelocity, float linearDamping,
                                               float angularDamping, bool allowSleep, bool awake,
@@ -864,7 +864,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniDestroyBody( long addr, long bodyAddr );
+    private static extern void jniDestroyBody( long addr, long bodyAddr );
     /*
         b2World* world = (b2World*)addr;
         b2Body* body = (b2Body*)bodyAddr;
@@ -878,7 +878,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniDestroyFixture( long addr, long bodyAddr, long fixtureAddr );
+    private static extern void jniDestroyFixture( long addr, long bodyAddr, long fixtureAddr );
     /*
         b2World* world = (b2World*)(addr);
         b2Body* body = (b2Body*)(bodyAddr);
@@ -893,7 +893,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniDeactivateBody( long addr, long bodyAddr );
+    private static extern void jniDeactivateBody( long addr, long bodyAddr );
     /*
         b2World* world = (b2World*)(addr);
         b2Body* body = (b2Body*)(bodyAddr);
@@ -907,7 +907,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateWheelJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateWheelJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                     float localAnchorAx,
                                                     float localAnchorAy, float localAnchorBx, float localAnchorBy,
                                                     float localAxisAx, float localAxisAy, bool enableMotor,
@@ -932,7 +932,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateRopeJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateRopeJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                    float localAnchorAx,
                                                    float localAnchorAy, float localAnchorBx, float localAnchorBy,
                                                    float maxLength );
@@ -950,7 +950,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateDistanceJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateDistanceJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                        float localAnchorAx,
                                                        float localAnchorAy, float localAnchorBx, float localAnchorBy,
                                                        float length, float frequencyHz, float dampingRatio );
@@ -970,7 +970,7 @@ public sealed class World
    */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateFrictionJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateFrictionJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                        float localAnchorAx,
                                                        float localAnchorAy, float localAnchorBx, float localAnchorBy,
                                                        float maxForce, float maxTorque );
@@ -988,7 +988,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateGearJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateGearJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                    long joint1,
                                                    long joint2,
                                                    float ratio );
@@ -1005,7 +1005,7 @@ public sealed class World
    */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateMotorJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateMotorJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                     float linearOffsetX,
                                                     float linearOffsetY, float angularOffset, float maxForce,
                                                     float maxTorque,
@@ -1025,7 +1025,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateMouseJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateMouseJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                     float targetX,
                                                     float targetY, float maxForce, float frequencyHz,
                                                     float dampingRatio );
@@ -1043,7 +1043,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreatePrismaticJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreatePrismaticJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                         float localAnchorAx,
                                                         float localAnchorAy, float localAnchorBx, float localAnchorBy,
                                                         float localAxisAx, float localAxisAy, float referenceAngle,
@@ -1071,7 +1071,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreatePulleyJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreatePulleyJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                      float groundAnchorAx, float groundAnchorAy,
                                                      float groundAnchorBx, float groundAnchorBy,
                                                      float localAnchorAx, float localAnchorAy,
@@ -1096,7 +1096,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateRevoluteJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateRevoluteJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                        float localAnchorAx,
                                                        float localAnchorAy, float localAnchorBx, float localAnchorBy,
                                                        float referenceAngle, bool enableLimit, float lowerAngle,
@@ -1121,7 +1121,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern long JniCreateWeldJoint( long addr, long bodyA, long bodyB, bool collideConnected,
+    private static extern long jniCreateWeldJoint( long addr, long bodyA, long bodyB, bool collideConnected,
                                                    float localAnchorAx, float localAnchorAy,
                                                    float localAnchorBx, float localAnchorBy,
                                                    float referenceAngle, float frequencyHz, float dampingRatio );
@@ -1141,7 +1141,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniDestroyJoint( long addr, long jointAddr );
+    private static extern void jniDestroyJoint( long addr, long jointAddr );
     /*
         b2World* world = (b2World*)addr;
         b2Joint* joint = (b2Joint*)jointAddr;
@@ -1155,7 +1155,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniStep( long addr, float timeStep, int velocityIterations, int positionIterations );
+    private static extern void jniStep( long addr, float timeStep, int velocityIterations, int positionIterations );
     /*
         b2World* world = (b2World*)addr;
         CustomContactFilter contactFilter(env, object);
@@ -1168,63 +1168,63 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniClearForces( long addr );
+    private static extern void jniClearForces( long addr );
     /*
         b2World* world = (b2World*)addr;
         world->ClearForces();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetWarmStarting( long addr, bool flag );
+    private static extern void jniSetWarmStarting( long addr, bool flag );
     /*
         b2World* world = (b2World*)addr;
         world->SetWarmStarting(flag);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetContiousPhysics( long addr, bool flag );
+    private static extern void jniSetContiousPhysics( long addr, bool flag );
     /*
         b2World* world = (b2World*)addr;
         world->SetContinuousPhysics(flag);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetProxyCount( long addr );
+    private static extern int jniGetProxyCount( long addr );
     /*
         b2World* world = (b2World*)addr;
         return world->GetProxyCount();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetBodyCount( long addr );
+    private static extern int jniGetBodyCount( long addr );
     /*
         b2World* world = (b2World*)addr;
         return world->GetBodyCount();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetJointcount( long addr );
+    private static extern int jniGetJointcount( long addr );
     /*
         b2World* world = (b2World*)addr;
         return world->GetJointCount();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetContactCount( long addr );
+    private static extern int jniGetContactCount( long addr );
     /*
         b2World* world = (b2World*)addr;
         return world->GetContactCount();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetGravity( long addr, float gravityX, float gravityY );
+    private static extern void jniSetGravity( long addr, float gravityX, float gravityY );
     /*
         b2World* world = (b2World*)addr;
         world->SetGravity( b2Vec2( gravityX, gravityY ) );
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniGetGravity( long addr, float[] gravity );
+    private static extern void jniGetGravity( long addr, float[] gravity );
     /*
         b2World* world = (b2World*)addr;
         b2Vec2 g = world->GetGravity();
@@ -1233,28 +1233,28 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern bool JniIsLocked( long addr );
+    private static extern bool jniIsLocked( long addr );
     /*
         b2World* world = (b2World*)addr;
         return world->IsLocked();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetAutoClearForces( long addr, bool flag );
+    private static extern void jniSetAutoClearForces( long addr, bool flag );
     /*
         b2World* world = (b2World*)addr;
         world->SetAutoClearForces(flag);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern bool JniGetAutoClearForces( long addr );
+    private static extern bool jniGetAutoClearForces( long addr );
     /*
         b2World* world = (b2World*)addr;
         return world->GetAutoClearForces();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniQueryAABB( long addr, float lowX, float lowY, float upX, float upY );
+    private static extern void jniQueryAABB( long addr, float lowX, float lowY, float upX, float upY );
     /*
         b2World* world = (b2World*)addr;
         b2AABB aabb;
@@ -1266,7 +1266,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniGetContactList( long addr, long[] contacts );
+    private static extern void jniGetContactList( long addr, long[] contacts );
     /*
         b2World* world = (b2World*)addr;
 
@@ -1280,7 +1280,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniDispose( long addr );
+    private static extern void jniDispose( long addr );
     /*
         b2World* world = (b2World*)(addr);
         delete world;
@@ -1302,7 +1302,7 @@ public sealed class World
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniRayCast( long addr, float aX, float aY, float bX, float bY );
+    private static extern void jniRayCast( long addr, float aX, float aY, float bX, float bY );
     /*
         b2World *world = (b2World*)addr;
         CustomRayCastCallback callback( env, object );

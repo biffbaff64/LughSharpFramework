@@ -32,7 +32,7 @@ using GLint = int;
 using GLsizei = int;
 using GLdouble = double;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLbyte = sbyte;
 using GLchar = byte;
 
@@ -404,7 +404,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix2Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix2Fv( GLint location, GLsizei count, GLbool transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2FVPROC >( "glUniformMatrix2fv", out _glUniformMatrix2fv );
 
@@ -412,7 +412,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix2Fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix2Fv( GLint location, GLbool transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2FVPROC >( "glUniformMatrix2fv", out _glUniformMatrix2fv );
 
@@ -425,7 +425,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix3Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix3Fv( GLint location, GLsizei count, GLbool transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3FVPROC >( "glUniformMatrix3fv", out _glUniformMatrix3fv );
 
@@ -433,7 +433,7 @@ public unsafe partial class GLBindings
     }
 
     /// <inheritdoc />
-    public void UniformMatrix3Fv( GLint location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix3Fv( GLint location, GLbool transpose, params GLfloat[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3FVPROC >( "glUniformMatrix3fv", out _glUniformMatrix3fv );
 
@@ -446,7 +446,7 @@ public unsafe partial class GLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void UniformMatrix4Fv( GLint location, GLsizei count, GLboolean transpose, GLfloat* value )
+    public void UniformMatrix4Fv( GLint location, GLsizei count, GLbool transpose, GLfloat* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4FVPROC >( "glUniformMatrix4fv", out _glUniformMatrix4fv );
 
@@ -464,7 +464,7 @@ public unsafe partial class GLBindings
     /// Specifies an array of values that will be used to update the specified uniform variable. Needs 16
     /// values per matrix.
     /// </param>
-    public void UniformMatrix4Fv( int location, GLboolean transpose, params GLfloat[] value )
+    public void UniformMatrix4Fv( int location, GLbool transpose, params GLfloat[] value )
     {
         Guard.Against.Null( value );
 
@@ -684,14 +684,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix2dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2DVPROC >( "glUniformMatrix2dv", out _glUniformMatrix2dv );
 
         _glUniformMatrix2dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix2dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix2dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2DVPROC >( "glUniformMatrix2dv", out _glUniformMatrix2dv );
 
@@ -703,14 +703,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix3dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3DVPROC >( "glUniformMatrix3dv", out _glUniformMatrix3dv );
 
         _glUniformMatrix3dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix3dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix3dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3DVPROC >( "glUniformMatrix3dv", out _glUniformMatrix3dv );
 
@@ -722,14 +722,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix4dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4DVPROC >( "glUniformMatrix4dv", out _glUniformMatrix4dv );
 
         _glUniformMatrix4dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix4dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix4dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4DVPROC >( "glUniformMatrix4dv", out _glUniformMatrix4dv );
 
@@ -741,14 +741,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix2x3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix2x3dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3DVPROC >( "glUniformMatrix2x3dv", out _glUniformMatrix2x3dv );
 
         _glUniformMatrix2x3dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix2x3dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix2x3dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X3DVPROC >( "glUniformMatrix2x3dv", out _glUniformMatrix2x3dv );
 
@@ -760,14 +760,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix2x4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix2x4dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4DVPROC >( "glUniformMatrix2x4dv", out _glUniformMatrix2x4dv );
 
         _glUniformMatrix2x4dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix2x4dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix2x4dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX2X4DVPROC >( "glUniformMatrix2x4dv", out _glUniformMatrix2x4dv );
 
@@ -779,14 +779,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix3x2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix3x2dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2DVPROC >( "glUniformMatrix3x2dv", out _glUniformMatrix3x2dv );
 
         _glUniformMatrix3x2dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix3x2dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix3x2dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X2DVPROC >( "glUniformMatrix3x2dv", out _glUniformMatrix3x2dv );
 
@@ -798,14 +798,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix3x4dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix3x4dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4DVPROC >( "glUniformMatrix3x4dv", out _glUniformMatrix3x4dv );
 
         _glUniformMatrix3x4dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix3x4dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix3x4dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX3X4DVPROC >( "glUniformMatrix3x4dv", out _glUniformMatrix3x4dv );
 
@@ -817,14 +817,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix4x2dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix4x2dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2DVPROC >( "glUniformMatrix4x2dv", out _glUniformMatrix4x2dv );
 
         _glUniformMatrix4x2dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix4x2dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix4x2dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X2DVPROC >( "glUniformMatrix4x2dv", out _glUniformMatrix4x2dv );
 
@@ -836,14 +836,14 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public void UniformMatrix4x3dv( GLint location, GLsizei count, GLboolean transpose, GLdouble* value )
+    public void UniformMatrix4x3dv( GLint location, GLsizei count, GLbool transpose, GLdouble* value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3DVPROC >( "glUniformMatrix4x3dv", out _glUniformMatrix4x3dv );
 
         _glUniformMatrix4x3dv( location, count, transpose, value );
     }
 
-    public void UniformMatrix4x3dv( GLint location, GLboolean transpose, GLdouble[] value )
+    public void UniformMatrix4x3dv( GLint location, GLbool transpose, GLdouble[] value )
     {
         GetDelegateForFunction< PFNGLUNIFORMMATRIX4X3DVPROC >( "glUniformMatrix4x3dv", out _glUniformMatrix4x3dv );
 

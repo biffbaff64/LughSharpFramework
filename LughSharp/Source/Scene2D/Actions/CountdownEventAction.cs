@@ -40,7 +40,7 @@ public class CountdownEventAction< T >( T eventClass, int count )
     /// </summary>
     /// <param name="e">The event instance to handle.</param>
     /// <returns>
-    /// A boolean value indicating whether the required count of events has been reached.
+    /// A bool value indicating whether the required count of events has been reached.
     /// Returns <c>true</c> if the number of handled events is equal to or greater than
     /// the specified count; otherwise, <c>false</c>.
     /// </returns>

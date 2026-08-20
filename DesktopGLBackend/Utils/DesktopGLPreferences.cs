@@ -175,10 +175,10 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a boolean value from the preferences.
+    /// Gets a bool value from the preferences.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
-    /// <returns> The boolean value. </returns>
+    /// <returns> The bool value. </returns>
     public bool GetBoolean( string key )
     {
         return GetBoolean( key, false );
@@ -215,11 +215,11 @@ public class DesktopGLPreferences : IPreferences
     }
 
     /// <summary>
-    /// Gets a boolean value from the preferences with a default value.
+    /// Gets a bool value from the preferences with a default value.
     /// </summary>
     /// <param name="key"> The key of the preference entry. </param>
     /// <param name="defValue"> The default value if the key does not exist. </param>
-    /// <returns> The boolean value. </returns>
+    /// <returns> The bool value. </returns>
     public bool GetBoolean( string key, bool defValue )
     {
         if ( !_properties.TryGetValue( key, out object? value )

@@ -24,6 +24,18 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Distance joint definition. This requires defining an anchor point on both bodies
+/// and the non-zero length of the distance joint. The definition uses local anchor
+/// points so that the initial configuration can violate the constraint slightly.
+/// This helps when saving and loading a game.
+/// <br/>
+/// <para>
+/// <b>
+/// WARNING: Do not use a zero or short length.
+/// </b>
+/// </para>
+/// </summary>
 [PublicAPI]
 public class DistanceJointDef : JointDef
 {

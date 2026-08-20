@@ -116,7 +116,7 @@ public class NetImpl
 //	}
 //
 //	public NetJavaImpl (int maxThreads) {
-//		final boolean isCachedPool = maxThreads == Integer.MAX_VALUE;
+//		final bool isCachedPool = maxThreads == Integer.MAX_VALUE;
 //		executorService = new ThreadPoolExecutor(isCachedPool ? 0 : maxThreads, maxThreads, 60L, TimeUnit.SECONDS,
 //			isCachedPool ? new SynchronousQueue<Runnable>() : new LinkedBlockingQueue<Runnable>(), new ThreadFactory() {
 //				AtomicInteger threadID = new AtomicInteger();
@@ -144,9 +144,9 @@ public class NetImpl
 //			final String method = httpRequest.getMethod();
 //			URL url;
 //
-//			final boolean doInput = !method.equalsIgnoreCase(HttpMethods.HEAD);
+//			final bool doInput = !method.equalsIgnoreCase(HttpMethods.HEAD);
 //			// should be enabled to upload data.
-//			final boolean doingOutPut = method.equalsIgnoreCase(HttpMethods.POST) || method.equalsIgnoreCase(HttpMethods.PUT)
+//			final bool doingOutPut = method.equalsIgnoreCase(HttpMethods.POST) || method.equalsIgnoreCase(HttpMethods.PUT)
 //				|| method.equalsIgnoreCase(HttpMethods.PATCH);
 //
 //			if (method.equalsIgnoreCase(HttpMethods.GET) || method.equalsIgnoreCase(HttpMethods.HEAD)) {
@@ -245,7 +245,7 @@ public class NetImpl
 //		}
 //	}
 //
-//	public boolean isHttpRequestPending (HttpRequest httpRequest) {
+//	public bool isHttpRequestPending (HttpRequest httpRequest) {
 //		return getFromListeners(httpRequest) != null;
 //	}
 //

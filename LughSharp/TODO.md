@@ -977,30 +977,30 @@ LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - DistanceJoint
-    -      -      - DONE - DistanceJointDef
-    -      -      - DONE - FrictionJoint
-    -      -      - DONE - FrictionJointDef
-    -      -      - DONE - GearJoint
-    -      -      - DONE - GearJointDef
-    -      -      - DONE - Joint
+    - IP   - IP   - DONE - DistanceJoint
+    - IP   - IP   - DONE - DistanceJointDef
+    - IP   - IP   - DONE - FrictionJoint
+    - IP   - IP   - DONE - FrictionJointDef
+    - IP   - IP   - DONE - GearJoint
+    - IP   - IP   - DONE - GearJointDef
+    - IP   - IP   - DONE - Joint
     - IP   - IP   - DONE - JointDef
     - IP   - IP   - DONE - JointEdge
-    -      -      - DONE - MotorJoint
-    -      -      - DONE - MotorJointDef
-    -      -      - DONE - MouseJoint
-    -      -      - DONE - MouseJointDef
-    -      -      - DONE - PrismaticJoint
-    -      -      - DONE - PrismaticJointDef
-    -      -      - DONE - PulleyJoint
-    -      -      - DONE - PulleyJointDef
-    -      -      - DONE - RevoluteJoint
-    -      -      - DONE - RevoluteJointDef
-    -      -      - DONE - RopeJoint
+    - IP   - IP   - DONE - MotorJoint
+    - IP   - IP   - DONE - MotorJointDef
+    - IP   - IP   - DONE - MouseJoint
+    - IP   - IP   - DONE - MouseJointDef
+    - IP   - IP   - DONE - PrismaticJoint
+    - IP   - IP   - DONE - PrismaticJointDef
+    - IP   - IP   - DONE - PulleyJoint
+    - IP   - IP   - DONE - PulleyJointDef
+    - IP   - IP   - DONE - RevoluteJoint
+    - IP   - IP   - DONE - RevoluteJointDef
+    - IP   - IP   - DONE - RopeJoint
     -      -      - DONE - RopeJointDef
-    -      -      - DONE - WeldJoint
+    - IP   - IP   - DONE - WeldJoint
     -      -      - DONE - WeldJointDef
-    -      -      - DONE - WheelJoint
+    - IP   - IP   - DONE - WheelJoint
     -      -      - DONE - WheelJointDef
 
 LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/SHAPES

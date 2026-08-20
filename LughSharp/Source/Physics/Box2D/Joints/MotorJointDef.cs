@@ -27,6 +27,48 @@ namespace LughSharp.Source.Physics.Box2D.Joints;
 [PublicAPI]
 public class MotorJointDef : JointDef
 {
+    /// <summary>
+    /// Position of bodyB minus the position of bodyA, in bodyA's frame, in meters.
+    /// </summary>
+    public readonly Vector2 LinearOffset = new();
+
+    /// <summary>
+    /// The bodyB angle minus bodyA angle in radians.
+    /// </summary>
+    public float AngularOffset { get; set; }
+
+    /// <summary>
+    /// The maximum motor force in N.
+    /// </summary>
+    public float MaxForce { get; set; } = 1.0f;
+
+    /// <summary>
+    /// The maximum motor torque in N-m.
+    /// </summary>
+    public float MaxTorque { get; set; } = 1.0f;
+
+    /// <summary>
+    /// Position correction factor in the range [0,1].
+    /// </summary>
+    public float CorrectionFactor { get; set; } = 0.3f;
+
+    // ========================================================================
+
+    public MotorJointDef()
+    {
+        Type = JointType.MotorJoint;
+    }
+
+    /// <summary>
+    /// Initialize the bodies and offsets using the current transforms.
+    /// </summary>
+    public void Initialize( Body body1, Body body2 )
+    {
+        this.BodyA = body1;
+        this.BodyB = body2;
+        this.LinearOffset.Set( BodyA.GetLocalPoint( BodyB.GetPosition() ) );
+        this.AngularOffset = BodyB.GetAngle() - BodyA.GetAngle();
+    }
 }
 
 // ============================================================================

@@ -71,7 +71,7 @@ public class PolygonShape : Shape
             verts[ i + 1 ] = vertices[ j ].Y;
         }
 
-        JniSet( addr, verts, 0, verts.Length );
+        jniSet( addr, verts, 0, verts.Length );
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class PolygonShape : Shape
     /// <param name="vertices"> The vertices to copy. </param>
     public void Set( float[] vertices )
     {
-        JniSet( addr, vertices, 0, vertices.Length );
+        jniSet( addr, vertices, 0, vertices.Length );
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class PolygonShape : Shape
     /// <param name="len"> The number of vertices to copy. </param>
     public void Set( float[] vertices, int offset, int len )
     {
-        JniSet( addr, vertices, offset, len );
+        jniSet( addr, vertices, offset, len );
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ public class PolygonShape : Shape
     /// <param name="hy"> the half-height. </param>
     public void SetAsBox( float hx, float hy )
     {
-        JniSetAsBox( addr, hx, hy );
+        jniSetAsBox( addr, hx, hy );
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public class PolygonShape : Shape
     /// <param name="angle"> the rotation in radians of the box in local coordinates. </param>
     public void SetAsBox( float hx, float hy, Vector2 center, float angle )
     {
-        JniSetAsBox( addr, hx, hy, center.X, center.Y, angle );
+        jniSetAsBox( addr, hx, hy, center.X, center.Y, angle );
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public class PolygonShape : Shape
     /// </summary>
     public int GetVertexCount()
     {
-        return JniGetVertexCount( addr );
+        return jniGetVertexCount( addr );
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class PolygonShape : Shape
     /// <param name="vertex"> vertex </param>
     public void GetVertex( int index, Vector2 vertex )
     {
-        JniGetVertex( addr, index, _verts );
+        jniGetVertex( addr, index, _verts );
         vertex.X = _verts[ 0 ];
         vertex.Y = _verts[ 1 ];
     }
@@ -144,7 +144,7 @@ public class PolygonShape : Shape
     // ========================================================================
     
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSet( long addr, float[] verts, int offset, int len );
+    private static extern void jniSet( long addr, float[] verts, int offset, int len );
     /*
         b2PolygonShape* poly = (b2PolygonShape*)addr;
         int numVertices = len / 2;
@@ -157,28 +157,28 @@ public class PolygonShape : Shape
      */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetAsBox( long addr, float hx, float hy );
+    private static extern void jniSetAsBox( long addr, float hx, float hy );
     /*
         b2PolygonShape* poly = (b2PolygonShape*)addr;
         poly->SetAsBox(hx, hy);
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetAsBox( long addr, float hx, float hy, float centerX, float centerY, float angle );
+    private static extern void jniSetAsBox( long addr, float hx, float hy, float centerX, float centerY, float angle );
     /*
         b2PolygonShape* poly = (b2PolygonShape*)addr;
         poly->SetAsBox( hx, hy, b2Vec2( centerX, centerY ), angle );
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetVertexCount( long addr );
+    private static extern int jniGetVertexCount( long addr );
     /*
         b2PolygonShape* poly = (b2PolygonShape*)addr;
         return poly->GetVertexCount();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniGetVertex( long addr, int index, float[] verts );
+    private static extern void jniGetVertex( long addr, int index, float[] verts );
     /*
         b2PolygonShape* poly = (b2PolygonShape*)addr;
         const b2Vec2 v = poly->GetVertex( index );

@@ -647,7 +647,7 @@ public class VerticalGroup : WidgetGroup
     /// <summary>
     /// Retrieves the reverse layout state of the VerticalGroup.
     /// </summary>
-    /// <returns>A boolean indicating whether the layout is reversed (true) or not (false).</returns>
+    /// <returns>A bool indicating whether the layout is reversed (true) or not (false).</returns>
     public bool GetReverse()
     {
         return _reverse;

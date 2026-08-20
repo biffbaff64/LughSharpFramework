@@ -24,11 +24,24 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Gear joint definition. This definition requires two existing revolute or
+/// prismatic joints (any combination will work). The provided joints must
+/// attach a dynamic body to a static body.
+/// </summary>
 [PublicAPI]
 public class GearJointDef : JointDef
 {
-    public Joint Joint1 { get; set; }
-    public Joint Joint2 { get; set; }
+    public Joint Joint1 { get; set; } = null!;
+    public Joint Joint2 { get; set; } = null!;
+    public float Ratio  { get; set; } = 1;
+
+    // ========================================================================
+
+    public GearJointDef()
+    {
+        Type = JointType.GearJoint;
+    }
 }
 
 // ============================================================================

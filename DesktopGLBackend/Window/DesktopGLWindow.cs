@@ -551,7 +551,7 @@ public class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="windowHandle">The handle to the GLFW window whose focus state has changed.</param>
     /// <param name="focused">
-    /// A boolean indicating the new focus state; true if the window gained focus,
+    /// A bool indicating the new focus state; true if the window gained focus,
     /// otherwise false.
     /// </param>
     public void GdxFocusCallback( DotGLFW.Window windowHandle, bool focused )
@@ -576,7 +576,7 @@ public class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="windowHandle">The handle to the GLFW window whose iconification state has changed.</param>
     /// <param name="iconified">
-    /// A boolean indicating the new iconification state; true if the window was minimized,
+    /// A bool indicating the new iconification state; true if the window was minimized,
     /// otherwise false.
     /// </param>
     public void GdxIconifyCallback( DotGLFW.Window windowHandle, bool iconified )
@@ -600,7 +600,7 @@ public class DesktopGLWindow : IDisposable
     /// </summary>
     /// <param name="windowHandle">The handle to the GLFW window whose maximization state has changed.</param>
     /// <param name="maximized">
-    /// A boolean indicating the new maximization state; true if the window is maximized,
+    /// A bool indicating the new maximization state; true if the window is maximized,
     /// otherwise false.
     /// </param>
     public void GdxMaximizeCallback( DotGLFW.Window windowHandle, bool maximized )

@@ -159,7 +159,7 @@ public class ParticleEffectActor : Actor, IDisposable
     /// <summary>
     /// Determines whether the particle effect should reset when the actor starts.
     /// </summary>
-    /// <returns>A boolean value indicating if the particle effect resets on start.</returns>
+    /// <returns>A bool value indicating if the particle effect resets on start.</returns>
     public bool IsResetOnStart()
     {
         return _resetOnStart;
@@ -185,7 +185,7 @@ public class ParticleEffectActor : Actor, IDisposable
     /// Sets whether the particle effect should be automatically removed when it finishes.
     /// </summary>
     /// <param name="autoRemove">
-    /// A boolean value indicating whether the particle effect should be automatically
+    /// A bool value indicating whether the particle effect should be automatically
     /// removed.
     /// </param>
     /// <returns>

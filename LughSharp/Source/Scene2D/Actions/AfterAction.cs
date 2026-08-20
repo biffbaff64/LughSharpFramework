@@ -78,7 +78,7 @@ public class AfterAction : DelegateAction
     /// action's progress.
     /// </param>
     /// <returns>
-    /// A boolean indicating whether the delegate action has finished executing.
+    /// A bool indicating whether the delegate action has finished executing.
     /// Returns true if all waiting actions have been completed and the delegate
     /// action has successfully executed, otherwise returns false.
     /// </returns>

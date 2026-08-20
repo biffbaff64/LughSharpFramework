@@ -62,6 +62,21 @@ public class Body
     {
         return new List< Fixture >();
     }
+
+    public Vector2 GetPosition()
+    {
+        return new Vector2();
+    }
+
+    public float GetAngle()
+    {
+        return 0.0f;
+    }
+
+    public Vector2 GetLocalVector( Vector2 axis )
+    {
+        return new Vector2();
+    }
 }
 
 // ============================================================================

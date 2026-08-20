@@ -25,7 +25,7 @@
 using GLenum = int;
 using GLsizei = int;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLbyte = sbyte;
 using GLchar = byte;
 
@@ -36,7 +36,7 @@ namespace LughSharp.Source.Graphics.OpenGL.Bindings;
 public unsafe partial class GLBindings
 {
     public void DebugMessageControl( GLenum source, GLenum type, GLenum severity, GLsizei count, GLuint* ids,
-                                     GLboolean enabled )
+                                     GLbool enabled )
     {
         GetDelegateForFunction< PFNGLDEBUGMESSAGECONTROLPROC >( "glDebugMessageControl", out _glDebugMessageControl );
 

@@ -28,7 +28,7 @@ using GLenum = int;
 using GLint = int;
 using GLsizei = int;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLsizeiptr = int;
 using GLintptr = int;
 using GLbyte = sbyte;
@@ -124,7 +124,7 @@ public unsafe partial class GLBindings
 
     // ========================================================================
 
-    public GLboolean IsTransformFeedback( GLuint id )
+    public GLbool IsTransformFeedback( GLuint id )
     {
         GetDelegateForFunction< PFNGLISTRANSFORMFEEDBACKPROC >( "glIsTransformFeedback", out _glIsTransformFeedback );
 

@@ -953,7 +953,7 @@ public class JsonReader
     }
 
     /// <summary>
-    /// Called when a boolean value is encountered in the JSON.
+    /// Called when a bool value is encountered in the JSON.
     /// </summary>
     protected void HandleBool( string? name, bool value )
     {

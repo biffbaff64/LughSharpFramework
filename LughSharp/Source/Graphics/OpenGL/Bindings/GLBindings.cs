@@ -33,7 +33,7 @@ using GLsizei = int;
 using GLbitfield = uint;
 using GLdouble = double;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLubyte = byte;
 using GLsizeiptr = int;
 using GLintptr = int;
@@ -77,7 +77,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void ColorMaski( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a )
+    public void ColorMaski( GLuint index, GLbool r, GLbool g, GLbool b, GLbool a )
     {
         GetDelegateForFunction< PFNGLCOLORMASKIPROC >( "glColorMaski", out _glColorMaski );
 
@@ -87,7 +87,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetBooleani_v( GLenum target, GLuint index, GLboolean* data )
+    public void GetBooleani_v( GLenum target, GLuint index, GLbool* data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
 
@@ -95,11 +95,11 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     /// <inheritdoc />
-    public void GetBooleani_v( GLenum target, GLuint index, ref GLboolean[] data )
+    public void GetBooleani_v( GLenum target, GLuint index, ref GLbool[] data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANI_VPROC >( "glGetBooleani_v", out _glGetBooleani_v );
 
-        fixed ( GLboolean* p = &data[ 0 ] )
+        fixed ( GLbool* p = &data[ 0 ] )
         {
             _glGetBooleani_v( target, index, p );
         }
@@ -229,7 +229,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void EnableOrDisable( EnableCap cap, GLboolean enable )
+    public void EnableOrDisable( EnableCap cap, GLbool enable )
     {
         if ( enable )
         {
@@ -254,7 +254,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsEnabled( EnableCap cap )
+    public GLbool IsEnabled( EnableCap cap )
     {
         GetDelegateForFunction< PFNGLISENABLEDPROC >( "glIsEnabled", out _glIsEnabled );
 
@@ -284,7 +284,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public GLboolean IsEnabledi( GLenum target, GLuint index )
+    public GLbool IsEnabledi( GLenum target, GLuint index )
     {
         GetDelegateForFunction< PFNGLISENABLEDIPROC >( "glIsEnabledi", out _glIsEnabledi );
 
@@ -394,7 +394,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void ColorMask( GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha )
+    public void ColorMask( GLbool red, GLbool green, GLbool blue, GLbool alpha )
     {
         GetDelegateForFunction< PFNGLCOLORMASKPROC >( "glColorMask", out _glColorMask );
 
@@ -404,7 +404,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void DepthMask( GLboolean flag )
+    public void DepthMask( GLbool flag )
     {
         GetDelegateForFunction< PFNGLDEPTHMASKPROC >( "glDepthMask", out _glDepthMask );
 
@@ -533,7 +533,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     /// <inheritdoc />
-    public void GetBooleanv( GLenum pname, GLboolean* data )
+    public void GetBooleanv( GLenum pname, GLbool* data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANVPROC >( "glGetBooleanv", out _glGetBooleanv );
 
@@ -541,21 +541,21 @@ public unsafe partial class GLBindings : IGLBindings
     }
 
     /// <inheritdoc />
-    public void GetBooleanv( GLenum pname, ref GLboolean[] data )
+    public void GetBooleanv( GLenum pname, ref GLbool[] data )
     {
         GetDelegateForFunction< PFNGLGETBOOLEANVPROC >( "glGetBooleanv", out _glGetBooleanv );
 
-        fixed ( GLboolean* p = &data[ 0 ] )
+        fixed ( GLbool* p = &data[ 0 ] )
         {
             _glGetBooleanv( pname, p );
         }
     }
 
     /// <inheritdoc />
-    public void GetBooleanv( GLenum pname, out GLboolean data )
+    public void GetBooleanv( GLenum pname, out GLbool data )
     {
         // Create a temporary array to hold the result from the underlying OpenGL method.
-        var tempArray = new GLboolean[ 1 ];
+        var tempArray = new GLbool[ 1 ];
 
         // Call the original method with the temporary array.
         GetBooleanv( pname, ref tempArray );
@@ -1691,7 +1691,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public void BindImageTexture( GLuint unit, GLuint texture, GLint level, GLboolean layered, GLint layer,
+    public void BindImageTexture( GLuint unit, GLuint texture, GLint level, GLbool layered, GLint layer,
                                   GLenum access, GLenum format )
     {
         GetDelegateForFunction< PFNGLBINDIMAGETEXTUREPROC >( "glBindImageTexture", out _glBindImageTexture );
@@ -1977,7 +1977,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void TexStorage2DMultisample( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width,
                                          GLsizei height,
-                                         GLboolean fixedsamplelocations )
+                                         GLbool fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE2DMULTISAMPLEPROC >( "glTexStorage2DMultisample",
                                                                     out _glTexStorage2DMultisample );
@@ -1988,7 +1988,7 @@ public unsafe partial class GLBindings : IGLBindings
     // ========================================================================
 
     public void TexStorage3DMultisample( GLenum target, GLsizei samples, GLenum internalFormat, GLsizei width,
-                                         GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )
+                                         GLsizei height, GLsizei depth, GLbool fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXSTORAGE3DMULTISAMPLEPROC >( "glTexStorage3DMultisample",
                                                                     out _glTexStorage3DMultisample );
@@ -2058,7 +2058,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// 
     /// </summary>
     /// <returns></returns>
-    private static GLboolean ObjectLabelAvailable()
+    private static GLbool ObjectLabelAvailable()
     {
         if ( ( ( Engine.GL.GetOpenGLVersion().major >= 4 ) && ( Engine.GL.GetOpenGLVersion().minor >= 3 ) )
           || Engine.Graphics.SupportsExtension( "GL_ARB_debug_output" ) )
@@ -2527,7 +2527,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public GLboolean UnmapNamedBuffer( GLuint buffer )
+    public GLbool UnmapNamedBuffer( GLuint buffer )
     {
         GetDelegateForFunction< PFNGLUNMAPNAMEDBUFFERPROC >( "glUnmapNamedBuffer", out _glUnmapNamedBuffer );
 
@@ -3118,7 +3118,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void TextureStorage2DMultisample( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width,
                                              GLsizei height,
-                                             GLboolean fixedsamplelocations )
+                                             GLbool fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXTURESTORAGE2DMULTISAMPLEPROC >( "glTextureStorage2DMultisample",
                                                                         out _glTextureStorage2DMultisample );
@@ -3130,7 +3130,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     public void TextureStorage3DMultisample( GLuint texture, GLsizei samples, GLenum internalFormat, GLsizei width,
                                              GLsizei height,
-                                             GLsizei depth, GLboolean fixedsamplelocations )
+                                             GLsizei depth, GLbool fixedsamplelocations )
     {
         GetDelegateForFunction< PFNGLTEXTURESTORAGE3DMULTISAMPLEPROC >( "glTextureStorage3DMultisample",
                                                                         out _glTextureStorage3DMultisample );
@@ -4236,7 +4236,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public GLboolean IsRenderbuffer( GLuint renderbuffer )
+    public GLbool IsRenderbuffer( GLuint renderbuffer )
     {
         GetDelegateForFunction< PFNGLISRENDERBUFFERPROC >( "glIsRenderbuffer", out _glIsRenderbuffer );
 
@@ -4331,7 +4331,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public GLboolean IsFramebuffer( GLuint framebuffer )
+    public GLbool IsFramebuffer( GLuint framebuffer )
     {
         GetDelegateForFunction< PFNGLISFRAMEBUFFERPROC >( "glIsFramebuffer", out _glIsFramebuffer );
 
@@ -4780,7 +4780,7 @@ public unsafe partial class GLBindings : IGLBindings
 
     // ========================================================================
 
-    public GLboolean IsSync( IntPtr sync )
+    public GLbool IsSync( IntPtr sync )
     {
         GetDelegateForFunction< PFNGLISSYNCPROC >( "glIsSync", out _glIsSync );
 

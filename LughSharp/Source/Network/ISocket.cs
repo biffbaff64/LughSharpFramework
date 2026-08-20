@@ -28,7 +28,7 @@ namespace LughSharp.Source.Network;
 public interface ISocket
 {
 //    /** @return whether the socket is connected */
-//    public boolean isConnected ();
+//    public bool isConnected ();
 //
 //    /** @return the {@link InputStream} used to read data from the other end of the connection. */
 //    public InputStream getInputStream ();

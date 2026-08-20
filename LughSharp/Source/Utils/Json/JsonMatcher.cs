@@ -152,7 +152,7 @@ namespace LughSharp.Source.Utils.Json;
 /// ==========<br/>
 /// <li>JsonValue instances are reused for <c>@</c> processing, references should not be kept.</li>
 /// <li>JsonValue references can safely be held only by processors called at the end of parsing.</li>
-/// <li>JsonValue types are object, array, null, boolean, or String.</li>
+/// <li>JsonValue types are object, array, null, bool, or String.</li>
 /// <li>Numbers are provided as String, deferring number parsing until explicitly converted
 /// (eg <see cref="JsonValue.AsFloat()"/>).</li>
 /// </para>

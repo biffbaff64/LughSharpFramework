@@ -32,7 +32,7 @@ using LughSharp.Source.Graphics.OpenGL.Enums;
 using GLfloat = float;
 using GLdouble = double;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 
 // ============================================================================
 using static LughSharp.Source.Graphics.OpenGL.IGL;
@@ -87,7 +87,7 @@ public partial interface IGLBindings
     /// <see href="https://docs.gl/gl4/glEnable"/> for a list of possible values.
     /// </param>
     /// <param name="enable"> True or false as appropriate. </param>
-    void EnableOrDisable( EnableCap cap, GLboolean enable );
+    void EnableOrDisable( EnableCap cap, GLbool enable );
 
     /// <summary>
     /// Test whether a capability is enabled.
@@ -463,7 +463,7 @@ public partial interface IGLBindings
                      int format,
                      int type,
                      IntPtr pixels = 0,
-                     GLboolean enabled = true );
+                     GLbool enabled = true );
 
     /// <summary>
     /// Specify a two-dimensional texture image
@@ -533,7 +533,7 @@ public partial interface IGLBindings
                           int format,
                           int type,
                           T[] pixels,
-                          GLboolean enabled = true ) where T : unmanaged;
+                          GLbool enabled = true ) where T : unmanaged;
 
     /// <summary>
     /// </summary>
@@ -602,7 +602,7 @@ public partial interface IGLBindings
     /// <param name="green">Specifies whether green can or cannot be written into the frame buffer.</param>
     /// <param name="blue">Specifies whether blue can or cannot be written into the frame buffer.</param>
     /// <param name="alpha">Specifies whether alpha can or cannot be written into the frame buffer.</param>
-    void ColorMask( GLboolean red, bool green, bool blue, bool alpha );
+    void ColorMask( GLbool red, bool green, bool blue, bool alpha );
 
     /// <summary>
     /// Enable or disable writing into the depth buffer.
@@ -611,7 +611,7 @@ public partial interface IGLBindings
     /// Specifies whether depth buffer writing is enabled or disabled. If flag is <c>false</c>,
     /// depth buffer writing is disabled. Otherwise, it is enabled. Initially, depth buffer writing is enabled.
     /// </param>
-    void DepthMask( GLboolean flag );
+    void DepthMask( GLbool flag );
 
     /// <summary>
     /// Block until all  execution is complete.
@@ -842,24 +842,24 @@ public partial interface IGLBindings
         where T : unmanaged;
 
     /// <summary>
-    /// Return the boolean value or values of a selected parameter.
+    /// Return the bool value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
     /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
-    /// <param name="data">A pointer to where the boolean value or values will be returned.</param>
+    /// <param name="data">A pointer to where the bool value or values will be returned.</param>
     unsafe void GetBooleanv( int pname, bool* data );
 
     /// <summary>
-    /// Return the boolean value or values of a selected parameter.
+    /// Return the bool value or values of a selected parameter.
     /// </summary>
     /// <param name="pname">
     /// Specifies the parameter value to be returned. Refer to <see href="https://docs.gl/gl4/glGet"/> for
     /// a list of possible values.
     /// </param>
     /// <param name="data">
-    /// A <see langword="ref"/> to an array of <see langword="bool"/>s where the boolean value or values
+    /// A <see langword="ref"/> to an array of <see langword="bool"/>s where the bool value or values
     /// will be returned.
     /// </param>
     void GetBooleanv( int pname, ref bool[] data );
@@ -1982,7 +1982,7 @@ public partial interface IGLBindings
     /// initial value is 1.
     /// </param>
     /// <param name="invert">
-    /// Specify a single boolean value representing if the coverage masks should be inverted. The intial
+    /// Specify a single bool value representing if the coverage masks should be inverted. The intial
     /// value is <c>false</c>.
     /// </param>
     void SampleCoverage( float value, bool invert );
@@ -4590,7 +4590,7 @@ public partial interface IGLBindings
     /// Specifies an offset of the first component in the first generic vertex attribute in the array in
     /// the data store of the buffer currently bound to the <see cref="IGL.GLArrayBuffer"/> target. The initial value is 0.
     /// </param>
-    void VertexAttribPointer( GLuint index, int size, int type, GLboolean normalized, int stride, uint pointer );
+    void VertexAttribPointer( GLuint index, int size, int type, GLbool normalized, int stride, uint pointer );
 
 //TODO: Unsupported method    
 //
@@ -4763,7 +4763,7 @@ public partial interface IGLBindings
     void ColorMaski( uint index, bool r, bool g, bool b, bool a );
 
     /// <summary>
-    /// Return the boolean value of a selected indexed state variable
+    /// Return the bool value of a selected indexed state variable
     /// </summary>
     /// <param name="target">
     /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of
@@ -4774,7 +4774,7 @@ public partial interface IGLBindings
     unsafe void GetBooleani_v( int target, uint index, bool* data );
 
     /// <summary>
-    /// Return the boolean value of a selected indexed state variable
+    /// Return the bool value of a selected indexed state variable
     /// </summary>
     /// <param name="target">
     /// Specifies the target of the query. Refer to <see href="https://docs.gl/gl4/glGet"/> for a list of

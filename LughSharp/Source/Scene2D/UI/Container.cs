@@ -464,7 +464,7 @@ public class Container< T > : WidgetGroup where T : Actor
     }
 
     /// <summary>
-    /// Sets horizontal and vertical fill values based on the specified boolean conditions.
+    /// Sets horizontal and vertical fill values based on the specified bool conditions.
     /// </summary>
     /// <param name="x">If true, sets the horizontal fill to 1; otherwise, sets it to 0.</param>
     /// <param name="y">If true, sets the vertical fill to 1; otherwise, sets it to 0.</param>
@@ -481,7 +481,7 @@ public class Container< T > : WidgetGroup where T : Actor
     /// Sets the container's horizontal and vertical fill values to 1 if the specified condition is true,
     /// otherwise sets them to 0.
     /// </summary>
-    /// <param name="fill">A boolean value that determines whether the container should be filled
+    /// <param name="fill">A bool value that determines whether the container should be filled
     /// horizontally and vertically.</param>
     /// <returns>The current instance of the container, with updated fill values.</returns>
     public Container< T > FillOnTrue( bool fill )

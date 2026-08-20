@@ -59,7 +59,7 @@ public class ChainShape : Shape
     /// </summary>
     public void Clear()
     {
-        JniClear( addr );
+        jniClear( addr );
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class ChainShape : Shape
     /// <param name="vertices"> An array of floats of alternating x, y coordinates. </param>
     public void CreateLoop( float[] vertices )
     {
-        JniCreateLoop( addr, vertices, 0, vertices.Length / 2 );
+        jniCreateLoop( addr, vertices, 0, vertices.Length / 2 );
         IsLooped = true;
     }
 
@@ -80,7 +80,7 @@ public class ChainShape : Shape
     /// <param name="length"> After offset (in floats, not float-pairs, so even number) </param>
     public void CreateLoop( float[] vertices, int offset, int length )
     {
-        JniCreateLoop( addr, vertices, offset, length / 2 );
+        jniCreateLoop( addr, vertices, offset, length / 2 );
         IsLooped = true;
     }
 
@@ -98,7 +98,7 @@ public class ChainShape : Shape
             verts[ i + 1 ] = vertices[ j ].Y;
         }
 
-        JniCreateLoop( addr, verts, 0, verts.Length / 2 );
+        jniCreateLoop( addr, verts, 0, verts.Length / 2 );
         IsLooped = true;
     }
 
@@ -108,7 +108,7 @@ public class ChainShape : Shape
     /// <param name="vertices"> an array of floats of alternating x, y coordinates. </param>
     public void CreateChain( float[] vertices )
     {
-        JniCreateChain( addr, vertices, 0, vertices.Length / 2 );
+        jniCreateChain( addr, vertices, 0, vertices.Length / 2 );
         IsLooped = false;
     }
 
@@ -120,7 +120,7 @@ public class ChainShape : Shape
     /// <param name="length"> after offset (in floats, not float-pairs, so even number) </param>
     public void CreateChain( float[] vertices, int offset, int length )
     {
-        JniCreateChain( addr, vertices, offset, length / 2 );
+        jniCreateChain( addr, vertices, offset, length / 2 );
         IsLooped = false;
     }
 
@@ -138,7 +138,7 @@ public class ChainShape : Shape
             verts[ i + 1 ] = vertices[ j ].Y;
         }
 
-        JniCreateChain( addr, verts, 0, vertices.Length );
+        jniCreateChain( addr, verts, 0, vertices.Length );
         IsLooped = false;
     }
 
@@ -151,7 +151,7 @@ public class ChainShape : Shape
     /// Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops. */
     public void SetPrevVertex( float prevVertexX, float prevVertexY )
     {
-        JniSetPrevVertex( addr, prevVertexX, prevVertexY );
+        jniSetPrevVertex( addr, prevVertexX, prevVertexY );
     }
 
     /// Establish connectivity to a vertex that follows the last vertex.
@@ -165,7 +165,7 @@ public class ChainShape : Shape
     /// Don't call this for loops.
     public void SetNextVertex( float nextVertexX, float nextVertexY )
     {
-        JniSetNextVertex( addr, nextVertexX, nextVertexY );
+        jniSetNextVertex( addr, nextVertexX, nextVertexY );
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public class ChainShape : Shape
     /// </summary>
     public int GetVertexCount()
     {
-        return JniGetVertexCount( addr );
+        return jniGetVertexCount( addr );
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class ChainShape : Shape
     /// <param name="vertex"> vertex </param>
     public void GetVertex( int index, Vector2 vertex )
     {
-        JniGetVertex( addr, index, _verts );
+        jniGetVertex( addr, index, _verts );
         vertex.X = _verts[ 0 ];
         vertex.Y = _verts[ 1 ];
     }
@@ -192,7 +192,7 @@ public class ChainShape : Shape
     // ========================================================================
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniCreateLoop( long addr, float[] verts, int offset, int numVertices );
+    private static extern void jniCreateLoop( long addr, float[] verts, int offset, int numVertices );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         b2Vec2* verticesOut = new b2Vec2[numVertices];
@@ -203,7 +203,7 @@ public class ChainShape : Shape
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniCreateChain( long addr, float[] verts, int offset, int numVertices );
+    private static extern void jniCreateChain( long addr, float[] verts, int offset, int numVertices );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         b2Vec2* verticesOut = new b2Vec2[numVertices];
@@ -214,28 +214,28 @@ public class ChainShape : Shape
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetPrevVertex( long addr, float x, float y );
+    private static extern void jniSetPrevVertex( long addr, float x, float y );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         chain->SetPrevVertex(b2Vec2(x, y));
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniSetNextVertex( long addr, float x, float y );
+    private static extern void jniSetNextVertex( long addr, float x, float y );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         chain->SetNextVertex(b2Vec2(x, y));
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern int JniGetVertexCount( long addr );
+    private static extern int jniGetVertexCount( long addr );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         return chain->GetVertexCount();
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniGetVertex( long addr, int index, float[] verts );
+    private static extern void jniGetVertex( long addr, int index, float[] verts );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         const b2Vec2 v = chain->GetVertex( index );
@@ -244,7 +244,7 @@ public class ChainShape : Shape
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    private static extern void JniClear( long addr );
+    private static extern void jniClear( long addr );
     /*
         b2ChainShape* chain = (b2ChainShape*)addr;
         chain->Clear();

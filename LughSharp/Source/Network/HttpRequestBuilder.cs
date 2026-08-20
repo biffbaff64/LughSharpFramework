@@ -74,15 +74,15 @@ public class HttpRequestBuilder
 //		return this;
 //	}
 //
-//	/** @see HttpRequest#setFollowRedirects(boolean) */
-//	public HttpRequestBuilder followRedirects (boolean followRedirects) {
+//	/** @see HttpRequest#setFollowRedirects(bool) */
+//	public HttpRequestBuilder followRedirects (bool followRedirects) {
 //		validate();
 //		httpRequest.setFollowRedirects(followRedirects);
 //		return this;
 //	}
 //
-//	/** @see HttpRequest#setIncludeCredentials(boolean) */
-//	public HttpRequestBuilder includeCredentials (boolean includeCredentials) {
+//	/** @see HttpRequest#setIncludeCredentials(bool) */
+//	public HttpRequestBuilder includeCredentials (bool includeCredentials) {
 //		validate();
 //		httpRequest.setIncludeCredentials(includeCredentials);
 //		return this;

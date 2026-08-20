@@ -71,7 +71,7 @@ public class Mp3
         {
 //            try
 //            {
-//                boolean setup = _bitstream == null;
+//                bool setup = _bitstream == null;
 //
 //                if ( setup )
 //                {

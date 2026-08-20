@@ -29,7 +29,7 @@ using GLsizei = int;
 using GLbitfield = uint;
 using GLdouble = double;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLubyte = byte;
 using GLsizeiptr = int;
 using GLintptr = int;
@@ -798,10 +798,10 @@ public partial class GLBindings
     private delegate void PFNGLSTENCILMASKPROC( GLuint mask );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLCOLORMASKPROC( GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha );
+    private delegate void PFNGLCOLORMASKPROC( GLbool red, GLbool green, GLbool blue, GLbool alpha );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLDEPTHMASKPROC( GLboolean flag );
+    private delegate void PFNGLDEPTHMASKPROC( GLbool flag );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLDISABLEPROC( GLenum cap );
@@ -844,7 +844,7 @@ public partial class GLBindings
                                                GLenum type, IntPtr pixels );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLGETBOOLEANVPROC( GLenum pname, GLboolean* data );
+    private unsafe delegate void PFNGLGETBOOLEANVPROC( GLenum pname, GLbool* data );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLGETDOUBLEVPROC( GLenum pname, GLdouble* data );
@@ -879,7 +879,7 @@ public partial class GLBindings
                                                                   GLint* @params );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISENABLEDPROC( GLenum cap );
+    private delegate GLbool PFNGLISENABLEDPROC( GLenum cap );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLDEPTHRANGEPROC( GLdouble near, GLdouble far );
@@ -951,7 +951,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGENTEXTURESPROC( GLsizei n, GLuint* textures );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISTEXTUREPROC( GLuint texture );
+    private delegate GLbool PFNGLISTEXTUREPROC( GLuint texture );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLDRAWRANGEELEMENTSPROC( GLenum mode, GLuint start, GLuint end, GLsizei count, GLenum type,
@@ -999,7 +999,7 @@ public partial class GLBindings
     private delegate void PFNGLACTIVETEXTUREPROC( GLenum texture );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLSAMPLECOVERAGEPROC( GLfloat value, GLboolean invert );
+    private delegate void PFNGLSAMPLECOVERAGEPROC( GLfloat value, GLbool invert );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLCOMPRESSEDTEXIMAGE3DPROC( GLenum target,
@@ -1108,7 +1108,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLDELETEQUERIESPROC( GLsizei n, GLuint* ids );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISQUERYPROC( GLuint id );
+    private delegate GLbool PFNGLISQUERYPROC( GLuint id );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLBEGINQUERYPROC( GLenum target, GLuint id );
@@ -1135,7 +1135,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGENBUFFERSPROC( GLsizei n, GLuint* buffers );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISBUFFERPROC( GLuint buffer );
+    private delegate GLbool PFNGLISBUFFERPROC( GLuint buffer );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLBUFFERDATAPROC( GLenum target, GLsizeiptr size, IntPtr data, GLenum usage );
@@ -1150,7 +1150,7 @@ public partial class GLBindings
     private delegate IntPtr PFNGLMAPBUFFERPROC( GLenum target, GLenum access );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLUNMAPBUFFERPROC( GLenum target );
+    private delegate GLbool PFNGLUNMAPBUFFERPROC( GLenum target );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLGETBUFFERPARAMETERIVPROC( GLenum target, GLenum pname, GLint* @params );
@@ -1262,10 +1262,10 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGETVERTEXATTRIBPOINTERVPROC( GLuint index, GLenum pname, IntPtr* pointer );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISPROGRAMPROC( GLuint program );
+    private delegate GLbool PFNGLISPROGRAMPROC( GLuint program );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISSHADERPROC( GLuint shader );
+    private delegate GLbool PFNGLISSHADERPROC( GLuint shader );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLLINKPROGRAMPROC( GLuint program );
@@ -1325,19 +1325,19 @@ public partial class GLBindings
     private unsafe delegate void PFNGLUNIFORM4IVPROC( GLint location, GLsizei count, GLint* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX2FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX2FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                             GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX3FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX3FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                             GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX4FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX4FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                             GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLVALIDATEPROGRAMPROC( GLuint program );
+    private delegate GLbool PFNGLVALIDATEPROGRAMPROC( GLuint program );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLVERTEXATTRIB1DPROC( GLuint index, GLdouble x );
@@ -1448,39 +1448,39 @@ public partial class GLBindings
     private unsafe delegate void PFNGLVERTEXATTRIB4USVPROC( GLuint index, GLushort* v );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLVERTEXATTRIBPOINTERPROC( GLuint index, GLint size, GLenum type, GLboolean normalized,
+    private delegate void PFNGLVERTEXATTRIBPOINTERPROC( GLuint index, GLint size, GLenum type, GLbool normalized,
                                                         GLsizei stride,
                                                         IntPtr pointer );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX2X3FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX2X3FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX3X2FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX3X2FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX2X4FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX2X4FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX4X2FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX4X2FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX3X4FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX3X4FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX4X3FVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX4X3FVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLCOLORMASKIPROC( GLuint index, GLboolean r, GLboolean g, GLboolean b, GLboolean a );
+    private delegate void PFNGLCOLORMASKIPROC( GLuint index, GLbool r, GLbool g, GLbool b, GLbool a );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLGETBOOLEANI_VPROC( GLenum target, GLuint index, GLboolean* data );
+    private unsafe delegate void PFNGLGETBOOLEANI_VPROC( GLenum target, GLuint index, GLbool* data );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLGETINTEGERI_VPROC( GLenum target, GLuint index, GLint* data );
@@ -1492,7 +1492,7 @@ public partial class GLBindings
     private delegate void PFNGLDISABLEIPROC( GLenum target, GLuint index );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISENABLEDIPROC( GLenum target, GLuint index );
+    private delegate GLbool PFNGLISENABLEDIPROC( GLenum target, GLuint index );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLBEGINTRANSFORMFEEDBACKPROC( GLenum primitiveMode );
@@ -1660,7 +1660,7 @@ public partial class GLBindings
     private unsafe delegate GLubyte* PFNGLGETSTRINGIPROC( GLenum name, GLuint index );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISRENDERBUFFERPROC( GLuint renderbuffer );
+    private delegate GLbool PFNGLISRENDERBUFFERPROC( GLuint renderbuffer );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLBINDRENDERBUFFERPROC( GLenum target, GLuint renderbuffer );
@@ -1679,7 +1679,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGETRENDERBUFFERPARAMETERIVPROC( GLenum target, GLenum pname, GLint* parameters );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISFRAMEBUFFERPROC( GLuint framebuffer );
+    private delegate GLbool PFNGLISFRAMEBUFFERPROC( GLuint framebuffer );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLBINDFRAMEBUFFERPROC( GLenum target, GLuint framebuffer );
@@ -1756,7 +1756,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGENVERTEXARRAYSPROC( GLsizei n, GLuint* arrays );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISVERTEXARRAYPROC( GLuint array );
+    private delegate GLbool PFNGLISVERTEXARRAYPROC( GLuint array );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void
@@ -1847,7 +1847,7 @@ public partial class GLBindings
     private delegate IntPtr PFNGLFENCESYNCPROC( GLenum condition, GLbitfield flags );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISSYNCPROC( IntPtr sync );
+    private delegate GLbool PFNGLISSYNCPROC( IntPtr sync );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLDELETESYNCPROC( IntPtr sync );
@@ -1880,7 +1880,7 @@ public partial class GLBindings
                                                           GLenum internalFormat,
                                                           GLsizei width,
                                                           GLsizei height,
-                                                          GLboolean fixedsamplelocations );
+                                                          GLbool fixedsamplelocations );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXIMAGE3DMULTISAMPLEPROC( GLenum target,
@@ -1889,7 +1889,7 @@ public partial class GLBindings
                                                           GLsizei width,
                                                           GLsizei height,
                                                           GLsizei depth,
-                                                          GLboolean fixedsamplelocations );
+                                                          GLbool fixedsamplelocations );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLGETMULTISAMPLEFVPROC( GLenum pname, GLuint index, GLfloat* val );
@@ -1911,7 +1911,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLDELETESAMPLERSPROC( GLsizei count, GLuint* samplers );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISSAMPLERPROC( GLuint sampler );
+    private delegate GLbool PFNGLISSAMPLERPROC( GLuint sampler );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLBINDSAMPLERPROC( GLuint unit, GLuint sampler );
@@ -1959,31 +1959,31 @@ public partial class GLBindings
     private delegate void PFNGLVERTEXATTRIBDIVISORPROC( GLuint index, GLuint divisor );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLVERTEXATTRIBP1UIPROC( GLuint index, GLenum type, GLboolean normalized, GLuint value );
+    private delegate void PFNGLVERTEXATTRIBP1UIPROC( GLuint index, GLenum type, GLbool normalized, GLuint value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLVERTEXATTRIBP1UIVPROC( GLuint index, GLenum type, GLboolean normalized,
+    private unsafe delegate void PFNGLVERTEXATTRIBP1UIVPROC( GLuint index, GLenum type, GLbool normalized,
                                                              GLuint* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLVERTEXATTRIBP2UIPROC( GLuint index, GLenum type, GLboolean normalized, GLuint value );
+    private delegate void PFNGLVERTEXATTRIBP2UIPROC( GLuint index, GLenum type, GLbool normalized, GLuint value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLVERTEXATTRIBP2UIVPROC( GLuint index, GLenum type, GLboolean normalized,
+    private unsafe delegate void PFNGLVERTEXATTRIBP2UIVPROC( GLuint index, GLenum type, GLbool normalized,
                                                              GLuint* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLVERTEXATTRIBP3UIPROC( GLuint index, GLenum type, GLboolean normalized, GLuint value );
+    private delegate void PFNGLVERTEXATTRIBP3UIPROC( GLuint index, GLenum type, GLbool normalized, GLuint value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLVERTEXATTRIBP3UIVPROC( GLuint index, GLenum type, GLboolean normalized,
+    private unsafe delegate void PFNGLVERTEXATTRIBP3UIVPROC( GLuint index, GLenum type, GLbool normalized,
                                                              GLuint* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLVERTEXATTRIBP4UIPROC( GLuint index, GLenum type, GLboolean normalized, GLuint value );
+    private delegate void PFNGLVERTEXATTRIBP4UIPROC( GLuint index, GLenum type, GLbool normalized, GLuint value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLVERTEXATTRIBP4UIVPROC( GLuint index, GLenum type, GLboolean normalized,
+    private unsafe delegate void PFNGLVERTEXATTRIBP4UIVPROC( GLuint index, GLenum type, GLbool normalized,
                                                              GLuint* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
@@ -2033,39 +2033,39 @@ public partial class GLBindings
     private unsafe delegate void PFNGLUNIFORM4DVPROC( GLint location, GLsizei count, GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX2DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX2DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                             GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX3DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX3DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                             GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX4DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX4DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                             GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX2X3DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX2X3DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX2X4DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX2X4DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX3X2DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX3X2DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX3X4DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX3X4DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX4X2DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX4X2DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private unsafe delegate void PFNGLUNIFORMMATRIX4X3DVPROC( GLint location, GLsizei count, GLboolean transpose,
+    private unsafe delegate void PFNGLUNIFORMMATRIX4X3DVPROC( GLint location, GLsizei count, GLbool transpose,
                                                               GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
@@ -2119,7 +2119,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGENTRANSFORMFEEDBACKSPROC( GLsizei n, GLuint* ids );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISTRANSFORMFEEDBACKPROC( GLuint id );
+    private delegate GLbool PFNGLISTRANSFORMFEEDBACKPROC( GLuint id );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLPAUSETRANSFORMFEEDBACKPROC();
@@ -2191,7 +2191,7 @@ public partial class GLBindings
     private unsafe delegate void PFNGLGENPROGRAMPIPELINESPROC( GLsizei n, GLuint* pipelines );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLISPROGRAMPIPELINEPROC( GLuint pipeline );
+    private delegate GLbool PFNGLISPROGRAMPIPELINEPROC( GLuint pipeline );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLGETPROGRAMPIPELINEIVPROC( GLuint pipeline, GLenum pname, GLint* param );
@@ -2316,92 +2316,92 @@ public partial class GLBindings
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX2FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                   GLboolean transpose,
+                                                                   GLbool transpose,
                                                                    GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX3FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                   GLboolean transpose,
+                                                                   GLbool transpose,
                                                                    GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX4FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                   GLboolean transpose,
+                                                                   GLbool transpose,
                                                                    GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX2DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                   GLboolean transpose,
+                                                                   GLbool transpose,
                                                                    GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX3DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                   GLboolean transpose,
+                                                                   GLbool transpose,
                                                                    GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX4DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                   GLboolean transpose,
+                                                                   GLbool transpose,
                                                                    GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX2X3FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX3X2FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX2X4FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX4X2FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX3X4FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX4X3FVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLfloat* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX2X3DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX3X2DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX2X4DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX4X2DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX3X4DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLPROGRAMUNIFORMMATRIX4X3DVPROC( GLuint program, GLint location, GLsizei count,
-                                                                     GLboolean transpose,
+                                                                     GLbool transpose,
                                                                      GLdouble* value );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
@@ -2499,7 +2499,7 @@ public partial class GLBindings
         PFNGLGETACTIVEATOMICCOUNTERBUFFERIVPROC( GLuint program, GLuint bufferIndex, GLenum pname, GLint* @params );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate void PFNGLBINDIMAGETEXTUREPROC( GLuint unit, GLuint texture, GLint level, GLboolean layered,
+    private delegate void PFNGLBINDIMAGETEXTUREPROC( GLuint unit, GLuint texture, GLint level, GLbool layered,
                                                      GLint layer,
                                                      GLenum access, GLenum format );
 
@@ -2631,13 +2631,13 @@ public partial class GLBindings
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXSTORAGE2DMULTISAMPLEPROC( GLenum target, GLsizei samples, GLenum internalFormat,
                                                             GLsizei width,
-                                                            GLsizei height, GLboolean fixedsamplelocations );
+                                                            GLsizei height, GLbool fixedsamplelocations );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXSTORAGE3DMULTISAMPLEPROC( GLenum target, GLsizei samples, GLenum internalFormat,
                                                             GLsizei width,
                                                             GLsizei height, GLsizei depth,
-                                                            GLboolean fixedsamplelocations );
+                                                            GLbool fixedsamplelocations );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXTUREVIEWPROC( GLuint texture, GLenum target, GLuint origtexture,
@@ -2650,7 +2650,7 @@ public partial class GLBindings
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLVERTEXATTRIBFORMATPROC( GLuint attribindex, GLint size, GLenum type,
-                                                       GLboolean normalized,
+                                                       GLbool normalized,
                                                        GLuint relativeoffset );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
@@ -2670,7 +2670,7 @@ public partial class GLBindings
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLDEBUGMESSAGECONTROLPROC( GLenum source, GLenum type, GLenum severity,
                                                                GLsizei count, GLuint* ids,
-                                                               GLboolean enabled );
+                                                               GLbool enabled );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private unsafe delegate void PFNGLDEBUGMESSAGEINSERTPROC( GLenum source, GLenum type, GLuint id, GLenum severity,
@@ -2802,7 +2802,7 @@ public partial class GLBindings
                                                           GLbitfield access );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
-    private delegate GLboolean PFNGLUNMAPNAMEDBUFFERPROC( GLuint buffer );
+    private delegate GLbool PFNGLUNMAPNAMEDBUFFERPROC( GLuint buffer );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLFLUSHMAPPEDNAMEDBUFFERRANGEPROC( GLuint buffer, GLintptr offset, GLsizeiptr length );
@@ -2938,13 +2938,13 @@ public partial class GLBindings
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXTURESTORAGE2DMULTISAMPLEPROC( GLuint texture, GLsizei samples, GLenum internalFormat,
                                                                 GLsizei width,
-                                                                GLsizei height, GLboolean fixedsamplelocations );
+                                                                GLsizei height, GLbool fixedsamplelocations );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXTURESTORAGE3DMULTISAMPLEPROC( GLuint texture, GLsizei samples, GLenum internalFormat,
                                                                 GLsizei width,
                                                                 GLsizei height, GLsizei depth,
-                                                                GLboolean fixedsamplelocations );
+                                                                GLbool fixedsamplelocations );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLTEXTURESUBIMAGE1DPROC( GLuint texture, GLint level, GLint xoffset, GLsizei width,
@@ -3075,7 +3075,7 @@ public partial class GLBindings
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]
     private delegate void PFNGLVERTEXARRAYATTRIBFORMATPROC( GLuint vaobj, GLuint attribindex, GLint size, GLenum type,
-                                                            GLboolean normalized,
+                                                            GLbool normalized,
                                                             GLuint relativeoffset );
 
     [UnmanagedFunctionPointer( CallingConvention.Cdecl )]

@@ -1054,7 +1054,7 @@ public class Cell : IPoolable, IResetable
 
     /// <summary>
     /// Sets <see cref="FillX"/> and <see cref="FillY"/> to either <see cref="DefaultFill1F"/> or <see cref="DefaultFill"/>
-    /// depending upon the values of the supplied boolean parameters.
+    /// depending upon the values of the supplied bool parameters.
     /// </summary>
     /// <param name="x"> If true, FillX is set to DefaultFill1F, otherwise DefaultFill. </param>
     /// <param name="y"> If true, FillY is set to DefaultFill1F, otherwise DefaultFill.  </param>
@@ -1301,10 +1301,10 @@ public class Cell : IPoolable, IResetable
     /// Configures whether this cell has uniform X and Y size with other cells in its row.
     /// </summary>
     /// <param name="ux">
-    /// A boolean value indicating if the cell should have uniform X sizing. Defaults to true.
+    /// A bool value indicating if the cell should have uniform X sizing. Defaults to true.
     /// </param>
     /// <param name="uy">
-    /// A boolean value indicating if the cell should have uniform Y sizing. Defaults to true.
+    /// A bool value indicating if the cell should have uniform Y sizing. Defaults to true.
     /// </param>
     /// <returns>The current instance of the <see cref="Cell"/> for method chaining.</returns>
     public Cell SetUniform( bool ux = true, bool uy = true )
@@ -1319,7 +1319,7 @@ public class Cell : IPoolable, IResetable
     /// Configures whether this cell has uniform X size with other cells in its row.
     /// </summary>
     /// <param name="ux">
-    /// A boolean value indicating if the cell should have uniform X sizing. Defaults to true.
+    /// A bool value indicating if the cell should have uniform X sizing. Defaults to true.
     /// </param>
     /// <returns>The current instance of the <see cref="Cell"/> for method chaining.</returns>
     public Cell SetUniformX( bool ux = true )
@@ -1333,7 +1333,7 @@ public class Cell : IPoolable, IResetable
     /// Configures whether this cell has uniform Y size with other cells in its row.
     /// </summary>
     /// <param name="uy">
-    /// A boolean value indicating if the cell should have uniform Y sizing. Defaults to true.
+    /// A bool value indicating if the cell should have uniform Y sizing. Defaults to true.
     /// </param>
     /// <returns>The current instance of the <see cref="Cell"/> for method chaining.</returns>
     public Cell SetUniformY( bool uy = true )

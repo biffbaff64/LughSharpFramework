@@ -24,9 +24,50 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Friction joint definition.
+/// </summary>
 [PublicAPI]
 public class FrictionJointDef : JointDef
 {
+    /// <summary>
+    /// The local anchor point relative to bodyA's origin.
+    /// </summary>
+    public readonly Vector2 LocalAnchorA = new();
+
+    /// <summary>
+    /// The local anchor point relative to bodyB's origin.
+    /// </summary>
+    public readonly Vector2 LocalAnchorB = new();
+
+    /// <summary>
+    /// The maximum friction force in N.
+    /// </summary>
+    public float MaxForce { get; set; }
+
+    /// <summary>
+    /// The maximum friction torque in N-m.
+    /// </summary>
+    public float MaxTorque { get; set; }
+
+    // ========================================================================
+    
+    public FrictionJointDef()
+    {
+        Type = JointType.FrictionJoint;
+    }
+
+    /// <summary>
+    /// Initialize the bodies, anchors, axis, and reference angle using the
+    /// world anchor and world axis.
+    /// </summary>
+    public void Initialize( Body bodyA, Body bodyB, Vector2 anchor )
+    {
+        this.BodyA = bodyA;
+        this.BodyB = bodyB;
+        LocalAnchorA.Set( bodyA.GetLocalPoint( anchor ) );
+        LocalAnchorB.Set( bodyB.GetLocalPoint( anchor ) );
+    }
 }
 
 // ============================================================================

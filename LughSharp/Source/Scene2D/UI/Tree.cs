@@ -1037,7 +1037,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         /// become visible, and when collapsed, the child nodes are hidden.
         /// </summary>
         /// <param name="expanded">
-        /// A boolean flag indicating whether the node should be expanded (true) or
+        /// A bool flag indicating whether the node should be expanded (true) or
         /// collapsed (false).
         /// </param>
         public void SetExpanded( bool expanded )

@@ -31,7 +31,7 @@ using GLfloat = float;
 using GLint = int;
 using GLsizei = int;
 using GLuint = uint;
-using GLboolean = bool;
+using GLbool = bool;
 using GLsizeiptr = int;
 using GLintptr = int;
 using GLint64 = long;
@@ -139,7 +139,7 @@ public unsafe partial class GLBindings
     /// <c>true</c> if <paramref name="buffer"/> is a buffer object name. <c>false</c>
     /// otherwise.
     /// </returns>
-    public GLboolean IsBuffer( GLuint buffer )
+    public GLbool IsBuffer( GLuint buffer )
     {
         GetDelegateForFunction< PFNGLISBUFFERPROC >( "glIsBuffer", out _glIsBuffer );
 
@@ -425,7 +425,7 @@ public unsafe partial class GLBindings
     /// the contents of the buffer have become corrupt and should be considered undefined. An application must detect this
     /// rare condition and reinitialize the data store.
     /// </returns>
-    public GLboolean UnmapBuffer( GLenum target )
+    public GLbool UnmapBuffer( GLenum target )
     {
         GetDelegateForFunction< PFNGLUNMAPBUFFERPROC >( "glUnmapBuffer", out _glUnmapBuffer );
 
