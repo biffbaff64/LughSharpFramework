@@ -24,9 +24,55 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Wheel joint definition. This requires defining a line of motion using an axis
+/// and an anchor point. The definition uses local anchor points and a local axis
+/// so that the initial configuration can violate the constraint slightly. The
+/// joint translation is zero when the local anchor points coincide in world space.
+/// Using local anchors and a local axis helps when saving and loading a game.
+/// </summary>
 [PublicAPI]
 public class WheelJointDef : JointDef
 {
+    /// The local anchor point relative to body1's origin. 
+    public readonly Vector2 LocalAnchorA = new();
+
+    /// The local anchor point relative to body2's origin. 
+    public readonly Vector2 LocalAnchorB = new();
+
+    /// The local translation axis in body1. 
+    public readonly Vector2 LocalAxisA = new( 1, 0 );
+
+    /// Enable/disable the joint motor. 
+    public bool EnableMotor;
+
+    /// The maximum motor torque, usually in N-m. 
+    public float MaxMotorTorque;
+
+    /// The desired motor speed in radians per second. 
+    public float MotorSpeed;
+
+    /// Suspension frequency, zero indicates no suspension 
+    public float FrequencyHz = 2;
+
+    /// Suspension damping ratio, one indicates critical damping 
+    public float DampingRatio = 0.7f;
+
+    // ========================================================================
+    
+    public WheelJointDef()
+    {
+        Type = JointType.WheelJoint;
+    }
+
+    public void Initialize( Body bodyA, Body bodyB, Vector2 anchor, Vector2 axis )
+    {
+        this.BodyA = bodyA;
+        this.BodyB = bodyB;
+        LocalAnchorA.Set( bodyA.GetLocalPoint( anchor ) );
+        LocalAnchorB.Set( bodyB.GetLocalPoint( anchor ) );
+        LocalAxisA.Set( bodyA.GetLocalVector( axis ) );
+    }
 }
 
 // ============================================================================

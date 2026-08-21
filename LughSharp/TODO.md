@@ -944,15 +944,15 @@ LUGHSHARP/SOURCE/PHYSICS/BOX2D
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - Body
+    - IP   - IP   - DONE - Body
     - IP   - IP   - DONE - BodyDef
     -      -      - DONE - Box2D
     -      -      - DONE - Box2DDebugRenderer
     - IP   - IP   - DONE - Contact
     -      -      - DONE - ContactImpulse
-    -      -      - DONE - Filter
+    - IP   - IP   - DONE - Filter
     -      -      - DONE - Fixture
-    -      -      - DONE - FixtureDef
+    - IP   - IP   - DONE - FixtureDef
     - IP   - IP   - DONE - IContactFilter
     - IP   - IP   - DONE - IContactListener
     - IP   - IP   - DONE - IDestructionListener
@@ -962,7 +962,7 @@ LUGHSHARP/SOURCE/PHYSICS/BOX2D
     - IP   - IP   - DONE - MassData
     - IP   - IP   - DONE - PhysicsConstants
     - IP   - IP   - DONE - Transform
-    -      -      - DONE - World
+    - IP   - IP   - DONE - World
     - IP   - IP   - DONE - WorldManifold
 
 LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/GRAPHICS
@@ -997,11 +997,11 @@ LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
     - IP   - IP   - DONE - RevoluteJoint
     - IP   - IP   - DONE - RevoluteJointDef
     - IP   - IP   - DONE - RopeJoint
-    -      -      - DONE - RopeJointDef
+    - IP   - IP   - DONE - RopeJointDef
     - IP   - IP   - DONE - WeldJoint
-    -      -      - DONE - WeldJointDef
+    - IP   - IP   - DONE - WeldJointDef
     - IP   - IP   - DONE - WheelJoint
-    -      -      - DONE - WheelJointDef
+    - IP   - IP   - DONE - WheelJointDef
 
 LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/SHAPES
 ---------------------------------------

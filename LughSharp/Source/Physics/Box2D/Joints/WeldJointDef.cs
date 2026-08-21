@@ -27,6 +27,49 @@ namespace LughSharp.Source.Physics.Box2D.Joints;
 [PublicAPI]
 public class WeldJointDef : JointDef
 {
+    /// <summary>
+    /// The local anchor point relative to body1's origin. 
+    /// </summary>
+    public readonly Vector2 LocalAnchorA = new();
+
+    /// <summary>
+    /// The local anchor point relative to body2's origin. 
+    /// </summary>
+    public readonly Vector2 LocalAnchorB = new();
+
+    /// <summary>
+    /// The body2 angle minus body1 angle in the reference state (radians). 
+    /// </summary>
+    public float ReferenceAngle { get; set; }
+
+    /// <summary>
+    /// The mass-spring-damper frequency in Hertz. Rotation only. Disable softness with a value of 0. 
+    /// </summary>
+    public float FrequencyHz { get; set; }
+
+    /// <summary>
+    /// The damping ratio. 0 = no damping, 1 = critical damping. 
+    /// </summary>
+    public float DampingRatio { get; set; }
+
+    // ========================================================================
+
+    public WeldJointDef()
+    {
+        Type = JointType.WeldJoint;
+    }
+
+    /// <summary>
+    /// Initialize the bodies, anchors, and reference angle using a world anchor point. 
+    /// </summary>
+    public void Initialize( Body body1, Body body2, Vector2 anchor )
+    {
+        this.BodyA = body1;
+        this.BodyB = body2;
+        this.LocalAnchorA.Set( body1.GetLocalPoint( anchor ) );
+        this.LocalAnchorB.Set( body2.GetLocalPoint( anchor ) );
+        ReferenceAngle = body2.GetAngle() - body1.GetAngle();
+    }
 }
 
 // ============================================================================

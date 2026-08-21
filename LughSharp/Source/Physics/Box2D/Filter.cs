@@ -3,6 +3,7 @@ namespace LughSharp.Source.Physics.Box2D;
 /// <summary>
 /// This holds contact filtering data. Faithful port of libgdx <c>Filter</c>.
 /// </summary>
+[PublicAPI]
 public class Filter
 {
     /// <summary>
@@ -23,6 +24,8 @@ public class Filter
     /// </summary>
     public short GroupIndex { get; set; } = 0;
 
+    // ========================================================================
+    
     /// <summary>
     /// Copies the values from the supplied filter into this one.
     /// </summary>

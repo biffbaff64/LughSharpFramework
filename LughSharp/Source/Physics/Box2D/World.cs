@@ -45,7 +45,9 @@ public sealed class World
 
     // ========================================================================
 
-    /** the address of the world instance **/
+    /// <summary>
+    /// the address of the world instance
+    /// </summary>
     public long Addr;
 
     // NOTE:
@@ -53,16 +55,24 @@ public sealed class World
     // LongMap uses a long key and a value of type T.
     // I've switched to a Dictionary<> for this.
 
-    /** all known bodies **/
+    /// <summary>
+    /// all known bodies 
+    /// </summary>
     public readonly Dictionary< long, Body > Bodies = new( 100 );
 
-    /** all known fixtures **/
+    /// <summary>
+    /// all known fixtures 
+    /// </summary>
     public readonly Dictionary< long, Fixture > Fixtures = new( 100 );
 
-    /** all known joints **/
+    /// <summary>
+    /// all known joints 
+    /// </summary>
     public readonly Dictionary< long, Joint > Joints = new( 100 );
 
-    /** Contact listener **/
+    /// <summary>
+    /// Contact listener 
+    /// </summary>
     public IContactListener? ContactListener;
 
     // ========================================================================
@@ -87,9 +97,11 @@ public sealed class World
 
     // ========================================================================
 
-    /** Construct a world object.
-     * @param gravity the world gravity vector.
-     * @param doSleep improve performance by not simulating inactive bodies. */
+    /// <summary>
+    /// Construct a world object.
+    /// </summary>
+    /// <param name="gravity"> the world gravity vector. </param>
+    /// <param name="doSleep"> improve performance by not simulating inactive bodies. </param> 
     public World( Vector2 gravity, bool doSleep )
     {
         FreeBodies = new Pool< Body >( 100, 200 )
@@ -111,43 +123,59 @@ public sealed class World
         }
     }
 
-    /** Register a destruction listener. The listener is owned by you and must remain in scope. */
+    /// <summary>
+    /// Register a destruction listener. The listener is owned by you and must
+    /// remain in scope. 
+    /// </summary>
     public void SetDestructionListener( IDestructionListener listener )
     {
     }
 
-    /** Register a contact filter to provide specific control over collision. Otherwise the default filter is used
-     * (b2_defaultFilter). The listener is owned by you and must remain in scope. */
+    /// <summary>
+    /// Register a contact filter to provide specific control over collision. Otherwise
+    /// the default filter is used (b2_defaultFilter). The listener is owned by you and
+    /// must remain in scope.
+    /// </summary>
     public void SetContactFilter( IContactFilter? filter )
     {
         this._contactFilter = filter;
         SetUseDefaultContactFilter( filter == null );
     }
-
-    /** Internal method called from JNI
-     * @return whether the native default IContactFilter should be used */
+    
+    /// <summary>
+    /// Internal method called from JNI
+    /// </summary>
+    /// <returns> whether the native default IContactFilter should be used </returns>
     private bool GetUseDefaultContactFilter()
     {
         return _useDefaultContactFilter;
     }
 
-    /** Sets flag to tell the native code not to call the Java World class if use is true **/
+    /// <summary>
+    /// Sets flag to tell the native code not to call the Java World class if use is true
+    /// </summary>
     private void SetUseDefaultContactFilter( bool use )
     {
         _useDefaultContactFilter = use;
     }
 
-    /** Register a contact event listener. The listener is owned by you and must remain in scope. */
+    /// <summary>
+    /// Register a contact event listener. The listener is owned by you and must remain in scope. 
+    /// </summary>
     public void SetContactListener( IContactListener listener )
     {
         this.ContactListener = listener;
     }
 
-    /** Create a rigid body given a definition. No reference to the definition is retained.
-     * Bodies created by this method are pooled internally by the World object.
-     * They will be freed upon calling {@link World#destroyBody(Body)}
-     * @see Pool
-     * @warning This function is locked during callbacks. */
+    /// <summary>
+    /// Create a rigid body given a definition. No reference to the definition is retained.
+    /// Bodies created by this method are pooled internally by the World object.
+    /// They will be freed upon calling <see cref="World.DestroyBody(Body)"/>
+    /// <br/>
+    /// <b>
+    /// WARNING: This function is locked during callbacks.
+    /// </b>
+    /// </summary>
     public Body CreateBody( BodyDef def )
     {
         long bodyAddr = jniCreateBody
@@ -177,10 +205,14 @@ public sealed class World
         return body;
     }
 
-    /** Destroy a rigid body given a definition. No reference to the definition is retained. This function is locked during
-     * callbacks.
-     * @warning This automatically deletes all associated shapes and joints.
-     * @warning This function is locked during callbacks. */
+    /// <summary>
+    /// Destroy a rigid body given a definition. No reference to the definition is retained.
+    /// <br/>
+    /// <b>
+    /// WARNING: This automatically deletes all associated shapes and joints.
+    /// WARNING: This function is locked during callbacks.
+    /// </b>
+    /// </summary>
     public void DestroyBody( Body body )
     {
         List< JointEdge > jointList = body.GetJointList();
@@ -209,27 +241,34 @@ public sealed class World
 
         FreeBodies.Free( body );
     }
-
-    /** Internal method for fixture destruction with notifying custom
-     * contact listener
-     * @param body
-     * @param fixture */
-    void DestroyFixture( Body body, Fixture fixture )
+    
+    /// <summary>
+    /// Internal method for fixture destruction with notifying custom contact listener
+    /// </summary>
+    /// <param name="body"></param>
+    /// <param name="fixture"></param>
+    public void DestroyFixture( Body body, Fixture fixture )
     {
         jniDestroyFixture( Addr, body.Addr, fixture.Addr );
     }
-
-    /** Internal method for body deactivation with notifying custom
-     * contact listener
-     * @param body */
-    void DeactivateBody( Body body )
+    
+    /// <summary>
+    /// Internal method for body deactivation with notifying custom contact listener
+    /// </summary>
+    /// <param name="body"></param>
+    public void DeactivateBody( Body body )
     {
         jniDeactivateBody( Addr, body.Addr );
     }
 
-    /** Create a joint to constrain bodies together. No reference to the definition is retained. This may cause the connected bodies
-     * to cease colliding.
-     * @warning This function is locked during callbacks. */
+    /// <summary>
+    /// Create a joint to constrain bodies together. No reference to the definition is
+    /// retained. This may cause the connected bodies to cease colliding.
+    /// <br/>
+    /// <b>
+    /// WARNING: This function is locked during callbacks.
+    /// </b>
+    /// </summary>
     public Joint CreateJoint( JointDef def )
     {
         long   jointAddr = CreateProperJoint( def );
@@ -242,7 +281,7 @@ public sealed class World
         {
             joint = new GearJoint( this, jointAddr, ( ( GearJointDef )def ).Joint1, ( ( GearJointDef )def ).Joint2 );
         }
-        
+
         if ( def.Type == JointDef.JointType.MotorJoint ) joint     = new MotorJoint( this, jointAddr );
         if ( def.Type == JointDef.JointType.MouseJoint ) joint     = new MouseJoint( this, jointAddr );
         if ( def.Type == JointDef.JointType.PrismaticJoint ) joint = new PrismaticJoint( this, jointAddr );
@@ -260,7 +299,7 @@ public sealed class World
 
         joint.JointEdgeA = jointEdgeA;
         joint.JointEdgeB = jointEdgeB;
-        
+
         def.BodyA?.Joints.Add( jointEdgeA );
         def.BodyB?.Joints.Add( jointEdgeB );
 
@@ -312,13 +351,16 @@ public sealed class World
         {
             GearJointDef d = ( GearJointDef )def;
 
-            return jniCreateGearJoint( Addr,
-                                       d.BodyA.Addr,
-                                       d.BodyB.Addr,
-                                       d.CollideConnected,
-                                       d.Joint1.Addr,
-                                       d.Joint2.Addr,
-                                       d.Ratio );
+            return jniCreateGearJoint
+                (
+                 Addr,
+                 d.BodyA.Addr,
+                 d.BodyB.Addr,
+                 d.CollideConnected,
+                 d.Joint1.Addr,
+                 d.Joint2.Addr,
+                 d.Ratio
+                );
         }
 
         if ( def.Type == JointDef.JointType.MotorJoint )
@@ -496,81 +538,117 @@ public sealed class World
 
         return 0;
     }
-
-    /** Destroy a joint. This may cause the connected bodies to begin colliding.
-     * @warning This function is locked during callbacks. */
+    
+    /// <summary>
+    /// Destroy a joint. This may cause the connected bodies to begin colliding.
+    /// <br/>
+    /// <b>
+    /// WARNING: This function is locked during callbacks.
+    /// </b>
+    /// </summary>
     public void DestroyJoint( Joint joint )
     {
         joint.UserData = null;
         Joints.Remove( joint.Addr );
         joint.JointEdgeA.Other.Joints.Remove( joint.JointEdgeB );
         joint.JointEdgeB.Other.Joints.Remove( joint.JointEdgeA );
-        
+
         jniDestroyJoint( Addr, joint.Addr );
     }
 
-    /** Take a time step. This performs collision detection, integration, and constraint solution.
-     * @param timeStep the amount of time to simulate, this should not vary.
-     * @param velocityIterations for the velocity constraint solver.
-     * @param positionIterations for the position constraint solver. */
+    /// <summary>
+    /// Take a time step. This performs collision detection, integration, and
+    /// constraint solution.
+    /// </summary>
+    /// <param name="timeStep"> the amount of time to simulate, this should not vary. </param>
+    /// <param name="velocityIterations"> for the velocity constraint solver. </param>
+    /// <param name="positionIterations"> for the position constraint solver. </param>
     public void Step( float timeStep, int velocityIterations, int positionIterations )
     {
         jniStep( Addr, timeStep, velocityIterations, positionIterations );
     }
-
-    /** Manually clear the force buffer on all bodies. By default, forces are cleared automatically after each call to Step. The
-     * default behavior is modified by calling SetAutoClearForces. The purpose of this function is to support sub-stepping.
-     * Sub-stepping is often used to maintain a fixed sized time step under a variable frame-rate. When you perform sub-stepping
-     * you will disable auto clearing of forces and instead call ClearForces after all sub-steps are complete in one pass of your
-     * game loop. {@link #setAutoClearForces(bool)} */
+    
+    /// <summary>
+    /// Manually clear the force buffer on all bodies. By default, forces are
+    /// cleared automatically after each call to Step. The default behavior is
+    /// modified by calling SetAutoClearForces.The purpose of this function is
+    /// to support sub-stepping.
+    /// <para>
+    /// Sub-stepping is often used to maintain a fixed sized time step under a
+    /// variable frame-rate. When you perform sub-stepping you will disable auto
+    /// clearing of forces and instead call ClearForces after all sub-steps are
+    /// complete in one pass of your game loop.
+    /// <code>
+    /// {
+    ///     SetAutoClearForces( bool );
+    /// }
+    /// </code>
+    /// </para>
+    /// </summary>
     public void ClearForces()
     {
         jniClearForces( Addr );
     }
 
-    /** Enable/disable warm starting. For testing. */
+    /// <summary>
+    /// Enable/disable warm starting. For testing. 
+    /// </summary>
     public void SetWarmStarting( bool flag )
     {
         jniSetWarmStarting( Addr, flag );
     }
 
-    /** Enable/disable continuous physics. For testing. */
+    /// <summary>
+    /// Enable/disable continuous physics. For testing. 
+    /// </summary>
     public void SetContinuousPhysics( bool flag )
     {
         jniSetContiousPhysics( Addr, flag );
     }
 
-    /** Get the number of broad-phase proxies. */
+    /// <summary>
+    /// Get the number of broad-phase proxies. 
+    /// </summary>
     public int GetProxyCount()
     {
         return jniGetProxyCount( Addr );
     }
 
-    /** Get the number of bodies. */
+    /// <summary>
+    /// Get the number of bodies. 
+    /// </summary>
     public int GetBodyCount()
     {
         return jniGetBodyCount( Addr );
     }
 
-    /** Get the number of fixtures. */
+    /// <summary>
+    /// Get the number of fixtures. 
+    /// </summary>
     public int GetFixtureCount()
     {
         return Fixtures.Count;
     }
 
-    /** Get the number of joints. */
+    /// <summary>
+    /// Get the number of joints. 
+    /// </summary>
     public int GetJointCount()
     {
         return jniGetJointcount( Addr );
     }
 
-    /** Get the number of contacts (each may have 0 or more contact points). */
+    /// <summary>
+    /// Get the number of contacts (each may have 0 or more contact points). 
+    /// </summary>
     public int GetContactCount()
     {
         return jniGetContactCount( Addr );
     }
 
-    /** Change the global gravity vector. */
+    /// <summary>
+    /// Change the global gravity vector. 
+    /// </summary>
     public void SetGravity( Vector2 gravity )
     {
         jniSetGravity( Addr, gravity.X, gravity.Y );
@@ -585,55 +663,54 @@ public sealed class World
         return _gravity;
     }
 
-    /** Is the world locked (in the middle of a time step). */
+    /// <summary>
+    /// Is the world locked (in the middle of a time step). 
+    /// </summary>
     public bool IsLocked()
     {
         return jniIsLocked( Addr );
     }
 
-    /** Set flag to control automatic clearing of forces after each time step. */
+    /// <summary>
+    /// Set flag to control automatic clearing of forces after each time step. 
+    /// </summary>
     public void SetAutoClearForces( bool flag )
     {
         jniSetAutoClearForces( Addr, flag );
     }
 
-    /** Get the flag that controls automatic clearing of forces after each time step. */
+    /// <summary>
+    /// Get the flag that controls automatic clearing of forces after each time step. 
+    /// </summary>
     public bool GetAutoClearForces()
     {
         return jniGetAutoClearForces( Addr );
     }
 
-    /** Query the world for all fixtures that potentially overlap the provided AABB.
-     * @param callback a user implemented callback class.
-     * @param lowerX the x coordinate of the lower left corner
-     * @param lowerY the y coordinate of the lower left corner
-     * @param upperX the x coordinate of the upper right corner
-     * @param upperY the y coordinate of the upper right corner */
+    /// <summary>
+    /// Query the world for all fixtures that potentially overlap the provided AABB.
+    /// </summary>
+    /// <param name="callback"> a user implemented callback class. </param>
+    /// <param name="lowerX"> the x coordinate of the lower left corner </param>
+    /// <param name="lowerY"> the y coordinate of the lower left corner </param>
+    /// <param name="upperX"> the x coordinate of the upper right corner </param>
+    /// <param name="upperY"> the y coordinate of the upper right corner </param>
     public void QueryAabb( IQueryCallback callback, float lowerX, float lowerY, float upperX, float upperY )
     {
         _queryCallback = callback;
         jniQueryAABB( Addr, lowerX, lowerY, upperX, upperY );
     }
-
-//
-// /// Ray-cast the world for all fixtures in the path of the ray. Your callback
-// /// controls whether you get the closest point, any point, or n-points.
-// /// The ray-cast ignores shapes that contain the starting point.
-// /// @param callback a user implemented callback class.
-// /// @param point1 the ray starting point
-// /// @param point2 the ray ending point
-// void RayCast(b2RayCastCallback* callback, const b2Vec2& point1, const b2Vec2& point2) const;
-//
-// /// Get the world contact list. With the returned contact, use b2Contact::GetNext to get
-// /// the next contact in the world list. A NULL contact indicates the end of the list.
-// /// @return the head of the world contact list.
-// /// @warning contacts are
-// b2Contact* GetContactList();
-
-    /** Returns the list of {@link Contact} instances produced by the last call to {@link #step(float, int, int)}. Note that the
-     * returned list will have O(1) access times when using indexing. contacts are created and destroyed in the middle of a time
-     * step. Use {@link IContactListener} to avoid missing contacts
-     * @return the contact list */
+    
+    /// <summary>
+    /// Returns the list of <see cref="Contact"/> instances produced by the last call to
+    /// <see cref="Step(float, int, int)"/>. Note that the returned list will have O( 1 )
+    /// access times when using indexing.contacts are created and destroyed in the middle
+    /// of a time step.
+    /// <para>
+    /// Use <see cref="IContactListener"/> to avoid missing contacts.
+    /// </para>
+    /// </summary>
+    /// <returns> the contact list </returns>
     public List< Contact > GetContactList()
     {
         int numContacts = GetContactCount();
@@ -649,6 +726,7 @@ public sealed class World
         if ( numContacts > _freeContacts.Count )
         {
             int freeConts = _freeContacts.Count;
+
             for ( int i = 0; i < numContacts - freeConts; i++ )
             {
                 _freeContacts.Add( new Contact( this, 0 ) );
@@ -669,7 +747,12 @@ public sealed class World
         return _contacts;
     }
 
-    /** @param bodies an Array in which to place all bodies currently in the simulation */
+    /// <summary>
+    /// Gets all bodies currently in the simulation and places them in the provided list.
+    /// </summary>
+    /// <param name="bodies">
+    /// an Array in which to place all bodies currently in the simulation
+    /// </param> 
     public void GetBodies( List< Body > bodies )
     {
         bodies.Clear();
@@ -677,7 +760,12 @@ public sealed class World
         bodies.AddRange( Bodies.Values );
     }
 
-    /** @param fixtures an Array in which to place all fixtures currently in the simulation */
+    /// <summary>
+    /// Gets all fixtures currently in the simulation and places them in the provided list.
+    /// </summary>
+    /// <param name="fixtures">
+    /// an Array in which to place all fixtures currently in the simulation
+    /// </param> 
     public void GetFixtures( List< Fixture > fixtures )
     {
         fixtures.Clear();
@@ -685,7 +773,12 @@ public sealed class World
         fixtures.AddRange( Fixtures.Values );
     }
 
-    /** @param joints an Array in which to place all joints currently in the simulation */
+    /// <summary>
+    /// Gets all joints currently in the simulation and places them in the provided list.
+    /// </summary>
+    /// <param name="joints">
+    /// an Array in which to place all joints currently in the simulation
+    /// </param> 
     public void GetJoints( List< Joint > joints )
     {
         joints.Clear();
@@ -697,11 +790,13 @@ public sealed class World
     {
         jniDispose( Addr );
     }
-
-    /** Internal method called from JNI in case a contact happens
-     * @param fixtureA
-     * @param fixtureB
-     * @return whether the things collided */
+    
+    /// <summary>
+    /// Internal method called from JNI in case a contact happens
+    /// </summary>
+    /// <param name="fixtureA"></param>
+    /// <param name="fixtureB"></param>
+    /// <returns>whether the things collided</returns>
     private bool ContactFilter( long fixtureA, long fixtureB )
     {
         if ( _contactFilter != null )
@@ -774,21 +869,27 @@ public sealed class World
         return false;
     }
 
-    /** Ray-cast the world for all fixtures in the path of the ray. The ray-cast ignores shapes that contain the starting point.
-     * @param callback a user implemented callback class.
-     * @param point1 the ray starting point
-     * @param point2 the ray ending point */
+    /// <summary>
+    /// Ray-cast the world for all fixtures in the path of the ray. The ray-cast
+    /// ignores shapes that contain the starting point.
+    /// </summary>
+    /// <param name="callback"> a user implemented callback class. </param>
+    /// <param name="point1"> the ray starting point </param>
+    /// <param name="point2"> the ray ending point </param>
     public void RayCast( IRayCastCallback callback, Vector2 point1, Vector2 point2 )
     {
         RayCast( callback, point1.X, point1.Y, point2.X, point2.Y );
     }
 
-    /** Ray-cast the world for all fixtures in the path of the ray. The ray-cast ignores shapes that contain the starting point.
-     * @param callback a user implemented callback class.
-     * @param point1X the ray starting point X
-     * @param point1Y the ray starting point Y
-     * @param point2X the ray ending point X
-     * @param point2Y the ray ending point Y */
+    /// <summary>
+    /// Ray-cast the world for all fixtures in the path of the ray. The ray-cast
+    /// ignores shapes that contain the starting point.
+    /// </summary>
+    /// <param name="callback"> a user implemented callback class. </param>
+    /// <param name="point1X"> the ray starting point X </param>
+    /// <param name="point1Y"> the ray starting point Y </param>
+    /// <param name="point2X"> the ray ending point X </param>
+    /// <param name="point2Y"> the ray ending point Y </param>
     public void RayCast( IRayCastCallback callback, float point1X, float point1Y, float point2X, float point2Y )
     {
         _rayCastCallback = callback;
@@ -806,10 +907,8 @@ public sealed class World
 
             return _rayCastCallback.ReportRayFixture( Fixtures[ addr ], _rayPoint, _rayNormal, fraction );
         }
-        else
-        {
-            return 0.0f;
-        }
+
+        return 0.0f;
     }
 
     // ============================================================================
@@ -1287,7 +1386,7 @@ public sealed class World
     */
 
     /** Sets the box2d velocity threshold globally, for all World instances.
-     * @param threshold the threshold, default 1.0f */
+     * <param name="threshold the threshold, default 1.0f */
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
     public static extern void setVelocityThreshold( float threshold );
     /*

@@ -24,9 +24,40 @@
 
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
+/// <summary>
+/// Rope joint definition. This requires two body anchor points and a maximum
+/// lengths.
+/// <br/>
+/// <b>
+/// Note: by default the connected objects will not collide. see collideConnected
+/// in b2JointDef.
+/// </b>
+/// </summary>
 [PublicAPI]
 public class RopeJointDef : JointDef
 {
+    /// <summary>
+    /// The local anchor point relative to bodyA's origin. 
+    /// </summary>
+    public readonly Vector2 LocalAnchorA = new( -1, 0 );
+
+    /// <summary>
+    /// The local anchor point relative to bodyB's origin. 
+    /// </summary>
+    public readonly Vector2 LocalAnchorB = new( 1, 0 );
+
+    /// <summary>
+    /// The maximum length of the rope. Warning: this must be larger than b2_linearSlop
+    /// or the joint will have no effect. 
+    /// </summary>
+    public float MaxLength { get; set; }
+
+    // ========================================================================
+
+    public RopeJointDef()
+    {
+        Type = JointType.RopeJoint;
+    }
 }
 
 // ============================================================================
