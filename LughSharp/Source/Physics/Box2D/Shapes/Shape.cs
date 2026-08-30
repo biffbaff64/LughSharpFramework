@@ -118,7 +118,7 @@ public abstract class Shape
     */
 
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    protected static extern int jniGetType( long addr );
+    public static extern int jniGetType( long addr );
     /*
         b2Shape* shape = (b2Shape*)addr;
         switch(shape->m_type) {

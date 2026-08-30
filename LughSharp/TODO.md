@@ -951,14 +951,14 @@ LUGHSHARP/SOURCE/PHYSICS/BOX2D
     - IP   - IP   - DONE - Contact
     -      -      - DONE - ContactImpulse
     - IP   - IP   - DONE - Filter
-    -      -      - DONE - Fixture
+    - IP   - IP   - DONE - Fixture
     - IP   - IP   - DONE - FixtureDef
     - IP   - IP   - DONE - IContactFilter
     - IP   - IP   - DONE - IContactListener
     - IP   - IP   - DONE - IDestructionListener
     - IP   - IP   - DONE - IQueryCallback
     - IP   - IP   - DONE - IRayCastCallback
-    -      -      - DONE - Manifold
+    - IP   - IP   - DONE - Manifold
     - IP   - IP   - DONE - MassData
     - IP   - IP   - DONE - PhysicsConstants
     - IP   - IP   - DONE - Transform

@@ -42,7 +42,7 @@ public class PolygonShape : Shape
     /// <summary>
     /// Constructs a new polygon
     /// </summary>
-    protected PolygonShape( long addr )
+    public PolygonShape( long addr )
     {
         this.addr = addr;
     }

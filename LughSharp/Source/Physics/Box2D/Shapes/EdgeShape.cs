@@ -36,7 +36,7 @@ public class EdgeShape : Shape
         addr = NewEdgeShape();
     }
 
-    EdgeShape( long addr )
+    public EdgeShape( long addr )
     {
         this.addr = addr;
     }

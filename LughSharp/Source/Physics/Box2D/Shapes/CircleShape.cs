@@ -38,7 +38,7 @@ public class CircleShape : Shape
         addr = newCircleShape();
     }
 
-    protected CircleShape( long addr )
+    public CircleShape( long addr )
     {
         this.addr = addr;
     }
