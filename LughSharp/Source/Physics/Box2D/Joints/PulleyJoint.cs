@@ -22,6 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+
+using JetBrains.Annotations;
+
+using LughSharp.Source.Maths;
+
 namespace LughSharp.Source.Physics.Box2D.Joints;
 
 /// <summary>

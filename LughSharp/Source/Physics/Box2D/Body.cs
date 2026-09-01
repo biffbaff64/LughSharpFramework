@@ -29,8 +29,9 @@ public class Body
 {
     public long    Addr;
     public object? UserData;
-
-    public List< JointEdge > Joints = new( 2 );
+    
+    public  List< JointEdge > Joints = new( 2 );
+    private bool              _isActive;
 
     public Body( World world, int i )
     {
@@ -76,6 +77,30 @@ public class Body
     public Vector2 GetLocalVector( Vector2 axis )
     {
         return new Vector2();
+    }
+
+    public Transform GetTransform()
+    {
+        return new Transform();
+    }
+
+    public Vector2 GetLinearVelocity()
+    {
+        return Vector2.Zero;
+    }
+
+    public BodyDef.BodyType GetBodyType()
+    {
+        return BodyDef.BodyType.Static;
+    }
+
+    public bool IsActive() => _isActive;
+
+    public void SetActive( bool value ) => _isActive = value;
+
+    public bool IsAwake()
+    {
+        return true;
     }
 }
 

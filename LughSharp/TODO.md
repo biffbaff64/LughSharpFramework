@@ -944,12 +944,12 @@ LUGHSHARP/SOURCE/PHYSICS/BOX2D
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - Body
+    -      -      - DONE - Body
     - IP   - IP   - DONE - BodyDef
-    -      -      - DONE - Box2D
-    -      -      - DONE - Box2DDebugRenderer
+    - IP   - IP   - DONE - Box2D
+    - IP   - IP   - DONE - Box2DDebugRenderer
     - IP   - IP   - DONE - Contact
-    -      -      - DONE - ContactImpulse
+    - IP   - IP   - DONE - ContactImpulse
     - IP   - IP   - DONE - Filter
     - IP   - IP   - DONE - Fixture
     - IP   - IP   - DONE - FixtureDef

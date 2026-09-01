@@ -88,7 +88,7 @@ public sealed class World
     private long[]  _contactAddrs = new long[ 200 ];
 
     private readonly Contact        _contact;
-    private readonly ContactImpulse _impulse;
+    private readonly ContactImpulse _contactImpulse;
 
     private IQueryCallback?   _queryCallback;
     private bool              _useDefaultContactFilter;
@@ -109,8 +109,8 @@ public sealed class World
             NewObjectFactory = () => new Body( this, 0 ),
         };
 
-        _contact = new Contact( this, 0 );
-        _impulse = new ContactImpulse( this, 0 );
+        _contact        = new Contact( this, 0 );
+        _contactImpulse = new ContactImpulse( this, 0 );
 
         Addr = NewWorld( gravity.X, gravity.Y, doSleep );
 
@@ -141,7 +141,7 @@ public sealed class World
         this._contactFilter = filter;
         SetUseDefaultContactFilter( filter == null );
     }
-    
+
     /// <summary>
     /// Internal method called from JNI
     /// </summary>
@@ -241,7 +241,7 @@ public sealed class World
 
         FreeBodies.Free( body );
     }
-    
+
     /// <summary>
     /// Internal method for fixture destruction with notifying custom contact listener
     /// </summary>
@@ -251,7 +251,7 @@ public sealed class World
     {
         jniDestroyFixture( Addr, body.Addr, fixture.Addr );
     }
-    
+
     /// <summary>
     /// Internal method for body deactivation with notifying custom contact listener
     /// </summary>
@@ -300,8 +300,8 @@ public sealed class World
         joint.JointEdgeA = jointEdgeA;
         joint.JointEdgeB = jointEdgeB;
 
-        def.BodyA?.Joints.Add( jointEdgeA );
-        def.BodyB?.Joints.Add( jointEdgeB );
+        def.BodyA.Joints.Add( jointEdgeA );
+        def.BodyB.Joints.Add( jointEdgeB );
 
         return joint;
     }
@@ -538,7 +538,7 @@ public sealed class World
 
         return 0;
     }
-    
+
     /// <summary>
     /// Destroy a joint. This may cause the connected bodies to begin colliding.
     /// <br/>
@@ -567,7 +567,7 @@ public sealed class World
     {
         jniStep( Addr, timeStep, velocityIterations, positionIterations );
     }
-    
+
     /// <summary>
     /// Manually clear the force buffer on all bodies. By default, forces are
     /// cleared automatically after each call to Step. The default behavior is
@@ -700,7 +700,7 @@ public sealed class World
         _queryCallback = callback;
         jniQueryAABB( Addr, lowerX, lowerY, upperX, upperY );
     }
-    
+
     /// <summary>
     /// Returns the list of <see cref="Contact"/> instances produced by the last call to
     /// <see cref="Step(float, int, int)"/>. Note that the returned list will have O( 1 )
@@ -790,7 +790,7 @@ public sealed class World
     {
         jniDispose( Addr );
     }
-    
+
     /// <summary>
     /// Internal method called from JNI in case a contact happens
     /// </summary>
@@ -852,10 +852,10 @@ public sealed class World
     {
         if ( ContactListener != null )
         {
-            _contact.Addr = contactAddr;
-            _impulse.Addr = impulseAddr;
+            _contact.Addr        = contactAddr;
+            _contactImpulse.Addr = impulseAddr;
 
-            ContactListener.PostSolve( _contact, _impulse );
+            ContactListener.PostSolve( _contact, _contactImpulse );
         }
     }
 
@@ -1385,17 +1385,18 @@ public sealed class World
         delete world;
     */
 
-    /** Sets the box2d velocity threshold globally, for all World instances.
-     * <param name="threshold the threshold, default 1.0f */
+    /// <summary>
+    /// Sets the box2d velocity threshold globally, for all World instances.
+    /// </summary>
+    /// <param name="threshold"> the threshold, default 1.0f </param>
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    public static extern void setVelocityThreshold( float threshold );
+    private static extern void setVelocityThreshold( float threshold );
     /*
         b2_velocityThreshold = threshold;
     */
 
-    /** @return the global box2d velocity threshold. */
     [DllImport( Box2D.Box2DDllFile, EntryPoint = "???", CallingConvention = CallingConvention.Cdecl )]
-    public static extern float getVelocityThreshold();
+    private static extern float getVelocityThreshold();
     /*
         return b2_velocityThreshold;
     */

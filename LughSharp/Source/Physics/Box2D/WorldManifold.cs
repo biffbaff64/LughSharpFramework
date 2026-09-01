@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
+using LughSharp.Source.Maths;
+
 namespace LughSharp.Source.Physics.Box2D;
 
 /// <summary>
@@ -35,17 +39,17 @@ public class WorldManifold
     /// <summary>
     /// The world normal at the contact points. Same instance returned each call.
     /// </summary>
-    public Vector2 NormalValue { get; set; } = new();
+    public Vector2 Normal { get; set; } = new();
 
     /// <summary>
     /// The world contact points (up to <see cref="NumContactPoints"/>).
     /// </summary>
-    public Vector2[] PointsValue { get; set; } = [ new(), new() ];
+    public Vector2[] ContactPoints { get; set; } = [ new(), new() ];
 
     /// <summary>
     /// The separation distances at each contact point (negative = penetration).
     /// </summary>
-    public float[] SeparationsValue { get; set; } = new float[ 2 ];
+    public float[] Separations { get; set; } = new float[ 2 ];
 
     /// <summary>
     /// The number of valid contact points in the world manifold.

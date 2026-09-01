@@ -22,6 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Runtime.InteropServices;
+
+using JetBrains.Annotations;
+
+using LughSharp.Source.Maths;
+
 namespace LughSharp.Source.Physics.Box2D;
 
 [PublicAPI]
@@ -59,17 +65,17 @@ public class Contact
         int numContactPoints = jniGetWorldManifold( Addr, _tmp );
 
         WorldManifold.NumContactPoints = numContactPoints;
-        WorldManifold.NormalValue.Set( _tmp[ 0 ], _tmp[ 1 ] );
+        WorldManifold.Normal.Set( _tmp[ 0 ], _tmp[ 1 ] );
 
         for ( int i = 0; i < numContactPoints; i++ )
         {
-            Vector2 point = WorldManifold.PointsValue[ i ];
+            Vector2 point = WorldManifold.ContactPoints[ i ];
             point.X = _tmp[ 2 + ( i * 2 ) ];
             point.Y = _tmp[ 2 + ( i * 2 ) + 1 ];
         }
 
-        WorldManifold.SeparationsValue[ 0 ] = _tmp[ 6 ];
-        WorldManifold.SeparationsValue[ 1 ] = _tmp[ 7 ];
+        WorldManifold.Separations[ 0 ] = _tmp[ 6 ];
+        WorldManifold.Separations[ 1 ] = _tmp[ 7 ];
 
         return WorldManifold;
     }
