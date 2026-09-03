@@ -22,6 +22,10 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using JetBrains.Annotations;
+
+using LughSharp.Source.Maths;
+
 namespace LughSharp.Source.Physics.Box2D;
 
 [PublicAPI]

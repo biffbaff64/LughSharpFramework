@@ -35,11 +35,10 @@ public class BodyDef
 {
     /// <summary>
     /// The physics body type.
-    /// <para>
-    /// static   : zero mass, zero velocity, may be manually moved.
-    /// kinematic : zero mass, non-zero velocity set by user, moved by the solver.
-    /// dynamic  : positive mass, velocity determined by forces.
-    /// </para>
+    /// <li>static   : zero mass, zero velocity, may be manually moved.</li>
+    /// <li>kinematic : zero mass, non-zero velocity set by user, moved by the solver.</li>
+    /// <li>dynamic  : positive mass, velocity determined by forces.</li>
+    /// <para/>
     /// The underlying integer values (0/1/2) match Box2D exactly.
     /// </summary>
     [PublicAPI]

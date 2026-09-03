@@ -22,7 +22,15 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+
+using JetBrains.Annotations;
+
 using LughSharp.Source.Collections;
+using LughSharp.Source.Maths;
+using LughSharp.Source.Physics.Box2D.Joints;
+using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Pooling;
 
 namespace LughSharp.Source.Physics.Box2D;
@@ -117,7 +125,7 @@ public sealed class World
         _contacts.EnsureCapacity( _contactAddrs.Length );
         _freeContacts.EnsureCapacity( _contactAddrs.Length );
 
-        for ( int i = 0; i < _contactAddrs.Length; i++ )
+        for ( var i = 0; i < _contactAddrs.Length; i++ )
         {
             _freeContacts.Add( new Contact( this, 0 ) );
         }
@@ -294,8 +302,8 @@ public sealed class World
         if ( joint == null ) throw new LughRuntimeException( "Unknown joint type: " + def.Type );
 
         Joints[ joint.Addr ] = joint;
-        JointEdge jointEdgeA = new JointEdge( def.BodyB, joint );
-        JointEdge jointEdgeB = new JointEdge( def.BodyA, joint );
+        var jointEdgeA = new JointEdge( def.BodyB, joint );
+        var jointEdgeB = new JointEdge( def.BodyA, joint );
 
         joint.JointEdgeA = jointEdgeA;
         joint.JointEdgeB = jointEdgeB;
@@ -310,7 +318,7 @@ public sealed class World
     {
         if ( def.Type == JointDef.JointType.DistanceJoint )
         {
-            DistanceJointDef d = ( DistanceJointDef )def;
+            var d = ( DistanceJointDef )def;
 
             return jniCreateDistanceJoint
                 (
@@ -330,7 +338,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.FrictionJoint )
         {
-            FrictionJointDef d = ( FrictionJointDef )def;
+            var d = ( FrictionJointDef )def;
 
             return jniCreateFrictionJoint
                 (
@@ -349,7 +357,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.GearJoint )
         {
-            GearJointDef d = ( GearJointDef )def;
+            var d = ( GearJointDef )def;
 
             return jniCreateGearJoint
                 (
@@ -365,7 +373,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.MotorJoint )
         {
-            MotorJointDef d = ( MotorJointDef )def;
+            var d = ( MotorJointDef )def;
 
             return jniCreateMotorJoint
                 (
@@ -384,7 +392,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.MouseJoint )
         {
-            MouseJointDef d = ( MouseJointDef )def;
+            var d = ( MouseJointDef )def;
 
             return jniCreateMouseJoint
                 (
@@ -402,7 +410,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.PrismaticJoint )
         {
-            PrismaticJointDef d = ( PrismaticJointDef )def;
+            var d = ( PrismaticJointDef )def;
 
             return jniCreatePrismaticJoint
                 (
@@ -428,7 +436,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.PulleyJoint )
         {
-            PulleyJointDef d = ( PulleyJointDef )def;
+            var d = ( PulleyJointDef )def;
 
             return jniCreatePulleyJoint
                 (
@@ -452,7 +460,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.RevoluteJoint )
         {
-            RevoluteJointDef d = ( RevoluteJointDef )def;
+            var d = ( RevoluteJointDef )def;
 
             return jniCreateRevoluteJoint
                 (
@@ -476,7 +484,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.RopeJoint )
         {
-            RopeJointDef d = ( RopeJointDef )def;
+            var d = ( RopeJointDef )def;
 
             return jniCreateRopeJoint
                 (
@@ -494,7 +502,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.WeldJoint )
         {
-            WeldJointDef d = ( WeldJointDef )def;
+            var d = ( WeldJointDef )def;
 
             return jniCreateWeldJoint
                 (
@@ -514,7 +522,7 @@ public sealed class World
 
         if ( def.Type == JointDef.JointType.WheelJoint )
         {
-            WheelJointDef d = ( WheelJointDef )def;
+            var d = ( WheelJointDef )def;
 
             return jniCreateWheelJoint
                 (
@@ -727,7 +735,7 @@ public sealed class World
         {
             int freeConts = _freeContacts.Count;
 
-            for ( int i = 0; i < numContacts - freeConts; i++ )
+            for ( var i = 0; i < numContacts - freeConts; i++ )
             {
                 _freeContacts.Add( new Contact( this, 0 ) );
             }
@@ -737,7 +745,7 @@ public sealed class World
 
         _contacts.Clear();
 
-        for ( int i = 0; i < numContacts; i++ )
+        for ( var i = 0; i < numContacts; i++ )
         {
             Contact contact = _freeContacts[ i ];
             contact.Addr = _contactAddrs[ i ];

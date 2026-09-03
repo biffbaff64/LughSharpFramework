@@ -37,12 +37,12 @@ public class ChainShape : Shape
 
     public ChainShape()
     {
-        addr = NewChainShape();
+        Addr = NewChainShape();
     }
 
     public ChainShape( long addr )
     {
-        this.addr = addr;
+        this.Addr = addr;
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ public class ChainShape : Shape
     /// </summary>
     public void Clear()
     {
-        jniClear( addr );
+        jniClear( Addr );
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ public class ChainShape : Shape
     /// <param name="vertices"> An array of floats of alternating x, y coordinates. </param>
     public void CreateLoop( float[] vertices )
     {
-        jniCreateLoop( addr, vertices, 0, vertices.Length / 2 );
+        jniCreateLoop( Addr, vertices, 0, vertices.Length / 2 );
         IsLooped = true;
     }
 
@@ -80,7 +80,7 @@ public class ChainShape : Shape
     /// <param name="length"> After offset (in floats, not float-pairs, so even number) </param>
     public void CreateLoop( float[] vertices, int offset, int length )
     {
-        jniCreateLoop( addr, vertices, offset, length / 2 );
+        jniCreateLoop( Addr, vertices, offset, length / 2 );
         IsLooped = true;
     }
 
@@ -98,7 +98,7 @@ public class ChainShape : Shape
             verts[ i + 1 ] = vertices[ j ].Y;
         }
 
-        jniCreateLoop( addr, verts, 0, verts.Length / 2 );
+        jniCreateLoop( Addr, verts, 0, verts.Length / 2 );
         IsLooped = true;
     }
 
@@ -108,7 +108,7 @@ public class ChainShape : Shape
     /// <param name="vertices"> an array of floats of alternating x, y coordinates. </param>
     public void CreateChain( float[] vertices )
     {
-        jniCreateChain( addr, vertices, 0, vertices.Length / 2 );
+        jniCreateChain( Addr, vertices, 0, vertices.Length / 2 );
         IsLooped = false;
     }
 
@@ -120,7 +120,7 @@ public class ChainShape : Shape
     /// <param name="length"> after offset (in floats, not float-pairs, so even number) </param>
     public void CreateChain( float[] vertices, int offset, int length )
     {
-        jniCreateChain( addr, vertices, offset, length / 2 );
+        jniCreateChain( Addr, vertices, offset, length / 2 );
         IsLooped = false;
     }
 
@@ -138,7 +138,7 @@ public class ChainShape : Shape
             verts[ i + 1 ] = vertices[ j ].Y;
         }
 
-        jniCreateChain( addr, verts, 0, vertices.Length );
+        jniCreateChain( Addr, verts, 0, vertices.Length );
         IsLooped = false;
     }
 
@@ -151,7 +151,7 @@ public class ChainShape : Shape
     /// Establish connectivity to a vertex that precedes the first vertex. Don't call this for loops. */
     public void SetPrevVertex( float prevVertexX, float prevVertexY )
     {
-        jniSetPrevVertex( addr, prevVertexX, prevVertexY );
+        jniSetPrevVertex( Addr, prevVertexX, prevVertexY );
     }
 
     /// Establish connectivity to a vertex that follows the last vertex.
@@ -165,7 +165,7 @@ public class ChainShape : Shape
     /// Don't call this for loops.
     public void SetNextVertex( float nextVertexX, float nextVertexY )
     {
-        jniSetNextVertex( addr, nextVertexX, nextVertexY );
+        jniSetNextVertex( Addr, nextVertexX, nextVertexY );
     }
 
     /// <summary>
@@ -173,7 +173,7 @@ public class ChainShape : Shape
     /// </summary>
     public int GetVertexCount()
     {
-        return jniGetVertexCount( addr );
+        return jniGetVertexCount( Addr );
     }
 
     /// <summary>
@@ -183,7 +183,7 @@ public class ChainShape : Shape
     /// <param name="vertex"> vertex </param>
     public void GetVertex( int index, Vector2 vertex )
     {
-        jniGetVertex( addr, index, _verts );
+        jniGetVertex( Addr, index, _verts );
         vertex.X = _verts[ 0 ];
         vertex.Y = _verts[ 1 ];
     }

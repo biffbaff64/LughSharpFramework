@@ -944,7 +944,7 @@ LUGHSHARP/SOURCE/PHYSICS/BOX2D
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - Body
+    - IP   - IP   - DONE - Body
     - IP   - IP   - DONE - BodyDef
     - IP   - IP   - DONE - Box2D
     - IP   - IP   - DONE - Box2DDebugRenderer
@@ -970,7 +970,7 @@ LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/GRAPHICS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - ParticleEmmitterBox2D
+    - IP   - IP   - DONE - ParticleEmmitterBox2D
 
 LUGHSHARP/PHYSICS2D/SOURCE/BOX2D/JOINTS
 ----------------------------------------

@@ -33,12 +33,12 @@ public class EdgeShape : Shape
     
     public EdgeShape()
     {
-        addr = NewEdgeShape();
+        Addr = NewEdgeShape();
     }
 
     public EdgeShape( long addr )
     {
-        this.addr = addr;
+        this.Addr = addr;
     }
 
     /// <summary>
@@ -59,75 +59,75 @@ public class EdgeShape : Shape
     /** Set this as an isolated edge. */
     public void Set( float v1X, float v1Y, float v2X, float v2Y )
     {
-        jniSet( addr, v1X, v1Y, v2X, v2Y );
+        jniSet( Addr, v1X, v1Y, v2X, v2Y );
     }
 
     public void GetVertex1( Vector2 vec )
     {
-        jniGetVertex1( addr, _vertex );
+        jniGetVertex1( Addr, _vertex );
         vec.X = _vertex[ 0 ];
         vec.Y = _vertex[ 1 ];
     }
 
     public void GetVertex2( Vector2 vec )
     {
-        jniGetVertex2( addr, _vertex );
+        jniGetVertex2( Addr, _vertex );
         vec.X = _vertex[ 0 ];
         vec.Y = _vertex[ 1 ];
     }
 
     public void GetVertex0( Vector2 vec )
     {
-        jniGetVertex0( addr, _vertex );
+        jniGetVertex0( Addr, _vertex );
         vec.X = _vertex[ 0 ];
         vec.Y = _vertex[ 1 ];
     }
 
     public void SetVertex0( Vector2 vec )
     {
-        jniSetVertex0( addr, vec.X, vec.Y );
+        jniSetVertex0( Addr, vec.X, vec.Y );
     }
 
     public void SetVertex0( float x, float y )
     {
-        jniSetVertex0( addr, x, y );
+        jniSetVertex0( Addr, x, y );
     }
 
     public void GetVertex3( Vector2 vec )
     {
-        jniGetVertex3( addr, _vertex );
+        jniGetVertex3( Addr, _vertex );
         vec.X = _vertex[ 0 ];
         vec.Y = _vertex[ 1 ];
     }
 
     public void SetVertex3( Vector2 vec )
     {
-        jniSetVertex3( addr, vec.X, vec.Y );
+        jniSetVertex3( Addr, vec.X, vec.Y );
     }
 
     public void SetVertex3( float x, float y )
     {
-        jniSetVertex3( addr, x, y );
+        jniSetVertex3( Addr, x, y );
     }
 
     public bool HasVertex0()
     {
-        return jniHasVertex0( addr );
+        return jniHasVertex0( Addr );
     }
 
     public void SetHasVertex0( bool hasVertex0 )
     {
-        jniSetHasVertex0( addr, hasVertex0 );
+        jniSetHasVertex0( Addr, hasVertex0 );
     }
 
     public bool HasVertex3()
     {
-        return jniHasVertex3( addr );
+        return jniHasVertex3( Addr );
     }
 
     public void SetHasVertex3( bool hasVertex3 )
     {
-        jniSetHasVertex3( addr, hasVertex3 );
+        jniSetHasVertex3( Addr, hasVertex3 );
     }
 
     // ========================================================================

@@ -36,7 +36,7 @@ public class PolygonShape : Shape
     /// </summary>
     public PolygonShape()
     {
-        addr = NewPolygonShape();
+        Addr = NewPolygonShape();
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class PolygonShape : Shape
     /// </summary>
     public PolygonShape( long addr )
     {
-        this.addr = addr;
+        this.Addr = addr;
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class PolygonShape : Shape
             verts[ i + 1 ] = vertices[ j ].Y;
         }
 
-        jniSet( addr, verts, 0, verts.Length );
+        jniSet( Addr, verts, 0, verts.Length );
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public class PolygonShape : Shape
     /// <param name="vertices"> The vertices to copy. </param>
     public void Set( float[] vertices )
     {
-        jniSet( addr, vertices, 0, vertices.Length );
+        jniSet( Addr, vertices, 0, vertices.Length );
     }
 
     /// <summary>
@@ -95,7 +95,7 @@ public class PolygonShape : Shape
     /// <param name="len"> The number of vertices to copy. </param>
     public void Set( float[] vertices, int offset, int len )
     {
-        jniSet( addr, vertices, offset, len );
+        jniSet( Addr, vertices, offset, len );
     }
 
     /// <summary>
@@ -105,7 +105,7 @@ public class PolygonShape : Shape
     /// <param name="hy"> the half-height. </param>
     public void SetAsBox( float hx, float hy )
     {
-        jniSetAsBox( addr, hx, hy );
+        jniSetAsBox( Addr, hx, hy );
     }
 
     /// <summary>
@@ -117,7 +117,7 @@ public class PolygonShape : Shape
     /// <param name="angle"> the rotation in radians of the box in local coordinates. </param>
     public void SetAsBox( float hx, float hy, Vector2 center, float angle )
     {
-        jniSetAsBox( addr, hx, hy, center.X, center.Y, angle );
+        jniSetAsBox( Addr, hx, hy, center.X, center.Y, angle );
     }
 
     /// <summary>
@@ -125,7 +125,7 @@ public class PolygonShape : Shape
     /// </summary>
     public int GetVertexCount()
     {
-        return jniGetVertexCount( addr );
+        return jniGetVertexCount( Addr );
     }
 
     /// <summary>
@@ -135,7 +135,7 @@ public class PolygonShape : Shape
     /// <param name="vertex"> vertex </param>
     public void GetVertex( int index, Vector2 vertex )
     {
-        jniGetVertex( addr, index, _verts );
+        jniGetVertex( Addr, index, _verts );
         vertex.X = _verts[ 0 ];
         vertex.Y = _verts[ 1 ];
     }

@@ -35,12 +35,12 @@ public class CircleShape : Shape
 
     public CircleShape()
     {
-        addr = newCircleShape();
+        Addr = newCircleShape();
     }
 
     public CircleShape( long addr )
     {
-        this.addr = addr;
+        this.Addr = addr;
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public class CircleShape : Shape
 
     public Vector2 GetPosition()
     {
-        jniGetPosition( addr, _tmp );
+        jniGetPosition( Addr, _tmp );
         _position.X = _tmp[ 0 ];
         _position.Y = _tmp[ 1 ];
 
@@ -64,7 +64,7 @@ public class CircleShape : Shape
     /** Sets the position of the shape */
     public void SetPosition( Vector2 position )
     {
-        jniSetPosition( addr, position.X, position.Y );
+        jniSetPosition( Addr, position.X, position.Y );
     }
 
     // ========================================================================

@@ -54,7 +54,7 @@ public abstract class Shape
     // ========================================================================
     
     /** the address of the shape **/
-    protected long addr;
+    public long Addr;
 
     /// <summary>
     /// Get the type of this shape. You can use this to down cast to the concrete shape.
@@ -67,13 +67,13 @@ public abstract class Shape
     /// </summary>
     public float GetRadius()
     {
-        return jniGetRadius( addr );
+        return jniGetRadius( Addr );
     }
 
     /** Sets the radius of this shape */
     public void SetRadius( float radius )
     {
-        jniSetRadius( addr, radius );
+        jniSetRadius( Addr, radius );
     }
 
     /// <summary>
@@ -81,7 +81,7 @@ public abstract class Shape
     /// </summary>
     public int GetChildCount()
     {
-        return jniGetChildCount( addr );
+        return jniGetChildCount( Addr );
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public abstract class Shape
     /// </summary>
     public void Dispose()
     {
-        jniDispose( addr );
+        jniDispose( Addr );
     }
 
     // ========================================================================
@@ -137,6 +137,19 @@ public abstract class Shape
         return shape->GetChildCount();
     */
 }
+
+// ============================================================================
+// ============================================================================
+
+[PublicAPI]
+public class DefaultShape : Shape
+{
+    /// <inheritdoc/>
+    public override ShapeTypes GetShapeType()
+    {
+        return ShapeTypes.Polygon;
+    }
+} 
 
 // ============================================================================
 // ============================================================================

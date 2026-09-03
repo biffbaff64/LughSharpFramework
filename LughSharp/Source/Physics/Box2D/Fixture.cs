@@ -48,7 +48,7 @@ public class Fixture( Body body, long addr )
 
     // ========================================================================
 
-    protected void Reset( Body body, long addr )
+    public void Reset( Body body, long addr )
     {
         this._body        = body;
         this.Addr         = addr;

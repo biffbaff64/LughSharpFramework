@@ -89,7 +89,7 @@ public class BodyBuilder( float ppm, World world )
                 break;
 
             // ----------------------------------------------------------------
-            
+
             case PhysicsBodyType.DynamicHeavy:
                 descriptor.Shape       = CreatePolygonShape( rectangle );
                 descriptor.Density     = PhysicsConstants.FullDensity;
@@ -106,7 +106,7 @@ public class BodyBuilder( float ppm, World world )
                 break;
 
             // ----------------------------------------------------------------
-            
+
             case PhysicsBodyType.DynamicPushable:
                 descriptor.Shape       = CreatePolygonShape( rectangle );
                 descriptor.Density     = PhysicsConstants.DefaultDensity;
@@ -123,7 +123,7 @@ public class BodyBuilder( float ppm, World world )
                 break;
 
             // ----------------------------------------------------------------
-            
+
             case PhysicsBodyType.DynamicCircle:
             case PhysicsBodyType.DynamicCircleSensor:
                 var circle = new Circle
@@ -147,7 +147,7 @@ public class BodyBuilder( float ppm, World world )
                 break;
 
             // ----------------------------------------------------------------
-            
+
             case PhysicsBodyType.Static:
             case PhysicsBodyType.StaticSensor:
                 descriptor.Shape       = CreatePolygonShape( rectangle );
@@ -165,7 +165,7 @@ public class BodyBuilder( float ppm, World world )
                 break;
 
             // ----------------------------------------------------------------
-            
+
             default:
                 throw new LughRuntimeException( $"UNKNOWN BODY TYPE SPECIFIED: {bodyType}" );
         }
@@ -200,7 +200,7 @@ public class BodyBuilder( float ppm, World world )
 
         if ( fixtureDef.IsSensor )
         {
-            body.SetGravityScale( 0 );
+            body.GravityScale = 0;
         }
 
         shape.Dispose();
@@ -224,24 +224,23 @@ public class BodyBuilder( float ppm, World world )
 
         if ( fixtureDef.IsSensor )
         {
-            body.SetGravityScale( 0 );
+            body.GravityScale = 0;
         }
 
         return body;
     }
 
-    /**
-     * Creates a Kinematic Box2D body which can be assigned to a GdxSprite.
-     * <p>
-     * Kinematic bodies are somewhat in between static and dynamic bodies.
-     * Like static bodies, they do not react to forces, but like dynamic bodies,
-     * they do have the ability to move. Kinematic bodies are great for things
-     * where you, the programmer, want to be in full control of a body's motion,
-     * such as a moving platform in a platform game.
-     * It is possible to set the position on a kinematic body directly, but it's
-     * usually better to set a velocity instead, and letting Box2D take care of
-     * position updates.
-     */
+    /// <summary>
+    /// Creates a Kinematic Box2D body which can be assigned to a GdxSprite.
+    /// Kinematic bodies are somewhat in between static and dynamic bodies.
+    /// Like static bodies, they do not react to forces, but like dynamic bodies,
+    /// they do have the ability to move. Kinematic bodies are great for things
+    /// where you, the programmer, want to be in full control of a body's motion,
+    /// such as a moving platform in a platform game.
+    /// It is possible to set the position on a kinematic body directly, but it's
+    /// usually better to set a velocity instead, and letting Box2D take care of
+    /// position updates.
+    /// </summary>
     public Body CreateKinematicBody( Rectangle rectangle, B2BodyDescriptor descriptor )
     {
         PolygonShape shape   = CreatePolygonShape( rectangle );
@@ -256,10 +255,10 @@ public class BodyBuilder( float ppm, World world )
             );
 
         Body body = BuildBody( bodyDef, fixtureDef );
-        
+
         if ( fixtureDef.IsSensor )
         {
-            body.SetGravityScale( 0 );
+            body.GravityScale = 0;
         }
 
         shape.Dispose();
@@ -267,14 +266,14 @@ public class BodyBuilder( float ppm, World world )
         return body;
     }
 
-    /**
-     * Creates a Static Box2D body.
-     * <p>
-     * Static bodies are objects which do not move and are not affected by forces.
-     * Dynamic bodies are affected by static bodies. Static bodies are perfect for
-     * ground, walls, and any object which does not need to move. Static bodies
-     * require less computing power.
-     */
+    /// <summary>
+    /// Creates a Static Box2D body.
+    /// <para/>
+    /// Static bodies are objects which do not move and are not affected by forces.
+    /// Dynamic bodies are affected by static bodies. Static bodies are perfect for
+    /// ground, walls, and any object which does not need to move. Static bodies
+    /// require less computing power.
+    /// </summary>
     public Body CreateStaticBody( Rectangle rectangle, B2BodyDescriptor descriptor )
     {
         PolygonShape shape   = CreatePolygonShape( rectangle );
