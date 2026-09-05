@@ -78,10 +78,14 @@ public partial class GLBindings
 
         throw new LughRuntimeException( $"Failed to load {functionName}" );
     }
-
-    // ========================================================================
-    // ========================================================================
-
+    
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="functionName"></param>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    /// <exception cref="LughRuntimeException"></exception>
     public static T GetDelegateFor< T >( string functionName ) where T : Delegate
     {
         IntPtr functionPtr = WglGetProcAddress( functionName );
@@ -109,7 +113,8 @@ public partial class GLBindings
 
         throw new LughRuntimeException( $"Failed to load {functionName}" );
     }
-
-    // ========================================================================
-    // ========================================================================
 }
+
+// ============================================================================
+// ============================================================================
+

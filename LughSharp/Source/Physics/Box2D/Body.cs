@@ -447,6 +447,7 @@ public class Body
     public Vector2 GetWorldPoint( Vector2 localPoint )
     {
         jniGetWorldPoint( Addr, localPoint.X, localPoint.Y, _tmpBuffAddress );
+
         this._localPoint.X = _tmpBuff.GetFloat( 0 );
         this._localPoint.Y = _tmpBuff.GetFloat( 4 );
 
@@ -462,6 +463,7 @@ public class Body
     public Vector2 GetWorldVector( Vector2 localVector )
     {
         jniGetWorldVector( Addr, localVector.X, localVector.Y, _tmpBuffAddress );
+        
         _worldVector.X = _tmpBuff.GetFloat( 0 );
         _worldVector.Y = _tmpBuff.GetFloat( 4 );
 
@@ -477,6 +479,7 @@ public class Body
     public Vector2 GetLocalPoint( Vector2 worldPoint )
     {
         jniGetLocalPoint( Addr, worldPoint.X, worldPoint.Y, _tmpBuffAddress );
+        
         LocalPoint2.X = _tmpBuff.GetFloat( 0 );
         LocalPoint2.Y = _tmpBuff.GetFloat( 4 );
 
@@ -492,6 +495,7 @@ public class Body
     public Vector2 GetLocalVector( Vector2 worldVector )
     {
         jniGetLocalVector( Addr, worldVector.X, worldVector.Y, _tmpBuffAddress );
+        
         LocalVector.X = _tmpBuff.GetFloat( 0 );
         LocalVector.Y = _tmpBuff.GetFloat( 4 );
 
@@ -507,6 +511,7 @@ public class Body
     public Vector2 GetLinearVelocityFromWorldPoint( Vector2 worldPoint )
     {
         jniGetLinearVelocityFromWorldPoint( Addr, worldPoint.X, worldPoint.Y, _tmpBuffAddress );
+        
         LinVelWorld.X = _tmpBuff.GetFloat( 0 );
         LinVelWorld.Y = _tmpBuff.GetFloat( 4 );
 
@@ -522,6 +527,7 @@ public class Body
     public Vector2 GetLinearVelocityFromLocalPoint( Vector2 localPoint )
     {
         jniGetLinearVelocityFromLocalPoint( Addr, localPoint.X, localPoint.Y, _tmpBuffAddress );
+        
         LinVelLoc.X = _tmpBuff.GetFloat( 0 );
         LinVelLoc.Y = _tmpBuff.GetFloat( 4 );
 
@@ -563,7 +569,7 @@ public class Body
     /// <summary>
     /// Set the type of this body. This may alter the mass and velocity. 
     /// </summary>
-    public void SetType( BodyDef.BodyType type )
+    public void SetBodyType( BodyDef.BodyType type )
     {
         jniSetType( Addr, ( int )type );
     }
@@ -577,25 +583,8 @@ public class Body
 
         if ( type == 0 ) return BodyDef.BodyType.Static;
         if ( type == 1 ) return BodyDef.BodyType.Kinematic;
-        if ( type == 2 ) return BodyDef.BodyType.Dynamic;
-
-        return BodyDef.BodyType.Static;
-    }
-
-    /// <summary>
-    /// Should this body be treated like a bullet for continuous collision detection? 
-    /// </summary>
-    public void SetBullet( bool flag )
-    {
-        jniSetBullet( Addr, flag );
-    }
-
-    /// <summary>
-    /// Is this body treated like a bullet for continuous collision detection? 
-    /// </summary>
-    public bool IsBullet()
-    {
-        return jniIsBullet( Addr );
+        
+        return type == 2 ? BodyDef.BodyType.Dynamic : BodyDef.BodyType.Static;
     }
 
     /// <summary>
@@ -615,67 +604,6 @@ public class Body
     }
 
     /// <summary>
-    /// Set the sleep state of the body. A sleeping body has very low CPU cost.
-    /// </summary>
-    /// <param name="flag"> set to true to wake the body, false to put it to sleep. </param> 
-    public void SetAwake( bool flag )
-    {
-        jniSetAwake( Addr, flag );
-    }
-
-    /// <summary>
-    /// Get the sleeping state of this body.
-    /// </summary>
-    /// <returns> true if the body is not sleeping. </returns>
-    public bool IsAwake()
-    {
-        return jniIsAwake( Addr );
-    }
-
-    /// <summary>
-    /// Set the active state of the body.
-    /// <li>An inactive body is not simulated and cannot be collided with or woken up.</li>
-    /// <li>If you pass a flag of true, all fixtures will be added to the broad-phase.</li>
-    /// <li>If you pass a flag of false, all fixtures will be removed from the broad-phase
-    /// and all contacts will be destroyed.</li>
-    /// <li>Fixtures and joints are otherwise unaffected.</li>
-    /// <li>You may continue to create/destroy fixtures and joints on inactive bodies.</li>
-    /// <li>Fixtures on an inactive body are implicitly inactive and will not participate
-    /// in collisions, ray-casts, or queries.</li>
-    /// <li>Joints connected to an inactive body are implicitly inactive.</li>
-    /// <li>An inactive body is still owned by a b2World object and remains in the body list.</li> 
-    /// </summary>
-    public void SetActive( bool flag )
-    {
-        if ( flag )
-        {
-            jniSetActive( Addr, flag );
-        }
-        else
-        {
-            this.World.DeactivateBody( this );
-        }
-    }
-
-    /// <summary>
-    /// Get the active state of the body. 
-    /// </summary>
-    public bool IsActive()
-    {
-        return jniIsActive( Addr );
-    }
-
-    /// <summary>
-    /// Gets / Sets the fixed rotation for this body.
-    /// Note: Setting fixed rotation causes the mass to be reset.
-    /// </summary>
-    public bool FixedRotation
-    {
-        get => jniIsFixedRotation( Addr );
-        set => jniSetFixedRotation( Addr, value );
-    }
-
-    /// <summary>
     /// Get the list of all fixtures attached to this body. Do not modify the list! 
     /// </summary>
     public List< Fixture > GetFixtureList()
@@ -689,6 +617,66 @@ public class Body
     public List< JointEdge > GetJointList()
     {
         return Joints;
+    }
+
+    // ========================================================================
+
+    /// <summary>
+    /// Get / Set the sleep state of the body. A sleeping body has very low CPU cost.
+    /// </summary>
+    /// <param name="value"> set to true to wake the body, false to put it to sleep. </param> 
+    public bool IsAwake
+    {
+        get => jniIsAwake( Addr );
+        set => jniSetAwake( Addr, value );
+    }
+    
+    /// <summary>
+    /// Gets / Sets the active state of the body.
+    /// <li>An inactive body is not simulated and cannot be collided with or woken up.</li>
+    /// <li>If you pass a flag of true, all fixtures will be added to the broad-phase.</li>
+    /// <li>If you pass a flag of false, all fixtures will be removed from the broad-phase
+    /// and all contacts will be destroyed.</li>
+    /// <li>Fixtures and joints are otherwise unaffected.</li>
+    /// <li>You may continue to create/destroy fixtures and joints on inactive bodies.</li>
+    /// <li>Fixtures on an inactive body are implicitly inactive and will not participate
+    /// in collisions, ray-casts, or queries.</li>
+    /// <li>Joints connected to an inactive body are implicitly inactive.</li>
+    /// <li>An inactive body is still owned by a b2World object and remains in the body list.</li> 
+    /// </summary>
+    public bool IsActive
+    {
+        get => jniIsActive( Addr );
+        set
+        {
+            if ( value )
+            {
+                jniSetActive( Addr, value );
+            }
+            else
+            {
+                this.World.DeactivateBody( this );
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Is this body treated like a bullet for continuous collision detection? 
+    /// </summary>
+    public bool IsBullet
+    {
+        get => jniIsBullet( Addr );
+        set => jniSetBullet( Addr, value );
+    }
+
+    /// <summary>
+    /// Gets / Sets the fixed rotation for this body.
+    /// Note: Setting fixed rotation causes the mass to be reset.
+    /// </summary>
+    public bool FixedRotation
+    {
+        get => jniIsFixedRotation( Addr );
+        set => jniSetFixedRotation( Addr, value );
     }
 
     /// <summary>

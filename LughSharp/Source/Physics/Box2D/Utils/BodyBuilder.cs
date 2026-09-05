@@ -175,14 +175,19 @@ public class BodyBuilder( float ppm, World world )
         return body;
     }
 
-    /**
-     * Creates a Dynamic Box2D body which can be assigned to a GdxSprite.
-     * <p>
-     * Dynamic bodies are objects which move around and are affected by
-     * forces and other dynamic, kinematic and static objects. Dynamic
-     * bodies are suitable for any object which needs to move and be
-     * affected by forces.
-     */
+    /// <summary>
+    /// Creates a Dynamic Box2D body which can be assigned to a <see cref="Sprite2D"/>.
+    /// Dynamic bodies are objects which move around and are affected by forces and other
+    /// dynamic, kinematic and static objects.
+    /// <br/>
+    /// This body will have a <b>Polygon</b> shape.
+    /// <br/>
+    /// Dynamic bodies are suitable for any object which needs to move and be affected
+    /// by forces.
+    /// </summary>
+    /// <param name="rectangle"></param>
+    /// <param name="descriptor"></param>
+    /// <returns></returns>
     public Body CreateDynamicBox( Rectangle rectangle, B2BodyDescriptor descriptor )
     {
         PolygonShape shape   = CreatePolygonShape( rectangle );
@@ -208,6 +213,19 @@ public class BodyBuilder( float ppm, World world )
         return body;
     }
 
+    /// <summary>
+    /// Creates a Dynamic Box2D body which can be assigned to a <see cref="Sprite2D"/>.
+    /// Dynamic bodies are objects which move around and are affected by forces and other
+    /// dynamic, kinematic and static objects.
+    /// <br/>
+    /// This body will have a <b>Circle</b> shape.
+    /// <br/>
+    /// Dynamic bodies are suitable for any object which needs to move and be affected
+    /// by forces.
+    /// </summary>
+    /// <param name="circle"></param>
+    /// <param name="descriptor"></param>
+    /// <returns></returns>
     public Body CreateDynamicCircle( Circle circle, B2BodyDescriptor descriptor )
     {
         BodyDef bodyDef = CreateBodyDef( BodyDef.BodyType.Dynamic, circle );
@@ -231,7 +249,7 @@ public class BodyBuilder( float ppm, World world )
     }
 
     /// <summary>
-    /// Creates a Kinematic Box2D body which can be assigned to a GdxSprite.
+    /// Creates a Kinematic Box2D body which can be assigned to a <see cref="Sprite2D"/>.
     /// Kinematic bodies are somewhat in between static and dynamic bodies.
     /// Like static bodies, they do not react to forces, but like dynamic bodies,
     /// they do have the ability to move. Kinematic bodies are great for things

@@ -101,7 +101,7 @@ public class Box2DDebugRenderer
 
             foreach ( Body body in _bodies )
             {
-                if ( body.IsActive() || _drawInactiveBodies )
+                if ( body.IsActive || _drawInactiveBodies )
                 {
                     RenderBody( body );
                 }
@@ -163,7 +163,7 @@ public class Box2DDebugRenderer
 
     private Color GetColorByBody( Body body )
     {
-        if ( body.IsActive() == false )
+        if ( !body.IsActive )
         {
             return ShapeNotActive;
         }
@@ -178,7 +178,7 @@ public class Box2DDebugRenderer
             return ShapeKinematic;
         }
 
-        return body.IsAwake() == false ? ShapeNotAwake : ShapeAwake;
+        return body.IsAwake ? ShapeNotAwake : ShapeAwake;
     }
 
     private void DrawAabb( Fixture fixture, Transform transform )

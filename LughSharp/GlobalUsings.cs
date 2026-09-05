@@ -50,6 +50,7 @@ global using NUnit.Framework;
 global using LughSharp.Source.Assets;
 global using LughSharp.Source.Audio;
 global using LughSharp.Source.Graphics;
+global using LughSharp.Source.Graphics.G2D;
 global using LughSharp.Source.Input;
 global using LughSharp.Source.Maps;
 global using LughSharp.Source.Maths;

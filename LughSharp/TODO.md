@@ -521,35 +521,13 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL/BINDINGS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - BufferObjectBindings
-    -      -      -      - DebugBindings
-    -      -      -      - DrawBindings
-    -      -      -      - ErrorBindings
-    -      -      -      - FrameBufferBindings
-    -      -      -      - GLBindings
-    -      -      -      - GLBindingsHelpers
-    -      -      -      - GLBindingsStructs
-    -      -      -      - GLFunctionDelegates
-    -      -      -      - GLFunctionsLoader
-    -      -      -      - IGLBindings
-    -      -      -      - IGLBindings.GL20
-    -      -      -      - IGLBindings.GL30
-    -      -      -      - IGLBindings.GL31
-    -      -      -      - IGLBindings.GL32
-    -      -      -      - IGLBindingsExtra
-    -      -      -      - ProgramBindings
-    -      -      -      - QueryBindings
-    -      -      -      - RenderBufferBindings
-    -      -      -      - ShaderBindings
-    -      -      -      - StateBindings
-    -      -      -      - StencilBindings
-    -      -      -      - TextureBindings
-    -      -      -      - TextureSamplerBindings
-    -      -      -      - TransformBindings
-    -      -      -      - TransformFeedbackBindings
-    -      -      -      - UniformBindings
-    -      -      -      - VertexArrayBindings
-    -      -      -      - VertexAttribBindings
+    - IP   - IP   - DONE - GLBindings           - Splitting in progress
+    - IP   - IP   - DONE - GLBindingsHelpers
+    - IP   - IP   - DONE - GLBindingsStructs
+    - IP   - IP   - DONE - GLFunctionDelegates
+    - IP   - IP   - DONE - GLFunctionsLoader
+    - IP   - IP   - DONE - IGLBindings
+    - IP   - IP   - DONE - IGLBindingsExtra
 
 LUGHSHARP/SOURCE/GRAPHICS/OPENGL/ENUMS
 --------------------------------------

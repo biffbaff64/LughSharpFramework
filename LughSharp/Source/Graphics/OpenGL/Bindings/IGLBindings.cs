@@ -7411,3 +7411,7 @@ public partial interface IGLBindings
     /// <param name="value">Specifies the value of the vertex attribute.</param>
     void VertexAttribP4Uiv( uint index, int type, bool normalized, uint[] value );
 }
+
+// ============================================================================
+// ============================================================================
+
