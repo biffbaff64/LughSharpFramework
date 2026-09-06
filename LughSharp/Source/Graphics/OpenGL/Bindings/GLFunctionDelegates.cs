@@ -45,7 +45,7 @@ using GLint64 = long;
 namespace LughSharp.Source.Graphics.OpenGL.Bindings;
 
 [SuppressMessage( "ReSharper", "InconsistentNaming" )]
-public partial class GLBindings
+public unsafe partial class GLBindings
 {
     private PFNGLACTIVESHADERPROGRAMPROC?                         _glActiveShaderProgram;
     private PFNGLACTIVETEXTUREPROC?                               _glActiveTexture;

@@ -26,7 +26,7 @@ using System.Runtime.CompilerServices;
 
 namespace LughSharp.Source.Graphics.OpenGL.Bindings;
 
-public partial class GLBindings
+public unsafe partial class GLBindings
 {
     private static readonly Dictionary< string, Delegate > _loadedFunctions = new();
 

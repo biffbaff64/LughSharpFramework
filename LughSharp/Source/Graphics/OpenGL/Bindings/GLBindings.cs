@@ -25,6 +25,7 @@
 using System.Numerics;
 
 using LughSharp.Source.Graphics.OpenGL.Enums;
+using LughSharp.Source.Graphics.Images;
 
 using GLenum = int;
 using GLfloat = float;
@@ -37,7 +38,9 @@ using GLbool = bool;
 using GLubyte = byte;
 using GLsizeiptr = int;
 using GLintptr = int;
+using GLshort = short;
 using GLbyte = sbyte;
+using GLushort = ushort;
 using GLchar = byte;
 using GLuint64 = ulong;
 using GLint64 = long;

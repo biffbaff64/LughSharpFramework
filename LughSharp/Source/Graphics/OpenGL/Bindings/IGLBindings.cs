@@ -29,13 +29,25 @@ using System.Numerics;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 
+using GLenum = int;
 using GLfloat = float;
+using GLint = int;
+using GLsizei = int;
+using GLbitfield = uint;
 using GLdouble = double;
 using GLuint = uint;
 using GLbool = bool;
+using GLubyte = byte;
+using GLsizeiptr = int;
+using GLintptr = int;
+using GLbyte = sbyte;
+using GLchar = byte;
+using GLuint64 = ulong;
+using GLint64 = long;
+
+using static LughSharp.Source.Graphics.OpenGL.IGL;
 
 // ============================================================================
-using static LughSharp.Source.Graphics.OpenGL.IGL;
 
 namespace LughSharp.Source.Graphics.OpenGL.Bindings;
 
