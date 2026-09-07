@@ -35,9 +35,11 @@ namespace LughSharp.Source.Audio.Maponus;
 [PublicAPI]
 public class Buffer16BitStereo : AudioBase
 {
+    public bool DoubleMonoToStereo { get; set; }
+
     // ========================================================================
 
-    private const int OutputChannels = 2;
+    private const int NumOutputChannels = 2;
 
     // Write offset used in append_bytes
     private readonly byte[] _buffer               = new byte[ Obuffersize * 2 ]; // all channels interleaved
@@ -57,15 +59,14 @@ public class Buffer16BitStereo : AudioBase
         OnStart();
     }
 
-    public bool DoubleMonoToStereo { get; set; }
-
     /// <summary>
     /// Gets the number of bytes remaining from the current position on the buffer.
     /// </summary>
     public int BytesLeft => _end - _offset;
 
     /// <summary>
-    /// Initialisation method. Called from constructor as the method <see cref="ClearBuffer"/>
+    /// Initialisation method, initialises the buffer pointers.
+    /// Called from constructor as the method <see cref="ClearBuffer"/>
     /// is virtual and cannot by called from constructors.
     /// </summary>
     private void OnStart()
@@ -102,7 +103,7 @@ public class Buffer16BitStereo : AudioBase
         else
         {
             // Copy an even number of sample frames
-            int remainder = count % ( 2 * OutputChannels );
+            int remainder = count % ( 2 * NumOutputChannels );
             copySize = count - remainder;
         }
 
@@ -121,7 +122,7 @@ public class Buffer16BitStereo : AudioBase
     {
         _buffer[ _bufferChannelOffsets[ channel ] ]     =  ( byte )( sampleValue & 0xff );
         _buffer[ _bufferChannelOffsets[ channel ] + 1 ] =  ( byte )( sampleValue >> 8 );
-        _bufferChannelOffsets[ channel ]                += OutputChannels * 2;
+        _bufferChannelOffsets[ channel ]                += NumOutputChannels * 2;
     }
 
     /// <summary>
@@ -174,7 +175,7 @@ public class Buffer16BitStereo : AudioBase
                 _buffer[ pos + 3 ] = ( byte )( sample >> 8 );
             }
 
-            pos += OutputChannels * 2;
+            pos += NumOutputChannels * 2;
         }
 
         _bufferChannelOffsets[ channel ] = pos;
@@ -188,7 +189,7 @@ public class Buffer16BitStereo : AudioBase
         _offset = 0;
         _end    = 0;
 
-        for ( var i = 0; i < OutputChannels; i++ )
+        for ( var i = 0; i < NumOutputChannels; i++ )
         {
             _bufferChannelOffsets[ i ] = i * 2; // two bytes per channel
         }
@@ -203,10 +204,9 @@ public class Buffer16BitStereo : AudioBase
     {
         _offset = 0;
 
-        // speed optimization - save end marker, and avoid
-        // array access at read time. Can you believe this saves
-        // like 1-2% of the cpu on a PIII? I guess allocating
-        // that temporary "new int(0)" is expensive, too.
+        // speed optimization - save end marker, and avoid array access at read
+        // time. Can you believe this saves 1-2% of the cpu on a PIII?
+        // Allocating that temporary "new int(0)" is expensive, too.
         _end = _bufferChannelOffsets[ 0 ];
     }
 

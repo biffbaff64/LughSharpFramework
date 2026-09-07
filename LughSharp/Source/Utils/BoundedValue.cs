@@ -129,14 +129,23 @@ public class BoundedValue
     }
 
     /// <summary>
-    /// Manually modifies the total by a custom amount.
+    /// Adds the specified value to the current total.
     /// </summary>
-    /// <param name="amount">The value to add (positive) or subtract (negative).</param>
-    public void Modify( int amount )
+    /// <param name="amount"> The amount to add. </param>
+    public void Add( int amount )
     {
         CurrentTotal += amount;
     }
 
+    /// <summary>
+    /// Subtracts the specified value from the current total.
+    /// </summary>
+    /// <param name="amount"> The amount to subtract. </param>
+    public void Subtract( int amount )
+    {
+        CurrentTotal -= amount;
+    }
+    
     /// <summary>
     /// Forces the total to immediately reach its Maximum bound.
     /// </summary>

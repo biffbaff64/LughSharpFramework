@@ -39,6 +39,7 @@ public class ApplicationConfiguration
     // General Application Configuration
     // ========================================================================
 
+    /// <inheritdoc cref="HdpiMode.Logical"/>
     public HdpiMode HdpiMode { get; set; } = HdpiMode.Logical;
 
     // ------------------------------------------
@@ -64,9 +65,9 @@ public class ApplicationConfiguration
     public int  Stencil                { get; set; }
     public int  Samples                { get; set; }
     public int  Red                    { get; set; } = 0b1000;
-    public int  Green                  { get; set; } = 0b1000;
-    public int  Blue                   { get; set; } = 0b1000;
-    public int  Alpha                  { get; set; } = 0b1000;
+    public int  Green                  { get; set; } = 0b0100;
+    public int  Blue                   { get; set; } = 0b0010;
+    public int  Alpha                  { get; set; } = 0b0001;
     public bool TransparentFramebuffer { get; set; }
 
     // ------------------------------------------
@@ -124,7 +125,7 @@ public class ApplicationConfiguration
     public bool InitialVisibility { get; set; } = true;
 
     /// <summary>
-    /// Sets whether to use VSync.
+    /// Sets whether to use VSync. This is set to <c>true</c> by default.
     /// <para>
     /// This setting can be changed anytime at runtime via <see cref="IGraphicsDevice.SetVSync(bool)"/>.
     /// </para>
@@ -442,7 +443,7 @@ public class ApplicationConfiguration
     /// </summary>
     /// <param name="width"> the width of the window (default 640) </param>
     /// <param name="height">the height of the window (default 480) </param>
-    public void SetWindowedMode( int width, int height )
+    public void SetWindowedMode( int width = 640, int height = 480 )
     {
         WindowWidth  = width;
         WindowHeight = height;

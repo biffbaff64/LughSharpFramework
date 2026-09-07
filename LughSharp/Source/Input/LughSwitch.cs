@@ -1,4 +1,4 @@
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
 //
 // Copyright (c) 2024 Circa64 Software Projects / Richard Ikin.
@@ -22,24 +22,66 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Audio.Maponus.Decoding;
+namespace LughSharp.Source.Input;
 
-/// <summary>
-/// This struct describes all error codes that can be thrown
-/// in BistreamExceptions.
-/// </summary>
 [PublicAPI]
-[StructLayout( LayoutKind.Sequential )]
-public struct BitstreamErrors
+public class LughSwitch : ILughButton
 {
-    public const int BitstreamLast     = 0x1ff;
-    public const int BitstreamError    = 0x100;
-    public const int DecoderError      = 0x200;
-    public const int UnknownError      = BitstreamError + 0;
-    public const int UnknownSampleRate = BitstreamError + 1;
-    public const int StreaError        = BitstreamError + 2;
-    public const int UnexpectedEof     = BitstreamError + 3;
-    public const int StreamEof         = BitstreamError + 4;
+    public bool IsPressed  { get; set; } = false;
+    public bool IsDisabled { get; set; } = false;
+    public bool IsDrawable { get; set; } = false;
+
+    // ========================================================================
+
+    /// <inheritdoc />
+    public bool CheckPress( int touchX, int touchY )
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
+    public bool CheckRelease( int touchX, int touchY )
+    {
+        return false;
+    }
+
+    /// <inheritdoc />
+    public void Press()
+    {
+        if ( !IsDisabled )
+        {
+            IsPressed = true;
+        }
+    }
+
+    /// <inheritdoc />
+    public void PressConditional( bool condition )
+    {
+        IsPressed = condition;
+    }
+
+    /// <inheritdoc />
+    public void Release()
+    {
+    }
+
+    /// <inheritdoc />
+    public void ToggleDisabled()
+    {
+        IsDisabled = !IsDisabled;
+    }
+
+    /// <inheritdoc />
+    public void TogglePressed()
+    {
+        IsPressed = !IsPressed;
+    }
+
+    /// <inheritdoc />
+    public ILughButton.Type GetSwitchType()
+    {
+        return ILughButton.Type.Switch;
+    }
 }
 
 // ============================================================================

@@ -72,11 +72,11 @@ public class Animator
         if ( atlasRegion != null )
         {
             TextureRegion[] splits     = atlasRegion.SplitInto( frameWidth, frameHeight );
-            var             animFrames = new TextureRegion[ splits.Length ];
+            var             AnimFrames = new TextureRegion[ splits.Length ];
 
-            Array.Copy( splits, animFrames, splits.Length );
+            Array.Copy( splits, AnimFrames, splits.Length );
 
-            var animation = new Animation< TextureRegion >( frameDuration / 6.0f, animFrames )
+            var animation = new Animation< TextureRegion >( frameDuration / 6.0f, AnimFrames )
             {
                 PlayMode = playMode,
             };
@@ -110,11 +110,11 @@ public class Animator
         Guard.Against.Null( asset );
 
         TextureRegion[] splits     = asset.SplitInto( frameWidth, frameHeight );
-        var             animFrames = new TextureRegion[ splits.Length ];
+        var             AnimFrames = new TextureRegion[ splits.Length ];
 
-        Array.Copy( splits, animFrames, splits.Length );
+        Array.Copy( splits, AnimFrames, splits.Length );
 
-        var animation = new Animation< TextureRegion >( frameDuration / 6f, animFrames )
+        var animation = new Animation< TextureRegion >( frameDuration / 6f, AnimFrames )
         {
             PlayMode = playMode
         };

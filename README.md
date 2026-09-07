@@ -2,7 +2,7 @@
 ( Heavily Work In Progress )
 
 
-C# 2D Game Framework project inspired by, but not a direct copy of, the Java LibGDX Game Framework.#
+C# 2D Game Framework project inspired by, but not a direct copy of, the Java LibGDX Game Framework.
 The original reason for this project was to learn C# and to gain experience with C#, as my exposure
 that language, and OOP in general was very limited ( I've spent most of my career with C and Assembly
 languages ).
@@ -34,48 +34,31 @@ IN PROGRESS:
 
 - Audio needs testing and/or finishing.
 - TiledMapPacker support.
+- Box2D Physics support.
 - Scene2D UI is not yet complete.
       1. I'm currently testing the UI Actors and their functionality.
       2. I'm working on adding StyleRegistry and StyleFactory classes to enable
          creation and use of Scene2D UI Actors without the need for Json Skin files,
          although support for Json Skins will still be retained.
+    - Something for consideration:
 
-        - Button              - Done
-        - CheckBox            - Done
-        - Dialog              - 
-        - ImageButton         - Done
-        - ImageTextButton     - Done
-        - Label               - Done
-        - ListBox             - Done
-        - ProgressBar         - Done
-        - Scene2DImage        - Done
-        - ScrollPane          - Done
-        - SelectBox           - 
-        - Slider              - Done
-        - SplitPane           - 
-        - Table               - 
-        - TextArea            - Done
-        - TextButton          - Done
-        - TextField           - Done
-        - TextTooltip         - 
-        - Tooltip             - 
-        - Touchpad            - 
-        - Tree                - 
-        - Window              - 
+    All Styles should provide a fully defined default style. This will remove any possibility
+    of problems with the default style not being defined..
 
-- Something for consideration:
-
-  All Styles should provide a fully defined default style. This will remove any possibility
-  of problems with the default style not being defined..
+- File GLBindings.cs needs splitting up into multiple files, using 'partial', because of
+  the size of it. It's far too big to be manageable.
+  I've begun arranging the methods into #regions to help with this.
 
 
 TODO:
 -----
 
-- Box2D Physics support.
 - 3D Graphics needs testing and/or finishing.
 - 2D Particle System needs testing and/or finishing.
 - Distance Field Font generation.
+- Wiki
+- 
+
 
 TESTS NEEDED:
 -------------
@@ -90,6 +73,7 @@ TESTS NEEDED:
 - Input
 - Scene2D UI
 - Particle Effects
+- Physics
 - 
 
 FUTURE UPDATES:

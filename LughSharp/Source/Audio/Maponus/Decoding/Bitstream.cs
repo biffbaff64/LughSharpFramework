@@ -99,6 +99,8 @@ public class Bitstream
     /// </summary>
     private int _wordPointer;
 
+    // ========================================================================
+    
     /// <summary>
     /// Create a IBitstream that reads data from a given InputStream.
     /// </summary>

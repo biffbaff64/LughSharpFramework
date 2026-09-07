@@ -24,7 +24,7 @@
 
 using Exception = System.Exception;
 
-namespace LughSharp.Source.Audio.Maponus.Decoding;
+namespace LughSharp.Source.Collections;
 
 [Serializable]
 [PublicAPI]

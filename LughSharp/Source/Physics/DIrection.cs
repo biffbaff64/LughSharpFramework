@@ -48,6 +48,34 @@ public class Direction( int x, int y )
     // ========================================================================
 
     /// <summary>
+    /// Default constructor, initialises both <c>X</c> and <c>Y</c> to zero.
+    /// </summary>
+    public Direction() : this( 0, 0 )
+    {
+    }
+
+    /// <summary>
+    /// Sets the <c>X</c> and <c>Y</c> properties to the specified values.
+    /// </summary>
+    /// <param name="x"> The new X value. </param>
+    /// <param name="y"> The new Y value. </param>
+    public void Set( int x, int y )
+    {
+        this.X = x;
+        this.Y = y;
+    }
+
+    /// <summary>
+    /// Sets the <c>X</c> and <c>Y</c> properties to the X and Y values
+    /// from the supplied <see cref="Direction"/> object.
+    /// </summary>
+    public void Set( Direction dir )
+    {
+        this.X = dir.X;
+        this.Y = dir.Y;
+    }
+    
+    /// <summary>
     /// Clears X and Y directions by setting them to DirectionStill.
     /// </summary>
     public void StandStill()

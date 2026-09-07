@@ -37,6 +37,7 @@ public enum StencilFunction
     Always   = IGL.GLAlways
 }
 
+[PublicAPI]
 public enum StencilOp
 {
     Keep          = IGL.GLKeep,

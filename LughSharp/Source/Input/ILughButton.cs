@@ -22,12 +22,48 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Audio;
+
+namespace LughSharp.Source.Input;
 
 [PublicAPI]
-public interface IAudioDeviceAsync
+public interface ILughButton
 {
+    [PublicAPI]
+    enum Type
+    {
+        Switch,
+        GameButton,
+        AnimatedButton,
+        ButtonRegion,
+    }
+
+    // ========================================================================
+
+    bool IsPressed { get; set; }
+
+    bool IsDisabled { get; set; }
+
+    bool IsDrawable { get; set; }
+
+    // ========================================================================
+    
+    bool CheckPress( int touchX, int touchY );
+
+    bool CheckRelease( int touchX, int touchY );
+
+    void Press();
+
+    void PressConditional( bool condition );
+
+    void Release();
+
+    void ToggleDisabled();
+
+    void TogglePressed();
+
+    Type GetSwitchType();
 }
 
 // ============================================================================
 // ============================================================================
+

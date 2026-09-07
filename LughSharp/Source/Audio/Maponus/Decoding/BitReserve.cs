@@ -52,6 +52,8 @@ public class BitReserve
     private int _bufByteIdx;
     private int _offset;
     private int _totbit;
+    
+    // ========================================================================
 
     /// <summary>
     /// Return totbit Field.

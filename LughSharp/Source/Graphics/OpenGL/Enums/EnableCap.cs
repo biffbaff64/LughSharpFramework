@@ -71,3 +71,7 @@ public enum EnableCap
     SampleAlphaToOne      = IGL.GLSampleAlphaToOne,
     SampleCoverage        = IGL.GLSampleCoverage
 }
+
+// ============================================================================
+// ============================================================================
+

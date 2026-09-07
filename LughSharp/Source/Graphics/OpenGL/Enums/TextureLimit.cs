@@ -42,3 +42,7 @@ public enum TextureLimit
     // The following is the number of texture coordinates available which usually is 8
     MaxTextureCoords = IGL.GLMaxTextureCoords
 }
+
+// ============================================================================
+// ============================================================================
+

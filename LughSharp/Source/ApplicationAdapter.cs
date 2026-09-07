@@ -31,6 +31,10 @@ namespace LughSharp.Source;
 [PublicAPI]
 public class ApplicationAdapter : IApplicationListener
 {
+    protected bool IsDisposed = false;
+
+    // ========================================================================
+    
     /// <summary>
     /// Called when the <see cref="IApplication"/> is first created.
     /// </summary>
@@ -41,6 +45,7 @@ public class ApplicationAdapter : IApplicationListener
     /// <summary>
     /// Called when the <see cref="IApplication"/> should update itself.
     /// </summary>
+    /// <param name="delta"> The time elapsed since the last update. </param>
     public virtual void Update( float delta )
     {
     }
@@ -48,6 +53,7 @@ public class ApplicationAdapter : IApplicationListener
     /// <summary>
     /// Called when the <see cref="IApplication"/> should draw itself.
     /// </summary>
+    /// <param name="delta"> The time elapsed since the last render call. </param>
     public virtual void Render( float delta )
     {
     }
@@ -101,6 +107,11 @@ public class ApplicationAdapter : IApplicationListener
     {
         if ( disposing )
         {
+            if ( !IsDisposed )
+            {
+            }
+            
+            IsDisposed = true;
         }
     }
 }

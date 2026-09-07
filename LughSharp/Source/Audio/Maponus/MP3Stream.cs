@@ -29,20 +29,43 @@ using Decoder = LughSharp.Source.Audio.Maponus.Decoding.Decoder;
 namespace LughSharp.Source.Audio.Maponus;
 
 /// <summary>
-/// Provides a view of the sequence of bytes that are produced during the conversion of an MP3 stream
-/// into a 16-bit PCM-encoded ("WAV" format) stream.
+/// Provides a view of the sequence of bytes that are produced during the conversion
+/// of an MP3 stream into a 16-bit PCM-encoded ("WAV" format) stream.
 /// </summary>
 [PublicAPI]
 public class Mp3Stream : Stream
 {
-    // ========================================================================
+    /// <summary>
+    /// Gets the frequency of the audio being decoded. Updated every call to
+    /// Read() or DecodeFrames(), to reflect the most recent header information
+    /// from the MP3 Stream.
+    /// </summary>
+    public int Frequency { get; private set; } = -1;
 
+    /// <summary>
+    /// Gets the number of channels available in the audio being decoded.
+    /// Updated every call to Read() or DecodeFrames(), to reflect the most
+    /// recent header information from the MP3 Stream.
+    /// </summary>
+    public short ChannelCount { get; private set; } = -1;
+
+    /// <summary>
+    /// Gets the PCM output format of this stream.
+    /// </summary>
+    public SoundFormat Format { get; }
+
+    public bool IsEof { get; protected set; }
+
+    // ========================================================================
+    
     private const int BackStreamByteCountRep = 0;
 
     private readonly Bitstream         _bitStream;
     private readonly Buffer16BitStereo _buffer;
     private readonly Decoder           _decoder = new( Decoder.DefaultParams );
     private readonly Stream            _sourceStream;
+
+    // ========================================================================
 
     /// <summary>
     /// Creates a new stream instance using the provided filename, and the default
@@ -91,8 +114,6 @@ public class Mp3Stream : Stream
             _buffer.DoubleMonoToStereo = true;
         }
     }
-
-    public bool IsEof { get; protected set; }
 
     /// <summary>
     /// Gets the chunk size.
@@ -144,25 +165,6 @@ public class Mp3Stream : Stream
             IsEof                  |= !ReadFrame();
         }
     }
-
-    /// <summary>
-    /// Gets the frequency of the audio being decoded. Updated every call to
-    /// Read() or DecodeFrames(), to reflect the most recent header information
-    /// from the MP3 Stream.
-    /// </summary>
-    public int Frequency { get; private set; } = -1;
-
-    /// <summary>
-    /// Gets the number of channels available in the audio being decoded.
-    /// Updated every call to Read() or DecodeFrames(), to reflect the most
-    /// recent header information from the MP3 Stream.
-    /// </summary>
-    public short ChannelCount { get; private set; } = -1;
-
-    /// <summary>
-    /// Gets the PCM output format of this stream.
-    /// </summary>
-    public SoundFormat Format { get; }
 
     /// <summary>
     /// Clears all buffers for this stream and causes any buffered data to be

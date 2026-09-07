@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Collections;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Source.Audio.Maponus.Decoding;

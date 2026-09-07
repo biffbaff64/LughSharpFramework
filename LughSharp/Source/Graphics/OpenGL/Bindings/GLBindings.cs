@@ -5186,6 +5186,13 @@ public unsafe partial class GLBindings : IGLBindings
         return new IntPtr( _glFenceSync( condition, flags ) );
     }
 
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+    // ========================================================================
+
+    #region Sampler Bindings
+
     /// <inheritdoc />
     public void GetMultisamplefv( GLenum pname, GLuint index, GLfloat* val )
     {
@@ -5584,7 +5591,9 @@ public unsafe partial class GLBindings : IGLBindings
     {
         return CreateSamplers( 1 )[ 0 ];
     }
-
+    
+    #endregion Sampler Bindings
+    
     // ========================================================================
     // ========================================================================
     // ========================================================================
