@@ -29,10 +29,16 @@ namespace LughSharp.Source.Maths;
 /// for use when they are all that is needed.
 /// </summary>
 [PublicAPI]
-public class Vec2< T >
+public class Vec2< T >( T x = default!, T y = default! )
 {
-    public T X { get; set; } = default!;
-    public T Y { get; set; } = default!;
+    public T X { get; set; } = x;
+    public T Y { get; set; } = y;
+    
+    public void Set( T x, T y )
+    {
+        this.X = x;
+        this.Y = y;
+    }
 }
 
 /// <summary>
@@ -40,11 +46,18 @@ public class Vec2< T >
 /// for use when they are all that is needed.
 /// </summary>
 [PublicAPI]
-public class Vec3< T >
+public class Vec3< T >( T x = default!, T y = default!,  T z = default! )
 {
-    public T X { get; set; } = default!;
-    public T Y { get; set; } = default!;
-    public T Z { get; set; } = default!;
+    public T X { get; set; } = x;
+    public T Y { get; set; } = y;
+    public T Z { get; set; } = z;
+    
+    public void Set( T x, T y , T z )
+    {
+        this.X = x;
+        this.Y = y;
+        this.Z = z;
+    }
 }
 
 // ========================================================================

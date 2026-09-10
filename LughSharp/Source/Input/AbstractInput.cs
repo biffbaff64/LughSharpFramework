@@ -103,11 +103,13 @@ public abstract class AbstractInput : IInput
         }
     }
 
+    /// <inheritdoc />
     public virtual void AddOverrideKey( int keycode )
     {
         _keysToOverride.Add( keycode );
     }
 
+    /// <inheritdoc />
     public virtual void RemoveOverrideKey( int keycode )
     {
         _keysToOverride.Remove( keycode );

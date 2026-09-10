@@ -57,7 +57,7 @@ public class Vector2 : IVector< Vector2 >
     // ========================================================================
 
     /// <summary>
-    /// Constructs a new vector at (0,0)
+    /// Constructs a new vector at ( 0, 0 )
     /// </summary>
     public Vector2() : this( 0, 0 )
     {
@@ -418,6 +418,14 @@ public class Vector2 : IVector< Vector2 >
     public float Dot( float ox, float oy )
     {
         return ( X * ox ) + ( Y * oy );
+    }
+
+    public Vector2 Scl( float scalar )
+    {
+        X *= scalar;
+        Y *= scalar;
+
+        return this;
     }
 
     public Vector2 Scl( float x, float y )

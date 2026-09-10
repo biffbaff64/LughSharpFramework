@@ -677,17 +677,17 @@ LUGHSHARP/SOURCE/INPUT
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - AbstractInput
-    -      -      -      - GestureDetector          - Mobile devices, do i keep this?
-    -      -      - DONE - IInput
-    -      -      -      - IInputProcessor
-    - DONE -      - DONE - ILughButton
-    -      -      -      - InputAdapter
-    -      -      -      - InputEventBuffer
+    - DONE - DONE - DONE - AbstractInput
+    - IP   - IP   - DONE - GestureDetector          - Mobile devices, do i keep this?
+    - DONE - IP   - DONE - IInput
+    - DONE - DONE - DONE - IInputProcessor
+    - DONE - DONE - DONE - ILughButton
+    - DONE - DONE - DONE - InputAdapter
+    - DONE - DONE - DONE - InputEventBuffer
     - DONE - DONE - DONE - InputMultiplexer
     - DONE - DONE - DONE - InputUtils
     - DONE - DONE - DONE - ITextInputWrapper
-    -      -      - DONE - LughSwitch
+    - DONE - DONE - DONE - LughSwitch
     - DONE - DONE - DONE - NativeInputConfiguration
     -      -      - DONE - RemoteInput
     -      -      - DONE - RemoteSender

@@ -63,6 +63,10 @@ public class LughSwitch : ILughButton
     /// <inheritdoc />
     public void Release()
     {
+        if ( !IsDisabled )
+        {
+            IsPressed = false;
+        }
     }
 
     /// <inheritdoc />
@@ -78,9 +82,9 @@ public class LughSwitch : ILughButton
     }
 
     /// <inheritdoc />
-    public ILughButton.Type GetSwitchType()
+    public ILughButton.LughButtonType GetSwitchType()
     {
-        return ILughButton.Type.Switch;
+        return ILughButton.LughButtonType.Switch;
     }
 }
 
