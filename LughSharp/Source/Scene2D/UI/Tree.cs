@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI.Styles;
@@ -592,7 +593,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         var over = false;
 
         if ( ( node == OverNode )
-          && ( Engine.App.AppType == Platform.ApplicationType.WindowsGL )
+          && ( Engine.App.AppType == ApplicationType.WindowsGL )
           && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
         {
             float mouseX = ScreenToLocalCoordinates( _tmp.Set( Engine.Input.GetX(), 0 ) ).X;

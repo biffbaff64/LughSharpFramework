@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
+
 namespace LughSharp.Source;
 
 /// <summary>
@@ -88,9 +90,9 @@ namespace LughSharp.Source;
 public interface IApplication : IDisposable
 {
     /// <summary>
-    /// What <see cref="Platform.ApplicationType"/> the application has.
+    /// What <see cref="ApplicationType"/> the application has.
     /// </summary>
-    Platform.ApplicationType AppType { get; }
+    ApplicationType AppType { get; }
 
     /// <summary>
     /// Represents an interface to interact with the clipboard functionality.

@@ -22,30 +22,14 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Physics.Box2D;
+namespace LughSharp.Source.Input;
 
 [PublicAPI]
-public class Box2D
+public class GameButton
 {
-    public const string Box2DDllFile = "lib/net9.0/box2d.dll";
-
-    // ========================================================================
     
-    private Box2D()
-    {
-    }
-
-    /// <summary>
-    /// Initialise the Box2D native library. This must be called before any of the box2d
-    /// classes/methods can be used, with the exception of the <see cref="World"/> class,
-    /// which will also cause the Box2D natives to be loaded.
-    /// </summary>
-    public static void Init()
-    {
-        //TODO:
-//        new SharedLibraryLoader().load( "gdx-box2d" );
-    }
 }
 
 // ============================================================================
 // ============================================================================
+

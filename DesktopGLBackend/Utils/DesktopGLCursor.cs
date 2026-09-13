@@ -110,14 +110,14 @@ public class DesktopGLCursor : ICursor, IDisposable
     {
         //@formatter:off
         Cursor? glCursor = systemCursor switch
-                           {
-                               ICursor.SystemCursor.Ibeam            => Glfw.CreateStandardCursor( CursorShape.Ibeam ),
-                               ICursor.SystemCursor.Crosshair        => Glfw.CreateStandardCursor( CursorShape.Crosshair ),
-                               ICursor.SystemCursor.Hand             => Glfw.CreateStandardCursor( CursorShape.PointingHand ),
-                               ICursor.SystemCursor.HorizontalResize => Glfw.CreateStandardCursor( CursorShape.Hresize ),
-                               ICursor.SystemCursor.VerticalResize   => Glfw.CreateStandardCursor( CursorShape.Vresize ),
-                               var _                                 => Glfw.CreateStandardCursor( CursorShape.Arrow )
-                           };
+           {
+               ICursor.SystemCursor.Ibeam            => Glfw.CreateStandardCursor( CursorShape.Ibeam ),
+               ICursor.SystemCursor.Crosshair        => Glfw.CreateStandardCursor( CursorShape.Crosshair ),
+               ICursor.SystemCursor.Hand             => Glfw.CreateStandardCursor( CursorShape.PointingHand ),
+               ICursor.SystemCursor.HorizontalResize => Glfw.CreateStandardCursor( CursorShape.Hresize ),
+               ICursor.SystemCursor.VerticalResize   => Glfw.CreateStandardCursor( CursorShape.Vresize ),
+               var _                                 => Glfw.CreateStandardCursor( CursorShape.Arrow )
+           };
         //@formatter:on
 
         SystemCursors[ systemCursor ] = glCursor;

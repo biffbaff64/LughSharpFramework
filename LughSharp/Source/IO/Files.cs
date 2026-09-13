@@ -43,11 +43,20 @@ public class Files : IFiles
     /// The ContentRoot property does not include a trailing slash. If one is included
     /// when setting the property, it will be removed.
     /// <para>
-    /// Correct usage:
+    /// This property is used together with <see cref="AssemblyDirectory"/> to point correctly
+    /// at the assets folder, creating the property <see cref="AssetsRoot"/>. i.e.
     /// <code>
-    /// Files.ContentRoot = "Content";
-    /// const string AssetPath = $"{Files.ContentRoot}/Textures/sprite.png";  
-    /// </code>
+    /// AssemblyDirectory = "C:\Development\Projects\CSharp\MyGame\bin\Debug\net10.0\"
+    /// ContentRoot = "Assets"
+    /// AssetsRoot = $"{AssembltDirectory}{ContentRoot}";
+    /// <br/>
+    ///     Console.WriteLine( Files.AssetsRoot );
+    /// <br/>
+    /// will output:-
+    /// <br/>
+    ///     C:\Development\Projects\CSharp\MyGame\bin\Debug\net10.0\Assets
+    /// <br/>
+    /// </code> 
     /// </para>
     /// </remarks>
     public static string ContentRoot
@@ -114,7 +123,7 @@ public class Files : IFiles
     public static string AssemblyDirectory => Path.GetDirectoryName( AssemblyPath ) + "\\";
 
     /// <summary>
-    /// The full path to the applicationsbase assets folder.
+    /// The full path to the applications base assets folder.
     /// a valid example path is:-
     /// <code>
     /// C:\Development\Projects\CSharp\TestProject\bin\Debug\net9.0\Assets\
@@ -122,6 +131,17 @@ public class Files : IFiles
     /// </summary>
     public static string AssetsRoot => $@"{AssemblyDirectory}{ContentRoot}\";
 
+    /// <summary>
+    /// The full path to a framework specific folder in the user profile folder.
+    /// <para>
+    /// An example External path would be:-
+    /// <code>
+    /// C:\Users\joe_blogs\.lughsharp
+    /// </code>
+    /// </para>
+    /// </summary>
+    public static string LughSharpUser => @$"{ExternalPath}.lughsharp";
+    
     // ========================================================================
     // ========================================================================
 
@@ -652,7 +672,7 @@ public class Files : IFiles
     // ========================================================================
     // ========================================================================
     // General Utility Methods
-
+    
     /// <summary>
     /// Retrieves a file handle based on the specified path and path type.
     /// </summary>
@@ -921,11 +941,12 @@ public class Files : IFiles
         Logger.Debug( $"InternalPath        : {InternalPath}" );
         Logger.Debug( $"LocalPath           : {LocalPath}" );
         // --------------------------------------------------------------------
-        Logger.Debug( $"ContentRoot         : {ContentRoot}" );
-        // --------------------------------------------------------------------
         Logger.Debug( $"AssemblyPath        : {AssemblyPath}" );
         Logger.Debug( $"AssemblyDirectory   : {AssemblyDirectory}" );
+        Logger.Debug( $"ContentRoot         : {ContentRoot}" );
         Logger.Debug( $"AssetsPath          : {AssetsRoot}" );
+        // --------------------------------------------------------------------
+        Logger.Debug( $"LughSharpUser       : {LughSharpUser}" );
     }
     #endif
 }

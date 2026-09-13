@@ -29,7 +29,7 @@ using DotGLFW;
 
 using JetBrains.Annotations;
 
-using LughSharp.Source;
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics;
 
 namespace DesktopGLBackend;

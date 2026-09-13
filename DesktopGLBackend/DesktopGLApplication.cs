@@ -31,6 +31,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Source;
 using LughSharp.Source.Collections;
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.IO;
 using LughSharp.Source.Utils;
@@ -38,7 +39,7 @@ using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
 
 using Monitor = DotGLFW.Monitor;
-using Platform = LughSharp.Source.Platform;
+using Platform = LughSharp.Source.Config.Platform;
 
 namespace DesktopGLBackend;
 
@@ -117,7 +118,7 @@ public class DesktopGLApplication : IApplication
         //
         // This MUST be the first call, so that the Logger and Engine.App
         // global are initialised correctly.
-        Engine.Initialise( this );
+        Engine.Initialise( this, ApplicationType.WindowsGL );
 
         // ====================================================================
         // ====================================================================
@@ -131,7 +132,7 @@ public class DesktopGLApplication : IApplication
         // if it has no value at this point.
         AppConfig       =   DesktopGLApplicationConfiguration.Copy( config );
         AppConfig.Title ??= listener.GetType().Name;
-
+        
         // ====================================================================
 
         // Initialise the global environment shortcuts. 'Engine.Audio', 'Engine.Files',
@@ -154,7 +155,7 @@ public class DesktopGLApplication : IApplication
         // immediately (see CreateWindow) and tracked here.
         Windows.Add( CreateWindow( AppConfig, listener, null ) );
 
-        Engine.Graphics.SetBackend( Platform.ApplicationType.WindowsGL, OglProfile );
+        Engine.Graphics.SetBackend( Platform.TargetPlatform, OglProfile );
     }
 
     // ========================================================================
@@ -301,7 +302,7 @@ public class DesktopGLApplication : IApplication
 
             Engine.Audio?.Update();
 
-            // Glfw.SwapBuffers is called in window.Update().
+            // NOTE: Glfw.SwapBuffers is called in window.Update().
             DotGLFW.Glfw.PollEvents();
         }
 
@@ -312,8 +313,11 @@ public class DesktopGLApplication : IApplication
     // ========================================================================
 
     /// <summary>
+    /// Initialises GLFW (the Graphics Library FrameWork).
     /// </summary>
-    /// <exception cref="LughRuntimeException"></exception>
+    /// <exception cref="LughRuntimeException">
+    /// Thrown if GLFW failed to initialise.
+    /// </exception>
     public void InitialiseGlfw()
     {
         try
@@ -433,9 +437,9 @@ public class DesktopGLApplication : IApplication
     }
 
     /// <summary>
-    /// What <see cref="Platform.ApplicationType"/> the application has.
+    /// What <see cref="ApplicationType"/> the application has.
     /// </summary>
-    public Platform.ApplicationType AppType => Platform.ApplicationType.WindowsGL;
+    public ApplicationType AppType => ApplicationType.WindowsGL;
 
     /// <summary>
     /// Creates the input device for this application window.

@@ -81,6 +81,8 @@ public class Gdx2DPixmap : IDisposable
     public uint   Scale         { get; set; }
     public byte[] Pixels        { get; set; } = [ ];
 
+    private const string DllFile = "lib/net9.0/gdx2d.dll";
+    
     // ========================================================================
     // ========================================================================
 

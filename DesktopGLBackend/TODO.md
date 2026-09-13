@@ -7,86 +7,59 @@
 BACKENDS/DESKTOPGL
 ------------------
 
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - IP   - DesktopGLApplication
-    - IP   - IP   - DesktopGLApplicationConfiguration
-    - IP   - IP   - DesktopGLNativesLoader
-    - IP   - IP   - DesktopGLNet
-    - IP   - IP   - DesktopWindowCallbacks
-    - DONE - DONE - IDesktopGLApplicationBase
-    - DONE - IP   - Sync
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - IP   - DONE - DesktopGLApplication
+    - IP   - IP   - DONE - DesktopGLApplicationConfiguration
+    - IP   - IP   - DONE - DesktopGLNet
+    - DONE - IP   - DONE - Sync
 
 BACKENDS/DESKTOPGL/AUDIO
 ------------------------
 
-    CODE   DOCUMENT
-    ----   --------
-    - IP   - IP   - GdxSoundAudioRecorder
-    - DONE - DONE - IGLAudio
-    - IP   - IP   - Mp3
-    - IP   - IP   - Ogg
-    - IP   - IP   - OggInputStream
-    - IP   - IP   - OpenALAudio
-    - IP   - IP   - OpenALAudioDevice
-    - IP   - IP   - OpenALMusic
-    - IP   - IP   - OpenALSound
-    - IP   - IP   - Wav
-
-BACKENDS/DESKTOPGL/AUDIO/MOCK
------------------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - IP   - MockAudio
-    - DONE - IP   - MockAudioDevice
-    - DONE - IP   - MockAudioRecorder
-    - DONE - IP   - MockMusic
-    - DONE - IP   - MockSound
-
-BACKENDS/DESKTOPGL/FILES
-------------------------
-
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - IP   - DesktopGLFileHandle
-    - DONE - DONE - DesktopGLFiles
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - IP   - IP   - DONE - AudioManager
+    - IP   - IP   - DONE - Mp3
+    - IP   - IP   - DONE - Ogg
+    - IP   - IP   - DONE - OggInputStream
+    - IP   - IP   - DONE - OpenALAudio
+    - IP   - IP   - DONE - OpenALAudioDevice
+    - IP   - IP   - DONE - OpenALMusic
+    - IP   - IP   - DONE - OpenALSound
+    - IP   - IP   - DONE - Wav
 
 BACKENDS/DESKTOPGL/GRAPHICS
 ---------------------------
 
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - IP   - DesktopGLGraphics
-    - DONE - IP   - DesktopGLGraphics.DesktopGLDisplayMode
-    - DONE - IP   - DesktopGLGraphics.DesktopGLMonitor
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - IP   - DONE - DesktopGLGraphics
 
 BACKENDS/DESKTOPGL/INPUT
 ------------------------
 
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - IP   - DefaultDesktopGLInput
-    - DONE - IP   - IDesktopGLInput
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - IP   - DONE - DefaultDesktopGLInput
+    - DONE - IP   - DONE - IDesktopGLInput
 
 BACKENDS/DESKTOPGL/UTILS
 ------------------------
 
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - DONE - DesktopGLClipboard
-    - DONE - IP   - DesktopGLCursor
-    - DONE - DONE - DesktopGLPreferences
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - DesktopGLClipboard
+    - DONE - IP   - DONE - DesktopGLCursor
+    - DONE - DONE - DONE - DesktopGLPreferences
 
 BACKENDS/DESKTOPGL/WINDOW
 -------------------------
 
-    CODE   DOCUMENT
-    ----   --------
-    - DONE - DONE - DesktopGLWindow
-    - DONE - DONE - DesktopGLWindowConfiguration
-    - DONE - DONE - DesktopGLWindowAdapter
-    - DONE - DONE - IDesktopGLWindowListener
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - DesktopGLWindow
+    - DONE - DONE - DONE - IDesktopGLWindowListener
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -25,6 +25,7 @@
 using System.Diagnostics;
 
 using LughSharp.Source.Collections;
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.Listeners;

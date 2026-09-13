@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL;
 
@@ -65,9 +66,9 @@ public class MipMapGenerator
             return;
         }
 
-        if ( ( Engine.App.AppType == Platform.ApplicationType.Android )
-          || ( Engine.App.AppType == Platform.ApplicationType.WebGL )
-          || ( Engine.App.AppType == Platform.ApplicationType.IOS ) )
+        if ( ( Engine.App.AppType == ApplicationType.Android )
+          || ( Engine.App.AppType == ApplicationType.WebGL )
+          || ( Engine.App.AppType == ApplicationType.IOS ) )
         {
             GenerateMipMapGLES20( target, pixmap );
         }

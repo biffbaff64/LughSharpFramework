@@ -6,6 +6,8 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
         <Title>LughSharp</Title>
+        <AssemblyName>LughSharp</AssemblyName>
+        <RootNamespace>LughSharp</RootNamespace>
         <Authors>Richard Ikin</Authors>
         <Version>0.1.0</Version>
         <Description>C# 2D/3D Game Framework.</Description>
@@ -14,20 +16,18 @@
         <IsWindows Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Windows)))' == 'true'">true</IsWindows>
         <IsOSX Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::OSX)))' == 'true'">true</IsOSX>
         <IsLinux Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))' == 'true'">true</IsLinux>
-        <PackageProjectUrl>https://github.com/biffbaff64/LughSharpFrameworkFramework</PackageProjectUrl>
         <AssemblyVersion>0.0.0.1</AssemblyVersion>
         <FileVersion>0.0.0.1</FileVersion>
         <PackageTags>CSharp;2D;Framework;OpenGL;</PackageTags>
-        <Copyright>Copyright 2024 Circa64 Software Projects</Copyright>
-        <Company>Circa64 Software Projects</Company>
         <PackageReleaseNotes>Release v0.1.0 for use with my game project. This will most likely still have issues and they will be fixed along the way</PackageReleaseNotes>
-        <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
-        <AssemblyName>LughSharp</AssemblyName>
-        <RootNamespace>LughSharp</RootNamespace>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/biffbaff64/LughSharpFramework</PackageProjectUrl>
+        <!--        <PackageIcon>lughicon.png</PackageIcon>-->
+        <Copyright>Copyright 2024 Circa64 Software Projects</Copyright>
+        <Company>Circa64 Software Projects</Company>
+        <UserSecretsId>15077a63-55d3-46e9-b882-0b5cf985e7cc</UserSecretsId>
         <TargetFramework>net9.0</TargetFramework>
-        <PackageIcon>lughicon.png</PackageIcon>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(IsWindows)'=='true'">
@@ -80,60 +80,16 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\README.md" Pack="true" PackagePath="\"/>
-        <Content Include="lib\net9.0\gdx2d.dll" Pack="true" PackagePath="lib\net9.0\">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Content Include="Assets\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="lib\net9.0\freetype_x86.dll" Pack="true" PackagePath="lib\net9.0\">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <Content Include="lib\**\*.*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="lib\net9.0\freetype_x64.dll" Pack="true" PackagePath="lib\net9.0\">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="AlisonTrout.txt" />
-        <None Remove="Assets\Circa64_Main_Logo.png" />
-        <Content Include="Assets\Circa64_Main_Logo.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="Assets\lughicon.png" />
-        <Content Include="Assets\lughicon.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Remove="Assets\lughlogo.png" />
-        <Content Include="Assets\lughlogo.png">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <None Include="bin\Debug\net9.0\Assets\lughicon.png">
-          <Pack>True</Pack>
-          <PackagePath></PackagePath>
-        </None>
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="Assets\Shaders\ColorTest.glsl.frag">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\ColorTest.glsl.vert">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\Default.glsl.frag">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\Default.glsl.vert">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\Quad.frag">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\Quad.vert">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\Simple.glsl.frag">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="Assets\Shaders\Simple.glsl.vert">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
+        <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -141,10 +97,5 @@
             <Pack>true</Pack>
             <PackagePath>runtimes</PackagePath>
         </Content>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Source\Graphics\Packing\" />
-      <Folder Include="Source\Physics\Box2D\Graphics\" />
     </ItemGroup>
 </Project>

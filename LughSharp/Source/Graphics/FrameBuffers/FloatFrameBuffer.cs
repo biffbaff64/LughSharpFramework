@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Images.TextureData;
 using LughSharp.Source.Graphics.OpenGL;
@@ -93,7 +94,7 @@ public class FloatFrameBuffer : FrameBuffer
 
         var result = new Texture2D( data );
 
-        if ( Engine.App.AppType == Platform.ApplicationType.WindowsGL )
+        if ( Engine.App.AppType == ApplicationType.WindowsGL )
         {
             result.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         }

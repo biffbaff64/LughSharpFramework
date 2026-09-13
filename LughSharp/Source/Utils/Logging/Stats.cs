@@ -35,10 +35,10 @@ namespace LughSharp.Source.Utils.Logging;
 public class Stats
 {
     private static Preferences _prefs;
-    private static object      _lock = new();
-    
+    private static Lock        _lock = new();
+
     // ========================================================================
-    
+
     static Stats()
     {
         _prefs = new Preferences( "statsmeters.stats" );
@@ -53,7 +53,7 @@ public class Stats
     {
         lock ( _lock )
         {
-            return _prefs?.GetInteger( meter, 0 ) ?? 0;
+            return _prefs.GetInteger( meter, 0 );
         }
     }
 

@@ -37,7 +37,7 @@ using LughSharp.Source.IO;
 using LughSharp.Source.Maths;
 
 using Image = DotGLFW.Image;
-using Platform = LughSharp.Source.Platform;
+using Platform = LughSharp.Source.Config.Platform;
 
 namespace DesktopGLBackend.Window;
 

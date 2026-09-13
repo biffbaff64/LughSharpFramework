@@ -25,7 +25,7 @@
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.IO;
 
-namespace LughSharp.Source;
+namespace LughSharp.Source.Config;
 
 /// <summary>
 /// Provides configuration for an application, including settings for graphics, audio,
@@ -216,7 +216,7 @@ public class ApplicationConfiguration
 
         return copy;
     }
-
+    
     /// <summary>
     /// Sets this ApplicationConfiguration settings, using settings from
     /// the supplied ApplicationConfiguration object.

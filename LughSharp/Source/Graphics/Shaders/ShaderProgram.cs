@@ -171,12 +171,19 @@ public class ShaderProgram : IDisposable
         Engine.GL.DeleteShader( _vertexShaderHandle );
         Engine.GL.DeleteShader( _fragmentShaderHandle );
 
-        CacheAttribute( "a_position" );
+//        CacheAttribute( "a_position" );
+//        CacheAttribute( ShaderConstants.AColor );
+//        CacheAttribute( "a_texCoord0" );
+//
+//        CacheUniform( "u_combinedMatrix" );
+//        CacheUniform( "u_texture" );
+        
+        CacheAttribute( ShaderConstants.APosition );
         CacheAttribute( ShaderConstants.AColor );
-        CacheAttribute( "a_texCoord0" );
+        CacheAttribute( ShaderConstants.ATexCoord0 );
 
-        CacheUniform( "u_combinedMatrix" );
-        CacheUniform( "u_texture" );
+        CacheUniform( ShaderConstants.UCombinedMatrix );
+        CacheUniform( ShaderConstants.UTexture );
     }
 
     /// <summary>

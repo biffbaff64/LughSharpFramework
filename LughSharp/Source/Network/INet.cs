@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Source.Network;
@@ -237,7 +239,7 @@ public interface INet : IDisposable
             get => _followRedirects;
             set
             {
-                if ( value || ( Engine.App.AppType != Platform.ApplicationType.WebGL ) )
+                if ( value || ( Engine.App.AppType != ApplicationType.WebGL ) )
                 {
                     _followRedirects = value;
                 }

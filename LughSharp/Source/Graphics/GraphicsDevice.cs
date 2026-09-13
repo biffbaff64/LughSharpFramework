@@ -22,6 +22,7 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.FrameBuffers;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL;
@@ -37,13 +38,24 @@ namespace LughSharp.Source.Graphics;
 [PublicAPI]
 public abstract class GraphicsDevice : IGraphicsDevice
 {
+    /// <summary>
+    /// Represents detailed information about a graphics backend, including the backend type
+    /// and any subcategories associated with it.
+    /// </summary>
+    [PublicAPI]
+    [StructLayout( LayoutKind.Sequential )]
+    public struct BackendData
+    {
+        public BackendType       BackendType { get; set; }
+        public OpenGLSubCategory SubCategory { get; set; }
+    }
+
+    // ========================================================================
+
     public FramebufferConfig BufferConfig          { get; set; } = null!;
     public Color             WindowBackgroundColor { get; set; } = Color.Blue;
 
-    /// <summary>
-    /// Represents detailed information about a graphics backend, including the
-    /// backend type and any subcategories associated with it.
-    /// </summary>
+    /// <inheritdoc cref="BackendData"/>
     public BackendData BackendInfo { get; set; }
 
     /// <summary>
@@ -91,16 +103,16 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     /// <summary>
     /// Sets the target graphics backend for the application, based on the specified
-    /// <see cref="Platform.ApplicationType"/> and <see cref="DotGLFW.OpenGLProfile"/>.
+    /// <see cref="ApplicationType"/> and <see cref="DotGLFW.OpenGLProfile"/>.
     /// </summary>
     /// <param name="appType"></param>
     /// <param name="profile"></param>
     /// <exception cref="LughRuntimeException"></exception>
-    public void SetBackend( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile )
+    public void SetBackend( ApplicationType appType, DotGLFW.OpenGLProfile profile )
     {
         BackendInfo = new BackendData
         {
-            Type = MapApplicationTypeToBackend( appType )
+            BackendType = MapApplicationTypeToBackend( appType )
         };
 
         LughGL.Initialisation.LoadVersion();
@@ -113,15 +125,15 @@ public abstract class GraphicsDevice : IGraphicsDevice
     /// <param name="appType">The application type to map.</param>
     /// <returns>The corresponding backend type.</returns>
     /// <exception cref="LughRuntimeException">Thrown when an unknown application type is provided.</exception>
-    private static BackendType MapApplicationTypeToBackend( Platform.ApplicationType appType )
+    private static BackendType MapApplicationTypeToBackend( ApplicationType appType )
     {
         return appType switch
                {
-                   Platform.ApplicationType.Android     => BackendType.AndroidGLES,
-                   Platform.ApplicationType.WindowsGles => BackendType.OpenGLES,
-                   Platform.ApplicationType.WindowsGL   => BackendType.OpenGL,
-                   Platform.ApplicationType.WebGL       => BackendType.WebGL,
-                   Platform.ApplicationType.IOS         => BackendType.IOSGLES,
+                   ApplicationType.Android     => BackendType.AndroidGLES,
+                   ApplicationType.WindowsGles => BackendType.OpenGLES,
+                   ApplicationType.WindowsGL   => BackendType.OpenGL,
+                   ApplicationType.WebGL       => BackendType.WebGL,
+                   ApplicationType.IOS         => BackendType.IOSGLES,
 
                    // ---------------------------
 
@@ -488,20 +500,6 @@ public abstract class GraphicsDevice : IGraphicsDevice
         GL20,
         GL30,
         GL40
-    }
-
-    // ========================================================================
-
-    /// <summary>
-    /// Represents detailed information about a graphics backend, including the backend type
-    /// and any subcategories associated with it.
-    /// </summary>
-    [PublicAPI]
-    [StructLayout( LayoutKind.Sequential )]
-    public struct BackendData
-    {
-        public BackendType       Type        { get; set; }
-        public OpenGLSubCategory SubCategory { get; set; }
     }
 }
 

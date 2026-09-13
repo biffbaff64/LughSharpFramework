@@ -24,7 +24,7 @@
 
 using RegexUtils = LughSharp.Source.Graphics.Utils.RegexUtils;
 
-namespace LughSharp.Source;
+namespace LughSharp.Source.Config;
 
 /// <summary>
 /// The current Library version, presented in the format:-

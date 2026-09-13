@@ -25,6 +25,7 @@
 using System.Reflection.Metadata;
 
 using LughSharp.Source.Collections;
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.Cameras;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.OpenGL.Enums;
@@ -214,7 +215,7 @@ public class Stage : InputAdapter, IDisposable
         }
 
         // Update over actor for the mouse on the desktop.
-        if ( Engine.App.AppType is Platform.ApplicationType.WindowsGL or Platform.ApplicationType.WebGL )
+        if ( Engine.App.AppType is ApplicationType.WindowsGL or ApplicationType.WebGL )
         {
             _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
         }

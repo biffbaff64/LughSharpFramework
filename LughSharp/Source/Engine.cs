@@ -22,7 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.OpenGL.Bindings;
+using LughSharp.Source.Graphics.Shaders;
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.IO;
 
@@ -56,8 +58,13 @@ public static class Engine
     // ========================================================================
 
     /// <summary>
-    /// Test mode flag which, when TRUE, means that all developer options are enabled.
+    /// Developer mode flag which, when TRUE, means that all developer options are enabled.
     /// This must, however, mean that software with this enabled cannot be published.
+    /// <para>
+    /// Note: Only the flag is provided by this library. It is intended for use in
+    /// local game code.
+    /// </para>
+    /// Defaults to FALSE and, on non-debug builds this will be enforced.
     /// </summary>
     public static bool DevMode
     {
@@ -87,6 +94,7 @@ public static class Engine
     /// Note: Only the flag is provided by this library. It is intended for use in
     /// local game code.
     /// </para>
+    /// Defaults to FALSE and, on non-debug builds this will be enforced.
     /// </summary>
     public static bool GodMode
     {
@@ -101,6 +109,30 @@ public static class Engine
         set;
     }
 
+    /// <summary>
+    /// Developer mode flag which can be used, when TRUE, to enable emulation of
+    /// mobile platforms on a desktop build. For instance, it could be used to enable
+    /// on-screen virtual controllers for testing on a desktop build.
+    /// This must, however, mean that software with this enabled cannot be published.
+    /// <para>
+    /// Note: Only the flag is provided by this library. It is intended for use in
+    /// local game code.
+    /// </para>
+    /// Defaults to FALSE and, on non-debug builds this will be enforced.
+    /// </summary>
+    public static bool IsMobileOnDesktop
+    {
+        get
+        {
+            #if DEBUG
+            return field;
+            #else
+            return false;
+            #endif
+        }
+        set;
+    } = false;
+    
     // ========================================================================
 
     /// <summary>
@@ -133,7 +165,7 @@ public static class Engine
     /// Performs essential tasks, which MUST be performed to allow the
     /// framework to work correctly.
     /// </summary>
-    public static void Initialise( IApplication app, string assetsRoot = "Assets" )
+    public static void Initialise( IApplication app, ApplicationType appType, string assetsRoot = "Assets" )
     {
         App = app;
 
@@ -145,7 +177,11 @@ public static class Engine
 
         // Generate the shader constants header. This is required for any shaders
         // defined in .glsl files to be parsed correctly.
+        //TODO: Is this still needed?
         ShaderConstants.ParseGlslHeader();
+
+        // Set the target platform for the users application.
+        Platform.TargetPlatform = appType;
     }
 
     /// <summary>

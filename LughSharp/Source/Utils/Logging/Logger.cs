@@ -297,10 +297,12 @@ public static class Logger
             }
 
             // Get the base directory
-            string baseDirectory = AppContext.BaseDirectory;
+            string baseDirectory = Files.LughSharpUser;
 
+            Directory.CreateDirectory( baseDirectory );
+            
             // Construct the log directory path
-            _debugFilePath = $"{baseDirectory}logs{Path.DirectorySeparatorChar}";
+            _debugFilePath = $"{baseDirectory}{Path.DirectorySeparatorChar}";
             _debugFileName = fileName;
 
             if ( File.Exists( _debugFilePath + _debugFileName ) && deleteExisting )
@@ -318,9 +320,18 @@ public static class Logger
                 _streamWriter.WriteLine( DividerString );
             }
         }
+        catch ( DirectoryNotFoundException dnf )
+        {
+            Console.WriteLine( $"Logs directory not found!: {dnf.Message}");
+            
+            _debugFilePath    = null!;
+            _debugFileName    = null!;
+            EnableWriteToFile = false;
+            
+        }
         catch ( Exception )
         {
-            Console.WriteLine( $"Unable to open loge file: {_debugFilePath + _debugFileName}" );
+            Console.WriteLine( $"Unable to open log file: {_debugFilePath + _debugFileName}" );
 
             _debugFilePath    = null!;
             _debugFileName    = null!;
@@ -340,7 +351,11 @@ public static class Logger
         // Check if the file exists before attempting to write
         if ( !File.Exists( filePath ) )
         {
-            OpenDebugFile( filePath, true );
+            throw new FileNotFoundException( $"Output file does not exist!: {filePath}" );
+
+//            Error( $"Output file does not exist!: {filePath}" );
+            
+//            OpenDebugFile( filePath, true );
         }
 
         try

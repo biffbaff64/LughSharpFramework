@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.FrameBuffers;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Utils;
@@ -112,7 +113,7 @@ public interface IGraphicsDevice : IDisposable
     // ========================================================================
     // ========================================================================
 
-    void SetBackend( Platform.ApplicationType appType, DotGLFW.OpenGLProfile profile );
+    void SetBackend( ApplicationType appType, DotGLFW.OpenGLProfile profile );
     
     /// <summary>
     /// Updates the current graphics state by calculating the frame delta time,
