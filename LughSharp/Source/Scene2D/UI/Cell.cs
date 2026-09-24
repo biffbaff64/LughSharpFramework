@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.IO;
 using LughSharp.Source.Utils.Pooling;
 
 namespace LughSharp.Source.Scene2D.UI;
@@ -32,39 +33,35 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Cell : IPoolable, IResetable
 {
-    public Value MinWidth    { get; set; } = Value.Zero;
-    public Value MinHeight   { get; set; } = Value.Zero;
-    public Value PrefWidth   { get; set; } = Value.Zero;
-    public Value PrefHeight  { get; set; } = Value.Zero;
-    public Value MaxWidth    { get; set; } = Value.Zero;
-    public Value MaxHeight   { get; set; } = Value.Zero;
-    public Value SpaceTop    { get; set; } = Value.Zero;
-    public Value SpaceLeft   { get; set; } = Value.Zero;
-    public Value SpaceBottom { get; set; } = Value.Zero;
-    public Value SpaceRight  { get; set; } = Value.Zero;
-    public Value PadTop      { get; set; } = Value.Zero;
-    public Value PadLeft     { get; set; } = Value.Zero;
-    public Value PadBottom   { get; set; } = Value.Zero;
-    public Value PadRight    { get; set; } = Value.Zero;
-
-    // ========================================================================
-
-    public Align? Alignment { get; set; }
-    public int    ExpandX   { get; set; }
-    public int    ExpandY   { get; set; }
-    public int    Colspan   { get; set; }
-    public bool   UniformX  { get; set; }
-    public bool   UniformY  { get; set; }
-
-    // ========================================================================
-
-    public Actor? Actor       { get; set; }
-    public float  ActorX      { get; set; }
-    public float  ActorY      { get; set; }
-    public float  ActorWidth  { get; set; }
-    public float  ActorHeight { get; set; }
+    public Value? MinWidth    { get; set; }
+    public Value? MinHeight   { get; set; }
+    public Value? PrefWidth   { get; set; }
+    public Value? PrefHeight  { get; set; }
+    public Value? MaxWidth    { get; set; }
+    public Value? MaxHeight   { get; set; }
+    public Value? SpaceTop    { get; set; }
+    public Value? SpaceLeft   { get; set; }
+    public Value? SpaceBottom { get; set; }
+    public Value? SpaceRight  { get; set; }
+    public Value? PadTop      { get; set; }
+    public Value? PadLeft     { get; set; }
+    public Value? PadBottom   { get; set; }
+    public Value? PadRight    { get; set; }
     public float  FillX       { get; set; }
     public float  FillY       { get; set; }
+    public Align? Alignment   { get; set; }
+    public int    ExpandX     { get; set; }
+    public int    ExpandY     { get; set; }
+    public int    Colspan     { get; set; }
+    public bool   UniformX    { get; set; }
+    public bool   UniformY    { get; set; }
+
+    // ========================================================================
+
+    public float ActorX      { get; set; }
+    public float ActorY      { get; set; }
+    public float ActorWidth  { get; set; }
+    public float ActorHeight { get; set; }
 
     // ========================================================================
 
@@ -86,6 +83,11 @@ public class Cell : IPoolable, IResetable
     private const int   DefaultExpand  = 0;
     private const int   DefaultColspan = 1;
 
+    private static Cell?   _defaultCell;
+    private static IFiles? _files;
+
+    private Actor? _actor;
+
     // ========================================================================
     // ========================================================================
 
@@ -96,58 +98,21 @@ public class Cell : IPoolable, IResetable
     public Cell()
     {
         CellAboveIndex = NoCellAbove;
-        ApplyDefaults();
-    }
 
-    // ========================================================================
+        Cell? defaults = GetCellDefaults();
 
-    /// <summary>
-    /// Reset state so the cell can be reused, setting all constraints to their default values.
-    /// </summary>
-    public void Reset()
-    {
-        ClearRuntimeState();
-        ApplyDefaults();
+        if ( defaults != null )
+        {
+            Set( defaults );
+        }
     }
 
     /// <summary>
-    /// Clears state that is specific to this cell instance while it is attached to a table.
+    /// Gets the actor in this cell.
     /// </summary>
-    private void ClearRuntimeState()
+    public Actor? GetActor()
     {
-        Actor          = null;
-        Table          = null;
-        EndRow         = false;
-        CellAboveIndex = NoCellAbove;
-    }
-
-    /// <summary>
-    /// Applies the shared default cell constraints to this instance.
-    /// </summary>
-    private void ApplyDefaults()
-    {
-        MinWidth    = Value.MinWidth;
-        MinHeight   = Value.MinHeight;
-        PrefWidth   = Value.PrefWidth;
-        PrefHeight  = Value.PrefHeight;
-        MaxWidth    = Value.MaxWidth;
-        MaxHeight   = Value.MaxHeight;
-        SpaceTop    = Value.Zero;
-        SpaceLeft   = Value.Zero;
-        SpaceBottom = Value.Zero;
-        SpaceRight  = Value.Zero;
-        PadTop      = Value.Zero;
-        PadLeft     = Value.Zero;
-        PadBottom   = Value.Zero;
-        PadRight    = Value.Zero;
-        FillX       = DefaultFill;
-        FillY       = DefaultFill;
-        Alignment   = Align.Center;
-        ExpandX     = DefaultExpand;
-        ExpandY     = DefaultExpand;
-        Colspan     = DefaultColspan;
-        UniformX    = false;
-        UniformY    = false;
+        return _actor;
     }
 
     /// <summary>
@@ -157,18 +122,18 @@ public class Cell : IPoolable, IResetable
     /// <returns> This Cell for chaining. </returns>
     public Cell SetActor< TA >( TA? newActor ) where TA : Actor
     {
-        if ( Actor != newActor )
+        if ( _actor != newActor )
         {
-            if ( Actor?.Parent == Table )
+            if ( _actor?.Parent == Table )
             {
-                Actor?.Remove();
+                _actor?.Remove();
             }
 
-            Actor = newActor;
+            _actor = newActor;
 
-            if ( Actor != null )
+            if ( _actor != null )
             {
-                Table?.AddActor( Actor );
+                Table?.AddActor( _actor );
             }
         }
 
@@ -187,9 +152,9 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Returns <b>true</b> if this Cells <see cref="Actor"/> is not null.
+    /// Returns <b>true</b> if this Cells <see cref="_actor"/> is not null.
     /// </summary>
-    public bool HasActor() => Actor != null;
+    public bool HasActor() => _actor != null;
 
     // ------------------------------------------------------------------------
 
@@ -1053,8 +1018,8 @@ public class Cell : IPoolable, IResetable
     }
 
     /// <summary>
-    /// Sets <see cref="FillX"/> and <see cref="FillY"/> to either <see cref="DefaultFill1F"/> or <see cref="DefaultFill"/>
-    /// depending upon the values of the supplied bool parameters.
+    /// Sets <see cref="FillX"/> and <see cref="FillY"/> to either <see cref="DefaultFill1F"/>
+    /// or <see cref="DefaultFill"/> depending upon the values of the supplied bool parameters.
     /// </summary>
     /// <param name="x"> If true, FillX is set to DefaultFill1F, otherwise DefaultFill. </param>
     /// <param name="y"> If true, FillY is set to DefaultFill1F, otherwise DefaultFill.  </param>
@@ -1346,7 +1311,7 @@ public class Cell : IPoolable, IResetable
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// Sets the bounds for this Cell <see cref="Actor"/>.
+    /// Sets the bounds for this Cell <see cref="_actor"/>.
     /// </summary>
     public void SetActorBounds( float x, float y, float width, float height )
     {
@@ -1363,7 +1328,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public virtual float GetPrefWidth()
     {
-        return PrefWidth.Get( Actor );
+        PrefWidth ??= Value.PrefWidth;
+        
+        return PrefWidth.Get( _actor );
     }
 
     /// <summary>
@@ -1371,7 +1338,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public virtual float GetPrefHeight()
     {
-        return PrefHeight.Get( Actor );
+        PrefHeight ??= Value.PrefHeight;
+        
+        return PrefHeight.Get( _actor );
     }
 
     /// <summary>
@@ -1379,7 +1348,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetMinWidth()
     {
-        return MinWidth.Get( Actor );
+        MinWidth ??= Value.MinWidth;
+        
+        return MinWidth.Get( _actor );
     }
 
     /// <summary>
@@ -1387,7 +1358,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetMinHeight()
     {
-        return MinHeight.Get( Actor );
+        MinHeight ??= Value.MinHeight;
+        
+        return MinHeight.Get( _actor );
     }
 
     /// <summary>
@@ -1395,7 +1368,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetMaxWidth()
     {
-        return MaxWidth.Get( Actor );
+        MaxWidth ??= Value.MaxWidth;
+        
+        return MaxWidth.Get( _actor );
     }
 
     /// <summary>
@@ -1403,7 +1378,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetMaxHeight()
     {
-        return MaxHeight.Get( Actor ); 
+        MaxHeight ??= Value.MaxHeight;
+        
+        return MaxHeight.Get( _actor );
     }
 
     /// <summary>
@@ -1411,7 +1388,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetSpaceTop()
     {
-        return SpaceTop.Get( Actor );
+        SpaceTop ??= Value.Zero;
+        
+        return SpaceTop.Get( _actor );
     }
 
     /// <summary>
@@ -1419,7 +1398,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetSpaceLeft()
     {
-        return SpaceLeft.Get( Actor );
+        SpaceLeft ??= Value.Zero;
+
+        return SpaceLeft.Get( _actor );
     }
 
     /// <summary>
@@ -1427,7 +1408,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetSpaceBottom()
     {
-        return SpaceBottom.Get( Actor );
+        SpaceBottom ??= Value.Zero;
+
+        return SpaceBottom.Get( _actor );
     }
 
     /// <summary>
@@ -1435,7 +1418,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetSpaceRight()
     {
-        return SpaceRight.Get( Actor );
+        SpaceRight ??= Value.Zero;
+        
+        return SpaceRight.Get( _actor );
     }
 
     /// <summary>
@@ -1443,7 +1428,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetPadTop()
     {
-        return PadTop.Get( Actor );
+        PadTop ??= Value.Zero;
+        
+        return PadTop.Get( _actor );
     }
 
     /// <summary>
@@ -1451,7 +1438,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetPadLeft()
     {
-        return PadLeft.Get( Actor );
+        PadLeft ??= Value.Zero;
+
+        return PadLeft.Get( _actor );
     }
 
     /// <summary>
@@ -1459,7 +1448,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetPadBottom()
     {
-        return PadBottom.Get( Actor );
+        PadBottom ??= Value.Zero;
+        
+        return PadBottom.Get( _actor );
     }
 
     /// <summary>
@@ -1467,7 +1458,9 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetPadRight()
     {
-        return PadRight.Get( Actor );
+        PadRight ??= Value.Zero;
+
+        return PadRight.Get( _actor );
     }
 
     // ------------------------------------------------------------------------
@@ -1478,7 +1471,10 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetPadX()
     {
-        return PadLeft.Get( Actor ) + PadRight.Get( Actor );
+        float padleft  = PadLeft?.Get( _actor ) ?? 0f;
+        float padright = PadRight?.Get( _actor ) ?? 0f;
+
+        return padleft + padright;
     }
 
     /// <summary>
@@ -1487,17 +1483,101 @@ public class Cell : IPoolable, IResetable
     /// </summary>
     public float GetPadY()
     {
-        return PadTop.Get( Actor ) + PadBottom.Get( Actor );
+        float padtop    = PadTop?.Get( _actor ) ?? 0f;
+        float padbottom = PadBottom?.Get( _actor ) ?? 0f;
+
+        return padtop + padbottom;
     }
 
     // ------------------------------------------------------------------------
 
     /// <summary>
-    /// Resets constraint fields to their default values.
+    /// Sets constraint fields to null.
     /// </summary>
     public void Clear()
     {
-        ApplyDefaults();
+        MinWidth    = null;
+        MinHeight   = null;
+        PrefWidth   = null;
+        PrefHeight  = null;
+        MaxWidth    = null;
+        MaxHeight   = null;
+        SpaceTop    = null;
+        SpaceLeft   = null;
+        SpaceBottom = null;
+        SpaceRight  = null;
+        PadTop      = null;
+        PadLeft     = null;
+        PadBottom   = null;
+        PadRight    = null;
+        FillX       = 0;
+        FillY       = 0;
+        Alignment   = null;
+        ExpandX     = 0;
+        ExpandY     = 0;
+        Colspan     = 0;
+        UniformX    = false;
+        UniformY    = false;
+    }
+
+    /// <summary>
+    /// Reset state so the cell can be reused, setting all constraints to their default values.
+    /// </summary>
+    public void Reset()
+    {
+        ClearRuntimeState();
+        Set( GetCellDefaults() );
+    }
+
+    /// <summary>
+    /// Clears state that is specific to this cell instance while it is attached to a table.
+    /// </summary>
+    private void ClearRuntimeState()
+    {
+        _actor         = null;
+        Table          = null;
+        EndRow         = false;
+        CellAboveIndex = NoCellAbove;
+    }
+
+    /// <summary>
+    /// Returns the defaults to use for all cells. This can be used to avoid needing to
+    /// set the same defaults for every table (eg, for spacing).
+    /// </summary>
+    private Cell? GetCellDefaults()
+    {
+        if ( ( _files == null ) || ( _files != Engine.Files ) )
+        {
+            _files = Engine.Files;
+
+            _defaultCell = new Cell
+            {
+                MinWidth    = Value.MinWidth,
+                MinHeight   = Value.MinHeight,
+                PrefWidth   = Value.PrefWidth,
+                PrefHeight  = Value.PrefHeight,
+                MaxWidth    = Value.MaxWidth,
+                MaxHeight   = Value.MaxHeight,
+                SpaceTop    = Value.Zero,
+                SpaceLeft   = Value.Zero,
+                SpaceBottom = Value.Zero,
+                SpaceRight  = Value.Zero,
+                PadTop      = Value.Zero,
+                PadLeft     = Value.Zero,
+                PadBottom   = Value.Zero,
+                PadRight    = Value.Zero,
+                FillX       = DefaultFill,
+                FillY       = DefaultFill,
+                Alignment   = Align.Center,
+                ExpandX     = DefaultExpand,
+                ExpandY     = DefaultExpand,
+                Colspan     = DefaultColspan,
+                UniformX    = false,
+                UniformY    = false,
+            };
+        }
+
+        return _defaultCell;
     }
 
     /// <summary>
@@ -1513,15 +1593,6 @@ public class Cell : IPoolable, IResetable
         }
 
         CopyConstraintsFrom( cell );
-
-        Alignment = cell.Alignment;
-        ExpandX   = cell.ExpandX;
-        ExpandY   = cell.ExpandY;
-        Colspan   = cell.Colspan;
-        UniformX  = cell.UniformX;
-        UniformY  = cell.UniformY;
-        FillX     = cell.FillX;
-        FillY     = cell.FillY;
     }
 
     /// <summary>
@@ -1535,17 +1606,31 @@ public class Cell : IPoolable, IResetable
             return;
         }
 
-        CopyConstraintsFrom( cell );
-
-        if ( cell.Alignment != 0 ) Alignment = cell.Alignment;
-        if ( cell.ExpandX != 0 ) ExpandX     = cell.ExpandX;
-        if ( cell.ExpandY != 0 ) ExpandY     = cell.ExpandY;
-        if ( cell.Colspan != 0 ) Colspan     = cell.Colspan;
-        if ( cell.UniformX ) UniformX        = cell.UniformX;
-        if ( cell.UniformY ) UniformY        = cell.UniformY;
-
-        FillX = cell.FillX;
-        FillY = cell.FillY;
+        //@formatter:off
+        if ( cell.MinWidth != null )    MinWidth    = cell.MinWidth;
+        if ( cell.MinHeight != null )   MinHeight   = cell.MinHeight;
+        if ( cell.PrefWidth != null )   PrefWidth   = cell.PrefWidth;
+        if ( cell.PrefHeight != null )  PrefHeight  = cell.PrefHeight;
+        if ( cell.MaxWidth != null )    MaxWidth    = cell.MaxWidth;
+        if ( cell.MaxHeight != null )   MaxHeight   = cell.MaxHeight;
+        if ( cell.SpaceTop != null )    SpaceTop    = cell.SpaceTop;
+        if ( cell.SpaceLeft != null )   SpaceLeft   = cell.SpaceLeft;
+        if ( cell.SpaceBottom != null ) SpaceBottom = cell.SpaceBottom;
+        if ( cell.SpaceRight != null )  SpaceRight  = cell.SpaceRight;
+        if ( cell.PadTop != null )      PadTop      = cell.PadTop;
+        if ( cell.PadLeft != null )     PadLeft     = cell.PadLeft;
+        if ( cell.PadBottom != null )   PadBottom   = cell.PadBottom;
+        if ( cell.PadRight != null )    PadRight    = cell.PadRight;
+        
+        FillX       = cell.FillX;
+        FillY       = cell.FillY;
+        Alignment   = cell.Alignment;
+        ExpandX     = cell.ExpandX;
+        ExpandY     = cell.ExpandY;
+        Colspan     = cell.Colspan;
+        UniformX    = cell.UniformX;
+        UniformY    = cell.UniformY;
+        //@formatter:on
     }
 
     /// <summary>
@@ -1572,12 +1657,20 @@ public class Cell : IPoolable, IResetable
         PadLeft     = cell.PadLeft;
         PadBottom   = cell.PadBottom;
         PadRight    = cell.PadRight;
+        Alignment   = cell.Alignment;
+        ExpandX     = cell.ExpandX;
+        ExpandY     = cell.ExpandY;
+        Colspan     = cell.Colspan;
+        UniformX    = cell.UniformX;
+        UniformY    = cell.UniformY;
+        FillX       = cell.FillX;
+        FillY       = cell.FillY;
     }
 
     /// <inheritdoc />
     public override string? ToString()
     {
-        return Actor != null ? Actor.ToString() : base.ToString();
+        return _actor != null ? _actor.ToString() : base.ToString();
     }
 }
 

@@ -164,11 +164,21 @@ public static class Engine
     /// <summary>
     /// Performs essential tasks, which MUST be performed to allow the
     /// framework to work correctly.
+    /// <para>
+    /// This method will also check for the existence of the environment variable
+    /// <c>DEV_MODE</c> or <c>DEVMODE</c>, and set the <see cref="DevMode"/> flag
+    /// accordingly.
+    /// A check for the environment variable <c>GOD_MODE</c> or <c>GODMODE</c> will
+    /// also be performed, and the flag <see cref="GodMode"/> will also be set accordingly.
+    /// </para>
     /// </summary>
     public static void Initialise( IApplication app, ApplicationType appType, string assetsRoot = "Assets" )
     {
         App = app;
 
+        CheckEnableDevMode();
+        CheckEnableGodMode();
+        
         Logger.Initialise( enableWriteToFile: true );
         Logger.EnableDebugLogging();
         Logger.EnableErrorLogging();

@@ -52,6 +52,8 @@ public interface ISceneDrawable
     /// with <see cref="IBatch.Color"/>, possibly by mixing its own color.
     /// </summary>
     void Draw( IBatch batch, float x, float y, float width, float height );
+    
+    string ToString();
 }
 
 // ============================================================================

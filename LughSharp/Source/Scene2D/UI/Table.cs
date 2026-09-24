@@ -187,10 +187,13 @@ public class Table : WidgetGroup
                 float padLeft   = _padLeft.Get( this );
                 float padBottom = _padBottom.Get( this );
 
-                if ( ClipBegin( padLeft,
-                                padBottom,
-                                GetWidth() - padLeft - _padRight.Get( this ),
-                                GetHeight() - padBottom - _padTop.Get( this ) ) )
+                if ( ClipBegin
+                        (
+                         padLeft,
+                         padBottom,
+                         GetWidth() - padLeft - _padRight.Get( this ),
+                         GetHeight() - padBottom - _padTop.Get( this )
+                        ) )
                 {
                     DrawChildren( batch, parentAlpha );
                     batch.Flush();
@@ -348,7 +351,7 @@ public class Table : WidgetGroup
     public Cell AddCell< T >( T? actor ) where T : Actor
     {
         Cell cell = ObtainCell();
-        cell.Actor = actor;
+        cell.SetActor( actor );
 
         // The row was ended for layout, not by the user, so revert it.
         if ( _implicitEndRow )
@@ -385,13 +388,18 @@ public class Table : WidgetGroup
                 {
                     Cell other = cells[ i ];
 
-                    if ( cell.Column >= other.Column && cell.Column < other.Column + other.Colspan )
+                    for ( int column = other.Column, nn = column + other.Colspan; column < nn; column++ )
                     {
-                        cell.CellAboveIndex = i;
+                        if ( column == cell.Column )
+                        {
+                            cell.CellAboveIndex = i;
 
-                        break;
+                            goto outer;
+                        }
                     }
                 }
+
+            outer: ;
             }
         }
         else
@@ -400,6 +408,8 @@ public class Table : WidgetGroup
             cell.Row    = 0;
         }
 
+        Cells.Add( cell );
+        
         cell.Set( CellDefaults );
 
         if ( cell.Column < _columnDefaults.Count )
@@ -408,8 +418,6 @@ public class Table : WidgetGroup
         }
 
         cell.Merge( _rowDefaults );
-
-        Cells.Add( cell );
 
         if ( actor != null )
         {
@@ -490,8 +498,14 @@ public class Table : WidgetGroup
     {
         return Skin == null
                    ? throw new LughRuntimeException( "Table must have a skin set to use this method." )
-                   : AddCell( new Label( text,
-                                         new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) ) ) );
+                   : AddCell
+                       (
+                        new Label
+                            (
+                             text,
+                             new LabelStyle( Skin.GetFont( fontName ), Skin.GetColor( colorName ) )
+                            )
+                       );
     }
 
     /// <summary>
@@ -529,7 +543,7 @@ public class Table : WidgetGroup
 
         if ( GetCell( actor ) != null )
         {
-            GetCell( actor )!.Actor = null;
+            GetCell( actor )!.ClearActor();
         }
 
         return true;
@@ -545,7 +559,7 @@ public class Table : WidgetGroup
     {
         Actor? actor = base.RemoveActorAt( index, unfocus );
 
-        GetCell( actor )!.Actor = null;
+        GetCell( actor )!.ClearActor();
 
         return actor;
     }
@@ -561,7 +575,7 @@ public class Table : WidgetGroup
         for ( int i = Cells.Count - 1; i >= 0; i-- )
         {
             Cell   cell  = cells[ i ];
-            Actor? actor = cell.Actor;
+            Actor? actor = cell.GetActor();
 
             actor?.Remove();
         }
@@ -725,7 +739,7 @@ public class Table : WidgetGroup
         {
             Cell c = cells[ i ];
 
-            if ( c.Actor == actor )
+            if ( c.GetActor() == actor )
             {
                 return c;
             }
@@ -1314,38 +1328,40 @@ public class Table : WidgetGroup
 
             // Compute combined padding/spacing for cells. Spacing between actors
             // isn't additive, the larger is used. Also, no spacing around edges.
-            c.ComputedPadLeft = ( c.PadLeft.Get( c.Actor )
+            c.ComputedPadLeft = ( c.GetPadLeft()
                                 + ( c.Column == 0
                                         ? 0
-                                        : Math.Max( 0f,
-                                                    ( float )( c.SpaceLeft.Get( c.Actor ) - spaceRightLast ) ) ) );
+                                        : Math.Max
+                                            (
+                                             0f,
+                                             ( float )( c.GetSpaceLeft() - spaceRightLast )
+                                            ) ) );
 
-            c.ComputedPadTop = c.PadTop.Get( c.Actor );
+            c.ComputedPadTop = c.GetPadTop();
 
             if ( c.CellAboveIndex != -1 )
             {
                 Cell above = cells[ c.CellAboveIndex ];
 
-                c.ComputedPadTop += Math.Max( 0, ( c.SpaceTop.Get( c.Actor ) - above.SpaceBottom.Get( c.Actor ) )! );
+                c.ComputedPadTop += Math.Max( 0, ( c.GetSpaceTop() - above.GetSpaceBottom() ) );
             }
 
-            float? spaceRight = c.SpaceRight.Get( c.Actor );
+            float? spaceRight = c.GetSpaceRight();
 
-            c.ComputedPadRight = ( float )( c.PadRight.Get( c.Actor )
+            c.ComputedPadRight = ( float )( c.GetPadRight()
                                           + ( ( c.Column + c.Colspan ) == columns ? 0f : spaceRight ) );
 
-            c.ComputedPadBottom = ( c.PadBottom.Get( c.Actor )
-                                  + ( c.Row == ( rows - 1 ) ? 0 : c.SpaceBottom.Get( c.Actor ) ) )!;
+            c.ComputedPadBottom = ( c.GetPadBottom() + ( c.Row == ( rows - 1 ) ? 0 : c.GetSpaceBottom() ) );
 
             spaceRightLast = spaceRight;
 
             // Determine minimum and preferred cell sizes.
-            float prefWidth  = c.PrefWidth.Get( c.Actor );
-            float prefHeight = c.PrefHeight.Get( c.Actor );
-            float minWidth   = c.MinWidth.Get( c.Actor );
-            float minHeight  = c.MinHeight.Get( c.Actor );
-            float maxWidth   = c.MaxWidth.Get( c.Actor );
-            float maxHeight  = c.MaxHeight.Get( c.Actor );
+            float prefWidth  = c.GetPrefWidth();
+            float prefHeight = c.GetPrefHeight();
+            float minWidth   = c.GetMinWidth();
+            float minHeight  = c.GetMinHeight();
+            float maxWidth   = c.GetMaxWidth();
+            float maxHeight  = c.GetMaxHeight();
 
             if ( prefWidth < minWidth )
             {
@@ -1380,11 +1396,17 @@ public class Table : WidgetGroup
                 // Spanned column min and pref width is added later.
                 float hpadding = c.ComputedPadLeft + c.ComputedPadRight;
 
-                columnPrefWidth[ c.Column ] = Math.Max( columnPrefWidth[ c.Column ],
-                                                        ( prefWidth + hpadding )! );
+                columnPrefWidth[ c.Column ] = Math.Max
+                    (
+                     columnPrefWidth[ c.Column ],
+                     ( prefWidth + hpadding )!
+                    );
 
-                columnMinWidth[ c.Column ] = Math.Max( columnMinWidth[ c.Column ],
-                                                       ( minWidth + hpadding )! );
+                columnMinWidth[ c.Column ] = Math.Max
+                    (
+                     columnMinWidth[ c.Column ],
+                     ( minWidth + hpadding )!
+                    );
             }
 
             float vpadding = c.ComputedPadTop + c.ComputedPadBottom;
@@ -1478,9 +1500,9 @@ public class Table : WidgetGroup
             }
 
             int   column    = c.Column;
-            float minWidth  = c.MinWidth.Get( c.Actor );
-            float prefWidth = c.PrefWidth.Get( c.Actor );
-            float maxWidth  = c.MaxWidth.Get( c.Actor );
+            float minWidth  = c.GetMinWidth();
+            float prefWidth = c.GetPrefWidth();
+            float maxWidth  = c.GetMaxWidth();
 
             if ( prefWidth < minWidth )
             {
@@ -1647,10 +1669,9 @@ public class Table : WidgetGroup
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            Cell   c      = cells[ i ];
-            int    column = c.Column;
-            int    row    = c.Row;
-            Actor? actor  = c.Actor;
+            Cell c      = cells[ i ];
+            int  column = c.Column;
+            int  row    = c.Row;
 
             float spannedWeightedWidth = 0;
             int   colspan              = c.Colspan;
@@ -1662,12 +1683,12 @@ public class Table : WidgetGroup
 
             float weightedHeight = rowWeightedHeight[ row ];
 
-            float prefWidth  = c.PrefWidth.Get( actor );
-            float prefHeight = c.PrefHeight.Get( actor );
-            float minWidth   = c.MinWidth.Get( actor );
-            float minHeight  = c.MinHeight.Get( actor );
-            float maxWidth   = c.MaxWidth.Get( actor );
-            float maxHeight  = c.MaxHeight.Get( actor );
+            float prefWidth  = c.GetPrefWidth();
+            float prefHeight = c.GetPrefHeight();
+            float minWidth   = c.GetMinWidth();
+            float minHeight  = c.GetMinHeight();
+            float maxWidth   = c.GetMaxWidth();
+            float maxHeight  = c.GetMaxHeight();
 
             if ( prefWidth < minWidth )
             {
@@ -1689,10 +1710,16 @@ public class Table : WidgetGroup
                 prefHeight = maxHeight;
             }
 
-            c.ActorWidth = Math.Min( Math.Max( 0, spannedWeightedWidth - c.ComputedPadLeft - c.ComputedPadRight ),
-                                     prefWidth );
-            c.ActorHeight = Math.Min( Math.Max( 0, weightedHeight - c.ComputedPadTop - c.ComputedPadBottom ),
-                                      prefHeight );
+            c.ActorWidth = Math.Min
+                (
+                 Math.Max( 0, spannedWeightedWidth - c.ComputedPadLeft - c.ComputedPadRight ),
+                 prefWidth
+                );
+            c.ActorHeight = Math.Min
+                (
+                 Math.Max( 0, weightedHeight - c.ComputedPadTop - c.ComputedPadBottom ),
+                 prefHeight
+                );
 
             if ( colspan == 1 )
             {
@@ -1870,7 +1897,8 @@ public class Table : WidgetGroup
 
         for ( var i = 0; i < cellCount; i++ )
         {
-            Cell c = cells[ i ];
+            Cell   c     = cells[ i ];
+            Actor? actor = c.GetActor();
 
             float spannedCellWidth = 0;
 
@@ -1888,9 +1916,9 @@ public class Table : WidgetGroup
 
             if ( fillX > 0 )
             {
-                c.ActorWidth = Math.Max( spannedCellWidth * fillX, c.MinWidth.Get( c.Actor ) );
+                c.ActorWidth = Math.Max( spannedCellWidth * fillX, c.GetMinWidth() );
 
-                float maxWidth = c.MaxWidth.Get( c.Actor );
+                float maxWidth = c.GetMaxWidth();
 
                 if ( maxWidth > 0 )
                 {
@@ -1900,10 +1928,13 @@ public class Table : WidgetGroup
 
             if ( fillY > 0 )
             {
-                c.ActorHeight = Math.Max( ( rowHeight[ c.Row ] * fillY ) - c.ComputedPadTop - c.ComputedPadBottom,
-                                          c.MinHeight.Get( c.Actor ) );
+                c.ActorHeight = Math.Max
+                    (
+                     ( rowHeight[ c.Row ] * fillY ) - c.ComputedPadTop - c.ComputedPadBottom,
+                     c.GetMinHeight()
+                    );
 
-                float maxHeight = c.MaxHeight.Get( c.Actor );
+                float maxHeight = c.GetMaxHeight();
 
                 if ( maxHeight > 0 )
                 {
@@ -1949,7 +1980,7 @@ public class Table : WidgetGroup
                 c.ActorY      = ( float )Math.Floor( c.ActorY );
             }
 
-            c.Actor?.SetBounds( c.ActorX, c.ActorY, c.ActorWidth, c.ActorHeight );
+            actor?.SetBounds( c.ActorX, c.ActorY, c.ActorWidth, c.ActorHeight );
 
             if ( c.EndRow )
             {
@@ -2044,7 +2075,10 @@ public class Table : WidgetGroup
         return this;
     }
 
-    /// <inheritdoc />
+    /// <summary>
+    /// Enables debug mode for this group and all its children recursively.
+    /// </summary>
+    /// <returns>The table instance for method chaining.</returns>
     public override Table DebugAll()
     {
         base.DebugAll();
@@ -2055,6 +2089,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Turns on table debug lines.
     /// </summary>
+    /// <returns>The table instance for method chaining.</returns>
     public Table DebugTable()
     {
         base.SetDebug( true, false );
@@ -2071,6 +2106,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Turns on cell debug lines.
     /// </summary>
+    /// <returns>The table instance for method chaining.</returns>
     public Table DebugCell()
     {
         base.SetDebug( true, false );
@@ -2087,6 +2123,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Turns on actor debug lines.
     /// </summary>
+    /// <returns>The table instance for method chaining.</returns>
     public Table DebugActor()
     {
         base.SetDebug( true, false );
@@ -2103,6 +2140,7 @@ public class Table : WidgetGroup
     /// <summary>
     /// Turns debug lines on or off.
     /// </summary>
+    /// <returns>The table instance for method chaining.</returns>
     public Table DebugLines( DebugType debug )
     {
         base.SetDebug( debug != DebugType.None, false );
@@ -2202,11 +2240,14 @@ public class Table : WidgetGroup
 
             if ( TableDebug is DebugType.Cell or DebugType.All )
             {
-                AddDebugRect( currentX,
-                              currentY + c.ComputedPadTop,
-                              spannedCellWidth,
-                              _rowHeight[ c.Row ] - c.ComputedPadTop - c.ComputedPadBottom,
-                              DebugCellColor );
+                AddDebugRect
+                    (
+                     currentX,
+                     currentY + c.ComputedPadTop,
+                     spannedCellWidth,
+                     _rowHeight[ c.Row ] - c.ComputedPadTop - c.ComputedPadBottom,
+                     DebugCellColor
+                    );
             }
 
             if ( c.EndRow )
@@ -2285,7 +2326,7 @@ public class Table : WidgetGroup
         shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
         var stage = GetStage();
-        
+
         if ( stage != null )
         {
             shapes.Color = stage.DebugColor;
@@ -2336,7 +2377,7 @@ public class Table : WidgetGroup
     public static readonly Value BackgroundRight = new BackgroundRightDelegate();
 
     //TODO: Re-work this to get rid of these delegates
-    
+
     private class BackgroundTopDelegate : Value
     {
         public override float Get( Actor? context = null )

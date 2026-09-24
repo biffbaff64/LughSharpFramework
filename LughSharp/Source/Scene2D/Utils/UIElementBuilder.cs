@@ -96,6 +96,27 @@ public class UIElementBuilder
     }
 
     /// <summary>
+    /// Creates an image of the size specified by <c>width</c> and <c>height</c>,
+    /// filled with the specified <c>color</c>.
+    /// </summary>
+    /// <param name="width"> The width of the image. </param>
+    /// <param name="height"> The height of the image. </param>
+    /// <param name="color"> The color of the image fill. </param>
+    /// <returns> The ISceneDrawable. </returns>
+    public static ISceneDrawable GetColoredDrawable( int width, int height, Color color )
+    {
+        var pixmap = new Pixmap( width, height, LughFormat.RGBA8888 );
+        pixmap.SetColor( color );
+        pixmap.FillWithCurrentColor();
+
+        var drawable = new TextureRegionDrawable( new TextureRegion( new Texture2D( pixmap ) ) );
+
+        pixmap.Dispose();
+
+        return drawable;
+    }
+
+    /// <summary>
     /// Creates a <see cref="ScrollPane"/>, without adding it to the stage.
     /// </summary>
     /// <param name="table"> The associated <see cref="Table"/>. </param>

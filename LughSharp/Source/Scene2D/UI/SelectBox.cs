@@ -119,8 +119,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// Returns the select box's style. Modifying the returned style may not have an effect
-    /// until <see cref="SetStyle(SelectBoxStyle)"/> is called.
+    /// Returns the select box's style. Modifying the returned style may not have
+    /// an effect until <see cref="SetStyle(SelectBoxStyle)"/> is called.
     /// </summary>
     public SelectBoxStyle GetStyle()
     {
@@ -176,7 +176,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Set the backing List that makes up the choices available in the SelectBox
     /// </summary>
-    /// <param name="newItems"> The new backing List that makes up the choices available in the SelectBox. </param>
+    /// <param name="newItems">
+    /// The new backing List that makes up the choices available in the SelectBox.
+    /// </param>
     public void SetItems( T[] newItems )
     {
         Guard.Against.Null( ScrollPane );
@@ -298,7 +300,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// batch and applying the parent's alpha transparency.
     /// </summary>
     /// <param name="batch">The batch used to draw the select box.</param>
-    /// <param name="parentAlpha">The alpha value of the parent, applied to the select box for transparency.</param>
+    /// <param name="parentAlpha">
+    /// The alpha value of the parent, applied to the select box for transparency.
+    /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -1014,15 +1018,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <seealso cref="SelectBox{T}"/>
     /// <seealso cref="ClickListener"/>
     [PublicAPI]
-    public class SelectBoxClickListener : ClickListener
+    public class SelectBoxClickListener( SelectBox< T > parent ) : ClickListener
     {
-        private readonly SelectBox< T > _parent;
-
-        public SelectBoxClickListener( SelectBox< T > parent )
-        {
-            _parent = parent;
-        }
-
         /// <summary>
         /// Called when a mouse button or a finger touch goes down on the actor.
         /// If true is returned, this listener will have
@@ -1038,20 +1035,20 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
                 return false;
             }
 
-            if ( _parent.IsDisabled )
+            if ( parent.IsDisabled )
             {
                 return false;
             }
 
-            if ( _parent.ScrollPane != null )
+            if ( parent.ScrollPane != null )
             {
-                if ( _parent.ScrollPane.HasParent() )
+                if ( parent.ScrollPane.HasParent() )
                 {
-                    _parent.HideScrollPane();
+                    parent.HideScrollPane();
                 }
                 else
                 {
-                    _parent.ShowScrollPane();
+                    parent.ShowScrollPane();
                 }
             }
 

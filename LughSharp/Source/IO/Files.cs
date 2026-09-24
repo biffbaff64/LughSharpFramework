@@ -141,7 +141,12 @@ public class Files : IFiles
     /// </para>
     /// </summary>
     public static string LughSharpUser => @$"{ExternalPath}.lughsharp";
-    
+
+    // ========================================================================
+    // ========================================================================
+
+    private const string DefaultSkinPath = "Assets/Skins/uiskin.json";
+
     // ========================================================================
     // ========================================================================
 
@@ -672,7 +677,7 @@ public class Files : IFiles
     // ========================================================================
     // ========================================================================
     // General Utility Methods
-    
+
     /// <summary>
     /// Retrieves a file handle based on the specified path and path type.
     /// </summary>
@@ -757,9 +762,12 @@ public class Files : IFiles
     public static string StripExtension( string filename, string extension )
     {
         var cultureInfo = new CultureInfo( CultureInfo.InvariantCulture.Name );
-        
-        if ( filename.ToLower(cultureInfo).EndsWith( extension.ToLower( cultureInfo ),
-                                                     StringComparison.OrdinalIgnoreCase ) )
+
+        if ( filename.ToLower( cultureInfo ).EndsWith
+                (
+                 extension.ToLower( cultureInfo ),
+                 StringComparison.OrdinalIgnoreCase
+                ) )
         {
 //            filename = filename.Substring( 0, filename.Length - extension.Length );
             filename = filename[ ..^extension.Length ];
@@ -784,7 +792,7 @@ public class Files : IFiles
     {
         int position = path.IndexOf( ContentRoot, StringComparison.Ordinal );
         int length   = path.Length - position;
-        
+
         return path.Substring( position, length );
     }
 
@@ -892,18 +900,10 @@ public class Files : IFiles
     /// </summary>
     public Skin GetDefaultLughSkin()
     {
-        using Stream stream = GetClassPathStream( "Assets/Skins/uiskin.json" )
-                           ?? throw new LughRuntimeException
-                                  ( "Embedded resource 'Assets/Skins/uiskin.json' not found." );
-
-        using var reader = new StreamReader( stream );
-
-
-        string text = reader.ReadToEnd();
-
-        Logger.Debug( text );
-
-        return new Skin();
+        Skin skin = new Skin( new FileInfo( Internal( DefaultSkinPath ).FullName ) )
+            ?? throw new LughRuntimeException( "Could not find default skin" );
+        
+        return skin;
     }
 
     // ========================================================================
@@ -918,7 +918,6 @@ public class Files : IFiles
     // ========================================================================
     // ========================================================================
 
-    #if DEBUG
     /// <summary>
     /// Writes a list of all files in the supplied directory path to console.
     /// </summary>
@@ -948,7 +947,6 @@ public class Files : IFiles
         // --------------------------------------------------------------------
         Logger.Debug( $"LughSharpUser       : {LughSharpUser}" );
     }
-    #endif
 }
 
 // ========================================================================

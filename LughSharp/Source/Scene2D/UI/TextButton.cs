@@ -45,7 +45,7 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
     private TextButtonStyle _style = null!;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Creates a new TextButton using the supplied <see cref="Skin"/>, and
     /// setting its text property to the supplied text.
@@ -127,8 +127,8 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
         {
             Guard.Against.Null( value );
 
-            GetLabelCell()?.Actor = value;
-            field                 = value;
+            GetLabelCell()?.SetActor( value );
+            field = value;
         }
     }
 

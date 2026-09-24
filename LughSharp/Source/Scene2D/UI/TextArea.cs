@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// A text input field with multiple lines.
 /// </summary>
 [PublicAPI]
-public class TextArea : TextField, IStyleable< TextAreaStyle >
+public class TextArea : TextField, IStyleable< TextFieldStyle >
 {
     /// <summary>
     /// Current line for the cursor
@@ -153,16 +153,16 @@ public class TextArea : TextField, IStyleable< TextAreaStyle >
     }
 
     /// <summary>
-    /// Gets the <see cref="TextAreaStyle"/> for this text area.
+    /// Gets the <see cref="TextFieldStyle"/> for this text area.
     /// </summary>
-    /// <returns>The <see cref="TextAreaStyle"/> used by this text area.</returns>
-    public override TextAreaStyle GetStyle() => ( TextAreaStyle )base.GetStyle();
+    /// <returns>The <see cref="TextFieldStyle"/> used by this text area.</returns>
+    public override TextFieldStyle GetStyle() => ( TextFieldStyle )base.GetStyle();
 
     /// <summary>
-    /// Sets the <see cref="TextAreaStyle"/> for this text field.
+    /// Sets the <see cref="TextFieldStyle"/> for this text field.
     /// </summary>
     /// <param name="style"> The style to use. </param>
-    public void SetStyle( TextAreaStyle style )
+    public void SetStyle( TextFieldStyle style )
     {
         Guard.Against.Null( style );
 

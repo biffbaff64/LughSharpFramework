@@ -333,8 +333,8 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
         get;
         set
         {
-            GetLabelCell()?.Actor = value;
-            field                 = value;
+            GetLabelCell()?.SetActor( value );
+            field = value;
         }
     }
 

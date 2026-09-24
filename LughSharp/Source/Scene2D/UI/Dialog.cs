@@ -35,7 +35,7 @@ namespace LughSharp.Source.Scene2D.UI;
 /// called and the dialog is removed from the stage.
 /// </summary>
 [PublicAPI]
-public class Dialog : Window, IStyleable< DialogStyle >
+public class Dialog : Window, IStyleable< WindowStyle >
 {
     public Actor? PreviousKeyboardFocus { get; set; }
     public Actor? PreviousScrollFocus   { get; set; }
@@ -50,6 +50,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     private readonly IgnoreTouchDown _ignoreTouchDown = new();
 
     private FocusListener _dialogFocusListener = null!;
+    private Skin?         _skin;
 
     // ========================================================================
 
@@ -57,55 +58,61 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// Creates a new Dialog, using the supplied title and <see cref="Skin"/>
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="skin"> The Skin holding the DialogStyle.</param>
-    public Dialog( string title, Skin skin ) : base( title, skin.Get< DialogStyle >(), skin )
+    /// <param name="skin"> The Skin holding the WindowStyle.</param>
+    public Dialog( string title, Skin skin )
+        : base( title, skin.Get< WindowStyle >() )
     {
-        Initialise( skin );
+        Skin  = skin;
+        _skin = skin;
+
+        Initialise();
     }
 
     /// <summary>
-    /// Creates a new Dialog, using the supplied title, <see cref="Skin"/>, and <see cref="DialogStyle"/>.
+    /// Creates a new Dialog, using the supplied title, <see cref="Skin"/>, and <see cref="WindowStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="skin"> The Skin holding the DialogStyle.</param>
-    /// <param name="dialogStyle"> The <see cref="DialogStyle"/> to use. </param>
+    /// <param name="skin"> The Skin holding the WindowStyle.</param>
+    /// <param name="dialogStyle"> The <see cref="WindowStyle"/> to use. </param>
     public Dialog( string title, Skin skin, string dialogStyle )
-        : base( title, skin.Get< DialogStyle >( dialogStyle ), skin )
+        : base( title, skin.Get< WindowStyle >( dialogStyle ) )
     {
-        Initialise( skin );
+        Skin  = skin;
+        _skin = skin;
+
+        Initialise();
     }
 
     /// <summary>
-    /// Creates a new Dialog window, using the supplied name and <see cref="DialogStyle"/>.
+    /// Creates a new Dialog window, using the supplied name and <see cref="WindowStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
-    /// <param name="dialogStyle"> The <see cref="DialogStyle"/> to use. </param>
-    /// <param name="skin"> The Skin holding the DialogStyle.</param>
-    public Dialog( string title, DialogStyle dialogStyle, Skin skin ) : base( title, dialogStyle, skin )
+    /// <param name="dialogStyle"> The <see cref="WindowStyle"/> to use. </param>
+    public Dialog( string title, WindowStyle dialogStyle )
+        : base( title, dialogStyle )
     {
-        Initialise( skin );
+        Initialise();
     }
 
     /// <summary>
     /// Initialises the basic elements of this dialog, including the necessary listeners.
     /// </summary>
-    /// <param name="skin"> The Skin holding the DialogStyle.</param>
-    private void Initialise( Skin skin )
+    private void Initialise()
     {
-        Skin    = skin;
         IsModal = true;
 
         CellDefaults.Space( 6 );
 
         AddCell( ContentTable = new Table( Skin ) ).Grow();
-        AddCell( ButtonTable  = new Table( Skin ) ).SetFillX();
+        AddRow();
+        AddCell( ButtonTable = new Table( Skin ) ).SetFillX();
 
         ContentTable.CellDefaults.Space( 6 );
         ButtonTable.CellDefaults.Space( 6 );
 
-        _dialogFocusListener = new DialogFocusListener( this );
-
         ButtonTable.AddListener( new ButtonTableChangeListener( this ) );
+
+        _dialogFocusListener = new DialogFocusListener( this );
 
         AddCaptureListener( _dialogFocusListener );
     }
@@ -137,12 +144,13 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <returns> This dialog, for chaining. </returns>
     public Dialog Text( string? text )
     {
-        if ( Skin == null )
-        {
-            throw new LughRuntimeException( "This method may only be used if the dialog was constructed." );
-        }
-
-        return Text( text, Skin.Get< LabelStyle >() );
+        return Skin == null
+                   ? throw new LughRuntimeException
+                         (
+                          "This method may only be used if the "
+                        + "dialog was constructed with a skin."
+                         )
+                   : Text( text, Skin.Get< LabelStyle >() );
     }
 
     /// <summary>
@@ -183,8 +191,11 @@ public class Dialog : Window, IStyleable< DialogStyle >
     {
         if ( Skin == null )
         {
-            throw new LughRuntimeException( "This method may only be used if the "
-                                      + "dialog was constructed with a Skin." );
+            throw new LughRuntimeException
+                (
+                 "This method may only be used if the "
+               + "dialog was constructed with a Skin."
+                );
         }
 
         return Button( text, obj, Skin.Get< TextButtonStyle >() );
@@ -218,7 +229,7 @@ public class Dialog : Window, IStyleable< DialogStyle >
     {
         ButtonTable?.AddCell( button );
 
-        SetObject( button, obj! );
+        SetAssociatedObject( button, obj! );
 
         return this;
     }
@@ -235,12 +246,21 @@ public class Dialog : Window, IStyleable< DialogStyle >
     /// <returns> This dialog, for chaining. </returns>
     public Dialog Show( Stage stage )
     {
-        Show( stage,
-              SceneActions.Sequence( SceneActions.Alpha( 0 ),
-                                     SceneActions.FadeIn( 0.4f, Interpolation.Fade ) ) );
+        Show
+            (
+             stage,
+             SceneActions.Sequence
+                 (
+                  SceneActions.Alpha( 0 ),
+                  SceneActions.FadeIn( 0.4f, Interpolation.Fade )
+                 )
+            );
 
-        SetPosition( ( float )Math.Round( ( stage.Width - GetWidth() ) / 2 ),
-                     ( float )Math.Round( ( stage.Height - GetHeight() ) / 2 ) );
+        SetPosition
+            (
+             ( float )Math.Round( ( stage.Width - GetWidth() ) / 2 ),
+             ( float )Math.Round( ( stage.Height - GetHeight() ) / 2 )
+            );
 
         return this;
     }
@@ -261,13 +281,13 @@ public class Dialog : Window, IStyleable< DialogStyle >
 
         PreviousKeyboardFocus = null;
 
-        Actor? previousFocus = stage.GetKeyboardFocus();
+        Actor? previousFocusActor = stage.GetKeyboardFocus();
 
-        if ( previousFocus != null )
+        if ( previousFocusActor != null )
         {
-            if ( !previousFocus.IsDescendantOf( this ) )
+            if ( !previousFocusActor.IsDescendantOf( this ) )
             {
-                PreviousKeyboardFocus = previousFocus;
+                PreviousKeyboardFocus = previousFocusActor;
             }
         }
 
@@ -338,9 +358,15 @@ public class Dialog : Window, IStyleable< DialogStyle >
         {
             AddCaptureListener( _ignoreTouchDown );
 
-            AddAction( SceneActions.Sequence( action,
-                                              SceneActions.RemoveListener( _ignoreTouchDown, true ),
-                                              SceneActions.RemoveActor() ) );
+            AddAction
+                (
+                 SceneActions.Sequence
+                     (
+                      action,
+                      SceneActions.RemoveListener( _ignoreTouchDown, true ),
+                      SceneActions.RemoveActor()
+                     )
+                );
         }
         else
         {
@@ -358,11 +384,11 @@ public class Dialog : Window, IStyleable< DialogStyle >
     }
 
     /// <summary>
-    /// Sets the object associated with the given button.
+    /// Sets the object associated with the given Actor.
     /// </summary>
     /// <param name="actor"> The actor to associate the object with. </param>
     /// <param name="obj"> The object to associate with the actor. </param>
-    public void SetObject( Actor actor, object obj )
+    public void SetAssociatedObject( Actor actor, object obj )
     {
         Values?[ actor ] = obj;
     }
@@ -388,19 +414,6 @@ public class Dialog : Window, IStyleable< DialogStyle >
     public virtual void ClickResult( object? obj )
     {
     }
-
-    /// <summary>
-    /// Gets this Dialogs <see cref="DialogStyle"/> property. Modifying the returned style
-    /// may not have an effect until <see cref="SetStyle"/> is called.
-    /// </summary>
-    /// <returns> The DialogStyle. </returns>
-    public override DialogStyle GetStyle() => ( DialogStyle )base.GetStyle();
-
-    /// <summary>
-    /// Sets the Dialogs <see cref="DialogStyle"/> property.
-    /// </summary>
-    /// <param name="style"> The new DialogStyle. </param>
-    public void SetStyle( DialogStyle style ) => base.SetStyle( style );
 
     // ========================================================================
     // ========================================================================

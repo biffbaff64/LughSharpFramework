@@ -103,21 +103,28 @@ public class AtlasLoader
     /// <param name="path">
     /// The path to the atlas to register. This path should be relative to the library's
     /// content root, which will be added to the provided path when registering the atlas.
+    /// The provided path should NOT begin with a Directory Seperator Character.
     /// An example would be:
     /// <code>
-    ///     @"\PackedImages\output\animations.atlas"
+    ///     @"PackedImages\output\animations.atlas"
     /// </code>
     /// </param>
     /// <exception cref="FileNotFoundException"> Thrown if the atlas cannot be found. </exception>
     /// <exception cref="ArgumentException"> Thrown if if the path does not end with .atlas. </exception>
     public AtlasLoader RegisterAtlas( string path )
     {
+        VerifyOutputFolder();
+        
         if ( !path.EndsWith( ".atlas" ) )
         {
             throw new ArgumentException( "The atlas path must end with .atlas" );
         }
 
-        path = $"{Files.ContentRoot}{path}";
+        path = path.StartsWith( '\\' ) ? path[ 1 .. ] : path;
+        
+        path = @$"{Files.AssemblyDirectory}{Files.ContentRoot}\{path}";
+
+        Logger.Debug( $"Registering atlas: {path}"  );
         
         if ( !File.Exists( path ) )
         {
@@ -130,6 +137,22 @@ public class AtlasLoader
         }
 
         return this;
+    }
+
+    /// <summary>
+    /// Verifies that the output folder exists. If it doesn't, that means the atlases
+    /// have not been built. An exception is thrown if the folder does not exist.
+    /// </summary>
+    /// <exception cref="DirectoryNotFoundException">
+    /// Thrown if the output folder does not exist.
+    /// </exception>
+    private static void VerifyOutputFolder()
+    {
+        if ( !Directory.Exists( @$"{Files.AssemblyDirectory}{Files.ContentRoot}\PackedImages\output" ) )
+        {
+            throw new DirectoryNotFoundException( "The PackedImages\\output folder does not exist. "
+                                                + "Please rebuild the atlases." );
+        }
     }
 }
 

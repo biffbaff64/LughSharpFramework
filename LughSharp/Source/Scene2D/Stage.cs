@@ -322,7 +322,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( inputEvent == null )
             {
-                throw new LughRuntimeException( "Null InputEvent for FireEnterAndExit [Exit Over]!" );
+                throw new LughRuntimeException( "Null InputEvent for FireEnterAndExit [Enter Over]!" );
             }
 
             inputEvent.Stage        = this;

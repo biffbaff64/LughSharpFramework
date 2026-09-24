@@ -367,12 +367,14 @@ public class DesktopGLApplication : IApplication
 
         DotGLFW.Glfw.DefaultWindowHints();
 
+        // boolean settings
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Visible, config.InitialVisibility );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Resizable, config.WindowResizable );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Maximized, config.WindowMaximized );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.AutoIconify, config.AutoIconify );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.Decorated, config.WindowDecorated );
 
+        // integer settings
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.RedBits, config.Red );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.GreenBits, config.Green );
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.BlueBits, config.Blue );
@@ -450,8 +452,8 @@ public class DesktopGLApplication : IApplication
     }
 
     /// <summary>
-    /// Returns the Android API level on Android, the major OS version on iOS (5, 6, 7, ..),
-    /// or 0 on the desktop.
+    /// Returns the Android API level on Android, the major OS version on iOS
+    /// (5, 6, 7, ..), or 0 on the desktop.
     /// </summary>
     public virtual int GetVersion()
     {
@@ -548,9 +550,13 @@ public class DesktopGLApplication : IApplication
     }
 
     /// <summary>
-    /// 
+    /// Releases all resources used by the <see cref="DesktopGLApplication"/> instance.
     /// </summary>
-    /// <param name="disposing"></param>
+    /// <param name="disposing">
+    /// A boolean value indicating whether managed resources should be disposed.
+    /// If true, managed and unmanaged resources are disposed;
+    /// if false, only unmanaged resources are released.
+    /// </param>
     private void Dispose( bool disposing )
     {
         if ( !_disposed )
@@ -565,8 +571,8 @@ public class DesktopGLApplication : IApplication
     }
 
     /// <summary>
-    /// Allows an object to try to free resources and perform other cleanup operations
-    /// before it is reclaimed by garbage collection.
+    /// Allows an object to try to free resources and perform other cleanup
+    /// operations before it is reclaimed by garbage collection.
     /// </summary>
     ~DesktopGLApplication()
     {
@@ -587,7 +593,8 @@ public class DesktopGLApplication : IApplication
     /// existing windows are updated.
     /// </para>
     /// </summary>
-    public DesktopGLWindow NewWindow( IApplicationListener listener, DesktopGLApplicationConfiguration windowConfig )
+    public DesktopGLWindow NewWindow( IApplicationListener listener,
+                                      DesktopGLApplicationConfiguration windowConfig )
     {
         Guard.Against.Null( AppConfig );
 
@@ -656,10 +663,22 @@ public class DesktopGLApplication : IApplication
     }
 
     /// <summary>
+    /// Creates a new <see cref="DesktopGLWindow"/> instance using the provided
+    /// configuration and optional shared OpenGL context.
     /// </summary>
-    /// <param name="dglWindow"></param>
-    /// <param name="config"></param>
-    /// <param name="sharedContext"></param>
+    /// <param name="dglWindow">
+    /// The <see cref="DesktopGLWindow"/> object to initialize and configure.
+    /// </param>
+    /// <param name="config">
+    /// The <see cref="DesktopGLApplicationConfiguration"/> containing settings for the
+    /// new window.
+    /// </param>
+    /// <param name="sharedContext">
+    /// An optional shared OpenGL context to associate with the new window.
+    /// </param>
+    /// <returns>
+    /// A fully configured and ready-to-use <see cref="DesktopGLWindow"/> instance.
+    /// </returns>
     public DesktopGLWindow CreateWindow( DesktopGLWindow? dglWindow,
                                          DesktopGLApplicationConfiguration config,
                                          DotGLFW.Window? sharedContext )

@@ -147,7 +147,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
             throw new ArgumentException( $"stepSize must be > 0. stepSize: {stepSize}" );
         }
 
-        SetStyle( style );
+        SetStyleUnchecked( style );
 
         MinValue   = min;
         MaxValue   = max;
@@ -201,12 +201,17 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     /// </remarks>
     public virtual void SetStyle( ProgressBarStyle value )
     {
+        SetStyleUnchecked( value );
+    }
+
+    protected void SetStyleUnchecked( ProgressBarStyle value )
+    {
         Guard.Against.Null( value );
 
         _style = value;
         InvalidateHierarchy();
     }
-
+    
     /// <summary>
     /// Handles all actions attached to this actor.
     /// </summary>

@@ -193,7 +193,9 @@ public class ClickListener : InputListener
     /// On the desktop, this event occurs even when no mouse buttons are pressed
     /// (pointer will be -1).
     /// </summary>
-    /// <param name="ev"> The input event containing information about the cursor movement. May be null if not provided. </param>
+    /// <param name="ev">
+    /// The input event containing information about the cursor movement. May be null if not provided.
+    /// </param>
     /// <param name="x"> The x-coordinate of the cursor or touch point relative to the actor's origin. </param>
     /// <param name="y"> The y-coordinate of the cursor or touch point relative to the actor's origin. </param>
     /// <param name="ptr"> The pointer index of the touch event. </param>
@@ -276,8 +278,7 @@ public class ClickListener : InputListener
     /// </summary>
     public bool InTapSquare( float x, float y )
     {
-        if ( Math.Abs( TouchDownX - ( -1f ) ) < NumberUtils.FloatTolerance
-          && Math.Abs( TouchDownY - ( -1f ) ) < NumberUtils.FloatTolerance )
+        if ( ( TouchDownX.CompareTo( -1 ) == 0 ) && ( TouchDownY.CompareTo( -1 ) == 0 ) )
         {
             return false;
         }
@@ -291,7 +292,7 @@ public class ClickListener : InputListener
     /// </summary>
     public bool InTapSquare()
     {
-        return !TouchDownX.Equals( -1 );
+        return TouchDownX.CompareTo( -1 ) != 0;
     }
 
     /// <summary>
@@ -299,8 +300,8 @@ public class ClickListener : InputListener
     /// </summary>
     public void InvalidateTapSquare()
     {
-        TouchDownX = -1;
-        TouchDownY = -1;
+        TouchDownX = -1f;
+        TouchDownY = -1f;
     }
 
     /// <summary>

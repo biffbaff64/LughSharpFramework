@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Globalization;
+
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
@@ -981,6 +983,403 @@ public class Skin : IDisposable
             }
         }
     }
+
+    // ========================================================================
+    // JSON output
+    // ========================================================================
+
+    /// <summary>
+    /// The maximum nesting level explored when writing a resource as JSON. This guards
+    /// against unexpectedly deep, or cyclic, object graphs reached via reflection.
+    /// </summary>
+    private const int MaxJsonDepth = 6;
+
+    /// <summary>
+    /// Returns the contents of this skin as JSON, using the same layout as a skin file
+    /// such as <c>uiskin.json</c>: a root object keyed by the JSON class tag of each
+    /// resource type, where each tag holds the named resources of that type.
+    /// <para>
+    /// Resources which reference another resource in the skin, such as the font or the
+    /// drawables of a style, are written as the name of the referenced resource, exactly
+    /// as they are written in a skin file. Values which are not registered in the skin,
+    /// such as the tint of a <see cref="TintedDrawable"/>, are written inline.
+    /// </para>
+    /// <para>
+    /// Only resource types which have an entry in <see cref="JsonClassTags"/> are written.
+    /// Types which the skin derives at runtime, such as <see cref="TextureRegion"/>,
+    /// <see cref="NinePatch"/>, <see cref="Sprite2D"/>, and <see cref="ISceneDrawable"/>,
+    /// have no tag and are therefore omitted. Properties left at their default value
+    /// (null, zero, false, or an empty string) are omitted as well.
+    /// </para>
+    /// </summary>
+    /// <param name="indented">
+    /// True, the default, to write the JSON indented over multiple lines as a skin file
+    /// is written. False to write it on a single line.
+    /// </param>
+    /// <returns> The skin data as a JSON string. </returns>
+    public string ToJson( bool indented = true )
+    {
+        var root    = new JObject();
+        var context = new JsonWriteContext( BuildNameLookup() );
+
+        foreach ( ( Type type, string tag ) in GetTaggedTypesInWriteOrder() )
+        {
+            Dictionary< string, object >? typeResources = Resources.GetValueOrDefault( type );
+
+            if ( typeResources is not { Count: > 0 } )
+            {
+                continue;
+            }
+
+            var block = new JObject();
+
+            foreach ( KeyValuePair< string, object > entry in typeResources )
+            {
+                // Top level resources are written in full, never as a name reference
+                // to themselves.
+                block[ entry.Key ] = WriteValue( entry.Value, context, false, 0 ) ?? new JObject();
+            }
+
+            root[ tag ] = block;
+        }
+
+        return root.ToString( indented ? Formatting.Indented : Formatting.None );
+    }
+
+    /// <summary>
+    /// Returns the contents of this skin as indented JSON, see <see cref="ToJson"/>.
+    /// </summary>
+    public override string ToString()
+    {
+        return ToJson();
+    }
+
+    /// <summary>
+    /// Returns the tagged resource types, paired with the tag to write them under, in
+    /// the order they should appear in the JSON output. <see cref="DefaultTagClasses"/>
+    /// are written first, in declaration order, followed by any additional tags which
+    /// have been added to <see cref="JsonClassTags"/>.
+    /// </summary>
+    private IEnumerable< (Type Type, string Tag) > GetTaggedTypesInWriteOrder()
+    {
+        var typeToTag = new Dictionary< Type, string >();
+
+        foreach ( KeyValuePair< string, Type > entry in JsonClassTags )
+        {
+            typeToTag.TryAdd( entry.Value, entry.Key );
+        }
+
+        var written = new HashSet< Type >();
+
+        foreach ( Tag tag in DefaultTagClasses )
+        {
+            if ( typeToTag.TryGetValue( tag.Type, out string? name ) && written.Add( tag.Type ) )
+            {
+                yield return ( tag.Type, name );
+            }
+        }
+
+        foreach ( KeyValuePair< Type, string > entry in typeToTag )
+        {
+            if ( written.Add( entry.Key ) )
+            {
+                yield return ( entry.Key, entry.Value );
+            }
+        }
+    }
+
+    /// <summary>
+    /// Builds a lookup of every resource in the skin to the name it is registered under,
+    /// keyed by reference so that a resource shared by several styles resolves to the
+    /// same name. Where a resource is registered under more than one name, the first
+    /// name encountered is used.
+    /// </summary>
+    private Dictionary< object, string > BuildNameLookup()
+    {
+        var lookup = new Dictionary< object, string >( ReferenceEqualityComparer.Instance );
+
+        foreach ( Dictionary< string, object > typeResources in Resources.Values )
+        {
+            foreach ( KeyValuePair< string, object > entry in typeResources )
+            {
+                lookup.TryAdd( entry.Value, entry.Key );
+            }
+        }
+
+        return lookup;
+    }
+
+    /// <summary>
+    /// Writes a single value as a JSON token.
+    /// </summary>
+    /// <param name="value"> The value to write. Can be null. </param>
+    /// <param name="context"> The state shared by the current write. </param>
+    /// <param name="allowReference">
+    /// True to write the value as the name it is registered under, if it is a resource
+    /// of this skin. False to always write the value in full.
+    /// </param>
+    /// <param name="depth"> The current nesting level. </param>
+    /// <returns>
+    /// The token to write, or null if the value is at its default and should be omitted.
+    /// </returns>
+    private JToken? WriteValue( object? value, JsonWriteContext context, bool allowReference, int depth )
+    {
+        if ( ( value == null ) || ( depth > MaxJsonDepth ) )
+        {
+            return null;
+        }
+
+        if ( allowReference && context.Names.TryGetValue( value, out string? name ) )
+        {
+            return new JValue( name );
+        }
+
+        switch ( value )
+        {
+            case string text:
+                return text.Length == 0 ? null : new JValue( text );
+
+            case bool flag:
+                return flag ? new JValue( true ) : null;
+
+            case Enum enumeration:
+                return new JValue( enumeration.ToString() );
+
+            case Color color:
+                return WriteColor( color );
+
+            case BitmapFont font:
+                return WriteFont( font );
+
+            // An unregistered drawable can still be identified by the name given to it
+            // when the skin created it.
+            case ISceneDrawable:
+                return value is BaseDrawable { Name.Length: > 0 } drawable
+                           ? new JValue( drawable.Name )
+                           : null;
+
+            case float single:
+                return single == 0.0f ? null : WriteNumber( single );
+
+            case double or decimal:
+            {
+                double number = Convert.ToDouble( value, CultureInfo.InvariantCulture );
+
+                return number == 0.0 ? null : WriteNumber( number );
+            }
+        }
+
+        Type type = value.GetType();
+
+        if ( type.IsPrimitive )
+        {
+            return Convert.ToDouble( value, CultureInfo.InvariantCulture ) == 0.0
+                       ? null
+                       : JToken.FromObject( value );
+        }
+
+        if ( value is System.Collections.IEnumerable items )
+        {
+            var array = new JArray();
+
+            foreach ( object? item in items )
+            {
+                JToken? token = WriteValue( item, context, true, depth + 1 );
+
+                if ( token != null )
+                {
+                    array.Add( token );
+                }
+            }
+
+            return array.Count == 0 ? null : array;
+        }
+
+        // Only skin resources and the styles nested inside them are expanded. Anything
+        // else, a texture for example, is meaningless in a skin file unless it resolves
+        // to a resource name, which it did not above.
+        if ( ( depth > 0 ) && value is not ( ISceneStyle or TintedDrawable ) )
+        {
+            return null;
+        }
+
+        return WriteProperties( value, context, depth );
+    }
+
+    /// <summary>
+    /// Writes the readable public instance properties of the supplied value as a JSON
+    /// object, using the camelCase property names that a skin file uses. Properties
+    /// left at their default value are omitted.
+    /// </summary>
+    /// <param name="value"> The object whose properties are to be written. </param>
+    /// <param name="context"> The state shared by the current write. </param>
+    /// <param name="depth"> The current nesting level. </param>
+    /// <returns> The written object, or null if it has no properties to write. </returns>
+    private JObject? WriteProperties( object value, JsonWriteContext context, int depth )
+    {
+        // Guards against a cycle between two objects which reference each other.
+        if ( !context.Visiting.Add( value ) )
+        {
+            return null;
+        }
+
+        try
+        {
+            var result = new JObject();
+
+            foreach ( PropertyInfo property in value.GetType()
+                                                    .GetProperties( BindingFlags.Public | BindingFlags.Instance ) )
+            {
+                if ( !property.CanRead || ( property.GetIndexParameters().Length > 0 ) )
+                {
+                    continue;
+                }
+
+                object? propertyValue;
+
+                try
+                {
+                    propertyValue = property.GetValue( value );
+                }
+                catch ( Exception )
+                {
+                    continue;
+                }
+
+                JToken? token = WriteValue( propertyValue, context, true, depth + 1 );
+
+                if ( token != null )
+                {
+                    result[ ToJsonName( property.Name ) ] = token;
+                }
+            }
+
+            return result.Count == 0 ? null : result;
+        }
+        finally
+        {
+            context.Visiting.Remove( value );
+        }
+    }
+
+    /// <summary>
+    /// Writes a color as the component object a skin file uses, ie { r, g, b, a }.
+    /// </summary>
+    private static JObject WriteColor( Color color )
+    {
+        return new JObject
+        {
+            [ "r" ] = WriteNumber( color.R ),
+            [ "g" ] = WriteNumber( color.G ),
+            [ "b" ] = WriteNumber( color.B ),
+            [ "a" ] = WriteNumber( color.A ),
+        };
+    }
+
+    /// <summary>
+    /// Writes a floating point value, as a whole number where it has no fractional
+    /// part, matching the way a skin file records its numbers.
+    /// </summary>
+    private static JToken WriteNumber( float number )
+    {
+        return IsWholeNumber( number ) ? new JValue( ( long )number ) : new JValue( number );
+    }
+
+    /// <summary>
+    /// Writes a floating point value, as a whole number where it has no fractional
+    /// part, matching the way a skin file records its numbers.
+    /// </summary>
+    private static JToken WriteNumber( double number )
+    {
+        return IsWholeNumber( number ) ? new JValue( ( long )number ) : new JValue( number );
+    }
+
+    /// <summary>
+    /// Returns true if the supplied value has no fractional part, and is small enough
+    /// to be written as a whole number without losing precision.
+    /// </summary>
+    private static bool IsWholeNumber( double number )
+    {
+        return ( Math.Abs( number ) < 1e15 ) && ( Math.Floor( number ) == number );
+    }
+
+    /// <summary>
+    /// Writes a font as the file reference a skin file uses, ie { file, markupEnabled }.
+    /// </summary>
+    /// <returns> The written font, or null if the font has no source file. </returns>
+    private JToken? WriteFont( BitmapFont font )
+    {
+        FileInfo? fontFile = font.FontData?.FontFile;
+
+        if ( fontFile == null )
+        {
+            return null;
+        }
+
+        var result = new JObject
+        {
+            [ "file" ] = GetSkinRelativePath( fontFile ),
+        };
+
+        if ( font.FontData!.MarkupEnabled )
+        {
+            result[ "markupEnabled" ] = true;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Returns the path of the supplied file relative to the directory holding the skin
+    /// file, as a skin file records it. The file name alone is returned if the file is
+    /// not below that directory.
+    /// </summary>
+    private string GetSkinRelativePath( FileInfo file )
+    {
+        if ( string.IsNullOrEmpty( _skinHome ) )
+        {
+            return file.Name;
+        }
+
+        try
+        {
+            string relative = Path.GetRelativePath( _skinHome, file.FullName );
+
+            return relative.StartsWith( ".." ) ? file.Name : relative.Replace( '\\', '/' );
+        }
+        catch ( Exception )
+        {
+            return file.Name;
+        }
+    }
+
+    /// <summary>
+    /// Converts a property name to the camelCase name used in a skin file, eg
+    /// "FontColor" becomes "fontColor".
+    /// </summary>
+    private static string ToJsonName( string name )
+    {
+        return name.Length == 0 ? name : char.ToLowerInvariant( name[ 0 ] ) + name[ 1.. ];
+    }
+
+    /// <summary>
+    /// Holds the state shared by the calls making up a single <see cref="ToJson"/> write.
+    /// </summary>
+    /// <param name="names"> Maps each resource of the skin to its registered name. </param>
+    private sealed class JsonWriteContext( Dictionary< object, string > names )
+    {
+        /// <summary>
+        /// Maps each resource of the skin, by reference, to the name it is registered under.
+        /// </summary>
+        public Dictionary< object, string > Names { get; } = names;
+
+        /// <summary>
+        /// The objects currently being written, used to detect cycles.
+        /// </summary>
+        public HashSet< object > Visiting { get; } = new( ReferenceEqualityComparer.Instance );
+    }
+
+    // ========================================================================
 
     /// <summary>
     /// Searches for a method with the specified name in the provided type, including

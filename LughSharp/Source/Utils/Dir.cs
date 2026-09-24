@@ -22,42 +22,36 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-global using System;
-global using System.Collections.Generic;
-global using System.Diagnostics.CodeAnalysis;
-global using System.IO;
-global using System.Linq;
-global using System.Reflection;
-global using System.Runtime.InteropServices;
-global using System.Text;
-global using System.Text.RegularExpressions;
-global using System.Threading.Tasks;
+namespace LughSharp.Source.Utils;
 
-// ============================================================================
-// ============================================================================
+[PublicAPI]
+public enum Dir
+{
+    // ----------------------------
+    Still,
+    Up,
+    Down,
+    Left,
+    Right,
 
-global using JetBrains.Annotations;
+    // ----------------------------
+    Forwards,
+    Backwards,
 
-// ============================================================================
-// ============================================================================
+    // ----------------------------
+    Horizontal,
+    Vertical,
 
-global using NSubstitute;
-global using NUnit.Framework;
+    // ----------------------------
+    In,
+    Out,
 
-// ============================================================================
-// ============================================================================
-
-global using LughSharp.Source.Assets;
-global using LughSharp.Source.Audio;
-global using LughSharp.Source.Graphics;
-global using LughSharp.Source.Graphics.G2D;
-global using LughSharp.Source.Input;
-global using LughSharp.Source.Maps;
-global using LughSharp.Source.Maths;
-global using LughSharp.Source.Network;
-global using LughSharp.Source.Utils;
-global using LughSharp.Source.Utils.Exceptions;
-global using LughSharp.Source.Utils.Logging;
+    // ----------------------------
+    UpLeft,
+    UpRight,
+    DownLeft,
+    DownRight,
+}
 
 // ============================================================================
 // ============================================================================

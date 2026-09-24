@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.G2D;
-
 namespace LughSharp.Source.Scene2D.Utils;
 
 /// <summary>
@@ -102,6 +100,22 @@ public class BaseDrawable : ISceneDrawable
     /// Creates a copy of this drawable.
     /// </summary>
     public virtual ISceneDrawable Copy() => new BaseDrawable( this );
+
+    /// <inheritdoc />
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+
+        sb.Append( $"Name:         {Name}\n" );
+        sb.Append( $"MinWidth:     {MinWidth}\n" );
+        sb.Append( $"MinHeight:    {MinHeight}\n" );
+        sb.Append( $"LeftWidth:    {LeftWidth}\n" );
+        sb.Append( $"RightWidth:   {RightWidth}\n" );
+        sb.Append( $"TopHeight:    {TopHeight}\n" );
+        sb.Append( $"BottomHeight: {BottomHeight}\n" );
+        
+        return sb.ToString();
+    }
 }
 
 // ============================================================================

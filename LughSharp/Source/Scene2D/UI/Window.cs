@@ -50,18 +50,19 @@ public class Window : Table, IStyleable< WindowStyle >
     public Table? TitleTable     { get; set; }
     public bool   IsModal        { get; set; }
     public bool   IsResizable    { get; set; }
-    public bool   Dragging       { get; set; }
 
     // ========================================================================
 
+    protected bool  Dragging        { get; set; }
     protected bool  KeepWithinStage { get; set; } = true;
     protected Align Edge            { get; set; }
 
     // ========================================================================
 
-    private const int   DefaultWidth  = 150;
-    private const int   DefaultHeight = 150;
-    private const Align Move          = Align.Special;
+    private const string DefaultWindowTitle = "LughWindow";
+    private const int    DefaultWidth       = 150;
+    private const int    DefaultHeight      = 150;
+    private const Align  Move               = Align.Special;
 
     private static readonly Vector2     _tmpPosition = new();
     private static readonly Vector2     _tmpSize     = new();
@@ -76,8 +77,8 @@ public class Window : Table, IStyleable< WindowStyle >
     /// </summary>
     /// <param name="title"> A string holding the title. </param>
     /// <param name="skin"> The Skin. </param>
-    public Window( string title, Skin skin )
-        : this( title, skin.Get< WindowStyle >(), skin )
+    public Window( string? title, Skin skin )
+        : this( title, skin.Get< WindowStyle >() )
     {
     }
 
@@ -88,8 +89,8 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <param name="title"> A string holding the title. </param>
     /// <param name="skin"> The Skin. </param>
     /// <param name="styleName"> The name of the WindowStyle to use. </param>
-    public Window( string title, Skin skin, string styleName )
-        : this( title, skin.Get< WindowStyle >( styleName ), skin )
+    public Window( string? title, Skin skin, string styleName )
+        : this( title, skin.Get< WindowStyle >( styleName ) )
     {
     }
 
@@ -102,12 +103,11 @@ public class Window : Table, IStyleable< WindowStyle >
     /// </summary>
     /// <param name="title"> The title. </param>
     /// <param name="style"> The WindowStyle to use. </param>
-    /// <param name="skin"> The Skin. </param>
-    public Window( string title, WindowStyle style, Skin skin )
+    public Window( string? title, WindowStyle style )
     {
         if ( string.IsNullOrEmpty( title ) )
         {
-            throw new ArgumentException( "Title cannot be null or empty!" );
+            title = DefaultWindowTitle;
         }
 
         if ( style.TitleFont == null )
@@ -115,14 +115,13 @@ public class Window : Table, IStyleable< WindowStyle >
             throw new InvalidUIStyleException( "Style does not contain a TitleFont!" );
         }
 
-        Skin      = skin;
         Touchable = Touchable.Enabled;
         Clip      = true;
 
         TitleLabel = new Label( title, new LabelStyle( style.TitleFont, style.TitleFontColor ) );
         TitleLabel.SetEllipsis( true );
 
-        TitleTable = new Table( skin );
+        TitleTable = new WindowTitle( this );
         TitleTable.AddCell( TitleLabel ).GrowX().SetMinWidth( DefaultWidth );
         AddActor( TitleTable );
 
@@ -146,7 +145,7 @@ public class Window : Table, IStyleable< WindowStyle >
             return;
         }
 
-        Stage stage        = GetStage() ?? throw new InvalidOperationException( "Window is not attached to a stage." );
+        Stage stage        = GetStage() ?? throw new LughRuntimeException( "Window is not attached to a stage." );
         float parentWidth  = stage.Width;
         float parentHeight = stage.Height;
 
@@ -155,32 +154,44 @@ public class Window : Table, IStyleable< WindowStyle >
             if ( ( GetX( Align.Right ) - stage.Camera.Position.X )
                > ( parentWidth / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
-                             GetY( Align.Right ),
-                             Align.Right );
+                SetPosition
+                    (
+                     stage.Camera.Position.X + ( parentWidth / 2 / orthographicCamera.Zoom ),
+                     GetY( Align.Right ),
+                     Align.Right
+                    );
             }
 
             if ( ( GetX( Align.Left ) - stage.Camera.Position.X )
                < ( -parentWidth / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
-                             GetY( Align.Left ),
-                             Align.Left );
+                SetPosition
+                    (
+                     stage.Camera.Position.X - ( parentWidth / 2 / orthographicCamera.Zoom ),
+                     GetY( Align.Left ),
+                     Align.Left
+                    );
             }
 
             if ( ( GetY( Align.Top ) - stage.Camera.Position.Y ) > ( parentHeight / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( GetX( Align.Top ),
-                             stage.Camera.Position.Y + ( parentHeight / 2 / orthographicCamera.Zoom ),
-                             Align.Top );
+                SetPosition
+                    (
+                     GetX( Align.Top ),
+                     stage.Camera.Position.Y + ( parentHeight / 2 / orthographicCamera.Zoom ),
+                     Align.Top
+                    );
             }
 
             if ( ( GetY( Align.Bottom ) - stage.Camera.Position.Y )
                < ( -parentHeight / 2 / orthographicCamera.Zoom ) )
             {
-                SetPosition( GetX( Align.Bottom ),
-                             stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
-                             Align.Bottom );
+                SetPosition
+                    (
+                     GetX( Align.Bottom ),
+                     stage.Camera.Position.Y - ( parentHeight / 2 / orthographicCamera.Zoom ),
+                     Align.Bottom
+                    );
             }
         }
         else if ( Parent == stage.RootGroup )
@@ -218,10 +229,10 @@ public class Window : Table, IStyleable< WindowStyle >
     /// <param name="parentAlpha"> The alpha value of the parent actor. </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        if ( GetStage() != null )
+        Stage? stage = GetStage();
+        
+        if ( stage != null )
         {
-            Stage stage = GetStage() ?? throw new InvalidOperationException( "Window is not attached to a stage." );
-
             if ( stage.GetKeyboardFocus() == null )
             {
                 stage.SetKeyboardFocus( this );
@@ -234,12 +245,15 @@ public class Window : Table, IStyleable< WindowStyle >
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
                 StageToLocalCoordinates( _tmpSize.Set( stage.Width, stage.Height ) );
 
-                DrawStageBackground( batch,
-                                     parentAlpha,
-                                     GetX() + _tmpPosition.X,
-                                     GetY() + _tmpPosition.Y,
-                                     GetX() + _tmpSize.X,
-                                     GetY() + _tmpSize.Y );
+                DrawStageBackground
+                    (
+                     batch,
+                     parentAlpha,
+                     GetX() + _tmpPosition.X,
+                     GetY() + _tmpPosition.Y,
+                     GetX() + _tmpSize.X,
+                     GetY() + _tmpSize.Y
+                    );
             }
         }
 
@@ -380,9 +394,8 @@ public class Window : Table, IStyleable< WindowStyle >
         if ( ( TitleLabel != null ) && ( _style.TitleFont != null ) )
         {
             TitleLabel.SetStyle( new LabelStyle( _style.TitleFont, _style.TitleFontColor ) );
+            InvalidateHierarchy();
         }
-
-        InvalidateHierarchy();
     }
 
     /// <summary>
@@ -409,16 +422,9 @@ public class Window : Table, IStyleable< WindowStyle >
     /// </para>
     /// </summary>
     [PublicAPI]
-    public class WindowCaptureListener : InputListener
+    public class WindowCaptureListener( Window window ) : InputListener
     {
-        private readonly Window _window;
-
         // ====================================================================
-
-        public WindowCaptureListener( Window window )
-        {
-            _window = window;
-        }
 
         /// <summary>
         /// Called when a mouse button or a finger touch goes down on the actor.
@@ -430,7 +436,7 @@ public class Window : Table, IStyleable< WindowStyle >
         /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            _window.BringToFront();
+            window.BringToFront();
 
             return false;
         }
@@ -625,10 +631,13 @@ public class Window : Table, IStyleable< WindowStyle >
                 height += amountY;
             }
 
-            _window.SetBounds( ( float )Math.Round( windowX ),
-                               ( float )Math.Round( windowY ),
-                               ( float )Math.Round( width ),
-                               ( float )Math.Round( height ) );
+            _window.SetBounds
+                (
+                 ( float )Math.Round( windowX ),
+                 ( float )Math.Round( windowY ),
+                 ( float )Math.Round( width ),
+                 ( float )Math.Round( height )
+                );
         }
 
         /// <summary>
@@ -787,25 +796,8 @@ public class Window : Table, IStyleable< WindowStyle >
 /// </para>
 /// </summary>
 [PublicAPI]
-public class WindowTitle : Table
+public class WindowTitle( Window window ) : Table
 {
-    private readonly Window _window;
-    
-    // ========================================================================
-
-    /// <summary>
-    /// Represents the title section of a window, providing additional control
-    /// over how the title is rendered and integrated within the window.
-    /// </summary>
-    /// <param name="window">
-    /// The parent <see cref="Window"/> associated with this title. It determines the
-    /// rendering behavior and state of the <see cref="WindowTitle"/>.
-    /// </param>
-    public WindowTitle( Window window )
-    {
-        _window = window;
-    }
-
     /// <summary>
     /// Renders the window title table using the specified batch and parent alpha value,
     /// if the window is configured to draw its title table.
@@ -814,7 +806,7 @@ public class WindowTitle : Table
     /// <param name="parentAlpha">The alpha factor inherited from the parent element.</param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        if ( _window.DrawTitleTable )
+        if ( window.DrawTitleTable )
         {
             base.Draw( batch, parentAlpha );
         }
