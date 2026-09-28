@@ -22,14 +22,12 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Scene2D.UI.Styles;
 using LughSharp.Source.Scene2D.Utils;
-using LughSharp.Source.Utils;
 
 namespace LughSharp.Source.Scene2D.UI;
 
@@ -46,7 +44,7 @@ namespace LughSharp.Source.Scene2D.UI;
 [Experimental( "LUGH_UI_001" )]
 public class StyleRegistry
 {
-    private Dictionary< string, Dictionary< string, object > > _data = [ ];
+    private Dictionary< string, Dictionary< string, object > > _registryData = [ ];
 
     // ========================================================================
 
@@ -59,10 +57,10 @@ public class StyleRegistry
         string typeKey = typeof( T ).Name;
 
         // Ensure the dictionary for this type exists
-        if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
+        if ( !_registryData.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
         {
-            section          = new Dictionary< string, object >();
-            _data[ typeKey ] = section;
+            section                  = new Dictionary< string, object >();
+            _registryData[ typeKey ] = section;
         }
 
         section[ name ] = style;
@@ -80,7 +78,7 @@ public class StyleRegistry
         string typeKey = typeof( T ).Name;
 
         // Check if the Type is registered at all
-        if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
+        if ( !_registryData.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
         {
             // This error will now tell you EXACTLY what string key it was looking for
             throw new Exception( $"StyleRegistry: No styles registered for type key '{typeKey}'." );
@@ -105,7 +103,7 @@ public class StyleRegistry
     /// </returns>
     public Dictionary< string, Dictionary< string, object > > GetRegistry()
     {
-        return _data;
+        return _registryData;
     }
 
     /// <summary>
@@ -175,18 +173,24 @@ public class StyleRegistry
         Add( "default", winStyle ).Add( "dialog", winStyle );
 
         // ----- ProgressBarStyle -----
-        Add( "default-horizontal",
-             new ProgressBarStyle
-             {
-                 Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
-                 Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-slider-knob" ) )
-             } )
-            .Add( "default-vertical",
-                  new ProgressBarStyle
-                  {
-                      Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
-                      Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
-                  } );
+        Add
+                (
+                 "default-horizontal",
+                 new ProgressBarStyle
+                 {
+                     Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
+                     Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-slider-knob" ) )
+                 }
+                )
+            .Add
+                (
+                 "default-vertical",
+                 new ProgressBarStyle
+                 {
+                     Background = new TextureRegionDrawable( atlas.FindRegion( "default-slider" ) ),
+                     Knob       = new TextureRegionDrawable( atlas.FindRegion( "default-round-large" ) )
+                 }
+                );
 
         // ----- SliderStyle -----
         var sliderStyle = new SliderStyle();
@@ -359,10 +363,10 @@ public class StyleRegistry
     {
         string typeKey = style.GetType().FullName ?? style.GetType().Name;
 
-        if ( !_data.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
+        if ( !_registryData.TryGetValue( typeKey, out Dictionary< string, object >? section ) )
         {
-            section          = new Dictionary< string, object >();
-            _data[ typeKey ] = section;
+            section                  = new Dictionary< string, object >();
+            _registryData[ typeKey ] = section;
         }
 
         section[ styleName ] = style;
@@ -384,7 +388,7 @@ public class StyleRegistry
     /// </summary>
     public void DebugRegistry()
     {
-        foreach ( KeyValuePair< string, Dictionary< string, object > > entry in _data )
+        foreach ( KeyValuePair< string, Dictionary< string, object > > entry in _registryData )
         {
             Logger.Debug( $"Registered Key: {entry.Key} | Count: {entry.Value.Count}" );
 

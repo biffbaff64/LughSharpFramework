@@ -27,14 +27,14 @@ using System.Collections.Concurrent;
 namespace LughSharp.Source.Utils.Pooling;
 
 /// <summary>
-/// Stores a map of <see cref="Pool{T}" />s by type for convenient static access.
+/// Stores a map of <see cref="Pool{T}" />s by type for convenient access.
 /// </summary>
 [PublicAPI]
-public static class PoolsMap
+public class PoolsMap
 {
     // Use a ConcurrentDictionary for thread-safe access to the pools themselves.
     // Store object as base Pool<object> or dynamic cast when retrieving.
-    private static readonly ConcurrentDictionary< Type, object > _typePools = new();
+    private readonly ConcurrentDictionary< Type, object > _typePools = new();
 
     // ========================================================================
 
@@ -49,7 +49,7 @@ public static class PoolsMap
     /// </param>
     /// <returns> True if the pool was registered, false if it was already registered. </returns>
     /// <typeparam name="T"> The Type of the pool. </typeparam>
-    public static bool RegisterPool< T >( Pool< T > pool, bool fatal = true ) where T : class
+    public bool RegisterPool< T >( Pool< T > pool, bool fatal = true ) where T : class
     {
         bool added = _typePools.TryAdd( typeof( T ), pool );
 
@@ -66,7 +66,7 @@ public static class PoolsMap
     /// </summary>
     /// <param name="pool"></param>
     /// <typeparam name="T"></typeparam>
-    public static void RemovePool< T >( Pool< T > pool ) where T : class
+    public void RemovePool< T >( Pool< T > pool ) where T : class
     {
         if ( !_typePools.TryRemove( typeof( T ), out _ ) )
         {
@@ -83,7 +83,7 @@ public static class PoolsMap
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T Obtain< T >() where T : class, new()
+    public T Obtain< T >() where T : class, new()
     {
         Pool< T > pool = GetRegisteredPool< T >();
 
@@ -101,7 +101,7 @@ public static class PoolsMap
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static T? ObtainOrNull< T >() where T : class, new()
+    public T? ObtainOrNull< T >() where T : class, new()
     {
         return TryGetRegisteredPool< T >( out Pool< T > pool ) ? pool.Obtain() : null;
     }
@@ -123,9 +123,9 @@ public static class PoolsMap
     /// <param name="initialCapacity">Initial capacity of the pool if a new one is created.</param>
     /// <param name="max">Maximum number of objects to store in the pool if a new one is created.</param>
     /// <returns>The Pool instance for the specified type.</returns>
-    public static Pool< T > Get< T >( Pool< T >.PoolObjectFactory newObjectFactory,
-                                      int initialCapacity = Pool< T >.DefaultInitialCapacity,
-                                      int max = int.MaxValue ) where T : class
+    public Pool< T > Get< T >( Pool< T >.PoolObjectFactory newObjectFactory,
+                               int initialCapacity = Pool< T >.DefaultInitialCapacity,
+                               int max = int.MaxValue ) where T : class
     {
         Guard.Against.Null( newObjectFactory );
 
@@ -151,7 +151,7 @@ public static class PoolsMap
     /// <typeparam name="T">The type of object the pool manages.</typeparam>
     /// <param name="pool">The Pool instance to set.</param>
     /// <exception cref="ArgumentNullException">Thrown if pool is null.</exception>
-    public static void Set< T >( Pool< T > pool ) where T : class
+    public void Set< T >( Pool< T > pool ) where T : class
     {
         Guard.Against.Null( pool );
 
@@ -167,7 +167,7 @@ public static class PoolsMap
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static void Free< T >( T obj ) where T : class
+    public void Free< T >( T obj ) where T : class
     {
         Guard.Against.Null( obj );
 
@@ -191,7 +191,7 @@ public static class PoolsMap
     /// <exception cref="InvalidOperationException">
     /// Thrown if no pool is registered for the specified type.
     /// </exception>
-    public static void FreeAll< T >( IEnumerable< T? > objects ) where T : class
+    public void FreeAll< T >( IEnumerable< T? > objects ) where T : class
     {
         Guard.Against.Null( objects );
 
@@ -218,7 +218,7 @@ public static class PoolsMap
     /// Clears the pool for a specific type, discarding all free objects.
     /// </summary>
     /// <typeparam name="T">The type of objects in the pool to clear.</typeparam>
-    public static void Clear< T >() where T : class
+    public void Clear< T >() where T : class
     {
         if ( TryGetRegisteredPool< T >( out Pool< T > pool ) )
         {
@@ -229,7 +229,7 @@ public static class PoolsMap
     /// <summary>
     /// Clears all registered pools.
     /// </summary>
-    public static void ClearAllPools()
+    public void ClearAllPools()
     {
         foreach ( object entry in _typePools.Values )
         {
@@ -246,11 +246,11 @@ public static class PoolsMap
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
     /// <exception cref="InvalidOperationException"></exception>
-    public static Pool< T > GetRegisteredPool< T >() where T : class
+    public Pool< T > GetRegisteredPool< T >() where T : class
     {
         return !TryGetRegisteredPool< T >( out Pool< T > pool )
-            ? throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}." )
-            : pool;
+                   ? throw new InvalidOperationException( $"No pool registered for type {typeof( T ).Name}." )
+                   : pool;
     }
 
     /// <summary>
@@ -259,7 +259,7 @@ public static class PoolsMap
     /// <param name="pool"></param>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public static bool TryGetRegisteredPool< T >( out Pool< T > pool ) where T : class
+    public bool TryGetRegisteredPool< T >( out Pool< T > pool ) where T : class
     {
         if ( _typePools.TryGetValue( typeof( T ), out object? poolObject ) )
         {

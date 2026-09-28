@@ -25,15 +25,17 @@
 namespace LughSharp.Source.Utils.Pooling;
 
 [PublicAPI]
-public interface IPoolable
+public interface IPool
 {
-    /// <summary>
-    /// Resets the object for reuse. Object references should be nulled
-    /// and fields may be set to default values.
-    /// </summary>
-    void Reset();
+    void Clear();
+}
+
+[PublicAPI]
+public interface IPool< T > : IPool where T : class
+{
+    T Obtain();
+    void Free( T obj );
 }
 
 // ============================================================================
 // ============================================================================
-

@@ -85,11 +85,14 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     /// <param name="vertical"> True if the slider is to be drawn vertically. otherwise false. </param>
     /// <param name="skin"> The Skin holding the style. </param>
     public Slider( float min, float max, float stepSize, bool vertical, Skin skin )
-        : this( min,
-                max,
-                stepSize,
-                vertical,
-                skin.Get< SliderStyle >( "default" + ( vertical ? "-vertical" : "-horizontal" ) ) )
+        : this
+            (
+             min,
+             max,
+             stepSize,
+             vertical,
+             skin.Get< SliderStyle >( "default" + ( vertical ? "-vertical" : "-horizontal" ) )
+            )
     {
     }
 
@@ -395,8 +398,8 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         }
 
         return Math.Abs( bestDiff - ( -1f ) ) < NumberUtils.FloatTolerance
-            ? value
-            : bestValue;
+                   ? value
+                   : bestValue;
     }
 
     /// <summary>
@@ -432,7 +435,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     {
         base.SetStyle( style );
     }
-    
+
     // ========================================================================
     // ========================================================================
 
@@ -450,15 +453,8 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     /// intuitive control for the end user.
     /// </remarks>
     [PublicAPI]
-    public class SliderInputListener : InputListener
+    public class SliderInputListener( Slider parent ) : InputListener
     {
-        private readonly Slider _parent;
-
-        public SliderInputListener( Slider parent )
-        {
-            _parent = parent;
-        }
-
         /// <summary>
         /// Called when a mouse button or a finger touch goes down on the actor.
         /// If true is returned, this listener will have
@@ -471,23 +467,23 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         {
             Logger.Checkpoint();
 
-            if ( _parent.IsDisabled )
+            if ( parent.IsDisabled )
             {
                 return false;
             }
 
-            if ( ( _parent.MouseButton != -1 ) && ( _parent.MouseButton != button ) )
+            if ( ( parent.MouseButton != -1 ) && ( parent.MouseButton != button ) )
             {
                 return false;
             }
 
-            if ( _parent._draggingPointer != -1 )
+            if ( parent._draggingPointer != -1 )
             {
                 return false;
             }
 
-            _parent._draggingPointer = pointer;
-            _parent.CalculatePositionAndValue( x, y );
+            parent._draggingPointer = pointer;
+            parent.CalculatePositionAndValue( x, y );
 
             return true;
         }
@@ -499,22 +495,22 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         /// </summary>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            if ( pointer != _parent._draggingPointer )
+            if ( pointer != parent._draggingPointer )
             {
                 return;
             }
 
             // The position is invalid when focus is cancelled
-            if ( ev!.TouchFocusCancel || !_parent.CalculatePositionAndValue( x, y ) )
+            if ( ev!.TouchFocusCancel || !parent.CalculatePositionAndValue( x, y ) )
             {
                 // Fire an event on touchUp even if the value didn't change, so
                 // listeners can see when a drag ends via isDragging.
-                var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
+                var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
                 Guard.Against.Null( changeEvent );
 
-                _parent.Fire( changeEvent );
-                PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
+                parent.Fire( changeEvent );
+                Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
             }
         }
 
@@ -525,7 +521,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         /// </summary>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
-            _parent.CalculatePositionAndValue( x, y );
+            parent.CalculatePositionAndValue( x, y );
         }
 
         /// <summary>
@@ -542,7 +538,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         {
             if ( pointer == -1 )
             {
-                _parent.MouseOver = true;
+                parent.MouseOver = true;
             }
         }
 
@@ -560,7 +556,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         {
             if ( pointer == -1 )
             {
-                _parent.MouseOver = false;
+                parent.MouseOver = false;
             }
         }
     }

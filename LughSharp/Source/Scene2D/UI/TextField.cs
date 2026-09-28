@@ -22,6 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using System.Collections;
 using System.Diagnostics;
 
 using LughSharp.Source.Collections;
@@ -56,26 +57,27 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class TextField : Widget, IStyleable< TextFieldStyle >
 {
-    public GlyphLayout         GlyphLayout              { get; set; } = new();
-    public List< float >       GlyphPositions           { get; set; } = [ ];
-    public ITextFieldFilter?   Filter                   { get; set; }
-    public ITextFieldListener? Listener                 { get; set; }
-    public string              Text                     { get; set; } = string.Empty;
-    public string              MessageText              { get; set; } = string.Empty;
-    public string              DisplayText              { get; set; } = string.Empty;
-    public int                 Cursor                   { get; set; }
-    public int                 SelectionStart           { get; set; }
-    public int                 MaxLength                { get; set; }
-    public bool                HasSelection             { get; set; }
-    public bool                WriteEnters              { get; set; }
-    public bool                FocusTraversal           { get; set; } = true;
-    public bool                ProgrammaticChangeEvents { get; set; }
-    public bool                Disabled                 { get; set; }
-    public float               FontOffset               { get; set; }
-    public float               TextHeight               { get; set; }
-    public float               TextOffset               { get; set; }
-    public float               KeyRepeatInitialTime     { get; private set; } = 0.4f;
-    public float               KeyRepeatTime            { get; private set; } = 0.1f;
+    public GlyphLayout         GlyphLayout    { get; set; }
+    public List< float >       GlyphPositions { get; set; }
+    public ITextFieldFilter?   Filter         { get; set; }
+    public ITextFieldListener? Listener       { get; set; }
+
+    public string Text                     { get; set; } = string.Empty;
+    public string MessageText              { get; set; } = string.Empty;
+    public string DisplayText              { get; set; } = string.Empty;
+    public int    Cursor                   { get; set; }
+    public int    SelectionStart           { get; set; }
+    public int    MaxLength                { get; set; }
+    public bool   HasSelection             { get; set; }
+    public bool   WriteEnters              { get; set; }
+    public bool   FocusTraversal           { get; set; } = true;
+    public bool   ProgrammaticChangeEvents { get; set; }
+    public bool   Disabled                 { get; set; }
+    public float  FontOffset               { get; set; }
+    public float  TextHeight               { get; set; }
+    public float  TextOffset               { get; set; }
+    public float  KeyRepeatInitialTime     { get; private set; } = 0.4f;
+    public float  KeyRepeatTime            { get; private set; } = 0.1f;
 
     // ========================================================================
 
@@ -88,16 +90,13 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
     // ========================================================================
 
-    private readonly bool                 _onlyFontChars = true;
-    private readonly Align                _textAlign     = Align.Left;
-    private readonly Vector2              _tmp1          = new();
-    private readonly Vector2              _tmp2          = new();
-    private readonly Vector2              _tmp3          = new();
-    private readonly BlinkTaskManager     _blink;
+    private readonly Align                _textAlign = Align.Left;
+    private readonly Vector2              _tmp1      = new();
+    private readonly Vector2              _tmp2      = new();
+    private readonly Vector2              _tmp3      = new();
     private readonly IClipboard?          _clipboard;
     private readonly KeyRepeatTaskManager _keyRepeat;
 
-    private CancellationToken        _blinkCancellationToken;
     private Task?                    _blinkTask;
     private CancellationTokenSource? _blinkTokenSource;
     private bool                     _cursorOn;
@@ -117,7 +116,8 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     private string?                  _undoText = string.Empty;
     private int                      _visibleTextEnd;
     private int                      _visibleTextStart;
-    private TextFieldStyle           _style = null!;
+    private TextFieldStyle           _style         = null!;
+    private bool                     _onlyFontChars = true;
 
     // ========================================================================
 
@@ -150,17 +150,185 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     /// <param name="style"> The <see cref="TextFieldStyle"/> to use. </param>
     public TextField( string? text, TextFieldStyle style )
     {
-        _clipboard     = Engine.App.Clipboard;
-        _blink         = new BlinkTaskManager( this );
-        _keyRepeat     = new KeyRepeatTaskManager( this );
-        _inputListener = new TextFieldClickListener( this );
-
-        _blink.Create();
-        _keyRepeat.Create();
+        GlyphLayout    = new();
+        GlyphPositions = [ ];
 
         SetStyleSafe( style );
+
+        _clipboard = Engine.App.Clipboard;
+        _keyRepeat = new KeyRepeatTaskManager( this );
+
+        _blinkTokenSource = new CancellationTokenSource();
+
+        _blinkTask = Task.Run
+            (
+             async () =>
+             {
+                 while ( !_blinkTokenSource.Token.IsCancellationRequested )
+                 {
+                     if ( GetStage() == null )
+                     {
+                         _blinkTokenSource.Cancel();
+
+                         return;
+                     }
+
+                     _cursorOn = !_cursorOn;
+                     Engine.Graphics.RequestRendering();
+
+                     // Adjust delay duration as needed for blink rate
+                     await Task.Delay( 500, _blinkTokenSource.Token );
+                 }
+             },
+             _blinkTokenSource.Token
+            );
+
+        SafeInitialise();
+
+        _keyRepeat.Create();
+
         SetText( text );
         SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void SafeInitialise() => Initialise();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    protected virtual void Initialise()
+    {
+        AddListener( _inputListener = CreateInputListener() );
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
+    protected InputListener CreateInputListener()
+    {
+        return new TextFieldClickListener( this );
+    }
+
+    /// <summary>
+    /// Determines the index of the letter located under the specified x-coordinate
+    /// relative to the current cursor line's glyph positions.
+    /// </summary>
+    /// <param name="x">The x-coordinate to check for a corresponding letter.</param>
+    /// <returns>The index of the letter under the specified x-coordinate.</returns>
+    protected virtual int LetterUnderCursor( float x )
+    {
+        x -= TextOffset + FontOffset - _style.Font.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
+
+        ISceneDrawable? background = GetBackgroundDrawable();
+
+        if ( background != null )
+        {
+            x -= background.LeftWidth;
+        }
+
+        int     n              = GlyphPositions.Count;
+        float[] glyphPositions = GlyphPositions.ToArray();
+
+        for ( var i = 1; i < n; i++ )
+        {
+            if ( glyphPositions[ i ] > x )
+            {
+                if ( ( glyphPositions[ i ] - x ) <= ( x - glyphPositions[ i - 1 ] ) )
+                {
+                    return i;
+                }
+
+                return i - 1;
+            }
+        }
+
+        return n - 1;
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if the specified character is considered a word character.
+    /// </summary>
+    /// <param name="c">The character to check.</param>
+    /// <returns><c>true</c> if the character is a word character; otherwise, <c>false</c>.</returns>
+    protected virtual bool IsWordCharacter( char c )
+    {
+        return char.IsLetterOrDigit( c );
+    }
+
+    /// <summary>
+    /// Returns the indices of the word under the cursor at the specified position.
+    /// </summary>
+    /// <param name="at">The position of the cursor.</param>
+    /// <returns>An array containing the indices of the word under the cursor.</returns>
+    protected virtual int[] WordUnderCursor( int at )
+    {
+        string text  = Text;
+        int    right = Text.Length;
+        var    left  = 0;
+        int    index = at;
+
+        if ( at >= text.Length )
+        {
+            left  = text.Length;
+            right = 0;
+        }
+        else
+        {
+            for ( ; index < right; index++ )
+            {
+                if ( !IsWordCharacter( text[ index ] ) )
+                {
+                    right = index;
+
+                    break;
+                }
+            }
+
+            for ( index = at - 1; index > -1; index-- )
+            {
+                if ( !IsWordCharacter( text[ index ] ) )
+                {
+                    left = index + 1;
+
+                    break;
+                }
+            }
+        }
+
+        return [ left, right ];
+    }
+
+    /// <summary>
+    /// Retrieves the start and end indices of the word under the cursor based on
+    /// the specified x-coordinate.
+    /// </summary>
+    /// <param name="x">
+    /// The x-coordinate relative to the text field, used to determine the word under the cursor.
+    /// </param>
+    /// <returns>
+    /// An array of two integers, where the first element represents the start index and
+    /// the second element represents the end index of the word under the cursor.
+    /// </returns>
+    protected virtual int[] WordUnderCursor( float x )
+    {
+        return WordUnderCursor( LetterUnderCursor( x ) );
+    }
+
+    /// <summary>
+    /// Determines whether the specified size is within the maximum allowable length.
+    /// </summary>
+    /// <param name="size">The size to evaluate against the maximum length.</param>
+    /// <returns>
+    /// <c>true</c> if the size is less than the maximum length or if no maximum length is set;
+    /// otherwise, <c>false</c>.
+    /// </returns>
+    protected virtual bool WithinMaxLength( int size )
+    {
+        return ( MaxLength <= 0 ) || ( size < MaxLength );
     }
 
     /// <summary>
@@ -420,129 +588,14 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     }
 
     /// <summary>
-    /// Determines the index of the letter located under the specified x-coordinate
-    /// relative to the current cursor line's glyph positions.
+    /// Retrieves the appropriate background drawable for the TextField based on
+    /// its current state.
     /// </summary>
-    /// <param name="x">The x-coordinate to check for a corresponding letter.</param>
-    /// <returns>The index of the letter under the specified x-coordinate.</returns>
-    protected virtual int LetterUnderCursor( float x )
-    {
-        x -= TextOffset + FontOffset - _style.Font.FontData.CursorX - GlyphPositions[ _visibleTextStart ];
-
-        ISceneDrawable? background = GetBackgroundDrawable();
-
-        if ( background != null )
-        {
-            x -= background.LeftWidth;
-        }
-
-        int     n              = GlyphPositions.Count;
-        float[] glyphPositions = GlyphPositions.ToArray();
-
-        for ( var i = 1; i < n; i++ )
-        {
-            if ( glyphPositions[ i ] > x )
-            {
-                if ( ( glyphPositions[ i ] - x ) <= ( x - glyphPositions[ i - 1 ] ) )
-                {
-                    return i;
-                }
-
-                return i - 1;
-            }
-        }
-
-        return n - 1;
-    }
-
-    /// <summary>
-    /// Returns <c>true</c> if the specified character is considered a word character.
-    /// </summary>
-    /// <param name="c">The character to check.</param>
-    /// <returns><c>true</c> if the character is a word character; otherwise, <c>false</c>.</returns>
-    protected virtual bool IsWordCharacter( char c )
-    {
-        return char.IsLetterOrDigit( c );
-    }
-
-    /// <summary>
-    /// Returns the indices of the word under the cursor at the specified position.
-    /// </summary>
-    /// <param name="at">The position of the cursor.</param>
-    /// <returns>An array containing the indices of the word under the cursor.</returns>
-    protected virtual int[] WordUnderCursor( int at )
-    {
-        string text  = Text;
-        int    right = Text.Length;
-        var    left  = 0;
-        int    index = at;
-
-        if ( at >= text.Length )
-        {
-            left  = text.Length;
-            right = 0;
-        }
-        else
-        {
-            for ( ; index < right; index++ )
-            {
-                if ( !IsWordCharacter( text[ index ] ) )
-                {
-                    right = index;
-
-                    break;
-                }
-            }
-
-            for ( index = at - 1; index > -1; index-- )
-            {
-                if ( !IsWordCharacter( text[ index ] ) )
-                {
-                    left = index + 1;
-
-                    break;
-                }
-            }
-        }
-
-        return [ left, right ];
-    }
-
-    /// <summary>
-    /// Retrieves the start and end indices of the word under the cursor based on
-    /// the specified x-coordinate.
-    /// </summary>
-    /// <param name="x">
-    /// The x-coordinate relative to the text field, used to determine the word under the cursor.
-    /// </param>
     /// <returns>
-    /// An array of two integers, where the first element represents the start index and
-    /// the second element represents the end index of the word under the cursor.
+    /// The <see cref="ISceneDrawable"/> representing the background. This could be
+    /// the disabled background if the TextField is disabled, the focused background
+    /// if the TextField has focus, or the default background otherwise.
     /// </returns>
-    protected virtual int[] WordUnderCursor( float x )
-    {
-        return WordUnderCursor( LetterUnderCursor( x ) );
-    }
-
-    /// <summary>
-    /// Determines whether the specified size is within the maximum allowable length.
-    /// </summary>
-    /// <param name="size">The size to evaluate against the maximum length.</param>
-    /// <returns>
-    /// <c>true</c> if the size is less than the maximum length or if no maximum length is set;
-    /// otherwise, <c>false</c>.
-    /// </returns>
-    protected virtual bool WithinMaxLength( int size )
-    {
-        return ( MaxLength <= 0 ) || ( size < MaxLength );
-    }
-
-    /// <summary>
-    /// Retrieves the appropriate background drawable for the TextField based on its current state.
-    /// </summary>
-    /// <returns>The <see cref="ISceneDrawable"/> representing the background.
-    /// This could be the disabled background if the TextField is disabled,
-    /// the focused background if the TextField has focus, or the default background otherwise.</returns>
     protected virtual ISceneDrawable? GetBackgroundDrawable()
     {
         if ( Disabled && ( _style.DisabledBackground != null ) )
@@ -566,12 +619,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         if ( ( focused != _focused ) || ( focused && ( _blinkTask?.Status != TaskStatus.Running ) ) )
         {
             _focused = focused;
-            _blink.Cancel();
+//            _blinkTokenSource?.Cancel();
             _cursorOn = focused;
 
             if ( focused )
             {
-                _blink.Start();
+                //
             }
             else
             {
@@ -652,13 +705,11 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
         else
         {
-            Color? fontColor = Disabled
-                                   ? _style.DisabledFontColor
-                                   : focused
-                                       ? _style.FocusedFontColor
-                                       : _style.FontColor;
-
-            Guard.Against.Null( fontColor ); // Or force fontColor to Color.White?
+            Color fontColor = Disabled
+                                  ? _style.DisabledFontColor ?? _style.FontColor
+                                  : focused
+                                      ? _style.FocusedFontColor ?? _style.FontColor
+                                      : _style.FontColor;
 
             font.SetColor( fontColor.R, fontColor.G, fontColor.B, fontColor.A * ActorColor.A * parentAlpha );
             DrawText( batch, font, x + bgLeftWidth, y + textY + yOffset );
@@ -977,7 +1028,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
             char c = content[ i ];
 
-            if ( !( WriteEnters && c is Newline or CarriageReturn ) )
+            if ( !( WriteEnters && ( c is Newline or CarriageReturn ) ) )
             {
                 if ( c is '\r' or '\n' )
                 {
@@ -1219,7 +1270,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
         Text = newText;
 
-        var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
+        var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
         bool cancelled = Fire( changeEvent );
 
@@ -1228,7 +1279,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             Text = oldText;
         }
 
-        PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
+        Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
 
         return !cancelled;
     }
@@ -1350,88 +1401,6 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     // ========================================================================
     // ========================================================================
 
-    /// Manages the blinking behavior of the text cursor within a <see cref="TextField"/>.
-    /// <para>
-    /// This class encapsulates the logic for creating, starting, and canceling a task
-    /// that controls the periodic blinking of the cursor. The task is executed asynchronously
-    /// and can be managed through this class.
-    /// </para>
-    /// <para>
-    /// Provides integration with <see cref="TextField"/> by managing the lifecycle of the
-    /// blinking task. The blinking behavior is initiated by calling the <see cref="Create"/>
-    /// method and starts with the <see cref="Start"/> method. The <see cref="Cancel"/> method
-    /// halts the blinking process.
-    /// </para>
-    /// <para>
-    /// Instances of this class are tied to a specific <see cref="TextField"/>, ensuring that
-    /// the blinking behavior is scoped to a single text field. Improper usage or accessing
-    /// methods on a disposed or canceled <see cref="BlinkTaskManager"/> instance may lead to
-    /// undefined behavior.
-    /// </para>
-    private class BlinkTaskManager
-    {
-        private readonly TextField _tf;
-
-        public BlinkTaskManager( TextField tf )
-        {
-            _tf = tf;
-        }
-
-        /// <summary>
-        /// Creates the blinking task and initializes the cancellation token source.
-        /// </summary>
-        public void Create()
-        {
-            _tf._blinkTokenSource       = new CancellationTokenSource();
-            _tf._blinkCancellationToken = _tf._blinkTokenSource.Token;
-
-            CreateBlinkTask();
-        }
-
-        /// <summary>
-        /// Handles the blinking task creation.
-        /// </summary>
-        private void CreateBlinkTask()
-        {
-            //@formatter:off
-            _tf._blinkTask = new Task( () =>
-               {
-                   _tf._cursorOn = !_tf._cursorOn;
-                   Engine.Graphics.RequestRendering();
-               },
-               _tf._blinkCancellationToken );
-            //@formatter:on
-        }
-
-        /// <summary>
-        /// Starts the blinking task.
-        /// </summary>
-        /// <exception cref="LughRuntimeException"> Thrown if the task is not created.</exception>
-        public void Start()
-        {
-            if ( _tf is not { _blinkTask: not null } )
-            {
-                throw new LughRuntimeException( "Unable to start BlinkTask" );
-            }
-
-            _tf._blinkTask.Start();
-        }
-
-        /// <summary>
-        /// Cancels the blinking task.
-        /// </summary>
-        public void Cancel()
-        {
-            if ( _tf._blinkTask is { Status: TaskStatus.Running } )
-            {
-                _tf._blinkTokenSource?.Cancel();
-            }
-        }
-    }
-
-    // ========================================================================
-    // ========================================================================
-
     /// Manages tasks related to key repetition for a given <see cref="TextField"/>.
     /// <para>
     /// This class handles the creation, starting, and cancellation of tasks that repeat
@@ -1444,36 +1413,29 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
     /// initialization, execution, and termination.
     /// </para>
     [PublicAPI]
-    public class KeyRepeatTaskManager
+    public class KeyRepeatTaskManager( TextField tf )
     {
         public int KeyCode { get; set; }
-
-        private readonly TextField _tf;
-
-        public KeyRepeatTaskManager( TextField tf )
-        {
-            _tf = tf;
-        }
 
         /// <summary>
         /// Handles the creation of the key repeat task.
         /// </summary>
         public void Create()
         {
-            _tf._keyRepeatTokenSource       = new CancellationTokenSource();
-            _tf._keyRepeatCancellationToken = _tf._keyRepeatTokenSource.Token;
+            tf._keyRepeatTokenSource       = new CancellationTokenSource();
+            tf._keyRepeatCancellationToken = tf._keyRepeatTokenSource.Token;
 
             //@formatter:off
-            _tf._keyRepeatTask = new Task( () =>
+            tf._keyRepeatTask = new Task( () =>
             {
-                _tf._inputListener?.OnKeyDown( null, KeyCode );
+                tf._inputListener?.OnKeyDown( null, KeyCode );
                 
-                if ( _tf._keyRepeatTokenSource.IsCancellationRequested )
+                if ( tf._keyRepeatTokenSource.IsCancellationRequested )
                 {
-                    _tf._keyRepeatCancellationToken.ThrowIfCancellationRequested();
+                    tf._keyRepeatCancellationToken.ThrowIfCancellationRequested();
                 }
             },
-            _tf._keyRepeatCancellationToken );
+            tf._keyRepeatCancellationToken );
             //@formatter:on
         }
 
@@ -1483,12 +1445,12 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         /// <exception cref="LughRuntimeException">Thrown if the key repeat task is not initialized.</exception>
         public void Start()
         {
-            if ( _tf is not { _keyRepeatTask: not null } )
+            if ( tf is not { _keyRepeatTask: not null } )
             {
                 throw new LughRuntimeException( "Unable to start KeyRepeatTask" );
             }
 
-            _tf._keyRepeatTask.Start();
+            tf._keyRepeatTask.Start();
         }
 
         /// <summary>
@@ -1496,9 +1458,9 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         /// </summary>
         public void Cancel()
         {
-            if ( _tf._keyRepeatTask is { Status: TaskStatus.Running } )
+            if ( tf._keyRepeatTask is { Status: TaskStatus.Running } )
             {
-                _tf._keyRepeatTokenSource?.Cancel();
+                tf._keyRepeatTokenSource?.Cancel();
             }
         }
     }
@@ -1527,7 +1489,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         private readonly TextField _tf;
 
         // ====================================================================
-        
+
         /// <summary>
         /// Creates a new TextFieldClickListener. Sets the TextField instance to
         /// a new instance of <see cref="TextField"/> with an empty string and a default skin.
@@ -1599,7 +1561,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf.SelectionStart = _tf.Cursor;
 
             var tfStage = _tf.GetStage();
-        
+
             if ( tfStage != null )
             {
                 tfStage.SetKeyboardFocus( _tf );
@@ -1659,7 +1621,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             }
 
             _tf._cursorOn = _tf._focused;
-            _tf._blink.Cancel();
+            _tf._blinkTokenSource?.Cancel();
 
             if ( _tf._focused )
             {
@@ -1990,7 +1952,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf.Cursor    = _tf.LetterUnderCursor( x );
             _tf._cursorOn = _tf._focused;
 
-            _tf._blink.Cancel();
+            _tf._blinkTokenSource?.Cancel();
 
             if ( _tf._focused )
             {
@@ -2073,6 +2035,121 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             Engine.Input.SetOnscreenKeyboardVisible( visible );
         }
     }
+
+//    internal class Undo
+//    {
+//        private int                max;
+//        private Queue< UndoState > states;
+//        private int                index;
+//        private long               lastChangeTime;
+//
+//        internal Undo( int max )
+//        {
+//            this.max = max;
+//            states   = new Queue( max + 1 );
+//        }
+//
+//        /** Stores state before an edit, truncating any redo entries. */
+//        void store( string text, int cursor, bool hasSelection, int selectionStart )
+//        {
+//            while ( states.Count > index )
+//            {
+//                states..RemoveLast();
+//            }
+//
+//            if ( states.size >= max )
+//            {
+//                states.removeFirst();
+//                index--;
+//            }
+//
+//            UndoState state = new UndoState();
+//            state.text           = text;
+//            state.cursor         = cursor;
+//            state.hasSelection   = hasSelection;
+//            state.selectionStart = selectionStart;
+//            states.addLast( state );
+//            index = states.size;
+//        }
+//
+//        void keyTyped( string text, int cursor, bool hasSelection, int selectionStart )
+//        {
+//            long time = System.currentTimeMillis();
+//            if ( time - 750 > lastChangeTime ) store( text, cursor, hasSelection, selectionStart );
+//            lastChangeTime = time;
+//        }
+//
+//        bool canUndo( string currentText )
+//        {
+//            return index > 0 && !states.get( index - 1 ).text.equals( currentText );
+//        }
+//
+//        bool canRedo( string currentText )
+//        {
+//            return index < states.size - 1 && !states.get( index + 1 ).text.equals( currentText );
+//        }
+//
+//        /** Saves the current state for redo, moves back, and returns the undo target state. */
+//        UndoState undo( string text, int cursor, bool hasSelection, int selectionStart )
+//        {
+//            storeCurrent( text, cursor, hasSelection, selectionStart );
+//
+//            return states.get( --index );
+//        }
+//
+//        /** Saves the current state for undo, moves forward, and returns the redo target state. */
+//        UndoState redo( string text, int cursor, bool hasSelection, int selectionStart )
+//        {
+//            storeCurrent( text, cursor, hasSelection, selectionStart );
+//
+//            return states.get( ++index );
+//        }
+//
+//        private void storeCurrent( string text, int cursor, bool hasSelection, int selectionStart )
+//        {
+//            UndoState state;
+//
+//            if ( index < states.size )
+//            {
+//                state = states.get( index );
+//            }
+//            else
+//            {
+//                state = new UndoState();
+//                states.addLast( state );
+//            }
+//
+//            state.text           = text;
+//            state.cursor         = cursor;
+//            state.hasSelection   = hasSelection;
+//            state.selectionStart = selectionStart;
+//        }
+//
+//        void cancelUndo()
+//        {
+//            index++;
+//            if ( index == states.size - 1 ) states.removeLast();
+//        }
+//
+//        void cancelRedo()
+//        {
+//            index--;
+//        }
+//
+//        void clear()
+//        {
+//            states.clear();
+//            index = 0;
+//        }
+//    }
+//
+//    static class UndoState
+//    {
+//        string text;
+//        int    cursor;
+//        int    selectionStart;
+//        bool   hasSelection;
+//    }
 }
 
 // ============================================================================

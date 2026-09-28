@@ -26,6 +26,7 @@ using System.Collections.Concurrent;
 
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.Utils;
+using LughSharp.Source.Utils.Pooling;
 
 namespace LughSharp.Source.Scene2D.Actions;
 
@@ -35,7 +36,7 @@ public class SceneActions
     /// <summary>
     /// The default pool for scene actions.
     /// </summary>
-    private static readonly ConcurrentDictionary< Type, IScenePool > _pools = new();
+    private static readonly ConcurrentDictionary< Type, IScenePool > _actionPools = new();
 
     // ========================================================================
 
@@ -46,7 +47,7 @@ public class SceneActions
     /// <typeparam name="T"> The type of SceneAction required. </typeparam>
     private static IScenePool GetPool< T >() where T : SceneAction, new()
     {
-        return _pools.GetOrAdd( typeof( T ), _ => new ScenePoolAdapter< T >() );
+        return _actionPools.GetOrAdd( typeof( T ), _ => new ScenePoolAdapter< T >() );
     }
 
     /// <summary>
@@ -150,9 +151,9 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static MoveToAction MoveTo( float x,
-                                            float y,
-                                            float duration = 0,
-                                            IInterpolation? interpolation = null )
+                                       float y,
+                                       float duration = 0,
+                                       IInterpolation? interpolation = null )
     {
         var action = ObtainAction< MoveToAction >();
 
@@ -174,10 +175,10 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static MoveToAction MoveToAligned( float x,
-                                                   float y,
-                                                   Align alignment,
-                                                   float duration = 0,
-                                                   IInterpolation? interpolation = null )
+                                              float y,
+                                              Align alignment,
+                                              float duration = 0,
+                                              IInterpolation? interpolation = null )
     {
         var action = ObtainAction< MoveToAction >();
 
@@ -198,9 +199,9 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static MoveByAction MoveBy( float amountX,
-                                            float amountY,
-                                            float duration = 0,
-                                            IInterpolation? interpolation = null )
+                                       float amountY,
+                                       float duration = 0,
+                                       IInterpolation? interpolation = null )
     {
         var action = ObtainAction< MoveByAction >();
 
@@ -221,9 +222,9 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static SizeToAction SizeTo( float x,
-                                            float y,
-                                            float duration = 0,
-                                            IInterpolation? interpolation = null )
+                                       float y,
+                                       float duration = 0,
+                                       IInterpolation? interpolation = null )
     {
         var action = ObtainAction< SizeToAction >();
 
@@ -244,9 +245,9 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static SizeByAction SizeBy( float amountX,
-                                            float amountY,
-                                            float duration = 0,
-                                            IInterpolation? interpolation = null )
+                                       float amountY,
+                                       float duration = 0,
+                                       IInterpolation? interpolation = null )
     {
         var action = ObtainAction< SizeByAction >();
 
@@ -267,9 +268,9 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static ScaleToAction ScaleTo( float x,
-                                              float y,
-                                              float duration = 0,
-                                              IInterpolation? interpolation = null )
+                                         float y,
+                                         float duration = 0,
+                                         IInterpolation? interpolation = null )
     {
         var action = ObtainAction< ScaleToAction >();
 
@@ -290,9 +291,9 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static ScaleByAction ScaleBy( float amountX,
-                                              float amountY,
-                                              float duration = 0,
-                                              IInterpolation? interpolation = null )
+                                         float amountY,
+                                         float duration = 0,
+                                         IInterpolation? interpolation = null )
     {
         var action = ObtainAction< ScaleByAction >();
 
@@ -312,8 +313,8 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static RotateToAction RotateTo( float rotation,
-                                                float duration = 0,
-                                                IInterpolation? interpolation = null )
+                                           float duration = 0,
+                                           IInterpolation? interpolation = null )
     {
         var action = ObtainAction< RotateToAction >();
 
@@ -333,8 +334,8 @@ public class SceneActions
     /// <returns></returns>
     /// <exception cref="ArgumentException"></exception>
     public static RotateByAction RotateBy( float rotationAmount,
-                                                float duration = 0,
-                                                IInterpolation? interpolation = null )
+                                           float duration = 0,
+                                           IInterpolation? interpolation = null )
     {
         var action = ObtainAction< RotateByAction >();
 
@@ -581,7 +582,7 @@ public class SceneActions
         {
             Logger.Debug( $" - {act}" );
         }
-        
+
         return action;
     }
 
@@ -605,8 +606,11 @@ public class SceneActions
     {
         if ( actions.Length == 0 )
         {
-            throw new ArgumentException( "No SceneActions provided. At least "
-                                       + "one is required for ParallelAction." );
+            throw new ArgumentException
+                (
+                 "No SceneActions provided. At least "
+               + "one is required for ParallelAction."
+                );
         }
 
         if ( actions.Contains( null ) )

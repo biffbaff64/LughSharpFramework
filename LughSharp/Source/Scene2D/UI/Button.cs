@@ -59,7 +59,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 
     public bool                   IsDisabled    { get; set; }
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
-    public ClickListener?         ClickListener { get; set; }
+    public ClickListener          ClickListener { get; set; } = null!;
 
     // ========================================================================
 
@@ -141,7 +141,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     public Button( Skin skin, string styleName = "default" ) : base( skin )
     {
         Skin = skin;
-        
+
         var style = skin.Get< ButtonStyle >( styleName );
 
         Guard.Against.Null( style, $"Skin does not contain a ButtonStyle named {styleName}" );
@@ -193,13 +193,15 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
         Touchable = Touchable.Enabled;
 
         // ReSharper disable UnusedParameter.Local
-        ClickListener = new ClickListener( ( ev, x, y ) =>
-        {
-            if ( !IsDisabled )
-            {
-                SetChecked( !IsChecked, _programmaticChangeEvents );
-            }
-        } );
+        ClickListener = new ClickListener
+            ( ( ev, x, y ) =>
+              {
+                  if ( !IsDisabled )
+                  {
+                      SetChecked( !IsChecked, _programmaticChangeEvents );
+                  }
+              }
+            );
 
         AddListener( ClickListener );
     }
@@ -219,7 +221,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
             return;
         }
 
-        _style.Set< TStyle >( style );
+        this._style = style;
 
         SetBackground( GetBackgroundDrawable() );
     }
@@ -239,17 +241,17 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     {
         SetStyle< ButtonStyle >( style );
     }
-    
+
     /// <summary>
     /// Returns <c>true</c> if the button is pressed, otherwise <c>false</c>.
     /// </summary>
-    public bool IsPressed => ClickListener?.VisualPressed ?? false;
+    public bool IsPressed => ClickListener.VisualPressed;
 
     /// <summary>
     /// Returns <c>true</c> if the mouse or touch is over the button, or is pressed
     /// and within the tap square, otherwise <c>false</c>.
     /// </summary>
-    public bool IsOver => ClickListener?.Over ?? false;
+    public bool IsOver => ClickListener.Over;
 
     /// <summary>
     /// Convenience method which toggles the button's checked state.
@@ -289,14 +291,14 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 
         if ( fireEvent )
         {
-            var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
+            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
             if ( Fire( changeEvent ) )
             {
                 IsChecked = !isChecked;
             }
 
-            PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 
@@ -304,7 +306,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     {
         return base.GetPrefWidth();
     }
-    
+
     public override float GetMinHeight()
     {
         return base.GetPrefHeight();
@@ -505,9 +507,9 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 
         if ( offset )
         {
-            foreach ( Actor actor in Children )
+            foreach ( Actor child in Children )
             {
-                actor.MoveBy( offsetX, offsetY );
+                child.MoveBy( offsetX, offsetY );
             }
         }
 
@@ -515,14 +517,14 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 
         if ( offset )
         {
-            for ( var i = 0; i < Children.Size; i++ )
+            foreach ( Actor child in Children )
             {
-                Children.GetAt( i ).MoveBy( -offsetX, -offsetY );
+                child.MoveBy( -offsetX, -offsetY );
             }
         }
 
         if ( GetStage() is { ActionsRequestRendering: true }
-          && ( IsPressed != ClickListener?.Pressed ) )
+          && ( IsPressed != ClickListener.Pressed ) )
         {
             Engine.Graphics.RequestRendering();
         }

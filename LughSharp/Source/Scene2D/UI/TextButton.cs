@@ -28,14 +28,12 @@ using LughSharp.Source.Scene2D.UI.Styles;
 namespace LughSharp.Source.Scene2D.UI;
 
 /// <summary>
-/// A UI component that represents a clickable button with text.
-/// This class extends <see cref="Button"/> and uses <see cref="TextButtonStyle"/>
-/// to define its appearance and behaviors.
+/// A UI component that represents a clickable button with text. This class extends
+/// <see cref="Button"/> and uses <see cref="TextButtonStyle"/> to define its appearance
+/// and behaviors. The <c>TextButton</c> class is designed for use in UI scenes. It
+/// allows setting and retrieving text content, customizing appearance via styles, and
+/// managing interactions.
 /// </summary>
-/// <remarks>
-/// The <c>TextButton</c> class is designed for use in UI scenes. It allows setting and retrieving
-/// text content, customizing appearance via styles, and managing interactions.
-/// </remarks>
 /// <seealso cref="Button"/>
 /// <seealso cref="TextButtonStyle"/>
 [PublicAPI]
@@ -209,6 +207,11 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
         if ( Label != null )
         {
             Label.GetStyle().FontColor = GetFontColor();
+
+            #if DEBUG
+            SetText( GetDebugText() );
+            #endif
+
             base.Draw( batch, parentAlpha );
         }
     }
@@ -234,6 +237,37 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
     /// </summary>
     public string? GetText() => Label?.GetText().ToString();
 
+    // ========================================================================
+
+    #if DEBUG
+    private string GetDebugText()
+    {
+        if ( IsDisabled )
+        {
+            return "DISABLED";
+        }
+
+        if ( IsPressed )
+        {
+            return IsChecked ? "CHECKED DOWN" : "DOWN";
+        }
+
+        if ( IsOver )
+        {
+            return IsChecked ? "CHECKED OVER" : "OVER";
+        }
+
+        bool focused = HasKeyboardFocus();
+
+        if ( IsChecked )
+        {
+            return focused ? "CHECKED FOCUSED" : "CHECKED";
+        }
+
+        return focused ? "FOCUSED" : "UP";
+    }
+    #endif
+    
     // ========================================================================
 
     /// <inheritdoc />

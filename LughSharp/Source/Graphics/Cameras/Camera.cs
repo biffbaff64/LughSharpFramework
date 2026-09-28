@@ -288,8 +288,8 @@ public abstract class Camera
         float x = screenCoords.X - viewportX;
         float y = Engine.Graphics.WindowHeight - screenCoords.Y - viewportY;
 
-        screenCoords.X = ( 2 * x / viewportWidth ) - 1;
-        screenCoords.Y = ( 2 * y / viewportHeight ) - 1;
+        screenCoords.X = ( ( 2 * x ) / viewportWidth ) - 1;
+        screenCoords.Y = ( ( 2 * y ) / viewportHeight ) - 1;
         screenCoords.Z = ( 2 * screenCoords.Z ) - 1;
         screenCoords.Prj( InvProjectionView );
 
@@ -359,8 +359,8 @@ public abstract class Camera
     {
         worldCoords.Prj( Combined );
 
-        worldCoords.X = ( viewportWidth * ( worldCoords.X + 1 ) / 2 ) + viewportX;
-        worldCoords.Y = ( viewportHeight * ( worldCoords.Y + 1 ) / 2 ) + viewportY;
+        worldCoords.X = ( ( viewportWidth * ( worldCoords.X + 1 ) ) / 2 ) + viewportX;
+        worldCoords.Y = ( ( viewportHeight * ( worldCoords.Y + 1 ) ) / 2 ) + viewportY;
         worldCoords.Z = ( worldCoords.Z + 1 ) / 2;
 
         return worldCoords;

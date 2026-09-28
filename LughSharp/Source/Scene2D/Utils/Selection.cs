@@ -59,8 +59,7 @@ public class Selection< T > : IDisableable, IDisposable
     public bool IsEmpty => Selected.Count == 0;
 
     // ========================================================================
-    // ========================================================================
-
+    
     /// <summary>
     /// Selects or deselects the specified item based on how the selection is
     /// configured, whether ctrl is currently pressed, etc.
@@ -471,12 +470,7 @@ public class Selection< T > : IDisableable, IDisposable
             return false;
         }
 
-        var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
-
-        if ( changeEvent == null )
-        {
-            return false;
-        }
+        var changeEvent = Actor.Pools.Obtain< ChangeListener.ChangeEvent >();
 
         try
         {
@@ -484,7 +478,7 @@ public class Selection< T > : IDisableable, IDisposable
         }
         finally
         {
-            PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
+            Actor.Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 

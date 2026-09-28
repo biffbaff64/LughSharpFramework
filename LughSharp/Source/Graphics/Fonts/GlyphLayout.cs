@@ -93,8 +93,9 @@ public class GlyphLayout : IResetable, IPoolable
 
     private const float Epsilon = 0.0001f;
 
-    private readonly Pool< GlyphRun > _glyphRunPool = PoolsMap.Get< GlyphRun >( () => new GlyphRun() );
-    private readonly List< int >      _colorStack   = new( 4 );
+    private readonly PoolsMap         _poolsMap   = new();
+    private readonly List< int >      _colorStack = new( 4 );
+    private readonly Pool< GlyphRun > _glyphRunPool;
 
     // ========================================================================
 
@@ -103,6 +104,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// </summary>
     public GlyphLayout()
     {
+        _glyphRunPool = _poolsMap.Get< GlyphRun >( () => new GlyphRun() );
     }
 
     /// <summary>
@@ -112,6 +114,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="str"> A string holding the text. </param>
     public GlyphLayout( BitmapFont font, string str )
     {
+        _glyphRunPool = _poolsMap.Get< GlyphRun >( () => new GlyphRun() );
         SetText( font, str );
     }
 
@@ -133,6 +136,7 @@ public class GlyphLayout : IResetable, IPoolable
     /// <param name="wrap"></param>
     public GlyphLayout( BitmapFont font, string str, Color color, float targetWidth, Align halign, bool wrap )
     {
+        _glyphRunPool = _poolsMap.Get< GlyphRun >( () => new GlyphRun() );
         SetText( font, str, color, targetWidth, halign, wrap );
     }
 
@@ -174,6 +178,7 @@ public class GlyphLayout : IResetable, IPoolable
                         bool wrap,
                         string truncate )
     {
+        _glyphRunPool = _poolsMap.Get< GlyphRun >( () => new GlyphRun() );
         SetText( font, str, start, end, color, targetWidth, halign, wrap, truncate );
     }
 
@@ -245,10 +250,10 @@ public class GlyphLayout : IResetable, IPoolable
                          float targetWidth, Align halign, bool wrap, string? truncate )
     {
         Guard.Against.Null( font );
-        
+
         //TODO: Refactor this method. It's too long and hard to understand,
         //      and uses 'goto' several times.
-        
+
         Reset();
 
         BitmapFontData fontData = font.FontData;
@@ -311,14 +316,17 @@ public class GlyphLayout : IResetable, IPoolable
             }
             else
             {
-                breakToOuter = ParseDelimiters( str,
-                                                ref start,
-                                                end,
-                                                ref newline,
-                                                ref runEnd,
-                                                ref isLastRun,
-                                                ref nextColor,
-                                                ref markupEnabled );
+                breakToOuter = ParseDelimiters
+                    (
+                     str,
+                     ref start,
+                     end,
+                     ref newline,
+                     ref runEnd,
+                     ref isLastRun,
+                     ref nextColor,
+                     ref markupEnabled
+                    );
             }
 
             if ( breakToOuter )
@@ -643,8 +651,8 @@ public class GlyphLayout : IResetable, IPoolable
                 GlyphRun run = runsItems[ i ];
 
                 run.X += center
-                    ? 0.5f * ( targetWidth - run.Width )
-                    : targetWidth - run.Width;
+                             ? 0.5f * ( targetWidth - run.Width )
+                             : targetWidth - run.Width;
             }
         }
     }
@@ -725,7 +733,7 @@ public class GlyphLayout : IResetable, IPoolable
             SetLastGlyphXAdvance( fontData, run );
 
             int xTruncateAdvancesCount = run.XAdvances.Count;
-            
+
             if ( xTruncateAdvancesCount > 0 )
             {
                 run.XAdvances.AddRange( truncateRun.XAdvances.GetRange( 1, xTruncateAdvancesCount - 1 ) );
@@ -821,7 +829,7 @@ public class GlyphLayout : IResetable, IPoolable
 
             xAdvances1.AddRange( xAdvances2.GetRange( 0, firstEnd + 1 ) );
             xAdvances2.RemoveRange( 1, secondStart ); // Leave first entry to be overwritten by next line.
-            
+
             xAdvances2[ 0 ]  = GetLineOffset( glyphs2, fontData );
             first.XAdvances  = xAdvances1;
             second.XAdvances = xAdvances2;
@@ -845,8 +853,11 @@ public class GlyphLayout : IResetable, IPoolable
                         break;
                     }
 
-                    Colors[ i ] = new GlyphColor( colorChangeIndex - droppedGlyphCount,
-                                                  Colors[ i ].Color );
+                    Colors[ i ] = new GlyphColor
+                        (
+                         colorChangeIndex - droppedGlyphCount,
+                         Colors[ i ].Color
+                        );
                 }
             }
         }
@@ -912,8 +923,8 @@ public class GlyphLayout : IResetable, IPoolable
     private float GetGlyphWidth( Glyph glyph, BitmapFontData fontData )
     {
         return ( ( glyph.FixedWidth
-            ? glyph.Xadvance
-            : glyph.Width + glyph.Xoffset ) * fontData.ScaleX ) - fontData.PadRight;
+                       ? glyph.Xadvance
+                       : glyph.Width + glyph.Xoffset ) * fontData.ScaleX ) - fontData.PadRight;
     }
 
     /// <summary>
@@ -925,8 +936,8 @@ public class GlyphLayout : IResetable, IPoolable
         Glyph first = glyphs.First();
 
         return ( first.FixedWidth
-            ? 0
-            : -first.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
+                     ? 0
+                     : -first.Xoffset * fontData.ScaleX ) - fontData.PadLeft;
     }
 
     /// <summary>
@@ -1034,8 +1045,8 @@ public class GlyphLayout : IResetable, IPoolable
     }
 
     /// <summary>
-    /// Resets the object for reuse. Object references should be nulled and fields
-    /// may be set to default values.
+    /// Resets the object for reuse. Object references should be nulled
+    /// and fields may be set to default values.
     /// </summary>
     public void Reset()
     {

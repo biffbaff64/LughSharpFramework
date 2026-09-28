@@ -32,8 +32,6 @@ namespace LughSharp.Source.Scene2D.UI.Styles;
 [PublicAPI]
 public class ButtonStyle : ISceneStyle
 {
-    public string Name { get; set; } = string.Empty;
-
     /// <summary>
     /// The button image for when the button is in its normal, unpressed, state. 
     /// </summary>
@@ -85,32 +83,32 @@ public class ButtonStyle : ISceneStyle
     /// <summary>
     /// The X offset of the button image when the button is in its pressed, held down, state.
     /// </summary>
-    public float PressedOffsetX   { get; set; }
-    
+    public float PressedOffsetX { get; set; }
+
     /// <summary>
     /// The Y offset of the button image when the button is in its pressed, held down, state.
     /// </summary>
-    public float PressedOffsetY   { get; set; }
-    
+    public float PressedOffsetY { get; set; }
+
     /// <summary>
     /// The X offset of the button image when the button is in its normal, unpressed, state.
     /// </summary>
     public float UnpressedOffsetX { get; set; }
-    
+
     /// <summary>
     /// The Y offset of the button image when the button is in its normal, unpressed, state.
     /// </summary>
     public float UnpressedOffsetY { get; set; }
-    
+
     /// <summary>
     /// The X offset of the button image when the button is in its checked, toggled, state.
     /// </summary>
-    public float CheckedOffsetX   { get; set; }
-    
+    public float CheckedOffsetX { get; set; }
+
     /// <summary>
     /// The Y offset of the button image when the button is in its checked, toggled, state.
     /// </summary>
-    public float CheckedOffsetY   { get; set; }
+    public float CheckedOffsetY { get; set; }
 
     // ====================================================================
 
@@ -141,15 +139,16 @@ public class ButtonStyle : ISceneStyle
     /// </summary>
     public ButtonStyle( ButtonStyle style )
     {
-        Up               = style.Up;
-        Down             = style.Down;
-        Over             = style.Over;
-        Focused          = style.Focused;
-        Disabled         = style.Disabled;
-        Checked          = style.Checked;
-        CheckedOver      = style.CheckedOver;
-        CheckedDown      = style.CheckedDown;
-        CheckedFocused   = style.CheckedFocused;
+        Up             = style.Up;
+        Down           = style.Down;
+        Over           = style.Over;
+        Focused        = style.Focused;
+        Disabled       = style.Disabled;
+        Checked        = style.Checked;
+        CheckedOver    = style.CheckedOver;
+        CheckedDown    = style.CheckedDown;
+        CheckedFocused = style.CheckedFocused;
+
         PressedOffsetX   = style.PressedOffsetX;
         PressedOffsetY   = style.PressedOffsetY;
         UnpressedOffsetX = style.UnpressedOffsetX;
@@ -158,30 +157,31 @@ public class ButtonStyle : ISceneStyle
         CheckedOffsetY   = style.CheckedOffsetY;
     }
 
-    /// <summary>
-    /// Sets the properties of this ButtonStyle to the properties from the given
-    /// style, which must be a ButtonStyle, or a subclass of it.
-    /// </summary>
-    /// <param name="style"> The ButtonStyle to copy properties from. </param>
-    /// <typeparam name="T"> The type of the style to copy properties from. </typeparam>
-    public void Set< T >( T style ) where T : ButtonStyle
-    {
-        Up               = style.Up;
-        Down             = style.Down;
-        Over             = style.Over;
-        Focused          = style.Focused;
-        Disabled         = style.Disabled;
-        Checked          = style.Checked;
-        CheckedOver      = style.CheckedOver;
-        CheckedDown      = style.CheckedDown;
-        CheckedFocused   = style.CheckedFocused;
-        PressedOffsetX   = style.PressedOffsetX;
-        PressedOffsetY   = style.PressedOffsetY;
-        UnpressedOffsetX = style.UnpressedOffsetX;
-        UnpressedOffsetY = style.UnpressedOffsetY;
-        CheckedOffsetX   = style.CheckedOffsetX;
-        CheckedOffsetY   = style.CheckedOffsetY;
-    }
+//    /// <summary>
+//    /// Sets the properties of this ButtonStyle to the properties from the given
+//    /// style, which must be a ButtonStyle, or a subclass of it.
+//    /// </summary>
+//    /// <param name="style"> The ButtonStyle to copy properties from. </param>
+//    /// <typeparam name="T"> The type of the style to copy properties from. </typeparam>
+//    public void Set< T >( T style ) where T : ButtonStyle
+//    {
+//        Up             = style.Up;
+//        Down           = style.Down;
+//        Over           = style.Over;
+//        Focused        = style.Focused;
+//        Disabled       = style.Disabled;
+//        Checked        = style.Checked;
+//        CheckedOver    = style.CheckedOver;
+//        CheckedDown    = style.CheckedDown;
+//        CheckedFocused = style.CheckedFocused;
+//
+//        PressedOffsetX   = style.PressedOffsetX;
+//        PressedOffsetY   = style.PressedOffsetY;
+//        UnpressedOffsetX = style.UnpressedOffsetX;
+//        UnpressedOffsetY = style.UnpressedOffsetY;
+//        CheckedOffsetX   = style.CheckedOffsetX;
+//        CheckedOffsetY   = style.CheckedOffsetY;
+//    }
 }
 
 // ============================================================================

@@ -1173,11 +1173,16 @@ LUGHSHARP/SOURCE/UTILS/POOLING
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    -      -      - DONE - ConcurrentPool
+    -      -      - DONE - DefaultPool
     - DONE - DONE - DONE - FlushablePool
     - DONE - DONE - DONE - IClearablePool
+    -      -      - DONE - IPool / IPool<T>
     - DONE - DONE - DONE - IPoolable
+    -      -      - DONE - IPoolSupplier
     - DONE - DONE - DONE - Pool
     - DONE - DONE - DONE - PooledLinkedList
+    -      -      - DONE - PoolManager
     - DONE - DONE - DONE - PoolsMap
 
 LUGHSHARP/SOURCE/UTILS/XML

@@ -225,16 +225,19 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         if ( bg != null )
         {
-            _prefHeight = ( Math.Max( bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
-                                    - ( font.GetDescent() * 2 ),
-                                      bg.MinHeight ) );
+            _prefHeight = ( Math.Max
+                                  (
+                                   bg.TopHeight + bg.BottomHeight + font.GetCapHeight()
+                                 - ( font.GetDescent() * 2 ),
+                                   bg.MinHeight
+                                  ) );
         }
         else
         {
             _prefHeight = ( font.GetCapHeight() - ( font.GetDescent() * 2 ) );
         }
 
-        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
+        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
 
         if ( _selectedPrefWidth )
@@ -284,8 +287,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             {
                 if ( ScrollPane is not { DisableYScroll: true } )
                 {
-                    scrollWidth += Math.Max( _style.ScrollPaneStyle.VScroll.MinWidth,
-                                             _style.ScrollPaneStyle.VScrollKnob.MinWidth );
+                    scrollWidth += Math.Max
+                        (
+                         _style.ScrollPaneStyle.VScroll.MinWidth,
+                         _style.ScrollPaneStyle.VScrollKnob.MinWidth
+                        );
                 }
             }
 
@@ -525,8 +531,14 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         // Sets the fade out starting point to the current alpha value.
         selectBox.ActorColor.A = 1f;
 
-        selectBox.AddAction( SceneActions.Sequence( SceneActions.FadeOut( 0.15f, Interpolation.Fade ),
-                                                    SceneActions.RemoveActor() ) );
+        selectBox.AddAction
+            (
+             SceneActions.Sequence
+                 (
+                  SceneActions.FadeOut( 0.15f, Interpolation.Fade ),
+                  SceneActions.RemoveActor()
+                 )
+            );
     }
 
     /// <summary>
@@ -540,7 +552,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         }
 
         var stage = GetStage();
-        
+
         if ( stage != null )
         {
             ScrollPane?.Show( stage );
@@ -634,7 +646,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public float GetMaxSelectedPrefWidth()
     {
-        Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
+        Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
         GlyphLayout         layout     = layoutPool.Obtain();
         float               width      = 0;
 
@@ -830,12 +842,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             if ( idx >= 0 )
             {
-                ScrollTo( x: 0,
-                          y: ListBox.GetHeight() - ( idx * itemHeight ) - ( itemHeight / 2 ),
-                          width: 0,
-                          height: 0,
-                          centerHorizontal: true,
-                          centerVertical: true );
+                ScrollTo
+                    (
+                     x: 0,
+                     y: ListBox.GetHeight() - ( idx * itemHeight ) - ( itemHeight / 2 ),
+                     width: 0,
+                     height: 0,
+                     centerHorizontal: true,
+                     centerVertical: true
+                    );
             }
 
             UpdateVisualScroll();
@@ -1266,4 +1281,3 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
 // ============================================================================
 // ============================================================================
-

@@ -24,16 +24,25 @@
 
 namespace LughSharp.Source.Utils.Pooling;
 
+/// <summary>
+/// Default Pool implementation that creates a new instances of a type based on a supplier.
+/// </summary>
 [PublicAPI]
-public interface IPoolable
+public class DefaultPool< T > : Pool< T > where T : class
 {
+    public DefaultPool( IPoolSupplier< T > supplier, int initialCapacity )
+        : this( supplier, initialCapacity, int.MaxValue )
+    {
+    }
+
     /// <summary>
-    /// Resets the object for reuse. Object references should be nulled
-    /// and fields may be set to default values.
+    /// Default Pool implementation that creates a new instances of a type based on a supplier.
     /// </summary>
-    void Reset();
+    public DefaultPool( IPoolSupplier< T > supplier, int initialCapacity = 16, int max = int.MaxValue )
+        : base( initialCapacity, max )
+    {
+    }
 }
 
 // ============================================================================
 // ============================================================================
-

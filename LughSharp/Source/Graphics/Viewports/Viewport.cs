@@ -132,12 +132,7 @@ public abstract class Viewport
             throw new NullReferenceException();
         }
 
-        _tmp = new Vector3
-        {
-            X = screenCoords.X,
-            Y = screenCoords.Y,
-            Z = 1.0f
-        };
+        _tmp.Set( screenCoords.X, screenCoords.Y, 1.0f );
 
         Camera.Unproject( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 

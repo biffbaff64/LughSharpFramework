@@ -359,7 +359,7 @@ public class ClickListener : InputListener
     public long TapCountInterval
     {
         get;
-        set;
+        private set;
     } = ( long )( 0.4f * 1000000000L );
 }
 

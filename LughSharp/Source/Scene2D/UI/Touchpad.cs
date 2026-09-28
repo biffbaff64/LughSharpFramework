@@ -56,11 +56,11 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
 
     // ========================================================================
 
-    private readonly Circle  _deadzoneBounds = new( 0, 0, 0 );
-    private readonly Circle  _knobBounds     = new( 0, 0, 0 );
-    private readonly Vector2 _knobPercent    = new();
-    private readonly Vector2 _knobPosition   = new();
-    private readonly Circle  _touchBounds    = new( 0, 0, 0 );
+    private readonly Circle   _deadzoneBounds = new( 0, 0, 0 );
+    private readonly Circle   _knobBounds     = new( 0, 0, 0 );
+    private readonly Vector2  _knobPercent    = new();
+    private readonly Vector2  _knobPosition   = new();
+    private readonly Circle   _touchBounds    = new( 0, 0, 0 );
 
     private float         _deadzoneRadius;
     private TouchpadStyle _style = null!;
@@ -222,7 +222,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
 
         if ( !oldPercentX.Equals( _knobPercent.X ) || !oldPercentY.Equals( _knobPercent.Y ) )
         {
-            var changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
+            var changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
 
             if ( Fire( changeEvent ) )
             {
@@ -230,7 +230,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
                 _knobPosition.Set( oldPositionX, oldPositionY );
             }
 
-            PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
         }
     }
 

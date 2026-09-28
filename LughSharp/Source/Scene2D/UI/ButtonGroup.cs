@@ -94,7 +94,7 @@ public class ButtonGroup< T > where T : Button
         bool shouldCheck = button.IsChecked || ( Buttons.Count < _minCheckCount );
 
         button.SetChecked( false );
-        button.ButtonGroup = ( this as ButtonGroup< Button > )!;
+        button.ButtonGroup = ( this as ButtonGroup< Button > );
 
         Buttons.Add( button );
 

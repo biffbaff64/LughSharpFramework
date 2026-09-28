@@ -72,11 +72,11 @@ public class TextFieldStyle : ISceneStyle
                            ISceneDrawable selection,
                            ISceneDrawable background )
     {
-        Font       = font;
-        FontColor  = fontColor;
-        Cursor     = cursor;
-        Selection  = selection;
-        Background = background;
+        Font               = font;
+        FontColor          = fontColor;
+        Cursor             = cursor;
+        Selection          = selection;
+        Background         = background;
     }
 
     /// <summary>
@@ -86,29 +86,21 @@ public class TextFieldStyle : ISceneStyle
     /// <param name="style"> The <see cref="TextFieldStyle"/> to copy. </param>
     public TextFieldStyle( TextFieldStyle style )
     {
-        Font               = style.Font;
-        MessageFont        = style.MessageFont;
+        Font        = style.Font;
+        MessageFont = style.MessageFont;
+
         Background         = style.Background;
         FocusedBackground  = style.FocusedBackground;
         DisabledBackground = style.DisabledBackground;
-        Cursor             = style.Cursor;
-        Selection          = style.Selection;
-        FontColor          = new Color( style.FontColor );
 
-        if ( style.FocusedFontColor != null )
-        {
-            FocusedFontColor = new Color( style.FocusedFontColor );
-        }
+        Cursor    = style.Cursor;
+        Selection = style.Selection;
 
-        if ( style.DisabledFontColor != null )
-        {
-            DisabledFontColor = new Color( style.DisabledFontColor );
-        }
+        FontColor = style.FontColor;
 
-        if ( style.MessageFontColor != null )
-        {
-            MessageFontColor = new Color( style.MessageFontColor );
-        }
+        if ( style.FocusedFontColor != null ) FocusedFontColor   = style.FocusedFontColor;
+        if ( style.DisabledFontColor != null ) DisabledFontColor = style.DisabledFontColor;
+        if ( style.MessageFontColor != null ) MessageFontColor   = style.MessageFontColor;
     }
 }
 

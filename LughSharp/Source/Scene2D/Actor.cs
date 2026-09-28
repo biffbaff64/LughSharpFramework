@@ -68,6 +68,8 @@ public class Actor : IComparable< Actor >
     protected float OriginX { get; set; }
     protected float OriginY { get; set; }
 
+    public static PoolsMap Pools = new();
+    
     // ========================================================================
 
     private float  _x;
@@ -90,22 +92,22 @@ public class Actor : IComparable< Actor >
     /// </remarks>
     static Actor()
     {
-        PoolsMap.RegisterPool< Rectangle >( new Pool< Rectangle >
+        Pools.RegisterPool< Rectangle >( new Pool< Rectangle >
         {
             NewObjectFactory = () => new Rectangle()
         } );
 
-        PoolsMap.RegisterPool< List< Group > >( new Pool< List< Group > >
+        Pools.RegisterPool< List< Group > >( new Pool< List< Group > >
         {
             NewObjectFactory = () => new List< Group >()
         } );
 
-        PoolsMap.RegisterPool< GlyphLayout >( new Pool< GlyphLayout >
+        Pools.RegisterPool< GlyphLayout >( new Pool< GlyphLayout >
         {
             NewObjectFactory = () => new GlyphLayout()
         } );
 
-        PoolsMap.RegisterPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
+        Pools.RegisterPool< ChangeListener.ChangeEvent >( new Pool< ChangeListener.ChangeEvent >
         {
             NewObjectFactory = () => new ChangeListener.ChangeEvent()
         } );
@@ -258,7 +260,7 @@ public class Actor : IComparable< Actor >
 
         // Collect ascendants so event propagation is unaffected by
         // hierarchy changes.
-        var    ascendants = PoolsMap.Obtain< List< Group > >();
+        var    ascendants = Pools.Obtain< List< Group > >();
         Group? parent     = Parent;
 
         while ( parent != null )
@@ -319,7 +321,7 @@ public class Actor : IComparable< Actor >
         {
             ascendants.Clear();
 
-            PoolsMap.Free< List< Group > >( ascendants );
+            Pools.Free< List< Group > >( ascendants );
         }
     }
 
@@ -1424,7 +1426,7 @@ public class Actor : IComparable< Actor >
         tableBounds.Width  = width;
         tableBounds.Height = height;
 
-        Rectangle scissorBounds = PoolsMap.Obtain< Rectangle >();
+        Rectangle scissorBounds = Pools.Obtain< Rectangle >();
 
         stage.CalculateScissors( tableBounds, scissorBounds );
 
@@ -1433,7 +1435,7 @@ public class Actor : IComparable< Actor >
             return true;
         }
 
-        PoolsMap.Free< Rectangle >( scissorBounds );
+        Pools.Free< Rectangle >( scissorBounds );
 
         return false;
     }
@@ -1443,7 +1445,7 @@ public class Actor : IComparable< Actor >
     /// </summary>
     public void ClipEnd()
     {
-        PoolsMap.Free< Rectangle >( ScissorStack.PopScissors() );
+        Pools.Free< Rectangle >( ScissorStack.PopScissors() );
     }
 
     /// <summary>

@@ -86,7 +86,6 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
     public TextArea( string text, Skin skin )
         : base( text, skin )
     {
-        WriteEnters = true;
     }
 
     /// <summary>
@@ -99,7 +98,6 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
     public TextArea( string text, Skin skin, string styleName )
         : base( text, skin, styleName )
     {
-        WriteEnters = true;
     }
 
     /// <summary>
@@ -111,9 +109,20 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
     public TextArea( string text, TextFieldStyle style )
         : base( text, style )
     {
-        WriteEnters = true;
     }
 
+    protected override void Initialise()
+    {
+        base.Initialise();
+        
+        WriteEnters      = true;
+        LinesBreak       = [ ];
+        CursorLine       = 0;
+        FirstLineShowing = 0;
+        _moveOffset      = -1;
+        LinesShowing     = 0;
+    }
+    
     /// <inheritdoc />
     /// <exception cref="LughRuntimeException">Thrown if invalid runtime conditions occur during processing.</exception>
     protected override int LetterUnderCursor( float x )
@@ -162,7 +171,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
     /// Sets the <see cref="TextFieldStyle"/> for this text field.
     /// </summary>
     /// <param name="style"> The style to use. </param>
-    public void SetStyle( TextFieldStyle style )
+    public override void SetStyle( TextFieldStyle style )
     {
         Guard.Against.Null( style );
 
@@ -193,8 +202,11 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
 
         if ( ( background = GetStyle().Background ) != null )
         {
-            prefHeight = Math.Max( ( prefHeight + background.BottomHeight + background.TopHeight ),
-                                   background.MinHeight );
+            prefHeight = Math.Max
+                (
+                 ( prefHeight + background.BottomHeight + background.TopHeight ),
+                 background.MinHeight
+                );
         }
 
         return prefHeight;
@@ -213,8 +225,9 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
     /// </summary>
     public bool NewLineAtEnd()
     {
-        return ( Text.Length != 0 ) && ( ( Text[ Text.Length - 1 ] == Newline )
-                                      || ( Text[ Text.Length - 1 ] == CarriageReturn ) );
+        return ( Text.Length != 0 )
+            && ( Text[ Text.Length - 1 ] == Newline )
+            || ( Text[ Text.Length - 1 ] == CarriageReturn );
     }
 
     /// <summary>
@@ -425,11 +438,14 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
                 float selectionX     = GlyphPositions[ start ] - GlyphPositions[ lineStart ];
                 float selectionWidth = GlyphPositions[ end ] - GlyphPositions[ start ];
 
-                selection.Draw( batch,
-                                x + selectionX + fontLineOffsetX,
-                                y - lineHeight - offsetY,
-                                selectionWidth + fontLineOffsetWidth,
-                                font.GetLineHeight() );
+                selection.Draw
+                    (
+                     batch,
+                     x + selectionX + fontLineOffsetX,
+                     y - lineHeight - offsetY,
+                     selectionWidth + fontLineOffsetWidth,
+                     font.GetLineHeight()
+                    );
             }
 
             offsetY += font.GetLineHeight();
@@ -446,15 +462,18 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
              ( i < ( ( FirstLineShowing + LinesShowing ) * 2 ) ) && ( i < LinesBreak.Count );
              i += 2 )
         {
-            font.Draw( batch,
-                       DisplayText,
-                       x,
-                       y + ( offsetY ?? 0 ),
-                       LinesBreak[ i ],
-                       LinesBreak[ i + 1 ],
-                       0,
-                       Align.Left,
-                       false );
+            font.Draw
+                (
+                 batch,
+                 DisplayText,
+                 x,
+                 y + ( offsetY ?? 0 ),
+                 LinesBreak[ i ],
+                 LinesBreak[ i + 1 ],
+                 0,
+                 Align.Left,
+                 false
+                );
 
             offsetY -= font.GetLineHeight();
         }
@@ -488,50 +507,59 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
             var lineStart = 0;
             var lastSpace = 0;
 
-            Pool< GlyphLayout > layoutPool = PoolsMap.Get< GlyphLayout >( () => new GlyphLayout() );
+            Pool< GlyphLayout > layoutPool = Pools.Get< GlyphLayout >( () => new GlyphLayout() );
             GlyphLayout         layout     = layoutPool.Obtain();
 
             for ( var i = 0; i < Text.Length; i++ )
             {
                 char lastCharacter = Text[ i ];
-
-                if ( lastCharacter is CarriageReturn or Newline )
+                
+                switch ( lastCharacter )
                 {
-                    LinesBreak.Add( lineStart );
-                    LinesBreak.Add( i );
-
-                    lineStart = i + 1;
-                    lastSpace = lineStart;
-
-                    // Treat \r\n as a single newline so it doesn't create a spurious empty line.
-                    if ( ( lastCharacter == CarriageReturn )
-                      && ( lineStart < Text.Length )
-                      && ( Text[ lineStart ] == Newline ) )
+                    case CarriageReturn:
+                    case Newline:
                     {
-                        i++;
+                        LinesBreak.Add( lineStart );
+                        LinesBreak.Add( i );
+
                         lineStart = i + 1;
                         lastSpace = lineStart;
-                    }
-                }
-                else
-                {
-                    lastSpace = ContinueCursor( i, 0 ) ? lastSpace : i;
 
-                    // Substring(startIndex, length) — length is (i - lineStart + 1), not (i + 1).
-                    layout.SetText( GetStyle().Font, Text.Substring( lineStart, i - lineStart + 1 ) );
-
-                    if ( layout.Width > maxWidthLine )
-                    {
-                        if ( lineStart >= lastSpace )
+                        // Treat \r\n as a single newline so it doesn't create a spurious empty line.
+                        if ( ( lastCharacter == CarriageReturn )
+                          && ( lineStart < Text.Length )
+                          && ( Text[ lineStart ] == Newline ) )
                         {
-                            lastSpace = i - 1;
+                            i++;
+                            lineStart = i + 1;
+                            lastSpace = lineStart;
                         }
 
-                        LinesBreak.Add( lineStart );
-                        LinesBreak.Add( lastSpace + 1 );
+                        break;
+                    }
 
-                        lineStart = lastSpace + 1;
-                        lastSpace = lineStart;
+                    default:
+                    {
+                        lastSpace = ContinueCursor( i, 0 ) ? lastSpace : i;
+
+                        // Substring(startIndex, length) — length is (i - lineStart + 1), not (i + 1).
+                        layout.SetText( GetStyle().Font, Text.Substring( lineStart, i - lineStart + 1 ) );
+
+                        if ( layout.Width > maxWidthLine )
+                        {
+                            if ( lineStart >= lastSpace )
+                            {
+                                lastSpace = i - 1;
+                            }
+
+                            LinesBreak.Add( lineStart );
+                            LinesBreak.Add( lastSpace + 1 );
+
+                            lineStart = lastSpace + 1;
+                            lastSpace = lineStart;
+                        }
+
+                        break;
                     }
                 }
             }

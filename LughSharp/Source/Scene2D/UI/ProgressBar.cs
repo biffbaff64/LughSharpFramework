@@ -73,7 +73,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     private const float DefaultPrefHeight = 140f;
 
     private readonly bool _programmaticChangeEvents = true;
-
+        
     private float            _animateDuration;
     private float            _animateFromValue;
     private float            _animateTime;
@@ -447,12 +447,12 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 
         if ( _programmaticChangeEvents )
         {
-            var  changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
+            var  changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
             bool cancelled   = Fire( changeEvent );
 
             // It is safe to suppress nullability warnings for 'changeEvent'
             // here because Fire() will throw an exception is it is null.
-            PoolsMap.Free< ChangeListener.ChangeEvent >( changeEvent );
+            Pools.Free< ChangeListener.ChangeEvent >( changeEvent );
 
             if ( cancelled )
             {
@@ -492,10 +492,10 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 
         if ( _programmaticChangeEvents )
         {
-            ChangeListener.ChangeEvent changeEvent = PoolsMap.Obtain< ChangeListener.ChangeEvent >();
+            ChangeListener.ChangeEvent changeEvent = Pools.Obtain< ChangeListener.ChangeEvent >();
             bool                       cancelled   = Fire( changeEvent );
 
-            PoolsMap.Free( changeEvent );
+            Pools.Free( changeEvent );
 
             if ( cancelled )
             {
