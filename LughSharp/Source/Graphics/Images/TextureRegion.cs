@@ -25,8 +25,9 @@
 namespace LughSharp.Source.Graphics.Images;
 
 /// <summary>
-/// Defines a rectangular area of a texture. The coordinate system used has its origin in the
-/// upper left corner with the x-axis pointing to the right and the y axis pointing downwards.
+/// Defines a rectangular area of a texture. The coordinate system used has its
+/// origin in the upper left corner with the x-axis pointing to the right and the
+/// y axis pointing downwards.
 /// </summary>
 [PublicAPI]
 public class TextureRegion
@@ -56,12 +57,13 @@ public class TextureRegion
     }
 
     /// <summary>
-    /// Represents a portion of a texture, defined by specific coordinates, width, and height.
-    /// Used for rendering only a subsection of the original texture.
+    /// Represents a portion of a texture, defined by specific coordinates, width,
+    /// and height. Used for rendering only a subsection of the original texture.
     /// </summary>
     public TextureRegion( Texture2D? texture )
     {
-        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture
+               ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
 
         SetRegion( 0, 0, texture.Width, texture.Height );
     }
@@ -79,7 +81,9 @@ public class TextureRegion
     /// </param>
     public TextureRegion( Texture2D? texture, int width, int height )
     {
-        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture
+               ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+        
         SetRegion( 0, 0, width, height );
     }
 
@@ -88,8 +92,8 @@ public class TextureRegion
     /// Can be used to render a portion of the texture or to create sprite animations.
     /// </summary>
     /// <param name="texture"> The texture from which to extract the region. </param>
-    /// <param name="x"></param>
-    /// <param name="y"></param>
+    /// <param name="x"> X coordinate of the bottom left corner of the region. </param>
+    /// <param name="y"> Y coordinate of the bottom left corner of the region. </param>
     /// <param name="width">
     /// The width of the texture region. May be negative to flip the sprite when drawn.
     /// </param>
@@ -98,7 +102,9 @@ public class TextureRegion
     /// </param>
     public TextureRegion( Texture2D? texture, int x, int y, int width, int height )
     {
-        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture
+               ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+
         SetRegion( x, y, width, height );
     }
 
@@ -114,7 +120,9 @@ public class TextureRegion
     /// <exception cref="LughRuntimeException"></exception>
     public TextureRegion( Texture2D? texture, float u, float v, float u2, float v2 )
     {
-        Texture = texture ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+        Texture = texture
+               ?? throw new LughRuntimeException( "Cannot create TextureRegion from null texture." );
+        
         SetRegionSafe( u, v, u2, v2 );
     }
 
@@ -205,10 +213,13 @@ public class TextureRegion
         float invTexWidth  = 1f / Texture.Width;
         float invTexHeight = 1f / Texture.Height;
 
-        SetRegion( x * invTexWidth,
-                       y * invTexHeight,
-                       ( x + width ) * invTexWidth,
-                       ( y + height ) * invTexHeight );
+        SetRegion
+            (
+             x * invTexWidth,
+             y * invTexHeight,
+             ( x + width ) * invTexWidth,
+             ( y + height ) * invTexHeight
+            );
 
         _regionWidth  = Math.Abs( width );
         _regionHeight = Math.Abs( height );
@@ -349,11 +360,11 @@ public class TextureRegion
         int cols = width / tileWidth;
 
         int targetTiles = rows * cols;
-        
+
         int startX  = x;
         var tiles   = new TextureRegion[ targetTiles ];
         var tileNum = 0;
-        
+
         for ( var row = 0; row < rows; row++, y += tileHeight )
         {
             x = startX;
@@ -663,4 +674,3 @@ public class TextureRegion
 
 // ========================================================================
 // ========================================================================
-

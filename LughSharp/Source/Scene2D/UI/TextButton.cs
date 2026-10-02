@@ -208,9 +208,9 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
         {
             Label.GetStyle().FontColor = GetFontColor();
 
-            #if DEBUG
-            SetText( GetDebugText() );
-            #endif
+//            #if DEBUG
+//            SetText( GetDebugText() );
+//            #endif
 
             base.Draw( batch, parentAlpha );
         }
@@ -239,34 +239,34 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
 
     // ========================================================================
 
-    #if DEBUG
-    private string GetDebugText()
-    {
-        if ( IsDisabled )
-        {
-            return "DISABLED";
-        }
-
-        if ( IsPressed )
-        {
-            return IsChecked ? "CHECKED DOWN" : "DOWN";
-        }
-
-        if ( IsOver )
-        {
-            return IsChecked ? "CHECKED OVER" : "OVER";
-        }
-
-        bool focused = HasKeyboardFocus();
-
-        if ( IsChecked )
-        {
-            return focused ? "CHECKED FOCUSED" : "CHECKED";
-        }
-
-        return focused ? "FOCUSED" : "UP";
-    }
-    #endif
+//    #if DEBUG
+//    private string GetDebugText()
+//    {
+//        if ( IsDisabled )
+//        {
+//            return "DISABLED";
+//        }
+//
+//        if ( IsPressed )
+//        {
+//            return IsChecked ? "CHECKED DOWN" : "DOWN";
+//        }
+//
+//        if ( IsOver )
+//        {
+//            return IsChecked ? "CHECKED OVER" : "OVER";
+//        }
+//
+//        bool focused = HasKeyboardFocus();
+//
+//        if ( IsChecked )
+//        {
+//            return focused ? "CHECKED FOCUSED" : "CHECKED";
+//        }
+//
+//        return focused ? "FOCUSED" : "UP";
+//    }
+//    #endif
     
     // ========================================================================
 

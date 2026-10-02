@@ -319,12 +319,9 @@ public class Preferences : IPreferences
     /// <returns> The string value. </returns>
     public string GetString( string key, string defValue = "" )
     {
-        if ( !_properties.TryGetValue( key, out object? value ) )
-        {
-            return defValue;
-        }
-
-        return ( string )value;
+        return !_properties.TryGetValue( key, out object? value )
+                   ? defValue
+                   : ( string )value;
     }
 
     /// <summary>

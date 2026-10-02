@@ -26,15 +26,12 @@ using LughSharp.Source.Scene2D.UI;
 
 namespace LughSharp.Source.Scene2D.Listeners;
 
-public sealed class DialogFocusListener : FocusListener
+/// <summary>
+/// Focus listener for Scene2D dialogs.
+/// </summary>
+/// <param name="dialog"> The parent <see cref="Dialog"/>. </param>
+public sealed class DialogFocusListener( Dialog dialog ) : FocusListener
 {
-    private readonly Dialog _dialog;
-
-    public DialogFocusListener( Dialog dialog )
-    {
-        _dialog = dialog;
-    }
-
     public override void KeyboardFocusChanged( FocusEvent ev, Actor? actor, bool focused )
     {
         if ( !focused )
@@ -53,22 +50,24 @@ public sealed class DialogFocusListener : FocusListener
 
     private void FocusChanged( FocusEvent ev )
     {
-        if ( _dialog.GetStage() == null )
+        Stage? stage = dialog.GetStage();
+        
+        if ( stage == null )
         {
             return;
         }
-        
-        if ( _dialog.IsModal
-          && ( _dialog.GetStage()?.RootGroup.Children.Size > 0 )
-          && ( _dialog.GetStage()?.RootGroup.Children.Peek() == _dialog ) )
+
+        if ( dialog.IsModal
+          && ( stage.RootGroup.Children.Size > 0 )
+          && ( stage.RootGroup.Children.Peek() == dialog ) )
         {
             // Dialog is top most actor.
             Actor? newFocusedActor = ev.RelatedActor;
 
             if ( ( newFocusedActor != null )
-              && !newFocusedActor.IsDescendantOf( _dialog )
-              && !( newFocusedActor.Equals( _dialog.PreviousKeyboardFocus )
-                 || newFocusedActor.Equals( _dialog.PreviousScrollFocus ) ) )
+              && !newFocusedActor.IsDescendantOf( dialog )
+              && !( newFocusedActor.Equals( dialog.PreviousKeyboardFocus )
+                 || newFocusedActor.Equals( dialog.PreviousScrollFocus ) ) )
             {
                 ev.Cancel();
             }
@@ -78,4 +77,3 @@ public sealed class DialogFocusListener : FocusListener
 
 // ============================================================================
 // ============================================================================
-

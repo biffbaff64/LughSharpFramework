@@ -108,7 +108,7 @@ public unsafe class LughGLTest : ILughTest
     }
 
     [TearDown]
-    public void TearDown()
+    public void Close()
     {
     }
 

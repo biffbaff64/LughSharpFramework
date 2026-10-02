@@ -68,7 +68,7 @@ public class TextureAtlasTest : ILughTest
     }
 
     [TearDown]
-    public void TearDown()
+    public void Close()
     {
     }
 }

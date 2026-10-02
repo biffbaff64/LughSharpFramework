@@ -409,10 +409,18 @@ public class SceneActions
     /// <summary>
     /// Transitions from the alpha at the time this action starts to an alpha of 1.
     /// </summary>
-    public static AlphaAction FadeIn( float duration, IInterpolation interpolation )
+    /// <param name="duration">
+    /// Specifies the total duration for the action to complete, measured in seconds.
+    /// Determines the amount of time the action takes to transition from start to finish.
+    /// </param>
+    /// <param name="interpolation">
+    /// Controls how the progression of the action is interpolated over time, enabling
+    /// non-linear transitions. This property modifies the percentage completion value,
+    /// allowing for easing effects such as acceleration and deceleration. If set to
+    /// null, the action progresses linearly.
+    /// </param>
+    public static AlphaAction FadeIn( float duration, IInterpolation? interpolation )
     {
-        Guard.Against.Null( interpolation );
-
         var action = ObtainAction< AlphaAction >();
 
         action.EndAlpha      = 1.0f;

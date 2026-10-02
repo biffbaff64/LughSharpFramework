@@ -618,7 +618,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
 
         if ( ( focused != _focused ) || ( focused && ( _blinkTask?.Status != TaskStatus.Running ) ) )
         {
-            _focused = focused;
+            _focused  = focused;
 //            _blinkTokenSource?.Cancel();
             _cursorOn = focused;
 
@@ -1083,8 +1083,8 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         {
             return text;
         }
-
-        return to.Substring( 0, position ) + text + to.Substring( position, to.Length );
+        
+        return to.Substring( 0, position ) + text + to.Substring( position, to.Length - position );
     }
 
     /// <summary>

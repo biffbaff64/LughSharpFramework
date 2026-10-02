@@ -48,7 +48,7 @@ public class PixmapPackerTest : ILughTest
     }
 
     [TearDown]
-    public void TearDown()
+    public void Close()
     {
     }
 }

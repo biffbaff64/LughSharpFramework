@@ -75,6 +75,11 @@ public class ParticleEffect : IDisposable
         Emitters = new List< ParticleEmitter >( DefaultEmittersSize );
     }
 
+    /// <summary>
+    /// Creates a new instance of the <see cref="ParticleEffect"/> class, using
+    /// the supplied <see cref="ParticleEffect"/> as a template.
+    /// </summary>
+    /// <param name="effect"> The <see cref="ParticleEffect"/> to copy. </param>
     public ParticleEffect( ParticleEffect effect )
     {
         Emitters = new List< ParticleEmitter >( effect.Emitters.Count );
@@ -158,7 +163,8 @@ public class ParticleEffect : IDisposable
     }
 
     /// <summary>
-    /// Iterates through the internal list of particle emitters and allows each one to complete.
+    /// Iterates through the internal list of particle emitters and allows each
+    /// one to complete.
     /// </summary>
     public void AllowCompletion()
     {
@@ -169,7 +175,8 @@ public class ParticleEffect : IDisposable
     }
 
     /// <summary>
-    /// Iterates through the internal list of particle emitters and checks if each one is complete.
+    /// Iterates through the internal list of particle emitters and checks if
+    /// each one is complete.
     /// </summary>
     /// <returns>
     /// <c>true</c> if all emitters are complete; otherwise, <c>false</c>.
@@ -189,6 +196,10 @@ public class ParticleEffect : IDisposable
         return true;
     }
 
+    /// <summary>
+    /// Sets the duration of all emitters.
+    /// </summary>
+    /// <param name="duration"> The new duration. </param>
     public void SetDuration( int duration )
     {
         for ( int i = 0, n = Emitters.Count; i < n; i++ )
@@ -201,6 +212,11 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Sets the position of all emitters.
+    /// </summary>
+    /// <param name="x"> The new X position. </param>
+    /// <param name="y"> The new Y position. </param>
     public void SetPosition( float x, float y )
     {
         for ( int i = 0, n = Emitters.Count; i < n; i++ )
@@ -209,6 +225,11 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Sets the flip state of all emitters.
+    /// </summary>
+    /// <param name="flipX"> Whether to flip the X axis. </param>
+    /// <param name="flipY"> Whether to flip the Y axis. </param>
     public void SetFlip( bool flipX, bool flipY )
     {
         for ( int i = 0, n = Emitters.Count; i < n; i++ )
@@ -217,6 +238,9 @@ public class ParticleEffect : IDisposable
         }
     }
 
+    /// <summary>
+    /// Flips the Y axis of all emitters.
+    /// </summary>
     public void FlipY()
     {
         for ( int i = 0, n = Emitters.Count; i < n; i++ )
@@ -471,17 +495,33 @@ public class ParticleEffect : IDisposable
 
     // ========================================================================
 
-    protected ParticleEmitter NewEmitter( StreamReader reader )
+    /// <summary>
+    /// Generates a new <see cref="ParticleEmitter"/> from the supplied stream reader.
+    /// </summary>
+    /// <param name="reader">  The stream reader. </param>
+    /// <returns> The new emitter. </returns>
+    protected static ParticleEmitter NewEmitter( StreamReader reader )
     {
         return new ParticleEmitter( reader );
     }
 
-    protected ParticleEmitter NewEmitter( ParticleEmitter emitter )
+    /// <summary>
+    /// Generates a new <see cref="ParticleEmitter"/>, using the supplied emitter
+    /// as a template.
+    /// </summary>
+    /// <param name="emitter"> The emitter to use as a template. </param>
+    /// <returns> The new emitter. </returns>
+    protected static ParticleEmitter NewEmitter( ParticleEmitter emitter )
     {
         return new ParticleEmitter( emitter );
     }
 
-    protected Texture2D LoadTexture( FileInfo file )
+    /// <summary>
+    /// Generates a new <see cref="Texture2D"/>, using the supplied file.
+    /// </summary>
+    /// <param name="file"> The file to use. </param>
+    /// <returns> The new texture. </returns>
+    protected static Texture2D LoadTexture( FileInfo file )
     {
         return new Texture2D( file, false );
     }
@@ -569,8 +609,8 @@ public class ParticleEffect : IDisposable
     }
 
     // ========================================================================
-    // ========================================================================
 
+    /// <inheritdoc />
     public void Dispose()
     {
         Dispose( true );

@@ -47,11 +47,6 @@ public class AlphaAction : TemporalAction
     /// </summary>
     protected override void BeginAction()
     {
-        if ( Target == null )
-        {
-            Logger.Error( "Cannot begin with a null Target!" );
-        }
-
         if ( Color == null )
         {
             Color = Target?.ActorColor;

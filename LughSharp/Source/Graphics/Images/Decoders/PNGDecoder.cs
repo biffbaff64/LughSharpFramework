@@ -35,14 +35,14 @@ namespace LughSharp.Source.Graphics.Images.Decoders;
 public class PNGDecoder
 {
     public const int ChunkLengthFieldSize = 4;
-    public const int SignatureLength        = 8;
-    public const int IHDRStart              = 8;
+    public const int SignatureLength      = 8;
+    public const int IHDRStart            = 8;
     public const int IHDRChunkTypeOffset  = IHDRStart + ChunkLengthFieldSize;
     public const int IHDRChunkTypeSize    = 4;
-    public const int IHDRDataOffset        = IHDRChunkTypeOffset + IHDRChunkTypeSize;
-    public const int IHDRDataSize          = 13;
-    public const int IHDRCrcStart          = IHDRDataOffset + IHDRDataSize;
-    public const int IHDRCrcSize           = 4;
+    public const int IHDRDataOffset       = IHDRChunkTypeOffset + IHDRChunkTypeSize;
+    public const int IHDRDataSize         = 13;
+    public const int IHDRCrcStart         = IHDRDataOffset + IHDRDataSize;
+    public const int IHDRCrcSize          = 4;
 
     // ------------------------------------------------------------------------
 
@@ -236,8 +236,11 @@ public class PNGDecoder
 
         if ( PNGPixelFormat == LughFormat.Invalid )
         {
-            ImageUtils.RejectInvalidImage( ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
-                                           $"BitDepth: {bitDepth}, ColorType: {colorType}." );
+            ImageUtils.RejectInvalidImage
+                (
+                 ImageUtils.RejectionReason.ColorTypeBitDepthMismatch,
+                 $"BitDepth: {bitDepth}, ColorType: {colorType}."
+                );
         }
 
         if ( verbose )
@@ -267,14 +270,17 @@ public class PNGDecoder
 
             if ( ( idatIndex + fullChunkSize ) > pngData.Length )
             {
-                Logger.Error( $"Error: Invalid Chunk Size or truncated file. " +
-                              $"Index: {idatIndex}, " +
-                              $"Chunksize: {fullChunkSize}, " +
-                              $"File Length: {pngData.Length}" );
+                Logger.Error
+                    (
+                     $"Error: Invalid Chunk Size or truncated file. " +
+                     $"Index: {idatIndex}, " +
+                     $"Chunksize: {fullChunkSize}, " +
+                     $"File Length: {pngData.Length}"
+                    );
 
                 break;
             }
-            
+
             totalIDATSize += chunkSize;
             idatIndex += fullChunkSize - 1; //Correctly increment the index. -1 to account for the +1 in the while loop.
         }
@@ -310,8 +316,14 @@ public class PNGDecoder
             string colorFormat = DetermineColorFormat( ColorType, bitDepth );
 
             Logger.Debug( "IHDR Data Breakdown:" );
-            Logger.Debug( $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels" );
-            Logger.Debug( $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels" );
+            Logger.Debug
+                (
+                 $"Width: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Take( 4 ).ToArray() ) ) )} pixels"
+                );
+            Logger.Debug
+                (
+                 $"Height: {ReadBigEndianUInt32( new BinaryReader( new MemoryStream( data.Skip( 4 ).Take( 4 ).ToArray() ) ) )} pixels"
+                );
             Logger.Debug( $"Bit Depth: {data[ BitdepthOffset ]}" );
             Logger.Debug( $"Color Type: {colorType}, {ColorTypeName( colorType )}" );
             Logger.Debug( $"Color Format: {colorFormat}" );
@@ -716,7 +728,7 @@ public class PNGDecoder
         }
 
         return ( BitConverter.ToInt32( widthbytes, 0 ),
-            BitConverter.ToInt32( heightbytes, 0 ) );
+                 BitConverter.ToInt32( heightbytes, 0 ) );
     }
 
     /// <summary>
@@ -731,11 +743,14 @@ public class PNGDecoder
         Guard.Against.Null( texture );
         Guard.Against.Null( texture.GetImageData() );
 
-        return CreatePNGFromRawRGBA( texture.GetImageData()!,
-                                     texture.Width,
-                                     texture.Height,
-                                     texture.ColorFormat,
-                                     ( byte )texture.BitDepth );
+        return CreatePNGFromRawRGBA
+            (
+             texture.GetImageData()!,
+             texture.Width,
+             texture.Height,
+             texture.ColorFormat,
+             ( byte )texture.BitDepth
+            );
     }
 
     /// <summary>

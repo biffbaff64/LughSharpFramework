@@ -35,29 +35,13 @@ public interface IInterpolation
 }
 
 [PublicAPI]
-public class Interpolator : IInterpolation
-{
-    public Func< float, float > Interp { get; set; } = null!;
-
-    public virtual float Apply( float x )
-    {
-        return Interp( x );
-    }
-
-    public virtual float Apply( float start, float end, float a )
-    {
-        return start + ( ( end - start ) * Apply( a ) );
-    }
-}
-
-[PublicAPI]
 public class Interpolation
 {
-    public static Interpolator Linear = new() { Interp = a => a };
+    public static readonly Interpolator Linear = new() { Interp = a => a };
 
-    public static Interpolator Smooth = new() { Interp = a => a * a * ( 3 - ( 2 * a ) ) };
+    public static readonly Interpolator Smooth = new() { Interp = a => a * a * ( 3 - ( 2 * a ) ) };
 
-    public static Interpolator Smooth2 = new()
+    public static readonly Interpolator Smooth2 = new()
     {
         Interp = a =>
         {
@@ -67,16 +51,16 @@ public class Interpolation
         }
     };
 
-    public static Interpolator Smoother = new()
+    public static readonly Interpolator Smoother = new()
     {
         Interp = a => a * a * a * ( ( a * ( ( a * 6 ) - 15 ) ) + 10 )
     };
 
-    public static Interpolator Fade = Smoother;
+    public static readonly Interpolator Fade = Smoother;
 
-    public static Interpolator Pow2InInverse = new() { Interp = a => a };
+    public static readonly Interpolator Pow2InInverse = new() { Interp = a => a };
 
-    public static Interpolator Pow2OutInverse = new()
+    public static readonly Interpolator Pow2OutInverse = new()
     {
         Interp = a =>
         {
@@ -89,32 +73,32 @@ public class Interpolation
         }
     };
 
-    public static Interpolator Pow3InInverse = new()
+    public static readonly Interpolator Pow3InInverse = new()
     {
         Interp = a => ( float )Math.Cbrt( a )
     };
 
-    public static Interpolator Pow3OutInverse = new()
+    public static readonly Interpolator Pow3OutInverse = new()
     {
         Interp = a => 1 - ( float )Math.Cbrt( -( a - 1 ) )
     };
 
-    public static Interpolator Sine = new()
+    public static readonly Interpolator Sine = new()
     {
         Interp = a => ( 1 - MathUtils.Cos( a * MathUtils.Pi ) ) / 2
     };
 
-    public static Interpolator SineIn = new()
+    public static readonly Interpolator SineIn = new()
     {
         Interp = a => 1 - MathUtils.Cos( a * ( MathUtils.Pi / 2 ) )
     };
 
-    public static Interpolator SineOut = new()
+    public static readonly Interpolator SineOut = new()
     {
         Interp = a => MathUtils.Sin( a * ( MathUtils.Pi / 2 ) )
     };
 
-    public static Interpolator Circle = new()
+    public static readonly Interpolator Circle = new()
     {
         Interp = a =>
         {
@@ -132,12 +116,12 @@ public class Interpolation
         }
     };
 
-    public static Interpolator CircleIn = new()
+    public static readonly Interpolator CircleIn = new()
     {
         Interp = a => 1 - ( float )Math.Sqrt( 1 - ( a * a ) )
     };
 
-    public static Interpolator CircleOut = new()
+    public static readonly Interpolator CircleOut = new()
     {
         Interp = a =>
         {
@@ -182,14 +166,9 @@ public class Interpolation
     // ========================================================================
 
     [PublicAPI]
-    public class Pow : Interpolator
+    public class Pow( int p ) : Interpolator
     {
-        protected readonly int Power;
-
-        public Pow( int p )
-        {
-            Power = p;
-        }
+        protected readonly int Power = p;
 
         public override float Apply( float start, float end, float a )
         {
@@ -203,12 +182,8 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class PowIn : Pow
+    public class PowIn( int power ) : Pow( power )
     {
-        public PowIn( int power ) : base( power )
-        {
-        }
-
         public override float Apply( float a )
         {
             return ( float )Math.Pow( a, Power );
@@ -216,12 +191,8 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class PowOut : Pow
+    public class PowOut( int power ) : Pow( power )
     {
-        public PowOut( int power ) : base( power )
-        {
-        }
-
         public override float Apply( float a )
         {
             return ( ( float )Math.Pow( a - 1, Power ) * ( ( Power % 2 ) == 0 ? -1 : 1 ) ) + 1;
@@ -259,13 +230,8 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class ExpIn : Exp
+    public class ExpIn( float value, float power ) : Exp( value, power )
     {
-        public ExpIn( float value, float power )
-            : base( value, power )
-        {
-        }
-
         public override float Apply( float a )
         {
             return ( ( float )Math.Pow( Value, Power * ( a - 1 ) ) - Min ) * Scale;
@@ -273,13 +239,8 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class ExpOut : Exp
+    public class ExpOut( float value, float power ) : Exp( value, power )
     {
-        public ExpOut( float value, float power )
-            : base( value, power )
-        {
-        }
-
         public override float Apply( float a )
         {
             return 1 - ( ( ( float )Math.Pow( Value, -Power * a ) - Min ) * Scale );
@@ -287,20 +248,13 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class ElasticImpl : Interpolator
+    public class ElasticImpl( float value, float power, int bounces, float scale )
+        : Interpolator
     {
-        protected readonly float Bounces;
-        protected readonly float Power;
-        protected readonly float Scale;
-        protected readonly float Value;
-
-        public ElasticImpl( float value, float power, int bounces, float scale )
-        {
-            Value   = value;
-            Power   = power;
-            Scale   = scale;
-            Bounces = bounces * MathUtils.Pi * ( ( bounces % 2 ) == 0 ? 1 : -1 );
-        }
+        protected readonly float Bounces = bounces * MathUtils.Pi * ( ( bounces % 2 ) == 0 ? 1 : -1 );
+        protected readonly float Power   = power;
+        protected readonly float Scale   = scale;
+        protected readonly float Value   = value;
 
         public override float Apply( float a )
         {
@@ -319,13 +273,9 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class ElasticInImpl : ElasticImpl
+    public class ElasticInImpl( float value, float power, int bounces, float scale )
+        : ElasticImpl( value, power, bounces, scale )
     {
-        public ElasticInImpl( float value, float power, int bounces, float scale )
-            : base( value, power, bounces, scale )
-        {
-        }
-
         public override float Apply( float a )
         {
             if ( a >= 0.99 )
@@ -338,13 +288,9 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class ElasticOutImpl : ElasticImpl
+    public class ElasticOutImpl( float value, float power, int bounces, float scale )
+        : ElasticImpl( value, power, bounces, scale )
     {
-        public ElasticOutImpl( float value, float power, int bounces, float scale )
-            : base( value, power, bounces, scale )
-        {
-        }
-
         public override float Apply( float a )
         {
             if ( a == 0 )
@@ -521,14 +467,9 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class SwingImpl : Interpolator
+    public class SwingImpl( float scale ) : Interpolator
     {
-        protected readonly float Scale;
-
-        public SwingImpl( float scale )
-        {
-            Scale = scale * 2;
-        }
+        protected readonly float Scale = scale * 2;
 
         public override float Apply( float a )
         {
@@ -547,36 +488,22 @@ public class Interpolation
     }
 
     [PublicAPI]
-    public class SwingOutImpl : Interpolator
+    public class SwingOutImpl( float scale ) : Interpolator
     {
-        private readonly float _scale;
-
-        public SwingOutImpl( float scale )
-        {
-            _scale = scale;
-        }
-
         public override float Apply( float a )
         {
             a--;
 
-            return ( a * a * ( ( ( _scale + 1 ) * a ) + _scale ) ) + 1;
+            return ( a * a * ( ( ( scale + 1 ) * a ) + scale ) ) + 1;
         }
     }
 
     [PublicAPI]
-    public class SwingInImpl : Interpolator
+    public class SwingInImpl( float scale ) : Interpolator
     {
-        private readonly float _scale;
-
-        public SwingInImpl( float scale )
-        {
-            _scale = scale;
-        }
-
         public override float Apply( float a )
         {
-            return a * a * ( ( ( _scale + 1 ) * a ) - _scale );
+            return a * a * ( ( ( scale + 1 ) * a ) - scale );
         }
     }
 }

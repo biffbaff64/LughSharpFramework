@@ -410,7 +410,7 @@ LUGHSHARP/SOURCE/GRAPHICS/G2D
     - DONE - DONE - DONE - CpuSpriteBatch
     - DONE - DONE - DONE - IBatch
     - DONE - DONE - DONE - IPolygonBatch
-    -      -      -      - ParticleEffect
+    - DONE - DONE - DONE - ParticleEffect
     -      -      -      - ParticleEffectPool
     -      -      -      - ParticleEmitter
     -      -      -      - PolygonRegion
@@ -825,6 +825,7 @@ LUGHSHARP/SOURCE/MATHS
     -      -      - DONE - GridPoint2
     -      -      - DONE - GridPoint3
     -      -      - DONE - Interpolation
+    -      -      - DONE - Interpolator
     -      -      - DONE - Intersector
     -      -      - DONE - IPath
     -      -      - DONE - IShape2D

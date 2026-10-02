@@ -33,7 +33,7 @@ public interface ILughTest
     void Run();
     void Update();
     void Render( SpriteBatch spriteBatch );
-    void TearDown();
+    void Close();
 }
 
 // ============================================================================

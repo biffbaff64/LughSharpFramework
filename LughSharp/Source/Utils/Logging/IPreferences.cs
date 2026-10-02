@@ -196,7 +196,7 @@ public interface IPreferences
     /// If the preference is not found, the <paramref name="defValue" /> will
     /// be returned.
     /// </summary>
-    string GetString( string key, string defValue );
+    string GetString( string key, string defValue = "" );
 
     /// <summary>
     /// Returns the preferences list as a Dictionary{string,object}.

@@ -29,10 +29,13 @@ using LughSharp.Source.Scene2D.UI.Styles;
 namespace LughSharp.Source.Scene2D.UI;
 
 /// <summary>
-/// Displays a dialog, which is a window with a title, a content table, and a button table.
-/// Methods are provided to add a label to the content table and buttons to the button table,
-/// but any widgets can be added. When a button is clicked, <see cref="ClickResult"/> is
-/// called and the dialog is removed from the stage.
+/// Displays a dialog, which is a window with a title, a content table, and a button
+/// table. Methods are provided to add a label to the content table and buttons to
+/// the button table, but any widgets can be added.
+/// <para>
+/// When a button is clicked, <see cref="ClickResult"/> is called and the dialog is
+/// removed from the stage.
+/// </para>
 /// </summary>
 [PublicAPI]
 public class Dialog : Window, IStyleable< WindowStyle >
@@ -69,7 +72,8 @@ public class Dialog : Window, IStyleable< WindowStyle >
     }
 
     /// <summary>
-    /// Creates a new Dialog, using the supplied title, <see cref="Skin"/>, and <see cref="WindowStyle"/>.
+    /// Creates a new Dialog, using the supplied title, <see cref="Skin"/>, and
+    /// <see cref="WindowStyle"/>.
     /// </summary>
     /// <param name="title"> A string holding the dialog name to display. </param>
     /// <param name="skin"> The Skin holding the WindowStyle.</param>
@@ -280,22 +284,19 @@ public class Dialog : Window, IStyleable< WindowStyle >
         RemoveCaptureListener( _ignoreTouchDown );
 
         PreviousKeyboardFocus = null;
+        Actor? actor = stage.GetKeyboardFocus();
 
-        Actor? previousFocusActor = stage.GetKeyboardFocus();
-
-        if ( previousFocusActor != null )
+        if ( ( actor != null ) && !actor!.IsDescendantOf( this ) )
         {
-            if ( !previousFocusActor.IsDescendantOf( this ) )
-            {
-                PreviousKeyboardFocus = previousFocusActor;
-            }
+            PreviousKeyboardFocus = actor;
         }
 
         PreviousScrollFocus = null;
+        actor               = stage.ScrollFocus;
 
-        if ( ( stage.ScrollFocus != null ) && !stage.ScrollFocus.IsDescendantOf( this ) )
+        if ( ( actor != null ) && !actor.IsDescendantOf( this ) )
         {
-            PreviousScrollFocus = stage.ScrollFocus;
+            PreviousScrollFocus = actor;
         }
 
         stage.AddActor( this );
@@ -388,7 +389,7 @@ public class Dialog : Window, IStyleable< WindowStyle >
     /// </summary>
     /// <param name="actor"> The actor to associate the object with. </param>
     /// <param name="obj"> The object to associate with the actor. </param>
-    public void SetAssociatedObject( Actor actor, object obj )
+    public void SetAssociatedObject( Actor actor, object? obj )
     {
         Values?[ actor ] = obj;
     }
@@ -475,6 +476,9 @@ public class Dialog : Window, IStyleable< WindowStyle >
             _dialog.CancelHide = false;
         }
     }
+
+    // ========================================================================
+    // ========================================================================
 
     /// <summary>
     /// An input listener that automatically cancels touch-down events when triggered.

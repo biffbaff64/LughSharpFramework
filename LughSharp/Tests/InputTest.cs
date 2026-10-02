@@ -77,7 +77,7 @@ public class InputTest : InputAdapter, ILughTest
     }
 
     [TearDown]
-    public void TearDown()
+    public void Close()
     {
     }
 
