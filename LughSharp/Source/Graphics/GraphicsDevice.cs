@@ -39,8 +39,8 @@ namespace LughSharp.Source.Graphics;
 public abstract class GraphicsDevice : IGraphicsDevice
 {
     /// <summary>
-    /// Represents detailed information about a graphics backend, including the backend type
-    /// and any subcategories associated with it.
+    /// Represents detailed information about a graphics backend, including the
+    /// backend type and any subcategories associated with it.
     /// </summary>
     [PublicAPI]
     [StructLayout( LayoutKind.Sequential )]
@@ -84,11 +84,12 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     // ========================================================================
 
-    public virtual int   WindowWidth         { get; }
-    public virtual int   WindowHeight        { get; }
-    public virtual float DeltaTime           { get; set; }
-    public virtual bool  ContinuousRendering { get; set; } = true;
-    public virtual bool  IsFullscreen        { get; }
+    public virtual int  WindowWidth  { get; }
+    public virtual int  WindowHeight { get; }
+    public virtual bool IsFullscreen { get; }
+
+    public float DeltaTime           { get; set; }
+    public bool  ContinuousRendering { get; set; } = true;
 
     /// <summary>
     /// The current OpenGL context.

@@ -350,6 +350,24 @@ public class Scene2DImage : Widget
         InvalidateLayout();
     }
 
+    /// <summary>
+    /// Enables this Scene2DImage to be displayed by adding it to the supplied stage.
+    /// ALso clears any actions on the image, and adds the specified action to it.
+    /// </summary>
+    /// <param name="stage"> The <see cref="Stage"/>. </param>
+    /// <param name="action"> The action, may be null. </param>
+    public void Show( Stage? stage, SceneAction? action = null )
+    {
+        ClearActions();
+        
+        stage?.AddActor( this );
+
+        if ( action != null )
+        {
+            AddAction( action );
+        }
+    }
+
     /// <inheritdoc />
     public override string ToString()
     {

@@ -94,24 +94,23 @@ public class Table : WidgetGroup
 
     // ========================================================================
 
-    public static readonly Color DebugTableColor = new( 0, 0, 1, 1 );
-    public static readonly Color DebugCellColor  = new( 1, 0, 0, 1 );
-    public static readonly Color DebugActorColor = new( 0, 1, 0, 1 );
+    public static readonly Color DebugTableColor = Color.Blue;
+    public static readonly Color DebugCellColor  = Color.Red;
+    public static readonly Color DebugActorColor = Color.Green;
 
     // ========================================================================
 
     private static float[]? _columnWeightedWidth;
     private static float[]? _rowWeightedHeight;
 
-    private List< DebugRect >? _debugRects = [ ];
+    private List< Cell? >      _columnDefaults = [ ];
+    private Cell?              _rowDefaults    = new();
+    private List< DebugRect >? _debugRects     = [ ];
     private ISceneDrawable?    _background;
 
     private bool _clip;
     private bool _implicitEndRow;
     private bool _sizeInvalid = true;
-
-    private readonly List< Cell? > _columnDefaults = [ ];
-    private          Cell?         _rowDefaults    = new();
 
     private float[]? _columnWidth;
     private float[]? _columnMinWidth;
@@ -184,16 +183,12 @@ public class Table : WidgetGroup
             {
                 batch.Flush();
 
-                float padLeft   = _padLeft.Get( this );
-                float padBottom = _padBottom.Get( this );
+                float padLeft    = _padLeft.Get( this );
+                float padBottom  = _padBottom.Get( this );
+                float clipWidth  = GetWidth() - padLeft - _padRight.Get( this );
+                float clipHeight = GetHeight() - padBottom - _padTop.Get( this );
 
-                if ( ClipBegin
-                        (
-                         padLeft,
-                         padBottom,
-                         GetWidth() - padLeft - _padRight.Get( this ),
-                         GetHeight() - padBottom - _padTop.Get( this )
-                        ) )
+                if ( ClipBegin( padLeft, padBottom, clipWidth, clipHeight ) )
                 {
                     DrawChildren( batch, parentAlpha );
                     batch.Flush();
@@ -409,7 +404,7 @@ public class Table : WidgetGroup
         }
 
         Cells.Add( cell );
-        
+
         cell.Set( CellDefaults );
 
         if ( cell.Column < _columnDefaults.Count )

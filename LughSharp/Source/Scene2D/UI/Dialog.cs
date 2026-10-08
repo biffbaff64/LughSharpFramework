@@ -40,17 +40,17 @@ namespace LughSharp.Source.Scene2D.UI;
 [PublicAPI]
 public class Dialog : Window, IStyleable< WindowStyle >
 {
-    public Actor? PreviousKeyboardFocus { get; set; }
-    public Actor? PreviousScrollFocus   { get; set; }
     public Table? ContentTable          { get; private set; }
     public Table? ButtonTable           { get; private set; }
+    public Actor? PreviousKeyboardFocus { get; set; }
+    public Actor? PreviousScrollFocus   { get; set; }
     public bool   CancelHide            { get; set; }
 
     public Dictionary< Actor, object? >? Values { get; set; } = new();
 
     // ========================================================================
 
-    private readonly IgnoreTouchDown _ignoreTouchDown = new();
+    private readonly IgnoreTouchDownListener _ignoreTouchDown = new();
 
     private FocusListener _dialogFocusListener = null!;
     private Skin?         _skin;
@@ -305,7 +305,6 @@ public class Dialog : Window, IStyleable< WindowStyle >
 
         stage.CancelTouchFocus();
         stage.SetKeyboardFocus( this );
-
         stage.ScrollFocus = this;
 
         if ( action != null )
@@ -485,7 +484,7 @@ public class Dialog : Window, IStyleable< WindowStyle >
     /// This can be used to ignore or prevent further processing of touch-down input actions
     /// on a specific actor or widget.
     /// </summary>
-    public class IgnoreTouchDown : InputListener
+    public class IgnoreTouchDownListener : InputListener
     {
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {

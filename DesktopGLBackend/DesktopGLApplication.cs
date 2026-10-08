@@ -30,10 +30,14 @@ using DesktopGLBackend.Window;
 using JetBrains.Annotations;
 
 using LughSharp.Source;
+using LughSharp.Source.Audio;
 using LughSharp.Source.Collections;
 using LughSharp.Source.Config;
+using LughSharp.Source.Graphics;
 using LughSharp.Source.Graphics.OpenGL;
+using LughSharp.Source.Input;
 using LughSharp.Source.IO;
+using LughSharp.Source.Network;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
 using LughSharp.Source.Utils.Logging;
@@ -534,6 +538,57 @@ public class DesktopGLApplication : IApplication
         _errorCallback = null;
 
         DotGLFW.Glfw.Terminate();
+    }
+
+    /// <summary>
+    /// Returns the <see cref="IApplicationListener"/> instance.
+    /// </summary>
+    public IApplicationListener GetApplicationListener()
+    {
+        return CurrentWindow?.ApplicationListener
+            ?? throw new LughRuntimeException( "Current Window is undefined!" );
+    }
+
+    /// <summary>
+    /// Returns the <see cref="IGraphicsDevice"/> instance.
+    /// </summary>
+    public IGraphicsDevice GetGraphicsDevice()
+    {
+        return CurrentWindow?.Graphics
+            ?? throw new LughRuntimeException( "Current Window is undefined!" );
+    }
+
+    /// <summary>
+    /// Returns the <see cref="IAudio"/> instance.
+    /// </summary>
+    public IAudio GetAudio()
+    {
+        return Engine.Audio;
+    }
+
+    /// <summary>
+    /// Returns the <see cref="IInput"/> instance.
+    /// </summary>
+    public IInput GetInput()
+    {
+        return CurrentWindow?.Input
+            ?? throw new LughRuntimeException( "Current Window is undefined!" );
+    }
+
+    /// <summary>
+    /// Returns the <see cref="IFiles"/> instance.
+    /// </summary>
+    public IFiles GetFiles()
+    {
+        return Engine.Files;
+    }
+
+    /// <summary>
+    /// Returns the <see cref="INet"/> instance.
+    /// </summary>
+    public INet GetNet()
+    {
+        return Engine.Net;
     }
 
     // ========================================================================

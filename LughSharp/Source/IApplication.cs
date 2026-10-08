@@ -23,6 +23,7 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Config;
+using LughSharp.Source.IO;
 
 namespace LughSharp.Source;
 
@@ -149,6 +150,36 @@ public interface IApplication : IDisposable
     /// Cleanup everything before shutdown.
     /// </summary>
     void Cleanup();
+
+    /// <summary>
+    /// Returns the <see cref="IApplicationListener"/> instance.
+    /// </summary>
+    IApplicationListener GetApplicationListener();
+
+    /// <summary>
+    /// Returns the <see cref="IGraphicsDevice"/> instance.
+    /// </summary>
+    IGraphicsDevice GetGraphicsDevice();
+
+    /// <summary>
+    /// Returns the <see cref="IAudio"/> instance.
+    /// </summary>
+    IAudio GetAudio();
+
+    /// <summary>
+    /// Returns the <see cref="IInput"/> instance.
+    /// </summary>
+    IInput GetInput();
+
+    /// <summary>
+    /// Returns the <see cref="IFiles"/> instance.
+    /// </summary>
+    IFiles GetFiles();
+
+    /// <summary>
+    /// Returns the <see cref="INet"/> instance.
+    /// </summary>
+    INet GetNet();
 }
 
 // ============================================================================

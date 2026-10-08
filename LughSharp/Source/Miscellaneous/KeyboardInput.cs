@@ -1,7 +1,7 @@
 ﻿// /////////////////////////////////////////////////////////////////////////////
 //  MIT License
 // 
-//  Copyright (c) 2024 Richard Ikin / Circa64 Software Projects
+//  Copyright (c) 2024 Richard Ikin
 // 
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,18 +22,36 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Config;
+namespace LughSharp.Source.Miscellaneous;
 
-/// <summary>
-/// Provides configuration for an application, including settings for graphics, audio,
-/// window properties, target platform, and more.
-/// This class supports extensive customization of the application runtime environment.
-/// </summary>
 [PublicAPI]
-[Experimental( "LUGH_CONFIG_001") ]
-public class CombinedConfig
+public class KeyboardInput : InputAdapter
 {
-    
+    /// <inheritdoc />
+    public override bool OnKeyDown( int keycode )
+    {
+        bool flag = keycode switch
+                    {
+                        IInput.Keys.Up   => true,
+                        IInput.Keys.Down => true,
+                        var _            => false
+                    };
+
+        return flag;
+    }
+
+    /// <inheritdoc />
+    public override bool OnKeyUp( int keycode )
+    {
+        bool flag = keycode switch
+                    {
+                        IInput.Keys.Up or IInput.Keys.Right  => true,
+                        IInput.Keys.Down or IInput.Keys.Left => true,
+                        var _                                => false
+                    };
+
+        return flag;
+    }
 }
 
 // ============================================================================

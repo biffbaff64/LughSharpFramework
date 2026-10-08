@@ -56,21 +56,21 @@ namespace LughSharp.Source.Scene2D.UI;
 [ActorDefinition( Role = "UI" )]
 public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
 {
-    public float KnobPosition { get; set; }
-    public float MinValue     { get; set; }
-    public float MaxValue     { get; set; }
-    public float Value        { get; set; }
-    public bool  IsVertical   { get; set; }
+    public float KnobPosition { get; set; } = 0.0f;
+    public float MinValue     { get; set; } = 0.0f;
+    public float MaxValue     { get; set; } = 0.0f;
+    public float Value        { get; set; } = 0.0f;
+    public bool  IsVertical   { get; set; } = false;
     public bool  IsRound      { get; set; } = true;
-    public bool  IsDisabled   { get; set; }
+    public bool  IsDisabled   { get; set; } = false;
 
     public Interpolator AnimateInterpolation { get; set; } = Interpolation.Linear;
     public Interpolator VisualInterpolation  { get; set; } = Interpolation.Linear;
 
     // ========================================================================
 
-    private const float DefaultPrefWidth  = 140f;
-    private const float DefaultPrefHeight = 140f;
+    private const float DefaultPrefWidth  = 140.0f;
+    private const float DefaultPrefHeight = 140.0f;
 
     private readonly bool _programmaticChangeEvents = true;
         
@@ -164,6 +164,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     /// Returns <c>True</c> if the progress bar is currently animating, otherwise <c>False</c>.
     /// The bar is animating if the <see cref="_animateTime"/> is greater than zero.
     /// </summary>
+    /// <remarks> Note: this property has no setter. </remarks>
     public bool IsAnimating => _animateTime > 0;
 
     /// <summary>
@@ -174,7 +175,7 @@ public class ProgressBar : Widget, IDisableable, IStyleable< ProgressBarStyle >
     public float StepSize
     {
         get;
-        init
+        set
         {
             if ( value <= 0 )
             {

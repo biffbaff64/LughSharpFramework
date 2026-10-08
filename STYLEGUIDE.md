@@ -28,7 +28,7 @@ Code
 - Names of public fields, local variables, parameters: **_camelCase_**.
 - Names of private, fields and properties: **__camelCase_**.
 - Names of protected, internal and protected internal fields and properties: **_camelCase_**.
-- Names of constant fields: **_UPPER_CASE_UNDERSCORE_TOLERANT_**
+- Names of constant fields: **_PascalCase_**
 - Naming convention is unaffected by modifiers such as const, static, readonly, etc.
 - For casing, a “word” is anything written without internal spaces, including acronyms. For example, **_MyRpc_** instead
   of **_MyRPC_**.

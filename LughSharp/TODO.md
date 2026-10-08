@@ -21,6 +21,7 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - STYLEGUIDE.md needs updating. Some of the information is incorrect.
+- CONTRIBUTING.md needs updating.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -93,15 +94,12 @@ LUGHSHARP/SOURCE
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ApplicationAdapter
-    - DONE - DONE - DONE - ApplicationConfiguration
     - DONE - DONE - DONE - Engine
     - DONE - DONE - DONE - IApplication
     - DONE - DONE - DONE - IApplicationListener
     - DONE - DONE - DONE - ILifecycleListener
     - DONE - DONE - DONE - IScreen
-    - DONE - DONE - DONE - LibraryVersion
     - DONE - DONE - DONE - LughGame
-    - DONE - DONE - DONE - Platform
     - DONE - DONE - DONE - ScreenAdapter
 
 LUGHSHARP/SOURCE/ASSETS
@@ -297,6 +295,7 @@ LUGHSHARP/SOURCE/COLLECTIONS
     - DONE - DONE - DONE - DelayedRemovalList
     - DONE - DONE - DONE - DictionaryExtensions
     - DONE - DONE - DONE - DirectoryInfoComparer
+    - DONE - DONE - DONE - IntArray
     - DONE - DONE - DONE - IPredicate
     - DONE - DONE - DONE - LinkedHashMap
     - DONE - DONE - DONE - ListExtensions
@@ -304,6 +303,35 @@ LUGHSHARP/SOURCE/COLLECTIONS
     - DONE - DONE - DONE - OrderedMap
     - DONE - DONE - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LUGHSHARP/SOURCE/CONFIG
+-----------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - ApplicationConfiguration
+    - DONE - DONE - DONE - ApplicationType
+    - DONE - DONE - DONE - LibraryVersion
+    - DONE - DONE - DONE - Platform
+    - DONE - DONE - DONE - PlatformFamily
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+LUGHSHARP/SOURCE/GRAPHICS
+-------------------------
+
+      CODE   DOCU   FOOTER
+      ----   ----   ------
+    - DONE - DONE - DONE - EntityID
+    - DONE - DONE - DONE - EntityIDs
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

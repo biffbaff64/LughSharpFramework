@@ -46,11 +46,14 @@ namespace LughSharp.Source.Utils;
 [AttributeUsage( AttributeTargets.Class
                | AttributeTargets.Enum
                | AttributeTargets.Interface
-               | AttributeTargets.Struct )]
+               | AttributeTargets.Struct
+               | AttributeTargets.Method
+               | AttributeTargets.Property
+               | AttributeTargets.Delegate )]
 public class UnstableApiAttribute : Attribute
 {
     /// <param name="reason">A brief description of why this type is considered unstable.</param>
-    public UnstableApiAttribute( string? reason = null )
+    public UnstableApiAttribute( string? reason )
     {
         Reason = reason;
     }

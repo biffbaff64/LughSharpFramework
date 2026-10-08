@@ -80,6 +80,7 @@ public class Window : Table, IStyleable< WindowStyle >
     public Window( string? title, Skin skin )
         : this( title, skin.Get< WindowStyle >() )
     {
+        Skin = skin;
     }
 
     /// <summary>
@@ -92,6 +93,7 @@ public class Window : Table, IStyleable< WindowStyle >
     public Window( string? title, Skin skin, string styleName )
         : this( title, skin.Get< WindowStyle >( styleName ) )
     {
+        Skin = skin;
     }
 
     /// <summary>
@@ -230,7 +232,7 @@ public class Window : Table, IStyleable< WindowStyle >
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Stage? stage = GetStage();
-        
+
         if ( stage != null )
         {
             if ( stage.GetKeyboardFocus() == null )
@@ -240,7 +242,7 @@ public class Window : Table, IStyleable< WindowStyle >
 
             EnsureWithinStage();
 
-            if ( GetStyle().StageBackground != null )
+            if ( _style.StageBackground != null )
             {
                 StageToLocalCoordinates( _tmpPosition.Set( 0, 0 ) );
                 StageToLocalCoordinates( _tmpSize.Set( stage.Width, stage.Height ) );
@@ -394,8 +396,9 @@ public class Window : Table, IStyleable< WindowStyle >
         if ( ( TitleLabel != null ) && ( _style.TitleFont != null ) )
         {
             TitleLabel.SetStyle( new LabelStyle( _style.TitleFont, _style.TitleFontColor ) );
-            InvalidateHierarchy();
         }
+
+        InvalidateHierarchy();
     }
 
     /// <summary>
@@ -721,16 +724,19 @@ public class Window : Table, IStyleable< WindowStyle >
             float padLeft   = _window.GetPadLeft();
             float padBottom = _window.GetPadBottom();
             float padRight  = _window.GetPadRight();
-            float right     = width - padRight;
+
+            float left   = padLeft;
+            float right  = width - padRight;
+            float bottom = padBottom;
 
             _window.Edge = 0;
 
             if ( _window.IsResizable
-              && ( x >= ( padLeft - border ) )
+              && ( x >= ( left - border ) )
               && ( x <= ( right + border ) )
-              && ( y >= ( padBottom - border ) ) )
+              && ( y >= ( bottom - border ) ) )
             {
-                if ( x < ( padLeft + border ) )
+                if ( x < ( left + border ) )
                 {
                     _window.Edge |= Align.Left;
                 }
@@ -740,7 +746,7 @@ public class Window : Table, IStyleable< WindowStyle >
                     _window.Edge |= Align.Right;
                 }
 
-                if ( y < ( padBottom + border ) )
+                if ( y < ( bottom + border ) )
                 {
                     _window.Edge |= Align.Bottom;
                 }
@@ -750,7 +756,7 @@ public class Window : Table, IStyleable< WindowStyle >
                     border += 25;
                 }
 
-                if ( x < ( padLeft + border ) )
+                if ( x < ( left + border ) )
                 {
                     _window.Edge |= Align.Left;
                 }
@@ -760,7 +766,7 @@ public class Window : Table, IStyleable< WindowStyle >
                     _window.Edge |= Align.Right;
                 }
 
-                if ( y < ( padBottom + border ) )
+                if ( y < ( bottom + border ) )
                 {
                     _window.Edge |= Align.Bottom;
                 }
@@ -769,7 +775,7 @@ public class Window : Table, IStyleable< WindowStyle >
             if ( _window is { IsMovable: true, Edge: 0 }
               && ( y <= height )
               && ( y >= ( height - padTop ) )
-              && ( x >= padLeft )
+              && ( x >= left )
               && ( x <= right ) )
             {
                 _window.Edge = Move;

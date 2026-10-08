@@ -37,7 +37,7 @@ public struct BitstreamErrors
     public const int DecoderError      = 0x200;
     public const int UnknownError      = BitstreamError + 0;
     public const int UnknownSampleRate = BitstreamError + 1;
-    public const int StreaError        = BitstreamError + 2;
+    public const int StreamError       = BitstreamError + 2;
     public const int UnexpectedEof     = BitstreamError + 3;
     public const int StreamEof         = BitstreamError + 4;
 }

@@ -44,6 +44,10 @@ public class ApplicationConfiguration
 
     // ------------------------------------------
 
+    /// <summary>
+    /// The directory where the applications Preferences file will be held. This folder will
+    /// be created in the users home directory.
+    /// </summary>
     public string   PreferencesDirectory { get; set; } = ".prefs/";
     public PathType PreferencesFileType  { get; set; } = PathType.External;
 

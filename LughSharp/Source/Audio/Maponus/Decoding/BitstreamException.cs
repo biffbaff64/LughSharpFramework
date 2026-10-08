@@ -40,6 +40,7 @@ namespace LughSharp.Source.Audio.Maponus.Decoding;
 /// condition has occurred.
 /// </li>
 /// </summary>
+/// <seealso cref="Mp3SharpException"/>
 [Serializable]
 [PublicAPI]
 public class BitstreamException : Mp3SharpException

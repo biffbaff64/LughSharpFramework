@@ -137,65 +137,12 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     }
 
     /// <summary>
-    /// Sets this actor as the event target and propagates the event to this actor and
-    /// ascendants as necessary. If this actor is not in the stage, the stage must be
-    /// set before calling this method.
-    /// <para>
-    /// Events are fired in 2 phases:
-    /// <li>
-    /// The first phase (the "capture" phase) notifies listeners on each actor starting
-    /// at the root and propagating down the hierarchy to (and including) this actor.
-    /// </li>
-    /// <li>
-    /// The second phase notifies listeners on each actor starting at this actor and, if
-    /// <see cref="Event.Bubbles()"/> is true, propagating upward to the root.
-    /// </li>
-    /// </para>
-    /// <para>
-    /// If the event is stopped at any time, it will not propagate to the next actor.
-    /// </para>
-    /// </summary>
-    /// <param name="ev"> The <see cref="Event"/> to fire. </param>
-    /// <returns> True if the event was cancelled. </returns>
-    public override bool Fire( Event? ev )
-    {
-        Logger.Checkpoint();
-
-        return base.Fire( ev );
-    }
-
-    /// <summary>
-    /// Responsible for notifying event listeners of an event.
-    /// <para>
-    /// This method first verifies that the event has a valid target actor. Depending on
-    /// whether the event is in the capture phase, it selects the appropriate listener list.
-    /// It then iterates through these listeners and notifies them of the event. If any
-    /// listener handles the event, the event is marked as handled.
-    /// </para>
-    /// <para>
-    /// If an exception occurs during this process, a new exception is thrown with additional
-    /// context.
-    /// </para>
-    /// </summary>
-    /// <param name="ev"> The event. </param>
-    /// <param name="capture">
-    /// true for <see cref="Actor.CaptureListeners"/>, false for <see cref="Actor.Listeners"/>.
-    /// </param>
-    /// <returns></returns>
-    public override bool Notify( Event ev, bool capture )
-    {
-        Logger.Checkpoint();
-
-        return base.Notify( ev, capture );
-    }
-
-    /// <summary>
     /// Returns the appropriate <see cref="ISceneDrawable"/> for the slider background,
     /// based on the current state of the slider.
     /// </summary>
     protected ISceneDrawable? GetBackgroundDrawable()
     {
-        var style = ( SliderStyle )GetStyle();
+        var style = GetStyle();
 
         if ( IsDisabled && ( style.DisabledBackground != null ) )
         {
@@ -221,7 +168,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     /// </summary>
     protected ISceneDrawable? GetKnobDrawable()
     {
-        var style = ( SliderStyle )GetStyle();
+        var style = GetStyle();
 
         if ( IsDisabled && ( style.DisabledKnob != null ) )
         {
@@ -252,7 +199,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     /// </returns>
     protected ISceneDrawable? GetKnobBeforeDrawable()
     {
-        var style = ( SliderStyle )GetStyle();
+        var style = GetStyle();
 
         if ( IsDisabled && ( style.DisabledKnobBefore != null ) )
         {
@@ -285,7 +232,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     /// </returns>
     protected ISceneDrawable? GetKnobAfterDrawable()
     {
-        var style = ( SliderStyle )GetStyle();
+        var style = GetStyle();
 
         if ( IsDisabled && ( style.DisabledKnobAfter != null ) )
         {
@@ -313,7 +260,7 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
     /// <returns>True if the value was successfully set, otherwise false.</returns>
     private bool CalculatePositionAndValue( float x, float y )
     {
-        SliderStyle     style = ( SliderStyle )GetStyle();
+        SliderStyle     style = GetStyle();
         ISceneDrawable? knob  = style.Knob;
         ISceneDrawable? bg    = GetBackgroundDrawable();
 
@@ -429,7 +376,10 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         Value = MinValue + ( ( MaxValue - MinValue ) * VisualInterpolationInverse.Apply( percent ) );
     }
 
-    public override SliderStyle GetStyle() => ( SliderStyle )base.GetStyle();
+    public override SliderStyle GetStyle()
+    {
+        return ( SliderStyle )base.GetStyle();
+    }
 
     public void SetStyle( SliderStyle style )
     {
@@ -465,8 +415,6 @@ public class Slider : ProgressBar, IStyleable< SliderStyle >
         /// </summary>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            Logger.Checkpoint();
-
             if ( parent.IsDisabled )
             {
                 return false;

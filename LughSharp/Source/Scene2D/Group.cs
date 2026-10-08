@@ -118,19 +118,21 @@ public class Group : Actor, ICullable
     {
         parentAlpha *= ActorColor.A;
 
-        Actor[] actors = Children.Begin();
+        SnapshotArrayList< Actor > tmpChildren = this.Children;
+        Actor[]                    actors      = tmpChildren.Begin();
+        Rectangle?                 cullingArea = this.CullingArea;
 
-        if ( CullingArea != null )
+        if ( cullingArea != null )
         {
             // Draw children only if inside culling area.
-            float cullLeft   = CullingArea.X;
-            float cullRight  = cullLeft + CullingArea.Width;
-            float cullBottom = CullingArea.Y;
-            float cullTop    = cullBottom + CullingArea.Height;
+            float cullLeft   = cullingArea.X;
+            float cullRight  = cullLeft + cullingArea.Width;
+            float cullBottom = cullingArea.Y;
+            float cullTop    = cullBottom + cullingArea.Height;
 
             if ( Transform )
             {
-                for ( int i = 0, n = Children.Size; i < n; i++ )
+                for ( int i = 0, n = tmpChildren.Size; i < n; i++ )
                 {
                     Actor child = actors[ i ];
 
@@ -160,7 +162,7 @@ public class Group : Actor, ICullable
                 SetX( 0 );
                 SetY( 0 );
 
-                for ( int i = 0, n = Children.Size; i < n; i++ )
+                for ( int i = 0, n = tmpChildren.Size; i < n; i++ )
                 {
                     Actor child = actors[ i ];
 
@@ -196,7 +198,7 @@ public class Group : Actor, ICullable
             // No culling, draw all children.
             if ( Transform )
             {
-                for ( int i = 0, n = Children.Size; i < n; i++ )
+                for ( int i = 0, n = tmpChildren.Size; i < n; i++ )
                 {
                     Actor child = actors[ i ];
 
@@ -217,7 +219,7 @@ public class Group : Actor, ICullable
                 SetX( 0 );
                 SetY( 0 );
 
-                for ( int i = 0, n = Children.Size; i < n; i++ )
+                for ( int i = 0, n = tmpChildren.Size; i < n; i++ )
                 {
                     Actor child = actors[ i ];
 
@@ -243,7 +245,7 @@ public class Group : Actor, ICullable
             }
         }
 
-        Children.End();
+        tmpChildren.End();
     }
 
     /// <summary>
@@ -281,12 +283,13 @@ public class Group : Actor, ICullable
     /// </summary>
     protected void DrawDebugChildren( ShapeRenderer shapes )
     {
-        Actor?[] actors = Children.Begin();
+        SnapshotArrayList< Actor > tmpChildren = Children;
+        Actor?[]                   actors      = tmpChildren.Begin();
 
         // No culling, draw all children.
         if ( Transform )
         {
-            for ( int i = 0, n = Children.Size; i < n; i++ )
+            for ( int i = 0, n = tmpChildren.Size; i < n; i++ )
             {
                 Actor? child = actors[ i ];
 
@@ -319,7 +322,7 @@ public class Group : Actor, ICullable
             SetX( 0 );
             SetY( 0 );
 
-            for ( int i = 0, n = Children.Size; i < n; i++ )
+            for ( int i = 0, n = tmpChildren.Size; i < n; i++ )
             {
                 Actor? child = actors[ i ];
 
@@ -352,7 +355,7 @@ public class Group : Actor, ICullable
             SetY( offsetY );
         }
 
-        Children.End();
+        tmpChildren.End();
     }
 
     /// <summary>
@@ -491,7 +494,7 @@ public class Group : Actor, ICullable
     /// <summary>
     /// Called when actors are added to or removed from the group.
     /// </summary>
-    protected virtual void ChildrenChanged()
+    protected virtual void OnChildrenChanged()
     {
     }
 
@@ -516,7 +519,7 @@ public class Group : Actor, ICullable
         actor.Parent = this;
         actor.SetStage( GetStage() );
 
-        ChildrenChanged();
+        OnChildrenChanged();
     }
 
     /// <summary>
@@ -550,7 +553,7 @@ public class Group : Actor, ICullable
         actor.Parent = this;
         actor.SetStage( GetStage() );
 
-        ChildrenChanged();
+        OnChildrenChanged();
     }
 
     /// <summary>
@@ -577,7 +580,7 @@ public class Group : Actor, ICullable
         actor.Parent = this;
         actor.SetStage( GetStage() );
 
-        ChildrenChanged();
+        OnChildrenChanged();
     }
 
     /// <summary>
@@ -612,7 +615,7 @@ public class Group : Actor, ICullable
         actor.Parent = this;
         actor.SetStage( GetStage() );
 
-        ChildrenChanged();
+        OnChildrenChanged();
     }
 
     /// <summary>
@@ -648,7 +651,7 @@ public class Group : Actor, ICullable
         Actor actor = Children.RemoveAt( index );
 
         var stage = GetStage();
-        
+
         if ( stage != null )
         {
             if ( unfocus )
@@ -660,7 +663,7 @@ public class Group : Actor, ICullable
             actor.SetStage( null );
         }
 
-        ChildrenChanged();
+        OnChildrenChanged();
 
         return actor;
     }
@@ -691,7 +694,7 @@ public class Group : Actor, ICullable
         Children.End();
         Children.Clear();
 
-        ChildrenChanged();
+        OnChildrenChanged();
     }
 
     /// <summary>
@@ -903,14 +906,14 @@ public class Group : Actor, ICullable
     private void ToString( StringBuilder buffer, int indent )
     {
         Guard.Against.Null( buffer );
-        
+
         buffer.Append( base.ToString() ?? string.Empty );
         buffer.Append( '\n' );
 
         Actor?[] actors = Children.Begin();
 
         indent = Math.Max( 0, indent );
-        
+
         for ( int i = 0, n = Children.Size; i < n; i++ )
         {
             for ( var ii = 0; ii < indent; ii++ )

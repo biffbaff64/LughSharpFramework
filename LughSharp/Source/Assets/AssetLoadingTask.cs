@@ -33,11 +33,12 @@ namespace LughSharp.Source.Assets;
 [PublicAPI]
 public class AssetLoadingTask : IAssetTask
 {
-    public AssetManager    Manager   { get; set; }
-    public AssetDescriptor AssetDesc { get; }
-    public AssetLoader     Loader    { get; set; }
-    public AsyncExecutor   Executor  { get; set; }
-    public long            StartTime { get; set; }
+    public AssetManager    Manager       { get; set; }
+    public AssetDescriptor AssetDesc     { get; }
+    public AssetLoader     Loader        { get; set; }
+    public AsyncExecutor   Executor      { get; set; }
+    public long            StartTime     { get; set; }
+    public bool            IsAsyncLoader { get; private set; }
 
     // ========================================================================
 
@@ -51,11 +52,7 @@ public class AssetLoadingTask : IAssetTask
 
     // ========================================================================
 
-    public bool IsAsyncLoader { get; private set; }
-
-    // ========================================================================
-
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     // ========================================================================
     // ========================================================================

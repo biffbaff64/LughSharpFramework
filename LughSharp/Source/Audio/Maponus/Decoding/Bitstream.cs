@@ -34,7 +34,8 @@ namespace LughSharp.Source.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Bitstream
 {
-//TODO: much of the parsing currently occurs in the various decoders. This should be moved into this class and associated inner classes.
+//TODO: much of the parsing currently occurs in the various decoders.
+// this should be moved into this class and associated inner classes.
 
     /// <summary>
     /// Synchronization control constant for the initial
@@ -117,6 +118,10 @@ public class Bitstream
         CloseFrame();
     }
 
+    /// <summary>
+    /// Closes the Bitstream.
+    /// </summary>
+    /// <exception cref="BitstreamException"></exception>
     public void Close()
     {
         try
@@ -125,7 +130,7 @@ public class Bitstream
         }
         catch ( IOException ex )
         {
-            throw new BitstreamException( BitstreamErrors.StreaError, ex );
+            throw new BitstreamException( BitstreamErrors.StreamError, ex );
         }
     }
 
@@ -182,7 +187,7 @@ public class Bitstream
             }
             catch
             {
-                throw new BitstreamException( BitstreamErrors.StreaError );
+                throw new BitstreamException( BitstreamErrors.StreamError );
             }
         }
     }
@@ -293,11 +298,13 @@ public class Bitstream
     }
 
     /// <summary>
-    /// check and skip the id3v2 tag.
+    /// Check and skip the <c>Id3v2</c> tag.
+    /// <para>
     /// mp3 frame sync inside id3 tag may led false decodeing.
     /// id3 tag do have a flag for "unsynchronisation", indicate there are no
     /// frame sync inside tags, scence decoder don't care about tags, we just
     /// skip all tags.
+    /// </para>
     /// </summary>
     public bool CheckAndSkipId3Tag( int headerstring )
     {
@@ -522,7 +529,7 @@ public class Bitstream
         }
         catch ( IOException ex )
         {
-            throw new BitstreamException( BitstreamErrors.StreaError, ex );
+            throw new BitstreamException( BitstreamErrors.StreamError, ex );
         }
     }
 
@@ -552,7 +559,7 @@ public class Bitstream
         }
         catch ( IOException ex )
         {
-            throw new BitstreamException( BitstreamErrors.StreaError, ex );
+            throw new BitstreamException( BitstreamErrors.StreamError, ex );
         }
 
         return totalBytesRead;

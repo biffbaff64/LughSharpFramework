@@ -289,7 +289,7 @@ public class WidgetGroup : Group, ILayout
     /// <summary>
     /// Called when actors are added to or removed from the group.
     /// </summary>
-    protected override void ChildrenChanged()
+    protected override void OnChildrenChanged()
     {
         InvalidateHierarchy();
     }

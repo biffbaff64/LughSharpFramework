@@ -35,7 +35,7 @@ public class Color : ICloneable, IEquatable< Color >
 {
     public static readonly Color Red        = new( 0xff, 0x00, 0x00, 0xff, "RED" );
     public static readonly Color Green      = new( 0x00, 0xff, 0x00, 0xff, "GREEN" );
-    public static readonly Color Blue       = new( 0x00, 0x00, 0xff, 0x00, "BLUE" );
+    public static readonly Color Blue       = new( 0x00, 0x00, 0xff, 0xff, "BLUE" );
     public static readonly Color Clear      = new( 0x00, 0x00, 0x00, 0x00, "CLEAR" );
     public static readonly Color White      = new( 0xff, 0xff, 0xff, 0xff, "WHITE" );
     public static readonly Color Black      = new( 0x00, 0x00, 0x00, 0xff, "BLACK" );
@@ -1092,12 +1092,12 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     /// <summary>
-    /// Parse a color code from a Scene2D <see cref="StyleRegistry"/> into a Colot instan e.
+    /// Parse a color code from a Scene2D <see cref="StyleRegistry"/> into a Color instance.
     /// </summary>
     /// <param name="value"> The string color code. </param>
     /// <param name="registry"> The registry. </param>
     /// <returns></returns>
-    [Experimental( "LUGH_UI_001" )]
+    [Experimental( "LUGH_UI_COLORS_001" )]
     public static Color ParseColor( string value, StyleRegistry registry )
     {
         if ( string.IsNullOrWhiteSpace( value ) )

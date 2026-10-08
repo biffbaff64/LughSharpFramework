@@ -34,7 +34,7 @@ namespace LughSharp.Source.Scene2D.Listeners;
 public sealed class ScrollPaneScrollListener( ScrollPane parent ) : InputListener
 {
     private readonly ScrollPane? _parent = parent;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -91,7 +91,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     private          float       _handlePosition;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Called when a mouse button or a finger touch goes down on the actor.
     /// If true is returned, this listener will have
@@ -104,10 +104,8 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     {
         Guard.Against.Null( _parent );
 
-        Logger.Checkpoint();
-        
         if ( ( _parent.DraggingPointer != -1 )
-            || ( ( ptr == 0 ) && ( button != 0 ) ) )
+          || ( ( ptr == 0 ) && ( button != 0 ) ) )
         {
             return false;
         }
@@ -124,17 +122,17 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
             return false;
         }
 
-        if ( _parent.ScrollBarTouch
-          && _parent.IsScrollX
-          && _parent.HScrollBounds.Contains( x, y ) )
+        if ( _parent.ScrollBarTouch && _parent.IsScrollX && _parent.HScrollBounds.Contains( x, y ) )
         {
             ev?.Stop();
+            
             _parent.SetScrollbarsVisible( true );
 
             if ( _parent.HKnobBounds.Contains( x, y ) )
             {
                 _parent.LastPoint.Set( x, y );
-                _handlePosition          = _parent.HKnobBounds.X;
+
+                _handlePosition         = _parent.HKnobBounds.X;
                 _parent.TouchScrollH    = true;
                 _parent.DraggingPointer = ptr;
 
@@ -146,17 +144,17 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
             return true;
         }
 
-        if ( _parent.ScrollBarTouch
-          && _parent.IsScrollY
-          && _parent.VScrollBounds.Contains( x, y ) )
+        if ( _parent.ScrollBarTouch && _parent.IsScrollY && _parent.VScrollBounds.Contains( x, y ) )
         {
             ev?.Stop();
+
             _parent.SetScrollbarsVisible( true );
 
             if ( _parent.VKnobBounds.Contains( x, y ) )
             {
                 _parent.LastPoint.Set( x, y );
-                _handlePosition          = _parent.VKnobBounds.Y;
+            
+                _handlePosition         = _parent.VKnobBounds.Y;
                 _parent.TouchScrollV    = true;
                 _parent.DraggingPointer = ptr;
 
@@ -274,14 +272,9 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
 /// <see cref="ScrollPane"/>.
 /// </summary>
 [PublicAPI]
-public class ScrollPaneGestureListener : ActorGestureListener
+public class ScrollPaneGestureListener( ScrollPane parent ) : ActorGestureListener
 {
-    private readonly ScrollPane? _parent;
-
-    public ScrollPaneGestureListener( ScrollPane parent )
-    {
-        _parent = parent;
-    }
+    private readonly ScrollPane? _parent = parent;
 
     /// <summary>
     /// Called when a pan gesture is detected by the user on the scroll pane.
@@ -382,4 +375,3 @@ public class ScrollPaneGestureListener : ActorGestureListener
 
 // ============================================================================
 // ============================================================================
-

@@ -131,9 +131,7 @@ public class AssetManager : IDisposable
     {
         if ( defaultLoaders )
         {
-            #if DEBUG
             Logger.Debug( "Setting Default Asset Loaders..." );
-            #endif
 
             //@formatter:off
             SetLoader( typeof( BitmapFont ),        new BitmapFontLoader( resolver ) );
@@ -156,9 +154,7 @@ public class AssetManager : IDisposable
             // I18NBundle loader here...
             //@formatter:on
 
-            #if DEBUG
             Logger.Debug( "Done." );
-            #endif
         }
 
         _executor          = new AsyncExecutor( 1, "AssetManager" );
