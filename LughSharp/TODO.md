@@ -317,6 +317,7 @@ LUGHSHARP/SOURCE/CONFIG
     - DONE - DONE - DONE - ApplicationConfiguration
     - DONE - DONE - DONE - ApplicationType
     - DONE - DONE - DONE - LibraryVersion
+    -      -      - DONE - LocalizationManager
     - DONE - DONE - DONE - Platform
     - DONE - DONE - DONE - PlatformFamily
 
@@ -707,7 +708,7 @@ LUGHSHARP/SOURCE/INPUT
       ----   ----   ------
     - DONE - DONE - DONE - AbstractInput
     - IP   - IP   - DONE - GestureDetector          - Mobile devices, do i keep this?
-    - DONE - IP   - DONE - IInput
+    - DONE - DONE - DONE - IInput
     - DONE - DONE - DONE - IInputProcessor
     - DONE - DONE - DONE - ILughButton
     - DONE - DONE - DONE - InputAdapter
@@ -719,6 +720,7 @@ LUGHSHARP/SOURCE/INPUT
     - DONE - DONE - DONE - NativeInputConfiguration
     -      -      - DONE - RemoteInput
     -      -      - DONE - RemoteSender
+    - DONE - DONE - DONE - VirtualController
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1124,6 +1126,7 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - ComparableTimSort
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
+    - IP   - IP   - DONE - GameTime                     May be abandoned
     - DONE - DONE - DONE - HashHelpers
     - DONE - DONE - DONE - IClipboard
     - DONE - DONE - DONE - IDrawable
@@ -1133,9 +1136,6 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - MinimalCrc32
     - DONE - DONE - DONE - Multiplexer
     - DONE - DONE - DONE - NumberParsing
-    - DONE - DONE - DONE - PerformanceCounter
-    - DONE - DONE - DONE - PerformanceCounters
-    - DONE - DONE - DONE - PropertiesUtils
     - DONE - DONE - DONE - QuadTreeFloat
     - DONE - DONE - DONE - QuickSelect
     - DONE - DONE - DONE - Scaling
@@ -1191,7 +1191,10 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
     - DONE - DONE - DONE - IPreferences
     - DONE - DONE - DONE - IState
     - DONE - DONE - DONE - Logger
+    - DONE - DONE - DONE - PerformanceCounter
+    - DONE - DONE - DONE - PerformanceCounters
     - DONE - DONE - DONE - Preferences
+    - DONE - DONE - DONE - PropertiesUtils
     - DONE - DONE - DONE - StateID
     - DONE - DONE - DONE - StateMachine
     - DONE - DONE - DONE - Stats

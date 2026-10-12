@@ -24,7 +24,7 @@
 
 using LughSharp.Source.Scene2D.Utils;
 
-namespace LughSharp.Source.Scene2D;
+namespace LughSharp.Source.Scene2D.Actions;
 
 [PublicAPI]
 public abstract class SceneAction : IAction, IResetable

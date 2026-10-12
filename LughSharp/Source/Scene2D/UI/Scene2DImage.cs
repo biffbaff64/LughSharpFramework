@@ -24,6 +24,7 @@
 
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
+using LughSharp.Source.Scene2D.Actions;
 using LughSharp.Source.Scene2D.Utils;
 
 namespace LughSharp.Source.Scene2D.UI;

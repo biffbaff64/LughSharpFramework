@@ -1,18 +1,18 @@
-// ///////////////////////////////////////////////////////////////////////////////
+﻿// ///////////////////////////////////////////////////////////////////////////////
 // MIT License
-//
+// 
 // Copyright (c) 2024, 2025, 2026 Circa64 Software Projects / Richard Ikin.
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,46 +22,48 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Utils;
+namespace LughSharp.Source.Utils.Logging;
 
 /// <summary>
-/// Marks a type as part of an unstable API that is still in active development.
-/// Applying this attribute alongside <see cref="System.Diagnostics.CodeAnalysis.ExperimentalAttribute"/>
-/// provides both human-readable context and IDE/compiler diagnostics at usage sites.
-/// <br/><br/>
-/// Recommended usage:
+/// To check if a single class has this attribute:
 /// <code>
-/// [UnstableApi("Style system is being redesigned")]
-/// [Experimental("LUGH_UI_001")]
-/// public class StyleRegistry { ... }
+/// var myPlayer = new Player();
+/// bool isActor = Attribute.IsDefined(myPlayer.GetType(), typeof(ActorDefinitionAttribute));
+/// if (isActor) 
+/// {
+///     Console.WriteLine("This object is an Actor!");
+/// }
 /// </code>
-/// Callers must suppress the compiler warning to use the type:
+/// <br/>
+/// If you want to find all classes in your project marked as Actors (common for
+/// Dependency Injection or Plugin systems):
 /// <code>
-/// #pragma warning disable LUGH_UI_001
-///     var registry = new StyleRegistry();
-/// #pragma warning restore LUGH_UI_001
+/// using System.Linq;
+/// using System.Reflection;
+/// 
+/// var actorTypes = Assembly.GetExecutingAssembly()
+///                          .GetTypes()
+///                          .Where(t => t.GetCustomAttribute&lt;ActorDefinitionAttribute&gt;() != null);
+/// foreach (var type in actorTypes)
+/// {
+///     Console.WriteLine($"Found Actor Type: {type.Name}");
+/// }
 /// </code>
 /// </summary>
 [PublicAPI]
-[AttributeUsage( AttributeTargets.Class
-               | AttributeTargets.Enum
-               | AttributeTargets.Interface
-               | AttributeTargets.Struct
-               | AttributeTargets.Method
-               | AttributeTargets.Property
-               | AttributeTargets.Delegate )]
-public class UnstableApiAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class)]
+public class ActorDefinitionAttribute : Attribute
 {
-    /// <param name="reason">A brief description of why this type is considered unstable.</param>
-    public UnstableApiAttribute( string? reason )
-    {
-        Reason = reason;
-    }
-
     /// <summary>
-    /// A brief description of why this type is considered unstable or incomplete.
+    /// The role of the actor. This is used for identifying the actor in the stage,
+    /// and is a user-defined string.
+    /// <br/>
+    /// For instance:-
+    /// <code>
+    /// [ActorDefinition(Role = "UI")]
+    /// </code>
     /// </summary>
-    public string? Reason { get; }
+    public string Role { get; set; } = "Generic";
 }
 
 // ============================================================================

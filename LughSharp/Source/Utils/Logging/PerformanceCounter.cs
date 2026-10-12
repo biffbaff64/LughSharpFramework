@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Utils;
+namespace LughSharp.Source.Utils.Logging;
 
 /// <summary>
 /// Class to keep track of the time and load (percentage of total time) a specific task

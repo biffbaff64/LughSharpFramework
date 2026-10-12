@@ -142,15 +142,17 @@ public class GeometryUtils
     }
 
     /// <summary>
-    /// 
+    /// Determines whether three points are colinear based on their coordinates.
     /// </summary>
-    /// <param name="x1"></param>
-    /// <param name="y1"></param>
-    /// <param name="x2"></param>
-    /// <param name="y2"></param>
-    /// <param name="x3"></param>
-    /// <param name="y3"></param>
-    /// <returns></returns>
+    /// <param name="x1">The x-coordinate of the first point.</param>
+    /// <param name="y1">The y-coordinate of the first point.</param>
+    /// <param name="x2">The x-coordinate of the second point.</param>
+    /// <param name="y2">The y-coordinate of the second point.</param>
+    /// <param name="x3">The x-coordinate of the third point.</param>
+    /// <param name="y3">The y-coordinate of the third point.</param>
+    /// <returns>
+    /// True if the points are colinear, otherwise false.
+    /// </returns>
     public static bool Colinear( float x1, float y1, float x2, float y2, float x3, float y3 )
     {
         float dx21 = x2 - x1;

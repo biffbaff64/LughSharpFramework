@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Input.Mobile;
+
 namespace LughSharp.Source.Scene2D.Listeners;
 
 /// <summary>

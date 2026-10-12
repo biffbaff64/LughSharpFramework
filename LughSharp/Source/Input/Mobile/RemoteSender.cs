@@ -24,14 +24,16 @@
 
 using System.Diagnostics;
 
+using LughSharp.Source.Input.Mobile;
+
 using Exception = System.Exception;
 
 namespace LughSharp.Source.Input;
 
 /// <summary>
-/// Sends all inputs from touch, key, accelerometer and compass to
-/// a <see cref="RemoteInput"/> at the given ip/port. Instantiate
-/// this and call SendUpdate() periodically.
+/// Sends all inputs from touch, key, accelerometer and compass to a
+/// <see cref="RemoteInput"/> at the given ip/port. Instantiate this
+/// and call SendUpdate() periodically.
 /// </summary>
 [PublicAPI]
 public class RemoteSender : IInputProcessor

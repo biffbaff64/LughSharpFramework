@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Utils;
+namespace LughSharp.Source.Utils.Logging;
 
 /// <summary>
 /// A helper class that allows you to load and store key/value pairs of an

@@ -31,6 +31,7 @@ using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Graphics.Viewports;
+using LughSharp.Source.Scene2D.Actions;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI;
 using LughSharp.Source.Utils.Pooling;
@@ -45,7 +46,7 @@ namespace LughSharp.Source.Scene2D;
 /// the stage and sets up the camera used to convert between stage coordinates and screen
 /// coordinates.
 /// A stage must receive input events so it can distribute them to actors. This is
-/// typically done by passing the stage to Engine.Input.SetInputProcessor.
+/// typically done by passing the stage to <c>Engine.Input.SetInputProcessor</c>.
 /// An InputMultiplexer may be used to handle input events before or after the stage does.
 /// If an actor handles an event by returning true from the input method, then the stage's
 /// input method will also return true, causing subsequent InputProcessors to not receive
@@ -60,10 +61,10 @@ public class Stage : InputAdapter, IDisposable
 {
     public SnapshotArrayList< TouchFocus > TouchFocuses { get; } = new( true, 4 );
 
-    public Camera?  Camera   { get; set; }
-    public Viewport Viewport { get; }
-    public IBatch   Batch    { get; }
-    public bool     Debug    { get; set; }
+    public Camera?  Camera      { get; set; }
+    public Viewport Viewport    { get; }
+    public IBatch   Batch       { get; }
+    public bool     DebugActive { get; set; }
 
     /// <summary>
     /// If true, any actions executed during a call to <see cref="Act()"/>)
@@ -83,7 +84,7 @@ public class Stage : InputAdapter, IDisposable
     /// If true, debug lines are shown for actors even when
     /// <see cref="Actor.IsVisible"/> is false.
     /// </summary>
-    public bool DebugInvisibleActors { get; set; }
+    public bool DebugInvisibleActors { get; set; } = false;
 
     // ========================================================================
 
@@ -124,17 +125,10 @@ public class Stage : InputAdapter, IDisposable
     /// </summary>
     /// <param name="batch"></param>
     public Stage( IBatch? batch )
-        : this
-            (
-             new ScalingViewport
-                 (
-                  Scaling.Stretch,
-                  Engine.Graphics.WindowWidth,
-                  Engine.Graphics.WindowHeight,
-                  new OrthographicCamera()
-                 ),
-             batch
-            )
+        : this( new ScalingViewport( Scaling.Stretch,
+                                     Engine.Graphics.WindowWidth,
+                                     Engine.Graphics.WindowHeight,
+                                     new OrthographicCamera() ), batch )
     {
         _ownsBatch = false;
     }
@@ -164,29 +158,20 @@ public class Stage : InputAdapter, IDisposable
         Viewport = viewport ?? throw new ArgumentException( "viewport cannot be null." );
         Batch    = batch ?? throw new ArgumentException( "batch cannot be null." );
 
-        Pools.RegisterPool< InputEvent >
-            (
-             new Pool< InputEvent >
-             {
-                 NewObjectFactory = () => new InputEvent()
-             }
-            );
+        Pools.RegisterPool< InputEvent >( new Pool< InputEvent >
+        {
+            NewObjectFactory = () => new InputEvent()
+        } );
 
-        Pools.RegisterPool< TouchFocus >
-            (
-             new Pool< TouchFocus >
-             {
-                 NewObjectFactory = () => new TouchFocus()
-             }
-            );
+        Pools.RegisterPool< TouchFocus >( new Pool< TouchFocus >
+        {
+            NewObjectFactory = () => new TouchFocus()
+        } );
 
-        Pools.RegisterPool< FocusListener.FocusEvent >
-            (
-             new Pool< FocusListener.FocusEvent >
-             {
-                 NewObjectFactory = () => new FocusListener.FocusEvent()
-             }
-            );
+        Pools.RegisterPool< FocusListener.FocusEvent >( new Pool< FocusListener.FocusEvent >
+        {
+            NewObjectFactory = () => new FocusListener.FocusEvent()
+        } );
 
         RootGroup = new Group();
         RootGroup.SetStage( this );
@@ -274,7 +259,7 @@ public class Stage : InputAdapter, IDisposable
 
         Batch.End();
 
-        if ( Debug )
+        if ( DebugActive )
         {
             DrawDebug();
         }
@@ -329,7 +314,7 @@ public class Stage : InputAdapter, IDisposable
 
             inputEvent.Type         = InputEvent.EventType.Exit;
             inputEvent.Stage        = this;
-            inputEvent.StageX       = _tempCoords.Y;
+            inputEvent.StageX       = _tempCoords.X;
             inputEvent.StageY       = _tempCoords.Y;
             inputEvent.Pointer      = pointer;
             inputEvent.RelatedActor = over;
@@ -465,7 +450,7 @@ public class Stage : InputAdapter, IDisposable
         inputEvent.Type    = InputEvent.EventType.TouchDragged;
         inputEvent.Stage   = this;
         inputEvent.StageX  = _tempCoords.X;
-        inputEvent.StageY  = _tempCoords.X;
+        inputEvent.StageY  = _tempCoords.Y;
         inputEvent.Pointer = pointer;
 
         TouchFocus?[] focuses = TouchFocuses.Begin();
@@ -1075,7 +1060,7 @@ public class Stage : InputAdapter, IDisposable
 
         if ( debugTableUnderMouse != Table.DebugType.None )
         {
-            Debug = true;
+            DebugActive = true;
         }
         else
         {
@@ -1394,7 +1379,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( value )
             {
-                Debug = true;
+                DebugActive = true;
             }
             else
             {
@@ -1421,7 +1406,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( value )
             {
-                Debug = true;
+                DebugActive = true;
             }
             else
             {
@@ -1448,7 +1433,7 @@ public class Stage : InputAdapter, IDisposable
 
             if ( value )
             {
-                Debug = true;
+                DebugActive = true;
             }
             else
             {

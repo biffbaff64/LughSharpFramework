@@ -115,7 +115,7 @@ public class Movement
     /// representation, and a descriptive name.
     /// </summary>
     [PublicAPI]
-    public struct DirectionValue( int x, int y, Dir trans, string name )
+    public struct DirectionValue( int x, int y, Dir trans, string name = "" )
     {
         public int    DirX       { get; set; } = x;
         public int    DirY       { get; set; } = y;

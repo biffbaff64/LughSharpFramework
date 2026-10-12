@@ -26,6 +26,7 @@ using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Utils;
+using LughSharp.Source.Scene2D.Actions;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.Utils;
 using LughSharp.Source.Utils.Pooling;
@@ -69,7 +70,7 @@ public class Actor : IComparable< Actor >
     protected float OriginY { get; set; }
 
     public static PoolsMap Pools = new();
-    
+
     // ========================================================================
 
     private float  _x;
@@ -754,16 +755,11 @@ public class Actor : IComparable< Actor >
         get;
         set
         {
-            var stage = GetStage();
-            
-            if ( stage != null )
-            {
-                field = value;
+            field = value;
 
-                if ( value )
-                {
-                    stage.Debug = true;
-                }
+            if ( value )
+            {
+                _stage?.DebugActive = true;
             }
         }
     } = false;
@@ -774,7 +770,7 @@ public class Actor : IComparable< Actor >
     public bool HasKeyboardFocus()
     {
         var stage = GetStage();
-        
+
         return ( stage != null ) && ( stage.GetKeyboardFocus() == this );
     }
 
@@ -795,7 +791,7 @@ public class Actor : IComparable< Actor >
     public bool IsTouchFocusTarget()
     {
         var stage = GetStage();
-        
+
         if ( stage == null )
         {
             return false;
@@ -819,7 +815,7 @@ public class Actor : IComparable< Actor >
     public bool IsTouchFocusListener()
     {
         var stage = GetStage();
-        
+
         if ( stage == null )
         {
             return false;
@@ -928,7 +924,7 @@ public class Actor : IComparable< Actor >
     public virtual void OnRotationChanged()
     {
     }
-    
+
     /// <summary>
     /// Returns the stage that this actor is currently in, or null if not in a stage.
     /// </summary>
@@ -1411,7 +1407,7 @@ public class Actor : IComparable< Actor >
         {
             return false;
         }
-        
+
         var stage = GetStage();
 
         if ( stage == null )
@@ -1456,7 +1452,7 @@ public class Actor : IComparable< Actor >
     public virtual Vector2 ScreenToLocalCoordinates( Vector2 screenCoords )
     {
         var stage = GetStage();
-        
+
         return stage == null
                    ? screenCoords
                    : StageToLocalCoordinates( stage.ScreenToStageCoordinates( screenCoords ) );
@@ -1642,7 +1638,7 @@ public class Actor : IComparable< Actor >
         shapes.Set( ShapeRenderer.ShapeRenderType.Lines );
 
         var stage = GetStage();
-        
+
         if ( stage != null )
         {
             shapes.Color = stage.DebugColor;

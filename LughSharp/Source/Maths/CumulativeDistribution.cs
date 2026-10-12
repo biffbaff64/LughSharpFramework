@@ -117,8 +117,8 @@ public class CumulativeDistribution< T >
     }
 
     /// <summary>
-    /// Finds the value whose interval contains the given probability
-    /// Binary search algorithm is used to find the value.
+    /// Finds the value whose interval contains the given probability.
+    /// A Binary search algorithm is used to find the value.
     /// </summary>
     /// <param name="probability"> </param>
     /// <returns> the value whose interval contains the probability  </returns>

@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Input;
+namespace LughSharp.Source.Input.Mobile;
 
 /// <summary>
 /// <see cref="IInputProcessor"/> implementation that detects gestures

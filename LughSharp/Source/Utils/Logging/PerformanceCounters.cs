@@ -22,7 +22,7 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-namespace LughSharp.Source.Utils;
+namespace LughSharp.Source.Utils.Logging;
 
 /// <summary>
 /// Class to keep track of a group of <see cref="PerformanceCounter" /> instances.
