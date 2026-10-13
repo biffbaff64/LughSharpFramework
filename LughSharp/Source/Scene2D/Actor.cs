@@ -1644,7 +1644,7 @@ public class Actor : IComparable< Actor >
             shapes.Color = stage.DebugColor;
         }
 
-        shapes.Rect( _x, _y, OriginX, OriginY, _width, _height, ScaleX, ScaleY, Rotation );
+        shapes.Rectangle( _x, _y, OriginX, OriginY, _width, _height, ScaleX, ScaleY, Rotation );
     }
 
     /// <summary>

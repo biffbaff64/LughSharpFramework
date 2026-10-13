@@ -254,15 +254,18 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
     /// <returns></returns>
     private static VertexAttribute[] BuildVertexAttributes( bool hasNormals, bool hasColor, int numTexCoords )
     {
+        // NOTE: Don't use VertexConstants.PositionComponents / ColorComponents here. Those
+        // describe the 2D SpriteBatch layout. This renderer always writes x, y, z per vertex,
+        // and its colour is a packed ABGR float, which GL must read as 4 normalised bytes.
         var attribs = new List< VertexAttribute >
         {
-            new( ( int )VertexConstants.Usage.Position, VertexConstants.PositionComponents, "a_position" )
+            new( ( int )VertexConstants.Usage.Position, 3, "a_position" )
         };
 
         if ( hasColor )
         {
             attribs.Add( new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
-                                              VertexConstants.ColorComponents,
+                                              4,
                                               ShaderConstants.AColor ) );
         }
 

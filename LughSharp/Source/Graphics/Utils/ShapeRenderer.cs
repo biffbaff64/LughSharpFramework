@@ -389,7 +389,7 @@ public class ShapeRenderer : IDisposable
         }
     }
 
-    public void Rect( float x, float y, float width, float height )
+    public void Rectangle( float x, float y, float width, float height )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
         float colorBits = _color.ToFloatBitsAbgr();
@@ -427,7 +427,7 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x, y, 0 );
     }
 
-    public void Rect( float x, float y, float width, float height, Color col1, Color col2, Color col3, Color col4 )
+    public void Rectangle( float x, float y, float width, float height, Color col1, Color col2, Color col3, Color col4 )
     {
         Check( ShapeRenderType.Lines, ShapeRenderType.Filled, 8 );
 
@@ -464,13 +464,13 @@ public class ShapeRenderer : IDisposable
         Renderer.Vertex( x, y, 0 );
     }
 
-    public void Rect( float x, float y, float originX, float originY, float width, float height, float scaleX,
+    public void Rectangle( float x, float y, float originX, float originY, float width, float height, float scaleX,
                       float scaleY, float degrees )
     {
-        Rect( x, y, originX, originY, width, height, scaleX, scaleY, degrees, _color, _color, _color, _color );
+        Rectangle( x, y, originX, originY, width, height, scaleX, scaleY, degrees, _color, _color, _color, _color );
     }
 
-    public void Rect( float x, float y, float originX, float originY,
+    public void Rectangle( float x, float y, float originX, float originY,
                       float width, float height, float scaleX, float scaleY, float degrees,
                       Color col1, Color col2, Color col3, Color col4 )
     {

@@ -78,7 +78,7 @@ public class Stage : InputAdapter, IDisposable
     /// <summary>
     /// The default color that can be used by actors to draw debug lines.
     /// </summary>
-    public Color DebugColor { get; } = new( 1, 0, 0, 0.85f );
+    public Color DebugColor { get; } = new( 1, 0, 0, 1 );
 
     /// <summary>
     /// If true, debug lines are shown for actors even when
@@ -1043,14 +1043,9 @@ public class Stage : InputAdapter, IDisposable
     /// ascendant of the actor under the mouse that is a table.
     /// Can be combined with <see cref="DebugAll"/>.
     /// </summary>
-    /// <param name="debugTableUnderMouse">May be null for <see cref="Table.DebugType.None"/>.</param>
+    /// <param name="debugTableUnderMouse">The table debug type to use.</param>
     public virtual void SetDebugTableUnderMouse( Table.DebugType debugTableUnderMouse )
     {
-        if ( Enum.IsDefined( typeof( Table.DebugType ), debugTableUnderMouse ) )
-        {
-            _debugTableUnderMouse = Table.DebugType.None;
-        }
-
         if ( _debugTableUnderMouse == debugTableUnderMouse )
         {
             return;
@@ -1322,7 +1317,7 @@ public class Stage : InputAdapter, IDisposable
     /// Disables debug on all actors recursively except the specified
     /// actor and any children.
     /// </summary>
-    private void DisableDebug( Actor actor, Actor except )
+    private static void DisableDebug( Actor actor, Actor except )
     {
         Guard.Against.Null( actor );
         Guard.Against.Null( except );
@@ -1338,10 +1333,7 @@ public class Stage : InputAdapter, IDisposable
         {
             for ( int i = 0, n = group.Children.Size; i < n; i++ )
             {
-                if ( group.Children.GetAt( i ) != except )
-                {
-                    group.Children.GetAt( i ).DebugActive = false;
-                }
+                DisableDebug( group.Children.GetAt( i ), except );
             }
         }
     }

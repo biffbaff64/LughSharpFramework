@@ -844,7 +844,7 @@ public class Group : Actor, ICullable
     /// If true, <see cref="DrawDebug(ShapeRenderer)"/> will be called for this
     /// group and, optionally, all children recursively.
     /// </summary>
-    public void SetDebug( bool enabled, bool recursively )
+    public virtual void SetDebug( bool enabled, bool recursively )
     {
         DebugActive = enabled;
 

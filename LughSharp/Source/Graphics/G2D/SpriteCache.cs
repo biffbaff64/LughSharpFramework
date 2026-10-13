@@ -179,8 +179,10 @@ public class SpriteCache
                           new VertexAttribute( ( int )VertexConstants.Usage.Position,
                                                VertexConstants.PositionComponents,
                                                "a_position" ),
+                          // The packed ABGR colour occupies one float slot, which
+                          // GL must read as 4 normalised unsigned bytes.
                           new VertexAttribute( ( int )VertexConstants.Usage.ColorPacked,
-                                               VertexConstants.ColorComponents,
+                                               4,
                                                ShaderConstants.AColor ),
                           new VertexAttribute( ( int )VertexConstants.Usage.TextureCoordinates,
                                                VertexConstants.TexcoordComponents,
@@ -1335,14 +1337,15 @@ public class SpriteCache
 
     private static ShaderProgram CreateDefaultShader()
     {
-        const string VertexShader = "in vec4 "
+        const string VertexShader = "#version 450 core\n"
+                                  + "in vec4 "
                                   + "a_position"
                                   + ";\n" //
                                   + "in vec4 "
                                   + "a_color"
                                   + ";\n" //
                                   + "in vec2 "
-                                  + "u_texCoord" + "0;\n"                    //
+                                  + "a_texCoord" + "0;\n"                    //
                                   + "uniform mat4 u_projectionViewMatrix;\n" //
                                   + "out vec4 v_color;\n"                    //
                                   + "out vec2 v_texCoords;\n"                //
@@ -1354,22 +1357,24 @@ public class SpriteCache
                                   + ";\n"                                         //
                                   + "   v_color.a = v_color.a * (255.0/254.0);\n" //
                                   + "   v_texCoords = "
-                                  + "u_texCoord" + "0;\n" //
+                                  + "a_texCoord" + "0;\n" //
                                   + "   gl_Position =  u_projectionViewMatrix * "
                                   + "a_position"
                                   + ";\n" //
                                   + "}\n";
 
-        const string FragmentShader = "#ifdef GL_ES\n"
+        const string FragmentShader = "#version 450 core\n"
+                                    + "#ifdef GL_ES\n"
                                     + "#define LOWP lowp\n"
                                     + "precision mediump float;\n"
                                     + "#endif\n"
                                     + "in vec4 v_color;\n"
                                     + "in vec2 v_texCoords;\n"
                                     + "uniform sampler2D u_texture;\n"
+                                    + "out vec4 fragColor;\n"
                                     + "void main()\n"
-                                    + "{\n"                                                             //
-                                    + "  vec4 fragColor = v_color * texture(u_texture, v_texCoords);\n" //
+                                    + "{\n"                                                        //
+                                    + "  fragColor = v_color * texture(u_texture, v_texCoords);\n" //
                                     + "}";
 
         var shader = new ShaderProgram( VertexShader, FragmentShader );

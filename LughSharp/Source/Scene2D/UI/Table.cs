@@ -2062,6 +2062,22 @@ public class Table : WidgetGroup
         DebugLines( enabled ? DebugType.All : DebugType.None );
     }
 
+    /// <summary>
+    /// Enables or disables debugging for the table, including table and cell
+    /// debug lines, and optionally for all children recursively.
+    /// </summary>
+    /// <param name="enabled">Whether debugging should be enabled or disabled.</param>
+    /// <param name="recursively">Whether to apply the setting to all children.</param>
+    public override void SetDebug( bool enabled, bool recursively )
+    {
+        DebugLines( enabled ? DebugType.All : DebugType.None );
+
+        if ( recursively )
+        {
+            base.SetDebug( enabled, true );
+        }
+    }
+
     /// <inheritdoc />
     public override Table EnableDebug()
     {
@@ -2341,7 +2357,7 @@ public class Table : WidgetGroup
             DebugRect debugRect = _debugRects[ i ];
 
             shapes.Color = debugRect.Color;
-            shapes.Rect( x + debugRect.X, y + debugRect.Y, debugRect.Width, debugRect.Height );
+            shapes.Rectangle( x + debugRect.X, y + debugRect.Y, debugRect.Width, debugRect.Height );
         }
     }
 

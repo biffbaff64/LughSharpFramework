@@ -731,7 +731,7 @@ public class HorizontalGroup : WidgetGroup
             shapes.Color = stage.DebugColor;
         }
 
-        shapes.Rect( GetX() + PadLeft,
+        shapes.Rectangle( GetX() + PadLeft,
                      GetY() + PadBottom,
                      OriginX,
                      OriginY,
