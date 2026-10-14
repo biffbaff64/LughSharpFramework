@@ -189,9 +189,8 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
-    /// Calls the <see cref="Actor.Act(float)"/> method on each actor in the
-    /// stage. Typically called each frame. This method also fires enter and exit
-    /// events.
+    /// Calls the <see cref="Actor.Act(float)"/> method on each actor in the stage.
+    /// Typically called each frame. This method also fires enter and exit events.
     /// </summary>
     /// <param name="delta"> Time in seconds since the last frame.</param>
     public virtual void Act( float delta )
@@ -223,9 +222,20 @@ public class Stage : InputAdapter, IDisposable
         }
 
         // Update over actor for the mouse on the desktop.
-        if ( Engine.App.AppType is ApplicationType.WindowsGL or ApplicationType.WebGL )
+        switch ( Engine.App.AppType )
         {
-            _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
+            case ApplicationType.Windows:
+            case ApplicationType.WindowsGdk:
+            case ApplicationType.WindowsGL:
+            case ApplicationType.WindowsGles:
+            case ApplicationType.WindowsVk:
+            case ApplicationType.WebGL:
+                _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
+
+                break;
+
+            default:
+                break;
         }
 
         RootGroup.Act( delta );
@@ -284,16 +294,29 @@ public class Stage : InputAdapter, IDisposable
     }
 
     /// <summary>
+    /// Determines the actor currently under the specified screen coordinates and fires
+    /// enter and exit events as necessary. If the actor under the coordinates changes,
+    /// the appropriate exit event will be fired for the previous actor and an enter
+    /// event will be fired for the new one.
     /// </summary>
-    /// <param name="overLast"></param>
-    /// <param name="screenX"></param>
-    /// <param name="screenY"></param>
-    /// <param name="pointer"></param>
-    /// <returns></returns>
+    /// <param name="overLast">
+    /// The last actor that was under the pointer, or null if no actor was previously
+    /// under the pointer.
+    /// </param>
+    /// <param name="screenX">The x-coordinate on the screen to check for an actor.</param>
+    /// <param name="screenY">The y-coordinate on the screen to check for an actor.</param>
+    /// <param name="pointer">
+    /// The pointer index, or -1 if no specific pointer is being checked (e.g., mouse focus).
+    /// </param>
+    /// <returns>
+    /// The actor currently under the specified screen coordinates, or null if no actor was found.
+    /// </returns>
     private Actor? FireEnterAndExit( Actor? overLast, int screenX, int screenY, int pointer )
     {
+        _tempCoords.Set( screenX, screenY );
+        
         // Find the actor under the point.
-        ScreenToStageCoordinates( _tempCoords.Set( screenX, screenY ) );
+        ScreenToStageCoordinates( _tempCoords );
 
         Actor? over = Hit( _tempCoords.X, _tempCoords.Y, true );
 
@@ -333,11 +356,11 @@ public class Stage : InputAdapter, IDisposable
                 throw new LughRuntimeException( "Null InputEvent for FireEnterAndExit [Enter Over]!" );
             }
 
+            inputEvent.Type         = InputEvent.EventType.Enter;
             inputEvent.Stage        = this;
             inputEvent.StageX       = _tempCoords.X;
             inputEvent.StageY       = _tempCoords.Y;
             inputEvent.Pointer      = pointer;
-            inputEvent.Type         = InputEvent.EventType.Enter;
             inputEvent.RelatedActor = overLast;
 
             over.Fire( inputEvent );
@@ -1000,6 +1023,7 @@ public class Stage : InputAdapter, IDisposable
     public virtual Vector2 StageToScreenCoordinates( Vector2 stageCoords )
     {
         Viewport.Project( stageCoords );
+
         stageCoords.Y = Engine.Graphics.WindowHeight - stageCoords.Y;
 
         return stageCoords;

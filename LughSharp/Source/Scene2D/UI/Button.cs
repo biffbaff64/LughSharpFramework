@@ -22,11 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI.Styles;
 using LughSharp.Source.Scene2D.Utils;
-using LughSharp.Source.Utils.Pooling;
 
 namespace LughSharp.Source.Scene2D.UI;
 
@@ -51,15 +49,16 @@ namespace LughSharp.Source.Scene2D.UI;
 public class Button : Table, IDisableable, IStyleable< ButtonStyle >
 {
     /// <summary>
-    /// Button Checked (State/Selected): Indicates that a button (usually a toggle, checkbox, or radio
-    /// button) is in a selected, toggled-on, or active state. The button remains in this state until
-    /// acted upon again. Examples include filter buttons, toggle buttons, or menu selections.
+    /// Button Checked (State/Selected): Indicates that a button (usually a toggle,
+    /// checkbox, or radio button) is in a selected, toggled-on, or active state.
+    /// The button remains in this state until acted upon again. Examples include
+    /// filter buttons, toggle buttons, or menu selections.
     /// </summary>
     public bool IsChecked { get; private set; }
 
     public bool                   IsDisabled    { get; set; }
     public ButtonGroup< Button >? ButtonGroup   { get; set; }
-    public ClickListener          ClickListener { get; set; } = null!;
+    public ClickListener          ClickListener { get; set; }
 
     // ========================================================================
 
@@ -70,12 +69,13 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     // ========================================================================
 
     /// <summary>
-    /// Creates a new button without setting the style, size or listener(s). Before this
-    /// button can be used, it is important that at least a <see cref="ButtonStyle"/> is
-    /// created and a <see cref="ClickListener"/> set.
+    /// Creates a new button without setting the style, size or listener(s).
+    /// Before this button can be used, it is important that at least a
+    /// <see cref="ButtonStyle"/> is created and a <see cref="ClickListener"/> set.
     /// </summary>
     public Button()
     {
+        ClickListener = null!;
     }
 
     /// <summary>
@@ -140,7 +140,8 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     /// </summary>
     public Button( Skin skin, string styleName = "default" ) : base( skin )
     {
-        Skin = skin;
+        Skin          = skin;
+        ClickListener = null!;
 
         var style = skin.Get< ButtonStyle >( styleName );
 
@@ -200,8 +201,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
                   {
                       SetChecked( !IsChecked, _programmaticChangeEvents );
                   }
-              }
-            );
+              } );
 
         AddListener( ClickListener );
     }

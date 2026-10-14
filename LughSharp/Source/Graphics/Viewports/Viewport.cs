@@ -102,10 +102,7 @@ public abstract class Viewport
     /// </param>
     public virtual void Apply( bool centerCamera = false )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         HdpiUtils.GLViewport( ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
@@ -127,10 +124,7 @@ public abstract class Viewport
     /// <see cref="Camera.Unproject(Vector3)"/>
     public virtual Vector2 Unproject( Vector2 screenCoords )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         _tmp.Set( screenCoords.X, screenCoords.Y, 1.0f );
 
@@ -148,10 +142,7 @@ public abstract class Viewport
     /// <see cref="Camera.Project(Vector3) "/>
     public virtual Vector2 Project( Vector2 worldCoords )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         _tmp.Set( worldCoords.X, worldCoords.Y, 1 );
 
@@ -168,10 +159,7 @@ public abstract class Viewport
     /// <see cref="Camera.Unproject(Vector3)"/>
     public virtual Vector3 Unproject( Vector3 screenCoords )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         Camera.Unproject( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
@@ -185,10 +173,7 @@ public abstract class Viewport
     /// <see cref="Camera.Project(Vector3) "/>
     public virtual Vector3 Project( Vector3 worldCoords )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         Camera.Project( _tmp, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
 
@@ -201,10 +186,7 @@ public abstract class Viewport
     /// <see cref="Camera.GetPickRay(float, float, float, float, float, float)"/>
     public virtual Ray GetPickRay( float screenX, float screenY )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         return Camera.GetPickRay( screenX, screenY, ScreenX, ScreenY, ScreenWidth, ScreenHeight );
     }
@@ -237,10 +219,7 @@ public abstract class Viewport
     /// </summary>
     public virtual Vector2 ToScreenCoordinates( Vector2 worldCoords, Matrix4 transformMatrix )
     {
-        if ( Camera == null )
-        {
-            throw new NullReferenceException();
-        }
+        Guard.Against.Null( Camera );
 
         _tmp.Set( worldCoords.X, worldCoords.Y, 0 );
         _tmp.Mul( transformMatrix );
@@ -335,18 +314,18 @@ public abstract class Viewport
     public void Debug()
     {
         Logger.Checkpoint();
-        Logger.Debug( $"ScreenX: {ScreenX}" );
-        Logger.Debug( $"ScreenY: {ScreenY}" );
-        Logger.Debug( $"ScreenWidth: {ScreenWidth}" );
-        Logger.Debug( $"ScreenHeight: {ScreenHeight}" );
-        Logger.Debug( $"WorldWidth: {WorldWidth}" );
-        Logger.Debug( $"WorldHeight: {WorldHeight}" );
-        Logger.Debug( $"LeftGutterWidth: {LeftGutterWidth}" );
-        Logger.Debug( $"RightGutterWidth: {RightGutterWidth}" );
-        Logger.Debug( $"TopGutterHeight: {TopGutterHeight}" );
+        Logger.Debug( $"ScreenX:            {ScreenX}" );
+        Logger.Debug( $"ScreenY:            {ScreenY}" );
+        Logger.Debug( $"ScreenWidth:        {ScreenWidth}" );
+        Logger.Debug( $"ScreenHeight:       {ScreenHeight}" );
+        Logger.Debug( $"WorldWidth:         {WorldWidth}" );
+        Logger.Debug( $"WorldHeight:        {WorldHeight}" );
+        Logger.Debug( $"LeftGutterWidth:    {LeftGutterWidth}" );
+        Logger.Debug( $"RightGutterWidth:   {RightGutterWidth}" );
+        Logger.Debug( $"TopGutterHeight:    {TopGutterHeight}" );
         Logger.Debug( $"BottomGutterHeight: {BottomGutterHeight}" );
-        Logger.Debug( $"RightGutterX: {RightGutterX}" );
-        Logger.Debug( $"TopGutterY: {TopGutterY}" );
+        Logger.Debug( $"RightGutterX:       {RightGutterX}" );
+        Logger.Debug( $"TopGutterY:         {TopGutterY}" );
     }
 }
 

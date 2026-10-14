@@ -278,8 +278,8 @@ public class ClickListener : InputListener
     /// </summary>
     public bool InTapSquare( float x, float y )
     {
-        if ( ( Math.Abs( TouchDownX - ( -1 ) ) > NumberUtils.FloatTolerance )
-          && ( Math.Abs( TouchDownY - ( -1 ) ) > NumberUtils.FloatTolerance ) )
+        if ( ( Math.Abs( TouchDownX - ( -1 ) ) < NumberUtils.FloatTolerance )
+          && ( Math.Abs( TouchDownY - ( -1 ) ) < NumberUtils.FloatTolerance ) )
         {
             return false;
         }

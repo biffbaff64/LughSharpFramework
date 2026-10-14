@@ -63,7 +63,7 @@ public interface IGameCamera
     /// </summary>
     Viewport.ViewportType ViewportType { get; set; }
 
-    string  Name             { get; set; }
+    string  Name             { get; }
     bool    IsInUse          { get; set; }
     bool    IsLerpingEnabled { get; set; }
     Vector3 Position         { get; set; }

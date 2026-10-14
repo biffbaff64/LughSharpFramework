@@ -87,7 +87,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
     /// </summary>
     public Viewport.ViewportType ViewportType { get; set; } = Viewport.ViewportType.Stretch;
 
-    public string  Name             { get; set; }
     public bool    IsInUse          { get; set; }
     public bool    IsLerpingEnabled { get; set; }
     public Vector3 Position         { get; set; }
@@ -142,7 +141,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                                    float ppm = CameraData.DefaultPPM,
                                    string name = "" )
     {
-        Name             = name;
         IsInUse          = true;
         IsLerpingEnabled = false;
         Position         = Vector3.Zero;
@@ -152,6 +150,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         // Create the camera instance.
         Camera = new OrthographicCamera( sceneWidth / ppm, sceneHeight / ppm );
         Camera.SetToOrtho( sceneWidth / ppm, sceneHeight / ppm, false );
+        Camera.Name = name;
         Camera.Update();
 
         // Add the viewport
@@ -253,7 +252,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
             {
                 Shake.Update( Engine.DeltaTime );
             }
-            
+
             Camera.Update();
         }
     }
@@ -545,6 +544,8 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
         _defaultZoom = zoom;
     }
 
+    public string Name => Camera.Name;
+
     // ========================================================================
 
     /// <inheritdoc />
@@ -564,7 +565,6 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
                 Camera     = null!;
                 Viewport   = null;
                 LerpVector = null!;
-                Name       = null!;
             }
 
             _disposed = true;

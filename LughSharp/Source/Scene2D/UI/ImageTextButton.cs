@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.UI.Styles;
 using LughSharp.Source.Scene2D.Utils;
 
@@ -143,12 +142,15 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
             UpdateImage();
         }
 
-        LabelStyle labelStyle = Label.GetStyle();
+        if ( Label != null )
+        {
+            LabelStyle labelStyle = Label.GetStyle();
 
-        labelStyle.Font      = textButtonStyle.Font;
-        labelStyle.FontColor = GetFontColor();
+            labelStyle.Font      = textButtonStyle.Font;
+            labelStyle.FontColor = GetFontColor();
 
-        Label.SetStyle( labelStyle );
+            Label.SetStyle( labelStyle );
+        }
     }
 
     /// <summary>
@@ -297,7 +299,7 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
     {
         UpdateImage();
 
-        Label.GetStyle().FontColor = GetFontColor();
+        Label?.GetStyle().FontColor = GetFontColor();
 
         base.Draw( batch, parentAlpha );
     }
@@ -328,13 +330,14 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
     /// <summary>
     /// The label for this button. Cannot be null.
     /// </summary>
-    public Label Label
+    public Label? Label
     {
         get;
         set
         {
-            GetLabelCell()?.SetActor( value );
             field = value;
+
+            GetLabelCell()?.SetActor( value );
         }
     }
 
@@ -343,7 +346,7 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
     /// </summary>
     public string GetText()
     {
-        return Label.GetText().ToString();
+        return Label?.GetText().ToString() ?? string.Empty;
     }
 
     /// <summary>
@@ -352,8 +355,8 @@ public class ImageTextButton : Button, IStyleable< ImageTextButtonStyle >
     /// <param name="text"> The new text for the label. </param>
     public void SetText( string text )
     {
-        Label.GetText().Clear();
-        Label.GetText().Append( text );
+        Label?.GetText().Clear();
+        Label?.GetText().Append( text );
     }
 }
 

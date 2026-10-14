@@ -50,6 +50,8 @@ public abstract class Camera
 
     public Frustrum Frustrum { get; init; } = new();
 
+    public string Name { get; set; } = "Camera";
+
     // ========================================================================
 
     /// <summary>
@@ -429,6 +431,7 @@ public abstract class Camera
     public void Debug()
     {
         Logger.Divider();
+        Logger.Debug( $"Name: {Name}" );
         Logger.Debug( $"Position: X:{Position.X}, Y:{Position.Y}, Z:{Position.Z}" );
         Logger.Debug( $"Viewport: {ViewportWidth}x{ViewportHeight}" );
         Logger.Debug( $"Direction: X:{Direction.X}, Y:{Direction.Y}, Z:{Direction.Z}" );
