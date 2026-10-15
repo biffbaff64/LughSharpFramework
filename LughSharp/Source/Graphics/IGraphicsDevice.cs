@@ -48,7 +48,7 @@ public interface IGraphicsDevice : IDisposable
     /// <summary>
     /// Gets or sets the buffer config data (bits per pixel, depth, stencil, samples).
     /// </summary>
-    FramebufferConfig BufferConfig { get; set; }
+    FramebufferFormat BufferFormat { get; set; }
 
     /// <summary>
     /// Gets or sets the time span between the current frame and the last frame in seconds,

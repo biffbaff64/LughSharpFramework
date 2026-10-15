@@ -52,7 +52,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
 
     // ========================================================================
 
-    public FramebufferConfig BufferConfig          { get; set; } = null!;
+    public FramebufferFormat BufferFormat          { get; set; } = null!;
     public Color             WindowBackgroundColor { get; set; } = Color.Blue;
 
     /// <inheritdoc cref="BackendData"/>

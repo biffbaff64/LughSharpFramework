@@ -27,19 +27,8 @@ using LughSharp.Source.Scene2D.UI;
 namespace LughSharp.Source.Scene2D.Listeners;
 
 [PublicAPI]
-public class DialogInputListener : InputListener
+public class DialogInputListener( Dialog dialog, int thisKey, object? obj ) : InputListener
 {
-    private readonly Dialog  _dialog;
-    private readonly object? _object;
-    private readonly int     _thisKey;
-
-    public DialogInputListener( Dialog d, int thisKey, object? o )
-    {
-        _dialog  = d;
-        _thisKey = thisKey;
-        _object  = o;
-    }
-
     /// <summary>
     /// Called when a key goes down. When true is returned, the event is
     /// handled by <see cref="Event.SetHandled"/>.
@@ -49,19 +38,19 @@ public class DialogInputListener : InputListener
     /// <returns>True if the event was handled.</returns>
     public override bool OnKeyDown( InputEvent? ev, int keycode )
     {
-        if ( keycode == _thisKey )
+        if ( keycode == thisKey )
         {
             // Delay a frame to eat the keyTyped event.
             Engine.App.PostRunnable( () =>
             {
-                _dialog.ClickResult( _object );
+                dialog.ClickResult( obj );
 
-                if ( !_dialog.CancelHide )
+                if ( !dialog.CancelHide )
                 {
-                    _dialog.Hide();
+                    dialog.Hide();
                 }
 
-                _dialog.CancelHide = false;
+                dialog.CancelHide = false;
             } );
         }
 

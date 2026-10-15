@@ -164,15 +164,17 @@ public class DesktopGLGraphics : GraphicsDevice
         LogicalWidth  = tmpWidth;
         LogicalHeight = tmpHeight;
 
-        BufferConfig = new FramebufferConfig
+        DesktopGLApplicationConfiguration config = GLWindow.AppConfig;
+        
+        BufferFormat = new FramebufferFormat
         {
-            R                = GLWindow.AppConfig.Red,
-            G                = GLWindow.AppConfig.Green,
-            B                = GLWindow.AppConfig.Blue,
-            A                = GLWindow.AppConfig.Alpha,
-            Depth            = GLWindow.AppConfig.Depth,
-            Stencil          = GLWindow.AppConfig.Stencil,
-            Samples          = GLWindow.AppConfig.Samples,
+            R                = config.Red,
+            G                = config.Green,
+            B                = config.Blue,
+            A                = config.Alpha,
+            Depth            = config.Depth,
+            Stencil          = config.Stencil,
+            Samples          = config.Samples,
             CoverageSampling = false
         };
 

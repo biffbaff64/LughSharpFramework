@@ -44,18 +44,21 @@ public class AfterAction : DelegateAction
     /// Sets the target actor for this action and ensures that
     /// all current actions of the target are queued to be waited on.
     /// </summary>
-    /// <param name="target">
-    /// The actor for which this action will execute. If the target is not null,
-    /// its existing actions are added to the waiting list.
-    /// </param>
-    public void SetTarget( Actor? target )
+    /// <remarks>
+    /// If the target is not null, its existing actions are added to the waiting list.
+    /// </remarks>
+    public override Actor? Target
     {
-        if ( target != null )
+        get => base.Target;
+        set
         {
-            _waitForActions.AddRange( target.Actions );
-        }
+            if ( value != null )
+            {
+                _waitForActions.AddRange( value.Actions );
+            }
 
-        base.Target = target;
+            base.Target = value;
+        }
     }
 
     /// <summary>

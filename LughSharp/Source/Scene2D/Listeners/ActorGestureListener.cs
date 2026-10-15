@@ -33,15 +33,15 @@ namespace LughSharp.Source.Scene2D.Listeners;
 [PublicAPI]
 public class ActorGestureListener : IEventListener
 {
-    public ActorGestureDetector Detector        { get; set; }
+    public ActorGestureDetector GestureDetector { get; set; }
     public Actor?               TouchDownTarget { get; set; }
 
     // ========================================================================
-    
+
     private const float DefaultHalfTapSquareSize = 20;
-    private const float DefaultTapCountInterval   = 0.4f;
-    private const float DefaultLongPressDuration  = 1.1f;
-    private const float DefaultMaxFlingDelay      = int.MaxValue;
+    private const float DefaultTapCountInterval  = 0.4f;
+    private const float DefaultLongPressDuration = 1.1f;
+    private const float DefaultMaxFlingDelay     = int.MaxValue;
 
     private static readonly Vector2 _tmpCoords  = new();
     private static readonly Vector2 _tmpCoords2 = new();
@@ -75,11 +75,11 @@ public class ActorGestureListener : IEventListener
                                  float longPressDuration = DefaultLongPressDuration,
                                  float maxFlingDelay = DefaultMaxFlingDelay )
     {
-        Detector = new ActorGestureDetector( halfTapSquareSize,
-                                             tapCountInterval,
-                                             longPressDuration,
-                                             maxFlingDelay,
-                                             this );
+        GestureDetector = new ActorGestureDetector( halfTapSquareSize,
+                                                    tapCountInterval,
+                                                    longPressDuration,
+                                                    maxFlingDelay,
+                                                    this );
     }
 
     /// <summary>
@@ -100,7 +100,7 @@ public class ActorGestureListener : IEventListener
                 _actor          = ev.ListenerActor;
                 TouchDownTarget = ev.TargetActor;
 
-                Detector.OnTouchDown( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
+                GestureDetector.OnTouchDown( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
                 _actor?.StageToLocalCoordinates( _tmpCoords.Set( ev.StageX, ev.StageY ) );
 
                 OnTouchDown( ev, _tmpCoords.X, _tmpCoords.Y, ev.Pointer, ev.Button );
@@ -121,7 +121,7 @@ public class ActorGestureListener : IEventListener
             {
                 if ( ev.TouchFocusCancel )
                 {
-                    Detector.Reset();
+                    GestureDetector.Reset();
 
                     return false;
                 }
@@ -129,7 +129,7 @@ public class ActorGestureListener : IEventListener
                 _inputEvent = ev;
                 _actor      = ev.ListenerActor;
 
-                Detector.OnTouchUp( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
+                GestureDetector.OnTouchUp( ev.StageX, ev.StageY, ev.Pointer, ev.Button );
                 _actor?.StageToLocalCoordinates( _tmpCoords.Set( ev.StageX, ev.StageY ) );
                 OnTouchUp( ev, _tmpCoords.X, _tmpCoords.Y, ev.Pointer, ev.Button );
 
@@ -140,7 +140,7 @@ public class ActorGestureListener : IEventListener
             {
                 _inputEvent = ev;
                 _actor      = ev.ListenerActor;
-                Detector.OnTouchDragged( ev.StageX, ev.StageY, ev.Pointer );
+                GestureDetector.OnTouchDragged( ev.StageX, ev.StageY, ev.Pointer );
 
                 return true;
             }
@@ -255,10 +255,10 @@ public class ActorGestureListener : IEventListener
     /// <param name="pointer1"></param>
     /// <param name="pointer2"></param>
     public virtual void OnPinch( InputEvent ev,
-                               Vector2 initialPointer1,
-                               Vector2 initialPointer2,
-                               Vector2 pointer1,
-                               Vector2 pointer2 )
+                                 Vector2 initialPointer1,
+                                 Vector2 initialPointer2,
+                                 Vector2 pointer1,
+                                 Vector2 pointer2 )
     {
     }
 
@@ -340,9 +340,9 @@ public class ActorGestureListener : IEventListener
         }
 
         public bool OnPinch( Vector2 stageInitialPointer1,
-                           Vector2 stageInitialPointer2,
-                           Vector2 stagePointer1,
-                           Vector2 stagePointer2 )
+                             Vector2 stageInitialPointer2,
+                             Vector2 stagePointer1,
+                             Vector2 stagePointer2 )
         {
             _parent._actor!.StageToLocalCoordinates( _initialPointer1.Set( stageInitialPointer1 ) );
             _parent._actor!.StageToLocalCoordinates( _initialPointer2.Set( stageInitialPointer2 ) );
@@ -364,4 +364,3 @@ public class ActorGestureListener : IEventListener
 
 // ============================================================================
 // ============================================================================
-

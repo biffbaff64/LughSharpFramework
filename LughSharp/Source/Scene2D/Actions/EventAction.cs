@@ -70,11 +70,19 @@ public abstract class EventAction< T > : SceneAction, IEventListener where T : E
         Active = false;
     }
 
-    public void SetTarget( Actor target )
+    /// <summary>
+    /// The actor this action targets. Setting this moves this action's event
+    /// listener from the previous target to the new one.
+    /// </summary>
+    public override Actor? Target
     {
-        base.Target?.RemoveListener( this );
-        base.Target = target;
-        base.Target?.AddListener( this );
+        get => base.Target;
+        set
+        {
+            base.Target?.RemoveListener( this );
+            base.Target = value;
+            base.Target?.AddListener( this );
+        }
     }
 
     // ReSharper disable once MemberCanBeProtected.Global

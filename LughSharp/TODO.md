@@ -1009,7 +1009,9 @@ LUGHSHARP/SOURCE/SCENE2D/LISTENERS
     - DONE - DONE - DONE - FocusListener
     - DONE - DONE - DONE - IEventListener
     - DONE - DONE - DONE - InputListener
-    - DONE - DONE - DONE - ScrollPaneListeners
+    - DONE - DONE - DONE - ScrollPaneCaptureListener
+    - DONE - DONE - DONE - ScrollPaneGestureListener
+    - DONE - DONE - DONE - ScrollPaneScrollListener
 
 LUGHSHARP/SOURCE/SCENE2D/UI
 ---------------------------

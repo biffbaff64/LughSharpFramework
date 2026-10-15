@@ -112,10 +112,11 @@ public class DesktopGLWindow : IDisposable
     private List< Action > _runnables         = [ ];
 
     private Vector2 _tmpV2 = new();
-    private bool    _focused;
-    private bool    _iconified;
-    private bool    _requestRendering;
-    private bool    _disposed;
+
+    private bool _focused          = false;
+    private bool _iconified        = false;
+    private bool _requestRendering = false;
+    private bool _disposed         = false;
 
     // ========================================================================
     // ========================================================================

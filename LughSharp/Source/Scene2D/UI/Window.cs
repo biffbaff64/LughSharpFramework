@@ -494,8 +494,6 @@ public class Window : Table, IStyleable< WindowStyle >
         /// <returns>True if the event was handled.</returns>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            Logger.Debug( $"x: {x}, y: {y}, button: {button}" );
-
             if ( button == 0 )
             {
                 UpdateEdge( x, y );
@@ -522,8 +520,6 @@ public class Window : Table, IStyleable< WindowStyle >
         /// <param name="button">The button index of the touch or mouse event.</param>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
-            Logger.Checkpoint();
-
             _window.Dragging = false;
         }
 

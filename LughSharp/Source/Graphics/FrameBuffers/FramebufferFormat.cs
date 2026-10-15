@@ -31,7 +31,7 @@ namespace LughSharp.Source.Graphics.FrameBuffers;
 /// for color channels, depth buffer, stencil buffer, and multisample anti-aliasing.
 /// </summary>
 [PublicAPI]
-public class FramebufferConfig
+public class FramebufferFormat
 {
     /// <summary>
     /// Number of bits per red color channel.

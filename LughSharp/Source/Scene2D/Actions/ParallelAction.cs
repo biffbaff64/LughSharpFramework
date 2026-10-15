@@ -138,14 +138,22 @@ public class ParallelAction : SceneAction
         }
     }
 
-    public void SetActor( Actor actor )
+    /// <summary>
+    /// The actor this action is attached to. Setting this also sets the actor
+    /// of every action contained in this action.
+    /// </summary>
+    public override Actor? Actor
     {
-        for ( int i = 0, n = _actions.Count; i < n; i++ )
+        get => base.Actor;
+        set
         {
-            _actions[ i ].Actor = actor;
-        }
+            for ( int i = 0, n = _actions.Count; i < n; i++ )
+            {
+                _actions[ i ].Actor = value;
+            }
 
-        base.Actor = actor;
+            base.Actor = value;
+        }
     }
 
     public List< SceneAction > GetActions()

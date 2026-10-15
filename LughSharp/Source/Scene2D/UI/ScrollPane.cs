@@ -143,9 +143,9 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
 
     // ========================================================================
 
-    private readonly ActorGestureListener _flickScrollListener;
-    private readonly Rectangle            _widgetCullingArea = new();
-    private          ScrollPaneStyle      _style             = null!;
+    private readonly ScrollPaneGestureListener _flickScrollListener;
+    private readonly Rectangle                 _widgetCullingArea = new();
+    private          ScrollPaneStyle           _style             = null!;
 
     // ========================================================================
     // ========================================================================
@@ -238,7 +238,8 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
         DraggingPointer = -1;
         TouchScrollH    = false;
         TouchScrollV    = false;
-        _flickScrollListener.Detector.Cancel();
+        
+        _flickScrollListener.GestureDetector.Cancel();
     }
 
     /// <summary>
@@ -254,12 +255,12 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
         }
 
         ScrollAmountX = OverscrollX
-            ? MathUtils.Clamp( ScrollAmountX, -OverscrollDistance, MaxScrollX + OverscrollDistance )
-            : MathUtils.Clamp( ScrollAmountX, 0, MaxScrollX );
+                            ? MathUtils.Clamp( ScrollAmountX, -OverscrollDistance, MaxScrollX + OverscrollDistance )
+                            : MathUtils.Clamp( ScrollAmountX, 0, MaxScrollX );
 
         ScrollAmountY = OverscrollY
-            ? MathUtils.Clamp( ScrollAmountY, -OverscrollDistance, MaxScrollY + OverscrollDistance )
-            : MathUtils.Clamp( ScrollAmountY, 0, MaxScrollY );
+                            ? MathUtils.Clamp( ScrollAmountY, -OverscrollDistance, MaxScrollY + OverscrollDistance )
+                            : MathUtils.Clamp( ScrollAmountY, 0, MaxScrollY );
     }
 
     /// <summary>
@@ -270,7 +271,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
     {
         base.Act( delta );
 
-        bool panning   = _flickScrollListener.Detector.IsPanning();
+        bool panning   = _flickScrollListener.GestureDetector.IsPanning();
         var  animating = false;
 
         if ( ( FadeAlpha > 0 ) && FadeScrollBars && !panning && !TouchScrollH && !TouchScrollV )
@@ -812,56 +813,41 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
 
         if ( x && y )
         {
-            if ( style.Corner != null )
-            {
-                style.Corner.Draw( batch,
-                                   HScrollBounds.X + HScrollBounds.Width,
-                                   HScrollBounds.Y,
-                                   VScrollBounds.Width,
-                                   VScrollBounds.Y );
-            }
+            style.Corner?.Draw( batch,
+                                HScrollBounds.X + HScrollBounds.Width,
+                                HScrollBounds.Y,
+                                VScrollBounds.Width,
+                                VScrollBounds.Y );
         }
 
         if ( x )
         {
-            if ( style.HScroll != null )
-            {
-                style.HScroll.Draw( batch,
-                                    HScrollBounds.X,
-                                    HScrollBounds.Y,
-                                    HScrollBounds.Width,
-                                    HScrollBounds.Height );
-            }
+            style.HScroll?.Draw( batch,
+                                 HScrollBounds.X,
+                                 HScrollBounds.Y,
+                                 HScrollBounds.Width,
+                                 HScrollBounds.Height );
 
-            if ( style.HScrollKnob != null )
-            {
-                style.HScrollKnob.Draw( batch,
-                                        HKnobBounds.X,
-                                        HKnobBounds.Y,
-                                        HKnobBounds.Width,
-                                        HKnobBounds.Height );
-            }
+            style.HScrollKnob?.Draw( batch,
+                                     HKnobBounds.X,
+                                     HKnobBounds.Y,
+                                     HKnobBounds.Width,
+                                     HKnobBounds.Height );
         }
 
         if ( y )
         {
-            if ( style.VScroll != null )
-            {
-                style.VScroll.Draw( batch,
-                                    VScrollBounds.X,
-                                    VScrollBounds.Y,
-                                    VScrollBounds.Width,
-                                    VScrollBounds.Height );
-            }
+            style.VScroll?.Draw( batch,
+                                 VScrollBounds.X,
+                                 VScrollBounds.Y,
+                                 VScrollBounds.Width,
+                                 VScrollBounds.Height );
 
-            if ( style.VScrollKnob != null )
-            {
-                style.VScrollKnob.Draw( batch,
-                                        VKnobBounds.X,
-                                        VKnobBounds.Y,
-                                        VKnobBounds.Width,
-                                        VKnobBounds.Height );
-            }
+            style.VScrollKnob?.Draw( batch,
+                                     VKnobBounds.X,
+                                     VKnobBounds.Y,
+                                     VKnobBounds.Width,
+                                     VKnobBounds.Height );
         }
     }
 
@@ -1219,7 +1205,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
     /// </param>
     public void SetFlickScrollTapSquareSize( float halfTapSquareSize )
     {
-        _flickScrollListener.Detector.SetTapSquareSize( halfTapSquareSize );
+        _flickScrollListener.GestureDetector.SetTapSquareSize( halfTapSquareSize );
     }
 
     /// <summary>
@@ -1374,7 +1360,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
     /// </returns>
     public bool IsPanning()
     {
-        return _flickScrollListener.Detector.IsPanning();
+        return _flickScrollListener.GestureDetector.IsPanning();
     }
 
     /// <summary>
@@ -1388,7 +1374,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
     /// <param name="overscrollY">
     /// <c>true</c> to enable overscrolling in the Y direction; otherwise <c>false</c>.
     /// </param>
-    public void SetOverscroll( bool overscrollX, bool overscrollY )
+    public void SetOverscroll( bool overscrollX = true, bool overscrollY = true )
     {
         OverscrollX = overscrollX;
         OverscrollY = overscrollY;

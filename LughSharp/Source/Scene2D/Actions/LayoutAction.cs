@@ -31,14 +31,22 @@ public class LayoutAction : SceneAction
 {
     public bool Enabled { get; set; }
 
-    public void SetTarget( Actor actor )
+    /// <summary>
+    /// The actor this action targets, which must implement <see cref="ILayout"/>.
+    /// </summary>
+    /// <exception cref="LughRuntimeException"> If the actor does not implement ILayout. </exception>
+    public override Actor? Target
     {
-        if ( ( actor != null ) && actor is not ILayout )
+        get => base.Target;
+        set
         {
-            throw new LughRuntimeException( "Actor must implement layout: " + actor );
-        }
+            if ( ( value != null ) && value is not ILayout )
+            {
+                throw new LughRuntimeException( "Actor must implement layout: " + value );
+            }
 
-        base.Target = actor;
+            base.Target = value;
+        }
     }
 
     /// <summary>

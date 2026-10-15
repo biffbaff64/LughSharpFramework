@@ -44,6 +44,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
 
     private readonly GlyphLayout _prefSizeLayout = new();
     private readonly Vector2     _prefSize       = new();
+    private readonly Color       _tempColor      = new();
 
     private StringBuilder    _text            = new();
     private bool             _prefSizeInvalid = true;
@@ -506,7 +507,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
     {
         Validate();
 
-        Color color = ActorColor;
+        Color color = _tempColor.Set( ActorColor );
         color.A *= parentAlpha;
 
         if ( _style.Background != null )

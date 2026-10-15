@@ -286,7 +286,7 @@ public class Dialog : Window, IStyleable< WindowStyle >
         PreviousKeyboardFocus = null;
         Actor? actor = stage.GetKeyboardFocus();
 
-        if ( ( actor != null ) && !actor!.IsDescendantOf( this ) )
+        if ( ( actor != null ) && !actor.IsDescendantOf( this ) )
         {
             PreviousKeyboardFocus = actor;
         }
@@ -316,6 +316,15 @@ public class Dialog : Window, IStyleable< WindowStyle >
     }
 
     /// <summary>
+    /// Hides the dialog. Called automatically when a button is clicked.
+    /// The default implementation fades out the dialog over 400 milliseconds.
+    /// </summary>
+    public void Hide()
+    {
+        Hide( SceneActions.FadeOut( 0.4f, Interpolation.Fade ) );
+    }
+
+    /// <summary>
     /// Removes the dialog from the stage, restoring the previous keyboard and scroll focus,
     /// and adds the specified action to the dialog.
     /// </summary>
@@ -330,6 +339,7 @@ public class Dialog : Window, IStyleable< WindowStyle >
         if ( stage != null )
         {
             RemoveListener( _dialogFocusListener );
+            RemoveCaptureListener( _dialogFocusListener );
 
             if ( PreviousKeyboardFocus?.GetStage() == null )
             {
@@ -375,15 +385,6 @@ public class Dialog : Window, IStyleable< WindowStyle >
     }
 
     /// <summary>
-    /// Hides the dialog. Called automatically when a button is clicked.
-    /// The default implementation fades out the dialog over 400 milliseconds.
-    /// </summary>
-    public void Hide()
-    {
-        Hide( SceneActions.FadeOut( 0.4f, Interpolation.Fade ) );
-    }
-
-    /// <summary>
     /// Sets the object associated with the given Actor.
     /// </summary>
     /// <param name="actor"> The actor to associate the object with. </param>
@@ -399,7 +400,7 @@ public class Dialog : Window, IStyleable< WindowStyle >
     /// <param name="keycode"> The keycode of the key to listen for. </param>
     /// <param name="obj"> The object to pass to <see cref="ClickResult"/> when the key is pressed. </param>
     /// <returns> This dialog, for chaining. </returns>
-    public Dialog Key( int keycode, object obj )
+    public Dialog Key( int keycode, object? obj )
     {
         AddListener( new DialogInputListener( this, keycode, obj ) );
 
@@ -428,19 +429,8 @@ public class Dialog : Window, IStyleable< WindowStyle >
     /// found, the dialog's click result is executed, followed by hiding the dialog unless
     /// explicitly canceled.
     /// </remarks>
-    internal class ButtonTableChangeListener : ChangeListener
+    public class ButtonTableChangeListener( Dialog dialog ) : ChangeListener
     {
-        private readonly Dialog _dialog;
-
-        /// <summary>
-        /// Creates a new ButtonTableChangeListener for the specified dialog. 
-        /// </summary>
-        /// <param name="dialog"> The dialog to monitor for button table changes. </param>
-        public ButtonTableChangeListener( Dialog dialog )
-        {
-            _dialog = dialog;
-        }
-
         /// <summary>
         /// Handles any <see cref="ChangeListener.ChangeEvent"/>s generated.
         /// </summary>
@@ -450,29 +440,29 @@ public class Dialog : Window, IStyleable< WindowStyle >
         /// </param>
         public override void Changed( ChangeEvent ev, Actor? actor )
         {
-            if ( ( _dialog.Values == null ) || ( actor == null ) )
+            if ( ( dialog.Values == null ) || ( actor == null ) )
             {
                 return;
             }
 
-            if ( !_dialog.Values.ContainsKey( actor ) )
+            if ( !dialog.Values.ContainsKey( actor ) )
             {
                 return;
             }
 
-            while ( actor?.Parent != _dialog.ButtonTable )
+            while ( actor?.Parent != dialog.ButtonTable )
             {
                 actor = actor?.Parent;
             }
 
-            _dialog.ClickResult( _dialog.Values[ actor! ] );
+            dialog.ClickResult( dialog.Values[ actor! ] );
 
-            if ( !_dialog.CancelHide )
+            if ( !dialog.CancelHide )
             {
-                _dialog.Hide();
+                dialog.Hide();
             }
 
-            _dialog.CancelHide = false;
+            dialog.CancelHide = false;
         }
     }
 
