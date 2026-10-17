@@ -72,7 +72,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
         if ( _parent.ScrollBarTouch && _parent.IsScrollX && _parent.HScrollBounds.Contains( x, y ) )
         {
             ev?.Stop();
-            
+
             _parent.SetScrollbarsVisible( true );
 
             if ( _parent.HKnobBounds.Contains( x, y ) )
@@ -100,7 +100,7 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
             if ( _parent.VKnobBounds.Contains( x, y ) )
             {
                 _parent.LastPoint.Set( x, y );
-            
+
                 _handlePosition         = _parent.VKnobBounds.Y;
                 _parent.TouchScrollV    = true;
                 _parent.DraggingPointer = ptr;
@@ -125,12 +125,12 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     {
         Guard.Against.Null( _parent );
 
-        if ( ptr != _parent!.DraggingPointer )
+        if ( ptr != _parent.DraggingPointer )
         {
             return;
         }
 
-        _parent!.Cancel();
+        _parent.Cancel();
     }
 
     /// <summary>
@@ -142,52 +142,52 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     {
         Guard.Against.Null( _parent );
 
-        if ( pointer != _parent!.DraggingPointer )
+        if ( pointer != _parent.DraggingPointer )
         {
             return;
         }
 
-        if ( _parent!.TouchScrollH )
+        if ( _parent.TouchScrollH )
         {
-            float delta   = x - _parent!.LastPoint.X;
+            float delta   = x - _parent.LastPoint.X;
             float scrollH = _handlePosition + delta;
 
             _handlePosition = scrollH;
-            scrollH         = Math.Max( _parent!.HScrollBounds.X, scrollH );
+            scrollH         = Math.Max( _parent.HScrollBounds.X, scrollH );
 
-            scrollH = Math.Min( _parent!.HScrollBounds.X + _parent!.HScrollBounds.Width
-                              - _parent!.HKnobBounds.Width,
+            scrollH = Math.Min( _parent.HScrollBounds.X + _parent.HScrollBounds.Width
+                              - _parent.HKnobBounds.Width,
                                 scrollH );
 
-            float total = _parent!.HScrollBounds.Width - _parent!.HKnobBounds.Width;
+            float total = _parent.HScrollBounds.Width - _parent.HKnobBounds.Width;
 
             if ( total != 0 )
             {
-                _parent!.SetScrollPercentX( ( scrollH - _parent!.HScrollBounds.X ) / total );
+                _parent.SetScrollPercentX( ( scrollH - _parent.HScrollBounds.X ) / total );
             }
 
-            _parent!.LastPoint.Set( x, y );
+            _parent.LastPoint.Set( x, y );
         }
-        else if ( _parent!.TouchScrollV )
+        else if ( _parent.TouchScrollV )
         {
-            float delta   = y - _parent!.LastPoint.Y;
+            float delta   = y - _parent.LastPoint.Y;
             float scrollV = _handlePosition + delta;
 
             _handlePosition = scrollV;
-            scrollV         = Math.Max( _parent!.VScrollBounds.Y, scrollV );
+            scrollV         = Math.Max( _parent.VScrollBounds.Y, scrollV );
 
-            scrollV = Math.Min( _parent!.VScrollBounds.Y + _parent!.VScrollBounds.Height
-                              - _parent!.VKnobBounds.Height,
+            scrollV = Math.Min( _parent.VScrollBounds.Y + _parent.VScrollBounds.Height
+                              - _parent.VKnobBounds.Height,
                                 scrollV );
 
-            float total = _parent!.VScrollBounds.Height - _parent!.VKnobBounds.Height;
+            float total = _parent.VScrollBounds.Height - _parent.VKnobBounds.Height;
 
             if ( total != 0 )
             {
-                _parent!.SetScrollPercentY( 1 - ( ( scrollV - _parent!.VScrollBounds.Y ) / total ) );
+                _parent.SetScrollPercentY( 1 - ( ( scrollV - _parent.VScrollBounds.Y ) / total ) );
             }
 
-            _parent!.LastPoint.Set( x, y );
+            _parent.LastPoint.Set( x, y );
         }
     }
 
@@ -200,9 +200,9 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
     {
         Guard.Against.Null( _parent );
 
-        if ( !_parent!.FlickScroll )
+        if ( !_parent.FlickScroll )
         {
-            _parent!.SetScrollbarsVisible( true );
+            _parent.SetScrollbarsVisible( true );
         }
 
         return false;
@@ -211,5 +211,3 @@ public class ScrollPaneCaptureListener( ScrollPane parent ) : InputListener
 
 // ============================================================================
 // ============================================================================
-
-

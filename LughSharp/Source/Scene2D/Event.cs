@@ -22,6 +22,8 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
+using LughSharp.Source.Utils.Pooling;
+
 namespace LughSharp.Source.Scene2D;
 
 /// <summary>
@@ -41,7 +43,7 @@ namespace LughSharp.Source.Scene2D;
 /// </para>
 /// </summary>
 [PublicAPI]
-public class Event : IResetable
+public class Event : IResetable, IPoolable
 {
     /// <summary>
     /// The Stage for the Actor the event was fired on.

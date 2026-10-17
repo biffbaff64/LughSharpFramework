@@ -168,8 +168,17 @@ public class InputEvent : Event
     {
         base.Reset();
 
-        RelatedActor = null;
-        Button       = -1;
+        Type          = null;
+        StageX        = 0;
+        StageY        = 0;
+        Pointer       = 0;
+        Button        = -1;
+        KeyCode       = 0;
+        Character     = '\0';
+        ScrollAmountX = 0;
+        ScrollAmountY = 0;
+        RelatedActor  = null;
+        TouchFocus    = true;
     }
 
     /// <summary>

@@ -119,7 +119,7 @@ public class ScrollPaneGestureListener( ScrollPane parent ) : ActorGestureListen
         {
             if ( ( ( InputEvent )e ).Type == InputEvent.EventType.TouchDown )
             {
-                _parent!.FlingTimer = 0;
+                _parent.FlingTimer = 0;
             }
 
             return true;
@@ -127,7 +127,7 @@ public class ScrollPaneGestureListener( ScrollPane parent ) : ActorGestureListen
 
         if ( e is InputEvent { TouchFocusCancel: true } )
         {
-            _parent!.Cancel();
+            _parent.Cancel();
         }
 
         return false;
