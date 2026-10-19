@@ -210,8 +210,8 @@ public class BitmapFont
             for ( var i = 0; i < n; i++ )
             {
                 FileInfo file = data.FontFile == null
-                    ? Engine.Files.Internal( data.ImagePaths[ i ] )
-                    : Engine.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
+                                    ? Engine.Files.Internal( data.ImagePaths[ i ] )
+                                    : Engine.Files.GetFileHandle( data.ImagePaths[ i ], _pathType );
 
                 _regions.Add( new TextureRegion( new Texture2D( file, false ) ) );
             }
@@ -234,7 +234,7 @@ public class BitmapFont
     /// </summary>
     public BitmapFont( BitmapFont font )
     {
-        Cache = new BitmapFontCache( font, _useIntegerPositions );
+        Cache    = new BitmapFontCache( font, _useIntegerPositions );
         FontData = font.FontData.Copy();
 
         Flipped     = font.Flipped;
@@ -305,8 +305,8 @@ public class BitmapFont
     public Color GetColor()
     {
         return Cache == null
-            ? throw new InvalidOperationException( "Font cache is not initialized" )
-            : Cache.Color;
+                   ? throw new InvalidOperationException( "Font cache is not initialized" )
+                   : Cache.Color;
     }
 
     /// <summary>
@@ -333,7 +333,7 @@ public class BitmapFont
         }
 
         color.A = alpha;
-            
+
         Cache.Color.Set( color );
     }
 
@@ -356,8 +356,8 @@ public class BitmapFont
     public float GetAlpha()
     {
         return Cache == null
-            ? throw new InvalidOperationException( "Font cache is not initialized" )
-            : Cache.Color.A;
+                   ? throw new InvalidOperationException( "Font cache is not initialized" )
+                   : Cache.Color.A;
     }
 
     /// <summary>

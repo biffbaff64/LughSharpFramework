@@ -644,6 +644,14 @@ public class Actor : IComparable< Actor >
     }
 
     /// <summary>
+    /// Returns true if this actor has no parent.
+    /// </summary>
+    public bool IsOrphan()
+    {
+        return Parent == null;
+    }
+    
+    /// <summary>
     /// Returns true if the actor's parent is not null.
     /// </summary>
     public bool HasParent()

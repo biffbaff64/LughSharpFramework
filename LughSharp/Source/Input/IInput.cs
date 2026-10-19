@@ -731,19 +731,6 @@ public interface IInput : IDisposable
     // ====================================================================
 
     /// <summary>
-    /// Screen orientation types.
-    /// </summary>
-    [PublicAPI]
-    public enum Orientation
-    {
-        Landscape,
-        Portrait
-    }
-
-    // ====================================================================
-    // ====================================================================
-
-    /// <summary>
     /// Potentially available peripherals.
     /// </summary>
     [PublicAPI]

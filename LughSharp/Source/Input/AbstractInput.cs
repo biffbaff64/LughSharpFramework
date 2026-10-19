@@ -225,7 +225,7 @@ public abstract class AbstractInput : IInput
     public virtual bool JustTouched() => false;
     public virtual float GetPressure( int ptrIndex = 0 ) => 0;
     public virtual int GetRotation() => 0;
-    public virtual IInput.Orientation GetNativeOrientation() => 0;
+    public virtual Orientation GetNativeOrientation() => 0;
 
     public virtual int GetMaxPointers() => 0;
     public virtual int GetX( int pointerId = 0 ) => 0;

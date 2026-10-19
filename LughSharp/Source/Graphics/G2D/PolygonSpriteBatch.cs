@@ -583,6 +583,48 @@ public class PolygonSpriteBatch : IPolygonBatch
                       bool flipX,
                       bool flipY )
     {
+        Draw( texture,
+              region.X, region.Y, region.Width, region.Height,
+              origin.X, origin.Y,
+              scale.X, scale.Y,
+              rotation,
+              src.X, src.Y, src.Width, src.Height,
+              flipX, flipY );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at regionX, regionX having the given width
+    /// and height, from region.Width and region.Height, in pixels. The rectangle is offset by origin.X,
+    /// origin.Y relative to the origin. Scale specifies the scaling factor by which the rectangle
+    /// should be scaled around originX, originY. Rotation specifies the angle of counter clockwise
+    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture2D"/>
+    /// given by srcX, srcY and srcWidth, srcHeight is used.
+    /// <para>
+    /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
+    /// portion should be flipped horizontally or vertically.
+    /// </para>
+    /// </summary>
+    /// <param name="texture"> The source <see cref="Texture2D"/>. </param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="originX"> The x-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="originY"> The y-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="scaleX"> The scaling factor in the x-direction. </param>
+    /// <param name="scaleY"> The scaling factor in the y-direction. </param>
+    /// <param name="rotation"> The angle of counter clockwise rotation of the rectangle around originX, originY. </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    /// <param name="flipX"> Whether the texture portion should be flipped horizontally. </param>
+    /// <param name="flipY"> Whether the texture portion should be flipped vertically. </param>
+    public void Draw( Texture2D texture, int regionX, int regionY, int regionWidth, int regionHeight, int originX,
+                      int originY, int scaleX,
+                      int scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight, bool flipX,
+                      bool flipY )
+    {
         if ( !IsDrawing )
         {
             throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
@@ -608,20 +650,20 @@ public class PolygonSpriteBatch : IPolygonBatch
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // bottom left and top right corner points relative to origin
-        int worldOriginX = region.X + origin.X;
-        int worldOriginY = region.Y + origin.Y;
-        int fx           = -origin.X;
-        int fy           = -origin.Y;
-        int fx2          = region.Width - origin.X;
-        int fy2          = region.Height - origin.Y;
+        int worldOriginX = regionX + originX;
+        int worldOriginY = regionY + originY;
+        int fx           = -originX;
+        int fy           = -originY;
+        int fx2          = regionWidth - originX;
+        int fy2          = regionHeight - originY;
 
         // scale
-        if ( !scale.X.Equals( 1 ) || !scale.Y.Equals( 1 ) )
+        if ( !scaleX.Equals( 1 ) || !scaleY.Equals( 1 ) )
         {
-            fx  *= scale.X;
-            fy  *= scale.Y;
-            fx2 *= scale.X;
-            fy2 *= scale.Y;
+            fx  *= scaleX;
+            fy  *= scaleY;
+            fx2 *= scaleX;
+            fy2 *= scaleY;
         }
 
         // construct corner points, start from top left and go counter clockwise
@@ -685,10 +727,10 @@ public class PolygonSpriteBatch : IPolygonBatch
         x4 += worldOriginX;
         y4 += worldOriginY;
 
-        float u  = src.X * _invTexWidth;
-        float v  = ( src.Y + src.Height ) * _invTexHeight;
-        float u2 = ( src.X + src.Width ) * _invTexWidth;
-        float v2 = src.Y * _invTexHeight;
+        float u  = srcX * _invTexWidth;
+        float v  = ( srcY + srcHeight ) * _invTexHeight;
+        float u2 = ( srcX + srcWidth ) * _invTexWidth;
+        float v2 = srcY * _invTexHeight;
 
         if ( flipX )
         {
@@ -746,84 +788,32 @@ public class PolygonSpriteBatch : IPolygonBatch
                       bool flipX,
                       bool flipY )
     {
-        if ( !IsDrawing )
-        {
-            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
-        }
-
-        if ( texture != _lastTexture )
-        {
-            SwitchTexture( texture );
-        }
-        else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
-               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
-        {
-            Flush();
-        }
-
-        int startVertex = _vertexIndex / Sprite2D.VertexSize;
-
-        _triangles[ _triangleIndex++ ] = ( short )startVertex;
-        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
-        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
-        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
-        _triangles[ _triangleIndex++ ] = ( short )startVertex;
-
-        float u   = src.X * _invTexWidth;
-        float v   = ( src.Y + src.Height ) * _invTexHeight;
-        float u2  = ( src.X + src.Width ) * _invTexWidth;
-        float v2  = src.Y * _invTexHeight;
-        int   fx2 = region.X + region.Width;
-        int   fy2 = region.Y + region.Height;
-
-        if ( flipX )
-        {
-            ( u, u2 ) = ( u2, u );
-        }
-
-        if ( flipY )
-        {
-            ( v, v2 ) = ( v2, v );
-        }
-
-        _vertices[ _vertexIndex++ ] = region.X;
-        _vertices[ _vertexIndex++ ] = region.Y;
-        _vertices[ _vertexIndex++ ] = _colorPacked;
-        _vertices[ _vertexIndex++ ] = u;
-        _vertices[ _vertexIndex++ ] = v;
-
-        _vertices[ _vertexIndex++ ] = region.X;
-        _vertices[ _vertexIndex++ ] = fy2;
-        _vertices[ _vertexIndex++ ] = _colorPacked;
-        _vertices[ _vertexIndex++ ] = u;
-        _vertices[ _vertexIndex++ ] = v2;
-
-        _vertices[ _vertexIndex++ ] = fx2;
-        _vertices[ _vertexIndex++ ] = fy2;
-        _vertices[ _vertexIndex++ ] = _colorPacked;
-        _vertices[ _vertexIndex++ ] = u2;
-        _vertices[ _vertexIndex++ ] = v2;
-
-        _vertices[ _vertexIndex++ ] = fx2;
-        _vertices[ _vertexIndex++ ] = region.Y;
-        _vertices[ _vertexIndex++ ] = _colorPacked;
-        _vertices[ _vertexIndex++ ] = u2;
-        _vertices[ _vertexIndex++ ] = v;
+        Draw( texture,
+              region.X, region.Y, region.Width, region.Height,
+              src.X, src.Y, src.Width, src.Height,
+              flipX, flipY );
     }
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
     /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
-    /// srcHeight are used. These coordinates and sizes are given in texels.
+    /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
+    /// specify whether the texture portion should be flipped horizontally or vertically.
     /// </summary>
     /// <param name="texture"></param>
-    /// <param name="x"> the x-coordinate in screen space </param>
-    /// <param name="y"> the y-coordinate in screen space </param>
-    /// <param name="src">
-    /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
-    /// </param>
-    public void Draw( Texture2D texture, float x, float y, GRect src )
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    /// <param name="flipX"> Whether the texture portion should be flipped horizontally. </param>
+    /// <param name="flipY"> Whether the texture portion should be flipped vertically. </param>
+    public void Draw( Texture2D texture, int regionX, int regionY, int regionWidth, int regionHeight, int srcX,
+                      int srcY, int srcWidth,
+                      int srcHeight, bool flipX, bool flipY )
     {
         if ( !IsDrawing )
         {
@@ -849,12 +839,108 @@ public class PolygonSpriteBatch : IPolygonBatch
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
-        float u   = src.X * _invTexWidth;
-        float v   = ( src.Y + src.Height ) * _invTexHeight;
-        float u2  = ( src.X + src.Width ) * _invTexWidth;
-        float v2  = src.Y * _invTexHeight;
-        float fx2 = x + src.Width;
-        float fy2 = y + src.Height;
+        float u   = srcX * _invTexWidth;
+        float v   = ( srcY + srcHeight ) * _invTexHeight;
+        float u2  = ( srcX + srcWidth ) * _invTexWidth;
+        float v2  = srcY * _invTexHeight;
+        int   fx2 = regionX + regionWidth;
+        int   fy2 = regionY + regionHeight;
+
+        if ( flipX )
+        {
+            ( u, u2 ) = ( u2, u );
+        }
+
+        if ( flipY )
+        {
+            ( v, v2 ) = ( v2, v );
+        }
+
+        _vertices[ _vertexIndex++ ] = regionX;
+        _vertices[ _vertexIndex++ ] = regionY;
+        _vertices[ _vertexIndex++ ] = _colorPacked;
+        _vertices[ _vertexIndex++ ] = u;
+        _vertices[ _vertexIndex++ ] = v;
+
+        _vertices[ _vertexIndex++ ] = regionX;
+        _vertices[ _vertexIndex++ ] = fy2;
+        _vertices[ _vertexIndex++ ] = _colorPacked;
+        _vertices[ _vertexIndex++ ] = u;
+        _vertices[ _vertexIndex++ ] = v2;
+
+        _vertices[ _vertexIndex++ ] = fx2;
+        _vertices[ _vertexIndex++ ] = fy2;
+        _vertices[ _vertexIndex++ ] = _colorPacked;
+        _vertices[ _vertexIndex++ ] = u2;
+        _vertices[ _vertexIndex++ ] = v2;
+
+        _vertices[ _vertexIndex++ ] = fx2;
+        _vertices[ _vertexIndex++ ] = regionY;
+        _vertices[ _vertexIndex++ ] = _colorPacked;
+        _vertices[ _vertexIndex++ ] = u2;
+        _vertices[ _vertexIndex++ ] = v;
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight are used. These coordinates and sizes are given in texels.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space </param>
+    /// <param name="src">
+    /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
+    /// </param>
+    public void Draw( Texture2D texture, float x, float y, GRect src )
+    {
+        Draw( texture, x, y, src.X, src.Y, src.Width, src.Height );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight are used. These coordinates and sizes are given in texels.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    public void Draw( Texture2D texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight )
+    {
+        if ( !IsDrawing )
+        {
+            throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
+        }
+
+        if ( texture != _lastTexture )
+        {
+            SwitchTexture( texture );
+        }
+        else if ( ( ( _triangleIndex + 6 ) > _triangles.Length )
+               || ( ( _vertexIndex + Sprite2D.SpriteSize ) > _vertices.Length ) )
+        {
+            Flush();
+        }
+
+        int startVertex = _vertexIndex / Sprite2D.VertexSize;
+
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 1 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 2 );
+        _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
+        _triangles[ _triangleIndex++ ] = ( short )startVertex;
+
+        float u   = srcX * _invTexWidth;
+        float v   = ( srcY + srcHeight ) * _invTexHeight;
+        float u2  = ( srcX + srcWidth ) * _invTexWidth;
+        float v2  = srcY * _invTexHeight;
+        float fx2 = x + srcWidth;
+        float fy2 = y + srcHeight;
 
         _vertices[ _vertexIndex++ ] = x;
         _vertices[ _vertexIndex++ ] = y;
@@ -897,6 +983,28 @@ public class PolygonSpriteBatch : IPolygonBatch
     /// <param name="v2"> The v2-coordinate in texture space </param>
     public void Draw( Texture2D texture, GRect region, float u, float v, float u2, float v2 )
     {
+        Draw( texture, region.X, region.Y, region.Width, region.Height, u, v, u2, v2 );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by u, v and u2, v2 are used.
+    /// These coordinates and sizes are given in texture size percentage. The rectangle will
+    /// have the given tint <see cref="IBatch.Color"/>.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="u"></param>
+    /// <param name="v"></param>
+    /// <param name="u2"></param>
+    /// <param name="v2"></param>
+    public void Draw( Texture2D texture, int regionX, int regionY, int regionWidth, int regionHeight, float u, float v,
+                      float u2,
+                      float v2 )
+    {
         if ( !IsDrawing )
         {
             throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
@@ -921,16 +1029,16 @@ public class PolygonSpriteBatch : IPolygonBatch
         _triangles[ _triangleIndex++ ] = ( short )( startVertex + 3 );
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
-        int fx2 = region.X + region.Width;
-        int fy2 = region.Y + region.Height;
+        int fx2 = regionX + regionWidth;
+        int fy2 = regionY + regionHeight;
 
-        _vertices[ _vertexIndex++ ] = region.X;
-        _vertices[ _vertexIndex++ ] = region.Y;
+        _vertices[ _vertexIndex++ ] = regionX;
+        _vertices[ _vertexIndex++ ] = regionY;
         _vertices[ _vertexIndex++ ] = _colorPacked;
         _vertices[ _vertexIndex++ ] = u;
         _vertices[ _vertexIndex++ ] = v;
 
-        _vertices[ _vertexIndex++ ] = region.X;
+        _vertices[ _vertexIndex++ ] = regionX;
         _vertices[ _vertexIndex++ ] = fy2;
         _vertices[ _vertexIndex++ ] = _colorPacked;
         _vertices[ _vertexIndex++ ] = u;
@@ -943,7 +1051,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         _vertices[ _vertexIndex++ ] = v2;
 
         _vertices[ _vertexIndex++ ] = fx2;
-        _vertices[ _vertexIndex++ ] = region.X;
+        _vertices[ _vertexIndex++ ] = regionX;
         _vertices[ _vertexIndex++ ] = _colorPacked;
         _vertices[ _vertexIndex++ ] = u2;
         _vertices[ _vertexIndex++ ] = v;
@@ -1208,6 +1316,24 @@ public class PolygonSpriteBatch : IPolygonBatch
                       Point2D scale,
                       float rotation )
     {
+        Draw( textureRegion,
+              region.X, region.Y, region.Width, region.Height,
+              origin.X, origin.Y,
+              scale.X, scale.Y,
+              rotation );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y and stretching the region to
+    /// cover the given width and height. The rectangle is offset by originX, originY relative
+    /// to the origin. Scale specifies the scaling factor by which the rectangle should be scaled
+    /// around originX, originY. Rotation specifies the angle of counter clockwise rotation
+    /// of the rectangle around originX, originY.
+    /// </summary>
+    public void Draw( TextureRegion textureRegion, int regionX, int regionY, int regionWidth, int regionHeight,
+                      int originX, int originY,
+                      int scaleX, int scaleY, float rotation )
+    {
         if ( !IsDrawing )
         {
             throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
@@ -1240,20 +1366,20 @@ public class PolygonSpriteBatch : IPolygonBatch
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // bottom left and top right corner points relative to origin
-        int worldOriginX = region.X + origin.X;
-        int worldOriginY = region.Y + origin.Y;
-        int fx           = -origin.X;
-        int fy           = -origin.Y;
-        int fx2          = region.Width - origin.X;
-        int fy2          = region.Height - origin.Y;
+        int worldOriginX = regionX + originX;
+        int worldOriginY = regionY + originY;
+        int fx           = -originX;
+        int fy           = -originY;
+        int fx2          = regionWidth - originX;
+        int fy2          = regionHeight - originY;
 
         // scale
-        if ( !scale.X.Equals( 1 ) || !scale.Y.Equals( 1 ) )
+        if ( !scaleX.Equals( 1 ) || !scaleY.Equals( 1 ) )
         {
-            fx  *= scale.X;
-            fy  *= scale.Y;
-            fx2 *= scale.X;
-            fy2 *= scale.Y;
+            fx  *= scaleX;
+            fy  *= scaleY;
+            fx2 *= scaleX;
+            fy2 *= scaleY;
         }
 
         // construct corner points, start from top left and go counter clockwise
@@ -1373,6 +1499,37 @@ public class PolygonSpriteBatch : IPolygonBatch
                       float rotation,
                       bool clockwise )
     {
+        Draw( textureRegion,
+              region.X, region.Y, region.Width, region.Height,
+              origin.X, origin.Y,
+              scale.X, scale.Y,
+              rotation,
+              clockwise );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom
+    /// left corner at x,y and stretching the region to cover the given width and height.
+    /// The rectangle is offset by originX, originY relative to the origin. Scale specifies
+    /// the scaling factor by which the rectangle should be scaled around originX, originY.
+    /// Rotation specifies the angle of counter clockwise rotation of the rectangle around
+    /// originX, originY.
+    /// </summary>
+    /// <param name="textureRegion"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="originX"> The x-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="originY"> The y-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="scaleX"> The scaling factor in the x-direction. </param>
+    /// <param name="scaleY"> The scaling factor in the y-direction. </param>
+    /// <param name="rotation"> The angle of counter clockwise rotation of the rectangle around originX, originY. </param>
+    /// <param name="clockwise"> Whether the rotation should be clockwise or counter clockwise. </param>
+    public void Draw( TextureRegion textureRegion, int regionX, int regionY, int regionWidth, int regionHeight,
+                      int originX, int originY,
+                      int scaleX, int scaleY, float rotation, bool clockwise )
+    {
         if ( !IsDrawing )
         {
             throw new LughRuntimeException( "PolygonSpriteBatch.begin must be called before Draw." );
@@ -1405,20 +1562,20 @@ public class PolygonSpriteBatch : IPolygonBatch
         _triangles[ _triangleIndex++ ] = ( short )startVertex;
 
         // bottom left and top right corner points relative to origin
-        int worldOriginX = region.X + origin.X;
-        int worldOriginY = region.Y + origin.Y;
-        int fx           = -origin.X;
-        int fy           = -origin.Y;
-        int fx2          = region.Width - origin.X;
-        int fy2          = region.Height - origin.Y;
+        int worldOriginX = regionX + originX;
+        int worldOriginY = regionY + originY;
+        int fx           = -originX;
+        int fy           = -originY;
+        int fx2          = regionWidth - originX;
+        int fy2          = regionHeight - originY;
 
         // scale
-        if ( !scale.X.Equals( 1 ) || !scale.Y.Equals( 1 ) )
+        if ( !scaleX.Equals( 1 ) || !scaleY.Equals( 1 ) )
         {
-            fx  *= scale.X;
-            fy  *= scale.Y;
-            fx2 *= scale.X;
-            fy2 *= scale.Y;
+            fx  *= scaleX;
+            fy  *= scaleY;
+            fx2 *= scaleX;
+            fy2 *= scaleY;
         }
 
         // construct corner points, start from top left and go counter clockwise
@@ -1726,7 +1883,7 @@ public class PolygonSpriteBatch : IPolygonBatch
         {
             _shader.Dispose();
         }
-        
+
         GC.SuppressFinalize( this );
     }
 

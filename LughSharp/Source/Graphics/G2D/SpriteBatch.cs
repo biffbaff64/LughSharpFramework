@@ -1110,6 +1110,42 @@ public class SpriteBatch : IBatch
                               bool flipX,
                               bool flipY )
     {
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at regionX, regionX having the given width
+    /// and height, from region.Width and region.Height, in pixels. The rectangle is offset by origin.X,
+    /// origin.Y relative to the origin. Scale specifies the scaling factor by which the rectangle
+    /// should be scaled around originX, originY. Rotation specifies the angle of counter clockwise
+    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture2D"/>
+    /// given by srcX, srcY and srcWidth, srcHeight is used.
+    /// <para>
+    /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
+    /// portion should be flipped horizontally or vertically.
+    /// </para>
+    /// </summary>
+    /// <param name="texture"> The source <see cref="Texture2D"/>. </param>
+    /// <param name="destinationX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="destinationY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="destinationWidth"> The width of the destination rectangle. </param>
+    /// <param name="destinationHeight"> The height of the destination rectangle. </param>
+    /// <param name="originX"> The x-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="originY"> The y-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="scaleX"> The scaling factor in the x-direction. </param>
+    /// <param name="scaleY"> The scaling factor in the y-direction. </param>
+    /// <param name="rotation"> The angle of counter clockwise rotation of the rectangle around originX, originY. </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    /// <param name="flipX"> Whether the texture portion should be flipped horizontally. </param>
+    /// <param name="flipY"> Whether the texture portion should be flipped vertically. </param>
+    public void Draw( Texture2D texture, int destinationX, int destinationY, int destinationWidth,
+                      int destinationHeight, int originX, int originY,
+                      int scaleX, int scaleY, float rotation, int srcX, int srcY, int srcWidth, int srcHeight,
+                      bool flipX,
+                      bool flipY )
+    {
         lock ( _lockObject )
         {
             Validate( texture );
@@ -1124,20 +1160,20 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            int worldOriginX = destination.X + origin.X;
-            int worldOriginY = destination.Y + origin.Y;
-            int fx           = -origin.X;
-            int fy           = -origin.Y;
-            int fx2          = destination.Width - origin.X;
-            int fy2          = destination.Height - origin.Y;
+            int worldOriginX = destinationX + originX;
+            int worldOriginY = destinationY + originY;
+            int fx           = -originX;
+            int fy           = -originY;
+            int fx2          = destinationWidth - originX;
+            int fy2          = destinationHeight - originY;
 
             // scale
-            if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
+            if ( ( scaleX != 1 ) || ( scaleY != 1 ) )
             {
-                fx  *= scale.X;
-                fy  *= scale.Y;
-                fx2 *= scale.X;
-                fy2 *= scale.Y;
+                fx  *= scaleX;
+                fy  *= scaleY;
+                fx2 *= scaleX;
+                fy2 *= scaleY;
             }
 
             // construct corner points, start from top left and go counter clockwise
@@ -1194,10 +1230,10 @@ public class SpriteBatch : IBatch
             x4 += worldOriginX;
             y4 += worldOriginY;
 
-            float u  = src.X * InvTexWidth;
-            float v  = ( src.Y + src.Height ) * InvTexHeight;
-            float u2 = ( src.X + src.Width ) * InvTexWidth;
-            float v2 = src.Y * InvTexHeight;
+            float u  = srcX * InvTexWidth;
+            float v  = ( srcY + srcHeight ) * InvTexHeight;
+            float u2 = ( srcX + srcWidth ) * InvTexWidth;
+            float v2 = srcY * InvTexHeight;
 
             if ( flipX )
             {
@@ -1229,54 +1265,30 @@ public class SpriteBatch : IBatch
     /// <param name="flipY">Indicates whether to flip the texture vertically.</param>
     public virtual void Draw( Texture2D texture, GRect destination, GRect src, bool flipX = false, bool flipY = false )
     {
-        lock ( _lockObject )
-        {
-            Validate( texture );
-
-            if ( texture != LastTexture )
-            {
-                SwitchTexture( texture );
-            }
-            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
-            {
-                Flush();
-            }
-
-            float u   = src.X * InvTexWidth;
-            float v   = ( src.Y + src.Height ) * InvTexHeight;
-            float u2  = ( src.X + src.Width ) * InvTexWidth;
-            float v2  = src.Y * InvTexHeight;
-            int   fx2 = destination.X + destination.Width;
-            int   fy2 = destination.Y + destination.Height;
-
-            if ( flipX )
-            {
-                ( u, u2 ) = ( u2, u );
-            }
-
-            if ( flipY )
-            {
-                ( v, v2 ) = ( v2, v );
-            }
-
-            SetVertices( destination.X, destination.Y, ColorPackedRGBA, u, v,
-                         // -----------
-                         destination.X, fy2, ColorPackedRGBA, u, v2,
-                         // -----------
-                         fx2, fy2, ColorPackedRGBA, u2, v2,
-                         // -----------
-                         fx2, destination.Y, ColorPackedRGBA, u2, v );
-        }
+        Draw( texture, destination.X, destination.Y, destination.Width, destination.Height, src.X, src.Y, src.Width,
+              src.Height, flipX, flipY );
     }
 
     /// <summary>
-    /// Draws a specified texture at the given position using the defined source rectangle.
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
+    /// specify whether the texture portion should be flipped horizontally or vertically.
     /// </summary>
-    /// <param name="texture">The texture to be drawn.</param>
-    /// <param name="x">The x-coordinate where the texture should be drawn.</param>
-    /// <param name="y">The y-coordinate where the texture should be drawn.</param>
-    /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
-    public virtual void Draw( Texture2D texture, float x, float y, GRect src )
+    /// <param name="texture"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    /// <param name="flipX"> Whether the texture portion should be flipped horizontally. </param>
+    /// <param name="flipY"> Whether the texture portion should be flipped vertically. </param>
+    public void Draw( Texture2D texture, int regionX, int regionY, int regionWidth, int regionHeight, int srcX,
+                      int srcY,
+                      int srcWidth, int srcHeight, bool flipX, bool flipY )
     {
         lock ( _lockObject )
         {
@@ -1291,12 +1303,78 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            float u   = src.X * InvTexWidth;
-            float v   = ( src.Y + src.Height ) * InvTexHeight;
-            float u2  = ( src.X + src.Width ) * InvTexWidth;
-            float v2  = src.Y * InvTexHeight;
-            float fx2 = x + src.Width;
-            float fy2 = y + src.Height;
+            float u   = srcX * InvTexWidth;
+            float v   = ( srcY + srcHeight ) * InvTexHeight;
+            float u2  = ( srcX + srcWidth ) * InvTexWidth;
+            float v2  = srcY * InvTexHeight;
+            int   fx2 = regionX + regionWidth;
+            int   fy2 = regionY + regionHeight;
+
+            if ( flipX )
+            {
+                ( u, u2 ) = ( u2, u );
+            }
+
+            if ( flipY )
+            {
+                ( v, v2 ) = ( v2, v );
+            }
+
+            SetVertices( regionX, regionY, ColorPackedRGBA, u, v,
+                         // -----------
+                         regionX, fy2, ColorPackedRGBA, u, v2,
+                         // -----------
+                         fx2, fy2, ColorPackedRGBA, u2, v2,
+                         // -----------
+                         fx2, regionY, ColorPackedRGBA, u2, v );
+        }
+    }
+
+    /// <summary>
+    /// Draws a specified texture at the given position using the defined source rectangle.
+    /// </summary>
+    /// <param name="texture">The texture to be drawn.</param>
+    /// <param name="x">The x-coordinate where the texture should be drawn.</param>
+    /// <param name="y">The y-coordinate where the texture should be drawn.</param>
+    /// <param name="src">The source rectangle portion of the texture to be drawn.</param>
+    public virtual void Draw( Texture2D texture, float x, float y, GRect src )
+    {
+        Draw( texture, x, y, src.X, src.Y, src.Width, src.Height );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight are used. These coordinates and sizes are given in texels.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    public void Draw( Texture2D texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight )
+    {
+        lock ( _lockObject )
+        {
+            Validate( texture );
+
+            if ( texture != LastTexture )
+            {
+                SwitchTexture( texture );
+            }
+            else if ( Idx > ( Vertices.Length - ( VerticesPerSprite * VertexConstants.VertexSize ) ) )
+            {
+                Flush();
+            }
+
+            float u   = srcX * InvTexWidth;
+            float v   = ( srcY + srcHeight ) * InvTexHeight;
+            float u2  = ( srcX + srcWidth ) * InvTexWidth;
+            float v2  = srcY * InvTexHeight;
+            float fx2 = x + srcWidth;
+            float fy2 = y + srcHeight;
 
             SetVertices( x, y, ColorPackedRGBA, u, v,
                          // -----------
@@ -1319,6 +1397,27 @@ public class SpriteBatch : IBatch
     /// <param name="v2">The V coordinate of the texture's bottom-right corner.</param>
     public virtual void Draw( Texture2D texture, GRect destination, float u, float v, float u2, float v2 )
     {
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by u, v and u2, v2 are used.
+    /// These coordinates and sizes are given in texture size percentage. The rectangle will
+    /// have the given tint <see cref="IBatch.Color"/>.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="destinationX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="destinationY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="destinationWidth"> The width of the destination rectangle. </param>
+    /// <param name="destinationHeight"> The height of the destination rectangle. </param>
+    /// <param name="u"></param>
+    /// <param name="v"></param>
+    /// <param name="u2"></param>
+    /// <param name="v2"></param>
+    public void Draw( Texture2D texture, int destinationX, int destinationY, int destinationWidth,
+                      int destinationHeight, float u, float v, float u2,
+                      float v2 )
+    {
         lock ( _lockObject )
         {
             Validate( texture );
@@ -1332,16 +1431,16 @@ public class SpriteBatch : IBatch
                 Flush();
             }
 
-            int fx2 = destination.X + destination.Width;
-            int fy2 = destination.Y + destination.Height;
+            int fx2 = destinationX + destinationWidth;
+            int fy2 = destinationY + destinationHeight;
 
-            SetVertices( destination.X, destination.Y, ColorPackedRGBA, u, v,
+            SetVertices( destinationX, destinationY, ColorPackedRGBA, u, v,
                          // -----------
-                         destination.X, fy2, ColorPackedRGBA, u, v2,
+                         destinationX, fy2, ColorPackedRGBA, u, v2,
                          // -----------
                          fx2, fy2, ColorPackedRGBA, u2, v2,
                          // -----------
-                         fx2, destination.Y, ColorPackedRGBA, u2, v );
+                         fx2, destinationY, ColorPackedRGBA, u2, v );
         }
     }
 
@@ -1482,6 +1581,26 @@ public class SpriteBatch : IBatch
     public virtual void Draw( TextureRegion textureRegion, GRect destination, Point2D origin, Point2D scale,
                               float rotation )
     {
+        Draw( textureRegion,
+              destination.X, destination.Y, destination.Width, destination.Height,
+              origin.X, origin.Y,
+              scale.X, scale.Y,
+              rotation );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y and stretching the region to
+    /// cover the given width and height. The rectangle is offset by originX, originY relative
+    /// to the origin. Scale specifies the scaling factor by which the rectangle should be scaled
+    /// around originX, originY. Rotation specifies the angle of counter clockwise rotation
+    /// of the rectangle around originX, originY.
+    /// </summary>
+    public void Draw( TextureRegion textureRegion,
+                      int regionX, int regionY, int regionWidth, int regionHeight,
+                      int originX, int originY,
+                      int scaleX, int scaleY,
+                      float rotation )
+    {
         lock ( _lockObject )
         {
             Validate( textureRegion );
@@ -1498,20 +1617,20 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            int worldOriginX = destination.X + origin.X;
-            int worldOriginY = destination.Y + origin.Y;
-            int fx           = -origin.X;
-            int fy           = -origin.Y;
-            int fx2          = destination.Width - origin.X;
-            int fy2          = destination.Height - origin.Y;
+            int worldOriginX = regionX + originX;
+            int worldOriginY = regionY + originY;
+            int fx           = -originX;
+            int fy           = -originY;
+            int fx2          = regionWidth - originX;
+            int fy2          = regionHeight - originY;
 
             // scale
-            if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
+            if ( ( scaleX != 1 ) || ( scaleY != 1 ) )
             {
-                fx  *= scale.X;
-                fy  *= scale.Y;
-                fx2 *= scale.X;
-                fy2 *= scale.Y;
+                fx  *= scaleX;
+                fy  *= scaleY;
+                fx2 *= scaleX;
+                fy2 *= scaleY;
             }
 
             // construct corner points, start from top left and go counter clockwise
@@ -1601,6 +1720,37 @@ public class SpriteBatch : IBatch
                               float rotation,
                               bool clockwise )
     {
+        Draw( textureRegion,
+              destination.X, destination.Y, destination.Width, destination.Height,
+              origin.X, origin.Y,
+              scale.X, scale.Y,
+              rotation,
+              clockwise );
+    }
+
+    /// <summary>
+    /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom
+    /// left corner at x,y and stretching the region to cover the given width and height.
+    /// The rectangle is offset by originX, originY relative to the origin. Scale specifies
+    /// the scaling factor by which the rectangle should be scaled around originX, originY.
+    /// Rotation specifies the angle of counter clockwise rotation of the rectangle around
+    /// originX, originY.
+    /// </summary>
+    /// <param name="textureRegion"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="originX"> The x-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="originY"> The y-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="scaleX"> The scaling factor in the x-direction. </param>
+    /// <param name="scaleY"> The scaling factor in the y-direction. </param>
+    /// <param name="rotation"> The angle of counter clockwise rotation of the rectangle around originX, originY. </param>
+    /// <param name="clockwise"> Whether the rotation should be clockwise or counter clockwise. </param>
+    public void Draw( TextureRegion textureRegion, int regionX, int regionY, int regionWidth, int regionHeight,
+                      int originX,
+                      int originY, int scaleX, int scaleY, float rotation, bool clockwise )
+    {
         lock ( _lockObject )
         {
             Validate( textureRegion );
@@ -1617,20 +1767,20 @@ public class SpriteBatch : IBatch
             }
 
             // bottom left and top right corner points relative to origin
-            int worldOriginX = destination.X + origin.X;
-            int worldOriginY = destination.Y + origin.Y;
-            int fx           = -origin.X;
-            int fy           = -origin.Y;
-            int fx2          = destination.Width - origin.X;
-            int fy2          = destination.Height - origin.Y;
+            int worldOriginX = regionX + originX;
+            int worldOriginY = regionY + originY;
+            int fx           = -originX;
+            int fy           = -originY;
+            int fx2          = regionWidth - originX;
+            int fy2          = regionHeight - originY;
 
             // scale
-            if ( ( scale.X != 1 ) || ( scale.Y != 1 ) )
+            if ( ( scaleX != 1 ) || ( scaleY != 1 ) )
             {
-                fx  *= scale.X;
-                fy  *= scale.Y;
-                fx2 *= scale.X;
-                fy2 *= scale.Y;
+                fx  *= scaleX;
+                fy  *= scaleY;
+                fx2 *= scaleX;
+                fy2 *= scaleY;
             }
 
             // construct corner points.

@@ -864,6 +864,7 @@ LUGHSHARP/SOURCE/MATHS
     -      -      - DONE - Matrix3
     -      -      - DONE - Matrix4
     -      -      - DONE - NumberUtils
+    -      -      - DONE - Orientation
     -      -      - DONE - Plane
     -      -      - DONE - Point2D
     -      -      - DONE - Polygon

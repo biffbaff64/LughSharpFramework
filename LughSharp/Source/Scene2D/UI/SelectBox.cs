@@ -48,16 +48,9 @@ namespace LughSharp.Source.Scene2D.UI;
 [ActorDefinition( Role = "UI" )]
 public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable where T : notnull
 {
-    /// <summary>
-    /// A Scrollpane containing the list that is shown when the
-    /// select box is open.
-    /// </summary>
-    public SelectBoxList? SelectboxList { get; private set; }
-
-    public ClickListener       ClickListener { get; set; }
-    public List< T >           Items         { get; } = [ ];
-    public bool                IsDisabled    { get; set; }
-    public ArraySelection< T > Selection     { get; private set; }
+    public ClickListener ClickListener { get; set; }
+    public List< T >     Items         { get; private set; } = [ ];
+    public bool          IsDisabled    { get; set; }         = false;
 
     // ========================================================================
 
@@ -71,11 +64,18 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
     private readonly Vector2 _temp = new();
 
-    private SelectBoxStyle _style     = null!;
-    private Align          _alignment = Align.Left;
-    private bool           _selectedPrefWidth;
-    private float          _prefWidth;
-    private float          _prefHeight;
+    /// <summary>
+    /// A Scrollpane containing the list that is shown when the
+    /// select box is open.
+    /// </summary>
+    private SelectBoxScrollPane? _scrollPane;
+
+    private SelectBoxArraySelection _selection;
+    private SelectBoxStyle          _style     = null!;
+    private Align                   _alignment = Align.Left;
+    private bool                    _selectedPrefWidth;
+    private float                   _prefWidth;
+    private float                   _prefHeight;
 
     // ========================================================================
 
@@ -91,13 +91,13 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     }
 
     /// <summary>
-    /// Creates a select box with the provided style. Also initialises the <see cref="SelectBoxList"/>
+    /// Creates a select box with the provided style. Also initialises the <see cref="SelectBoxScrollPane"/>
     /// and <see cref="SelectBoxClickListener"/>.
     /// </summary>
     /// <param name="style"> The <see cref="SelectBoxStyle"/> to use for the select box. </param>
     public SelectBox( SelectBoxStyle style )
     {
-        Selection = new SelectBoxArraySelection( this, Items )
+        _selection = new SelectBoxArraySelection( this, Items )
         {
             Actor    = this,
             Required = true
@@ -106,7 +106,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         SetStyle( style );
         SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
 
-        SelectboxList = new SelectBoxList( this );
+        _scrollPane   = new SelectBoxScrollPane( this );
         ClickListener = new SelectBoxClickListener( this );
 
         AddListener( ClickListener );
@@ -121,7 +121,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         if ( stage == null )
         {
-            SelectboxList?.Hide();
+            _scrollPane?.Hide();
         }
 
         base.SetStage( stage );
@@ -144,10 +144,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         this._style = style;
 
-        if ( SelectboxList != null )
+        if ( _scrollPane != null )
         {
-            SelectboxList.SetStyle( style.ScrollPaneStyle );
-            SelectboxList.ListBox.SetStyle( style.ListBoxStyle );
+            _scrollPane.SetStyle( style.ScrollPaneStyle );
+            _scrollPane.ListBox.SetStyle( style.ListBoxStyle );
         }
 
         InvalidateHierarchy();
@@ -164,8 +164,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         }
 
         Items.Clear();
-        Selection.Clear();
-        SelectboxList?.ListBox.ClearItems();
+        _selection.Clear();
+        _scrollPane?.ListBox.ClearItems();
 
         InvalidateHierarchy();
     }
@@ -173,20 +173,25 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Set the backing List that makes up the choices available in the SelectBox
     /// </summary>
+    /// <remarks>
+    /// If you want the SelectBox to size itself to fit its items and style automatically
+    /// after setting items, call <see cref="Widget.Pack()" /> after calling this method.
+    /// Pack is not called automatically because it is expensive and may not be needed.
+    /// </remarks>
     /// <param name="newItems">
     /// The new backing List that makes up the choices available in the SelectBox.
     /// </param>
     public void SetItems( T[] newItems )
     {
-        Guard.Against.Null( SelectboxList );
+        Guard.Against.Null( _scrollPane );
 
         float oldPrefWidth = GetPrefWidth();
 
         Items.Clear();
         Items.AddRange( newItems );
 
-        Selection.Validate();
-        SelectboxList.ListBox.SetItems( Items );
+        _selection.Validate();
+        _scrollPane.ListBox.SetItems( Items );
 
         InvalidateLayout();
 
@@ -199,6 +204,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <summary>
     /// Sets the items visible in the select box.
     /// </summary>
+    /// <remarks>
+    /// If you want the SelectBox to size itself to fit its items and style automatically
+    /// after setting items, call <see cref="Widget.Pack()" /> after calling this method.
+    /// Pack is not called automatically because it is expensive and may not be needed.
+    /// </remarks>
     /// <param name="newItems"> The new items visible in the select box. </param>
     public void SetItems( List< T > newItems )
     {
@@ -282,7 +292,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             if ( _style.ScrollPaneStyle is { VScroll: not null, VScrollKnob: not null } )
             {
-                if ( SelectboxList is not { DisableYScroll: true } )
+                if ( _scrollPane is not { DisableYScroll: true } )
                 {
                     scrollWidth += Math.Max
                         (
@@ -308,8 +318,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </param>
     public override void Draw( IBatch batch, float parentAlpha )
     {
-        Logger.Checkpoint();
-
         Validate();
 
         ISceneDrawable background = GetBackgroundDrawable();
@@ -327,7 +335,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
         background.Draw( batch, x, y, width, height );
 
-        T? selected = Selection.First();
+        T? selected = _selection.First();
 
         if ( selected != null )
         {
@@ -370,7 +378,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             return _style.BackgroundDisabled ?? _style.Background;
         }
 
-        if ( SelectboxList != null && SelectboxList.HasParent() )
+        if ( _scrollPane != null && _scrollPane.HasParent() )
         {
             return _style.BackgroundOpen ?? _style.Background;
         }
@@ -388,7 +396,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             return _style.DisabledFontColor ?? _style.FontColor;
         }
 
-        if ( IsOver() || ( SelectboxList != null && SelectboxList.HasParent() ) )
+        if ( IsOver() || ( _scrollPane != null && _scrollPane.HasParent() ) )
         {
             return _style.OverFontColor ?? _style.FontColor;
         }
@@ -415,7 +423,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     public ArraySelection< T > GetSelection()
     {
         //TODO: Property?
-        return Selection;
+        return _selection;
     }
 
     /// <summary>
@@ -424,7 +432,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public T? GetSelected()
     {
-        return Selection.First();
+        return _selection.First();
     }
 
     /// <summary>
@@ -436,15 +444,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         if ( Items.Contains( item ) )
         {
-            Selection.Set( item );
+            _selection.Set( item );
         }
         else if ( Items.Count > 0 )
         {
-            Selection.Set( Items.First() );
+            _selection.Set( Items.First() );
         }
         else
         {
-            Selection.Clear();
+            _selection.Clear();
         }
     }
 
@@ -454,7 +462,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </returns>
     public int GetSelectedIndex()
     {
-        SortedSet< T > selected = Selection.Items();
+        SortedSet< T > selected = _selection.Items();
 
         return selected.Count == 0 ? -1 : Items.IndexOf( selected.First() );
     }
@@ -470,7 +478,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             throw new IndexOutOfRangeException( "Index out of range: " + index );
         }
 
-        Selection.Set( Items[ index ] );
+        _selection.Set( Items[ index ] );
     }
 
     /// <summary>
@@ -494,7 +502,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <param name="ystate"> true to disable vertical scrolling, false to enable vertical scrolling. </param>
     public void SetScrollingDisabled( bool xstate, bool ystate )
     {
-        SelectboxList?.SetScrollingDisabled( xstate, ystate );
+        _scrollPane?.SetScrollingDisabled( xstate, ystate );
 
         InvalidateHierarchy();
     }
@@ -550,11 +558,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             return;
         }
 
-        var stage = GetStage();
+        Stage? stage = GetStage();
 
         if ( stage != null )
         {
-            SelectboxList?.Show( stage );
+            _scrollPane?.Show( stage );
         }
     }
 
@@ -563,7 +571,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public void HideScrollPane()
     {
-        SelectboxList?.Hide();
+        _scrollPane?.Hide();
     }
 
     /// <summary>
@@ -673,8 +681,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public int MaxListCount
     {
-        get => SelectboxList?.MaxListCount ?? DefaultMaxListCount;
-        set => SelectboxList?.MaxListCount = value;
+        get => _scrollPane?.MaxListCount ?? DefaultMaxListCount;
+        set => _scrollPane?.MaxListCount = value;
     }
 
     /// <summary>
@@ -682,7 +690,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     public ListBox< T > GetList()
     {
-        return SelectboxList?.ListBox ?? throw new LughRuntimeException( "No ListBox available!" );
+        return _scrollPane?.ListBox ?? throw new LughRuntimeException( "No ListBox available!" );
     }
 
     /// <summary>
@@ -708,7 +716,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// scrollable container for displaying a list of items in a <see cref="SelectBox{T}"/>.
     /// </summary>
     [PublicAPI]
-    public class SelectBoxList : ScrollPane
+    public class SelectBoxScrollPane : ScrollPane
     {
         public int            MaxListCount    { get; set; }
         public ListBox< T >   ListBox         { get; set; }
@@ -727,8 +735,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         /// list of items for a <see cref="SelectBox{T}"/>. This scroll pane prevents overscrolling
         /// and disables fading and horizontal scrolling to align with the behavior expected in a dropdown.
         /// </summary>
-        /// <typeparam name="T">The type of the items contained in the parent <see cref="SelectBox{T}"/>.</typeparam>
-        public SelectBoxList( SelectBox< T > parent ) : base( null, parent._style.ScrollPaneStyle )
+        public SelectBoxScrollPane( SelectBox< T > parent )
+            : base( null, parent.GetStyle().ScrollPaneStyle )
         {
             ParentSelectBox = parent;
 
@@ -736,18 +744,17 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             SetFadeScrollBars( false );
             SetScrollingDisabled( true, false );
 
-            ListBox = new ListBox< T >( ParentSelectBox._style.ListBoxStyle )
+            ListBox = new SelectBoxScrollPaneListBox( ParentSelectBox )
             {
                 Touchable    = Touchable.Disabled,
-                TypeToSelect = true
+                TypeToSelect = true,
             };
 
             SetActor( ListBox );
 
-            _hideListener = new SelectBoxScrollPaneHideListener( this );
-
             AddListener( new SelectBoxScrollPaneClickListener( this ) );
             AddListener( new SelectBoxScrollPaneInputListener( this ) );
+            _hideListener = new SelectBoxScrollPaneHideListener( this );
         }
 
         /// <summary>
@@ -761,8 +768,6 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             {
                 return;
             }
-
-            Logger.Checkpoint();
 
             stage.AddActor( this );
             stage.AddCaptureListener( _hideListener );
@@ -831,26 +836,35 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             {
                 x -= width - ParentSelectBox.GetWidth() - 1;
 
-                if ( x < 0 ) x = 0;
+                if ( x < 0 )
+                {
+                    x = 0;
+                }
             }
 
             SetX( x );
             Validate();
 
+//            int idx;
+//
+//            if ( ( idx = ParentSelectBox.GetSelectedIndex() ) < 0 )
+//            {
+//                // If GetSelectedIndex returns -1 ( nothing selected )
+//                // set idx to the first item in the list.
+//                idx = 0;
+//            }
+
             int idx = ParentSelectBox.GetSelectedIndex();
 
-            if ( idx >= 0 )
-            {
-                ScrollTo
-                    (
-                     x: 0,
-                     y: ListBox.GetHeight() - ( idx * itemHeight ) - ( itemHeight / 2 ),
-                     width: 0,
-                     height: 0,
-                     centerHorizontal: true,
-                     centerVertical: true
-                    );
-            }
+            ScrollTo
+                (
+                 x: 0,
+                 y: ListBox.GetHeight() - ( idx * itemHeight ) - ( itemHeight / 2 ),
+                 width: 0,
+                 height: 0,
+                 centerHorizontal: true,
+                 centerVertical: true
+                );
 
             UpdateVisualScroll();
 
@@ -891,24 +905,23 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
 
             ListBox.Touchable = Touchable.Disabled;
 
-            if ( GetStage() != null )
+            Stage? stage = GetStage();
+            
+            if ( stage != null )
             {
-                // Returns false if '_hideListener' is null.
-                _ = GetStage()?.RemoveCaptureListener( _hideListener );
-
-                // Returns false if 'ListBox.KeyListener' is null.
-                _ = GetStage()?.RemoveListener( ListBox.KeyListener );
+                stage.RemoveCaptureListener( _hideListener );
+                stage.RemoveListener( ListBox.KeyListener );
 
                 if ( _previousScrollFocus != null && _previousScrollFocus.GetStage() == null )
                 {
                     _previousScrollFocus = null;
                 }
 
-                Actor? actor = GetStage()?.ScrollFocus;
+                Actor? actor = stage.ScrollFocus;
 
                 if ( ( actor == null ) || IsAscendantOf( actor ) )
                 {
-                    GetStage()?.ScrollFocus = _previousScrollFocus;
+                    stage.ScrollFocus = _previousScrollFocus;
                 }
             }
 
@@ -967,6 +980,23 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             }
 
             base.SetStage( stage );
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    [PublicAPI]
+    public class SelectBoxScrollPaneListBox( SelectBox< T > selectBox )
+        : ListBox< T >( selectBox.GetStyle().ListBoxStyle )
+    {
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>A string that represents the current object.</returns>
+        public override string ToString()
+        {
+            return selectBox.ToString() ?? string.Empty;
         }
     }
 
@@ -1054,9 +1084,9 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
                 return false;
             }
 
-            if ( parent.SelectboxList != null )
+            if ( parent._scrollPane != null )
             {
-                if ( parent.SelectboxList.HasParent() )
+                if ( parent._scrollPane.HasParent() )
                 {
                     parent.HideScrollPane();
                 }
@@ -1089,15 +1119,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     [PublicAPI]
     public class SelectBoxScrollPaneClickListener : ClickListener
     {
-        private readonly SelectBoxList _parent;
+        private readonly SelectBoxScrollPane _parent;
 
         /// <summary>
-        /// Handles click interactions for the <see cref="SelectBoxList"/>.
+        /// Handles click interactions for the <see cref="SelectBoxScrollPane"/>.
         /// </summary>
         /// <param name="parent">
-        /// The parent <see cref="SelectBoxList"/> to which this click listener is associated.
+        /// The parent <see cref="SelectBoxScrollPane"/> to which this click listener is associated.
         /// </param>
-        public SelectBoxScrollPaneClickListener( SelectBoxList parent )
+        public SelectBoxScrollPaneClickListener( SelectBoxScrollPane parent )
         {
             _parent = parent;
         }
@@ -1115,8 +1145,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
             // Force clicking the already selected item to trigger a change event.
             if ( selected != null )
             {
-                _parent.ParentSelectBox.Selection.Clear();
-                _parent.ParentSelectBox.Selection.Choose( selected );
+                _parent.ParentSelectBox._selection.Clear();
+                _parent.ParentSelectBox._selection.Choose( selected );
                 _parent.Hide();
             }
         }
@@ -1128,6 +1158,11 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
         /// </summary>
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
+            Vector2 coords = new( x, y );
+
+            _parent.LocalToStageCoordinates( coords );
+            _parent.ListBox.StageToLocalCoordinates( coords );
+
             int index = _parent.ListBox.GetItemIndexAt( y );
 
             if ( index != -1 )
@@ -1159,15 +1194,15 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     [PublicAPI]
     public class SelectBoxScrollPaneInputListener : InputListener
     {
-        private readonly SelectBoxList _parent;
+        private readonly SelectBoxScrollPane _parent;
 
         /// <summary>
-        /// Handles input events for a <see cref="SelectBoxList"/> to enable interactive behaviors.
+        /// Handles input events for a <see cref="SelectBoxScrollPane"/> to enable interactive behaviors.
         /// </summary>
         /// <param name="parent">
-        /// The parent <see cref="SelectBoxList"/> to which this listener is attached.
+        /// The parent <see cref="SelectBoxScrollPane"/> to which this listener is attached.
         /// </param>
-        public SelectBoxScrollPaneInputListener( SelectBoxList parent )
+        public SelectBoxScrollPaneInputListener( SelectBoxScrollPane parent )
         {
             _parent = parent;
         }
@@ -1209,16 +1244,16 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     [PublicAPI]
     public class SelectBoxScrollPaneHideListener : InputListener
     {
-        private readonly SelectBoxList _parent;
+        private readonly SelectBoxScrollPane _parent;
 
         /// <summary>
-        /// Listener to handle hiding behavior for the <see cref="SelectBoxList"/>.
+        /// Listener to handle hiding behavior for the <see cref="SelectBoxScrollPane"/>.
         /// This class provides custom input handling to determine when to hide the scroll pane.
         /// </summary>
         /// <param name="parent">
-        /// The parent <see cref="SelectBoxList"/> instance to which this listener is attached.
+        /// The parent <see cref="SelectBoxScrollPane"/> instance to which this listener is attached.
         /// </param>
-        public SelectBoxScrollPaneHideListener( SelectBoxList parent )
+        public SelectBoxScrollPaneHideListener( SelectBoxScrollPane parent )
         {
             _parent = parent;
         }
@@ -1257,7 +1292,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
                 case IInput.Keys.NumpadEnter:
                 case IInput.Keys.Enter:
                 {
-                    _parent.ParentSelectBox.Selection.Choose( _parent.ListBox.GetSelected()! );
+                    _parent.ParentSelectBox._selection.Choose( _parent.ListBox.GetSelected()! );
                     _parent.Hide();
                     ev?.Stop();
 

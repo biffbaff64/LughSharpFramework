@@ -887,9 +887,7 @@ public class BitmapFontCache : IDisposable
                                 bool wrap = false,
                                 string? truncate = null )
     {
-        GlyphLayout? layout = _pooledLayouts.Obtain();
-
-        Guard.Against.Null( layout );
+        GlyphLayout layout = _pooledLayouts.Obtain();
 
         layout.SetText( Font, str, start, end, Color, targetWidth, halign, wrap, truncate );
 

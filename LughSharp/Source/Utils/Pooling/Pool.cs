@@ -61,8 +61,13 @@ public class Pool< T > where T : class
     }
 
     /// <summary>
-    /// Returns an object from this pool. The object may be new (from <see cref="NewObjectFactory"/>)
-    /// or reused from a previous call to <see cref="Free(T)"/>.
+    /// Returns an object from this pool.
+    /// <br/>
+    /// If no object is available from the pool, a new object will be created (from
+    /// <see cref="NewObjectFactory"/>) otherwise it will be reused from a previous
+    /// call to <see cref="Free(T)"/>.
+    /// This means that a <c>Obtain</c> call will always return a valid object and
+    /// never return <c>null</c>.
     /// </summary>
     public virtual T Obtain()
     {

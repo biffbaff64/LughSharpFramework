@@ -45,6 +45,12 @@ IN PROGRESS:
     All Styles should provide a fully defined default style. This will remove any possibility
     of problems with the default style not being defined..
 
+- For SelectBox, ListBox and ScrollPane - consider adding a default background.
+    
+- For SelectBox, ListBox and ScrollPane, I'm considering creating a new class that inherits from
+  ScrollPane and adds a ListBox to it. This will allow for easier use of these classes and will also
+  allow for easier customization of the ListBox within the ScrollPane.
+
 - File GLBindings.cs needs splitting up into multiple files, using 'partial', because of
   the size of it. It's far too big to be manageable.
   I've begun arranging the methods into #regions to help with this.

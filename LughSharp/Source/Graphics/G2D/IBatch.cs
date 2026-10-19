@@ -199,6 +199,43 @@ public interface IBatch : IDisposable
                bool flipY );
 
     /// <summary>
+    /// Draws a rectangle with the bottom left corner at regionX, regionX having the given width
+    /// and height, from region.Width and region.Height, in pixels. The rectangle is offset by origin.X,
+    /// origin.Y relative to the origin. Scale specifies the scaling factor by which the rectangle
+    /// should be scaled around originX, originY. Rotation specifies the angle of counter clockwise
+    /// rotation of the rectangle around originX, originY. The portion of the <see cref="Texture2D"/>
+    /// given by srcX, srcY and srcWidth, srcHeight is used.
+    /// <para>
+    /// These coordinates and sizes are given in texels. FlipX and FlipY specify whether the texture
+    /// portion should be flipped horizontally or vertically.
+    /// </para>
+    /// </summary>
+    /// <param name="texture"> The source <see cref="Texture2D"/>. </param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="originX"> The x-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="originY"> The y-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="scaleX"> The scaling factor in the x-direction. </param>
+    /// <param name="scaleY"> The scaling factor in the y-direction. </param>
+    /// <param name="rotation"> The angle of counter clockwise rotation of the rectangle around originX, originY. </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    /// <param name="flipX"> Whether the texture portion should be flipped horizontally. </param>
+    /// <param name="flipY"> Whether the texture portion should be flipped vertically. </param>
+    void Draw( Texture2D texture,
+               int regionX, int regionY, int regionWidth, int regionHeight,
+               int originX, int originY,
+               int scaleX, int scaleY,
+               float rotation,
+               int srcX, int srcY, int srcWidth, int srcHeight,
+               bool flipX,
+               bool flipY );
+    
+    /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
     /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
     /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
@@ -222,6 +259,29 @@ public interface IBatch : IDisposable
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
     /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight is used. These coordinates and sizes are given in texels. FlipX and flipY
+    /// specify whether the texture portion should be flipped horizontally or vertically.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    /// <param name="flipX"> Whether the texture portion should be flipped horizontally. </param>
+    /// <param name="flipY"> Whether the texture portion should be flipped vertically. </param>
+    void Draw( Texture2D texture,
+               int regionX, int regionY, int regionWidth, int regionHeight,
+               int srcX, int srcY, int srcWidth, int srcHeight,
+               bool flipX,
+               bool flipY );
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
     /// srcHeight are used. These coordinates and sizes are given in texels.
     /// </summary>
     /// <param name="texture"></param>
@@ -231,6 +291,20 @@ public interface IBatch : IDisposable
     /// the x &amp; y coordinates in texel space, and source width &amp; height in texels.
     /// </param>
     void Draw( Texture2D texture, float x, float y, GRect src );
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by srcX, srcY and srcWidth,
+    /// srcHeight are used. These coordinates and sizes are given in texels.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="x"> the x-coordinate in screen space </param>
+    /// <param name="y"> the y-coordinate in screen space </param>
+    /// <param name="srcX"> The x-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcY"> The y-coordinate of the top left corner of the source rectangle. </param>
+    /// <param name="srcWidth"> The width of the source rectangle. </param>
+    /// <param name="srcHeight"> The height of the source rectangle. </param>
+    void Draw( Texture2D texture, float x, float y, int srcX, int srcY, int srcWidth, int srcHeight );
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the given width and height
@@ -247,6 +321,28 @@ public interface IBatch : IDisposable
     /// <param name="u2"></param>
     /// <param name="v2"></param>
     void Draw( Texture2D texture, GRect region, float u, float v, float u2, float v2 );
+
+    /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y having the given width and height
+    /// in pixels. The portion of the <see cref="Texture2D"/> given by u, v and u2, v2 are used.
+    /// These coordinates and sizes are given in texture size percentage. The rectangle will
+    /// have the given tint <see cref="Color"/>.
+    /// </summary>
+    /// <param name="texture"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="u"></param>
+    /// <param name="v"></param>
+    /// <param name="u2"></param>
+    /// <param name="v2"></param>
+    void Draw( Texture2D texture,
+               int regionX, int regionY, int regionWidth, int regionHeight,
+               float u,
+               float v,
+               float u2,
+               float v2 );
 
     /// <summary>
     /// Draws a rectangle with the bottom left corner at x,y having the width and
@@ -298,6 +394,19 @@ public interface IBatch : IDisposable
                float rotation );
 
     /// <summary>
+    /// Draws a rectangle with the bottom left corner at x,y and stretching the region to
+    /// cover the given width and height. The rectangle is offset by originX, originY relative
+    /// to the origin. Scale specifies the scaling factor by which the rectangle should be scaled
+    /// around originX, originY. Rotation specifies the angle of counter clockwise rotation
+    /// of the rectangle around originX, originY.
+    /// </summary>
+    void Draw( TextureRegion textureRegion,
+               int regionX, int regionY, int regionWidth, int regionHeight,
+               int originX, int originY,
+               int scaleX, int scaleY,
+               float rotation );
+
+    /// <summary>
     /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom
     /// left corner at x,y and stretching the region to cover the given width and height.
     /// The rectangle is offset by originX, originY relative to the origin. Scale specifies
@@ -320,6 +429,32 @@ public interface IBatch : IDisposable
                GRect region,
                Point2D origin,
                Point2D scale,
+               float rotation,
+               bool clockwise );
+
+    /// <summary>
+    /// Draws a rectangle with the texture coordinates rotated 90 degrees. The bottom
+    /// left corner at x,y and stretching the region to cover the given width and height.
+    /// The rectangle is offset by originX, originY relative to the origin. Scale specifies
+    /// the scaling factor by which the rectangle should be scaled around originX, originY.
+    /// Rotation specifies the angle of counter clockwise rotation of the rectangle around
+    /// originX, originY.
+    /// </summary>
+    /// <param name="textureRegion"></param>
+    /// <param name="regionX"> The x-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionY"> The y-coordinate of the bottom left corner of the destination rectangle. </param>
+    /// <param name="regionWidth"> The width of the destination rectangle. </param>
+    /// <param name="regionHeight"> The height of the destination rectangle. </param>
+    /// <param name="originX"> The x-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="originY"> The y-coordinate of the scaling and rotation origin relative to the screen space coordinates. </param>
+    /// <param name="scaleX"> The scaling factor in the x-direction. </param>
+    /// <param name="scaleY"> The scaling factor in the y-direction. </param>
+    /// <param name="rotation"> The angle of counter clockwise rotation of the rectangle around originX, originY. </param>
+    /// <param name="clockwise"> Whether the rotation should be clockwise or counter clockwise. </param>
+    void Draw( TextureRegion textureRegion,
+               int regionX, int regionY, int regionWidth, int regionHeight,
+               int originX, int originY,
+               int scaleX, int scaleY,
                float rotation,
                bool clockwise );
 
@@ -369,7 +504,9 @@ public interface IBatch : IDisposable
     /// <param name="dstFuncAlpha">
     /// the destination alpha function, e.g. GL20.GL_ONE_MINUS_SRC_ALPHA.
     /// </param>
-    void SetBlendFunctionSeparate( BlendMode srcFuncColor, BlendMode dstFuncColor, BlendMode srcFuncAlpha,
+    void SetBlendFunctionSeparate( BlendMode srcFuncColor,
+                                   BlendMode dstFuncColor,
+                                   BlendMode srcFuncAlpha,
                                    BlendMode dstFuncAlpha );
 
     /// <summary>

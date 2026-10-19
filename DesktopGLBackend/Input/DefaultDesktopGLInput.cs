@@ -28,6 +28,7 @@ using JetBrains.Annotations;
 
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Input;
+using LughSharp.Source.Maths;
 using LughSharp.Source.Utils;
 using LughSharp.Source.Utils.Exceptions;
 
@@ -257,9 +258,9 @@ public class DefaultDesktopGLInput : AbstractInput, IDesktopGLInput
         return peripheral == IInput.Peripheral.HardwareKeyboard;
     }
 
-    public override IInput.Orientation GetNativeOrientation()
+    public override Orientation GetNativeOrientation()
     {
-        return IInput.Orientation.Landscape;
+        return Orientation.Landscape;
     }
 
     private static DotGLFW.MouseButton TranslateToMouseButton( int button )
