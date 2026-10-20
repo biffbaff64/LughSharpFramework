@@ -22,10 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.CompilerServices;
-
 using LughSharp.Source.IO;
 
 using Environment = System.Environment;

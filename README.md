@@ -28,6 +28,11 @@ COMPLETED:
 - Sprite Scrolling.
 - Update Logger.Debug and Logger.Error to acceot NULL messages and report them as such.
 
+ISSUES:
+-------
+
+- SelectBox - Has problems involving initial startup state, item selection. I'm currently
+  debugging but having difficulty finding the problem.
 
 IN PROGRESS:
 ------------
@@ -49,7 +54,7 @@ IN PROGRESS:
     
 - For SelectBox, ListBox and ScrollPane, I'm considering creating a new class that inherits from
   ScrollPane and adds a ListBox to it. This will allow for easier use of these classes and will also
-  allow for easier customization of the ListBox within the ScrollPane.
+  allow for easier customisation of the ListBox within the ScrollPane.
 
 - File GLBindings.cs needs splitting up into multiple files, using 'partial', because of
   the size of it. It's far too big to be manageable.
@@ -63,7 +68,7 @@ TODO:
 - 2D Particle System needs testing and/or finishing.
 - Distance Field Font generation.
 - Wiki
-- 
+- UIElementBuilderTest
 
 
 

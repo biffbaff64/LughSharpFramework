@@ -71,6 +71,8 @@ public class Pixmap : IDisposable
     /// <param name="format">The <see cref="PixFormat"/> </param>
     public Pixmap( int width, int height, int format )
     {
+        Logger.Debug( $"Creating pixmap with width: {width}, height: {height}, format: {format}" );
+
         try
         {
             Gdx2DPixmap = new Gdx2DPixmap( width, height, format );

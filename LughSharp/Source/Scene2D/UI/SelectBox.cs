@@ -60,6 +60,8 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// </summary>
     protected const int DefaultMaxListCount = 0;
 
+    protected const int NothingSelected = -1;
+
     // ========================================================================
 
     private readonly Vector2 _temp = new();
@@ -97,21 +99,30 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// <param name="style"> The <see cref="SelectBoxStyle"/> to use for the select box. </param>
     public SelectBox( SelectBoxStyle style )
     {
-        _selection = new SelectBoxArraySelection( this, Items )
-        {
-            Actor    = this,
-            Required = true
-        };
-
         SetStyle( style );
         SetSize( GetPrefWidthUnchecked(), GetPrefHeightUnchecked() );
 
-        _scrollPane   = new SelectBoxScrollPane( this );
+        _selection = new SelectBoxArraySelection( this, Items )
+        {
+            Actor    = this,
+            Required = true,
+        };
+
+        _scrollPane   = NewScrollPane();
         ClickListener = new SelectBoxClickListener( this );
 
         AddListener( ClickListener );
     }
 
+    /// <summary>
+    /// Allows a subclass to customize the scroll pane shown when the select box is open.
+    /// </summary>
+    /// <returns> The new scroll pane </returns>
+    protected SelectBoxScrollPane NewScrollPane()
+    {
+        return new SelectBoxScrollPane( this );
+    }
+    
     /// <summary>
     /// Sets the stage this select box should be added to. If null, the selectbox
     /// will be hidden.
@@ -140,8 +151,10 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     /// Sets the <see cref="SelectBoxStyle"/> to use for this select box.
     /// </summary>
     /// <param name="style"> The <see cref="SelectBoxStyle"/> to use for the select box. </param>
-    public void SetStyle( SelectBoxStyle style )
+    public void SetStyle( SelectBoxStyle? style )
     {
+        Guard.Against.Null( style );
+
         this._style = style;
 
         if ( _scrollPane != null )
@@ -464,7 +477,7 @@ public class SelectBox< T > : Widget, IStyleable< SelectBoxStyle >, IDisableable
     {
         SortedSet< T > selected = _selection.Items();
 
-        return selected.Count == 0 ? -1 : Items.IndexOf( selected.First() );
+        return selected.Count == 0 ? NothingSelected : Items.IndexOf( selected.First() );
     }
 
     /// <summary>

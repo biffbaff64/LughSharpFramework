@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Graphics.Atlases;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 
 namespace LughSharp.Source.Scene2D.Utils;
