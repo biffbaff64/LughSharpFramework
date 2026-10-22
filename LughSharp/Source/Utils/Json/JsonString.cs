@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
 using System.Numerics;
 
 using LughSharp.Source.Collections;

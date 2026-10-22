@@ -25,7 +25,6 @@
 using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.OpenGL.Bindings;
 using LughSharp.Source.Graphics.Shaders;
-using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.IO;
 
 using GLBindings = LughSharp.Source.Graphics.OpenGL.Bindings.GLBindings;

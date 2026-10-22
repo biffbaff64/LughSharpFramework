@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using System.Buffers;
-using System.Runtime.CompilerServices;
 
 namespace LughSharp.Source.Collections;
 

@@ -29,16 +29,9 @@ using LughSharp.Source.Graphics.Images;
 namespace LughSharp.Tests;
 
 [TestFixture]
-public class AssetManagerTest
+public class AssetManagerTest( AssetManager? assetManager )
 {
-    private readonly AssetManager? _assetManager;
-
     // ========================================================================
-
-    public AssetManagerTest( AssetManager? assetManager )
-    {
-        _assetManager = assetManager;
-    }
 
     [SetUp]
     public void Setup()
@@ -52,7 +45,7 @@ public class AssetManagerTest
         Logger.Debug( "Loading assets...", true );
         Logger.Divider();
 
-        if ( _assetManager == null )
+        if ( assetManager == null )
         {
             return;
         }
@@ -66,8 +59,8 @@ public class AssetManagerTest
             Engine.Files.Assets( "title_background.png" )
         };
 
-        _assetManager.Load< Texture2D >( files );
-        _assetManager.FinishLoading();
+        assetManager.Load< Texture2D >( files );
+        assetManager.FinishLoading();
 
         Logger.Debug( "Checking loaded assets...", true );
 
@@ -76,9 +69,9 @@ public class AssetManagerTest
             CheckAsset( file );
         }
 
-        Logger.Debug( "Checking TextureAtlas assets...", true );
-
         // ====================================================================
+
+        Logger.Debug( "Checking TextureAtlas assets...", true );
 
         const string ObjectsAtlas = @"Assets\PackedImages\output\objects.atlas";
 
@@ -103,12 +96,11 @@ public class AssetManagerTest
     [TearDown]
     public void TearDown()
     {
-        _assetManager?.Dispose();
     }
 
     private void CheckAsset( FileInfo asset )
     {
-        if ( _assetManager == null )
+        if ( assetManager == null )
         {
             return;
         }
@@ -118,11 +110,11 @@ public class AssetManagerTest
         Logger.Divider();
         Logger.Debug( $"########## Checking asset {asset.Name}... ##########" );
 
-        if ( _assetManager.Contains( asset.FullName ) )
+        if ( assetManager.Contains( asset.FullName ) )
         {
             Logger.Debug( $"AssetManager contains {asset.Name}" );
 
-            var texture = _assetManager.Get< Texture2D >( asset.FullName );
+            var texture = assetManager.Get< Texture2D >( asset.FullName );
 
             Logger.Debug( texture != null
                               ? $"Texture loaded and retrieved: {asset.Name}"

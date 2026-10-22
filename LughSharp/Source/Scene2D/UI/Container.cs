@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Scene2D.Actions;
 using LughSharp.Source.Scene2D.Utils;

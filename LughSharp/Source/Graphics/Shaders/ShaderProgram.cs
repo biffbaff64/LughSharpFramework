@@ -26,7 +26,6 @@
 
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Enums;
-using LughSharp.Source.Graphics.Utils;
 
 using GLuint = uint;
 

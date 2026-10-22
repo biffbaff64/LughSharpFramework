@@ -110,11 +110,7 @@ public class FreeType
 
     // ========================================================================
 
-    #if NET8_0
-    private const string NativeLib = "lib/net8.0/freetype_x64.dll";
-    #elif NET9_0
-    private const string NativeLib = "lib/net9.0/freetype_x64.dll";
-    #endif
+    private const string NativeLib = "freetype";
 
     // ========================================================================
 

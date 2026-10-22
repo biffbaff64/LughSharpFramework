@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 
 namespace LughSharp.Source.Maps.Tiled.Renderers;

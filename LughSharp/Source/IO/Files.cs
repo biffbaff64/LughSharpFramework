@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
-
 using LughSharp.Source.Scene2D.UI;
 
 namespace LughSharp.Source.IO;
@@ -50,7 +48,7 @@ public class Files : IFiles
     /// ContentRoot = "Assets"
     /// AssetsRoot = $"{AssembltDirectory}{ContentRoot}";
     /// <br/>
-    ///     Console.WriteLine( Files.AssetsRoot );
+    /// Console.WriteLine( Files.AssetsRoot );
     /// <br/>
     /// will output:-
     /// <br/>

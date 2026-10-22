@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source;
-using LughSharp.Source.Graphics.G2D;
 
 using Logger = LughSharp.Source.Utils.Logging.Logger;
 

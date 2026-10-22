@@ -27,7 +27,6 @@ using System.Reflection.Metadata;
 using LughSharp.Source.Collections;
 using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.Cameras;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.OpenGL.Enums;
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Graphics.Viewports;

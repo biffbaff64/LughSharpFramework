@@ -22,14 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
 using LughSharp.Source.Assets.Loaders;
 using LughSharp.Source.Assets.Loaders.Resolvers;
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.Shaders;
 using LughSharp.Source.Scene2D.UI;
@@ -151,6 +148,10 @@ public class AssetManager : IDisposable
             // .g3dj loader here...
             // .g3db loader here...
             // .obj loader here...
+            
+            // .json loader here...
+//            SetLoader( typeof( Json ), ",json", new JsonLoader( resolver ) );
+            
             // I18NBundle loader here...
             //@formatter:on
 
@@ -669,14 +670,15 @@ public class AssetManager : IDisposable
     /// <param name="parameters"></param>
     public void Load< T >( string? filename, AssetLoaderParameters? parameters = null )
     {
+        Logger.Debug(  $"Loading {filename}" );
         Load( filename, typeof( T ), parameters );
     }
 
     /// <summary>
-    /// 
+    /// Loads the given assets into the loading queue of the AssetManager.
     /// </summary>
-    /// <param name="files"></param>
-    /// <typeparam name="T"></typeparam>
+    /// <param name="files"> A List&lt; FileInfo &gt; holding the assets to load. </param>
+    /// <typeparam name="T"> The type of the assets to load. </typeparam>
     public void Load< T >( List< FileInfo > files )
     {
         foreach ( FileInfo asset in files )

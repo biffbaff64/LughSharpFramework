@@ -1,7 +1,5 @@
 ﻿
 
-using System.Globalization;
-
 namespace LughSharp.Source.Utils;
 
 /// <summary>

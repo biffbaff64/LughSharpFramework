@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
-
 using Exception = System.Exception;
 
 namespace LughSharp.Source.Utils.Exceptions;

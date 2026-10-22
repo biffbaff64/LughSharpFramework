@@ -25,8 +25,6 @@
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Scene2D.Utils;
 
-using Newtonsoft.Json;
-
 namespace LughSharp.Source.Scene2D.UI.Styles;
 
 /// <summary>
@@ -75,7 +73,7 @@ public class WindowStyle : ISceneStyle
     /// <param name="titleFont"></param>
     /// <param name="titleFontColor"></param>
     /// <param name="background"></param>
-    [JsonConstructor]
+    [System.Text.Json.Serialization.JsonConstructor]
     public WindowStyle( BitmapFont titleFont, Color titleFontColor, ISceneDrawable background )
     {
         TitleFont       = titleFont;

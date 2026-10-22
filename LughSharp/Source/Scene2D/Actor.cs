@@ -24,7 +24,6 @@
 
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Fonts;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Utils;
 using LughSharp.Source.Scene2D.Actions;
 using LughSharp.Source.Scene2D.Listeners;

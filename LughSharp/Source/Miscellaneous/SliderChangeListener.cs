@@ -31,7 +31,7 @@ namespace LughSharp.Source.Miscellaneous;
 [PublicAPI]
 public class SliderChangeListener( Slider slider ) : ChangeListener
 {
-    public override void Changed( ChangeListener.ChangeEvent ev, Actor actor)
+    public override void Changed( ChangeListener.ChangeEvent ev, Actor? actor)
     {
         Logger.Debug( $"Slider: {slider.Value}" );
     }

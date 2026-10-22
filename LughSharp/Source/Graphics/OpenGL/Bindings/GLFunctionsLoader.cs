@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.CompilerServices;
-
 namespace LughSharp.Source.Graphics.OpenGL.Bindings;
 
 public unsafe partial class GLBindings

@@ -22,7 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
 using System.Numerics;
 
 namespace LughSharp.Source.Utils.Json;

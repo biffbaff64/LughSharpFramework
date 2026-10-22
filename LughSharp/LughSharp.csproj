@@ -83,19 +83,18 @@
         <Content Include="Assets\**\*.*">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Content Include="lib\**\*.*">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
 
     <ItemGroup>
         <None Include="..\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
+    <!-- Native libraries. -->
     <ItemGroup>
-        <Content Include="runtimes\**\*.*">
-            <Pack>true</Pack>
-            <PackagePath>runtimes</PackagePath>
-        </Content>
+        <None Remove="runtimes\**"/>
+        <!-- Packed under runtimes\<rid>\native\ so NuGet consumers resolve the right one per platform. -->
+        <None Include="runtimes\**\native\*.dll" Pack="true" PackagePath="runtimes\"/>
+        <!-- Local builds and ProjectReference consumers don't get runtimes\ resolution, so copy the x64 set flat to the output. -->
+        <None Include="runtimes\win-x64\native\*.dll" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" Pack="false"/>
     </ItemGroup>
 </Project>

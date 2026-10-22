@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Diagnostics;
-
 using LughSharp.Source.Input.Mobile;
 
 using Exception = System.Exception;

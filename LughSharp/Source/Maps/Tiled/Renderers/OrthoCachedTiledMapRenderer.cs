@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Graphics.Cameras;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.Graphics.OpenGL;
 using LughSharp.Source.Graphics.OpenGL.Enums;

@@ -27,9 +27,23 @@ namespace LughSharp.Source.Graphics.Images.Decoders;
 [PublicAPI]
 public class ImageValidator
 {
-    public static void Validate< T >( T image )
+    public static void Validate< T >( T image, string extension = ".png" )
     {
         //TODO: Implement
+    }
+
+    /// <summary>
+    /// Returns <c>true</c> if the supplied file extension is that of a framework
+    /// supported image, otherwise false.
+    /// </summary>
+    /// <param name="extension"> The file extension, including the period i.e. ".png". </param>
+    public static bool IsSupportedImageFormat( string extension )
+    {
+        return extension switch
+               {
+                   ".jpeg" or ".png" or ".jpg" or ".bmp" => true,
+                   _                                     => false
+               };
     }
 }
 

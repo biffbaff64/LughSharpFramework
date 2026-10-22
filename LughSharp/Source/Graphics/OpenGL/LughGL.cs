@@ -22,8 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Runtime.InteropServices;
-
 using DotGLFW;
 
 using LughSharp.Source.Graphics.OpenGL.Enums;

@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text.Json;
-
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Scene2D.UI.Styles;

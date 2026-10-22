@@ -22,7 +22,6 @@
 //  SOFTWARE.
 // /////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
 using System.Xml.Linq;
 
 namespace LughSharp.Source.Utils.Logging;

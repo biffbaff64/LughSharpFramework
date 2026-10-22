@@ -22,12 +22,9 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
-
 using LughSharp.Source.Collections;
 using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Graphics.Images;
 using LughSharp.Source.IO;
 using LughSharp.Source.Scene2D.UI.Styles;
@@ -37,7 +34,10 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 using Exception = System.Exception;
+using JsonConverter = Newtonsoft.Json.JsonConverter;
+using JsonException = Newtonsoft.Json.JsonException;
 using JsonReader = Newtonsoft.Json.JsonReader;
+using JsonSerializer = Newtonsoft.Json.JsonSerializer;
 using JsonWriter = Newtonsoft.Json.JsonWriter;
 
 namespace LughSharp.Source.Scene2D.UI;
@@ -740,7 +740,7 @@ public class Skin : IDisposable
                 else
                 {
                     throw new LughRuntimeException( $"No ISceneDrawable, NinePatch, TextureRegion,"
-                                              + $" Texture, or Sprite registered with name: {name}" );
+                                                  + $" Texture, or Sprite registered with name: {name}" );
                 }
             }
         }
@@ -830,7 +830,7 @@ public class Skin : IDisposable
                    // ---------------------------
 
                    var _ => throw new LughRuntimeException( $"Unable to copy, unknown "
-                                                      + $"drawable type: {drawable.GetType()}" )
+                                                          + $"drawable type: {drawable.GetType()}" )
                };
     }
 
@@ -1198,7 +1198,7 @@ public class Skin : IDisposable
         // Only skin resources and the styles nested inside them are expanded. Anything
         // else, a texture for example, is meaningless in a skin file unless it resolves
         // to a resource name, which it did not above.
-        if ( ( depth > 0 ) && value is not ( ISceneStyle or TintedDrawable ) )
+        if ( ( depth > 0 ) && value is not (ISceneStyle or TintedDrawable) )
         {
             return null;
         }
@@ -1471,7 +1471,7 @@ public class Skin : IDisposable
     /// </para>
     /// </summary>
     [PublicAPI]
-    public class ColorConverter( Skin skin ) : JsonConverter< Color >
+    public class ColorConverter( Skin skin ) : Newtonsoft.Json.JsonConverter< Color >
     {
         public override Color ReadJson( JsonReader reader, Type type, Color? existing, bool hasExt,
                                         JsonSerializer serializer )
@@ -1525,7 +1525,7 @@ public class Skin : IDisposable
     /// </para>
     /// </summary>
     [PublicAPI]
-    public class SkinConverter : JsonConverter< Skin >
+    public class SkinConverter : Newtonsoft.Json.JsonConverter< Skin >
     {
         private readonly Skin     _skin;
         private readonly FileInfo _skinFile;
@@ -1739,12 +1739,14 @@ public class Skin : IDisposable
         public override bool CanConvert( Type objectType )
         {
             if ( _excludedType != null && objectType == _excludedType )
+            {
                 return false;
+            }
 
-            return objectType == typeof( Color ) ||
-                   objectType == typeof( BitmapFont ) ||
-                   typeof( ISceneDrawable ).IsAssignableFrom( objectType ) ||
-                   typeof( ISceneStyle ).IsAssignableFrom( objectType );
+            return objectType == typeof( Color )
+                || objectType == typeof( BitmapFont )
+                || typeof( ISceneDrawable ).IsAssignableFrom( objectType )
+                || typeof( ISceneStyle ).IsAssignableFrom( objectType );
         }
 
         /// <summary>

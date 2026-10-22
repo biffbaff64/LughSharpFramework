@@ -1257,23 +1257,26 @@ LUGHSHARP/TESTS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    - DONE -      - DONE - AssetManagerTest
+    - DONE -      - DONE - ClickListenerTests
+    -      -      -      - ColorTest
+    -      -      -      - FilepathTest
+    -      -      -      - ILughTest
+    -      -      -      - ImagePackerTest
     -      -      -      - InputTest
-    -      -      -      - MockEngine
-    -      -      -      - OpenGLTest
-    -      -      -      - ShaderLoaderTest
+    -      -      -      - LughGLTest
+    -      -      -      - Matrix4Tests
+    -      -      -      - PixmapPackerTest
+    -      -      -      - PreferencesTest
+    -      -      -      - SkinLoadingTests
+    -      -      -      - SpriteBatchTests
+    -      -      -      - TableTest
+    -      -      -      - TextureAtlasTest
+    -      -      -      - TexturePackerTest
+    -      -      -      - TexturePackerUpscaleTest
     -      -      -      - TiledMapPackerTest
     -      -      -      - TiledMapPackerTestRenderer
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
-    -      -      -      - 
+    -      -      -      - UIElementBuilderTest
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -189,6 +189,7 @@ public class Button : Table, IDisableable, IStyleable< ButtonStyle >
     /// Enables the button to be clicked, setting the touchable to <see cref="Touchable.Enabled"/>,
     /// and adding a <see cref="ClickListener"/> to the button.
     /// </summary>
+    [MemberNotNull( nameof( ClickListener ) )]
     private void SetClickListener()
     {
         Touchable = Touchable.Enabled;

@@ -31,33 +31,6 @@ namespace LughSharp.Tests;
 [TestFixture]
 public class ClickListenerTests
 {
-    // A simple derived class so we can spy on OnClicked
-    private class TestClickListener : ClickListener
-    {
-        public bool  WasClicked { get; private set; }
-        public float ClickX     { get; private set; }
-        public float ClickY     { get; private set; }
-
-        public override void OnClicked( InputEvent ev, float x, float y )
-        {
-            WasClicked = true;
-            ClickX     = x;
-            ClickY     = y;
-        }
-    }
-
-    private InputEvent CreateTouchEvent( InputEvent.EventType type, int pointer = 0, int button = 0 )
-    {
-        return new InputEvent
-        {
-            Type    = type,
-            Pointer = pointer,
-            Button  = button,
-            StageX  = 100,
-            StageY  = 100
-        };
-    }
-
     [Test]
     public void TouchDown_Then_TouchUp_TriggersClick()
     {
@@ -138,6 +111,33 @@ public class ClickListenerTests
         // Assert
         Assert.That( listener.WasClicked, Is.False );
         Assert.That( listener.Pressed, Is.False );
+    }
+
+    // A simple derived class so we can spy on OnClicked
+    private class TestClickListener : ClickListener
+    {
+        public bool  WasClicked { get; private set; }
+        public float ClickX     { get; private set; }
+        public float ClickY     { get; private set; }
+
+        public override void OnClicked( InputEvent ev, float x, float y )
+        {
+            WasClicked = true;
+            ClickX     = x;
+            ClickY     = y;
+        }
+    }
+
+    private InputEvent CreateTouchEvent( InputEvent.EventType type, int pointer = 0, int button = 0 )
+    {
+        return new InputEvent
+        {
+            Type    = type,
+            Pointer = pointer,
+            Button  = button,
+            StageX  = 100,
+            StageY  = 100
+        };
     }
 }
 

@@ -23,7 +23,6 @@
 // ///////////////////////////////////////////////////////////////////////////////
 
 using LughSharp.Source.Config;
-using LughSharp.Source.Graphics.G2D;
 using LughSharp.Source.Scene2D.Listeners;
 using LughSharp.Source.Scene2D.UI.Styles;
 using LughSharp.Source.Scene2D.Utils;

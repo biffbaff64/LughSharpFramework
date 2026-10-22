@@ -22,8 +22,6 @@
 // //  SOFTWARE.
 // // /////////////////////////////////////////////////////////////////////////////
 
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace LughSharp.Source.Utils;
 
 /** A resizable, ordered array of objects with efficient add and remove at the beginning and end. Values in the backing array may

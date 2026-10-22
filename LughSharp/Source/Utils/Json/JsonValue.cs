@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Globalization;
-
 using SerializationException = System.Runtime.Serialization.SerializationException;
 
 namespace LughSharp.Source.Utils.Json;

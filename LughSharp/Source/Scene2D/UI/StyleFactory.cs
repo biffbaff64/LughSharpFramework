@@ -22,11 +22,11 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-using System.Text.Json;
-
-using LughSharp.Source.Graphics.Atlases;
+ using LughSharp.Source.Graphics.Atlases;
 using LughSharp.Source.Graphics.Fonts;
 using LughSharp.Source.Scene2D.Utils;
+
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace LughSharp.Source.Scene2D.UI;
 
@@ -37,17 +37,17 @@ public class StyleFactory
 {
     /// <summary>
     /// Creates a style object based on the given type name and JSON description.
-    /// This method allows for the dynamic creation of style objects, applying inherited
-    /// properties when a parent style is specified and updating properties based on the
-    /// provided JSON metadata.
+    /// This method allows for the dynamic creation of style objects, applying
+    /// inherited properties when a parent style is specified and updating properties
+    /// based on the provided JSON metadata.
     /// </summary>
     /// <param name="typeName">
-    /// The name of the type to create. This should match the type name of a class representing
-    /// the style.
+    /// The name of the type to create. This should match the type name of a class
+    /// representing the style.
     /// </param>
     /// <param name="json">
-    /// A JSON object containing the style properties and metadata. The JSON can also include a
-    /// "parent" property to enable inheritance of properties from a parent style.
+    /// A JSON object containing the style properties and metadata. The JSON can also
+    /// include a "parent" property to enable inheritance of properties from a parent style.
     /// </param>
     /// <param name="atlas">
     /// A <see cref="TextureAtlas"/> instance to assist in resolving relevant graphics details
