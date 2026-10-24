@@ -1,0 +1,147 @@
+﻿📢 LughSharp Update: Breaking Changes & Architecture Refactor
+
+We’ve overhauled the core Engine and AtlasRegion systems to be more idiomatic to
+modern C# and to provide better flexibility for asset management.
+
+1. Static Engine API
+The Engine class is now static. You no longer need to access subsystems via a
+singleton Api property.
+
+Old: Engine.Api.Graphics.DeltaTime
+
+New: Engine.Graphics.DeltaTime
+
+2. Configurable Assets Root
+LughSharp no longer enforces a hardcoded "Assets/" directory. You now specify your 
+assets root during initialization.
+
+Update Required: Update your Engine.Initialise call.
+
+Example: Engine.Initialise(this, "Content"); (Defaults to "Assets" if omitted).
+
+3. AtlasRegion Property Dictionary
+We have replaced the parallel Names and Values arrays in AtlasRegion with a unified 
+Properties dictionary for faster, safer metadata lookups.
+
+Old: region.Names[0] == "split"
+
+New: region.FindValue("split") or region.Properties["split"]
+
+4. PixmapPacker Regex Update
+
+The internal logic for parsing frame indexes (e.g., hero_01.png) has been updated. 
+The packer now correctly identifies imageName and imageIndex using more robust Regex groups.
+
+Quick Migration Snippet
+If your project previously looked like this:
+
+C#
+public void Create() 
+{
+    Engine.Api.Initialise(this);
+    var tex = Engine.Api.Files.Internal("sprite.png");
+}
+
+Update it to this:
+
+C#
+public void Create() 
+{
+    // Explicitly set your root folder here
+    Engine.Initialise(this, "Assets"); 
+    
+    var tex = Engine.Files.Internal("sprite.png");
+}
+
+===============================================================================
+
+Revised "Testing" Section for Release Notes:
+
+🧪 Note on Unit Testing
+With the move to a static Engine, we have ensured that all subsystem properties 
+(App, Audio, Input, etc.) remain mutable.
+
+Mocking: You can easily swap out any subsystem during a test setup by assigning a
+mock implementation to the static property (e.g., Engine.Audio = new TestAudio();).
+
+Cleanup: Remember to reset these to null or your default implementations in your 
+TearDown methods to avoid state bleeding between tests.
+
+===============================================================================
+
+[PublicAPI]
+public static class MockEngine
+{
+    /// <summary>
+    /// Resets all Engine subsystems to empty or mock implementations.
+    /// Useful for starting each unit test with a clean, hardware-independent state.
+    /// </summary>
+    public static void TuneUp()
+    {
+        Engine.App      = new MockApplication();
+        Engine.Audio    = new MockAudio();
+        Engine.Input    = new MockInput();
+        Engine.Files    = new MockFiles();
+        Engine.Graphics = new MockGraphics();
+        Engine.Net      = new MockNet();
+        
+        // Ensure DevMode and GodMode are reset to safe defaults
+        Engine.DevMode = false;
+        Engine.GodMode = false;
+    }
+
+    /// <summary>
+    /// Clears all Engine subsystems to null.
+    /// </summary>
+    public static void TearDown()
+    {
+        Engine.App      = null!;
+        Engine.Audio    = null!;
+        Engine.Input    = null!;
+        Engine.Files    = null!;
+        Engine.Graphics = null!;
+        Engine.Net      = null!;
+    }
+}
+
+How a User Employs It in NUnit/xUnit
+
+C#
+[TestFixture]
+public class PlayerTests
+{
+    [SetUp]
+    public void Setup()
+    {
+        // Wipe the slate clean before every test
+        MockEngine.TuneUp();
+    }
+
+    [Test]
+    public void Player_ShouldMoveRight_WhenDKeyIsPressed()
+    {
+        // Arrange: Manually override just the subsystem you need for this specific test
+        var mockInput = new ManualInputTrigger();
+        Engine.Input = mockInput;
+        
+        var player = new Player();
+
+        // Act
+        mockInput.SetKeyDown(Keys.D);
+        player.Update(1.0f);
+
+        // Assert
+        Assert.That(player.Position.X, Is.GreaterThan(0));
+    }
+}
+
+Pro Tip for Testing:
+
+Because Engine properties are now static and mutable, you have full control over the 
+environment. Use MockEngine.TuneUp() in your test setup to prevent NullReferenceExceptions 
+without needing to initialize a real OpenGL context. This allows your logic tests to run 
+at lightning speed in any CI/CD environment.
+
+===============================================================================
+
+
