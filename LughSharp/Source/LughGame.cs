@@ -26,9 +26,11 @@ namespace LughSharp.Source;
 
 /// <summary>
 /// An ApplicationListener that delegates to a Screen. This allows an application
-/// to easily have multiple screens. Screens are not disposed automatically. You
-/// must handle whether you want to keep screens around or dispose of them when
-/// another screen is set.
+/// to easily have multiple screens.
+/// <para><b>
+/// Screens are not disposed automatically. You must handle whether you want to
+/// keep screens around or dispose of them when another screen is set.
+/// </b></para>
 /// </summary>
 [PublicAPI]
 public abstract class LughGame : IApplicationListener

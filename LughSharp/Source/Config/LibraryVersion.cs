@@ -57,7 +57,7 @@ public sealed class LibraryVersion
         try
         {
             MatchCollection matches = RegexUtils.VersionNumberRegex().Matches( version.ToString() );
-            var             v       = string.Empty;
+            string          v       = string.Empty;
 
             foreach ( object? match in matches )
             {
@@ -69,11 +69,11 @@ public sealed class LibraryVersion
             // v[..1] takes the first character,
             // v[1..] takes from index 1 to the end,
             // v[2..] takes from index 2 to the end.
-            
+
             LibMajorVersion    = v.Length < 1 ? 0 : int.Parse( v[ ..1 ] );
             LibMinorVersion    = v.Length < 2 ? 0 : int.Parse( v[ 1.. ] );
             LibRevisionVersion = v.Length < 3 ? 0 : int.Parse( v[ 2.. ] );
-            
+
             Logger.Debug( $"Current Library Version : {LibMajorVersion}.{LibMinorVersion}.{LibRevisionVersion}" );
         }
         catch ( Exception e )

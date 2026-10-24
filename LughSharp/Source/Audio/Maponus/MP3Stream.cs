@@ -54,6 +54,9 @@ public class Mp3Stream : Stream
     /// </summary>
     public SoundFormat Format { get; }
 
+    /// <summary>
+    /// Whether or not the stream has reached the end of the file.
+    /// </summary>
     public bool IsEof { get; protected set; }
 
     // ========================================================================
@@ -97,7 +100,8 @@ public class Mp3Stream : Stream
         _buffer               = new Buffer16BitStereo();
         _decoder.OutputBuffer = _buffer;
 
-        // read the first frame. This will fill the initial buffer with data, and get our frequency!
+        // read the first frame. This will fill the initial buffer
+        // with data, and get our frequency!
         IsEof |= !ReadFrame();
 
         Format = ChannelCount switch

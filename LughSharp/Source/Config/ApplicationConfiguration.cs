@@ -48,20 +48,21 @@ public class ApplicationConfiguration
     /// The directory where the applications Preferences file will be held. This folder will
     /// be created in the users home directory.
     /// </summary>
-    public string   PreferencesDirectory { get; set; } = ".prefs/";
-    public PathType PreferencesFileType  { get; set; } = PathType.External;
+    public string PreferencesDirectory { get; set; } = ".prefs/";
+
+    public PathType PreferencesFileType { get; set; } = PathType.External;
 
     // ------------------------------------------
 
     public int IdleFPS       { get; set; } = 60;
-    public int ForegroundFPS { get; set; }
+    public int ForegroundFPS { get; set; } = 60;
 
     // ------------------------------------------
 
     public int  AudioDeviceSimultaneousSources { get; set; } = 16;
     public int  AudioDeviceBufferSize          { get; set; } = 512;
     public int  AudioDeviceBufferCount         { get; set; } = 9;
-    public bool DisableAudio                   { get; set; }
+    public bool DisableAudio                   { get; set; } = false;
 
     // ------------------------------------------
 
@@ -83,7 +84,7 @@ public class ApplicationConfiguration
     // ------------------------------------------
 
     public GLEmulationType GLEmulation { get; set; } = GLEmulationType.GL20;
-    public bool            Debug       { get; set; }
+    public bool            GLDebug     { get; set; } = false;
 
     /// <summary>
     /// Determines whether the application should pause when it loses focus.
@@ -190,8 +191,8 @@ public class ApplicationConfiguration
     // ========================================================================
     // Default display mode settings.
 
-    protected const int DefaultRefreshRate     = 60;
-    protected const int DefaultBitsPerPixel    = 32;
+    protected const int DefaultRefreshRate  = 60;
+    protected const int DefaultBitsPerPixel = 32;
 
     // ========================================================================
 
@@ -220,7 +221,7 @@ public class ApplicationConfiguration
 
         return copy;
     }
-    
+
     /// <summary>
     /// Sets this ApplicationConfiguration settings, using settings from
     /// the supplied ApplicationConfiguration object.
@@ -231,24 +232,24 @@ public class ApplicationConfiguration
         AudioDeviceSimultaneousSources = config.AudioDeviceSimultaneousSources;
         AudioDeviceBufferSize          = config.AudioDeviceBufferSize;
         AudioDeviceBufferCount         = config.AudioDeviceBufferCount;
-        Debug                          = config.Debug;
-        TransparentFramebuffer         = config.TransparentFramebuffer;
-        HdpiMode                       = config.HdpiMode;
-        Depth                          = config.Depth;
-        Stencil                        = config.Stencil;
-        Samples                        = config.Samples;
-        IdleFPS                        = config.IdleFPS;
-        ForegroundFPS                  = config.ForegroundFPS;
+        // --------------------------------------
+        GLDebug                        = config.GLDebug;
+        GLEmulation                    = config.GLEmulation;
         GLContextMajorVersion          = config.GLContextMajorVersion;
         GLContextMinorVersion          = config.GLContextMinorVersion;
         GLContextRevision              = config.GLContextRevision;
+        GLProfilingEnabled             = config.GLProfilingEnabled;
+        // --------------------------------------
+        InitialBackgroundColor         = config.InitialBackgroundColor;
         Red                            = config.Red;
         Green                          = config.Green;
         Blue                           = config.Blue;
         Alpha                          = config.Alpha;
+        // --------------------------------------
         PreferencesDirectory           = config.PreferencesDirectory;
         PreferencesFileType            = config.PreferencesFileType;
-        GLEmulation                    = config.GLEmulation;
+        // --------------------------------------
+        Title                          = config.Title;
         WindowX                        = config.WindowX;
         WindowY                        = config.WindowY;
         WindowWidth                    = config.WindowWidth;
@@ -259,15 +260,20 @@ public class ApplicationConfiguration
         WindowMaxHeight                = config.WindowMaxHeight;
         WindowIconPathType             = config.WindowIconPathType;
         WindowIconPaths                = config.WindowIconPaths;
-        InitialVisibility              = config.InitialVisibility;
-        VSyncEnabled                   = config.VSyncEnabled;
         WindowResizable                = config.WindowResizable;
         WindowDecorated                = config.WindowDecorated;
         WindowMaximized                = config.WindowMaximized;
+        InitialVisibility              = config.InitialVisibility;
+        VSyncEnabled                   = config.VSyncEnabled;
         AutoIconify                    = config.AutoIconify;
-        InitialBackgroundColor         = config.InitialBackgroundColor;
-        Title                          = config.Title;
-        GLProfilingEnabled             = config.GLProfilingEnabled;
+        // --------------------------------------
+        TransparentFramebuffer         = config.TransparentFramebuffer;
+        HdpiMode                       = config.HdpiMode;
+        Depth                          = config.Depth;
+        Stencil                        = config.Stencil;
+        Samples                        = config.Samples;
+        IdleFPS                        = config.IdleFPS;
+        ForegroundFPS                  = config.ForegroundFPS;
         MaxNetThreads                  = config.MaxNetThreads;
     }
 
@@ -376,9 +382,9 @@ public class ApplicationConfiguration
     public virtual IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
         return new IGraphicsDevice.DisplayMode( DefaultWindowWidth,
-                                               DefaultWindowHeight,
-                                               DefaultRefreshRate,
-                                               DefaultBitsPerPixel );
+                                                DefaultWindowHeight,
+                                                DefaultRefreshRate,
+                                                DefaultBitsPerPixel );
     }
 
     /// <summary>
@@ -391,7 +397,7 @@ public class ApplicationConfiguration
     /// </returns>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
-        return Array.Empty<IGraphicsDevice.DisplayMode>();
+        return Array.Empty< IGraphicsDevice.DisplayMode >();
     }
 
     /// <summary>
@@ -404,7 +410,7 @@ public class ApplicationConfiguration
     /// </returns>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
-        return Array.Empty<IGraphicsDevice.DisplayMode>();
+        return Array.Empty< IGraphicsDevice.DisplayMode >();
     }
 
     // ========================================================================

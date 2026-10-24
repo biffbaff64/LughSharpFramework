@@ -34,9 +34,6 @@ namespace LughSharp.Source.Audio.Maponus.Decoding;
 [PublicAPI]
 public class Bitstream
 {
-//TODO: much of the parsing currently occurs in the various decoders.
-// this should be moved into this class and associated inner classes.
-
     /// <summary>
     /// Synchronization control constant for the initial
     /// synchronization to the start of a frame.
@@ -48,6 +45,8 @@ public class Bitstream
     /// synchronizations.
     /// </summary>
     public const sbyte StrictSync = 1;
+
+    // ========================================================================
 
     /// <summary>
     /// Maximum size of the frame buffer:
@@ -62,6 +61,9 @@ public class Bitstream
         0x00000FFF, 0x00001FFF, 0x00003FFF, 0x00007FFF, 0x0000FFFF, 0x0001FFFF
     ];
 
+    /// <summary>
+    /// The CRC table.
+    /// </summary>
     private readonly Crc16[] _crc;
 
     /// <summary>
@@ -74,9 +76,20 @@ public class Bitstream
     /// </summary>
     private readonly sbyte[] _frameBytes;
 
-    private readonly Header         _header;
+    /// <summary>
+    /// The header.
+    /// </summary>
+    private readonly Header _header;
+
+    /// <summary>
+    /// The source stream.
+    /// </summary>
     private readonly PushbackStream _sourceStream;
-    private readonly sbyte[]        _syncBuffer;
+
+    /// <summary>
+    /// The sync buffer.
+    /// </summary>
+    private readonly sbyte[] _syncBuffer;
 
     /// <summary>
     /// Number (0-31, from MSB to LSB) of next bit for get_bits()
@@ -88,6 +101,9 @@ public class Bitstream
     /// </summary>
     private int _frameSize;
 
+    /// <summary>
+    /// Single channel mode.
+    /// </summary>
     private bool _singleChMode;
 
     /// <summary>
@@ -101,7 +117,7 @@ public class Bitstream
     private int _wordPointer;
 
     // ========================================================================
-    
+
     /// <summary>
     /// Create a IBitstream that reads data from a given InputStream.
     /// </summary>
@@ -161,6 +177,13 @@ public class Bitstream
         return result;
     }
 
+    /// <summary>
+    /// Reads and parses the next frame from the input source.
+    /// </summary>
+    /// <returns>
+    /// The Header describing details of the frame read, or null if the end
+    /// of the stream has been reached.
+    /// </returns>
     private Header ReadNextFrame()
     {
         if ( _frameSize == -1 )
@@ -192,6 +215,9 @@ public class Bitstream
         }
     }
 
+    /// <summary>
+    /// Closes the current frame, allowing the next frame to be read.
+    /// </summary>
     public void CloseFrame()
     {
         _frameSize   = -1;
@@ -342,6 +368,13 @@ public class Bitstream
         return id3;
     }
 
+    /// <summary>
+    /// Returns true if the given header string matches the given sync mode.
+    /// </summary>
+    /// <param name="headerstring"> The header string to check. </param>
+    /// <param name="syncmode"> The sync mode to check. </param>
+    /// <param name="word"> The word to check. </param>
+    /// <returns> True if the header string matches the sync mode. </returns>
     public bool IsSyncMark( int headerstring, int syncmode, int word )
     {
         bool sync;

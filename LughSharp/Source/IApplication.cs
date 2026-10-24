@@ -92,6 +92,11 @@ public interface IApplication : IDisposable
 {
     /// <summary>
     /// What <see cref="ApplicationType"/> the application has.
+    /// For instance:-
+    /// <li>    <see cref="ApplicationType.Windows"/>,</li>
+    /// <li>    <see cref="ApplicationType.Android"/>,</li>
+    /// <li>    <see cref="ApplicationType.IOS"/></li>
+    /// etc.
     /// </summary>
     ApplicationType AppType { get; }
 

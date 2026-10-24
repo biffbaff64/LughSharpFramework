@@ -28,17 +28,6 @@ COMPLETED:
 - Sprite Scrolling.
 - Update Logger.Debug and Logger.Error to acceot NULL messages and report them as such.
 
-ISSUES:
--------
-
-- AssetManager needs an update to support Json files
-
-- The framework is currently using NewtonSoft.Json AND System.Text.Json. Until LughSharp.Json
-  is ready, pick ONE of the others and remove the 3rd.
-
-- SelectBox - Has problems involving initial startup state, item selection. I'm currently
-  debugging but having difficulty finding the problem.
-
 IN PROGRESS:
 ------------
 
@@ -73,12 +62,6 @@ TODO:
 - 2D Particle System needs testing and/or finishing.
 - Distance Field Font generation.
 - Wiki
-- UIElementBuilderTest
-
-
-
-
-
 
 TESTS NEEDED:
 -------------
@@ -105,28 +88,5 @@ FUTURE UPDATES:
 - SpriteFont support.
 - Add AnimatedTileBuilder to TiledMap support.
 - Network / HTTP etc.
-
-
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
--------------------------------------------------------------------------------
-
-ref (method parameters)
------------------------
-
-- pass by reference. Variable passed must be initialised first. (check other uses of ref).
-- the method MAY modify parameter.
-
-out (method parameters)
------------------------
-
-- Like ref but variable does not need to be initialised.
-- the method MUST modify parameter.
-
-in (method parameters)
-----------------------
-
-- pass by reference but disable modification.
-- the method CANNOT modify parameter.
 
 

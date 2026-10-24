@@ -47,6 +47,7 @@ public class AssetManager : IDisposable
     [
         typeof( BitmapFont ),
         typeof( Cubemap ),
+        typeof( I18NBundle ),
         typeof( IMusic ),
         typeof( ISound ),
         typeof( ParticleEffect ),
@@ -142,6 +143,7 @@ public class AssetManager : IDisposable
             SetLoader( typeof( PolygonRegion ),     new PolygonRegionLoader( resolver ) );
             SetLoader( typeof( ShaderProgram ),     new ShaderProgramLoader( resolver ) );
             SetLoader( typeof( Cubemap ),           new CubemapLoader( resolver ) );
+            SetLoader( typeof( I18NBundle ),        new I18NBundleLoader( resolver ) );
 
             //TODO:
             // 3D Particle effect loader here...
@@ -151,8 +153,6 @@ public class AssetManager : IDisposable
             
             // .json loader here...
 //            SetLoader( typeof( Json ), ",json", new JsonLoader( resolver ) );
-            
-            // I18NBundle loader here...
             //@formatter:on
 
             Logger.Debug( "Done." );

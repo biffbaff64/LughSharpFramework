@@ -125,6 +125,9 @@ public class CircularByteBuffer
         return new CircularByteBuffer( this );
     }
 
+    /// <summary>
+    /// Resets the buffer to its initial state.
+    /// </summary>
     public void Reset()
     {
         _index    = 0;
@@ -186,6 +189,11 @@ public class CircularByteBuffer
         }
     }
 
+    /// <summary>
+    /// Gets the value at the given offset.
+    /// </summary>
+    /// <param name="offset"> The offset to get. </param>
+    /// <returns> The value at the given offset. </returns>
     private byte InternalGet( int offset )
     {
         int ind = _index + offset;
@@ -205,6 +213,11 @@ public class CircularByteBuffer
         return _buffer[ ind ];
     }
 
+    /// <summary>
+    /// Sets the value at the given offset.
+    /// </summary>
+    /// <param name="offset"> The offset to set. </param>
+    /// <param name="valueToSet"> The value to set at the given offset. </param>
     private void InternalSet( int offset, byte valueToSet )
     {
         int ind = _index + offset;

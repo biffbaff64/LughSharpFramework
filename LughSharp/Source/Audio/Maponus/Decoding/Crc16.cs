@@ -38,6 +38,9 @@ public class Crc16
 
     // ========================================================================
 
+    /// <summary>
+    /// Initializes the CRC16 algorithm with the polynomial 0x8005.
+    /// </summary>
     static Crc16()
     {
         _polynomial = ( short )SupportClass.Identity( 0x8005 );

@@ -29,16 +29,23 @@ using Exception = System.Exception;
 namespace LughSharp.Source.Audio.Maponus.Decoding;
 
 /// <summary>
-/// The DecoderException represents the class of errors that can occur when decoding MPEG audio.
+/// The DecoderException represents the class of errors that can occur when
+/// decoding MPEG audio.
 /// </summary>
 /// <remarks>
-/// This exception is used to signal errors that occur specifically during the decoding of MPEG audio streams.
-/// It extends from the <see cref="Mp3SharpException"/> class and adds additional context with an error code.
+/// This exception is used to signal errors that occur specifically during the
+/// decoding of MPEG audio streams. It extends from the <see cref="Mp3SharpException"/>
+/// class and adds additional context with an error code.
 /// </remarks>
 [Serializable]
 [PublicAPI]
 public class DecoderException : Mp3SharpException
 {
+    /// <summary>
+    /// Gets or sets the error code associated with this exception.
+    /// </summary>
+    public int ErrorCode { get; set; }
+
     // ========================================================================
 
     /// <summary>
@@ -81,30 +88,25 @@ public class DecoderException : Mp3SharpException
         ErrorCode = info.GetInt32( "ErrorCode" );
     }
 
-    /// <summary>
-    /// Gets or sets the error code associated with this exception.
-    /// </summary>
-    public int ErrorCode { get; set; }
-
-    /// <summary>
-    /// Sets the <see cref="SerializationInfo"/> with information about the exception.
-    /// </summary>
-    /// <param name="info">The object that holds the serialized object data.</param>
-    /// <param name="context">The contextual information about the source or destination.</param>
-    /// <exception cref="ArgumentNullException">Thrown when the info parameter is null.</exception>
-    [Obsolete( "This API supports obsolete formatter-based serialization. It should not be called or extended by application code.",
-               DiagnosticId = "SYSLIB0051",
-               UrlFormat = "https://aka.ms/dotnet-warnings/{0}" )]
-    public override void GetObjectData( SerializationInfo info, StreamingContext context )
-    {
-        //TODO: This needs replacing!!
-
-        Guard.Against.Null( info );
-
-        info.AddValue( "ErrorCode", ErrorCode );
-
+//    /// <summary>
+//    /// Sets the <see cref="SerializationInfo"/> with information about the exception.
+//    /// </summary>
+//    /// <param name="info">The object that holds the serialized object data.</param>
+//    /// <param name="context">The contextual information about the source or destination.</param>
+//    /// <exception cref="ArgumentNullException">Thrown when the info parameter is null.</exception>
+//    [Obsolete( "This API supports obsolete formatter-based serialization. It should not be called or extended by application code.",
+//               DiagnosticId = "SYSLIB0051",
+//               UrlFormat = "https://aka.ms/dotnet-warnings/{0}" )]
+//    public override void GetObjectData( SerializationInfo info, StreamingContext context )
+//    {
+//        //TODO: This needs replacing!!
+//
+//        Guard.Against.Null( info );
+//
+//        info.AddValue( "ErrorCode", ErrorCode );
+//
 //        base.GetObjectData( info, context );
-    }
+//    }
 
     /// <summary>
     /// Returns the error message that corresponds to the specified error code.

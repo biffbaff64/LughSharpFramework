@@ -39,9 +39,6 @@ public class Decoder
 
     private static readonly Parameters _decoderDefaultParams = new();
 
-    // ========================================================================
-    // ========================================================================
-
     private readonly Equalizer? _equalizer;
 
     // ========================================================================
@@ -260,16 +257,21 @@ public class Decoder
         // TODO: allow channel output selection type (LEFT, RIGHT, BOTH, DOWNMIX)
         switch ( layer )
         {
-            case 3:
+            case 1:
             {
-                _l3Decoder ??= new LayerIIIDecoder( stream,
-                                                    header,
-                                                    _leftChannelFilter,
-                                                    _rightChannelFilter,
-                                                    _output,
-                                                    ( int )OutputChannelsEnum.BothChannels );
+                if ( _l1Decoder == null )
+                {
+                    _l1Decoder = new LayerIDecoder();
 
-                decoder = _l3Decoder;
+                    _l1Decoder.Create( stream,
+                                       header,
+                                       _leftChannelFilter,
+                                       _rightChannelFilter,
+                                       _output,
+                                       ( int )OutputChannelsEnum.BothChannels );
+                }
+
+                decoder = _l1Decoder;
 
                 break;
             }
@@ -293,21 +295,16 @@ public class Decoder
                 break;
             }
 
-            case 1:
+            case 3:
             {
-                if ( _l1Decoder == null )
-                {
-                    _l1Decoder = new LayerIDecoder();
+                _l3Decoder ??= new LayerIIIDecoder( stream,
+                                                    header,
+                                                    _leftChannelFilter,
+                                                    _rightChannelFilter,
+                                                    _output,
+                                                    ( int )OutputChannelsEnum.BothChannels );
 
-                    _l1Decoder.Create( stream,
-                                       header,
-                                       _leftChannelFilter,
-                                       _rightChannelFilter,
-                                       _output,
-                                       ( int )OutputChannelsEnum.BothChannels );
-                }
-
-                decoder = _l1Decoder;
+                decoder = _l3Decoder;
 
                 break;
             }

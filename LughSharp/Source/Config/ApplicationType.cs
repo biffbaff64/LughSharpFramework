@@ -30,60 +30,7 @@ namespace LughSharp.Source.Config;
 [PublicAPI]
 public enum ApplicationType
 {
-    /// <summary>
-    /// Windows32 Platform
-    /// </summary>
-    Windows,
-
-    /// <summary>
-    /// Windows Cross Platform Opengl Platform
-    /// </summary>
-    WindowsGL,
-
-    /// <summary>
-    /// Windows Cross Platform Opengles Platform
-    /// </summary>
-    WindowsGles,
-
-    /// <summary>
-    /// Windows Vulkan Platform
-    /// </summary>
-    WindowsVk,
-
-    /// <summary>
-    /// Windows Game Development Kit Platform
-    /// </summary>
-    WindowsGdk,
-
-    /// <summary>
-    /// Web-based Graphics Library platform.
-    /// </summary>
-    WebGL,
-
-    /// <summary>
-    /// XBox One Platform
-    /// </summary>
-    XBoxOne,
-
-    /// <summary>
-    /// XBox Series Platform
-    /// </summary>
-    XBoxSeries,
-
-    /// <summary>
-    /// Nintendo Switch Platform
-    /// </summary>
-    NintendoSwitch,
-
-    /// <summary>
-    /// PlayStation 4 Platform
-    /// </summary>
-    PlayStation4,
-
-    /// <summary>
-    /// PlayStation 5 Platform
-    /// </summary>
-    PlayStation5,
+//	Android, Desktop, HeadlessDesktop, Applet, WebGL, iOS
 
     /// <summary>
     /// Android Platform
@@ -96,13 +43,21 @@ public enum ApplicationType
     IOS,
 
     /// <summary>
-    /// Mac OS Platform
+    /// Desktop Platform
     /// </summary>
-    MacOs,
+    Desktop,
+
+    /// <summary>
+    /// Web-based Graphics Library platform.
+    /// </summary>
+    WebGL,
 
     // ------------------------------------------
-    
-    Default = Windows
+    // ------------------------------------------
+    // ------------------------------------------
+    // ------------------------------------------
+
+    Default = Desktop,
 }
 
 // ============================================================================

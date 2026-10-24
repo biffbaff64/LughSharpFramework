@@ -592,7 +592,7 @@ public class Tree< TNode, TValue > : WidgetGroup
         var over = false;
 
         if ( ( node == OverNode )
-          && ( Engine.App.AppType == ApplicationType.WindowsGL )
+          && ( Engine.App.AppType == ApplicationType.Desktop )
           && ( !_selection.Multiple || ( !InputUtils.CtrlKey() && !InputUtils.ShiftKey() ) ) )
         {
             float mouseX = ScreenToLocalCoordinates( _tmp.Set( Engine.Input.GetX(), 0 ) ).X;

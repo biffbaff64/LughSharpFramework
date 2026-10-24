@@ -43,12 +43,23 @@ namespace LughSharp.Source;
 [PublicAPI]
 public static class Engine
 {
-    public static IApplication    App      { get; set; } = null!;
-    public static IAudio          Audio    { get; set; } = null!;
-    public static IInput          Input    { get; set; } = null!;
-    public static IFiles          Files    { get; set; } = null!;
+    /// <inheritdoc cref="IApplication"/>
+    public static IApplication App { get; set; } = null!;
+
+    /// <inheritdoc cref="IAudio"/>
+    public static IAudio Audio { get; set; } = null!;
+
+    /// <inheritdoc cref="IInput"/>
+    public static IInput Input { get; set; } = null!;
+
+    /// <inheritdoc cref="IFiles"/>
+    public static IFiles Files { get; set; } = null!;
+
+    /// <inheritdoc cref="IGraphicsDevice"/>
     public static IGraphicsDevice Graphics { get; set; } = null!;
-    public static INet            Net      { get; set; } = null!;
+
+    /// <inheritdoc cref="INet"/>
+    public static INet Net { get; set; } = null!;
 
     // ========================================================================
 
@@ -91,7 +102,8 @@ public static class Engine
     /// </para>
     /// <para>
     /// Note: Only the flag is provided by this library. It is intended for use in
-    /// local game code.
+    /// local game code. Paragraph 2 above is not governed by this flag. Only paragraph
+    /// 1 applies.
     /// </para>
     /// Defaults to FALSE and, on non-debug builds this will be enforced.
     /// </summary>
@@ -131,7 +143,7 @@ public static class Engine
         }
         set;
     } = false;
-    
+
     // ========================================================================
 
     /// <summary>
@@ -167,8 +179,15 @@ public static class Engine
     /// This method will also check for the existence of the environment variable
     /// <c>DEV_MODE</c> or <c>DEVMODE</c>, and set the <see cref="DevMode"/> flag
     /// accordingly.
+    /// </para>
+    /// <para>
     /// A check for the environment variable <c>GOD_MODE</c> or <c>GODMODE</c> will
     /// also be performed, and the flag <see cref="GodMode"/> will also be set accordingly.
+    /// </para>
+    /// <para>
+    /// A check for the environment variable <c>MOBILE_EMU</c> or <c>MOBILEEMU</c> will
+    /// also be performed, and the flag <see cref="IsMobileOnDesktop"/> will also be set
+    /// accordingly.
     /// </para>
     /// </summary>
     public static void Initialise( IApplication app, ApplicationType appType, string assetsRoot = "Assets" )
@@ -177,7 +196,8 @@ public static class Engine
 
         CheckEnableDevMode();
         CheckEnableGodMode();
-        
+        CheckEnableMobileEmu();
+
         Logger.Initialise( enableWriteToFile: true );
         Logger.EnableDebugLogging();
         Logger.EnableErrorLogging();
@@ -198,6 +218,7 @@ public static class Engine
     /// available and is set to "TRUE" or "true". This environment variable must
     /// be named DEVMODE or DEV_MODE.
     /// </summary>
+    /// <seealso cref="DevMode"/>
     public static void CheckEnableDevMode()
     {
         DevMode = CheckEnvironmentVar( "DEV_MODE", "TRUE" );
@@ -215,6 +236,7 @@ public static class Engine
     /// available and is set to "TRUE" or "true". This environment variable must
     /// be named GODMODE or GOD_MODE.
     /// </summary>
+    /// <seealso cref="GodMode"/>
     public static void CheckEnableGodMode()
     {
         GodMode = false;
@@ -230,6 +252,29 @@ public static class Engine
         }
 
         Logger.Debug( $"GodMode: {( GodMode ? "Enabled" : "Disabled" )}" );
+    }
+
+    /// <summary>
+    /// Enables <see cref="IsMobileOnDesktop"/> if the relevant environment variable is
+    /// available and is set to "TRUE" or "true". This environment variable must
+    /// be named MOBILE_EMU or MOBILEEMU.
+    /// </summary>
+    /// <seealso cref="IsMobileOnDesktop"/>
+    public static void CheckEnableMobileEmu()
+    {
+        IsMobileOnDesktop = false;
+
+        if ( DevMode )
+        {
+            IsMobileOnDesktop = CheckEnvironmentVar( "MOBILE_EMU", "TRUE" );
+
+            if ( !IsMobileOnDesktop )
+            {
+                IsMobileOnDesktop = CheckEnvironmentVar( "MOBILEEMU", "TRUE" );
+            }
+        }
+
+        Logger.Debug( $"MobileEmu: {( IsMobileOnDesktop ? "Enabled" : "Disabled" )}" );
     }
 
     // ========================================================================

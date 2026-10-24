@@ -12,8 +12,9 @@ Thanks for wanting to contribute!
 4. Run tests: ...
 
 ## Finding something to work on
-Look for issues labelled:
-- good first issue
-- help wanted
+1. Look for issues labelled:
+   - good first issue
+   - help wanted
+2. Also check TODO.md
 
 ## Making a pull request

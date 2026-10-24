@@ -131,8 +131,7 @@ public abstract class GraphicsDevice : IGraphicsDevice
         return appType switch
                {
                    ApplicationType.Android     => BackendType.AndroidGLES,
-                   ApplicationType.WindowsGles => BackendType.OpenGLES,
-                   ApplicationType.WindowsGL   => BackendType.OpenGL,
+                   ApplicationType.Desktop     => BackendType.OpenGLES,
                    ApplicationType.WebGL       => BackendType.WebGL,
                    ApplicationType.IOS         => BackendType.IOSGLES,
 

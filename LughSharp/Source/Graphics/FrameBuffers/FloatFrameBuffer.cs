@@ -94,7 +94,7 @@ public class FloatFrameBuffer : FrameBuffer
 
         var result = new Texture2D( data );
 
-        if ( Engine.App.AppType == ApplicationType.WindowsGL )
+        if ( Engine.App.AppType == ApplicationType.WebGL )
         {
             result.SetFilter( TextureFilterMode.Linear, TextureFilterMode.Linear );
         }

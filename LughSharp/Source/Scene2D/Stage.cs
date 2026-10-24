@@ -223,11 +223,7 @@ public class Stage : InputAdapter, IDisposable
         // Update over actor for the mouse on the desktop.
         switch ( Engine.App.AppType )
         {
-            case ApplicationType.Windows:
-            case ApplicationType.WindowsGdk:
-            case ApplicationType.WindowsGL:
-            case ApplicationType.WindowsGles:
-            case ApplicationType.WindowsVk:
+            case ApplicationType.Desktop:
             case ApplicationType.WebGL:
                 _mouseOverActor = FireEnterAndExit( _mouseOverActor, _mouseScreenX, _mouseScreenY, -1 );
 

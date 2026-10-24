@@ -29,6 +29,7 @@ namespace LughSharp.Source.Utils.Logging;
 /// handles safe transitions, guards against illegal jumps, and drives the active
 /// state's update loop.
 /// </summary>
+/// <seealso cref="StateID"/>
 [PublicAPI]
 public class StateMachine
 {
@@ -40,6 +41,8 @@ public class StateMachine
     /// </summary>
     public event Action< StateID, StateID >? OnStateTransitioned;
 
+    // ========================================================================
+    
     private Dictionary< StateID, IState > _states = new();
     private IState?                       _currentState;
 
@@ -70,7 +73,7 @@ public class StateMachine
             // Guard check: Is this transition allowed?
             if ( !ValidateTransition( _currentState.ID, nextStateID ) )
             {
-                Logging.Logger.Error
+                Logger.Error
                     (
                      $"[Warning] Illegal transition attempted from "
                    + $"{_currentState.ID} to {nextStateID}"

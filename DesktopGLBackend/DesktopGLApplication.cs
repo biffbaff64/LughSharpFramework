@@ -122,7 +122,7 @@ public class DesktopGLApplication : IApplication
         //
         // This MUST be the first call, so that the Logger and Engine.App
         // global are initialised correctly.
-        Engine.Initialise( this, ApplicationType.WindowsGL );
+        Engine.Initialise( this, ApplicationType.Desktop );
 
         // ====================================================================
         // ====================================================================
@@ -416,7 +416,7 @@ public class DesktopGLApplication : IApplication
             DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.TransparentFramebuffer, true );
         }
 
-        if ( config.Debug )
+        if ( config.GLDebug )
         {
             DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
         }
@@ -445,7 +445,7 @@ public class DesktopGLApplication : IApplication
     /// <summary>
     /// What <see cref="ApplicationType"/> the application has.
     /// </summary>
-    public ApplicationType AppType => ApplicationType.WindowsGL;
+    public ApplicationType AppType => ApplicationType.Desktop;
 
     /// <summary>
     /// Creates the input device for this application window.
@@ -888,7 +888,7 @@ public class DesktopGLApplication : IApplication
         DotGLFW.Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
         GLUtils.CreateCapabilities();
 
-        if ( config.Debug )
+        if ( config.GLDebug )
         {
             GLDebugControl.EnableGLDebugOutput();
         }

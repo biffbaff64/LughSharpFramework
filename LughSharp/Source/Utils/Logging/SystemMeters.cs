@@ -24,30 +24,23 @@
 
 namespace LughSharp.Source.Utils.Logging;
 
+//TODO:This may be removed
+
 /// <summary>
 /// Statistical Logging meters for various LughSharp Exceptions. 
 /// </summary>
 [PublicAPI]
 public enum SystemMeters
 {
-    IllegalGameMode         = 0,
-    SoundLoadFail           = 1,
-    BadPlayerAction         = 2,
-    FontLoadFailure         = 3,
-    BorderedFontLoadFailure = 4,
+    UnknownException = 0,
+    DummyMeter       = 1,
 
-    IOException                    = 5,
-    IndexOutOfBoundsException      = 6,
-    ArrayIndexOutOfBoundsException = 7,
-    SaxException                   = 8,
-    InterruptedException           = 9,
-    NullPointerException           = 10,
-    IllegalStateException          = 11,
-    LughRuntimeException           = 12,
-    EntityDataException            = 13,
-
-    UnknownException = 14,
-    DummyMeter       = 15,
+    // ------------------------------------------
+    
+    SoundLoadFail   = 2,
+    FontLoadFailure = 3,
+    
+    // ------------------------------------------
 }
 
 // ============================================================================

@@ -4,9 +4,9 @@
 Style Guide for contributors
 ----------------------------
 
-This style guide is for C# code developed for the LughSharp Framework, and must be adhered
-to by contributors.
-It is heavily based on the Google C# Style Guide.
+- This style guide is for C# code developed for the LughSharp Framework, and must be adhered
+  to by contributors.
+- It is heavily based on the Google C# Style Guide.
 
 Formatting guidelines
 =====================
@@ -14,9 +14,9 @@ Formatting guidelines
 Naming rules
 ------------
 
-Naming rules follow [Microsoft’s C# naming guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines).
-Where Microsoft’s naming guidelines are unspecified (e.g. private and local variables), rules are taken
-fromthe [CoreFX C# coding guidelines](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md).
+- Naming rules follow [Microsoft’s C# naming guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/naming-guidelines).
+- Where Microsoft’s naming guidelines are unspecified (e.g. private and local variables), rules are taken
+  from the [CoreFX C# coding guidelines](https://github.com/dotnet/runtime/blob/master/docs/coding-guidelines/coding-style.md).
 
 Rule summary:
 -------------
@@ -41,12 +41,17 @@ Files
 - Where possible the file name should be the same as the name of the main class
   in the file, e.g. MyClass.cs.
 - In general, prefer one core class per file.
-  - All source files must have a copyright header, and have a footer comprised of 2 lines of '=' characters with a minimum length of 80 characters
+- Constructors should be positioned at the START of source files.
+- Finalizers should be positioned at the END of source files.
+- Methods like **Dispose (), ToString (), Equals (), GetHashCode () (Essentially any overridden system methods )**
+  should be positioned at the END of source files.
+- All source files should have a footer at the bottom of the file, consisting of two lines of '=' signs and
+  ending at column 80.
     - eg:
-    
-        // ============================================================================
-        // ============================================================================
-
+    ````
+        // ============================================== ( end at col 80 )
+        // ============================================== ( end at col 80 )
+    ````
 
 Organization
 ------------
@@ -104,6 +109,7 @@ Whitespace rules
 - For function definitions and calls, if the arguments do not all fit on one line they should be broken up onto multiple
   lines, with each subsequent line aligned with the first argument. If there is not enough room for this, arguments may
   instead be placed on subsequent lines with a four space indent.
+
   The code example below illustrates this.
 
 ```
@@ -275,6 +281,7 @@ Property styles
 
 - For single line read-only properties, prefer expression body properties (=>) when possible.
 - For everything else, use the older { get; set; } syntax.
+- Use **field** instead of private backing variables.
 
 Expression body syntax
 ----------------------
@@ -339,111 +346,143 @@ ref and out
 LINQ
 ----
 
-In general, prefer single line LINQ calls and imperative code, rather than long chains of LINQ. Mixing imperative code
-and heavily chained LINQ is often hard to read.
-Prefer member extension methods over SQL-style LINQ keywords - e.g. prefer myList.Where(x) to myList where x.
-Avoid Container.ForEach(...) for anything longer than a single statement.
+- In general, prefer single line LINQ calls and imperative code, rather than long chains of LINQ. Mixing imperative code
+  and heavily chained LINQ is often hard to read.
+- Prefer member extension methods over SQL-style LINQ keywords - e.g. prefer myList.Where(x) to myList where x.
+- Avoid Container.ForEach(...) for anything longer than a single statement.
+
 Array vs List
-In general, prefer List<> over arrays for public variables, properties, and return types (keeping in mind the guidance
-on IList / IEnumerable / IReadOnlyList above).
-Prefer List<> when the size of the container can change.
-Prefer arrays when the size of the container is fixed and known at construction time.
-Prefer array for multidimensional arrays.
+--------------
+- In general, prefer List<> over arrays for public variables, properties, and return types (keeping in mind the guidance
+  on IList / IEnumerable / IReadOnlyList above).
+- Prefer List<> when the size of the container can change.
+- Prefer arrays when the size of the container is fixed and known at construction time.
+- Prefer array for multidimensional arrays.
+
 Note:
-array and List<> both represent linear, contiguous containers.
-Similar to C++ arrays vs std::vector, arrays are of fixed capacity, whereas List<> can be added to.
-In some cases arrays are more performant, but in general List<> is more flexible.
+------
+- Array and List<> both represent linear, contiguous containers.
+- Similar to C++ arrays vs std::vector, arrays are of fixed capacity, whereas List<> can be added to.
+- In some cases arrays are more performant, but in general List<> is more flexible.
+
 Folders and file locations
-Be consistent with the project.
-Prefer a flat structure where possible.
-Use of tuple as a return type
-In general, prefer a named class type over Tuple<>, particularly when returning complex types.
-String interpolation vs String.Format() vs String.Concat vs operator+
-In general, use whatever is easiest to read, particularly for logging and assert messages.
-Be aware that chained operator+ concatenations will be slower and cause significant memory churn.
-If performance is a concern, StringBuilder will be faster for multiple string concatenations.
+---------------------------
+- Be consistent with the project.
+- Prefer a flat structure where possible.
+- Use of tuple as a return type
+- In general, prefer a named class type over Tuple<>, particularly when returning complex types.
+- String interpolation vs String.Format() vs String.Concat vs operator+
+- In general, use whatever is easiest to read, particularly for logging and assert messages.
+- Be aware that chained operator+ concatenations will be slower and cause significant memory churn.
+- If performance is a concern, StringBuilder will be faster for multiple string concatenations.
+
 using
-Generally, don’t alias long typenames with using. Often this is a sign that a Tuple<> needs to be turned into a class.
-e.g. using RecordList = List<Tuple<int, float>> should probably be a named class instead.
-Be aware that using statements are only file scoped and so of limited use. Type aliases will not be available for
-external users.
+------
+- Generally, don’t alias long typenames with using. Often this is a sign that a Tuple<> needs to be turned into a class.
+  e.g. using RecordList = List<Tuple<int, float>> should probably be a named class instead.
+- Be aware that using statements are only file scoped and so of limited use. Type aliases will not be available for
+  external users.
+
 Object Initializer syntax
-For example:
+-------------------------
 
-var x = new SomeClass {
-Property1 = value1,
-Property2 = value2,
-};
-Object Initializer Syntax is fine for ‘plain old data’ types.
-Avoid using this syntax for classes or structs with constructors.
-If splitting across multiple lines, indent one block level.
+````
+    var x = new SomeClass
+    {
+        Property1 = value1,
+        Property2 = value2,
+    };
+````
+
+- Object Initializer Syntax is fine for ‘plain old data’ types.
+- Avoid using this syntax for classes or structs with constructors.
+- If splitting across multiple lines, indent one block level.
+
 Namespace naming
-In general, namespaces should be no more than 2 levels deep.
-Don’t force file/folder layout to match namespaces.
-For shared library/module code, use namespaces. For leaf ‘application’ code, such as unity_app, namespaces are not
-necessary.
-New top-level namespace names must be globally unique and recognizable.
-Default values/null returns for structs
-Prefer returning a ‘success’ boolean value and a struct out value.
-Where performance isn’t a concern and the resulting code significantly more readable (e.g. chained null conditional
-operators vs deeply nested if statements) nullable structs are acceptable.
+----------------
+- In general, namespaces should be no more than 2 levels deep.
+- Don’t force file/folder layout to match namespaces.
+- For shared library/module code, use namespaces. For leaf ‘application’ code, such as unity_app, namespaces are not
+- necessary.
+- New top-level namespace names must be globally unique and recognizable.
+- Default values/null returns for structs
+- Prefer returning a ‘success’ boolean value and a struct out value.
+- Where performance isn’t a concern and the resulting code significantly more readable (e.g. chained null conditional
+  operators vs deeply nested if statements) nullable structs are acceptable.
+
 Notes:
+------
+- Nullable structs are convenient, but reinforce the general ‘null is failure’ pattern Google prefers to avoid. We will
+  investigate a StatusOr equivalent in the future, if there is enough demand.
 
-Nullable structs are convenient, but reinforce the general ‘null is failure’ pattern Google prefers to avoid. We will
-investigate a StatusOr equivalent in the future, if there is enough demand.
 Removing from containers while iterating
+-----------------------------------------
 C# (like many other languages) does not provide an obvious mechanism for removing items from containers while iterating.
-There are a couple of options:
 
-If all that is required is to remove items that satisfy some condition, someList.RemoveAll(somePredicate) is
-recommended.
-If other work needs to be done in the iteration, RemoveAll may not be sufficient. A common alternative pattern is to
-create a new container outside of the loop, insert items to keep in the new container, and swap the original container
-with the new one at the end of iteration.
+- There are a couple of options:
+
+    - If all that is required is to remove items that satisfy some condition, someList.RemoveAll(somePredicate) is
+      recommended.
+    - If other work needs to be done in the iteration, RemoveAll may not be sufficient. A common alternative pattern is to
+      create a new container outside of the loop, insert items to keep in the new container, and swap the original container
+      with the new one at the end of iteration.
+
 Calling delegates
+------------------
 When calling a delegate, use Invoke() and use the null conditional operator - e.g. SomeDelegate?.Invoke(). This clearly
 marks the call at the callsite as ‘a delegate that is being called’. The null check is concise and robust against
 threading race conditions.
+
 The var keyword
+----------------
 Use of var is encouraged if it aids readability by avoiding type names that are noisy, obvious, or unimportant.
+
 Encouraged:
 
 When the type is obvious - e.g. var apple = new Apple();, or var request = Factory.Create<HttpRequest>();
 For transient variables that are only passed directly to other methods - e.g. var item = GetItem(); ProcessItem(item);
+
 Discouraged:
 
 When working with basic types - e.g. var success = true;
 When working with compiler-resolved built-in numeric types - e.g. var number = 12 * ReturnsFloat();
 When users would clearly benefit from knowing the type - e.g. var listOfItems = GetList();
+
 Attributes
-Attributes should appear on the line above the field, property, or method they are associated with, separated from the
-member by a newline.
-Multiple attributes should be separated by newlines. This allows for easier adding and removing of attributes, and
-ensures each attribute is easy to search for.
+-----------
+- Attributes should appear on the line above the field, property, or method they are associated with, separated from the
+  member by a newline.
+- Multiple attributes should be separated by newlines. This allows for easier adding and removing of attributes, and
+  ensures each attribute is easy to search for.
 
 Argument Naming
+----------------
+
 Derived from the Google C++ style guide.
 
 When the meaning of a function argument is nonobvious, consider one of the following remedies:
 
-If the argument is a literal constant, and the same constant is used in multiple function calls in a way that tacitly
-assumes they’re the same, use a named constant to make that constraint explicit, and to guarantee that it holds.
-Consider changing the function signature to replace a bool argument with an enum argument. This will make the argument
-values self-describing.
-Replace large or complex nested expressions with named variables.
-Consider using Named Arguments to clarify argument meanings at the call site.
-For functions that have several configuration options, consider defining a single class or struct to hold all the
-options and pass an instance of that. This approach has several advantages. Options are referenced by name at the call
-site, which clarifies their meaning. It also reduces function argument count, which makes function calls easier to read
-and write. As an added benefit, call sites don’t need to be changed when another option is added.
-Consider the following example:
+- If the argument is a literal constant, and the same constant is used in multiple function calls in a way that tacitly
+  assumes they’re the same, use a named constant to make that constraint explicit, and to guarantee that it holds.
+- Consider changing the function signature to replace a bool argument with an enum argument. This will make the argument
+  values self-describing.
+- Replace large or complex nested expressions with named variables.
+- Consider using Named Arguments to clarify argument meanings at the call site.
+- For functions that have several configuration options, consider defining a single class or struct to hold all the
+  options and pass an instance of that. This approach has several advantages. Options are referenced by name at the call
+  site, which clarifies their meaning. It also reduces function argument count, which makes function calls easier to read
+  and write. As an added benefit, call sites don’t need to be changed when another option is added.
 
-// Bad - what are these arguments?
-DecimalNumber product = CalculateProduct(values, 7, false, null);
-versus:
+  Consider the following example:
+````
+    // Bad - what are these arguments?
+    DecimalNumber product = CalculateProduct(values, 7, false, null);
 
-// Good
-ProductOptions options = new ProductOptions();
-options.PrecisionDecimals = 7;
-options.UseCache = CacheUsage.DontUseCache;
-DecimalNumber product = CalculateProduct(values, options, completionDelegate: null);
+    versus:
+    
+    // Good
+    ProductOptions options = new ProductOptions();
+    options.PrecisionDecimals = 7;
+    options.UseCache = CacheUsage.DontUseCache;
+    DecimalNumber product = CalculateProduct(values, options, completionDelegate: null);
+````

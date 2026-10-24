@@ -3,6 +3,8 @@
 
 ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 - Complete all conversions so that the code will build.
 - Refactor, where possible and necessary, to take advantage of C# language features.
@@ -20,18 +22,22 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+ISSUES:
+-------
+
+- AssetManager needs an update to support Json files
+
+- The framework is currently using NewtonSoft.Json AND System.Text.Json. Until LughSharp.Json
+  is ready, pick ONE of the others and remove the 3rd.
+
+- Scene2D/UI/SelectBox - Has problems involving initial startup state, item selection. I'm
+- currently debugging but having difficulty finding the problem.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
 - STYLEGUIDE.md needs updating. Some of the information is incorrect.
 - CONTRIBUTING.md needs updating.
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-- Constructors should be positioned at the START of source files.
-- Finalizers should be positioned at the END of source files.
-- Methods like **Dispose(), ToString(), Equals(), GetHashCode() ( Essentially overridden system methods )**
-- should be positioned at the END of source files.
-- All source files should have a footer at the bottom of the file, consisting of two lines of '=' signs
-  80 chars long.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -67,6 +73,27 @@ ALL CLASSES WILL BE UP FOR MODIFICATION FOLLOWING TESTING.
 
 - There seems to be different namings for width/height etc. properties and methods.
   Make it more uniform
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+ref (method parameters)
+-----------------------
+
+- pass by reference. Variable passed must be initialised first. (check other uses of ref).
+- the method MAY modify parameter.
+
+out (method parameters)
+-----------------------
+
+- Like ref but variable does not need to be initialised.
+- the method MUST modify parameter.
+
+in (method parameters)
+----------------------
+
+- pass by reference but disable modification.
+- the method CANNOT modify parameter.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -108,10 +135,10 @@ LUGHSHARP/SOURCE/ASSETS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - AssetDescriptor
-    - DONE - DONE - DONE - AssetHelper
     - DONE - DONE - DONE - AssetLoaderParameters
     - DONE - DONE - DONE - AssetLoadingTask
     - DONE - DONE - DONE - AssetManager
+    - DONE - DONE - DONE - AssetUtils
     - DONE - DONE - DONE - IAssetErrorListener
     - DONE - DONE - DONE - IAssetTask
     - DONE - DONE - DONE - RefCountedContainer
@@ -125,6 +152,7 @@ LUGHSHARP/SOURCE/ASSETS/LOADERS
     - DONE - DONE - DONE - AsynchronousAssetLoader
     - DONE - DONE - DONE - BitmapFontLoader
     - DONE - DONE - DONE - CubemapLoader
+    - DONE - DONE - DONE - I18NBundleLoader
     - DONE - DONE - DONE - ModelLoader
     - DONE - DONE - DONE - MusicLoader
     - DONE - DONE - DONE - ParticleEffectLoader
@@ -169,8 +197,8 @@ LUGHSHARP/SOURCE/AUDIO
     - DONE - DONE - DONE - IMusic
     - DONE - DONE - DONE - ISound
 
-LUGHSHARP/SOURCE/AUDIO/MAPONUS ( MAPONUS is the God of Music )
---------------------------------------------------------------
+LUGHSHARP/SOURCE/AUDIO/MAPONUS
+------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -186,16 +214,15 @@ LUGHSHARP/SOURCE/AUDIO/MAPONUS/DECODING
       ----   ----   ------
     - DONE - DONE - DONE - AudioBase
     - DONE - DONE - DONE - BitReserve
-    -      -      -      - Bitstream
+    - DONE - DONE - DONE - Bitstream
     - DONE - DONE - DONE - BitstreamErrors
     - DONE - DONE - DONE - BitstreamException
-    -      -      -      - Crc16
-    -      -      -      - Decoder
-    -      -      -      - DecoderParameters
-    -      -      -      - DecoderErrors
-    -      -      -      - DecoderException
-    -      -      -      - Equalizer
-    -      -      -      - Header
+    - DONE - DONE - DONE - Crc16
+    - DONE - DONE - DONE - Decoder
+    - DONE - DONE - DONE - DecoderErrors
+    - DONE - DONE - DONE - DecoderException
+    - DONE - DONE - DONE - Equalizer
+    - DONE - DONE - DONE - Header
     -      -      -      - Huffman
     -      -      -      - OutputChannels
     -      -      -      - PushbackStream
@@ -276,8 +303,8 @@ LUGHSHARP/SOURCE/AUDIO/OPENAL
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - AL
-    -      -      -      - ALC
+    -      -      - DONE - AL
+    -      -      - DONE - ALC
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -290,7 +317,7 @@ LUGHSHARP/SOURCE/COLLECTIONS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - ByteArray
-    - DONE - IP   - DONE - CircularByteBuffer
+    - DONE - DONE - DONE - CircularByteBuffer
     - DONE - DONE - DONE - Collections
     - DONE - DONE - DONE - DelayedRemovalList
     - DONE - DONE - DONE - DictionaryExtensions
@@ -317,7 +344,6 @@ LUGHSHARP/SOURCE/CONFIG
     - DONE - DONE - DONE - ApplicationConfiguration
     - DONE - DONE - DONE - ApplicationType
     - DONE - DONE - DONE - LibraryVersion
-    -      -      - DONE - LocalizationManager
     - DONE - DONE - DONE - Platform
     - DONE - DONE - DONE - PlatformFamily
 
@@ -1129,8 +1155,11 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - ComparableTimSort
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
+    // ------------------------------------------
     - IP   - IP   - DONE - GameTime                     May be abandoned
+    // ------------------------------------------
     - DONE - DONE - DONE - HashHelpers
+    - DONE - DONE - DONE - I18NBundle
     - DONE - DONE - DONE - IClipboard
     - DONE - DONE - DONE - IDrawable
     - DONE - DONE - DONE - IManaged
@@ -1189,6 +1218,7 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
 
       CODE   DOCU   FOOTER
       ----   ----   ------
+    - IP   - IP   - DONE - ActorDefinitionAttribute
     - DONE - DONE - DONE - EnumStateManager
     - DONE - DONE - DONE - FPSLogger
     - DONE - DONE - DONE - IPreferences
@@ -1202,6 +1232,7 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
     - DONE - DONE - DONE - StateMachine
     - DONE - DONE - DONE - Stats
     - DONE - IP   - DONE - SystemMeters
+    - IP   - IP   - DONE - UnstableApiAttribute
 
 LUGHSHARP/SOURCE/UTILS/POOLING
 ------------------------------

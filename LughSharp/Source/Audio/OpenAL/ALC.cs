@@ -61,6 +61,7 @@ public class ALC
             {
                 const string Osx   = "OpenAL.framework/OpenAL";
                 const string Linux = "libopenal.so.1";
+                
                 NativeLibrary.TryLoad( Osx, assembly, DllImportSearchPath.System32, out libHandle );
 
                 if ( libHandle == IntPtr.Zero ) //If OSX path didn't work

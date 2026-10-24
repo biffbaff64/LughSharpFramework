@@ -91,18 +91,8 @@ public static class Platform
                {
                    ApplicationType.Android
                     or ApplicationType.IOS
-                    or ApplicationType.MacOs
-                    or ApplicationType.NintendoSwitch
-                    or ApplicationType.PlayStation4
-                    or ApplicationType.PlayStation5
-                    or ApplicationType.WebGL
-                    or ApplicationType.Windows
-                    or ApplicationType.WindowsGdk
-                    or ApplicationType.WindowsGL
-                    or ApplicationType.WindowsGles
-                    or ApplicationType.WindowsVk
-                    or ApplicationType.XBoxOne
-                    or ApplicationType.XBoxSeries => true,
+                    or ApplicationType.Desktop
+                    or ApplicationType.WebGL => true,
 
                    // ---------------------------
 

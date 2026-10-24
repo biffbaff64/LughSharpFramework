@@ -40,9 +40,11 @@ public class Equalizer
     /// </summary>
     public const float BandNotPresent = float.NegativeInfinity;
 
-    private const int Bands = 32;
-
     public static readonly Equalizer PassThruEq = new();
+
+    // ========================================================================
+    
+    private const int Bands = 32;
 
     private readonly float[] _settings = new float[ Bands ];
 
@@ -83,7 +85,7 @@ public class Equalizer
 
             int max = value.Length > Bands ? Bands : value.Length;
 
-            for ( var i = 0; i < max; i++ )
+            for ( int i = 0; i < max; i++ )
             {
                 _settings[ i ] = Limit( value[ i ] );
             }
@@ -106,10 +108,12 @@ public class Equalizer
     }
 
     /// <summary>
-    /// Property to enable setting the equalizer bands based on a specified <see cref="EQFunction"/>.
-    /// The provided <see cref="EQFunction"/> determines the configuration of all equalizer bands,
-    /// with values being computed for each band using the `GetBand(int band)` method of the supplied function.
-    /// When set, all bands of the equalizer are reset and re-initialized in accordance with this function.
+    /// Property to enable setting the equalizer bands based on a specified
+    /// <see cref="EQFunction"/>.
+    /// The provided <see cref="EQFunction"/> determines the configuration of
+    /// all equalizer bands, with values being computed for each band using the
+    /// `GetBand(int band)` method of the supplied function. When set, all bands
+    /// of the equalizer are reset and re-initialized in accordance with this function.
     /// </summary>
     public EQFunction FromEQFunction
     {
@@ -117,7 +121,7 @@ public class Equalizer
         {
             Reset();
 
-            for ( var i = 0; i < Bands; i++ )
+            for ( int i = 0; i < Bands; i++ )
             {
                 _settings[ i ] = Limit( value.GetBand( i ) );
             }
@@ -139,9 +143,9 @@ public class Equalizer
     {
         get
         {
-            var factors = new float[ Bands ];
+            float[] factors = new float[ Bands ];
 
-            for ( var i = 0; i < Bands; i++ )
+            for ( int i = 0; i < Bands; i++ )
             {
                 factors[ i ] = GetBandFactor( _settings[ i ] );
             }
@@ -155,7 +159,7 @@ public class Equalizer
     /// </summary>
     public void Reset()
     {
-        for ( var i = 0; i < Bands; i++ )
+        for ( int i = 0; i < Bands; i++ )
         {
             _settings[ i ] = 0.0f;
         }
@@ -169,7 +173,7 @@ public class Equalizer
     /// <returns></returns>
     public float SetBand( int band, float neweq )
     {
-        var eq = 0.0f;
+        float eq = 0.0f;
 
         if ( band is >= 0 and < Bands )
         {
@@ -185,7 +189,7 @@ public class Equalizer
     /// </summary>
     public float GetBand( int band )
     {
-        var eq = 0.0f;
+        float eq = 0.0f;
 
         if ( band is >= 0 and < Bands )
         {
@@ -221,7 +225,7 @@ public class Equalizer
             return 0.0f;
         }
 
-        var f = ( float )Math.Pow( 2.0, eq );
+        float f = ( float )Math.Pow( 2.0, eq );
 
         return f;
     }
