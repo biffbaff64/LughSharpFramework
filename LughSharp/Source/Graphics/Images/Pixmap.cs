@@ -83,8 +83,8 @@ public class Pixmap : IDisposable
         catch ( Exception e )
         {
             throw new LughRuntimeException( $"Couldn't create pixmap with width: {width}, " +
-                                        $"height: {height}, format: {format}",
-                                        e );
+                                            $"height: {height}, format: {format}",
+                                            e );
         }
     }
 
@@ -195,12 +195,12 @@ public class Pixmap : IDisposable
         {
             return Gdx2DPixmap.ColorFormat switch
                    {
-                       LughFormat.Alpha           => IGL.GLUnsignedByte,
+                       LughFormat.Alpha          => IGL.GLUnsignedByte,
                        LughFormat.LuminanceAlpha => IGL.GLUnsignedByte,
-                       LughFormat.RGB888          => IGL.GLUnsignedByte,
-                       LughFormat.RGBA8888        => IGL.GLUnsignedByte,
-                       LughFormat.RGB565          => IGL.GLUnsignedShort565,
-                       LughFormat.RGBA4444        => IGL.GLUnsignedShort4444,
+                       LughFormat.RGB888         => IGL.GLUnsignedByte,
+                       LughFormat.RGBA8888       => IGL.GLUnsignedByte,
+                       LughFormat.RGB565         => IGL.GLUnsignedShort565,
+                       LughFormat.RGBA4444       => IGL.GLUnsignedShort4444,
                        LughFormat.IndexedColor   => IGL.GLUnsignedByte,
 
                        var _ => throw new Exception( $"Unsupported color format: {Gdx2DPixmap.ColorFormat}" )
@@ -257,8 +257,8 @@ public class Pixmap : IDisposable
             field = value;
 
             Scale = field == Filter.NearestNeighbour
-                ? Gdx2DPixmap.Gdx2DScaleNearest
-                : Gdx2DPixmap.Gdx2DScaleLinear;
+                        ? Gdx2DPixmap.Gdx2DScaleNearest
+                        : Gdx2DPixmap.Gdx2DScaleLinear;
         }
     } = Filter.BiLinear;
 
@@ -596,7 +596,7 @@ public class Pixmap : IDisposable
 
         IEnumerable< string > strings      = PNGDecoder.StandardPNGSignature.Select( b => b.ToString( "X2" ) );
         string                finalStrings = string.Join( ", ", strings );
-        
+
         Logger.Debug( $"({finalStrings})" );
 
         for ( var i = 0; i < ( 2 * 8 ); i += 8 )

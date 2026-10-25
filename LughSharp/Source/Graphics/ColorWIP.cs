@@ -25,42 +25,43 @@
 namespace LughSharp.Source.Graphics;
 
 [PublicAPI]
+[UnstableApi( "This class is still under development and is unsafe to use." )]
 public class ColorWIP
 {
     /// <summary>
-    /// Red ColorWIP Component
+    /// Red Color Component
     /// </summary>
     public byte R { get; set; }
 
     /// <summary>
-    /// Green ColorWIP Component
+    /// Green Color Component
     /// </summary>
     public byte G { get; set; }
 
     /// <summary>
-    /// Blue ColorWIP Component
+    /// Blue Color Component
     /// </summary>
     public byte B { get; set; }
 
     /// <summary>
-    /// Alpha ColorWIP Component
+    /// Alpha Color Component
     /// </summary>
     public byte A { get; set; }
 
     /// <summary>
-    /// ColorWIP Components packed into a <b>uint</b>, stored in <b>RGBA</b> format.
+    /// Color Components packed into a <b>uint</b>, stored in <b>RGBA</b> format.
     /// </summary>
     public uint RGBAPackedColor { get; private set; }
 
     /// <summary>
-    /// ColorWIP Components packed into a <b>uint</b>, stored in <b>ABGR</b> format.
+    /// Color Components packed into a <b>uint</b>, stored in <b>ABGR</b> format.
     /// </summary>
     public uint ABGRPackedColor { get; private set; }
 
     /// <summary>
     /// The color's name.
     /// </summary>
-    public string Name { get; set; } = "ColorWIP";
+    public string Name { get; set; } = "Color";
     
     // ========================================================================
 

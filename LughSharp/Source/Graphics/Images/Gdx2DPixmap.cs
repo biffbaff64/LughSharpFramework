@@ -25,12 +25,13 @@
 namespace LughSharp.Source.Graphics.Images;
 
 /// <summary>
-/// Provides functionality for managing and manipulating 2D pixel maps with various color formats,
-/// blending modes, and scaling options.  Gdx2DPixmap is designed to handle image processing and
-/// manipulation at the pixel level. It supports multiple color formats, allows drawing operations,
-/// and facilitates scaling and format conversion for efficient rendering in 2D graphics. The class
-/// also allows management of associated buffer data and provides constructors for different
-/// initialization scenarios.
+/// Provides functionality for managing and manipulating 2D pixel maps with various
+/// color formats, blending modes, and scaling options. Gdx2DPixmap is designed to
+/// handle image processing and manipulation at the pixel level. It supports multiple
+/// color formats, allows drawing operations, and facilitates scaling and format
+/// conversion for efficient rendering in 2D graphics. The class also allows management
+/// of associated buffer data and provides constructors for different initialization
+/// scenarios.
 /// </summary>
 [PublicAPI]
 public class Gdx2DPixmap : IDisposable
@@ -72,8 +73,19 @@ public class Gdx2DPixmap : IDisposable
     public Buffer< byte > PixmapBuffer  { get; set; }
     public long           TotalIDATSize { get; set; }
 
+    /// <summary>
+    /// The width of the pixmap in pixels.
+    /// </summary>
     public int    Width         { get; set; }
+    
+    /// <summary>
+    /// The height of the pixmap in pixels.
+    /// </summary>
     public int    Height        { get; set; }
+    
+    /// <summary>
+    /// The color format of the pixmap.
+    /// </summary>
     public int    ColorFormat   { get; set; }
     public byte   BitDepth      { get; set; }
     public int    BytesPerPixel { get; set; }

@@ -350,7 +350,7 @@ public class PixFormat
     }
 
     /// <summary>
-    /// Converts a PNG color type and bit depth to a PixelFormat value. If invalid
+    /// Converts a PNG color type and bit depth to a PixelFormat value. If an 0erty\invalid
     /// color type or bit depth is provided, the function returns <see cref="LughFormat.Invalid"/>,
     /// and this must be handled by the caller.
     /// </summary>

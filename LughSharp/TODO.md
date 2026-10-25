@@ -352,7 +352,7 @@ LUGHSHARP/SOURCE/CONFIG
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-LUGHSHARP/SOURCE/GRAPHICS
+LUGHSHARP/SOURCE/ENTITIES
 -------------------------
 
       CODE   DOCU   FOOTER
@@ -368,10 +368,13 @@ LUGHSHARP/SOURCE/GRAPHICS
 LUGHSHARP/SOURCE/GRAPHICS
 -------------------------
 
+- Rework Color.cs/Colors.cs/LughFormat.cs/PixFormat.cs. These classes are untidy and
+  need to be reworked to be less confusing.
+
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE - DONE - Color 
-    - DONE - DONE - DONE - Colors
+    - DONE - DONE - DONE - Color                    REWORK
+    - DONE - DONE - DONE - Colors                   REWORK
     - DONE - DONE - DONE - Cubemap
     - DONE - DONE - DONE - GraphicsDevice
     - DONE - DONE - DONE - GStructs
@@ -379,9 +382,9 @@ LUGHSHARP/SOURCE/GRAPHICS
     - DONE - DONE - DONE - ICursor
     - DONE - DONE - DONE - IGraphicsDevice
     - DONE - DONE - DONE - ITextureArrayData
-    - DONE - DONE - DONE - LughFormat               ( Needs a better name )
+    - DONE - DONE - DONE - LughFormat               REWORK
     - DONE - DONE - DONE - Mesh
-    - DONE - DONE - DONE - PixelFormat
+    - DONE - DONE - DONE - PixFormat                REWORK
     - DONE - DONE - DONE - VertexAttribute
     - DONE - DONE - DONE - VertexAttributes
     - DONE - DONE - DONE - VertexDataType
@@ -428,7 +431,8 @@ LUGHSHARP/SOURCE/GRAPHICS/FONTS/FREETYPE - TEMPORARILY SHELVED
 ----------------------------------------
 
     These classes do not need to be completed as yet.
-    Possibly advocate using SharpFont instead of these classes, as the work has already been done?
+    Possibly advocate using SharpFont instead of these classes,
+    as the work has already been done?
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -494,7 +498,7 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - Gdx2DPixmap
+    - DONE - IP   - DONE - Gdx2DPixmap              RENAME
     - DONE - DONE - DONE - GLTexture
     - DONE - DONE - DONE - GLTextureArray
     - DONE - IP   - DONE - NinePatch
