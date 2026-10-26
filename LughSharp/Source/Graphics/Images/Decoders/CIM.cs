@@ -69,7 +69,7 @@ public static class CIM
             lock ( _writeBuffer )
             {
                 var writeBufferSize = _writeBuffer.Length;
-            
+
                 for ( var i = 0; i < iterations; i++ )
                 {
                     _writeBuffer = pixelBuf.GetBytes( writeBufferSize );
@@ -99,11 +99,12 @@ public static class CIM
     {
         try
         {
-            var            input    = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
-            int            width    = input.Read();
-            int            height   = input.Read();
-            int            format   = PixFormat.PNGColorToLughFormat( input.Read() );
-            var            pixmap   = new Pixmap( width, height, format );
+            var input  = new BinaryReader( new InflaterInputStream( file.OpenRead() ) );
+            int width  = input.Read();
+            int height = input.Read();
+            int format = PixFormat.PNGColorToLughFormat( input.Read() );
+            var pixmap = new Pixmap( width, height, format );
+
             Buffer< byte > pixelBuf = pixmap.ByteBuffer;
 
             pixelBuf.Position = 0;

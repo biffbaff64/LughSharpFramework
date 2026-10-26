@@ -34,49 +34,8 @@ public enum BufferTarget
     TransformFeedbackBuffer = IGL.GLTransformFeedbackBuffer,
     CopyReadBuffer          = IGL.GLCopyReadBuffer,
     CopyWriteBuffer         = IGL.GLCopyWriteBuffer,
-    TextureBuffer           = IGL.GL_TEXTURE_BUFFER,
+    TextureBuffer           = IGL.GLTextureBuffer,
     UniformBuffer           = IGL.GLUniformBuffer
-}
-
-[PublicAPI]
-public enum BufferAccess
-{
-    ReadOnly  = IGL.GLReadOnly,
-    ReadWrite = IGL.GLReadWrite,
-    WriteOnly = IGL.GLWriteOnly
-}
-
-[PublicAPI]
-public enum BufferUsageHint
-{
-    StaticDraw  = IGL.GLStaticDraw,
-    StaticCopy  = IGL.GLStaticCopy,
-    StaticRead  = IGL.GLStaticRead,
-    DynamicDraw = IGL.GLDynamicDraw,
-    DynamicCopy = IGL.GLDynamicCopy,
-    DynamicRead = IGL.GLDynamicRead,
-    StreamDraw  = IGL.GLStreamDraw,
-    StreamCopy  = IGL.GLStreamCopy,
-    StreamRead  = IGL.GLStreamRead
-}
-
-[PublicAPI]
-public enum BufferBinding
-{
-    ArrayBuffer                    = IGL.GLArrayBuffer,
-    ArrayBufferBinding             = IGL.GLArrayBufferBinding,
-    BufferSize                     = IGL.GLBufferSize,
-    BufferUsage                    = IGL.GLBufferUsage,
-    ColorArrayBufferBinding        = IGL.GLColorArrayBufferBinding,
-    DynamicDraw                    = IGL.GLDynamicDraw,
-    ElementArrayBuffer             = IGL.GLElementArrayBuffer,
-    ElementArrayBufferBinding      = IGL.GLElementArrayBufferBinding,
-    FramebufferBinding             = IGL.GLFramebufferBinding,
-    NormalArrayBufferBinding       = IGL.GLNormalArrayBufferBinding,
-    StaticDraw                     = IGL.GLStaticDraw,
-    TextureCoordArrayBufferBinding = IGL.GLTextureCoordArrayBufferBinding,
-    VertexArrayBinding             = IGL.GLVertexArrayBinding,
-    VertexArrayBufferBinding       = IGL.GLVertexArrayBufferBinding
 }
 
 // ============================================================================

@@ -37,13 +37,5 @@ public enum DataType
     Double        = IGL.GLDouble
 }
 
-[PublicAPI]
-public enum IndexType
-{
-    UnsignedByte  = IGL.GLUnsignedByte,
-    UnsignedShort = IGL.GLUnsignedShort,
-    UnsignedInt   = IGL.GLUnsignedInt
-}
-
 // ========================================================================
 // ========================================================================

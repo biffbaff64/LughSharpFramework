@@ -27,7 +27,7 @@ namespace LughSharp.Source.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum TextureWrapMode
 {
-    ClampToBorder = IGL.GL_CLAMP_TO_BORDER,
+    ClampToBorder = IGL.GLClampToBorder,
 
     /// <summary>
     /// Repeats the texture, mirroring it at every integer boundary. This

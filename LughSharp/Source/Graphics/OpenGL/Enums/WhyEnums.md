@@ -19,7 +19,7 @@ recommended, especially when wrapping low-level APIs like OpenGL.
 If extra functionality is needed:
 ---------------------------------
 
-If I find yourself frequently needing to perform complex logic on these values, the best
+If there is a need to frequently perform complex logic on these values, the best
 option is to not refactor the enum itself. Instead, create a static helper class to house
 the functionality.
 

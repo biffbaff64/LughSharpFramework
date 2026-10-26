@@ -106,8 +106,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
     /// <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="IGL.GLTextureRectangle"/>.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, or <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
@@ -117,7 +117,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureSwizzleR"/>,
     /// <see cref="IGL.GLTextureSwizzleG"/>, <see cref="IGL.GLTextureSwizzleB"/>, <see cref="IGL.GLTextureSwizzleA"/>,
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, and <see cref="IGL.GLTextureWrapR"/> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// accepted. For the vector commands (those that end in v), <see cref="IGL.GLTextureBorderColor"/> or
     /// <see cref="IGL.GLTextureSwizzleRGBA"/> is also acceptable.
     /// </param>
     /// <param name="param">Specifies the value of pname.</param>
@@ -130,8 +130,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
     /// <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="IGL.GLTextureRectangle"/>.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, or <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
@@ -141,7 +141,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureSwizzleR"/>,
     /// <see cref="IGL.GLTextureSwizzleG"/>, <see cref="IGL.GLTextureSwizzleB"/>, <see cref="IGL.GLTextureSwizzleA"/>,
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, and <see cref="IGL.GLTextureWrapR"/> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// accepted. For the vector commands (those that end in v), <see cref="IGL.GLTextureBorderColor"/> or
     /// <see cref="IGL.GLTextureSwizzleRGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
@@ -154,8 +154,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
     /// <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="IGL.GLTextureRectangle"/>.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, or <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
@@ -165,7 +165,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureSwizzleR"/>,
     /// <see cref="IGL.GLTextureSwizzleG"/>, <see cref="IGL.GLTextureSwizzleB"/>, <see cref="IGL.GLTextureSwizzleA"/>,
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, and <see cref="IGL.GLTextureWrapR"/> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// accepted. For the vector commands (those that end in v), <see cref="IGL.GLTextureBorderColor"/> or
     /// <see cref="IGL.GLTextureSwizzleRGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
@@ -178,8 +178,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
     /// <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="IGL.GLTextureRectangle"/>.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, or <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
@@ -189,7 +189,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureSwizzleR"/>,
     /// <see cref="IGL.GLTextureSwizzleG"/>, <see cref="IGL.GLTextureSwizzleB"/>, <see cref="IGL.GLTextureSwizzleA"/>,
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, and <see cref="IGL.GLTextureWrapR"/> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// accepted. For the vector commands (those that end in v), <see cref="IGL.GLTextureBorderColor"/> or
     /// <see cref="IGL.GLTextureSwizzleRGBA"/> is also acceptable.
     /// </param>
     /// <param name="param">Specifies the value of pname.</param>
@@ -202,8 +202,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
     /// <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="IGL.GLTextureRectangle"/>.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, or <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
@@ -213,7 +213,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureSwizzleR"/>,
     /// <see cref="IGL.GLTextureSwizzleG"/>, <see cref="IGL.GLTextureSwizzleB"/>, <see cref="IGL.GLTextureSwizzleA"/>,
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, and <see cref="IGL.GLTextureWrapR"/> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// accepted. For the vector commands (those that end in v), <see cref="IGL.GLTextureBorderColor"/> or
     /// <see cref="IGL.GLTextureSwizzleRGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
@@ -226,8 +226,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound for TexParameter functions. Must be one of
     /// <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, or <see cref="IGL.GLTextureRectangle"/>.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, or <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued texture parameter.
@@ -237,7 +237,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureSwizzleR"/>,
     /// <see cref="IGL.GLTextureSwizzleG"/>, <see cref="IGL.GLTextureSwizzleB"/>, <see cref="IGL.GLTextureSwizzleA"/>,
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, and <see cref="IGL.GLTextureWrapR"/> are
-    /// accepted. For the vector commands (those that end in v), <see cref="GL_TEXTURE_BORDER_COLOR"/> or
+    /// accepted. For the vector commands (those that end in v), <see cref="IGL.GLTextureBorderColor"/> or
     /// <see cref="IGL.GLTextureSwizzleRGBA"/> is also acceptable.
     /// </param>
     /// <param name="parameters">Specifies the values of pname.</param>
@@ -410,10 +410,10 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureCubeMapPositiveY"/>, <see cref="IGL.GLTextureCubeMapNegativeY"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveZ"/>, <see cref="IGL.GLTextureCubeMapNegativeZ"/>,
     /// <see cref="IGL.GLProxyTextureCubeMap"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
-    /// <see cref="IGL.GLProxyTextureCubeMapArray"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="IGL.GLTextureCubeMapArray"/>,
+    /// <see cref="IGL.GLProxyTextureCubeMapArray"/>, <see cref="IGL.GLTextureCubeMapArray"/>,
     /// <see cref="IGL.GLProxyTextureCubeMapArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, or
+    /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>, or
     /// <see cref="IGL.GLProxyTexture2DMultisampleArray"/>.
     /// </param>
     /// <param name="level">
@@ -477,10 +477,10 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLTextureCubeMapPositiveY"/>, <see cref="IGL.GLTextureCubeMapNegativeY"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveZ"/>, <see cref="IGL.GLTextureCubeMapNegativeZ"/>,
     /// <see cref="IGL.GLProxyTextureCubeMap"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
-    /// <see cref="IGL.GLProxyTextureCubeMapArray"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="IGL.GLTextureCubeMapArray"/>,
+    /// <see cref="IGL.GLProxyTextureCubeMapArray"/>, <see cref="IGL.GLTextureCubeMapArray"/>,
     /// <see cref="IGL.GLProxyTextureCubeMapArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, or
+    /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>, or
     /// <see cref="IGL.GLProxyTexture2DMultisampleArray"/>.
     /// </param>
     /// <param name="level">
@@ -901,7 +901,7 @@ public partial interface IGLBindings
     /// <returns>
     /// One of <see cref="IGL.GLNoError"/>, <see cref="IGL.GLInvalidEnum"/>, <see cref="IGL.GLInvalidValue"/>,
     /// <see cref="IGL.GLInvalidOperation"/>, <see cref="IGL.GLInvalidFramebufferOperation"/>,
-    /// <see cref="IGL.GLOutOfMemory"/>, <see cref="GL_STACK_UNDERFLOW"/>, or <see cref="GL_STACK_OVERFLOW"/>.
+    /// <see cref="IGL.GLOutOfMemory"/>, <see cref="IGL.GLStackUnderflow"/>, or <see cref="IGL.GLStackOverflow"/>.
     /// </returns>
     int GetError();
 
@@ -1073,13 +1073,13 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>,
     /// <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a texture parameter. <see cref="IGL.GLDepthStencilTextureMode"/>,
     /// <see cref="IGL.GLImageFormatCompatibilityType"/>, <see cref="IGL.GLTextureBaseLevel"/>,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="IGL.GLTextureCompareFunc"/>,
+    /// <see cref="IGL.GLTextureBorderColor"/>, <see cref="IGL.GLTextureCompareFunc"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureImmutableFormat"/>,
     /// <see cref="IGL.GLTextureImmutableLevels"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureMaxLod"/>,
@@ -1099,13 +1099,13 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>,
     /// <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a texture parameter. <see cref="IGL.GLDepthStencilTextureMode"/>,
     /// <see cref="IGL.GLImageFormatCompatibilityType"/>, <see cref="IGL.GLTextureBaseLevel"/>,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="IGL.GLTextureCompareFunc"/>,
+    /// <see cref="IGL.GLTextureBorderColor"/>, <see cref="IGL.GLTextureCompareFunc"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureImmutableFormat"/>,
     /// <see cref="IGL.GLTextureImmutableLevels"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureMaxLod"/>,
@@ -1125,13 +1125,13 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>,
     /// <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a texture parameter. <see cref="IGL.GLDepthStencilTextureMode"/>,
     /// <see cref="IGL.GLImageFormatCompatibilityType"/>, <see cref="IGL.GLTextureBaseLevel"/>,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="IGL.GLTextureCompareFunc"/>,
+    /// <see cref="IGL.GLTextureBorderColor"/>, <see cref="IGL.GLTextureCompareFunc"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureImmutableFormat"/>,
     /// <see cref="IGL.GLTextureImmutableLevels"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureMaxLod"/>,
@@ -1151,13 +1151,13 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture1DArray"/>,
     /// <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>,
+    /// <see cref="IGL.GLTextureCubeMapArray"/> and <see cref="IGL.GLTextureRectangle"/> are accepted.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a texture parameter. <see cref="IGL.GLDepthStencilTextureMode"/>,
     /// <see cref="IGL.GLImageFormatCompatibilityType"/>, <see cref="IGL.GLTextureBaseLevel"/>,
-    /// <see cref="GL_TEXTURE_BORDER_COLOR"/>, <see cref="IGL.GLTextureCompareFunc"/>,
+    /// <see cref="IGL.GLTextureBorderColor"/>, <see cref="IGL.GLTextureCompareFunc"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureImmutableFormat"/>,
     /// <see cref="IGL.GLTextureImmutableLevels"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureMaxLevel"/>, <see cref="IGL.GLTextureMaxLod"/>,
@@ -1180,14 +1180,14 @@ public partial interface IGLBindings
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2DArray"/>,
     /// <see cref="IGL.GLTextureRectangle"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeX"/>, <see cref="IGL.GLTextureCubeMapPositiveY"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeY"/>, <see cref="IGL.GLTextureCubeMapPositiveZ"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeZ"/>, <see cref="IGL.GLProxyTexture1D"/>,
     /// <see cref="IGL.GLProxyTexture2D"/>, <see cref="IGL.GLProxyTexture3D"/>, <see cref="IGL.GLProxyTexture1DArray"/>,
     /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="IGL.GLProxyTextureRectangle"/>,
     /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="IGL.GLProxyTexture2DMultisampleArray"/>,
-    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
+    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="IGL.GLTextureBuffer"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1204,14 +1204,14 @@ public partial interface IGLBindings
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2DArray"/>,
     /// <see cref="IGL.GLTextureRectangle"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeX"/>, <see cref="IGL.GLTextureCubeMapPositiveY"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeY"/>, <see cref="IGL.GLTextureCubeMapPositiveZ"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeZ"/>, <see cref="IGL.GLProxyTexture1D"/>,
     /// <see cref="IGL.GLProxyTexture2D"/>, <see cref="IGL.GLProxyTexture3D"/>, <see cref="IGL.GLProxyTexture1DArray"/>,
     /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="IGL.GLProxyTextureRectangle"/>,
     /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="IGL.GLProxyTexture2DMultisampleArray"/>,
-    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
+    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="IGL.GLTextureBuffer"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1228,14 +1228,14 @@ public partial interface IGLBindings
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2DArray"/>,
     /// <see cref="IGL.GLTextureRectangle"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeX"/>, <see cref="IGL.GLTextureCubeMapPositiveY"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeY"/>, <see cref="IGL.GLTextureCubeMapPositiveZ"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeZ"/>, <see cref="IGL.GLProxyTexture1D"/>,
     /// <see cref="IGL.GLProxyTexture2D"/>, <see cref="IGL.GLProxyTexture3D"/>, <see cref="IGL.GLProxyTexture1DArray"/>,
     /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="IGL.GLProxyTextureRectangle"/>,
     /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="IGL.GLProxyTexture2DMultisampleArray"/>,
-    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
+    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="IGL.GLTextureBuffer"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1252,14 +1252,14 @@ public partial interface IGLBindings
     /// Specifies the target texture. <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2DArray"/>,
     /// <see cref="IGL.GLTextureRectangle"/>, <see cref="IGL.GLTexture2DMultisample"/>,
-    /// <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
+    /// <see cref="IGL.GLTexture2DMultisampleArray"/>, <see cref="IGL.GLTextureCubeMapPositiveX"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeX"/>, <see cref="IGL.GLTextureCubeMapPositiveY"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeY"/>, <see cref="IGL.GLTextureCubeMapPositiveZ"/>,
     /// <see cref="IGL.GLTextureCubeMapNegativeZ"/>, <see cref="IGL.GLProxyTexture1D"/>,
     /// <see cref="IGL.GLProxyTexture2D"/>, <see cref="IGL.GLProxyTexture3D"/>, <see cref="IGL.GLProxyTexture1DArray"/>,
     /// <see cref="IGL.GLProxyTexture2DArray"/>, <see cref="IGL.GLProxyTextureRectangle"/>,
     /// <see cref="IGL.GLProxyTexture2DMultisample"/>, <see cref="IGL.GLProxyTexture2DMultisampleArray"/>,
-    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="GL_TEXTURE_BUFFER"/> are accepted.
+    /// <see cref="IGL.GLProxyTextureCubeMap"/> or <see cref="IGL.GLTextureBuffer"/> are accepted.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -1300,7 +1300,7 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>, <see cref="GL_PATCHES"/> are
+    /// <see cref="IGL.GLTriangleStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>, <see cref="IGL.GLPatches"/> are
     /// accepted.
     /// </param>
     /// <param name="first">Specifies the starting index in the enabled arrays.</param>
@@ -1314,7 +1314,7 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>, <see cref="GL_PATCHES"/> are
+    /// <see cref="IGL.GLTriangleStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>, <see cref="IGL.GLPatches"/> are
     /// accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
@@ -1332,7 +1332,7 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>, <see cref="GL_PATCHES"/> are
+    /// <see cref="IGL.GLTriangleStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>, <see cref="IGL.GLPatches"/> are
     /// accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
@@ -1623,8 +1623,8 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture is bound. Must be one of <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTexture1DArray"/>,
     /// <see cref="IGL.GLTexture2DArray"/>, <see cref="IGL.GLTextureRectangle"/>, <see cref="IGL.GLTextureCubeMap"/>,
-    /// <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>, <see cref="GL_TEXTURE_BUFFER"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/> or <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>.
+    /// <see cref="IGL.GLTextureCubeMapArray"/>, <see cref="IGL.GLTextureBuffer"/>,
+    /// <see cref="IGL.GLTexture2DMultisample"/> or <see cref="IGL.GLTexture2DMultisampleArray"/>.
     /// </param>
     /// <param name="texture">Specifies the name of a texture.</param>
     void BindTexture( int target, uint texture );
@@ -1680,9 +1680,9 @@ public partial interface IGLBindings
     /// <param name="mode">
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="IGL.GLTriangleStrip"/>,
-    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLTriangleStrip"/>,
+    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="IGL.GLTriangleStripAdjacency"/>,
+    /// <see cref="IGL.GLTrianglesAdjacency"/>, and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
     /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
@@ -1697,9 +1697,9 @@ public partial interface IGLBindings
     /// <param name="mode">
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="IGL.GLTriangleStrip"/>,
-    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLTriangleStrip"/>,
+    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="IGL.GLTriangleStripAdjacency"/>,
+    /// <see cref="IGL.GLTrianglesAdjacency"/>, and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
     /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
@@ -2205,7 +2205,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target texture. Must be <see cref="IGL.GLTexture3D"/>,
-    /// <see cref="IGL.GLTexture2DArray"/> or <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>.
+    /// <see cref="IGL.GLTexture2DArray"/> or <see cref="IGL.GLTextureCubeMapArray"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2253,7 +2253,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target texture. Must be <see cref="IGL.GLTexture3D"/>,
-    /// <see cref="IGL.GLTexture2DArray"/> or <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>.
+    /// <see cref="IGL.GLTexture2DArray"/> or <see cref="IGL.GLTextureCubeMapArray"/>.
     /// </param>
     /// <param name="level">
     /// Specifies the level-of-detail number. Level 0 is the base image level. Level n is the nth mipmap
@@ -2427,7 +2427,7 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture. Must be <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMapArray"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveX"/>, <see cref="IGL.GLTextureCubeMapNegativeX"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveY"/>, <see cref="IGL.GLTextureCubeMapNegativeY"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveZ"/>, <see cref="IGL.GLTextureCubeMapNegativeZ"/> or
@@ -2446,7 +2446,7 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture. Must be <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMapArray"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveX"/>, <see cref="IGL.GLTextureCubeMapNegativeX"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveY"/>, <see cref="IGL.GLTextureCubeMapNegativeY"/>,
     /// <see cref="IGL.GLTextureCubeMapPositiveZ"/>, <see cref="IGL.GLTextureCubeMapNegativeZ"/> or
@@ -2488,9 +2488,9 @@ public partial interface IGLBindings
     /// <param name="mode">
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="IGL.GLTriangleStrip"/>,
-    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLTriangleStrip"/>,
+    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="IGL.GLTriangleStripAdjacency"/>,
+    /// <see cref="IGL.GLTrianglesAdjacency"/>, and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="first">Specifies an array of starting indices in the enabled arrays.</param>
     /// <param name="count">Specifies an array of the number of indices to be rendered.</param>
@@ -2503,9 +2503,9 @@ public partial interface IGLBindings
     /// <param name="mode">
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="IGL.GLTriangleStrip"/>,
-    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLTriangleStrip"/>,
+    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="IGL.GLTriangleStripAdjacency"/>,
+    /// <see cref="IGL.GLTrianglesAdjacency"/>, and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="first">Specifies an array of starting indices in the enabled arrays.</param>
     /// <param name="count">Specifies an array of the number of indices to be rendered.</param>
@@ -2517,9 +2517,9 @@ public partial interface IGLBindings
     /// <param name="mode">
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="IGL.GLTriangleStrip"/>,
-    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLTriangleStrip"/>,
+    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="IGL.GLTriangleStripAdjacency"/>,
+    /// <see cref="IGL.GLTrianglesAdjacency"/>, and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies an array of the elements counts.</param>
     /// <param name="type">
@@ -2536,9 +2536,9 @@ public partial interface IGLBindings
     /// <param name="mode">
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
-    /// <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_LINES_ADJACENCY"/>, <see cref="IGL.GLTriangleStrip"/>,
-    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLES_ADJACENCY"/>, and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLTriangleStrip"/>,
+    /// <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>, <see cref="IGL.GLTriangleStripAdjacency"/>,
+    /// <see cref="IGL.GLTrianglesAdjacency"/>, and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies an array of the elements counts.</param>
     /// <param name="type">
@@ -2681,7 +2681,7 @@ public partial interface IGLBindings
     /// Specifies the target type of query object established between <see cref="BeginQuery"/> and the
     /// subsequent <see cref="EndQuery"/>. The symbol constant must be one of <see cref="IGL.GLSamplesPassed"/>,
     /// <see cref="IGL.GLAnySamplesPassed"/>, <see cref="IGL.GLAnySamplesPassedConservative"/>,
-    /// <see cref="GL_PRIMITIVES_GENERATED"/>, <see cref="IGL.GLTransformFeedbackPrimitivesWritten"/> or
+    /// <see cref="IGL.GLPrimitivesGenerated"/>, <see cref="IGL.GLTransformFeedbackPrimitivesWritten"/> or
     /// <see cref="IGL.GLTimeElapsed"/>.
     /// </param>
     /// <param name="id">Specifies the name of a query object.</param>
@@ -2694,7 +2694,7 @@ public partial interface IGLBindings
     /// Specifies the target type of query object established between <see cref="BeginQuery"/> and the
     /// subsequent <see cref="EndQuery"/>. The symbol constant must be one of <see cref="IGL.GLSamplesPassed"/>,
     /// <see cref="IGL.GLAnySamplesPassed"/>, <see cref="IGL.GLAnySamplesPassedConservative"/>,
-    /// <see cref="GL_PRIMITIVES_GENERATED"/>, <see cref="IGL.GLTransformFeedbackPrimitivesWritten"/> or
+    /// <see cref="IGL.GLPrimitivesGenerated"/>, <see cref="IGL.GLTransformFeedbackPrimitivesWritten"/> or
     /// <see cref="IGL.GLTimeElapsed"/>.
     /// </param>
     void EndQuery( int target );
@@ -2705,7 +2705,7 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target parameter of the query object being queried. The symbolic constant must be
     /// one of <see cref="IGL.GLSamplesPassed"/>, <see cref="IGL.GLAnySamplesPassed"/>,
-    /// <see cref="IGL.GLAnySamplesPassedConservative"/>, <see cref="GL_PRIMITIVES_GENERATED"/>,
+    /// <see cref="IGL.GLAnySamplesPassedConservative"/>, <see cref="IGL.GLPrimitivesGenerated"/>,
     /// <see cref="IGL.GLTransformFeedbackPrimitivesWritten"/>, <see cref="IGL.GLTimeElapsed"/> or
     /// <see cref="IGL.GLTimestamp"/>.
     /// </param>
@@ -2722,7 +2722,7 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target parameter of the query object being queried. The symbolic constant must be
     /// one of <see cref="IGL.GLSamplesPassed"/>, <see cref="IGL.GLAnySamplesPassed"/>,
-    /// <see cref="IGL.GLAnySamplesPassedConservative"/>, <see cref="GL_PRIMITIVES_GENERATED"/>,
+    /// <see cref="IGL.GLAnySamplesPassedConservative"/>, <see cref="IGL.GLPrimitivesGenerated"/>,
     /// <see cref="IGL.GLTransformFeedbackPrimitivesWritten"/>, <see cref="IGL.GLTimeElapsed"/> or
     /// <see cref="IGL.GLTimestamp"/>.
     /// </param>
@@ -2856,7 +2856,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
@@ -2890,7 +2890,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="data">An array of <typeparamref name="T"/>s that will be copied into the data store for initialization.</param>
@@ -2910,7 +2910,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">
@@ -2930,7 +2930,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store where data replacement will begin.</param>
@@ -2945,7 +2945,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">
@@ -2965,7 +2965,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store from which data will be returned.</param>
@@ -2981,7 +2981,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="access">
@@ -3000,7 +3000,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="access">
@@ -3020,7 +3020,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <returns>
     /// <c>true</c> unless the data store contents have become corrupt during the time the data store was
@@ -3071,7 +3071,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="IGL.GLBufferMapPointer"/>.</param>
     /// <param name="parameters">A pointer to a memory location where the returned data will be placed.</param>
@@ -3086,7 +3086,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="pname">Specifies the pointer to be returned. Accepted values are <see cref="IGL.GLBufferMapPointer"/>.</param>
     /// <param name="parameters">
@@ -3240,8 +3240,8 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="type">
     /// Specifies the type of shader to be created. Must be <see cref="IGL.GLComputeShader"/>,
-    /// <see cref="IGL.GLVertexShader"/>, <see cref="GL_TESS_CONTROL_SHADER"/>, <see cref="GL_TESS_EVALUATION_SHADER"/>,
-    /// <see cref="GL_GEOMETRY_SHADER"/> or <see cref="IGL.GLFragmentShader"/>.
+    /// <see cref="IGL.GLVertexShader"/>, <see cref="IGL.GLTessControlShader"/>, <see cref="IGL.GLTessEvaluationShader"/>,
+    /// <see cref="IGL.GLGeometryShader"/> or <see cref="IGL.GLFragmentShader"/>.
     /// </param>
     /// <returns>The name of the shader object created.</returns>
     GLuint CreateShader( int type );
@@ -4843,9 +4843,9 @@ public partial interface IGLBindings
     /// <param name="primitiveMode">
     /// Specifies the mode used to capture vertex data. Symbolic constants <see cref="IGL.GLPoints"/>
     /// , <see cref="IGL.GLLines"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLineStrip"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="GL_TRIANGLES_ADJACENCY"/> and
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> are accepted. Refer to
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTriangles"/>,
+    /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTrianglesAdjacency"/> and
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> are accepted. Refer to
     /// <see href="https://docs.gl/gl4/glBeginTransformFeedback"/> for some quirks regarding this parameter.
     /// </param>
     void BeginTransformFeedback( int primitiveMode );
@@ -5473,8 +5473,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5495,8 +5495,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5517,8 +5517,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5539,8 +5539,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5561,8 +5561,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5583,8 +5583,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5605,8 +5605,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -5627,8 +5627,8 @@ public partial interface IGLBindings
     /// <param name="target">
     /// Specifies the target texture, which must be either <see cref="IGL.GLTexture1D"/>,
     /// <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2D"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="GL_TEXTURE_2D_MULTISAMPLE_ARRAY"/>,
-    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/> or
+    /// <see cref="IGL.GLTexture2DMultisample"/>, <see cref="IGL.GLTexture2DMultisampleArray"/>,
+    /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/> or
     /// <see cref="IGL.GLTextureRectangle"/>.
     /// </param>
     /// <param name="pname">
@@ -6039,7 +6039,7 @@ public partial interface IGLBindings
     /// Specifies the target to which the texture whose mimaps to generate is bound.
     /// <paramref name="target"/> must be one of <see cref="IGL.GLTexture1D"/>, <see cref="IGL.GLTexture2D"/>,
     /// <see cref="IGL.GLTexture3D"/>, <see cref="IGL.GLTexture1DArray"/>, <see cref="IGL.GLTexture2DArray"/>,
-    /// <see cref="IGL.GLTextureCubeMap"/>, <see cref="GL_TEXTURE_CUBE_MAP_ARRAY"/>.
+    /// <see cref="IGL.GLTextureCubeMap"/>, <see cref="IGL.GLTextureCubeMapArray"/>.
     /// </param>
     void GenerateMipmap( int target );
 
@@ -6112,7 +6112,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">Specifies the starting offset within the buffer of the range to be mapped.</param>
@@ -6130,7 +6130,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">Specifies the starting offset within the buffer of the range to be mapped.</param>
@@ -6148,7 +6148,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">
@@ -6214,8 +6214,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="first">Specifies the starting index in the enabled arrays.</param>
     /// <param name="count">Specifies the number of indices to be rendered.</param>
@@ -6232,8 +6232,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
@@ -6254,8 +6254,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
@@ -6275,7 +6275,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="target">
     /// Specifies the target to which the buffer object's data store is attached for the purposes of the
-    /// specified buffer texture object. target​ must be <see cref="GL_TEXTURE_BUFFER"/>.
+    /// specified buffer texture object. target​ must be <see cref="IGL.GLTextureBuffer"/>.
     /// </param>
     /// <param name="internalFormat">Specifies the internal format of the data in the store belonging to buffer.</param>
     /// <param name="buffer">
@@ -6299,7 +6299,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="writeTarget">
     /// Specifies the target to which the data will be copied. The symbolic constant must be
@@ -6307,7 +6307,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="readOffset">Specifies the offset into the data store of the buffer object containing the data to copy.</param>
     /// <param name="writeOffset">Specifies the offset into the data store of the buffer object into which data will be copied.</param>
@@ -6499,8 +6499,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
@@ -6521,8 +6521,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
@@ -6547,8 +6547,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
     /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
@@ -6572,8 +6572,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="start">Specifies the minimum array index contained in <paramref name="indices"/>.</param>
     /// <param name="end">Specifies the maximum array index contained in <paramref name="indices"/>.</param>
@@ -6601,8 +6601,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
@@ -6625,8 +6625,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies the number of elements to be rendered.</param>
     /// <param name="type">
@@ -6653,8 +6653,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="count">Specifies an array of the elements counts.</param>
     /// <param name="type">
@@ -6677,8 +6677,8 @@ public partial interface IGLBindings
     /// Specifies what kind of primitives to render. Symbolic constants <see cref="IGL.GLPoints"/>,
     /// <see cref="IGL.GLLineStrip"/>, <see cref="IGL.GLLineLoop"/>, <see cref="IGL.GLLines"/>,
     /// <see cref="IGL.GLTriangleStrip"/>, <see cref="IGL.GLTriangleFan"/>, <see cref="IGL.GLTriangles"/>,
-    /// <see cref="GL_LINES_ADJACENCY"/>, <see cref="GL_LINE_STRIP_ADJACENCY"/>, <see cref="GL_TRIANGLES_ADJACENCY"/>,
-    /// <see cref="GL_TRIANGLE_STRIP_ADJACENCY"/> and <see cref="GL_PATCHES"/> are accepted.
+    /// <see cref="IGL.GLLinesAdjacency"/>, <see cref="IGL.GLLineStripAdjacency"/>, <see cref="IGL.GLTrianglesAdjacency"/>,
+    /// <see cref="IGL.GLTriangleStripAdjacency"/> and <see cref="IGL.GLPatches"/> are accepted.
     /// </param>
     /// <param name="type">
     /// Specifies the type of the values in <paramref name="indices"/>. Must be one of
@@ -6700,7 +6700,7 @@ public partial interface IGLBindings
     /// </summary>
     /// <param name="mode">
     /// Specifies the vertex to be used as the source of data for flat shaded varyings. Must be
-    /// <see cref="GL_FIRST_VERTEX_CONVENTION"/> or <see cref="GL_LAST_VERTEX_CONVENTION"/>.
+    /// <see cref="IGL.GLFirstVertexConvention"/> or <see cref="IGL.GLLastVertexConvention"/>.
     /// </param>
     void ProvokingVertex( int mode );
 
@@ -6841,7 +6841,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a buffer object parameter. Accepted values are
@@ -6861,7 +6861,7 @@ public partial interface IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/>, or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="pname">
     /// Specifies the symbolic name of a buffer object parameter. Accepted values are
@@ -7051,7 +7051,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7065,7 +7065,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7079,7 +7079,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7093,7 +7093,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7107,7 +7107,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7121,7 +7121,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7135,7 +7135,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7149,7 +7149,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7163,7 +7163,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7177,7 +7177,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7191,7 +7191,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>
@@ -7205,7 +7205,7 @@ public partial interface IGLBindings
     /// <param name="pname">
     /// Specifies the symbolic name of a single-valued sampler parameter. One of
     /// <see cref="IGL.GLTextureWrapS"/>, <see cref="IGL.GLTextureWrapT"/>, <see cref="IGL.GLTextureWrapR"/>,
-    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="GL_TEXTURE_BORDER_COLOR"/>,
+    /// <see cref="IGL.GLTextureMinFilter"/>, <see cref="IGL.GLTextureMagFilter"/>, <see cref="IGL.GLTextureBorderColor"/>,
     /// <see cref="IGL.GLTextureMinLod"/>, <see cref="IGL.GLTextureMaxLod"/>, <see cref="IGL.GLTextureLodBias"/>,
     /// <see cref="IGL.GLTextureCompareMode"/>, <see cref="IGL.GLTextureCompareFunc"/>.
     /// </param>

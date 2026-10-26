@@ -553,7 +553,7 @@ public abstract class GLTexture : IDisposable
             Logger.Debug( $"pixmap.Height          : {pixmap.Height}" );
             Logger.Debug( $"Bit Depth              : {pixmap.GetBitDepth()}" );
             Logger.Debug( $"Pixmap ColorType       : {pixmap.Gdx2DPixmap.ColorFormat}" );
-            Logger.Debug( $"Pixmap Pixel Format    : {PixFormat.GetFormatString( pixmap.Gdx2DPixmap.ColorFormat )}" );
+            Logger.Debug( $"Pixmap Pixel Format    : {PixFormat.LughFormatAsString( pixmap.Gdx2DPixmap.ColorFormat )}" );
             Logger.Debug( $"pixmap.GLFormat        : {pixmap.GLPixelFormat}" );
             Logger.Debug( $"pixmap.GLFormat Name   : {PixFormat.GLFormatAsString( pixmap.GLPixelFormat )}" );
             Logger.Debug( $"pixmap.GLInternalFormat: {pixmap.GLInternalPixelFormat}" );

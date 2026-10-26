@@ -38,12 +38,5 @@ public enum CullFaceMode
     FrontAndBack = IGL.GLFrontAndBack
 }
 
-[PublicAPI]
-public enum FrontFaceDirection
-{
-    Clockwise        = IGL.GLCw,
-    CounterClockwise = IGL.GLCcw
-}
-
 // ========================================================================
 // ========================================================================

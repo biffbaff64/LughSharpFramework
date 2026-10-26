@@ -593,39 +593,52 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL/ENUMS
       CODE   DOCU   FOOTER
       ----   ----   ------
     - IP   -      - DONE - BlendMode
-    - IP   -      - DONE - BufferEnums
+    - IP   -      - DONE - BufferAccess
+    - IP   -      - DONE - BufferBinding
+    - IP   -      - DONE - BufferTarget
+    - IP   -      - DONE - BufferUsageHint
     - IP   -      - DONE - ClearBufferMask
     - IP   -      - DONE - ClientApi
     - IP   -      - DONE - CompareFunction
     - IP   -      - DONE - ContextApi
     - IP   -      - DONE - CullFaceMode
     - IP   -      - DONE - DataType
-    - IP   -      - DONE - DebugEnums
+    - IP   -      - DONE - DebugEnums               Split
     - IP   -      - DONE - DrawElementsType
+    - IP   -      - DONE - DrawMode
     - IP   -      - DONE - EnableCap
-    - IP   -      - DONE - FrameBufferEnums
+    - IP   -      - DONE - ErrorCode
+    - IP   -      - DONE - FrameBufferEnums         Split
+    - IP   -      - DONE - FrontFaceDirection
     - IP   -      - DONE - GLParameter
+    - IP   -      - DONE - ImageClass
+    - IP   -      - DONE - IndexType
+    - IP   -      - DONE - InternalFormat
     - IP   -      - DONE - JoystickHats
     - IP   -      - DONE - LogicOp
+    - IP   -      - DONE - MapBufferAccess
     - IP   -      - DONE - MatrixMode
-    - IP   -      - DONE - PixelEnums
+    - IP   -      - DONE - MatrixSize
+    - IP   -      - DONE - PixelEnums               Split
     - IP   -      - DONE - PolygonMode
     - IP   -      - DONE - PrimitiveType
     - IP   -      - DONE - ProgramParameter
+    - IP   -      - DONE - QueryParameter
     - IP   -      - DONE - QueryTarget
-    - IP   -      - DONE - ShaderEnums
-    - IP   -      - DONE - StencilEnums
+    - IP   -      - DONE - ShaderEnums              Split
+    - IP   -      - DONE - StencilEnums             Split
     - IP   -      - DONE - StringName
     - IP   -      - DONE - TextureFilterMode
     - IP   -      - DONE - TextureFormat
-    - IP   -      - DONE - TextureLimit
+    - IP   -      - DONE - TextureLimit             Redo comments
     - IP   -      - DONE - TextureParameter
-    - IP   -      - DONE - TextureTarget
+    - IP   -      - DONE - TextureTarget            Split
     - IP   -      - DONE - TextureUnit
     - IP   -      - DONE - TextureUsage
     - IP   -      - DONE - TextureWrapMode
     - IP   -      - DONE - VertexAttribParameter
     - IP   -      - DONE - VertexAttribType
+    - IP   -      - DONE - ViewClass
 
 LUGHSHARP/SOURCE/GRAPHICS/PACKING/IMAGEPACKER
 ---------------------------------------------

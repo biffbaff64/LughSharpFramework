@@ -38,8 +38,8 @@ public enum EnableCap
     Lighting = IGL.GLLighting,
 
     // --------------------------------
-    DebugOutput            = IGL.GL_DEBUG_OUTPUT,
-    DebugOutputSynchronous = IGL.GL_DEBUG_OUTPUT_SYNCHRONOUS,
+    DebugOutput            = IGL.GLDebugOutput,
+    DebugOutputSynchronous = IGL.GLDebugOutputSynchronous,
 
     // --------------------------------
     TextureCubemapSeamless = IGL.GLTextureCubeMapSeamless,
@@ -64,7 +64,7 @@ public enum EnableCap
     Normalize   = IGL.GLNormalize,
 
     // --------------------------------
-    VertexArray = IGL.GL_VERTEX_ARRAY,
+    VertexArray = IGL.GLVertexArray,
 
     // --------------------------------
     SampleAlphaToCoverage = IGL.GLSampleAlphaToCoverage,

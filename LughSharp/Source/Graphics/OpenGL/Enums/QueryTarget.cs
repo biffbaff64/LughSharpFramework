@@ -29,16 +29,9 @@ public enum QueryTarget
 {
     SamplesPassed                      = IGL.GLSamplesPassed,
     AnySamplesPassed                   = IGL.GLAnySamplesPassed,
-    PrimitivesGenerated                = IGL.GL_PRIMITIVES_GENERATED,
+    PrimitivesGenerated                = IGL.GLPrimitivesGenerated,
     TimeElapsed                        = IGL.GLTimeElapsed,
     TransformFeedbackPrimitivesWritten = IGL.GLTransformFeedbackPrimitivesWritten
-}
-
-[PublicAPI]
-public enum QueryParameter
-{
-    QueryResult          = IGL.GLQueryResult,
-    QueryResultAvailable = IGL.GLQueryResultAvailable
 }
 
 // ========================================================================

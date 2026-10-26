@@ -157,7 +157,7 @@ public class PNGDecoder
     /// Analyzes PNG image data to extract metadata such as width, height, bit depth, color type,
     /// compression method, filter method, interlace method, and other structural components of
     /// the PNG format.
-    /// The extracted details are logged for debugging purposes if the <paramref name="verbose"/>
+    /// The extracted details are logged for debugging purposes if <paramref name="verbose"/>
     /// is set to true.
     /// Once completed, the PNG data is written to the specified file path as a valid PNG image file. 
     /// </summary>
@@ -1036,7 +1036,7 @@ public class PNGDecoder
         Logger.Debug( $"- Height        : {IHDRchunk.Height}" );
         Logger.Debug( $"- BitDepth      : {IHDRchunk.BitDepth}" );
         Logger.Debug( $"- ColorType     : {IHDRchunk.ColorType} :: ( {ColorTypeName( IHDRchunk.ColorType )} )" );
-        Logger.Debug( $"- PixelFormat   : {PixFormat.GetFormatString( PNGPixelFormat )} :: ( {PNGPixelFormat} )" );
+        Logger.Debug( $"- PixelFormat   : {PixFormat.LughFormatAsString( PNGPixelFormat )} :: ( {PNGPixelFormat} )" );
         Logger.Debug( $"- BytesPerPixel : {BytesPerPixel}" );
         Logger.Debug( $"- Compression   : {IHDRchunk.Compression}" );
         Logger.Debug( $"- Filter        : {IHDRchunk.Filter}" );

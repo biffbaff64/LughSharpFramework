@@ -34,7 +34,7 @@ public enum TextureLimit
     MaxVertexTextureImageUnits = IGL.GLMaxVertexTextureImageUnits,
 
     // The following is for the geometry shader (available since GL 3.2)
-    MaxGeometryTextureImageUnits = IGL.GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS,
+    MaxGeometryTextureImageUnits = IGL.GLMaxGeometryTextureImageUnits,
 
     // The following is VS + GS + FS (available since GL 2.0)
     MaxCombinedTextureImageUnits = IGL.GLMaxCombinedTextureImageUnits,

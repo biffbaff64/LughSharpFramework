@@ -37,7 +37,7 @@ public enum TextureParameter
     CompareFunc           = IGL.GLTextureCompareFunc,
     MinLod                = IGL.GLTextureMinLod,
     MaxLod                = IGL.GLTextureMaxLod,
-    BorderColor           = IGL.GL_TEXTURE_BORDER_COLOR,
+    BorderColor           = IGL.GLTextureBorderColor,
     TextureSwizzleR       = IGL.GLTextureSwizzleR,
     TextureSwizzleG       = IGL.GLTextureSwizzleG,
     TextureSwizzleB       = IGL.GLTextureSwizzleB,

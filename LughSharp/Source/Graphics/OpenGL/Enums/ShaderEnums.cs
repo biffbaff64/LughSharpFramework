@@ -29,9 +29,9 @@ public enum ShaderType
 {
     VertexShader         = IGL.GLVertexShader,
     FragmentShader       = IGL.GLFragmentShader,
-    GeometryShader       = IGL.GL_GEOMETRY_SHADER,
-    TessControlShader    = IGL.GL_TESS_CONTROL_SHADER,
-    TessEvaluationShader = IGL.GL_TESS_EVALUATION_SHADER,
+    GeometryShader       = IGL.GLGeometryShader,
+    TessControlShader    = IGL.GLTessControlShader,
+    TessEvaluationShader = IGL.GLTessEvaluationShader,
     ComputeShader        = IGL.GLComputeShader
 }
 

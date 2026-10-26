@@ -64,9 +64,9 @@ public static class GLUtils
                    IGL.GLInvalidValue                => "Invalid Value",
                    IGL.GLOutOfMemory                 => "Out of memory",
                    IGL.GLInvalidFramebufferOperation => "Invalid Framebuffer operation",
-                   IGL.GL_STACK_OVERFLOW             => "Stack Overflow",
-                   IGL.GL_STACK_UNDERFLOW            => "Stack Underflow",
-                   IGL.GL_CONTEXT_LOST               => "Context Lost",
+                   IGL.GLStackOverflow             => "Stack Overflow",
+                   IGL.GLStackUnderflow            => "Stack Underflow",
+                   IGL.GLContextLost               => "Context Lost",
 
                    // ----------------------------------
 

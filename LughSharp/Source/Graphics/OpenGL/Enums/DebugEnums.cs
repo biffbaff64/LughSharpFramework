@@ -27,35 +27,35 @@ namespace LughSharp.Source.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum DebugSeverityControl
 {
-    High         = IGL.GL_DEBUG_SEVERITY_HIGH,
-    Medium       = IGL.GL_DEBUG_SEVERITY_MEDIUM,
-    Low          = IGL.GL_DEBUG_SEVERITY_LOW,
-    Notification = IGL.GL_DEBUG_SEVERITY_NOTIFICATION,
+    High         = IGL.GLDebugSeverityHigh,
+    Medium       = IGL.GLDebugSeverityMedium,
+    Low          = IGL.GLDebugSeverityLow,
+    Notification = IGL.GLDebugSeverityNotification,
     DontCare     = IGL.GLDontCare
 }
 
 [PublicAPI]
 public enum DebugSourceControl
 {
-    Api            = IGL.GL_DEBUG_SOURCE_API,
-    WindowSystem   = IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM,
-    ShaderCompiler = IGL.GL_DEBUG_SOURCE_SHADER_COMPILER,
-    ThirdParty     = IGL.GL_DEBUG_SOURCE_THIRD_PARTY,
-    Application    = IGL.GL_DEBUG_SOURCE_APPLICATION,
-    Other          = IGL.GL_DEBUG_SOURCE_OTHER,
+    Api            = IGL.GLDebugSourceApi,
+    WindowSystem   = IGL.GLDebugSourceWindowSystem,
+    ShaderCompiler = IGL.GLDebugSourceShaderCompiler,
+    ThirdParty     = IGL.GLDebugSourceThirdParty,
+    Application    = IGL.GLDebugSourceApplication,
+    Other          = IGL.GLDebugSourceOther,
     DontCare       = IGL.GLDontCare
 }
 
 [PublicAPI]
 public enum DebugTypeControl
 {
-    Error              = IGL.GL_DEBUG_TYPE_ERROR,
-    DeprecatedBehavior = IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR,
-    UndefinedBehavior  = IGL.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR,
-    Portability        = IGL.GL_DEBUG_TYPE_PORTABILITY,
-    Performance        = IGL.GL_DEBUG_TYPE_PERFORMANCE,
-    Marker             = IGL.GL_DEBUG_TYPE_MARKER,
-    Other              = IGL.GL_DEBUG_TYPE_OTHER,
+    Error              = IGL.GLDebugTypeError,
+    DeprecatedBehavior = IGL.GLDebugTypeDeprecatedBehavior,
+    UndefinedBehavior  = IGL.GLDebugTypeUndefinedBehavior,
+    Portability        = IGL.GLDebugTypePortability,
+    Performance        = IGL.GLDebugTypePerformance,
+    Marker             = IGL.GLDebugTypeMarker,
+    Other              = IGL.GLDebugTypeOther,
     DontCare           = IGL.GLDontCare
 }
 

@@ -5731,7 +5731,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="size">Specifies the size in bytes of the buffer object's new data store.</param>
@@ -5780,7 +5780,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="data">
@@ -5812,7 +5812,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">
@@ -5837,7 +5837,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store where data replacement will begin.</param>
@@ -5862,7 +5862,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offset">
@@ -5887,7 +5887,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="offsetCount">Specifies the offset into the buffer object's data store from which data will be returned.</param>
@@ -5914,7 +5914,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="access">
@@ -5938,7 +5938,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLAtomicCounterBuffer"/>, <see cref="IGL.GLCopyReadBuffer"/>, <see cref="IGL.GLCopyWriteBuffer"/>,
     /// <see cref="IGL.GLDispatchIndirectBuffer"/>, <see cref="IGL.GLDrawIndirectBuffer"/>,
     /// <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>, <see cref="IGL.GLPixelUnpackBuffer"/>,
-    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GL_TEXTURE_BUFFER"/>,
+    /// <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>, <see cref="IGL.GLTextureBuffer"/>,
     /// <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <param name="access">
@@ -5977,7 +5977,7 @@ public unsafe partial class GLBindings : IGLBindings
     /// <see cref="IGL.GLCopyWriteBuffer"/>, <see cref="IGL.GLDispatchIndirectBuffer"/>,
     /// <see cref="IGL.GLDrawIndirectBuffer"/>, <see cref="IGL.GLElementArrayBuffer"/>, <see cref="IGL.GLPixelPackBuffer"/>
     /// , <see cref="IGL.GLPixelUnpackBuffer"/>, <see cref="IGL.GLQueryBuffer"/>, <see cref="IGL.GLShaderStorageBuffer"/>,
-    /// <see cref="IGL.GL_TEXTURE_BUFFER"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
+    /// <see cref="IGL.GLTextureBuffer"/>, <see cref="IGL.GLTransformFeedbackBuffer"/> or <see cref="IGL.GLUniformBuffer"/>.
     /// </param>
     /// <returns>
     /// <c>true</c> unless the data store contents have become corrupt during the time the data store was
@@ -6469,33 +6469,33 @@ public unsafe partial class GLBindings : IGLBindings
 
         string srcStr = source switch
                         {
-                            IGL.GL_DEBUG_SOURCE_API             => "API",
-                            IGL.GL_DEBUG_SOURCE_WINDOW_SYSTEM   => "WINDOW SYSTEM",
-                            IGL.GL_DEBUG_SOURCE_SHADER_COMPILER => "SHADER COMPILER",
-                            IGL.GL_DEBUG_SOURCE_THIRD_PARTY     => "THIRD PARTY",
-                            IGL.GL_DEBUG_SOURCE_APPLICATION     => "APPLICATION",
-                            IGL.GL_DEBUG_SOURCE_OTHER           => "OTHER",
+                            IGL.GLDebugSourceApi             => "API",
+                            IGL.GLDebugSourceWindowSystem   => "WINDOW SYSTEM",
+                            IGL.GLDebugSourceShaderCompiler => "SHADER COMPILER",
+                            IGL.GLDebugSourceThirdParty     => "THIRD PARTY",
+                            IGL.GLDebugSourceApplication     => "APPLICATION",
+                            IGL.GLDebugSourceOther           => "OTHER",
                             var _                               => "UNKNOWN"
                         };
 
         string typeStr = type switch
                          {
-                             IGL.GL_DEBUG_TYPE_ERROR               => "ERROR",
-                             IGL.GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR => "DEPRECATED_BEHAVIOR",
-                             IGL.GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR  => "UNDEFINED_BEHAVIOR",
-                             IGL.GL_DEBUG_TYPE_PORTABILITY         => "PORTABILITY",
-                             IGL.GL_DEBUG_TYPE_PERFORMANCE         => "PERFORMANCE",
-                             IGL.GL_DEBUG_TYPE_MARKER              => "MARKER",
-                             IGL.GL_DEBUG_TYPE_OTHER               => "OTHER",
+                             IGL.GLDebugTypeError               => "ERROR",
+                             IGL.GLDebugTypeDeprecatedBehavior => "DEPRECATED_BEHAVIOR",
+                             IGL.GLDebugTypeUndefinedBehavior  => "UNDEFINED_BEHAVIOR",
+                             IGL.GLDebugTypePortability         => "PORTABILITY",
+                             IGL.GLDebugTypePerformance         => "PERFORMANCE",
+                             IGL.GLDebugTypeMarker              => "MARKER",
+                             IGL.GLDebugTypeOther               => "OTHER",
                              var _                                 => "UNKNOWN"
                          };
 
         string severityStr = severity switch
                              {
-                                 IGL.GL_DEBUG_SEVERITY_NOTIFICATION => "NOTIFICATION",
-                                 IGL.GL_DEBUG_SEVERITY_LOW          => "LOW",
-                                 IGL.GL_DEBUG_SEVERITY_MEDIUM       => "MEDIUM",
-                                 IGL.GL_DEBUG_SEVERITY_HIGH         => "HIGH",
+                                 IGL.GLDebugSeverityNotification => "NOTIFICATION",
+                                 IGL.GLDebugSeverityLow          => "LOW",
+                                 IGL.GLDebugSeverityMedium       => "MEDIUM",
+                                 IGL.GLDebugSeverityHigh         => "HIGH",
                                  var _                              => "UNKNOWN"
                              };
 

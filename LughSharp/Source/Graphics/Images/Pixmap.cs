@@ -587,7 +587,7 @@ public class Pixmap : IDisposable
     {
         Logger.Debug( $"Format: {GetColorFormat()}, size : {Width * Height} "
                     + $"( {Width} x {Height} ) : {Gdx2DPixmap.ColorFormat}: "
-                    + $"{PixFormat.GetFormatString( Gdx2DPixmap.ColorFormat )}" );
+                    + $"{PixFormat.LughFormatAsString( Gdx2DPixmap.ColorFormat )}" );
         Logger.Debug( $"Color : {Color.R}, {Color.G}, {Color.B}, {Color.A}" );
 
         byte[] a = Gdx2DPixmap.PixmapBuffer.BackingArray();

@@ -192,16 +192,16 @@ public class PixFormat
     {
         return target switch
                {
-                   IGL.GLTexture1D                     => "GL_TEXTURE_1D",
-                   IGL.GLTexture2D                     => "GL_TEXTURE_2D",
-                   IGL.GLTexture3D                     => "GL_TEXTURE_3D",
-                   IGL.GLTextureCubeMap                => "GL_TEXTURE_CUBE_MAP",
-                   IGL.GLTextureRectangle              => "GL_TEXTURE_RECTANGLE",
-                   IGL.GL_TEXTURE_BUFFER               => "GL_TEXTURE_BUFFER",
-                   IGL.GLTexture2DArray                => "GL_TEXTURE_2D_ARRAY",
-                   IGL.GL_TEXTURE_CUBE_MAP_ARRAY       => "GL_TEXTURE_CUBE_MAP_ARRAY",
-                   IGL.GLTexture2DMultisample          => "GL_TEXTURE_2D_MULTISAMPLE",
-                   IGL.GL_TEXTURE_2D_MULTISAMPLE_ARRAY => "GL_TEXTURE_2D_MULTISAMPLE_ARRAY",
+                   IGL.GLTexture1D                 => "GL_TEXTURE_1D",
+                   IGL.GLTexture2D                 => "GL_TEXTURE_2D",
+                   IGL.GLTexture3D                 => "GL_TEXTURE_3D",
+                   IGL.GLTextureCubeMap            => "GL_TEXTURE_CUBE_MAP",
+                   IGL.GLTextureRectangle          => "GL_TEXTURE_RECTANGLE",
+                   IGL.GLTextureBuffer             => "GL_TEXTURE_BUFFER",
+                   IGL.GLTexture2DArray            => "GL_TEXTURE_2D_ARRAY",
+                   IGL.GLTextureCubeMapArray       => "GL_TEXTURE_CUBE_MAP_ARRAY",
+                   IGL.GLTexture2DMultisample      => "GL_TEXTURE_2D_MULTISAMPLE",
+                   IGL.GLTexture2DMultisampleArray => "GL_TEXTURE_2D_MULTISAMPLE_ARRAY",
 
                    // ----------------------------------
 
@@ -213,7 +213,7 @@ public class PixFormat
     /// Retrieves the name of the PixelFormat format based on the provided
     /// LughFormat identifier.
     /// </summary>
-    public static string GetFormatString( int format )
+    public static string LughFormatAsString( int format )
     {
         return format switch
                {
@@ -303,8 +303,11 @@ public class PixFormat
     }
 
     /// <summary>
-    /// Converts a PNG Color Type value to a LughFormat value.
+    /// Converts a PNG Color Type value to a LughFormat value. The color type value
+    /// is retrieved from the PNG image and is used to determine the corresponding
+    /// LughFormat value.
     /// </summary>
+    /// <seealso cref="Images.Decoders.PNGDecoder"/>
     public static int PNGColorToLughFormat( int colorType )
     {
         return colorType switch
@@ -350,9 +353,19 @@ public class PixFormat
     }
 
     /// <summary>
-    /// Converts a PNG color type and bit depth to a PixelFormat value. If an 0erty\invalid
-    /// color type or bit depth is provided, the function returns <see cref="LughFormat.Invalid"/>,
-    /// and this must be handled by the caller.
+    /// Converts a PNG color type and bit depth to a LughFormat value. If an
+    /// invalid color type or bit depth is provided, the function returns
+    /// <see cref="LughFormat.Invalid"/>, and this must be handled by the caller.
+    /// <br/>
+    /// For example:
+    /// <code>
+    /// var colorType = 6;<br/>
+    /// var bitDepth = 8;<br/>
+    /// var format = LughFormat.FromPNGColorAndBitDepth( colorType, bitDepth );<br/>
+    /// </code>
+    /// This code will result in the <see cref="LughFormat.RGBA8888"/> format
+    /// being assigned to the <c>format</c> variable.
+    /// <br/>
     /// </summary>
     public static int FromPNGColorAndBitDepth( byte colorType, byte bitDepth )
     {
@@ -369,7 +382,8 @@ public class PixFormat
 
                          // ----------------------------------
 
-                         var _ => LughFormat.Invalid // Invalid format, handled by caller
+                         // Invalid format, handled by caller
+                         var _ => LughFormat.Invalid
                      };
 
         return format;
