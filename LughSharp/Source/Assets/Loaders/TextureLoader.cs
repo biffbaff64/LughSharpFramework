@@ -111,7 +111,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
                 _loaderInfo.Texture = p.Texture;
             }
 
-            _loaderInfo.Data = TextureDataFactory.LoadFromFile( file!, format, genMipMaps );
+            _loaderInfo.Data = ITextureData.Factory.LoadFromFile( file!, format, genMipMaps );
         }
         else
         {
@@ -208,7 +208,7 @@ public class TextureLoader : AsynchronousAssetLoader, IDisposable
 
         // ====================================================================
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Dispose()
         {
             Dispose( true );

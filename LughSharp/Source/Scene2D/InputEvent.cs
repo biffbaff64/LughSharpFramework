@@ -194,7 +194,7 @@ public class InputEvent : Event
         return actorCoords;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return Type != null ? Type.ToString() : string.Empty;

@@ -67,7 +67,7 @@ public class SkinLoader : AsynchronousAssetLoader
         return deps;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void LoadAsync< TP >( AssetManager manager,
                                           string filename,
                                           FileInfo? file,
@@ -75,7 +75,7 @@ public class SkinLoader : AsynchronousAssetLoader
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override object LoadSync< TP >( AssetManager manager,
                                            FileInfo file,
                                            TP? parameter ) where TP : class

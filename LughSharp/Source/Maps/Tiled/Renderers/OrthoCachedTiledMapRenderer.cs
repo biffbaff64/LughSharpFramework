@@ -87,7 +87,7 @@ public class OrthoCachedTiledMapRenderer : ITiledMapRenderer, IDisposable
     /// </summary>
     public float OverCache { get; set; } = 0.50f;
 
-    // <inheritdoc />
+    // <inheritdoc/>
     public void Dispose()
     {
         SpriteCache?.Dispose();

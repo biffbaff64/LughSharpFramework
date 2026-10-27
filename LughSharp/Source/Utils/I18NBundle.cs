@@ -239,7 +239,7 @@ public class I18NBundle
             : Get( key );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"I18NBundle[{( Culture.Name.Length == 0 ? "root" : Culture.Name )}]";

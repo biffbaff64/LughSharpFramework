@@ -1328,7 +1328,7 @@ public class Color : ICloneable, IEquatable< Color >
     }
 
     // Not from IEquatable, but connected to it because of Equals()
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return PackedColorAbgr().GetHashCode();

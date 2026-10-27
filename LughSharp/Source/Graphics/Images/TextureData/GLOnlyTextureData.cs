@@ -46,7 +46,7 @@ public class GLOnlyTextureData : ITextureData
     public bool IsPrepared     { get; set; }
     public bool UseMipMaps     { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsOwned { get; set; }
 
     /// <summary>
@@ -128,7 +128,7 @@ public class GLOnlyTextureData : ITextureData
                               IntPtr.Zero );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void DebugPrint()
     {
         // TODO: Implement DebugPrint

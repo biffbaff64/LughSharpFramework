@@ -69,7 +69,7 @@ public class Group : Actor, ICullable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Act( float delta )
     {
         base.Act( delta );
@@ -84,7 +84,7 @@ public class Group : Actor, ICullable
         Children.End();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( Transform )

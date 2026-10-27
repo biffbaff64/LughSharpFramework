@@ -25,43 +25,14 @@
 namespace LughSharp.Source.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum FramebufferTarget
+public enum PixelType
 {
-    Framebuffer     = IGL.GLFramebuffer,
-    ReadFramebuffer = IGL.GLReadFramebuffer,
-    DrawFramebuffer = IGL.GLDrawFramebuffer
-}
-
-[PublicAPI]
-public enum FramebufferAttachment
-{
-    ColorAttachment0       = IGL.GLColorAttachment0,
-    DepthAttachment        = IGL.GLDepthAttachment,
-    StencilAttachment      = IGL.GLStencilAttachment,
-    DepthStencilAttachment = IGL.GLDepthStencilAttachment
-}
-
-[PublicAPI]
-public enum FramebufferStatus
-{
-    Complete                    = IGL.GLFramebufferComplete,
-    Undefined                   = IGL.GLFramebufferUndefined,
-    IncompleteAttachment        = IGL.GLFramebufferIncompleteAttachment,
-    IncompleteMissingAttachment = IGL.GLFramebufferIncompleteMissingAttachment,
-    IncompleteDrawBuffer        = IGL.GLFramebufferIncompleteDrawBuffer,
-    IncompleteReadBuffer        = IGL.GLFramebufferIncompleteReadBuffer,
-    Unsupported                 = IGL.GLFramebufferUnsupported
-}
-
-[PublicAPI]
-public enum FramebufferAttachmentPoint
-{
-    ColorAttachment0  = IGL.GLColorAttachment0,
-    ColorAttachment1  = IGL.GLColorAttachment1,
-    ColorAttachment2  = IGL.GLColorAttachment2,
-    DepthAttachment   = IGL.GLDepthAttachment,
-    StencilAttachment = IGL.GLStencilAttachment
+    UnsignedShort4444 = IGL.GLUnsignedShort4444,
+    UnsignedShort5551 = IGL.GLUnsignedShort5551,
+    UnsignedShort565  = IGL.GLUnsignedShort565,
+    UnsignedByte      = IGL.GLUnsignedByte
 }
 
 // ========================================================================
 // ========================================================================
+

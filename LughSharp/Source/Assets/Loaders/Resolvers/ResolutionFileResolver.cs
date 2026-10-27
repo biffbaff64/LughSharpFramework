@@ -83,7 +83,7 @@ public class ResolutionFileResolver : IFileHandleResolver
         Descriptors  = descs;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public FileInfo Resolve( string filename )
     {
         Resolution bestResolution = Choose( Descriptors );

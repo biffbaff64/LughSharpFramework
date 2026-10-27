@@ -397,7 +397,7 @@ public class VertexAttribute
             && ( Unit == other.Unit );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         int result = GetKey();

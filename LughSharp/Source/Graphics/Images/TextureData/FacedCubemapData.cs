@@ -49,12 +49,12 @@ public class FacedCubemapData : ICubemapData
                              FileInfo positiveZ,
                              FileInfo negativeZ,
                              bool useMipMaps = false )
-        : this( TextureDataFactory.LoadFromFile( positiveX, useMipMaps ),
-                TextureDataFactory.LoadFromFile( negativeX, useMipMaps ),
-                TextureDataFactory.LoadFromFile( positiveY, useMipMaps ),
-                TextureDataFactory.LoadFromFile( negativeY, useMipMaps ),
-                TextureDataFactory.LoadFromFile( positiveZ, useMipMaps ),
-                TextureDataFactory.LoadFromFile( negativeZ, useMipMaps ) )
+        : this( ITextureData.Factory.LoadFromFile( positiveX, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( negativeX, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( positiveY, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( negativeY, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( positiveZ, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( negativeZ, useMipMaps ) )
     {
     }
 
@@ -309,7 +309,7 @@ public class FacedCubemapData : ICubemapData
             throw new LughRuntimeException( $"Cannot load {file.Name}, _data is null!" );
         }
 
-        _data[ side.Index ] = TextureDataFactory.LoadFromFile( file, false )
+        _data[ side.Index ] = ITextureData.Factory.LoadFromFile( file, false )
                            ?? throw new LughRuntimeException( $"Error loading {file.Name}" );
     }
 
@@ -357,3 +357,7 @@ public class FacedCubemapData : ICubemapData
         return true;
     }
 }
+
+// ============================================================================
+// ============================================================================
+

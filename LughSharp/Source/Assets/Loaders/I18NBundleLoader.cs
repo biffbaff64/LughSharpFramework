@@ -45,7 +45,7 @@ public class I18NBundleLoader : AsynchronousAssetLoader
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? p ) where TP : class
@@ -78,7 +78,7 @@ public class I18NBundleLoader : AsynchronousAssetLoader
                                            p?.Encoding );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override object? LoadSync< TP >( AssetManager manager,
                                             FileInfo file,
                                             TP? parameter ) where TP : class
@@ -90,7 +90,7 @@ public class I18NBundleLoader : AsynchronousAssetLoader
         return bundle;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void UnloadAsync< TP >( AssetManager manager,
                                             string filename,
                                             FileInfo file,

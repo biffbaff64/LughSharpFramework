@@ -25,25 +25,12 @@
 namespace LughSharp.Source.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum ShaderType
+public enum FramebufferTarget
 {
-    VertexShader         = IGL.GLVertexShader,
-    FragmentShader       = IGL.GLFragmentShader,
-    GeometryShader       = IGL.GLGeometryShader,
-    TessControlShader    = IGL.GLTessControlShader,
-    TessEvaluationShader = IGL.GLTessEvaluationShader,
-    ComputeShader        = IGL.GLComputeShader
+    Framebuffer     = IGL.GLFramebuffer,
+    ReadFramebuffer = IGL.GLReadFramebuffer,
+    DrawFramebuffer = IGL.GLDrawFramebuffer
 }
 
-[PublicAPI]
-public enum ShaderParameterName
-{
-    CompileStatus = IGL.GLCompileStatus,
-    InfoLogLength = IGL.GLInfoLogLength,
-    ShaderType    = IGL.GLShaderType,
-    DeleteStatus  = IGL.GLDeleteStatus
-}
-
-// ============================================================================
-// ============================================================================
-
+// ========================================================================
+// ========================================================================

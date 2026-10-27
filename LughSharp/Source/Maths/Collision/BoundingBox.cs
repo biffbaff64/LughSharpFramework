@@ -468,7 +468,7 @@ public class BoundingBox
                     Max.Set( Math.Max( Max.X, x ), Math.Max( Max.Y, y ), Math.Max( Max.Z, z ) ) );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"[ {Min} | {Max} ]";

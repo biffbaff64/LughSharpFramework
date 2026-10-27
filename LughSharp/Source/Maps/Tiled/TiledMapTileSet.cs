@@ -100,13 +100,13 @@ public class TiledMapTileSet : IEnumerable< ITiledMapTile >
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IEnumerator< ITiledMapTile > GetEnumerator()
     {
         return _tiles.Values.GetEnumerator();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();

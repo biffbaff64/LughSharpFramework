@@ -246,7 +246,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         InvalidateHierarchy();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Layout()
     {
         ClampSplitAmount();
@@ -361,7 +361,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         HandleBounds.Set( 0, bottomAreaHeight, width, handleHeight );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Stage? stage = GetStage();
@@ -614,7 +614,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool RemoveActor( Actor actor, bool unfocus )
     {
         if ( actor == null )
@@ -643,7 +643,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override Actor? RemoveActorAt( int index, bool unfocus )
     {
         Actor? actor = base.RemoveActorAt( index, unfocus );
@@ -701,7 +701,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             _parent = parent;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _draggingPointer != -1 )
@@ -727,7 +727,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( pointer == _draggingPointer )
@@ -736,7 +736,7 @@ public class SplitPane : WidgetGroup, IStyleable< SplitPaneStyle >
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             if ( pointer != _draggingPointer )

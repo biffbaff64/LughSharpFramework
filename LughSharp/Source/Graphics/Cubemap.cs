@@ -73,12 +73,12 @@ public class Cubemap : GLTexture, IManaged
                     FileInfo positiveZ,
                     FileInfo negativeZ,
                     bool useMipMaps = false )
-        : this( TextureDataFactory.LoadFromFile( positiveX, useMipMaps ),
-                TextureDataFactory.LoadFromFile( negativeX, useMipMaps ),
-                TextureDataFactory.LoadFromFile( positiveY, useMipMaps ),
-                TextureDataFactory.LoadFromFile( negativeY, useMipMaps ),
-                TextureDataFactory.LoadFromFile( positiveZ, useMipMaps ),
-                TextureDataFactory.LoadFromFile( negativeZ, useMipMaps ) )
+        : this( ITextureData.Factory.LoadFromFile( positiveX, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( negativeX, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( positiveY, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( negativeY, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( positiveZ, useMipMaps ),
+                ITextureData.Factory.LoadFromFile( negativeZ, useMipMaps ) )
     {
     }
 
@@ -311,7 +311,7 @@ public class Cubemap : GLTexture, IManaged
         return builder.ToString();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void Dispose( bool disposing )
     {
         if ( disposing )
@@ -534,7 +534,7 @@ public class Cubemap : GLTexture, IManaged
         public static readonly CubemapSide NegativeZ =
             new( "NegativeZ", InnerEnum.NegativeZ, 5, IGL.GLTextureCubeMapNegativeZ, 0, -1, 0, 0, 0, -1 );
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override string ToString()
         {
             return _nameValue;

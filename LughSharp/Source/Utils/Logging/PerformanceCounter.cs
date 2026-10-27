@@ -170,7 +170,7 @@ public class PerformanceCounter
         Valid      = false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{Name}: [time: {Time.Value}, load: {Load.Value}]";

@@ -309,7 +309,7 @@ public class AtlasSprite : Sprite2D
         return Height / Region.RotatedPackedHeight;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return Region.ToString();

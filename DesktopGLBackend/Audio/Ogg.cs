@@ -31,13 +31,13 @@ public class Ogg
 {
     public class Music : OpenALMusic
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override int Read( byte[] buffer )
         {
             return 0;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Reset()
         {
         }
@@ -45,7 +45,7 @@ public class Ogg
 
     public class Sound : OpenALSound
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public Sound( OpenALAudio audio ) : base( audio )
         {
         }

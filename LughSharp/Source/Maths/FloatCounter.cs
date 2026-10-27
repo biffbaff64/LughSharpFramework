@@ -131,7 +131,7 @@ public class FloatCounter
         Mean?.Clear();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"FloatCounter: count={Count}, total={Total}, min={Min},"

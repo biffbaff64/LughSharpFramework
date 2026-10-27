@@ -46,7 +46,7 @@ public class DirectionalLightsAttribute : G3DAttribute
     public static string Alias   => "directionalLights";
     public static long   DlaType => Register( Alias );
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override G3DAttribute Copy()
     {
         return this;

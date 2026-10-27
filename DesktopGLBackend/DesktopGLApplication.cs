@@ -886,11 +886,11 @@ public class DesktopGLApplication : IApplication
 
         DotGLFW.Glfw.MakeContextCurrent( windowHandle );
         DotGLFW.Glfw.SwapInterval( config.VSyncEnabled ? 1 : 0 );
-        GLUtils.CreateCapabilities();
+        LughGL.Initialisation.LoadVersion();
 
         if ( config.GLDebug )
         {
-            GLDebugControl.EnableGLDebugOutput();
+            GLDebugManager.EnableGLDebugOutput();
         }
 
         return windowHandle;

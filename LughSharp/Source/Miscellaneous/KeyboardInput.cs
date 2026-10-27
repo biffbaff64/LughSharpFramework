@@ -27,7 +27,7 @@ namespace LughSharp.Source.Miscellaneous;
 [PublicAPI]
 public class KeyboardInput : InputAdapter
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnKeyDown( int keycode )
     {
         bool flag = keycode switch
@@ -40,7 +40,7 @@ public class KeyboardInput : InputAdapter
         return flag;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnKeyUp( int keycode )
     {
         bool flag = keycode switch

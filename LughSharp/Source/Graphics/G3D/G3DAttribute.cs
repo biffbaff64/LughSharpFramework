@@ -52,7 +52,7 @@ public abstract class G3DAttribute : IComparable< G3DAttribute >
         _typeBit  = ( int )long.TrailingZeroCount( attributeType );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int CompareTo( G3DAttribute? other )
     {
         if ( other == null )
@@ -130,7 +130,7 @@ public abstract class G3DAttribute : IComparable< G3DAttribute >
         return other.GetHashCode() == GetHashCode();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == null )
@@ -151,13 +151,13 @@ public abstract class G3DAttribute : IComparable< G3DAttribute >
         return ( AttributeType == other.AttributeType ) && Equals( other );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return GetAttributeAlias( AttributeType );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return 7489 * _typeBit;

@@ -30,37 +30,15 @@ namespace LughSharp.Source.Graphics.Images.TextureData;
 /// for texture data in OpenGL-based graphics applications.
 /// </summary>
 [PublicAPI]
-public class FileTextureData : ITextureData
+public class FileTextureData : TextureDataBase
 {
     public FileInfo File { get; set; }
-
-    /// <inheritdoc/>
-    public int Width { get; set; }
-
-    /// <inheritdoc/>
-    public int Height { get; set; }
-
-    /// <inheritdoc />
-    public int BitDepth { get; set; }
-
-    /// <inheritdoc />
-    public int BytesPerPixel { get; set; }
-
-    /// <inheritdoc/>
-    public bool IsPrepared { get; set; }
-
-    /// <inheritdoc />
-    public bool IsOwned { get; set; }
-
-    /// <inheritdoc/>
-    public bool UseMipMaps { get; set; }
 
     // ========================================================================
 
     private int     _pixelFormat;
     private Pixmap? _pixmap;
 
-    // ========================================================================
     // ========================================================================
 
     /// <summary>
@@ -96,7 +74,7 @@ public class FileTextureData : ITextureData
         IsOwned = false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual bool IsManaged => true;
 
     /// <returns> the <see cref="ITextureData.TextureDataType"/></returns>

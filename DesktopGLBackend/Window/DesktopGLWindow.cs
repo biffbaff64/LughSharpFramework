@@ -514,7 +514,7 @@ public class DesktopGLWindow : IDisposable
 
     #region dispose pattern
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

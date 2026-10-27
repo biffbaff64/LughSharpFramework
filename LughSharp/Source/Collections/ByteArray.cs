@@ -735,7 +735,7 @@ public class ByteArray
         return array;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         //TODO:
@@ -801,7 +801,7 @@ public class ByteArray
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         if ( Size == 0 )

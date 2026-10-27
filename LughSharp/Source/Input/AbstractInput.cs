@@ -30,7 +30,7 @@ namespace LughSharp.Source.Input;
 [PublicAPI]
 public abstract class AbstractInput : IInput
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IInputProcessor? InputProcessor { get; set; }
 
     // ========================================================================
@@ -90,7 +90,7 @@ public abstract class AbstractInput : IInput
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual void SetOverrideKey( int keycode, bool addKey )
     {
         if ( addKey )
@@ -103,19 +103,19 @@ public abstract class AbstractInput : IInput
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual void AddOverrideKey( int keycode )
     {
         _keysToOverride.Add( keycode );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual void RemoveOverrideKey( int keycode )
     {
         _keysToOverride.Remove( keycode );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual bool IsOverrideKey( int keycode )
     {
         return _keysToOverride.Contains( keycode );

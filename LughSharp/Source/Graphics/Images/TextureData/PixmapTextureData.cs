@@ -66,13 +66,13 @@ public class PixmapTextureData : ITextureData
         return DisposePixmap;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int GetPixelFormat()
     {
         return _pixelFormat;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public Pixmap ConsumePixmap()
     {
         return Pixmap;
@@ -90,12 +90,10 @@ public class PixmapTextureData : ITextureData
         set { }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void DebugPrint()
     {
     }
-
-    // ========================================================================
 
     public void ConsumeCustomData( int target )
     {

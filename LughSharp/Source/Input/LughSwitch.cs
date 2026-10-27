@@ -33,19 +33,19 @@ public class LughSwitch : ILughButton
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool CheckPress( int touchX, int touchY )
     {
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool CheckRelease( int touchX, int touchY )
     {
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Press()
     {
         if ( !IsDisabled )
@@ -54,13 +54,13 @@ public class LughSwitch : ILughButton
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void PressConditional( bool condition )
     {
         IsPressed = condition;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Release()
     {
         if ( !IsDisabled )
@@ -69,19 +69,19 @@ public class LughSwitch : ILughButton
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void ToggleDisabled()
     {
         IsDisabled = !IsDisabled;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void TogglePressed()
     {
         IsPressed = !IsPressed;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public ILughButton.LughButtonType GetSwitchType()
     {
         return ILughButton.LughButtonType.Switch;

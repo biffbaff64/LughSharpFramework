@@ -254,7 +254,7 @@ public class CircularByteBuffer
         return outByte;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         var ret = string.Empty;

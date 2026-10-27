@@ -129,7 +129,7 @@ public class DesktopGLCursor : ICursor, IDisposable
 
     #region Dispose methods
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

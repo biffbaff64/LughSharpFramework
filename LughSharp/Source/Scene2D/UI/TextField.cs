@@ -358,7 +358,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetPrefWidth()
     {
         return GetPrefWidthUnchecked();
@@ -375,7 +375,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return 150;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetPrefHeight()
     {
         return GetPrefHeightUnchecked();
@@ -606,7 +606,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
         return _style.Background;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         bool focused = HasKeyboardFocus();
@@ -1512,7 +1512,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf = tf;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnClicked( InputEvent ev, float x, float y )
         {
             int count = TapCount % 4;
@@ -1534,7 +1534,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( !base.OnTouchDown( ev, x, y, pointer, button ) )
@@ -1568,14 +1568,14 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             return true;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             base.OnTouchDragged( ev, x, y, pointer );
             SetCursorPosition( x, y );
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( _tf.SelectionStart == _tf.Cursor )
@@ -1607,7 +1607,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             _tf.Cursor = _tf.Text.Length;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             if ( _tf.Disabled )
@@ -1774,7 +1774,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
             return handled;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnKeyUp( InputEvent? ev, int keycode )
         {
             if ( _tf.Disabled )
@@ -1803,7 +1803,7 @@ public class TextField : Widget, IStyleable< TextFieldStyle >
                   || ( character is CarriageReturn or Newline && ( Platform.IsAndroid || Platform.IsIos ) ) );
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             if ( _tf.Disabled )

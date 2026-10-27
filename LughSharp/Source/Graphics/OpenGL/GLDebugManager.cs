@@ -28,8 +28,11 @@ using LughSharp.Source.Graphics.OpenGL.Bindings;
 namespace LughSharp.Source.Graphics.OpenGL;
 
 [PublicAPI]
-public class GLDebugControl
+public class GLDebugManager
 {
+    // ========================================================================
+    // OpenGL Debug Functions
+    
     public const int DebugOutput                  = 0x92E0;
     public const int DebugOutputSynchronous       = 0x8242;
     public const int ContextFlagDebugBit          = 0x0002;
@@ -86,6 +89,7 @@ public class GLDebugControl
         DotGLFW.Glfw.WindowHint( DotGLFW.WindowHint.OpenGLDebugContext, true );
 
         _debugCallback = Engine.GL.MessageCallback;
+        
         Engine.GL.Enable( EnableCap.DebugOutput );
         Engine.GL.Enable( EnableCap.DebugOutputSynchronous );
         Engine.GL.DebugMessageCallback( _debugCallback, null );

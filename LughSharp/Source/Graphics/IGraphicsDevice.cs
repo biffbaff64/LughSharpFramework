@@ -439,7 +439,7 @@ public interface IGraphicsDevice : IDisposable
             BitsPerPixel = bitsPerPixel;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override string ToString()
         {
             return $"{Width}x{Height}, bpp: {BitsPerPixel}, hz: {RefreshRate}";

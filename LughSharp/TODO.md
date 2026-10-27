@@ -516,12 +516,11 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES/DECODERS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - IP   - DONE - BMPFormatStructs
+    - DONE - DONE - DONE - BMPFormatStructs
     - IP   - IP   - DONE - BMPUtils
     - DONE - DONE - DONE - CIM
-    - IP   -      - DONE - ImageValidator
     - DONE - IP   - DONE - PNG
-    - DONE - IP   - DONE - PNGDecoder
+    - DONE - DONE - DONE - PNGDecoder
     - DONE - DONE - DONE - PNGFormatStructs
 
     ------------------------------------
@@ -537,25 +536,22 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES/TEXTUREDATA
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - ETC1TextureData
-    -      -      -      - FacedCubemapData
-    -      -      -      - FileTextureArrayData
-    -      -      -      - FileTextureData
-    -      -      -      - FloatTextureData
-    -      -      -      - GLOnlyTextureData
-    - DONE - IP   - DONE - ITextureData
-    - DONE - IP   - DONE - KTXTTextureData
-    -      -      -      - MipMapTextureData
-    -      -      -      - PixmapTextureData
-    -      -      -      - TextureData
-    -      -      -      - TextureDataFactory
+    -      -      - DONE - FacedCubemapData
+    -      -      - DONE - FileTextureArrayData
+    -      -      - DONE - FileTextureData
+    -      -      - DONE - FloatTextureData
+    -      -      - DONE - GLOnlyTextureData
+    - DONE - DONE - DONE - ITextureData
+    - DONE - IP   - DONE - KTXTTextureData          Update for KTX2
+    -      -      - DONE - MipMapTextureData
+    -      -      - DONE - PixmapTextureData
+    - DONE - DONE - DONE - TextureDataBase          Rename
 
 LUGHSHARP/SOURCE/GRAPHICS/LOADERS
 ---------------------------------
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      -      - Etc1Loader
     -      -      -      - FileLoader
     -      -      -      - KtxLoader
 
@@ -565,14 +561,13 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL
       CODE   DOCU   FOOTER
       ----   ----   ------
     - DONE - DONE - DONE - GLDebugControl
-    - DONE - DONE - DONE - GLImage              Is this still needed?
-    - DONE - IP   - DONE - GLUtils
+    - DONE - DONE - DONE - GLImage
     - DONE - IP   - DONE - IGL
     - DONE - IP   - DONE - IGL.GL20
     - DONE - IP   - DONE - IGL.GL30
     - DONE - IP   - DONE - IGL.GL31
     - DONE - IP   - DONE - IGL.GL32
-    - DONE - IP   - DONE - LughGL
+    - DONE - DONE - DONE - LughGL
 
 LUGHSHARP/SOURCE/GRAPHICS/OPENGL/BINDINGS
 -----------------------------------------
@@ -592,53 +587,63 @@ LUGHSHARP/SOURCE/GRAPHICS/OPENGL/ENUMS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   -      - DONE - BlendMode
-    - IP   -      - DONE - BufferAccess
-    - IP   -      - DONE - BufferBinding
-    - IP   -      - DONE - BufferTarget
-    - IP   -      - DONE - BufferUsageHint
-    - IP   -      - DONE - ClearBufferMask
-    - IP   -      - DONE - ClientApi
-    - IP   -      - DONE - CompareFunction
-    - IP   -      - DONE - ContextApi
-    - IP   -      - DONE - CullFaceMode
-    - IP   -      - DONE - DataType
-    - IP   -      - DONE - DebugEnums               Split
-    - IP   -      - DONE - DrawElementsType
-    - IP   -      - DONE - DrawMode
-    - IP   -      - DONE - EnableCap
-    - IP   -      - DONE - ErrorCode
-    - IP   -      - DONE - FrameBufferEnums         Split
-    - IP   -      - DONE - FrontFaceDirection
-    - IP   -      - DONE - GLParameter
-    - IP   -      - DONE - ImageClass
-    - IP   -      - DONE - IndexType
-    - IP   -      - DONE - InternalFormat
-    - IP   -      - DONE - JoystickHats
-    - IP   -      - DONE - LogicOp
-    - IP   -      - DONE - MapBufferAccess
-    - IP   -      - DONE - MatrixMode
-    - IP   -      - DONE - MatrixSize
-    - IP   -      - DONE - PixelEnums               Split
-    - IP   -      - DONE - PolygonMode
-    - IP   -      - DONE - PrimitiveType
-    - IP   -      - DONE - ProgramParameter
-    - IP   -      - DONE - QueryParameter
-    - IP   -      - DONE - QueryTarget
-    - IP   -      - DONE - ShaderEnums              Split
-    - IP   -      - DONE - StencilEnums             Split
-    - IP   -      - DONE - StringName
-    - IP   -      - DONE - TextureFilterMode
-    - IP   -      - DONE - TextureFormat
-    - IP   -      - DONE - TextureLimit             Redo comments
-    - IP   -      - DONE - TextureParameter
-    - IP   -      - DONE - TextureTarget            Split
-    - IP   -      - DONE - TextureUnit
-    - IP   -      - DONE - TextureUsage
-    - IP   -      - DONE - TextureWrapMode
-    - IP   -      - DONE - VertexAttribParameter
-    - IP   -      - DONE - VertexAttribType
-    - IP   -      - DONE - ViewClass
+    - DONE -      - DONE - BlendMode
+    - DONE -      - DONE - BufferAccess
+    - DONE -      - DONE - BufferBinding
+    - DONE -      - DONE - BufferTarget
+    - DONE -      - DONE - BufferUsageHint
+    - DONE -      - DONE - ClearBufferMask
+    - DONE - DONE - DONE - ClientApi
+    - DONE -      - DONE - CompareFunction
+    - DONE - DONE - DONE - ContextApi
+    - DONE -      - DONE - CullFaceMode
+    - DONE -      - DONE - DataType
+    - DONE -      - DONE - DebugSeverityControl
+    - DONE -      - DONE - DebugSourceControl
+    - DONE -      - DONE - DebugTypeControl
+    - DONE -      - DONE - DrawElementsType
+    - DONE -      - DONE - DrawMode
+    - DONE -      - DONE - EnableCap
+    - DONE -      - DONE - ErrorCode
+    - DONE -      - DONE - FramebufferAttachment
+    - DONE -      - DONE - FramebufferAttachmentPoint
+    - DONE -      - DONE - FramebufferStatus
+    - DONE -      - DONE - FramebufferTarget
+    - DONE -      - DONE - FrontFaceDirection
+    - DONE -      - DONE - GLParameter
+    - DONE -      - DONE - GLPixFormat
+    - DONE -      - DONE - ImageClass
+    - DONE -      - DONE - IndexType
+    - DONE -      - DONE - InternalFormat
+    - DONE -      - DONE - InternalPixFormat
+    - DONE - DONE - DONE - JoystickHats
+    - DONE -      - DONE - LogicOp
+    - DONE -      - DONE - MapBufferAccess
+    - DONE -      - DONE - MatrixMode
+    - DONE -      - DONE - MatrixSize
+    - DONE -      - DONE - PixelStoreParameter
+    - DONE -      - DONE - PixelType
+    - DONE -      - DONE - PolygonMode
+    - DONE -      - DONE - PrimitiveType
+    - DONE -      - DONE - ProgramParameter
+    - DONE -      - DONE - QueryParameter
+    - DONE -      - DONE - QueryTarget
+    - DONE -      - DONE - ShaderParameterName
+    - DONE -      - DONE - ShaderType
+    - DONE -      - DONE - StencilFunction
+    - DONE -      - DONE - StencilOp
+    - DONE -      - DONE - StringName
+    - DONE - DONE - DONE - TextureFilterMode
+    - DONE -      - DONE - TextureFormat
+    - DONE -      - DONE - TextureLimit
+    - DONE -      - DONE - TextureParameter
+    - DONE -      - DONE - TextureTarget
+    - DONE -      - DONE - TextureUnit
+    - DONE -      - DONE - TextureUsage
+    - DONE - DONE - DONE - TextureWrapMode
+    - DONE -      - DONE - VertexAttribParameter
+    - DONE -      - DONE - VertexAttribType
+    - DONE -      - DONE - ViewClass
 
 LUGHSHARP/SOURCE/GRAPHICS/PACKING/IMAGEPACKER
 ---------------------------------------------
@@ -698,8 +703,6 @@ LUGHSHARP/SOURCE/GRAPHICS/UTILS
       ----   ----   ------
     - DONE - DONE - DONE - CharacterUtils
     - DONE - DONE - DONE - DrawableUtils
-    - IP   - IP   - DONE - ETC1
-    - IP   - IP   - DONE - ETC1Data
     - DONE - DONE - DONE - HdpiUtils
     -      -      -      - IImmediateModeRenderer
     -      -      -      - IIndexData

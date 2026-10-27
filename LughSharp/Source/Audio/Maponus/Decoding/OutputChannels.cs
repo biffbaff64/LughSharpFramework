@@ -123,7 +123,7 @@ public class OutputChannels
                };
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         var equals = false;
@@ -136,7 +136,7 @@ public class OutputChannels
         return equals;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         return _outputChannels;

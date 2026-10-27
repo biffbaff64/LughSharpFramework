@@ -31,6 +31,9 @@ namespace LughSharp.Source.Graphics.OpenGL;
 [PublicAPI]
 public class LughGL
 {
+    // ========================================================================
+    // GL Defaults
+
     public const int           DefaultGLMajor             = 3;
     public const int           DefaultGLMinor             = 2;
     public const ClientAPI     DefaultClientApi           = ClientAPI.OpenGLAPI;
@@ -38,12 +41,164 @@ public class LughGL
     public const bool          DefaultOpenglForwardcompat = true;
 
     /// <summary>
-    /// As named, this is the currently bound FBO, used to keep track.
+    /// As named, this is the currently bound FBO.
     /// </summary>
     public static uint CurrentBoundFbo { get; set; }
 
     // ========================================================================
-    
+
+    /// <summary>
+    /// Checks for OpenGL errors after a given stage of rendering or processing.
+    /// Throws an <see cref="InvalidOperationException"/> if an OpenGL error is detected.
+    /// </summary>
+    /// <param name="stage">The description of the stage at which the error occurred.</param>
+    /// <exception cref="InvalidOperationException">Thrown when an OpenGL error is detected.</exception>
+    public static void GLErrorCheck( string stage )
+    {
+        int error = Engine.GL.GetError();
+
+        if ( error != ( int )DotGLFW.ErrorCode.NoError )
+        {
+            throw new InvalidOperationException( $"OpenGL error at {stage}: {error}" );
+        }
+    }
+
+    /// <summary>
+    /// Converts a specified OpenGL error code into a corresponding descriptive error string.
+    /// </summary>
+    /// <param name="errorCode">
+    /// The error code to be translated, typically returned from OpenGL functions.
+    /// </param>
+    /// <returns>
+    /// A string that describes the given OpenGL error code. If the error code is unrecognized,
+    /// a generic message including the code is returned.
+    /// </returns>
+    public static string GetErrorString( int errorCode )
+    {
+        return errorCode switch
+               {
+                   IGL.GLInvalidEnum                 => "Invalid Enum",
+                   IGL.GLInvalidOperation            => "Invalid Operation",
+                   IGL.GLInvalidValue                => "Invalid Value",
+                   IGL.GLOutOfMemory                 => "Out of memory",
+                   IGL.GLInvalidFramebufferOperation => "Invalid Framebuffer operation",
+                   IGL.GLStackOverflow               => "Stack Overflow",
+                   IGL.GLStackUnderflow              => "Stack Underflow",
+                   IGL.GLContextLost                 => "Context Lost",
+
+                   // ----------------------------------
+
+                   IGL.GLNoError => "No Error",
+
+                   // ----------------------------------
+
+                   var _ => $"Unknown GL Error Code: {errorCode}"
+               };
+    }
+
+    /// <summary>
+    /// Checks if there is a current OpenGL context bound to the calling thread.
+    /// </summary>
+    /// <exception cref="LughRuntimeException">
+    /// Thrown when no OpenGL context is currently bound to the thread.
+    /// </exception>
+    public static bool CheckOpenGLContext()
+    {
+        return DotGLFW.Glfw.GetCurrentContext() == null
+            ? throw new LughRuntimeException( "No OpenGL context is current on this thread!" )
+            : true;
+    }
+
+    /// <summary>
+    /// Verifies whether the currently bound buffer matches the expected buffer ID.
+    /// Logs an error if there is a mismatch.
+    /// </summary>
+    /// <param name="expectedBuffer">The identifier of the buffer that is expected to be currently bound.</param>
+    public static unsafe void CheckBufferBinding( uint expectedBuffer )
+    {
+        var currentBuffer = new int[ 1 ];
+
+        fixed ( int* ptr = &currentBuffer[ 0 ] )
+        {
+            // Fetch the currently bound buffer
+            Engine.GL.GetIntegerv( ( int )BufferBinding.ArrayBufferBinding, ptr );
+        }
+
+        if ( currentBuffer[ 0 ] != expectedBuffer )
+        {
+            Logger.Error( $"Buffer not bound correctly! Expected {expectedBuffer}, got {currentBuffer[ 0 ]}" );
+        }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="vbo"></param>
+    /// <param name="sizeInBytes"></param>
+    /// <param name="vertexSizeInFloats"></param>
+    /// <returns></returns>
+    public static float[]? GetVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
+    {
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, vbo );
+
+        IntPtr dataPtr = Engine.GL.MapBuffer( ( int )BufferTarget.ArrayBuffer, ( int )BufferAccess.ReadOnly );
+
+        if ( dataPtr == IntPtr.Zero )
+        {
+            Logger.Debug( "Error: Failed to map VBO." );
+
+            return null;
+        }
+
+        var data = new float[ sizeInBytes / sizeof( float ) ];
+        Marshal.Copy( dataPtr, data, 0, data.Length );
+
+        Engine.GL.UnmapBuffer( ( int )BufferTarget.ArrayBuffer );
+        Engine.GL.BindBuffer( BufferTarget.ArrayBuffer, 0 );
+
+        return data;
+    }
+
+    /// <summary>
+    /// Logs the data contained in a specified Vertex Buffer Object (VBO) for debugging purposes.
+    /// </summary>
+    /// <param name="vbo">
+    /// The ID of the Vertex Buffer Object to retrieve and print data from.
+    /// </param>
+    /// <param name="sizeInBytes"> The size of the data in the VBO, in bytes. </param>
+    /// <param name="vertexSizeInFloats">
+    /// The size of each vertex in the VBO, in terms of the number of floats it contains.
+    /// </param>
+    public static void PrintVboData( uint vbo, int sizeInBytes, int vertexSizeInFloats )
+    {
+        float[]? data = GetVboData( vbo, sizeInBytes, vertexSizeInFloats );
+
+        if ( data == null )
+        {
+            return;
+        }
+
+        Logger.Debug( $"sizeInBytes: {sizeInBytes}" );
+        Logger.Debug( $"vertexSizeInFloats: {vertexSizeInFloats}" );
+        Logger.Debug( $"data.Length: {data.Length}" );
+
+        for ( var i = 0; i < data.Length; i += vertexSizeInFloats )
+        {
+            Logger.Debug( $"Vertex {i / vertexSizeInFloats}: " );
+
+            for ( var j = 0; j < vertexSizeInFloats; j++ )
+            {
+                Logger.Debug( $"{data[ i + j ]} " );
+            }
+        }
+    }
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// OpenGL initialisation and capabilities.
+    /// </summary>
     [PublicAPI]
     public class Initialisation
     {
@@ -117,13 +272,13 @@ public class LughGL
 
     /// <summary>
     /// Attempts to parse the version of the loaded OpenGL implementation from the string
-    /// returned by <c>Engine.GL.GetString( IGL.GLVersion )</c>.
+    /// returned by <see cref="Engine.GL.GetString( IGL.GLVersion )"/>.
     /// </summary>
     private static bool TryParseOpenGLVersionFromString( string str, out int major, out int minor, out int revision )
     {
         str = Capabilities.IsGLES
-            ? str.Substring( "OpenGL ES ".Length )
-            : str.Substring( "OpenGL ".Length );
+                  ? str.Substring( "OpenGL ES ".Length )
+                  : str.Substring( "OpenGL ".Length );
 
         string[] components = str.Split( [ ' ', '.' ], StringSplitOptions.RemoveEmptyEntries );
 
@@ -191,7 +346,8 @@ public class LughGL
         {
             get
             {
-                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Vendor ) ) ?? string.Empty;
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Vendor ) )
+                     ?? string.Empty;
 
                 return field;
             }
@@ -208,7 +364,8 @@ public class LughGL
         {
             get
             {
-                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Renderer ) ) ?? string.Empty;
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Renderer ) )
+                     ?? string.Empty;
 
                 return field;
             }
@@ -225,7 +382,8 @@ public class LughGL
         {
             get
             {
-                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Version ) ) ?? string.Empty;
+                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.Version ) )
+                     ?? string.Empty;
 
                 return field;
             }
@@ -242,7 +400,9 @@ public class LughGL
         {
             get
             {
-                field = Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.ShadingLanguageVersion ) ) ?? string.Empty;
+                field =
+                    Marshal.PtrToStringUTF8( ( IntPtr )Engine.GL.GetString( ( int )StringName.ShadingLanguageVersion ) )
+                 ?? string.Empty;
 
                 return field;
             }

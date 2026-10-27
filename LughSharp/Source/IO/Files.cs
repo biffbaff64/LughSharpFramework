@@ -907,7 +907,7 @@ public class Files : IFiles
     // ========================================================================
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual void Dispose()
     {
         GC.SuppressFinalize( this );

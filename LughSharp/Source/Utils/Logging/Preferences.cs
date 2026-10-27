@@ -93,33 +93,33 @@ public class Preferences : IPreferences
 
     // ========================================================================
     
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsEnabled( string preference )
     {
         return GetBoolean( preference );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsDisabled( string preference )
     {
         return GetBoolean( preference );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Enable( string preference )
     {
         PutBoolean( preference, true );
         Flush();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Disable( string preference )
     {
         PutBoolean( preference, false );
         Flush();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void ToggleState( string preference )
     {
         PutBoolean( preference, !GetBoolean( preference ) );
@@ -169,31 +169,31 @@ public class Preferences : IPreferences
         return this;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutBoolean( string key, bool val )
     {
         return Put( key, val.ToString() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutInteger( string key, int val )
     {
         return Put( key, val.ToString() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutLong( string key, long val )
     {
         return Put( key, val.ToString() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutFloat( string key, float val )
     {
         return Put( key, val.ToString( CultureInfo.InvariantCulture ) );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutString( string key, string val )
     {
         return Put( key, val );

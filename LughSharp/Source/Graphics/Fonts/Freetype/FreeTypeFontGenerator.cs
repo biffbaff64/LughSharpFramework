@@ -887,7 +887,7 @@ public class FreeTypeFontGenerator : IDisposable
         return _face.GetCharIndex( charCode ) != 0;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return _name;
@@ -1102,7 +1102,7 @@ public class FreeTypeFontGenerator : IDisposable
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void Dispose()
         {
             if ( Stroker != null )

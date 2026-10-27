@@ -725,7 +725,7 @@ public class ScrollPane : WidgetGroup, IStyleable< ScrollPaneStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         if ( Widget == null )

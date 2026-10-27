@@ -90,7 +90,7 @@ public class DragScrollListener : DragListener
         _rampTime = ( long )( rampSecs * 1000 );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Drag( InputEvent ev, float x, float y, int pointer )
     {
         ev.ListenerActor?.LocalToActorCoordinates( _scrollPane, _tmpCoords.Set( x, y ) );
@@ -128,7 +128,7 @@ public class DragScrollListener : DragListener
         CancelScrollDown();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void DragStop( InputEvent ev, float x, float y, int pointer )
     {
         CancelScrollUp();

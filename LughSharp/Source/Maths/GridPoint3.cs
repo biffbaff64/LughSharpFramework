@@ -223,7 +223,7 @@ public class GridPoint3
         return new GridPoint3( this );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? o )
     {
         if ( this == o )
@@ -241,7 +241,7 @@ public class GridPoint3
         return ( X == g.X ) && ( Y == g.Y ) && ( Z == g.Z );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 17;
@@ -253,7 +253,7 @@ public class GridPoint3
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"({X}, {Y}, {Z})";

@@ -101,7 +101,7 @@ public class BaseDrawable : ISceneDrawable
     /// </summary>
     public virtual ISceneDrawable Copy() => new BaseDrawable( this );
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         var sb = new StringBuilder();

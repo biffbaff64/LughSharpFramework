@@ -588,7 +588,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
         return newItems;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 31;
@@ -599,7 +599,7 @@ public class SnapshotArrayList< T > : IEnumerable< T >
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -637,13 +637,13 @@ public class SnapshotArrayList< T > : IEnumerable< T >
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IEnumerator< T > GetEnumerator()
     {
         return new SnapshotEnumerator< T >( _items );
@@ -722,10 +722,10 @@ public class SnapshotEnumerator< T > : IEnumerator< T >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     object IEnumerator.Current => Current!;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

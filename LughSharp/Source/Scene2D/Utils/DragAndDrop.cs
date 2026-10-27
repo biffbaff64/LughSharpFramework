@@ -228,7 +228,7 @@ public class DragAndDrop
             _source = source;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void DragStart( InputEvent ev, float x, float y, int pointer )
         {
             if ( _parent.ActivePointer != -1 )
@@ -253,7 +253,7 @@ public class DragAndDrop
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void Drag( InputEvent ev, float x, float y, int pointer )
         {
             if ( ( _parent.DragPayload == null ) || ( pointer != _parent.ActivePointer ) )
@@ -379,7 +379,7 @@ public class DragAndDrop
             actor.SetPosition( actorX, actorY );
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void DragStop( InputEvent ev, float x, float y, int pointer )
         {
             if ( pointer != _parent.ActivePointer )

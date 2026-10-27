@@ -101,7 +101,7 @@ public class AssetDescriptor
         AssetName  = file.FullName;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"AssetName: {AssetName}\n" +

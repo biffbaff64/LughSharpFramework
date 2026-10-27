@@ -162,7 +162,7 @@ public class BitmapFontLoader : AsynchronousAssetLoader, IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

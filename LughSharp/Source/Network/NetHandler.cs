@@ -91,7 +91,7 @@ public abstract class NetHandler : INet
     /// <returns>True if the URI was successfully opened; otherwise, false.</returns>
     public abstract bool OpenUri( string uri );
     
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual void Dispose()
     {
         GC.SuppressFinalize( this );

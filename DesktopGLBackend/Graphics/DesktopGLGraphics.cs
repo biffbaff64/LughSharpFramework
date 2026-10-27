@@ -230,7 +230,7 @@ public class DesktopGLGraphics : GraphicsDevice
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool SetWindowedMode( int width, int height )
     {
         GLWindow?.Input.ResetPollingStates();
@@ -286,7 +286,7 @@ public class DesktopGLGraphics : GraphicsDevice
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SetUndecorated( bool undecorated )
     {
         Guard.Against.Null( GLWindow );
@@ -296,7 +296,7 @@ public class DesktopGLGraphics : GraphicsDevice
         DotGLFW.Glfw.SetWindowAttrib( GLWindow.GlfwWindow, DotGLFW.WindowAttrib.Decorated, undecorated );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SetResizable( bool resizable )
     {
         Guard.Against.Null( GLWindow );
@@ -306,7 +306,7 @@ public class DesktopGLGraphics : GraphicsDevice
         DotGLFW.Glfw.SetWindowAttrib( GLWindow.GlfwWindow, DotGLFW.WindowAttrib.Resizable, resizable );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SetVSync( bool vsync )
     {
         Guard.Against.Null( GLWindow );
@@ -316,7 +316,7 @@ public class DesktopGLGraphics : GraphicsDevice
         DotGLFW.Glfw.SwapInterval( vsync ? 1 : 0 );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SetForegroundFps( int fps )
     {
         Guard.Against.Null( GLWindow );
@@ -324,19 +324,19 @@ public class DesktopGLGraphics : GraphicsDevice
         GLWindow.AppConfig.ForegroundFPS = fps;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool SupportsExtension( string extension )
     {
         return DotGLFW.Glfw.ExtensionSupported( extension );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void RequestRendering()
     {
         GLWindow?.RequestRendering();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override ICursor NewCursor( Pixmap pixmap, int xHotspot, int yHotspot )
     {
         return new DesktopGLCursor( GLWindow!, pixmap, xHotspot, yHotspot );
@@ -370,7 +370,7 @@ public class DesktopGLGraphics : GraphicsDevice
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
         Guard.Against.Null( GLWindow );
@@ -378,7 +378,7 @@ public class DesktopGLGraphics : GraphicsDevice
         return GLWindow.AppConfig.GetDisplayModes( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes( Monitor monitor )
     {
         Guard.Against.Null( GLWindow );
@@ -386,7 +386,7 @@ public class DesktopGLGraphics : GraphicsDevice
         return GLWindow.AppConfig.GetDisplayModes( monitor );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode GetDisplayMode()
     {
         Guard.Against.Null( GLWindow );
@@ -394,7 +394,7 @@ public class DesktopGLGraphics : GraphicsDevice
         return GLWindow.AppConfig.GetDisplayMode( DotGLFW.Glfw.GetPrimaryMonitor() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode GetDisplayMode( Monitor monitor )
     {
         Guard.Against.Null( GLWindow );
@@ -402,13 +402,13 @@ public class DesktopGLGraphics : GraphicsDevice
         return GLWindow.AppConfig.GetDisplayMode( monitor );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override HdpiMode? GetHdpiMode()
     {
         return GLWindow?.AppConfig.HdpiMode;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool SetFullscreenMode( IGraphicsDevice.DisplayMode displayMode )
     {
         Guard.Against.Null( GLWindow );
@@ -498,13 +498,13 @@ public class DesktopGLGraphics : GraphicsDevice
         // --------------------------------------------------------------------
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override (float X, float Y) GetPpiXY()
     {
         return ( GetPpcXY().X * 2.54f, GetPpcXY().Y * 2.54f );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override (float X, float Y) GetPpcXY()
     {
         DotGLFW.Glfw.GetMonitorPhysicalSize( DotGLFW.Glfw.GetPrimaryMonitor(), out int sizeX, out int sizeY );

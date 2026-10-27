@@ -216,7 +216,7 @@ public class Plane
         DistanceToOrigin = plane.DistanceToOrigin;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{Normal}, {DistanceToOrigin}";

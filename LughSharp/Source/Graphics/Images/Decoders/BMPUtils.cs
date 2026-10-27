@@ -139,7 +139,7 @@ public static class BmpUtils
                 or System.Drawing.Imaging.PixelFormat.Format8bppIndexed )
             {
                 Logger.Debug( "Image is Indexed (uses a color palette)." );
-                Logger.Debug( $"Palette Entries: {bmp.Palette.Entries.Length}" );
+                Logger.Debug( $"Number of Palette Entries: {bmp.Palette.Entries.Length}" );
             }
             else
             {
@@ -151,7 +151,7 @@ public static class BmpUtils
             {
                 Logger.Debug( $"- PropertyItem ID: 0x{propItem.Id:X}, Type: {propItem.Type}, Length: {propItem.Len}" );
 
-                // You'd need to parse propItem.Value for its meaning
+                //TODO: parse propItem.Value for its meaning
             }
         }
         catch ( NullReferenceException nre )

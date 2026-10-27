@@ -80,7 +80,7 @@ public class InputTest : InputAdapter, ILughTest
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnKeyDown( int keycode )
     {
         Logger.Debug( $"key down: {IInput.Keys.NameOf( keycode, true )}" );
@@ -93,7 +93,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnKeyUp( int keycode )
     {
         Logger.Debug( $"key up: {IInput.Keys.NameOf( keycode, true )}" );
@@ -101,7 +101,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnKeyTyped( char ch )
     {
         Logger.Debug( $"key typed: '{ch}'" );
@@ -109,7 +109,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnTouchDown( int screenX, int screenY, int ptr, int button )
     {
         Logger.Debug( $"touch down: {screenX}, {screenY}, button: {IInput.Keys.NameOf( button, true )}" );
@@ -117,7 +117,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnTouchUp( int screenX, int screenY, int pointer, int button )
     {
         Logger.Debug( $"touch up: {screenX}, {screenY}, button: {IInput.Keys.NameOf( button, true )}" );
@@ -125,7 +125,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnTouchDragged( int screenX, int screenY, int pointer )
     {
         Logger.Debug( $"touch dragged: {screenX}, {screenY}, pointer: {pointer}" );
@@ -133,7 +133,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnMouseMoved( int screenX, int screenY )
     {
         Logger.Debug( $"touch moved: {screenX}, {screenY}" );
@@ -141,7 +141,7 @@ public class InputTest : InputAdapter, ILughTest
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnScrolled( float amountX, float amountY )
     {
         Logger.Debug( $"scrolled: {amountY}" );

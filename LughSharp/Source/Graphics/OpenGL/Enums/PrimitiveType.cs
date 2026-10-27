@@ -27,14 +27,14 @@ namespace LughSharp.Source.Graphics.OpenGL.Enums;
 [PublicAPI]
 public enum PrimitiveType
 {
-    Points        = 0x0000,
-    Lines         = 0x0001,
-    LineLoop      = 0x0002,
-    LineStrip     = 0x0003,
-    Triangles     = 0x0004,
-    TriangleStrip = 0x0005,
-    TriangleFan   = 0x0006,
-    Quads         = 0x0007
+    Points        = IGL.GLPoints,
+    Lines         = IGL.GLLines,
+    LineLoop      = IGL.GLLineLoop,
+    LineStrip     = IGL.GLLineStrip,
+    Triangles     = IGL.GLTriangles,
+    TriangleStrip = IGL.GLTriangleStrip,
+    TriangleFan   = IGL.GLTriangleFan,
+    Quads         = IGL.GLQuads,
 }
 
 // ========================================================================

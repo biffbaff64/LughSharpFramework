@@ -668,7 +668,7 @@ public class Vector2 : IVector< Vector2 >
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( ( obj == null ) || ( GetType() != obj.GetType() ) )

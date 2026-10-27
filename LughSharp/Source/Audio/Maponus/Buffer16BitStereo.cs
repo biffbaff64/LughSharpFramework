@@ -195,7 +195,7 @@ public class Buffer16BitStereo : AudioBase
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SetStopFlag()
     {
     }

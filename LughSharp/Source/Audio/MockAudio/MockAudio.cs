@@ -31,36 +31,36 @@ namespace LughSharp.Source.Mock.Audio;
 [PublicAPI]
 public class MockAudio : IAudio
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IAudioDevice NewAudioDevice( int samplingRate, bool isMono )
     {
         return new MockAudioDevice();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IAudioRecorder NewAudioRecorder( int samplingRate, bool isMono )
     {
         return new MockAudioRecorder();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public ISound NewSound( FileInfo? fileHandle )
     {
         return new MockSound();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IMusic NewMusic( FileInfo? file )
     {
         return new MockMusic();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Update()
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         GC.SuppressFinalize( this );

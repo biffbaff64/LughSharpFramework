@@ -132,7 +132,7 @@ public class HexagonalTiledMapRenderer : BatchTileMapRenderer
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void RenderTileLayer( TiledMapTileLayer layer )
     {
         float color =

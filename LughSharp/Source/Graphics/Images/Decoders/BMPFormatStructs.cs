@@ -26,6 +26,11 @@ namespace LughSharp.Source.Graphics.Images.Decoders;
 
 /// <summary>
 /// BMP Header Structure.
+/// <br/>Bytes 0 - 1: File signature/identifier; must be 0x4D42 in hex or "BM" in ASCII.
+/// <br/>Bytes 2 - 5: Size of the file in bytes.
+/// <br/>Bytes 6 - 7: Reserved, must be 0.
+/// <br/>Bytes 8 - 9: Reserved, must be 0.
+/// <br/>Bytes 10 - 13: Offset to the pixel array from the beginning of the file.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -43,6 +48,17 @@ public struct BitmapFileHeader
 
 /// <summary>
 /// BMP Info Header Structure. Do not change this layout order.
+/// <br/>Bytes 0 - 3: Size of the header in bytes.
+/// <br/>Bytes 4 - 7: Width of the image in pixels.
+/// <br/>Bytes 8 - 11: Height of the image in pixels.
+/// <br/>Bytes 12 - 13: Number of color planes.
+/// <br/>Bytes 14 - 15: Number of bits per pixel.
+/// <br/>Bytes 16 - 19: Compression method.
+/// <br/>Bytes 20 - 23: Image size in bytes.
+/// <br/>Bytes 24 - 27: Horizontal resolution in pixels per meter.
+/// <br/>Bytes 28 - 31: Vertical resolution in pixels per meter.
+/// <br/>Bytes 32 - 35: Number of colors used.
+/// <br/>Bytes 36 - 39: Number of important colors.
 /// </summary>
 [PublicAPI]
 [StructLayout( LayoutKind.Sequential )]
@@ -75,12 +91,43 @@ public struct BitmapFileInfoHeader
 [PublicAPI]
 public enum BitmapCompressionMode : uint
 {
-    BiRGB       = 0,
-    BiRle8      = 1,
-    BiRle4      = 2,
+    /// <summary>
+    ///  The standard uncompressed mode used for most BMP files. It stores raw
+    /// pixel data sequentially without any compression.
+    /// </summary>
+    BiRGB = 0,
+
+    /// <summary>
+    /// Run-Length Encoding (RLE) used exclusively for 8-bit (256-color) paletted
+    /// bitmaps. It compresses consecutive matching color indices into pairs of
+    /// count and color data.
+    /// </summary>
+    BiRle8 = 1,
+
+    /// <summary>
+    /// Run-Length Encoding used exclusively for 4-bit (16-color) paletted bitmaps,
+    /// working on the same repetition-counting principle for 4-bit nibbles.
+    /// </summary>
+    BiRle4 = 2,
+
+    /// <summary>
+    /// Used for 16-bit or 32-bit high-color and true-color images. Instead of
+    /// compression, it uses explicit red, green, and blue bit masks in the header
+    /// to define how color channels are packed into each pixel.
+    /// </summary>
     BiBitfields = 3,
-    BiJpeg      = 4,
-    BiPNG       = 5
+
+    /// <summary>
+    /// Later extension in certain device/driver specs allowing embedded JPEG streams
+    /// directly inside a BMP wrapper, though rarely used in standard file creation.
+    /// </summary>
+    BiJpeg = 4,
+
+    /// <summary>
+    /// Later extension in certain device/driver specs allowing embedded PNG streams
+    /// directly inside a BMP wrapper, though rarely used in standard file creation.
+    /// </summary>
+    BiPNG = 5
 }
 
 // ============================================================================
@@ -98,5 +145,3 @@ public struct BmpPixelArray
 
 // ============================================================================
 // ============================================================================
-
-

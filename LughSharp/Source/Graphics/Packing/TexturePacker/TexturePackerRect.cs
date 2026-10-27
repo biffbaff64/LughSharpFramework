@@ -169,7 +169,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
         return flattenPaths ? new FileInfo( name ).Name : name;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     [SuppressMessage( "ReSharper", "NonReadonlyMemberInGetHashCode" )]
     public override int GetHashCode()
     {
@@ -183,7 +183,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
         return hash.ToHashCode();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( this == obj )
@@ -234,7 +234,7 @@ public class TexturePackerRect : IComparable< TexturePackerRect >
         Logger.Block();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{Name}{( Index != -1 ? $"_{Index}" : string.Empty )}[{X},{Y} {Width}x{Height}]";

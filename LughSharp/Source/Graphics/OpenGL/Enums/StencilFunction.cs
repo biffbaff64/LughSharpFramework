@@ -37,18 +37,5 @@ public enum StencilFunction
     Always   = IGL.GLAlways
 }
 
-[PublicAPI]
-public enum StencilOp
-{
-    Keep          = IGL.GLKeep,
-    Zero          = IGL.GLZero,
-    Replace       = IGL.GLReplace,
-    Increment     = IGL.GLIncr,
-    IncrementWrap = IGL.GLIncrWrap,
-    Decrement     = IGL.GLDecr,
-    DecrementWrap = IGL.GLDecrWrap,
-    Invert        = IGL.GLInvert
-}
-
 // ========================================================================
 // ========================================================================

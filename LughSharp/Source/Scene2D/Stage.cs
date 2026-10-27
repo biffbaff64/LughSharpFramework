@@ -1228,7 +1228,7 @@ public class Stage : InputAdapter, IDisposable
     /// <see cref="Group.Children "/>
     public SnapshotArrayList< Actor > Actors => RootGroup.Children;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Clear();

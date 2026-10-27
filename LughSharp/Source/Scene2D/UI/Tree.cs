@@ -937,7 +937,7 @@ public class Tree< TNode, TValue > : WidgetGroup
     // ========================================================================
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     [PublicAPI]
     public class TreeSelection : Selection< TNode >
     {
@@ -948,7 +948,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             _parent = p;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void OnChanged()
         {
             _parent.RangeStart = Size() switch
@@ -1556,7 +1556,7 @@ public class Tree< TNode, TValue > : WidgetGroup
 
         // ====================================================================
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnClicked( InputEvent ev, float x, float y )
         {
             TNode? node = _tree.GetNodeAt( y );
@@ -1638,7 +1638,7 @@ public class Tree< TNode, TValue > : WidgetGroup
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnMouseMoved( InputEvent? ev, float x, float y )
         {
             _tree.OverNode = _tree.GetNodeAt( y );
@@ -1646,14 +1646,14 @@ public class Tree< TNode, TValue > : WidgetGroup
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void EnterActor( InputEvent? ev, float x, float y, int pointer, Actor? fromActor )
         {
             base.EnterActor( ev, x, y, pointer, fromActor );
             _tree.OverNode = _tree.GetNodeAt( y );
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void ExitActor( InputEvent? ev, float x, float y, int pointer, Actor? toActor )
         {
             base.ExitActor( ev, x, y, pointer, toActor );

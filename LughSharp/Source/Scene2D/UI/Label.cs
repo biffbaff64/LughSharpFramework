@@ -698,7 +698,7 @@ public class Label : Widget, IStyleable< LabelStyle >, IDisposable
         _ellipsis = ellipsis ? "..." : null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         string className = GetType().Name;

@@ -368,7 +368,7 @@ public class Scene2DImage : Widget
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         string className = GetType().Name;

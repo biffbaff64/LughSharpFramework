@@ -72,7 +72,7 @@ public class NinePatchDrawable : BaseDrawable, ITransformDrawable
         Patch = drawable.Patch;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Draw( IBatch batch, float x, float y, float width, float height )
     {
         Patch?.Draw( batch, x, y, width, height );

@@ -131,7 +131,7 @@ public class Ray
         return this;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -149,7 +149,7 @@ public class Ray
         return Direction.Equals( r.Direction ) && Origin.Equals( r.Origin );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 73;
@@ -160,7 +160,7 @@ public class Ray
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return "ray [" + Origin + ":" + Direction + "]";

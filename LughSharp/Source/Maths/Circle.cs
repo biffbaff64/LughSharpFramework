@@ -252,7 +252,7 @@ public class Circle : IShape2D
         return Radius * Radius * MathUtils.Pi;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -272,7 +272,7 @@ public class Circle : IShape2D
             || ( Math.Abs( Radius - c.Radius ) < NumberUtils.FloatTolerance );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 41;

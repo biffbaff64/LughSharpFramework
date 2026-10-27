@@ -212,7 +212,7 @@ public class IndexBufferObject : IIndexData
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public Buffer< int > GetBuffer( bool forWriting )
     {
         _isDirty = forWriting;
@@ -220,7 +220,7 @@ public class IndexBufferObject : IIndexData
         return _buffer;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Bind()
     {
         if ( BufferID == 0 )
@@ -248,21 +248,21 @@ public class IndexBufferObject : IIndexData
         _isBound = true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Unbind()
     {
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
         _isBound = false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Invalidate()
     {
         BufferID = ( int )Engine.GL.GenBuffer(); //TODO: ???
         _isDirty = true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );

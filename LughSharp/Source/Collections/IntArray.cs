@@ -1,4 +1,4 @@
-﻿// // /////////////////////////////////////////////////////////////////////////////
+﻿// /////////////////////////////////////////////////////////////////////////////
 // //  MIT License
 // //
 // //  Copyright (c) 2024 Richard Ikin
@@ -20,7 +20,7 @@
 // //  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // //  SOFTWARE.
-// // /////////////////////////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////////////////////////
 
 
 namespace LughSharp.Source.Collections;
@@ -736,7 +736,7 @@ public class IntArray
         return array;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         //TODO:
@@ -802,7 +802,7 @@ public class IntArray
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         if ( Size == 0 )

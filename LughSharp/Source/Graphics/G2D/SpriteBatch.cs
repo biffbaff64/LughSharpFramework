@@ -245,7 +245,7 @@ public class SpriteBatch : IBatch
     /// </param>
     private void Initialise( int size, ShaderProgram? defaultShader )
     {
-        GLUtils.CheckOpenGLContext();
+        LughGL.CheckOpenGLContext();
 
         _currentTextureIndex   = 0;
         _textureLocation       = 0;
@@ -471,7 +471,7 @@ public class SpriteBatch : IBatch
     {
         lock ( _lockObject )
         {
-            GLUtils.CheckOpenGLContext();
+            LughGL.CheckOpenGLContext();
 
             if ( Idx <= 0 )
             {
@@ -669,7 +669,7 @@ public class SpriteBatch : IBatch
     {
         lock ( _lockObject )
         {
-            GLUtils.CheckOpenGLContext();
+            LughGL.CheckOpenGLContext();
 
             if ( program == null || _mesh == null )
             {
@@ -2093,7 +2093,7 @@ public class SpriteBatch : IBatch
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         lock ( _lockObject )

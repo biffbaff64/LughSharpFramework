@@ -30,7 +30,7 @@ namespace LughSharp.Source.Assets.Loaders.Resolvers;
 [PublicAPI]
 public class LocalFileHandleResolver : IFileHandleResolver
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public FileInfo Resolve( string filename )
     {
         return Engine.Files.Local( filename );

@@ -100,7 +100,7 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
         BuildBuffer();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override Cubemap CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
         GLOnlyTextureData data = new( BufferBuilder.Width,
@@ -118,13 +118,13 @@ public class FrameBufferCubemap : GLFrameBuffer< Cubemap >
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void DisposeColorTexture( Cubemap colorTexture )
     {
         colorTexture.Dispose();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void AttachFrameBufferColorTexture( Cubemap texture )
     {
         uint glHandle = texture.GLTextureHandle;

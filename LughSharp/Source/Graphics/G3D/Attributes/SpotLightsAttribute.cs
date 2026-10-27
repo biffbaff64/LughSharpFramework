@@ -46,7 +46,7 @@ public class SpotLightsAttribute : G3DAttribute
     public static string Alias => "spotLights";
     public static long   Type  => Register( Alias );
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override G3DAttribute Copy()
     {
         return this;

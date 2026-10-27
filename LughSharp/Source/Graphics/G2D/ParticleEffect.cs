@@ -610,7 +610,7 @@ public class ParticleEffect : IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

@@ -83,7 +83,7 @@ public class FramebufferFormat
     /// </summary>
     public bool CoverageSampling { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"r - {R}, g - {G}, b - {B}, a - {A}, depth - {Depth}, stencil - "

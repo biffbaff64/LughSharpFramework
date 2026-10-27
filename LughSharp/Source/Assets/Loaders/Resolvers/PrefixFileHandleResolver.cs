@@ -49,7 +49,7 @@ public class PrefixFileHandleResolver : IFileHandleResolver
         Prefix       = prefix;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public FileInfo Resolve( string filename )
     {
         return BaseResolver.Resolve( Prefix + filename );

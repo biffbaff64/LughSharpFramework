@@ -414,7 +414,7 @@ public abstract class GLTexture : IDisposable
     /// <param name="target"></param>
     /// <param name="data"></param>
     /// <param name="miplevel"></param>
-    public void UploadImageData( int target, ITextureData? data, int miplevel )
+    public static void UploadImageData( int target, ITextureData? data, int miplevel )
     {
         if ( data == null )
         {
@@ -517,7 +517,7 @@ public abstract class GLTexture : IDisposable
     // ========================================================================
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

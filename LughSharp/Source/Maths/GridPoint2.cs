@@ -197,7 +197,7 @@ public class GridPoint2
         return new GridPoint2( this );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? o )
     {
         if ( this == o )
@@ -215,7 +215,7 @@ public class GridPoint2
         return ( X == g.X ) && ( Y == g.Y );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 53;
@@ -226,7 +226,7 @@ public class GridPoint2
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"({X},{Y})";

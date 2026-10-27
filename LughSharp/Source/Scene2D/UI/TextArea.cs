@@ -122,7 +122,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         LinesShowing     = 0;
     }
     
-    /// <inheritdoc />
+    /// <inheritdoc/>
     /// <exception cref="LughRuntimeException">Thrown if invalid runtime conditions occur during processing.</exception>
     protected override int LetterUnderCursor( float x )
     {
@@ -347,7 +347,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         return index;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void OnSizeChanged()
     {
         // Cause calculateOffsets to recalculate the line breaks.
@@ -365,7 +365,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         LinesShowing = ( int )Math.Floor( availableHeight / font.GetLineHeight() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override float GetTextY( BitmapFont font, ISceneDrawable? background )
     {
         float textY = GetHeight();
@@ -383,7 +383,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         return textY;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void DrawSelection( ISceneDrawable selection, IBatch batch, BitmapFont font, float x, float y )
     {
         int   i          = FirstLineShowing * 2;
@@ -452,7 +452,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void DrawText( IBatch batch, BitmapFont font, float x, float y )
     {
         float? offsetY = -( GetStyle().Font.GetLineHeight() - TextHeight ) / 2;
@@ -478,13 +478,13 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void DrawCursor( ISceneDrawable cursorPatch, IBatch batch, BitmapFont font, float x, float y )
     {
         cursorPatch.Draw( batch, x + GetCursorX(), y + GetCursorY(), cursorPatch.MinWidth, font.GetLineHeight() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void CalculateOffsets()
     {
         Guard.Against.Null( Text );
@@ -576,14 +576,14 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SetSelection( int selectionStart, int selectionEnd )
     {
         base.SetSelection( selectionStart, selectionEnd );
         UpdateCurrentLine();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void MoveCursor( bool forward, bool jump )
     {
         int count = forward ? 1 : -1;
@@ -611,7 +611,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
         UpdateCurrentLine();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override bool ContinueCursor( int index, int offset )
     {
         int pos = CalculateCurrentLineIndex( index + offset );
@@ -682,7 +682,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
             _parent = ta;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void SetCursorPosition( float x, float y )
         {
             _parent._moveOffset = -1;
@@ -712,7 +712,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
             _parent.UpdateCurrentLine();
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnKeyDown( InputEvent? ev, int keycode )
         {
             bool result = base.OnKeyDown( ev, keycode );
@@ -779,13 +779,13 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
             return result;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override bool CheckFocusTraversal( char character )
         {
             return _parent.FocusTraversal && ( character == Tab );
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnKeyTyped( InputEvent? ev, char character )
         {
             bool result = base.OnKeyTyped( ev, character );
@@ -795,7 +795,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
             return result;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void GoHome( bool jump )
         {
             if ( jump )
@@ -808,7 +808,7 @@ public class TextArea : TextField, IStyleable< TextFieldStyle >
             }
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         protected override void GoEnd( bool jump )
         {
             if ( jump || ( _parent.CursorLine >= _parent.GetLines() ) )

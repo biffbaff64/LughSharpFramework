@@ -135,13 +135,13 @@ public class MapLayers : IEnumerable< MapLayer >
         return fill;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IEnumerator< MapLayer > GetEnumerator()
     {
         return _layers.GetEnumerator();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();

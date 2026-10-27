@@ -404,7 +404,7 @@ public class TextureAtlas : IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

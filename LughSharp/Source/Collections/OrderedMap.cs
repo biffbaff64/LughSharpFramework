@@ -561,7 +561,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     {
         private List< TK > _keys;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public OrderedMapKeys( OrderedMap< TK, TV > map ) : base( map )
         {
             _keys = map._keys;
@@ -667,7 +667,7 @@ public class OrderedMap< TK, TV > : ObjectMap< TK, TV > where TK : notnull
     {
         private List< TK > _keys;
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public OrderedMapValues( OrderedMap< TK, TV > map ) : base( map )
         {
             _keys = map._keys;

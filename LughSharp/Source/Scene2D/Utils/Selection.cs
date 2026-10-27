@@ -538,7 +538,7 @@ public class Selection< T > : IDisableable, IDisposable
 
     #region dispose pattern
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

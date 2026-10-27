@@ -79,7 +79,7 @@ public class TextureAtlasLoader : SynchronousAssetLoader< TextureAtlas >, IDispo
         return atlas;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo atlasFile,
                                                                    TP? parameter ) where TP : class

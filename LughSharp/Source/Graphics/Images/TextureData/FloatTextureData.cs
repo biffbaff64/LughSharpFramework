@@ -44,7 +44,7 @@ public class FloatTextureData : ITextureData
     public bool            IsPrepared    { get; set; }
     public bool            UseMipMaps    { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsOwned { get; set; }
 
     /// <summary>
@@ -165,9 +165,6 @@ public class FloatTextureData : ITextureData
         return LughFormat.RGBA8888;
     }
 
-    // ========================================================================
-    // ========================================================================
-
     public int PixelFormat
     {
         get => throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
@@ -184,7 +181,7 @@ public class FloatTextureData : ITextureData
         throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void DebugPrint()
     {
     }

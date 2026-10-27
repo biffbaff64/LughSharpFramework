@@ -94,7 +94,9 @@ public static class CIM
     /// </summary>
     /// <param name="file"> The file to read from. </param>
     /// <returns> The Pixmap instance read from the file. </returns>
-    /// <exception cref="LughRuntimeException">Thrown if the Pixmap cannot be read from the specified file.</exception>
+    /// <exception cref="LughRuntimeException">
+    /// Thrown if the Pixmap cannot be read from the specified file.
+    /// </exception>
     public static Pixmap Read( FileInfo file )
     {
         try

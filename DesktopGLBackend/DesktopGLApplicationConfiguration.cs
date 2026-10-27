@@ -74,7 +74,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
         return copy;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode GetDisplayMode( DotGLFW.Monitor monitor )
     {
         Vidmode? videoMode = Glfw.GetVideoMode( monitor );
@@ -87,7 +87,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
                                                                              + videoMode.BlueBits );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
         Vidmode[]? videoModes = Glfw.GetVideoModes( Glfw.GetPrimaryMonitor() );
@@ -109,7 +109,7 @@ public class DesktopGLApplicationConfiguration : ApplicationConfiguration
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {
         Vidmode[]? videoModes = Glfw.GetVideoModes( monitor );

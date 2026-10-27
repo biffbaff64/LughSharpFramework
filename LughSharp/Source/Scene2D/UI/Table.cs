@@ -291,7 +291,7 @@ public class Table : WidgetGroup
         return _background;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( _clip )
@@ -742,7 +742,7 @@ public class Table : WidgetGroup
         return null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetPrefWidth()
     {
         if ( _sizeInvalid )
@@ -755,7 +755,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( width, _background.MinWidth ) : width;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetPrefHeight()
     {
         if ( _sizeInvalid )
@@ -768,7 +768,7 @@ public class Table : WidgetGroup
         return _background != null ? Math.Max( height, _background.MinHeight ) : height;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetMinWidth()
     {
         if ( _sizeInvalid )
@@ -779,7 +779,7 @@ public class Table : WidgetGroup
         return _tableMinWidth;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetMinHeight()
     {
         if ( _sizeInvalid )
@@ -2077,7 +2077,7 @@ public class Table : WidgetGroup
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override Table EnableDebug()
     {
         base.EnableDebug();

@@ -1032,7 +1032,7 @@ public class PixmapPacker : IDisposable
 
         private class PixmapComparer : IComparer< Pixmap >
         {
-            /// <inheritdoc />
+            /// <inheritdoc/>
             public int Compare( Pixmap? x, Pixmap? y )
             {
                 return Math.Max( x!.Width, x.Height ) - Math.Max( y!.Width, y.Height );
@@ -1191,7 +1191,7 @@ public class PixmapPacker : IDisposable
 
         private class PixmapComparer : IComparer< Pixmap >
         {
-            /// <inheritdoc />
+            /// <inheritdoc/>
             public int Compare( Pixmap? x, Pixmap? y )
             {
                 if ( ReferenceEquals( x, y ) )

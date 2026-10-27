@@ -202,7 +202,7 @@ public class GestureDetector : InputAdapter
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnTouchDown( int screenX, int screenY, int ptrIndex, int button )
     {
         return OnTouchDown( screenX, screenY, ptrIndex, button );
@@ -270,7 +270,7 @@ public class GestureDetector : InputAdapter
         return _listener.TouchDown( x, y, ptrIndex, button );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnTouchDragged( int screenX, int screenY, int ptrIndex )
     {
         return OnTouchDragged( screenX, screenY, ptrIndex );
@@ -338,7 +338,7 @@ public class GestureDetector : InputAdapter
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OnTouchUp( int screenX, int screenY, int ptrIndex, int button )
     {
         return OnTouchUp( screenX, screenY, ptrIndex, button );
@@ -666,49 +666,49 @@ public class GestureDetector : InputAdapter
     [PublicAPI]
     public class GestureAdapter : IGestureListener
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool TouchDown( float x, float y, int pointerId, int button )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool Tap( float x, float y, int count, int button )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool LongPress( float x, float y )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool Fling( float velocityX, float velocityY, int button )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool Pan( float x, float y, float deltaX, float deltaY )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool PanStop( float x, float y, int pointerId, int button )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool Zoom( float initialDistance, float distance )
         {
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public bool Pinch( Vector2 initialPointer1,
                            Vector2 initialPointer2,
                            Vector2 pointer1,
@@ -717,7 +717,7 @@ public class GestureDetector : InputAdapter
             return false;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public void PinchStop()
         {
         }

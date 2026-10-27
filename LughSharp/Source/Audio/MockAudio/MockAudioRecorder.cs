@@ -30,12 +30,12 @@ namespace LughSharp.Source.Mock.Audio;
 [PublicAPI]
 public class MockAudioRecorder : IAudioRecorder
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Read( short[] samples, int offset, int numSamples )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         GC.SuppressFinalize( this );

@@ -134,10 +134,10 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     /// <inheritdoc cref="Actor.GetHeight()"/>
     private float GetHeightUnchecked() => GetHeight();
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetPrefWidth() => _style.Background?.MinWidth ?? 0;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override float GetPrefHeight() => _style.Background?.MinHeight ?? 0;
 
     /// <summary>
@@ -250,7 +250,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override Actor? Hit( float x, float y, bool touchable )
     {
         if ( touchable && ( this.Touchable != Touchable.Enabled ) )
@@ -266,7 +266,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
         return _touchBounds.Contains( x, y ) ? this : null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Layout()
     {
         // Recalc pad and deadzone bounds
@@ -289,7 +289,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
         _knobPercent.Set( 0, 0 );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void Draw( IBatch batch, float parentAlpha )
     {
         Validate();
@@ -353,7 +353,7 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
     /// </remarks>
     public class TouchpadInputListener( Touchpad pad ) : InputListener
     {
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override bool OnTouchDown( InputEvent? ev, float x, float y, int pointer, int button )
         {
             if ( pad.IsTouched )
@@ -367,13 +367,13 @@ public class Touchpad : Widget, IStyleable< TouchpadStyle >
             return true;
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnTouchDragged( InputEvent? ev, float x, float y, int pointer )
         {
             pad.CalculatePositionAndValue( x, y, false );
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override void OnTouchUp( InputEvent? ev, float x, float y, int pointer, int button )
         {
             pad.IsTouched = false;

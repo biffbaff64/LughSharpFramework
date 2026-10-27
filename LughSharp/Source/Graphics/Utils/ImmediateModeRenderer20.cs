@@ -402,7 +402,7 @@ public class ImmediateModeRenderer20 : IImmediateModeRenderer
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         if ( _ownsShader && ( _shader != null ) )

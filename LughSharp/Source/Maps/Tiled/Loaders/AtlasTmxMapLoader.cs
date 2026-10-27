@@ -156,7 +156,7 @@ public class AtlasTmxMapLoader( IFileHandleResolver resolver )
         return null!;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override List< AssetDescriptor > GetDependencyAssetDescriptors( FileInfo tmxFile,
                                                                            TextureLoader.TextureLoaderParameters
                                                                                textureLoaderParameters )

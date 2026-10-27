@@ -355,7 +355,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
         _nodes[ index ] = node;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj is not BinaryHeap< T > other )
@@ -382,7 +382,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         int hash = 37 + GetType().GetHashCode();
@@ -392,7 +392,7 @@ public class BinaryHeap< T > where T : BinaryHeapNode
         return hash;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         if ( ( Size == 0 ) || ( _nodes == null ) )

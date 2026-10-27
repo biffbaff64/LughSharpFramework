@@ -1193,7 +1193,7 @@ public class BitmapFontData
         return copy;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return Name ?? base.ToString();

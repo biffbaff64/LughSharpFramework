@@ -285,7 +285,7 @@ public class ImagePacker : IDisposable
         return bitmap;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

@@ -732,10 +732,10 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// 
+    /// Creates a PNG from the supplied <see cref="Texture2D"/>
     /// </summary>
-    /// <param name="texture"></param>
-    /// <returns></returns>
+    /// <param name="texture"> The <see cref="Texture2D"/> to be converted into a PNG. </param>
+    /// <returns> The resulting PNG data as a byte array. </returns>
     public static byte[] CreatePNGFromTexture( Texture2D texture )
     {
         Logger.Checkpoint();
@@ -754,14 +754,14 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// 
+    /// Creates a PNG from raw RGBA data by adding the necessary PNG headers and chunks.
     /// </summary>
-    /// <param name="rawRgba"></param>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="format"></param>
-    /// <param name="bitDepth"></param>
-    /// <returns></returns>
+    /// <param name="rawRgba"> The raw RGBA data to be converted into a PNG. </param>
+    /// <param name="width"> The width of the image in pixels. </param>
+    /// <param name="height"> The height of the image in pixels. </param>
+    /// <param name="format"> The color format of the image. </param>
+    /// <param name="bitDepth"> The bit depth of the image. </param>
+    /// <returns> The resulting PNG data as a byte array. </returns>
     /// <exception cref="ArgumentException"></exception>
     public static byte[] CreatePNGFromRawRGBA( byte[] rawRgba,
                                                int width,
@@ -872,10 +872,10 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// 
+    /// Writes the supplied PNG data to a file.
     /// </summary>
-    /// <param name="pngData"></param>
-    /// <param name="filename"></param>
+    /// <param name="pngData"> The PNG data to be written to the file. </param>
+    /// <param name="filename"> The name of the file to write the PNG data to. </param>
     /// <exception cref="ArgumentException"></exception>
     public static void WritePNGToFile( byte[] pngData, string filename )
     {
@@ -1067,9 +1067,9 @@ public class PNGDecoder
     }
 
     /// <summary>
-    /// 
+    /// Debug writes the supplied PNG data to the log.
     /// </summary>
-    /// <param name="pngData"></param>
+    /// <param name="pngData"> The PNG data to be written to the log. </param>
     private static void DebugDumpPngData( byte[] pngData )
     {
         var offset    = 0;

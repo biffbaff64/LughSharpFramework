@@ -191,8 +191,10 @@ public class PolygonRegionLoader( IFileHandleResolver resolver ) : SynchronousAs
         /// </summary>
         public readonly string[] TextureExtensions =
         [
-            "png", "PNG", "jpeg", "JPEG", "jpg", "JPG", "cim", "CIM",
-            "etc1", "ETC1", "ktx", "KTX", "zktx", "ZKTX"
+            "png", "PNG",
+            "jpeg", "JPEG", "jpg", "JPG",
+            "cim", "CIM",
+            "ktx", "KTX", "zktx", "ZKTX",
         ];
 
         /// <summary>

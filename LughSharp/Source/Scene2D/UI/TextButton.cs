@@ -269,7 +269,7 @@ public class TextButton : Button, IStyleable< TextButtonStyle >
     
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         string className = GetType().Name;

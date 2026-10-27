@@ -35,37 +35,37 @@ public class DesktopGLNet : NetHandler
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void SendHttpRequest( INet.HttpRequest httpRequest,
                                           INet.IHttpResponseListener httpResponseListener )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override void CancelHttpRequest( INet.HttpRequest httpRequest )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IServerSocket? NewServerSocket( INet.Protocol protocol, string hostname, int port,
                                                     ServerSocketHints hints )
     {
         return null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override IServerSocket? NewServerSocket( INet.Protocol protocol, int port, ServerSocketHints hints )
     {
         return null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override ISocket? NewClientSocket( INet.Protocol protocol, string host, int port, SocketHints hints )
     {
         return null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool OpenUri( string uri )
     {
 //        if ( SharedLibraryLoader.IsMac )

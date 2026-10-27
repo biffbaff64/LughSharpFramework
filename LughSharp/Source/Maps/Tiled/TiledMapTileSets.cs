@@ -127,7 +127,7 @@ public class TiledMapTileSets : IEnumerable< TiledMapTileSet >
         return null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public virtual IEnumerator< TiledMapTileSet > GetEnumerator()
     {
         return _tilesets.GetEnumerator();

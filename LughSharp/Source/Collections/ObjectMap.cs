@@ -683,7 +683,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 28;
@@ -723,7 +723,7 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         return tableSize;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -1002,19 +1002,19 @@ public class ObjectMap< TK, TV > : IEnumerable< KeyValuePair< TK, TV > > where T
         return GetEntries();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IEnumerator< KeyValuePair< TK, TV > > GetEnumerator()
     {
         return new ObjectMapEnumerator( this );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return ToString( ", ", true );

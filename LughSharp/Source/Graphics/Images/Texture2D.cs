@@ -99,7 +99,7 @@ public class Texture2D : GLTexture, IManaged
     public Texture2D( FileInfo file,
                       int format = LughFormat.RGBA8888,
                       bool useMipMaps = false )
-        : this( TextureDataFactory.LoadFromFile( file, format, useMipMaps ) )
+        : this( ITextureData.Factory.LoadFromFile( file, format, useMipMaps ) )
     {
     }
 
@@ -456,7 +456,7 @@ public class Texture2D : GLTexture, IManaged
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override void Dispose( bool disposing )
     {
         if ( IsDisposed )

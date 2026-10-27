@@ -25,50 +25,16 @@
 namespace LughSharp.Source.Graphics.OpenGL.Enums;
 
 [PublicAPI]
-public enum PixelType
+public enum ShaderType
 {
-    UnsignedShort4444 = IGL.GLUnsignedShort4444,
-    UnsignedShort5551 = IGL.GLUnsignedShort5551,
-    UnsignedShort565  = IGL.GLUnsignedShort565,
-    UnsignedByte      = IGL.GLUnsignedByte
+    VertexShader         = IGL.GLVertexShader,
+    FragmentShader       = IGL.GLFragmentShader,
+    GeometryShader       = IGL.GLGeometryShader,
+    TessControlShader    = IGL.GLTessControlShader,
+    TessEvaluationShader = IGL.GLTessEvaluationShader,
+    ComputeShader        = IGL.GLComputeShader
 }
 
-[PublicAPI]
-public enum GLPixFormat
-{
-    Alpha          = IGL.GLAlpha,
-    Luminance      = IGL.GLLuminance,
-    LuminanceAlpha = IGL.GLLuminanceAlpha,
-    Rgb565         = IGL.GLRGB565,
-    Rgba4444       = IGL.GLRGBA4,
-    Rgb            = IGL.GLRGB,
-    Rgba           = IGL.GLRGBA,
-    Red            = IGL.GLRed,
-    Green          = IGL.GLGreen,
-    Blue           = IGL.GLBlue
-}
+// ============================================================================
+// ============================================================================
 
-[PublicAPI]
-public enum InternalPixFormat
-{
-    Alpha          = IGL.GLAlpha,
-    Rgb            = IGL.GLRGB,
-    Rgba           = IGL.GLRGBA,
-    Rgba8          = IGL.GLRGBA8,
-    Luminance      = IGL.GLLuminance,
-    LuminanceAlpha = IGL.GLLuminanceAlpha
-}
-
-[PublicAPI]
-public enum PixelStoreParameter
-{
-    UnpackAlignment  = IGL.GLUnpackAlignment,
-    PackAlignment    = IGL.GLPackAlignment,
-    UnpackRowLength  = IGL.GLUnpackRowLength,
-    PackRowLength    = IGL.GLPackRowLength,
-    UnpackSkipPixels = IGL.GLUnpackSkipPixels,
-    PackSkipPixels   = IGL.GLPackSkipPixels
-}
-
-// ========================================================================
-// ========================================================================

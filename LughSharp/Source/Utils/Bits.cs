@@ -497,7 +497,7 @@ public class Bits
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 73;
@@ -508,7 +508,7 @@ public class Bits
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( this == obj )

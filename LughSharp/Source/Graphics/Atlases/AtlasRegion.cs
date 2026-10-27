@@ -200,13 +200,13 @@ public class AtlasRegion : TextureRegion, IDisposable
         return NameValuePairs.GetValueOrDefault( name );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return Name ?? base.ToString();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

@@ -685,7 +685,7 @@ public class BitmapFont
     /// </summary>
     public string Name => FontData.Name ?? "Unnamed";
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return FontData.Name ?? base.ToString();

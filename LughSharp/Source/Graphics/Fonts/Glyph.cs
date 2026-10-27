@@ -122,7 +122,7 @@ public class Glyph
         page[ ch & ( BitmapFont.PageSize - 1 ) ] = ( byte )value;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"ID: {ID.ToString()}";

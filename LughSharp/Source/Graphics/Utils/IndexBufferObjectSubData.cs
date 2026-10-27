@@ -87,13 +87,13 @@ public class IndexBufferObjectSubData : IIndexData
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int NumIndices => _buffer.Limit;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int NumMaxIndices => _buffer.Capacity;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public unsafe void SetIndices( int[] indices, int offset, int count )
     {
         _isDirty = true;
@@ -116,7 +116,7 @@ public class IndexBufferObjectSubData : IIndexData
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public unsafe void SetIndices( Buffer< int > indices )
     {
         int pos = indices.Position;
@@ -143,7 +143,7 @@ public class IndexBufferObjectSubData : IIndexData
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public unsafe void UpdateIndices( int targetOffset, int[] indices, int offset, int count )
     {
         _isDirty = true;
@@ -168,7 +168,7 @@ public class IndexBufferObjectSubData : IIndexData
         }
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public Buffer< int > GetBuffer( bool forWriting )
     {
         _isDirty |= forWriting;
@@ -176,7 +176,7 @@ public class IndexBufferObjectSubData : IIndexData
         return _buffer;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public unsafe void Bind()
     {
         if ( _bufferHandle == 0 )
@@ -201,21 +201,21 @@ public class IndexBufferObjectSubData : IIndexData
         _isBound = true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Unbind()
     {
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );
         _isBound = false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Invalidate()
     {
         _bufferHandle = CreateBufferObject();
         _isDirty      = true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Engine.GL.BindBuffer( BufferTarget.ElementArrayBuffer, 0 );

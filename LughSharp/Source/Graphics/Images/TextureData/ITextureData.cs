@@ -36,7 +36,7 @@ namespace LughSharp.Source.Graphics.Images.TextureData;
 /// if necessary. See MipMapGenerator. Before a call to either consumePixmap() or
 /// consumeCustomData(int), Texture will bind the OpenGL ES texture.
 /// <para>
-/// Look at FileTextureData and Etc1TextureData for example implementations of this interface.
+/// Look at FileTextureData for example implementations of this interface.
 /// </para>
 /// </summary>
 [PublicAPI]
@@ -63,7 +63,7 @@ public interface ITextureData : IManaged
     bool IsPrepared { get; set; }
 
     /// <summary>
-    /// 
+    /// Returns whether the TextureData is owned or not.
     /// </summary>
     bool IsOwned { get; set; }
 
@@ -91,6 +91,8 @@ public interface ITextureData : IManaged
     /// The number of bytes per pixel.
     /// </summary>
     int BytesPerPixel { get; set; }
+
+    // ========================================================================
 
     /// <summary>
     /// Returns the Pixel Format of the pixel data.
@@ -136,6 +138,69 @@ public interface ITextureData : IManaged
     /// Dumps the internal state of the TextureData to the log.
     /// </summary>
     void DebugPrint();
+
+    // ========================================================================
+    // ========================================================================
+
+    /// <summary>
+    /// Factory class for creating instances of ITextureData based on file types.
+    /// Provides static methods to instantiate the right implementation (Pixmap, KTX).
+    /// </summary>
+    [PublicAPI]
+    public static class Factory
+    {
+        /// <summary>
+        /// Loads texture data from the specified file with default format and mipmaps settings.
+        /// </summary>
+        /// <param name="file">The file to load texture data from.</param>
+        /// <param name="useMipMaps">Specifies whether to use mipmaps.</param>
+        /// <returns>The loaded texture data.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
+        public static ITextureData LoadFromFile( FileInfo file, bool useMipMaps = true )
+        {
+            return LoadFromFile( file, LughFormat.Default, useMipMaps );
+        }
+
+        /// <summary>
+        /// Loads texture data from the specified file with the given format and mipmaps settings.
+        /// </summary>
+        /// <param name="file">The file to load texture data from.</param>
+        /// <param name="format">The format of the texture data.</param>
+        /// <param name="useMipMaps">Specifies whether to use mipmaps.</param>
+        /// <returns>The loaded texture data.</returns>
+        /// <exception cref="ArgumentNullException">Thrown when the file parameter is null.</exception>
+        public static ITextureData LoadFromFile( FileInfo file, int format, bool useMipMaps = true )
+        {
+            ITextureData data;
+
+            switch ( file.Extension.ToLower() )
+            {
+                // Common Information Model image file format.
+                case ".cim":
+                    data = new FileTextureData( file, PixmapIO.ReadCIM( file ), format, useMipMaps );
+
+                    break;
+
+                // Kronos TeXture image file format for OpenGL and OpenGL ES.
+                case ".ktx" or ".zktx":
+                    data = new KtxTextureData( file, useMipMaps );
+
+                    break;
+
+                // Other supported image file formats, PNG, BMP, FNT
+                case ".bmp":
+                case ".png":
+                default:
+                    var pixmap = new Pixmap( file );
+
+                    data = new FileTextureData( file, pixmap, format, useMipMaps );
+
+                    break;
+            }
+
+            return data;
+        }
+    }
 }
 
 // ============================================================================

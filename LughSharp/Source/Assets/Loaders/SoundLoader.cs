@@ -46,7 +46,7 @@ public class SoundLoader : AsynchronousAssetLoader, IDisposable
         LoadedSound = null!;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override List< AssetDescriptor > GetDependencies< TP >( string filename,
                                                                    FileInfo file,
                                                                    TP? p ) where TP : class

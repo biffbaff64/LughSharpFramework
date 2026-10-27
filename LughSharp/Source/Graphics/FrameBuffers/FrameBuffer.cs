@@ -97,7 +97,7 @@ public class FrameBuffer : GLFrameBuffer< Texture2D >
         BuildBuffer();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     protected override Texture2D CreateTexture( FrameBufferTextureAttachmentSpec attachmentSpec )
     {
         var data = new GLOnlyTextureData( BufferBuilder.Width,

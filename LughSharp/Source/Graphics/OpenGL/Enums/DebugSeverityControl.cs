@@ -34,30 +34,5 @@ public enum DebugSeverityControl
     DontCare     = IGL.GLDontCare
 }
 
-[PublicAPI]
-public enum DebugSourceControl
-{
-    Api            = IGL.GLDebugSourceApi,
-    WindowSystem   = IGL.GLDebugSourceWindowSystem,
-    ShaderCompiler = IGL.GLDebugSourceShaderCompiler,
-    ThirdParty     = IGL.GLDebugSourceThirdParty,
-    Application    = IGL.GLDebugSourceApplication,
-    Other          = IGL.GLDebugSourceOther,
-    DontCare       = IGL.GLDontCare
-}
-
-[PublicAPI]
-public enum DebugTypeControl
-{
-    Error              = IGL.GLDebugTypeError,
-    DeprecatedBehavior = IGL.GLDebugTypeDeprecatedBehavior,
-    UndefinedBehavior  = IGL.GLDebugTypeUndefinedBehavior,
-    Portability        = IGL.GLDebugTypePortability,
-    Performance        = IGL.GLDebugTypePerformance,
-    Marker             = IGL.GLDebugTypeMarker,
-    Other              = IGL.GLDebugTypeOther,
-    DontCare           = IGL.GLDontCare
-}
-
 // ========================================================================
 // ========================================================================

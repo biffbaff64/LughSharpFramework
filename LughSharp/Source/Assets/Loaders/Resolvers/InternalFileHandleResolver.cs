@@ -27,7 +27,7 @@ namespace LughSharp.Source.Assets.Loaders.Resolvers;
 [PublicAPI]
 public class InternalFileHandleResolver : IFileHandleResolver
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public FileInfo Resolve( string filename )
     {
         return Engine.Files.Internal( filename );

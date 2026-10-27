@@ -671,7 +671,7 @@ public class Rectangle : IShape2D, IEquatable< Rectangle >
         return result;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool Equals( Rectangle? other )
     {
         return ReferenceEquals( this, other );

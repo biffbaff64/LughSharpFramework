@@ -269,7 +269,7 @@ public class Ellipse : IShape2D
         return ( float )( MathUtils.Pi2 * Math.Sqrt( ( ( a * a ) + ( b * b ) ) / 2 ) );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -290,7 +290,7 @@ public class Ellipse : IShape2D
             && Height.Equals( e.Height );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         const int Prime = 53;

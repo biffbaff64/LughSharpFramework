@@ -77,7 +77,7 @@ public interface ILoadedCallback
 [PublicAPI]
 public class DefaultLoadedCallback( int refCount ) : ILoadedCallback
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void FinishedLoading( AssetManager assetManager, string filename, Type? type )
     {
         assetManager.SetReferenceCount( filename, refCount );

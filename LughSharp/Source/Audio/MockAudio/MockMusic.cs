@@ -30,60 +30,60 @@ namespace LughSharp.Source.Mock.Audio;
 [PublicAPI]
 public class MockMusic : IMusic
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsPlaying { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsLooping { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IMusic.IOnCompletionListener? OnCompletionListener { get; set; }
 
     // ========================================================================
     
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Play()
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Pause()
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Stop()
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void SetVolume( float volume )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public float GetVolume()
     {
         return 0;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void SetPan( float pan, float volume )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void SetPosition( float position )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public float GetPosition()
     {
         return 0;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         GC.SuppressFinalize( this );

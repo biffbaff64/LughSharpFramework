@@ -136,13 +136,13 @@ public class MapObjects : IEnumerable< MapObject >
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IEnumerator< MapObject > GetEnumerator()
     {
         return _objects.GetEnumerator();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();

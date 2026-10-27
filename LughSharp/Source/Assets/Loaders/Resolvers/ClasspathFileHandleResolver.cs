@@ -27,7 +27,7 @@ namespace LughSharp.Source.Assets.Loaders.Resolvers;
 [PublicAPI]
 public class ClasspathFileHandleResolver : IFileHandleResolver
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public FileInfo Resolve( string filename )
     {
         return Engine.Files.ClassPath( filename );

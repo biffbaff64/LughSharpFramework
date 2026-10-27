@@ -55,10 +55,10 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// </summary>
     public int Height { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int BitDepth { get; set; }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int BytesPerPixel { get; set; }
 
     /// <summary>
@@ -66,7 +66,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     /// </summary>
     public bool UseMipMaps { get; set; } = useMipMaps;
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsOwned { get; set; }
 
     /// <summary>
@@ -80,10 +80,10 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
     // ========================================================================
 
-    private const int GLTexture1D         = 0x1234; //TODO: ????
-    private const int GLTexture3D         = 0x1234; //TODO: ????
-    private const int GLTexture1DArrayExt = 0x1234; //TODO: ????
-    private const int GLTexture2DArrayExt = 0x1234; //TODO: ????
+    private const int GLTexture1D         = 0x1234;
+    private const int GLTexture3D         = 0x1234;
+    private const int GLTexture1DArrayExt = 0x1234;
+    private const int GLTexture2DArrayExt = 0x1234;
 
     // KTX image data (only available after preparing and before consuming)
     private Buffer< byte >? _compressedData;
@@ -104,17 +104,6 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
     // ========================================================================
     // ========================================================================
-
-    /// <summary>
-    /// Uploads the pixel data for the 6 faces of the cube to the OpenGL ES texture.
-    /// The caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare"/>
-    /// must preceed a call to this method. Any internal data structures created
-    /// in <see cref="ICubemapData.Prepare"/> should be disposed of here.
-    /// </summary>
-    public void ConsumeCubemapData()
-    {
-        ConsumeCustomData( IGL.GLTextureCubeMap );
-    }
 
     /// <summary>
     /// Returns true if this implementation can cope with a EGL context loss.
@@ -144,7 +133,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         }
 
         // We support normal ktx files as well as 'zktx' which are gzip ktx
-        // file with an int length at the beginning (like ETC1).
+        // file with an int length at the beginning.
         if ( file.Name.EndsWith( ".zktx" ) )
         {
             var           buffer          = new byte[ 1024 * 10 ];
@@ -152,9 +141,8 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
             try
             {
-                dataInputStream =
-                    new BinaryReader( new BufferedStream( new GZipStream( file.OpenRead(),
-                                                                          CompressionMode.Decompress ) ) );
+                var input = new BufferedStream( new GZipStream( file.OpenRead(), CompressionMode.Decompress ) );
+                dataInputStream = new BinaryReader( input );
 
                 int fileSize = dataInputStream.ReadInt32();
 
@@ -272,7 +260,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int GetPixelFormat()
     {
         throw new LughRuntimeException( "This TextureData implementation directly handles texture formats." );
@@ -285,6 +273,17 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
     public bool ShouldDisposePixmap()
     {
         return false;
+    }
+
+    /// <summary>
+    /// Uploads the pixel data for the 6 faces of the cube to the OpenGL ES texture. The
+    /// caller must bind an OpenGL ES texture. A call to <see cref="ICubemapData.Prepare"/>
+    /// must preceed a call to this method. Any internal data structures created in
+    /// <see cref="ICubemapData.Prepare"/> should be disposed of here.
+    /// </summary>
+    public void ConsumeCubemapData()
+    {
+        ConsumeCustomData( IGL.GLTextureCubeMap );
     }
 
     /// <summary>
@@ -371,7 +370,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         if ( glTarget == 0x1234 )
         {
             throw new LughRuntimeException( "Unsupported texture format (only 2D textures " +
-                                        "are supported for the time being)" );
+                                            "are supported for the time being)" );
         }
 
         int singleFace = -1;
@@ -380,10 +379,12 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         {
             // Load a single face of the cube (should be avoided since the data is unloaded afterwards)
             if ( !( target is >= IGL.GLTextureCubeMapPositiveX
-                    and <= IGL.GLTextureCubeMapNegativeZ ) )
+                          and <= IGL.GLTextureCubeMapNegativeZ ) )
             {
-                throw new LughRuntimeException( "You must specify either GL_TEXTURE_CUBE_MAP to bind all 6 faces of the"
-                                          + "cube or the requested face GL_TEXTURE_CUBE_MAP_POSITIVE_X and followings." );
+                throw new LughRuntimeException( "You must specify either GL_TEXTURE_CUBE_MAP "
+                                              + "to bind all 6 faces of the cube or the "
+                                              + "requested face GL_TEXTURE_CUBE_MAP_POSITIVE_X "
+                                              + "and followings." );
             }
 
             singleFace = target - IGL.GLTextureCubeMapPositiveX;
@@ -400,7 +401,8 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
             if ( ( target != glTarget )
               && !( target is >= IGL.GLTextureCubeMapPositiveX and <= IGL.GLTextureCubeMapNegativeZ ) )
             {
-                throw new LughRuntimeException( $"Invalid target requested : 0x{target:X}, expecting : 0x{glTarget:X}" );
+                throw
+                    new LughRuntimeException( $"Invalid target requested : 0x{target:X}, expecting : 0x{glTarget:X}" );
             }
         }
 
@@ -467,66 +469,19 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
 
                     if ( compressed )
                     {
-                        if ( glInternalFormat == ETC1.ETC1RGB8Oes )
+                        // Try to load (no software unpacking fallback)
+                        unsafe
                         {
-                            if ( !Engine.Graphics.SupportsExtension( "GL_OES_compressed_ETC1_RGB8_texture" ) )
+                            fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
                             {
-                                ETC1   etc1    = new();
-                                var    etcData = new ETC1Data( pixelWidth, pixelHeight, data, 0, etc1 );
-                                Pixmap pixmap  = etc1.DecodeImage( etcData, LughFormat.RGBA8888 );
-
-                                unsafe
-                                {
-                                    fixed ( void* ptr = &pixmap.ByteBuffer.BackingArray()[ 0 ] )
-                                    {
-                                        Engine.GL.TexImage2D( target + face,
-                                                              level,
-                                                              pixmap.GLInternalPixelFormat,
-                                                              pixmap.Width,
-                                                              pixmap.Height,
-                                                              0,
-                                                              pixmap.GLPixelFormat,
-                                                              pixmap.GLDataType,
-                                                              ( IntPtr )ptr );
-                                    }
-                                }
-
-                                pixmap.Dispose();
-                            }
-                            else
-                            {
-                                unsafe
-                                {
-                                    fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
-                                    {
-                                        Engine.GL.CompressedTexImage2D( target + face,
-                                                                        level,
-                                                                        glInternalFormat,
-                                                                        pixelWidth,
-                                                                        pixelHeight,
-                                                                        0,
-                                                                        faceLodSize,
-                                                                        ( IntPtr )dataptr );
-                                    }
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Try to load (no software unpacking fallback)
-                            unsafe
-                            {
-                                fixed ( void* dataptr = &data.BackingArray()[ 0 ] )
-                                {
-                                    Engine.GL.CompressedTexImage2D( target + face,
-                                                                    level,
-                                                                    glInternalFormat,
-                                                                    pixelWidth,
-                                                                    pixelHeight,
-                                                                    0,
-                                                                    faceLodSize,
-                                                                    ( IntPtr )dataptr );
-                                }
+                                Engine.GL.CompressedTexImage2D( target + face,
+                                                                level,
+                                                                glInternalFormat,
+                                                                pixelWidth,
+                                                                pixelHeight,
+                                                                0,
+                                                                faceLodSize,
+                                                                ( IntPtr )dataptr );
                             }
                         }
                     }
@@ -586,7 +541,7 @@ public class KtxTextureData( FileInfo? file, bool useMipMaps ) : ITextureData, I
         _compressedData = null;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void DebugPrint()
     {
     }

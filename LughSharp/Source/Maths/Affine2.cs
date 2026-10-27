@@ -875,7 +875,7 @@ public class Affine2
         point.Y = ( M10 * x ) + ( M11 * y ) + M12;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return "[" + M00 + "|" + M01 + "|" + M02 + "]\n[" + M10 + "|" + M11 + "|" + M12 + "]\n[0.0|0.0|0.1]";

@@ -183,7 +183,7 @@ public class VertexAttributes
         return _attributes[ index ];
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         var builder = new StringBuilder();
@@ -208,7 +208,7 @@ public class VertexAttributes
         return builder.ToString();
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override bool Equals( object? obj )
     {
         if ( obj == this )
@@ -237,7 +237,7 @@ public class VertexAttributes
         return true;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override int GetHashCode()
     {
         long result = 61 * _attributes.Length;

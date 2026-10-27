@@ -103,31 +103,31 @@ public class DesktopGLPreferences : IPreferences
 
     // ------------------------------------------------------------------------
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutBoolean( string key, bool val )
     {
         return _put( key, val.ToString() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutInteger( string key, int val )
     {
         return _put( key, val.ToString() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutLong( string key, long val )
     {
         return _put( key, val.ToString() );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutFloat( string key, float val )
     {
         return _put( key, val.ToString( CultureInfo.InvariantCulture ) );
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public IPreferences PutString( string key, string val )
     {
         return _put( key, val );

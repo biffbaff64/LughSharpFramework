@@ -42,7 +42,7 @@ public enum LogicOp
     OrInverted   = IGL.GLOrInverted,
     OrReversed   = IGL.GLOrReverse,
     Set          = IGL.GLSet,
-    Xor          = IGL.GLXor
+    Xor          = IGL.GLXor,
 }
 
 // ========================================================================

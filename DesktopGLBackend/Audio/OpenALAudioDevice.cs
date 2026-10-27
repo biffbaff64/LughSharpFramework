@@ -28,34 +28,34 @@ namespace DesktopGLBackend.Audio;
 
 public class OpenALAudioDevice : IAudioDevice
 {
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public bool IsMono()
     {
         return false;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void WriteSamples( int[] samples, int offset, int numSamples )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void WriteSamples( float[] samples, int offset, int numSamples )
     {
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public int GetLatency()
     {
         return 0;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void SetVolume( float volume )
     {
     }

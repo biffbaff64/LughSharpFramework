@@ -64,7 +64,7 @@ public readonly record struct EntityID
         Name      = name;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string ToString()
     {
         return $"{Namespace}:{Name}";

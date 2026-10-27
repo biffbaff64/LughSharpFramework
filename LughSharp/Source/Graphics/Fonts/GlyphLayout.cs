@@ -1111,7 +1111,7 @@ public class GlyphLayout : IResetable, IPoolable
             XAdvances.Clear();
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
         public override string ToString()
         {
             StringBuilder buffer = new( Glyphs.Count + 32 );

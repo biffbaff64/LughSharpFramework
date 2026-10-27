@@ -1667,7 +1667,7 @@ public class Cell : IPoolable, IResetable
         FillY       = cell.FillY;
     }
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public override string? ToString()
     {
         return _actor != null ? _actor.ToString() : base.ToString();

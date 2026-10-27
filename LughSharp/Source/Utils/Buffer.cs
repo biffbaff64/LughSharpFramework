@@ -1710,7 +1710,7 @@ public class Buffer< T > : IDisposable where T : unmanaged
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );

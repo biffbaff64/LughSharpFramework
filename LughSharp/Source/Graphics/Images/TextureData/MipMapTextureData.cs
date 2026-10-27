@@ -29,18 +29,8 @@ namespace LughSharp.Source.Graphics.Images.TextureData;
 /// mipmap level. All the mipmap levels must be defined and cannot be null.
 /// </summary>
 [PublicAPI]
-public class MipMapTextureData : ITextureData
+public class MipMapTextureData : TextureDataBase
 {
-    public bool IsPrepared    { get; set; }
-    public bool UseMipMaps    { get; set; }
-    public int  Width         { get; set; }
-    public int  Height        { get; set; }
-    public int  BitDepth      { get; set; }
-    public int  BytesPerPixel { get; set; }
-    public bool IsOwned       { get; set; }
-
-    // ========================================================================
-
     private readonly ITextureData[] _mips;
 
     // ========================================================================
@@ -55,10 +45,17 @@ public class MipMapTextureData : ITextureData
         Array.Copy( mipMapData, 0, _mips, 0, mipMapData.Length );
     }
 
-    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
-    public bool                     IsManaged       => false;
+    /// <inheritdoc/>
+    public override ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    public bool ShouldDisposePixmap()
+    /// <inheritdoc/>
+    public override bool IsManaged => false;
+
+    /// <summary>
+    /// Returns whether the caller of <see cref="ITextureData.ConsumePixmap"/> should
+    /// dispose the Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>.
+    /// </summary>
+    public override bool ShouldDisposePixmap()
     {
         return false;
     }
@@ -68,7 +65,7 @@ public class MipMapTextureData : ITextureData
     /// <see cref="ITextureData.ConsumeCustomData"/>. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
-    public void Prepare()
+    public override void Prepare()
     {
     }
 
@@ -81,7 +78,7 @@ public class MipMapTextureData : ITextureData
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public Pixmap ConsumePixmap()
+    public override Pixmap ConsumePixmap()
     {
         throw new LughRuntimeException( "This Texture is compressed, use the compress method." );
     }
@@ -95,53 +92,18 @@ public class MipMapTextureData : ITextureData
     /// should be disposed of here.
     /// </para>
     /// </summary>
-    public void ConsumeCustomData( int target )
+    public override void ConsumeCustomData( int target )
     {
-        var derivedGLTexture = new DerivedGLTexture();
-
-        for ( var i = 0; i < _mips.Length; ++i )
+        for ( int i = 0; i < _mips.Length; ++i )
         {
-            derivedGLTexture.UploadImageData( target, _mips[ i ], i );
+            GLTexture.UploadImageData( target, _mips[ i ], i );
         }
     }
 
-    /// <inheritdoc />
-    public int GetPixelFormat()
+    /// <inheritdoc/>
+    public override int GetPixelFormat()
     {
         return _mips[ 0 ].GetPixelFormat();
-    }
-
-    /// <inheritdoc />
-    public void DebugPrint()
-    {
-    }
-
-    // ========================================================================
-
-    //TODO: This is a hack to get around the fact that GLTexture is not abstract. This should be fixed.
-    private class DerivedGLTexture : GLTexture
-    {
-        /// <inheritdoc />
-        public override void Reload()
-        {
-        }
-
-        public void ClearWithColor( Color color )
-        {
-        }
-
-        public int GetPixel( int x, int y )
-        {
-            return 0;
-        }
-
-        public void SetPixel( int x, int y, Color color )
-        {
-        }
-
-        public void SetPixel( int x, int y, int color )
-        {
-        }
     }
 }
 

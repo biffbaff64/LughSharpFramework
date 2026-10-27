@@ -548,7 +548,7 @@ public class OrthographicGameCamera : IGameCamera, IDisposable
 
     // ========================================================================
 
-    /// <inheritdoc />
+    /// <inheritdoc/>
     public void Dispose()
     {
         Dispose( true );
