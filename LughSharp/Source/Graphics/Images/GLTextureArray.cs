@@ -102,7 +102,7 @@ public class GLTextureArray : GLTexture, IManaged
 
         Load( data );
 
-        if ( data.Managed )
+        if ( data.IsManaged() )
         {
             AddManagedTexture( Engine.App, this );
         }
@@ -129,7 +129,7 @@ public class GLTextureArray : GLTexture, IManaged
     /// Indicates whether the underlying texture data is managed by the engine.
     /// Managed textures are tracked and can be reloaded automatically when needed.
     /// </summary>
-    public bool IsManaged => _data.Managed;
+    public bool IsManaged => _data.IsManaged();
 
     // ========================================================================
 
@@ -179,13 +179,13 @@ public class GLTextureArray : GLTexture, IManaged
     /// <exception cref="LughRuntimeException">Thrown when attempting to replace data with differing managed status.</exception>
     private void Load( ITextureArrayData data )
     {
-        if ( ( _data != null ) && ( data.Managed != _data.Managed ) )
+        if ( data.IsManaged() != this._data.IsManaged() )
         {
             throw new LughRuntimeException
                 ( "New data must have the same managed status as the old data" );
         }
 
-        _data = data;
+        this._data = data;
 
         Bind();
 

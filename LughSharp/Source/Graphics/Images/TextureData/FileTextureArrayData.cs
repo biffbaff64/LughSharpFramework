@@ -36,7 +36,7 @@ public class FileTextureArrayData : ITextureArrayData
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// the pixel format of this TextureArray
     /// </summary>
     public int PixelFormat { get; set; }
 
@@ -61,11 +61,6 @@ public class FileTextureArrayData : ITextureArrayData
     public int Depth { get; set; }
 
     /// <summary>
-    /// whether this implementation can cope with a EGL context loss.
-    /// </summary>
-    public bool Managed { get; set; }
-
-    /// <summary>
     /// the internal format of this TextureArray
     /// </summary>
     public int InternalFormat => ( int )PixelFormat;
@@ -78,10 +73,12 @@ public class FileTextureArrayData : ITextureArrayData
     // ========================================================================
 
     /// <summary>
+    /// Creates a new FileTextureArrayData using the specified pixel format, mip
+    /// map usage and files.
     /// </summary>
-    /// <param name="pixelFormat"></param>
-    /// <param name="useMipMaps"></param>
-    /// <param name="files"></param>
+    /// <param name="pixelFormat"> the pixel format of this TextureArray </param>
+    /// <param name="useMipMaps"> whether mip maps should be used </param>
+    /// <param name="files"> the files to load </param>
     public FileTextureArrayData( int pixelFormat, bool useMipMaps, FileInfo[] files )
     {
         PixelFormat  = pixelFormat;
@@ -125,7 +122,7 @@ public class FileTextureArrayData : ITextureArrayData
             if ( ( width != data.Width ) || ( height != data.Height ) )
             {
                 throw new LughRuntimeException( "Error whilst preparing TextureArray:"
-                                          + "TextureArray Textures must have equal dimensions." );
+                                              + "TextureArray Textures must have equal dimensions." );
             }
         }
 
@@ -208,24 +205,20 @@ public class FileTextureArrayData : ITextureArrayData
         }
     }
 
-    // ========================================================================
-
-    [SuppressMessage( "ReSharper", "ValueParameterNotUsed" )]
-    public bool IsManaged
+    /// <summary>
+    /// Returns whether this implementation can cope with a EGL context loss. .
+    /// </summary>
+    public bool IsManaged()
     {
-        get
+        foreach ( ITextureData? data in _textureData )
         {
-            foreach ( ITextureData? data in _textureData )
+            if ( data is { IsManaged: false } )
             {
-                if ( data is { IsManaged: false } )
-                {
-                    return false;
-                }
+                return false;
             }
-
-            return true;
         }
-        set { }
+
+        return true;
     }
 }
 

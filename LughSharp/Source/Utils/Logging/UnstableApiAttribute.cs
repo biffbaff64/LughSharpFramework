@@ -52,6 +52,9 @@ namespace LughSharp.Source.Utils.Logging;
                | AttributeTargets.Delegate )]
 public class UnstableApiAttribute : Attribute
 {
+    /// <summary>
+    /// Creates a new UnstableApiAttribute.
+    /// </summary>
     /// <param name="reason">A brief description of why this type is considered unstable.</param>
     public UnstableApiAttribute( string? reason )
     {

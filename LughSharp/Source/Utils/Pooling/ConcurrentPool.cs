@@ -26,6 +26,11 @@ using System.Collections.Concurrent;
 
 namespace LughSharp.Source.Utils.Pooling;
 
+/// <summary>
+/// 
+/// </summary>
+/// <param name="supplier"></param>
+/// <typeparam name="T"></typeparam>
 [PublicAPI]
 public class ConcurrentPool< T >( Func< T > supplier ) : IPool< T > where T : class
 {

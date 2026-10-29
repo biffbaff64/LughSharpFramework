@@ -22,8 +22,6 @@
 // SOFTWARE.
 // ///////////////////////////////////////////////////////////////////////////////
 
-#pragma warning disable CS8500 // This takes the address of, gets the size of, or declares a pointer to a managed type
-
 using LughSharp.Source.Config;
 using LughSharp.Source.Graphics.OpenGL;
 
@@ -34,23 +32,20 @@ namespace LughSharp.Source.Graphics.Images.TextureData;
 /// This class is used to create textures with floating-point precision.
 /// </summary>
 [PublicAPI]
-public class FloatTextureData : ITextureData
+public class FloatTextureData : TextureDataBase
 {
-    public Buffer< float > Buffer        { get; private set; } = null!;
-    public int             Width         { get; set; }
-    public int             Height        { get; set; }
-    public int             BitDepth      { get; set; }
-    public int             BytesPerPixel { get; set; }
-    public bool            IsPrepared    { get; set; }
-    public bool            UseMipMaps    { get; set; }
+    /// <summary>
+    /// Buffer containing the float data for the texture.
+    /// </summary>
+    public Buffer< float > Buffer { get; private set; } = null!;
 
     /// <inheritdoc/>
-    public bool IsOwned { get; set; }
+    public override bool IsOwned { get; set; }
 
     /// <summary>
     /// FloatTextureData objects are Managed.
     /// </summary>
-    public bool IsManaged => true;
+    public override bool IsManaged => true;
 
     // ========================================================================
 
@@ -61,17 +56,33 @@ public class FloatTextureData : ITextureData
 
     // ========================================================================
 
+    /// <summary>
+    /// Creates a new FloatTextureData object.
+    /// </summary>
+    /// <param name="w"> Width of the texture. </param>
+    /// <param name="h"> Height of the texture. </param>
+    /// <param name="internalFormat"> Internal format of the texture. </param>
+    /// <param name="format"> Format of the texture. </param>
+    /// <param name="type"> Type of the texture. </param>
+    /// <param name="isGpuOnly"> Whether the texture is only used on the GPU. </param>
     public FloatTextureData( int w, int h, int internalFormat, int format, int type, bool isGpuOnly )
     {
-        Width           = w;
-        Height          = h;
         _internalFormat = internalFormat;
         _format         = format;
         _type           = type;
         _isGpuOnly      = isGpuOnly;
+
+        Setup( w, h );
     }
 
-    public void Prepare()
+    private void Setup( int width, int height )
+    {
+        Width  = width;
+        Height = height;
+    }
+
+    /// <inheritdoc />
+    public override void Prepare()
     {
         if ( IsPrepared )
         {
@@ -111,7 +122,8 @@ public class FloatTextureData : ITextureData
         IsPrepared = true;
     }
 
-    public void ConsumeCustomData( int target )
+    /// <inheritdoc />
+    public override void ConsumeCustomData( int target )
     {
         if ( ( Engine.App.AppType == ApplicationType.Android )
           || ( Engine.App.AppType == ApplicationType.IOS )
@@ -155,35 +167,25 @@ public class FloatTextureData : ITextureData
         }
     }
 
-    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
+    /// <inheritdoc />
+    public override ITextureData.TextureType TextureDataType => ITextureData.TextureType.Custom;
 
-    /// <summary>
-    /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
-    /// </summary>
-    public int GetPixelFormat()
+    /// <inheritdoc />
+    public override int GetPixelFormat()
     {
         return LughFormat.RGBA8888;
     }
 
-    public int PixelFormat
-    {
-        get => throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
-        set => throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
-    }
-
-    public Pixmap ConsumePixmap()
+    /// <inheritdoc />
+    public override Pixmap ConsumePixmap()
     {
         throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
     }
 
-    public bool ShouldDisposePixmap()
+    /// <inheritdoc />
+    public override bool ShouldDisposePixmap()
     {
         throw new LughRuntimeException( "This TextureData implementation does not return a Pixmap" );
-    }
-
-    /// <inheritdoc/>
-    public void DebugPrint()
-    {
     }
 }
 

@@ -40,7 +40,8 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Construct a Cubemap with the specified texture files for the sides, optionally generating mipmaps.
+    /// Construct a Cubemap with the specified texture files for the sides,
+    /// optionally generating mipmaps.
     /// </summary>
     public FacedCubemapData( FileInfo positiveX,
                              FileInfo negativeX,
@@ -59,7 +60,8 @@ public class FacedCubemapData : ICubemapData
     }
 
     /// <summary>
-    /// Construct a Cubemap with the specified <see cref="Pixmap"/>s for the sides, optionally generating mipmaps.
+    /// Construct a Cubemap with the specified <see cref="Pixmap"/>s for the sides,
+    /// optionally generating mipmaps.
     /// </summary>
     public FacedCubemapData( Pixmap? positiveX,
                              Pixmap? negativeX,

@@ -249,7 +249,7 @@ public class TiledMapPacker
                             {
                                 if ( tile is AnimatedTiledMapTile aTile )
                                 {
-                                    foreach ( StaticTiledMapTile t in aTile.GetFrameTiles() )
+                                    foreach ( StaticTiledMapTile t in aTile.FrameTiles )
                                     {
                                         AddTile( t, bucketSize );
                                     }

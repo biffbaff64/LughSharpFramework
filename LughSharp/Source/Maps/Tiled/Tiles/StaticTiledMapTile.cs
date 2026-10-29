@@ -32,11 +32,31 @@ namespace LughSharp.Source.Maps.Tiled.Tiles;
 [PublicAPI]
 public class StaticTiledMapTile : ITiledMapTile
 {
-    public uint                    ID            { get; set; }
-    public float                   OffsetX       { get; set; }
-    public float                   OffsetY       { get; set; }
-    public TextureRegion           TextureRegion { get; set; }
-    public ITiledMapTile.TileBlendMode BlendMode     { get; set; } = ITiledMapTile.TileBlendMode.Alpha;
+    /// <summary>
+    /// The unique identifier of the tile.
+    /// </summary>
+    public uint  ID      { get; set; }
+
+    /// <summary>
+    /// The X offset of the tile in the tileset atlas.
+    /// </summary>
+    public float OffsetX { get; set; }
+
+    /// <summary>
+    /// The Y offset of the tile in the tileset atlas.
+    /// </summary>
+    public float OffsetY { get; set; }
+
+    /// <summary>
+    /// The <see cref="TextureRegion"/> from the tileset atlas to use when
+    /// rendering the tile.
+    /// </summary>
+    public TextureRegion TextureRegion { get; set; }
+
+    /// <summary>
+    /// The blend mode used when rendering the tile.
+    /// </summary>
+    public ITiledMapTile.TileBlendMode BlendMode { get; set; } = ITiledMapTile.TileBlendMode.Alpha;
 
     // ========================================================================
 

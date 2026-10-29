@@ -28,7 +28,7 @@ namespace LughSharp.Source.Utils.Logging;
 /// Manages states that are driven by simple Enum values, as defined in <see cref="StateID"/>.
 /// </summary>
 [PublicAPI]
-public class EnumStateManager
+public class EnumStateIDManager
 {
     // Property to read the current state publicly
     public StateID CurrentState => _currentState;
@@ -46,7 +46,7 @@ public class EnumStateManager
     /// <summary>
     /// Initializes the StateManager with a default starting state.
     /// </summary>
-    public EnumStateManager(StateID initialState = StateID.StateSetup)
+    public EnumStateIDManager(StateID initialState = StateID.StateSetup)
     {
         _currentState = initialState;
     }

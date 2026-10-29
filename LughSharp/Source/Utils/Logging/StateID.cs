@@ -26,7 +26,7 @@ namespace LughSharp.Source.Utils.Logging;
 
 /// <summary>
 /// Enum holding State Identifiers for use in combination with
-/// <see cref="EnumStateManager"/>.
+/// <see cref="EnumStateIDManager"/>.
 /// </summary>
 [PublicAPI]
 public enum StateID

@@ -32,6 +32,9 @@ namespace LughSharp.Source.Graphics.Images.TextureData;
 [PublicAPI]
 public class FileTextureData : TextureDataBase
 {
+    /// <summary>
+    /// Represents the file from which the texture data is loaded.
+    /// </summary>
     public FileInfo File { get; set; }
 
     // ========================================================================
@@ -42,12 +45,12 @@ public class FileTextureData : TextureDataBase
     // ========================================================================
 
     /// <summary>
-    /// 
+    /// Initializes a new instance of the <see cref="FileTextureData"/> class.
     /// </summary>
-    /// <param name="file"></param>
-    /// <param name="preloadedPixmap"></param>
-    /// <param name="format"></param>
-    /// <param name="useMipMaps"></param>
+    /// <param name="file"> The file from which the texture data is loaded. </param>
+    /// <param name="preloadedPixmap"> The preloaded pixmap to use for the texture data. </param>
+    /// <param name="format"> The pixel format to use for the texture data. </param>
+    /// <param name="useMipMaps"> Whether to use mipmaps for the texture data. </param>
     public FileTextureData( FileInfo file, Pixmap preloadedPixmap, int format, bool useMipMaps )
     {
         Guard.Against.Null( preloadedPixmap );
@@ -55,37 +58,51 @@ public class FileTextureData : TextureDataBase
         File         = file;
         _pixmap      = preloadedPixmap;
         _pixelFormat = format;
-        UseMipMaps   = useMipMaps;
+
+        int bytesPerPixel = 0;
 
         if ( _pixmap != null )
         {
-            Width  = _pixmap.Width;
-            Height = _pixmap.Height;
-
             // If _pixelFormat is not set, use the pixmap's format.
             if ( _pixelFormat <= 0 )
             {
                 _pixelFormat = _pixmap.GetColorFormat();
             }
 
-            BytesPerPixel = PixFormat.BytesPerPixel( _pixmap.GetColorFormat() );
+            bytesPerPixel = PixFormat.BytesPerPixel( _pixmap.GetColorFormat() );
         }
 
-        IsOwned = false;
+        Setup( preloadedPixmap, bytesPerPixel, false, useMipMaps );
+    }
+
+    /// <summary>
+    /// Sets up the internal state of the texture data.
+    /// </summary>
+    /// <param name="pixmap">The pixmap to use.</param>
+    /// <param name="bytesPerPixel">The number of bytes per pixel.</param>
+    /// <param name="isOwned">Whether the pixmap is owned by this texture data.</param>
+    /// <param name="useMipMaps">Whether to use mipmaps.</param>
+    private void Setup( Pixmap pixmap, int bytesPerPixel, bool isOwned, bool useMipMaps )
+    {
+        UseMipMaps    = useMipMaps;
+        Width         = pixmap.Width;
+        Height        = pixmap.Height;
+        BytesPerPixel = bytesPerPixel;
+        IsOwned       = isOwned;
     }
 
     /// <inheritdoc/>
-    public virtual bool IsManaged => true;
+    public override bool IsManaged => true;
 
-    /// <returns> the <see cref="ITextureData.TextureDataType"/></returns>
-    public ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
+    /// <inheritdoc/>
+    public override ITextureData.TextureType TextureDataType => ITextureData.TextureType.Pixmap;
 
     /// <summary>
     /// Prepares the TextureData for a call to <see cref="ITextureData.ConsumePixmap"/> or
     /// <see cref="ITextureData.ConsumeCustomData"/>. This method can be called from a non
     /// OpenGL thread and should thus not interact with OpenGL.
     /// </summary>
-    public void Prepare()
+    public override void Prepare()
     {
         if ( IsPrepared )
         {
@@ -118,7 +135,7 @@ public class FileTextureData : TextureDataBase
     /// <summary>
     /// Returns the <c>Pixmap.Format.XXX</c> of the pixel data.
     /// </summary>
-    public int GetPixelFormat()
+    public override int GetPixelFormat()
     {
         return _pixmap?.GetColorFormat() ?? LughFormat.RGBA8888;
     }
@@ -132,7 +149,7 @@ public class FileTextureData : TextureDataBase
     /// </para>
     /// </summary>
     /// <returns> the pixmap.</returns>
-    public virtual Pixmap ConsumePixmap()
+    public override Pixmap ConsumePixmap()
     {
         if ( !IsPrepared )
         {
@@ -157,7 +174,7 @@ public class FileTextureData : TextureDataBase
     /// whether the caller of <see cref="ITextureData.ConsumePixmap"/> should dispose the
     /// Pixmap returned by <see cref="ITextureData.ConsumePixmap"/>
     /// </returns>
-    public virtual bool ShouldDisposePixmap()
+    public override bool ShouldDisposePixmap()
     {
         return IsOwned;
     }
@@ -171,7 +188,7 @@ public class FileTextureData : TextureDataBase
     /// disposed of here.
     /// </para>
     /// </summary>
-    public virtual void ConsumeCustomData( int target )
+    public override void ConsumeCustomData( int target )
     {
         throw new LughRuntimeException( "This TextureData implementation does not upload data itself" );
     }
@@ -179,7 +196,7 @@ public class FileTextureData : TextureDataBase
     /// <summary>
     /// Dumps the internal state of the TextureData to the log.
     /// </summary>
-    public void DebugPrint()
+    public override void DebugPrint()
     {
         Logger.Debug( $"FileTextureData: {File.Name}" );
         Logger.Debug( $"Size           : {Width} x {Height}" );

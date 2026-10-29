@@ -24,22 +24,21 @@
 
 namespace LughSharp.Source.Utils.Logging;
 
-//TODO:This may be removed
-
 /// <summary>
 /// Statistical Logging meters for various LughSharp Exceptions. 
 /// </summary>
 [PublicAPI]
-public enum SystemMeters
+public class SystemMeters
 {
-    UnknownException = 0,
-    DummyMeter       = 1,
+    public const string UnknownException = "UnknownException";
+    public const string DummyMeter       = "DummyMeter";
 
     // ------------------------------------------
-    
-    SoundLoadFail   = 2,
-    FontLoadFailure = 3,
-    
+
+    public const string SoundLoadFail    = "SoundLoadFail";
+    public const string FontLoadFailure  = "FontLoadFailure";
+    public const string AssetLoadFailure = "AssetLoadFailure";
+
     // ------------------------------------------
 }
 

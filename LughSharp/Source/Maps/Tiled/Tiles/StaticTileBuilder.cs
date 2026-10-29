@@ -27,6 +27,7 @@ using LughSharp.Source.Utils.XML;
 namespace LughSharp.Source.Maps.Tiled.Tiles;
 
 [PublicAPI]
+[UnstableApi( "Class still in development" )]
 public class StaticTileBuilder
 {
     /// <summary>

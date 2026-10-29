@@ -87,19 +87,7 @@ public static class Platform
     /// </summary>
     private static bool ValidApplicationType( ApplicationType type )
     {
-        return type switch
-               {
-                   ApplicationType.Android
-                    or ApplicationType.IOS
-                    or ApplicationType.Desktop
-                    or ApplicationType.WebGL => true,
-
-                   // ---------------------------
-
-                   var _ => false,
-               };
-
-//        return Enum.IsDefined( typeof( ApplicationType ), type );
+        return Enum.IsDefined( typeof( ApplicationType ), type );
     }
 
     /// <summary>

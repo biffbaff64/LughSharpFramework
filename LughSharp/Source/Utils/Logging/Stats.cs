@@ -43,7 +43,7 @@ public class Stats
     {
         _prefs = new Preferences( "statsmeters.stats" );
     }
-
+    
     /// <summary>
     /// Retrieve the specified meter from the meter storage.
     /// </summary>

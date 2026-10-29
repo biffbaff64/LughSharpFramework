@@ -27,10 +27,14 @@ namespace LughSharp.Source.Utils.Pooling;
 /// <summary>
 /// An interface that is used to create objects for the Pool.
 /// </summary>
-/// <typeparam name="T"></typeparam>
+/// <typeparam name="T"> The type of the object that is created. </typeparam>
 [PublicAPI]
 public interface IPoolSupplier< T >
 {
+    /// <summary>
+    /// Creates a new instance of the type.
+    /// </summary>
+    /// <returns> The new instance of the type. </returns>
     T Get();
 }
 

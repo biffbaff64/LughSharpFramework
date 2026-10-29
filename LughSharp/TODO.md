@@ -331,6 +331,11 @@ LUGHSHARP/SOURCE/COLLECTIONS
     - DONE - DONE - DONE - ResettableStack
     - DONE - DONE - DONE - SnapshotArrayList
 
+    ------------------------------------
+    ( Possible future additions )
+    -      -      -      - FloatArray
+    -      -      -      - ShortArray
+
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -368,8 +373,8 @@ LUGHSHARP/SOURCE/ENTITIES
 LUGHSHARP/SOURCE/GRAPHICS
 -------------------------
 
-- Rework Color.cs/Colors.cs/LughFormat.cs/PixFormat.cs. These classes are untidy and
-  need to be reworked to be less confusing.
+    Rework Color.cs/Colors.cs/LughFormat.cs/PixFormat.cs. These classes are untidy and
+    need to be reworked to be less confusing.
 
       CODE   DOCU   FOOTER
       ----   ----   ------
@@ -536,10 +541,10 @@ LUGHSHARP/SOURCE/GRAPHICS/IMAGES/TEXTUREDATA
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    -      -      - DONE - FacedCubemapData
-    -      -      - DONE - FileTextureArrayData
-    -      -      - DONE - FileTextureData
-    -      -      - DONE - FloatTextureData
+    - DONE - DONE - DONE - FacedCubemapData
+    - DONE - DONE - DONE - FileTextureArrayData
+    - DONE - DONE - DONE - FileTextureData
+    - DONE - DONE - DONE - FloatTextureData
     -      -      - DONE - GLOnlyTextureData
     - DONE - DONE - DONE - ITextureData
     - DONE - IP   - DONE - KTXTTextureData          Update for KTX2
@@ -869,9 +874,9 @@ LUGHSHARP/SOURCE/MAPS/TILED/TILES
       CODE   DOCU   FOOTER
       ----   ----   ------
     -      -      - DONE - AnimatedTileBuilder
-    - DONE - IP   - DONE - AnimatedTileMapTile
+    - DONE - DONE - DONE - AnimatedTileMapTile
     - DONE - IP   - DONE - StaticTileBuilder
-    - DONE - IP   - DONE - StaticTiledMapTile
+    - DONE - DONE - DONE - StaticTiledMapTile
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -965,22 +970,6 @@ LUGHSHARP/SOURCE/NETWORK - TEMPORARILY SHELVED
     - IP   - IP   - DONE - NetSocketImpl
     - IP   - IP   - DONE - ServerSocketHints
     - IP   - IP   - DONE - SocketHints
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-LUGHSHARP/SOURCE/PHYSICS
-------------------------
-
-      CODE   DOCU   FOOTER
-      ----   ----   ------
-    - DONE - DONE - DONE - CollisionFilter
-    - DONE - DONE - DONE - Dir
-    - DONE - DONE - DONE - Direction
-    - DONE - DONE - DONE - Movement
-    - DONE - DONE - DONE - PhysicsBodyType
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1161,8 +1150,8 @@ LUGHSHARP/SOURCE/UTILS
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - DONE - DONE - DONE - ActorDefinitionAttribute
     - DONE - DONE - DONE - Align
+    - DONE - DONE - DONE - AlignUtils
     - DONE - DONE - DONE - AsyncExecutor
     - DONE - DONE - DONE - AsyncResult
     - DONE - DONE - DONE - BaseClassFactory
@@ -1175,6 +1164,8 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - ComparableTimSort
     - DONE - DONE - DONE - DataOutput
     - DONE - DONE - DONE - DataUtils
+    - DONE - DONE - DONE - Dir
+    - DONE - DONE - DONE - Direction
     // ------------------------------------------
     - IP   - IP   - DONE - GameTime                     May be abandoned
     // ------------------------------------------
@@ -1186,6 +1177,7 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - IReadable
     - DONE - DONE - DONE - IResetable
     - DONE - DONE - DONE - MinimalCrc32
+    - DONE - DONE - DONE - Movement
     - DONE - DONE - DONE - Multiplexer
     - DONE - DONE - DONE - NumberParsing
     - DONE - DONE - DONE - QuadTreeFloat
@@ -1197,7 +1189,6 @@ LUGHSHARP/SOURCE/UTILS
     - DONE - DONE - DONE - SystemArrayUtils
     - DONE - DONE - DONE - TimeUtils
     - DONE - DONE - DONE - TimSort
-    - DONE - DONE - DONE - UnstableApiAttribute
 
 LUGHSHARP/SOURCE/UTILS/EXCEPTIONS
 ---------------------------------
@@ -1238,8 +1229,8 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
 
       CODE   DOCU   FOOTER
       ----   ----   ------
-    - IP   - IP   - DONE - ActorDefinitionAttribute
-    - DONE - DONE - DONE - EnumStateManager
+    - DONE - DONE - DONE - ActorDefinitionAttribute
+    - DONE - DONE - DONE - EnumStateIDManager
     - DONE - DONE - DONE - FPSLogger
     - DONE - DONE - DONE - IPreferences
     - DONE - DONE - DONE - IState
@@ -1251,8 +1242,8 @@ LUGHSHARP/SOURCE/UTILS/LOGGING
     - DONE - DONE - DONE - StateID
     - DONE - DONE - DONE - StateMachine
     - DONE - DONE - DONE - Stats
-    - DONE - IP   - DONE - SystemMeters
-    - IP   - IP   - DONE - UnstableApiAttribute
+    - DONE - DONE - DONE - SystemMeters
+    - DONE - DONE - DONE - UnstableApiAttribute
 
 LUGHSHARP/SOURCE/UTILS/POOLING
 ------------------------------
@@ -1265,10 +1256,10 @@ LUGHSHARP/SOURCE/UTILS/POOLING
     - DONE - DONE - DONE - IClearablePool
     -      -      - DONE - IPool / IPool<T>
     - DONE - DONE - DONE - IPoolable
-    -      -      - DONE - IPoolSupplier
+    - DONE - DONE - DONE - IPoolSupplier
     - DONE - DONE - DONE - Pool
     - DONE - DONE - DONE - PooledLinkedList
-    -      -      - DONE - PoolManager
+    - IP   - IP   - DONE - PoolManager
     - DONE - DONE - DONE - PoolsMap
 
 LUGHSHARP/SOURCE/UTILS/XML

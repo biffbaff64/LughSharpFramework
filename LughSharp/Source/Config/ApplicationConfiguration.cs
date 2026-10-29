@@ -391,10 +391,12 @@ public class ApplicationConfiguration
     /// Return the available <see cref="IGraphicsDevice.DisplayMode"/>s of the primary monitor
     /// </summary>
     /// <returns>A list of the available display modes of the primary monitor.</returns>
-    /// <returns>
+    /// <remarks>
+    /// <b>
     /// The default implementation returns an empty DisplayMode array. This method should be
     /// overridden by implementations that provide a list of available display modes.
-    /// </returns>
+    /// </b>
+    /// </remarks>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes()
     {
         return Array.Empty< IGraphicsDevice.DisplayMode >();
@@ -405,8 +407,10 @@ public class ApplicationConfiguration
     /// </summary>
     /// <param name="monitor">The monitor to get the display modes list for.</param>
     /// <returns>
+    /// <b>
     /// The default implementation returns an empty DisplayMode array. This method should be
     /// overridden by implementations that provide a list of available display modes.
+    /// </b>
     /// </returns>
     public virtual IGraphicsDevice.DisplayMode[] GetDisplayModes( DotGLFW.Monitor monitor )
     {

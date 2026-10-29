@@ -34,9 +34,9 @@ public enum PlatformFamily
 
     // --------------------------------------
 
-    Mobile,  // Android, IOS
-    Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS
-    Console, // XBox, Playstation, Nintendo
+    Mobile,  // Android, IOS, etc.
+    Desktop, // WindowsGL, UWP, WebGL, Linux, MacOS, etc.
+    Console, // XBox, Playstation, Nintendo, etc.
 }
 
 // ============================================================================

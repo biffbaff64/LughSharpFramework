@@ -67,11 +67,6 @@ public interface ITextureArrayData
     int Depth { get; }
 
     /// <summary>
-    /// Returns whether this implementation can cope with a EGL context loss. .
-    /// </summary>
-    bool Managed { get; }
-
-    /// <summary>
     /// Returns the internal format of this TextureArray .
     /// </summary>
     int InternalFormat { get; }
@@ -81,6 +76,11 @@ public interface ITextureArrayData
     /// </summary>
     int GLDataType { get; }
 
+    /// <summary>
+    /// Returns whether this implementation can cope with a EGL context loss. .
+    /// </summary>
+    bool IsManaged();
+    
     /// <summary>
     /// Prepares the TextureArrayData for a call to <see cref="ConsumeTextureArrayData()"/>.
     /// This method can be called from a non OpenGL thread and should thus not interact
